@@ -13,7 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 class MaterialDataTable extends DataTable
 {
     /**
-     * Build DataTable class.
+     * Build DataTable class. 
      *
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
