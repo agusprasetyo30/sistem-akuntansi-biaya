@@ -7,7 +7,6 @@ use App\Models\Produk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Validator;
 
 class ProdukController extends Controller
 {
@@ -20,16 +19,13 @@ class ProdukController extends Controller
 
     public function create(Request $request){
         try {
-            $validator = Validator::make($request->all(), [
+            $request->validate([
                 "produk_name" => 'required',
                 "produk_desc" => 'required',
                 "kategori_produk_id" => 'required',
                 "is_dummy" => 'required',
                 "is_active" => 'required',
-            ], validatorMsg());
-    
-            if ($validator->fails())
-                return $this->makeValidMsg($validator);
+            ]);
 
             $input['produk_name'] = $request->produk_name;
             $input['produk_desc'] = $request->produk_desc;

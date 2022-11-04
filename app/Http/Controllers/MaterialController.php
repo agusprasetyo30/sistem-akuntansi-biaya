@@ -7,7 +7,6 @@ use App\Models\Material;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Validator;
 
 class MaterialController extends Controller
 {
@@ -20,17 +19,14 @@ class MaterialController extends Controller
 
     public function create(Request $request){
         try {
-            $validator = Validator::make($request->all(), [
+            $request->validate([
                 "material_name" => 'required',
                 "material_desc" => 'required',
                 "kategori_material_id" => 'required',
                 "uom" => 'required',
                 "is_dummy" => 'required',
                 "is_active" => 'required',
-            ], validatorMsg());
-    
-            if ($validator->fails())
-                return $this->makeValidMsg($validator);
+            ]);
 
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;
