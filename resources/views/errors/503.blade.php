@@ -1,0 +1,51 @@
+@extends('layouts.custom-app')
+
+@section('styles')
+
+@endsection
+
+@section('class')
+
+		<div class="bg-light">
+
+@endsection
+
+@section('content')
+
+        <div class="box">
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+			<div></div>
+		</div>
+
+		<div class="page">
+			<div class="page-content">
+				<div class="container text-center">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="">
+								<div class="text-primary">
+									<div class="display-1 error-text mb-5 font-weight-bold"> 5<i class="fa fa-frown-o"></i>3</div>
+									<h1 class="h3  mb-3 font-weight-bold">Sorry, an error has occured, Serive Unavaliable </h1>
+									<p class="h5 font-weight-normal mb-7 leading-normal">You may have mistyped the address or the page may have moved.</p>
+									<a class="btn text-primary border-primary mb-5 ms-2 fs-18" href="{{url('/')}}">Back to Home</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+@endsection('content')
+
+@section('scripts')
+
+@endsection
