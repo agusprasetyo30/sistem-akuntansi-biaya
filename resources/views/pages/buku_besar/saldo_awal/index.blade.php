@@ -51,8 +51,8 @@
                                 <th data-type='text' data-name='gl_account' class="text-center"></th>
                                 <th data-type='text' data-name='valuation_class' class="text-center"></th>
                                 <th data-type='text' data-name='price_control' class="text-center"></th>
-                                <th></th>
-                                <th></th>
+                                <th data-type='text' data-name='material' class="text-center"></th>
+                                <th data-type='text' data-name='plant' class="text-center"></th>
                                 <th data-type='text' data-name='total_stock' class="text-center"></th>
                                 <th data-type='text' data-name='total_value' class="text-center"></th>
                                 <th data-type='text' data-name='nilai_satuan' class="text-center"></th>
@@ -66,6 +66,7 @@
                     </div>
                 </div>
             </div>
+            @include('pages.buku_besar.saldo_awal.add')
         </div> 
     </div>
 </div>
@@ -77,6 +78,50 @@
     <script>
         $(document).ready(function () {
             get_data()
+
+            $('#data_main_plant').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Plant',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('plant_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_material').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
         })
 
         function get_data(){
@@ -137,8 +182,8 @@
                     { data: 'gl_account', name: 'gl_account', orderable:false},
                     { data: 'valuation_class', name: 'valuation_class', orderable:false},
                     { data: 'price_control', name: 'price_control', orderable:false},
-                    { data: 'material_name', name: 'material_name', orderable:false},
-                    { data: 'plant_code', name: 'plant_code', orderable:false},
+                    { data: 'material_name', name: 'material.material_name', orderable:false},
+                    { data: 'plant_code', name: 'plant.plant_code', orderable:false},
                     { data: 'total_stock', name: 'total_stock', orderable:false},
                     { data: 'total_value', name: 'total_value', orderable:false},
                     { data: 'nilai_satuan', name: 'nilai_satuan', orderable:false},
@@ -147,6 +192,154 @@
                 columnDefs:[
                     {className: 'text-center', targets: [0,10]}
                 ],
+
+            })
+        }
+
+        $('#submit').on('click', function () {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data akan segera dikirim",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#019267',
+                cancelButtonColor: '#EF4B4B',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Kembali'
+            }).then((result) =>{
+                if (result.value){
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{route('insert_saldo_awal')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            company_code: $('#company_code').val(),
+                            gl_account: $('#gl_account').val(),
+                            valuation_class: $('#valuation_class').val(),
+                            price_control: $('#price_control').val(),
+                            material_id: $('#data_main_material').val(),
+                            plant_id: $('#data_main_plant').val(),
+                            total_stock: $('#total_stock').val(),
+                            total_value: $('#total_value').val(),
+                            nilai_satuan: $('#nilai_satuan').val(),
+                        },
+                        success:function (response) {
+                            if (response.Code === 200){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                $('#is_active').val('').trigger("change");
+                                toastr.success('Data Berhasil Disimpan', 'Success')
+                                get_data()
+                            }else if (response.Code === 0){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else {
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
+                            }
+
+
+                        }
+                    })
+
+                }
+
+            })
+        })
+
+        function update_saldo_awal(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data akan segera disimpan",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#019267',
+                cancelButtonColor: '#EF4B4B',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Kembali'
+            }).then((result) =>{
+                if (result.value){
+
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{route('update_saldo_awal')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id,
+                            company_code: $('#edit_company_code'+id).val(),
+                            gl_account: $('#edit_gl_account'+id).val(),
+                            valuation_class: $('#edit_valuation_class'+id).val(),
+                            price_control: $('#edit_price_control'+id).val(),
+                            material_id: $('#edit_data_main_material'+id).val(),
+                            plant_id: $('#edit_data_main_plant'+id).val(),
+                            total_stock: $('#edit_total_stock'+id).val(),
+                            total_value: $('#edit_total_value'+id).val(),
+                            nilai_satuan: $('#edit_nilai_satuan'+id).val(),
+                        },
+                        success:function (response) {
+                            if (response.Code === 200){
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.success('Data Berhasil Disimpan', 'Success')
+                                get_data()
+                            }else if (response.Code === 0){
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else {
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
+                            }
+                        }
+                    })
+
+                }
+
+            })
+        }
+
+        function delete_saldo_awal(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data akan segera dihapus",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#019267',
+                cancelButtonColor: '#EF4B4B',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Kembali'
+            }).then((result) =>{
+                if (result.value){
+
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{route('delete_saldo_awal')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id,
+                        },
+                        success:function (response) {
+                            if (response.Code === 200){
+                                toastr.success('Data Berhasil Dihapus', 'Success')
+                                get_data()
+                            }else if (response.Code === 0){
+                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else {
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
+                            }
+                        }
+                    })
+
+                }
 
             })
         }

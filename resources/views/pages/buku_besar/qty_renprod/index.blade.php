@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Kategori Produk</h4>
+        <h4 class="page-title mb-0 text-primary">Kuantiti Rencana Produksi</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -25,25 +25,29 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Basic DataTable</div>
+                <div class="card-title">Basic Kuantiti Rencana Produksi</div>
             </div>
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_kategori_produk" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                        <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
-                                <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
-                                <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
+                                <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
+                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">PERIODE</th>
+                                <th data-type='text' data-name='region_id' class="border-bottom-0 text-center">REGION</th>
+                                <th data-type='text' data-name='qty_renprod_desc' class="border-bottom-0 text-center">DESKRIPSI</th>
+                                <th data-type='text' data-name='qty_renprod_value' class="border-bottom-0 text-center">VALUE</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='nama' class="text-center"></th>
-                                <th data-type='text' data-name='deskripsi' class="text-center"></th>
-                                <th data-type='select' data-name='status' class="text-center"></th>
+                                <th data-type='text' data-name='material_id' class="text-center"></th>
+                                <th data-type='text' data-name='periode_id' class="text-center"></th>
+                                <th data-type='text' data-name='region_id' class="text-center"></th>
+                                <th data-type='text' data-name='qty_renprod_desc' class="text-center"></th>
+                                <th data-type='text' data-name='qty_renprod_value' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
                             </tr>
                             </thead>
@@ -54,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.kategori_produk.add')
+            @include('pages.buku_besar.qty_renprod.add')
         </div> 
     </div>
 </div>
@@ -66,17 +70,77 @@
     <script>
         $(document).ready(function () {
             get_data()
-            
-            $('#is_active').select2({
+
+            $('#data_main_periode').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
+                placeholder: 'Pilih periode',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('periode_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_material').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_region').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih region',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('region_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             })
         })
 
         function get_data(){
-            $('#dt_kategori_produk').DataTable().clear().destroy();
-            $("#dt_kategori_produk").DataTable({
+            $('#dt_qty_renprod').DataTable().clear().destroy();
+            $("#dt_qty_renprod").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
@@ -114,22 +178,6 @@
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-                            }else if (data_type == 'select'){
-                                var input = document.createElement("select");
-                                input.className = "form-control form-control-sm custom-select select2";
-                                var options = "";
-                                if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }
-                                input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
-                                    .on('change clear', function () {
-                                        column.search($(this).val(), false, false, true).draw();
-                                    });
-
                             }
                         }
 
@@ -139,23 +187,25 @@
                     'pageLength', 'csv', 'pdf', 'excel', 'print'
                 ],
                 ajax: {
-                    url : '{{route("kategori_produk")}}',
+                    url : '{{route("qty_renprod")}}',
                     data: {data:'index'}
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'kategori_produk_name', name: 'kategori_produk_name', orderable:false},
-                    { data: 'kategori_produk_desc', name: 'kategori_produk_desc', orderable:false},
-                    { data: 'status', name: 'filter_status', orderable:false},
+                    { data: 'material_name', name: 'material.material_name', orderable:false},
+                    { data: 'periode_name', name: 'periode.periode_name', orderable:false},
+                    { data: 'region_name', name: 'regions.region_name', orderable:false},
+                    { data: 'qty_renprod_desc', name: 'qty_renprod_desc', orderable:false},
+                    { data: 'qty_renprod_value', name: 'qty_renprod_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
-
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,4,3]}
+                    {className: 'text-center', targets: [0,6]}
                 ],
 
             })
         }
+
 
         $('#submit').on('click', function () {
             Swal.fire({
@@ -174,12 +224,14 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('insert_kategori_produk')}}',
+                        url: '{{route('insert_qty_renprod')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            nama: $('#kategori_produk_name').val(),
-                            deskripsi: $('#kategori_produk_desc').val(),
-                            is_active: $('#is_active').val(),
+                            material_id: $('#data_main_material').val(),
+                            periode_id: $('#data_main_periode').val(),
+                            region_id: $('#data_main_region').val(),
+                            qty_renprod_desc: $('#qty_renprod_desc').val(),
+                            qty_renprod_value: $('#qty_renprod_value').val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
@@ -207,7 +259,7 @@
             })
         })
 
-        function update_kategori_produk(id) {
+        function update_qty_renprod(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -225,13 +277,15 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('update_kategori_produk')}}',
+                        url: '{{route('update_qty_renprod')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
-                            nama: $('#edit_kategori_produk_name'+id).val(),
-                            deskripsi: $('#edit_kategori_produk_desc'+id).val(),
-                            is_active: $('#edit_is_active'+id).val(),
+                            material_id: $('#edit_data_main_material'+id).val(),
+                            periode_id: $('#edit_data_main_periode'+id).val(),
+                            region_id: $('#edit_data_main_region'+id).val(),
+                            qty_renprod_desc: $('#edit_qty_renprod_desc'+id).val(),
+                            qty_renprod_value: $('#edit_qty_renprod_value'+id).val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
@@ -253,7 +307,7 @@
             })
         }
 
-        function delete_kategori_produk(id) {
+        function delete_qty_renprod(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -265,13 +319,13 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
+                
                     $.ajax({
                         type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_kategori_produk')}}',
+                        url: '{{route('delete_qty_renprod')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,

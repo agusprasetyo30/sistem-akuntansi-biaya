@@ -38,15 +38,15 @@
                 <li><a href="{{route('asumsi_umum')}}" class="slide-item"> Asumsi Umum</a></li>
                 <li><a href="{{route('cost_center')}}" class="slide-item"> Cost Center</a></li>
 				<li><a href="{{url('master/saldo-awal')}}" class="slide-item"> Saldo Awal</a></li>
-				{{-- <li><a href="#" class="slide-item"> Kuantiti Rencana Produksi</a></li>
+				<li><a href="{{url('master/qty-renprod')}}" class="slide-item"> Kuantiti Rencana Produksi</a></li>
 				<li><a href="#" class="slide-item"> Kuantiti Rencana Pengadaan</a></li>
 				<li><a href="#" class="slide-item"> Price Pengadaan</a></li>
 				<li><a href="#" class="slide-item"> Total Pengadaan</a></li>
-				<li><a href="#" class="slide-item"> ZCO</a></li>
+				<!-- <li><a href="#" class="slide-item"> ZCO</a></li>
 				<li><a href="#" class="slide-item"> SALR</a></li>
 				<li><a href="#" class="slide-item"> Laba Rugi</a></li>
 				<li><a href="#" class="slide-item"> Pakai Jual</a></li>
-				<li><a href="#" class="slide-item"> Balans</a></li> --}}
+				<li><a href="#" class="slide-item"> Balans</a></li> -->
 			</ul>
 		</li>
 		<li class="slide">
