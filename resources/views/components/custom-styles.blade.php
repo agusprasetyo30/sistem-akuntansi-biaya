@@ -1,5 +1,5 @@
 		<!--Favicon -->
-		<link rel="icon" href="{{asset('assets/images/brand/favicon.ico')}}" type="image/x-icon"/>
+		<link rel="icon" href="{{asset('assets/images/logo/Petrokimia_Gresik_logo.png')}}" type="image/x-icon"/>
 
 		<!--Bootstrap css -->
 		<link href="{{asset('assets/plugins/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
