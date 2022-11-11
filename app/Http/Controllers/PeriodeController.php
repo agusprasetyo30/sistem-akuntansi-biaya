@@ -10,14 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 class PeriodeController extends Controller
 {
-    public function index(Request $request, PeriodeDataTable $periodeDataTable){
-        if ($request->data == 'index'){
+    public function index(Request $request, PeriodeDataTable $periodeDataTable)
+    {
+        if ($request->data == 'index') {
             return $periodeDataTable->render('pages.master.periode.index');
         }
         return view('pages.master.periode.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
             $request->validate([
                 "nama" => 'required',
@@ -38,12 +40,13 @@ class PeriodeController extends Controller
             Periode::create($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         try {
             $request->validate([
                 "nama" => 'required',
@@ -53,8 +56,8 @@ class PeriodeController extends Controller
             ]);
 
             $input['periode_name'] = $request->nama;
-            $input['awal_periode'] = $request->awal_periode;
-            $input['akhir_periode'] = $request->akhir_periode;
+            $input['awal_periode'] = date('Y-m-d', strtotime($request->awal_periode));
+            $input['akhir_periode'] = date('Y-m-d', strtotime($request->akhir_periode));
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -63,12 +66,13 @@ class PeriodeController extends Controller
                 ->where('id', $request->id)->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         try {
             Periode::where('id', $request->id)
                 ->update([
@@ -76,7 +80,7 @@ class PeriodeController extends Controller
                     'deleted_by' => auth()->user()->id
                 ]);
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
