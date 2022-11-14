@@ -1,6 +1,6 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a class="btn bg-danger-transparent" onclick="delete_qty_renprod({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+<a class="btn bg-danger-transparent" onclick="delete_qty_rendaan({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 
 <!-- Modal Detail-->
@@ -9,7 +9,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Kuantiti Rencana Produksi</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Kuantiti Rencana Pengadaan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -39,14 +39,14 @@
                             <div class="form-group">
                                 <label>Deskripsi </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Total Value" value="{{$model->qty_renprod_desc}}" name="detail_qty_renprod_desc"
-                                    id="detail_qty_renprod_desc" autocomplete="off">
+                                    placeholder="Total Value" value="{{$model->qty_rendaan_desc}}" name="detail_qty_rendaan_desc"
+                                    id="detail_qty_rendaan_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->qty_renprod_value}}" name="detail_qty_renprod_value"
-                                    id="detail_qty_renprod_value" autocomplete="off">
+                                    placeholder="Nilai Satuan" value="{{$model->qty_rendaan_value}}" name="detail_qty_rendaan_value"
+                                    id="detail_qty_rendaan_value" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Kuantiti Rencana Produksi</h5>
+                <h5 class="modal-title" id="largemodal1">Edit Kuantiti Rencana Pengadaan</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -96,21 +96,21 @@
                             <div class="form-group">
                                 <label>Total Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Deskripsi"
-                                    value="{{$model->qty_renprod_desc}}" name="edit_qty_renprod_desc"
-                                    id="edit_qty_renprod_desc{{$model->id}}" autocomplete="off">
+                                    value="{{$model->qty_rendaan_desc}}" name="edit_qty_rendaan_desc"
+                                    id="edit_qty_rendaan_desc{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->qty_renprod_value}}" name="edit_qty_renprod_value"
-                                    id="edit_qty_renprod_value{{$model->id}}" autocomplete="off">
+                                    value="{{$model->qty_rendaan_value}}" name="edit_qty_rendaan_value"
+                                    id="edit_qty_rendaan_value{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit" onclick="update_qty_renprod({{$model->id}})"
+                <button type="button" id="submit_edit" onclick="update_qty_rendaan({{$model->id}})"
                     class="btn btn-primary">Simpan</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
