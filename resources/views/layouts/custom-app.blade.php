@@ -10,7 +10,7 @@
 		<meta name="keywords" content="laravel ui admin template, laravel admin template, laravel dashboard template,laravel ui template, laravel ui, livewire, laravel, laravel admin panel, laravel admin panel template, laravel blade, laravel bootstrap5, bootstrap admin template, admin, dashboard, admin template">
 
 		<!-- Title -->
-		<title>Azea – Laravel Admin & Dashboard Template</title>
+		<title>Akuntansi Biaya</title>
 
         @include('components.custom-styles')
 
