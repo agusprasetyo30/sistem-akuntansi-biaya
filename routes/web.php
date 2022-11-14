@@ -140,6 +140,25 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
         });
 
+        // Main Select2
+        Route::group(['prefix' => 'main_data'], function () {
+            Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
+            Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');
+            Route::get('/kategori_material', [SelectController::class, 'kategori_material'])->name('kategori_material_select');
+            Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
+            Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
+            Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
+        });
+    });
+
+    Route::group(['prefix' => 'buku-besar'], function () {
+        Route::group(['prefix' => 'cost_center'], function () {
+            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
+            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
+            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
+            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
+        });
+
         Route::group(['prefix' => 'asumsi_umum'], function () {
             Route::get('/', [AsumsiUmumController::class, 'index'])->name('asumsi_umum');
             Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
@@ -161,36 +180,26 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [QtyRenProdController::class, 'delete'])->name('delete_qty_renprod');
         });
 
-        // Route::group(['prefix' => 'qty-rendaan'], function () {
-        //     Route::get('/', [QtyRenDaanController::class, 'index'])->name('saldo_awal');
-        //     Route::post('insert', [QtyRenDaanController::class, 'create'])->name('insert_saldo_awal');
-        //     Route::post('update', [QtyRenDaanController::class, 'update'])->name('update_saldo_awal');
-        //     Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_saldo_awal');
-        // });
+        Route::group(['prefix' => 'qty-rendaan'], function () {
+            Route::get('/', [QtyRenDaanController::class, 'index'])->name('qty_rendaan');
+            Route::post('insert', [QtyRenDaanController::class, 'create'])->name('insert_qty_rendaan');
+            Route::post('update', [QtyRenDaanController::class, 'update'])->name('update_qty_rendaan');
+            Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_qty_rendaan');
+        });
 
         // Route::group(['prefix' => 'price-rendaan'], function () {
-        //     Route::get('/', [PriceDaanController::class, 'index'])->name('saldo_awal');
-        //     Route::post('insert', [PriceDaanController::class, 'create'])->name('insert_saldo_awal');
-        //     Route::post('update', [PriceDaanController::class, 'update'])->name('update_saldo_awal');
-        //     Route::post('delete', [PriceDaanController::class, 'delete'])->name('delete_saldo_awal');
+        //     Route::get('/', [PriceDaanController::class, 'index'])->name('price_daan');
+        //     Route::post('insert', [PriceDaanController::class, 'create'])->name('insert_price_daan');
+        //     Route::post('update', [PriceDaanController::class, 'update'])->name('update_price_daan');
+        //     Route::post('delete', [PriceDaanController::class, 'delete'])->name('delete_price_daan');
         // });
 
         // Route::group(['prefix' => 'total-daan'], function () {
-        //     Route::get('/', [TotalDaanController::class, 'index'])->name('saldo_awal');
-        //     Route::post('insert', [TotalDaanController::class, 'create'])->name('insert_saldo_awal');
-        //     Route::post('update', [TotalDaanController::class, 'update'])->name('update_saldo_awal');
-        //     Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_saldo_awal');
+        //     Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
+        //     Route::post('insert', [TotalDaanController::class, 'create'])->name('insert_total_daan');
+        //     Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
+        //     Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
         // });
-
-        // Main Select2
-        Route::group(['prefix' => 'main_data'], function () {
-            Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
-            Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');
-            Route::get('/kategori_material', [SelectController::class, 'kategori_material'])->name('kategori_material_select');
-            Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
-            Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
-            Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
-        });
     });
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);
