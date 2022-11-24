@@ -40,8 +40,8 @@
 				<li><a href="{{url('buku-besar/saldo-awal')}}" class="slide-item"> Saldo Awal</a></li>
 				<li><a href="{{url('buku-besar/qty-renprod')}}" class="slide-item"> Kuantiti Rencana Produksi</a></li>
 				<li><a href="{{url('buku-besar/qty-rendaan')}}" class="slide-item"> Kuantiti Rencana Pengadaan</a></li>
-				<li><a href="#" class="slide-item"> Price Pengadaan</a></li>
-				<li><a href="#" class="slide-item"> Total Pengadaan</a></li>
+				<li><a href="{{url('buku-besar/price-rendaan')}}" class="slide-item"> Price Rencana Pengadaan</a></li>
+				<li><a href="{{url('buku-besar/total-daan')}}" class="slide-item"> Total Pengadaan</a></li>
 				<!-- <li><a href="#" class="slide-item"> ZCO</a></li>
 				<li><a href="#" class="slide-item"> SALR</a></li>
 				<li><a href="#" class="slide-item"> Laba Rugi</a></li>

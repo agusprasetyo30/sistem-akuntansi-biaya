@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <label>Deskripsi </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Total Value" value="{{$model->qty_rendaan_desc}}" name="detail_qty_rendaan_desc"
+                                    placeholder="Deskripsi" value="{{$model->qty_rendaan_desc}}" name="detail_qty_rendaan_desc"
                                     id="detail_qty_rendaan_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -94,7 +94,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Total Value </label>
+                                <label>Deskripsi </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Deskripsi"
                                     value="{{$model->qty_rendaan_desc}}" name="edit_qty_rendaan_desc"
                                     id="edit_qty_rendaan_desc{{$model->id}}" autocomplete="off">
