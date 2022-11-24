@@ -9,7 +9,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class QtyRenDaanDataTable extends DataTable
+class PriceRenDaanDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -19,16 +19,16 @@ class QtyRenDaanDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('qty_rendaan')->select('qty_rendaan.*', 'material.material_name', 'periode.periode_name', 'regions.region_name')
-            ->leftjoin('material', 'material.id', '=', 'qty_rendaan.material_id')
-            ->leftjoin('periode', 'periode.id', '=', 'qty_rendaan.periode_id')
-            ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
-            ->whereNull('qty_rendaan.deleted_at');
+        $query = DB::table('price_rendaan')->select('price_rendaan.*', 'material.material_name', 'periode.periode_name', 'regions.region_name')
+            ->leftjoin('material', 'material.id', '=', 'price_rendaan.material_id')
+            ->leftjoin('periode', 'periode.id', '=', 'price_rendaan.periode_id')
+            ->leftjoin('regions', 'regions.id', '=', 'price_rendaan.region_id')
+            ->whereNull('price_rendaan.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('action', 'pages.buku_besar.qty_rendaan.action')
+            ->addColumn('action', 'pages.buku_besar.price_rendaan.action')
             ->escapeColumns([]);
     }
 
@@ -36,7 +36,7 @@ class QtyRenDaanDataTable extends DataTable
     {
         return $this->builder()
             ->addTableClass('table table-bordered text-nowrap key-buttons')
-            ->setTableId('dt_qty_rendaan')
+            ->setTableId('dt_price_rendaan')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -77,6 +77,6 @@ class QtyRenDaanDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Master\QtyRenDaan_' . date('YmdHis');
+        return 'Master\QtyPriceRenDaan_' . date('YmdHis');
     }
 }

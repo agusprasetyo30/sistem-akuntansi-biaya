@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\Master\TotalDaanDataTable;
-use App\Models\TotalDaan;
+use App\DataTables\Master\PriceRenDaanDataTable;
+use App\Models\PriceRenDaan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class TotalDaanController extends Controller
+class PriceRenDaanController extends Controller
 {
-    public function index(Request $request, TotalDaanDataTable $totaldaanDataTable)
+    public function index(Request $request, PriceRenDaanDataTable $pricerendaanDataTable)
     {
         if ($request->data == 'index') {
-            return $totaldaanDataTable->render('pages.buku_besar.total_daan.index');
+            return $pricerendaanDataTable->render('pages.buku_besar.price_rendaan.index');
         }
-        return view('pages.buku_besar.total_daan.index');
+        return view('pages.buku_besar.price_rendaan.index');
     }
 
     public function create(Request $request)
@@ -24,21 +24,21 @@ class TotalDaanController extends Controller
                 "material_id" => 'required',
                 "periode_id" => 'required',
                 "region_id" => 'required',
-                "total_daan_desc" => 'required',
-                "total_daan_value" => 'required',
+                "price_rendaan_desc" => 'required',
+                "price_rendaan_value" => 'required',
             ]);
 
             $input['material_id'] = $request->material_id;
             $input['periode_id'] = $request->periode_id;
             $input['region_id'] = $request->region_id;
-            $input['total_daan_desc'] = $request->total_daan_desc;
-            $input['total_daan_value'] = $request->total_daan_value;
+            $input['price_rendaan_desc'] = $request->price_rendaan_desc;
+            $input['price_rendaan_value'] = $request->price_rendaan_value;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            TotalDaan::create($input);
+            PriceRenDaan::create($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
@@ -53,19 +53,19 @@ class TotalDaanController extends Controller
                 "material_id" => 'required',
                 "periode_id" => 'required',
                 "region_id" => 'required',
-                "total_daan_desc" => 'required',
-                "total_daan_value" => 'required',
+                "price_rendaan_desc" => 'required',
+                "price_rendaan_value" => 'required',
             ]);
 
             $input['material_id'] = $request->material_id;
             $input['periode_id'] = $request->periode_id;
             $input['region_id'] = $request->region_id;
-            $input['total_daan_desc'] = $request->total_daan_desc;
-            $input['total_daan_value'] = $request->total_daan_value;
+            $input['price_rendaan_desc'] = $request->price_rendaan_desc;
+            $input['price_rendaan_value'] = $request->price_rendaan_value;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
 
-            TotalDaan::where('id', $request->id)
+            PriceRenDaan::where('id', $request->id)
                 ->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
@@ -80,7 +80,7 @@ class TotalDaanController extends Controller
             $input['deleted_at'] = Carbon::now();
             $input['deleted_by'] = auth()->user()->id;
 
-            TotalDaan::where('id', $request->id)
+            PriceRenDaan::where('id', $request->id)
                 ->update($input);
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {

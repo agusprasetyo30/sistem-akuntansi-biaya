@@ -17,7 +17,7 @@ use App\Http\Controllers\RegionsController;
 use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\SelectController;
 use App\Http\Controllers\AsumsiUmumController;
-use App\Http\Controllers\PriceDaanController;
+use App\Http\Controllers\PriceRenDaanController;
 use App\Http\Controllers\QtyRenDaanController;
 use App\Http\Controllers\QtyRenProdController;
 use App\Http\Controllers\SaldoAwalController;
@@ -187,19 +187,19 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_qty_rendaan');
         });
 
-        // Route::group(['prefix' => 'price-rendaan'], function () {
-        //     Route::get('/', [PriceDaanController::class, 'index'])->name('price_daan');
-        //     Route::post('insert', [PriceDaanController::class, 'create'])->name('insert_price_daan');
-        //     Route::post('update', [PriceDaanController::class, 'update'])->name('update_price_daan');
-        //     Route::post('delete', [PriceDaanController::class, 'delete'])->name('delete_price_daan');
-        // });
+        Route::group(['prefix' => 'price-rendaan'], function () {
+            Route::get('/', [PriceRenDaanController::class, 'index'])->name('price_rendaan');
+            Route::post('insert', [PriceRenDaanController::class, 'create'])->name('insert_price_rendaan');
+            Route::post('update', [PriceRenDaanController::class, 'update'])->name('update_price_rendaan');
+            Route::post('delete', [PriceRenDaanController::class, 'delete'])->name('delete_price_rendaan');
+        });
 
-        // Route::group(['prefix' => 'total-daan'], function () {
-        //     Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
-        //     Route::post('insert', [TotalDaanController::class, 'create'])->name('insert_total_daan');
-        //     Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
-        //     Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
-        // });
+        Route::group(['prefix' => 'total-daan'], function () {
+            Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
+            Route::post('insert', [TotalDaanController::class, 'create'])->name('insert_total_daan');
+            Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
+            Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
+        });
     });
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);

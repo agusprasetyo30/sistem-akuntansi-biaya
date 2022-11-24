@@ -9,11 +9,11 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Plant</h4>
+        <h4 class="page-title mb-0 text-primary">Price Pengadaan</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
-            {{-- <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button> --}}
+            <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
             <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
         </div>
     </div>
@@ -25,25 +25,29 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Basic DataTable</div>
+                <div class="card-title">Price Pengadaan</div>
             </div>
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_plant" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                        <table id="dt_price_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
-                                <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
-                                <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
+                                <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
+                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">PERIODE</th>
+                                <th data-type='text' data-name='region_id' class="border-bottom-0 text-center">REGION</th>
+                                <th data-type='text' data-name='price_rendaan_desc' class="border-bottom-0 text-center">DESKRIPSI</th>
+                                <th data-type='text' data-name='price_rendaan_value' class="border-bottom-0 text-center">VALUE</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='nama' class="text-center"></th>
-                                <th data-type='text' data-name='deskripsi' class="text-center"></th>
-                                <th data-type='select' data-name='status' class="text-center"></th>
+                                <th data-type='text' data-name='material_id' class="text-center"></th>
+                                <th data-type='text' data-name='periode_id' class="text-center"></th>
+                                <th data-type='text' data-name='region_id' class="text-center"></th>
+                                <th data-type='text' data-name='price_rendaan_desc' class="text-center"></th>
+                                <th data-type='text' data-name='price_rendaan_value' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
                             </tr>
                             </thead>
@@ -54,8 +58,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        @include('pages.master.plant.add')
+            @include('pages.buku_besar.price_rendaan.add')
+        </div> 
     </div>
 </div>
 <!-- /Row -->
@@ -67,16 +71,76 @@
         $(document).ready(function () {
             get_data()
 
-            $('#is_active').select2({
+            $('#data_main_periode').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
+                placeholder: 'Pilih periode',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('periode_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_material').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_region').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih region',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('region_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             })
         })
 
         function get_data(){
-            $('#dt_plant').DataTable().clear().destroy();
-            $("#dt_plant").DataTable({
+            $('#dt_price_rendaan').DataTable().clear().destroy();
+            $("#dt_price_rendaan").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
@@ -107,29 +171,13 @@
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
                                 appendTo($(column.header()).empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-                            }else if (data_type == 'select'){
-                                var input = document.createElement("select");
-                                input.className = "form-control custom-select select2";
-                                var options = "";
-                                if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }
-                                input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
-                                    .on('change clear', function () {
-                                        column.search($(this).val(), false, false, true).draw();
-                                    });
-
                             }
                         }
 
@@ -139,23 +187,25 @@
                     'pageLength', 'csv', 'pdf', 'excel', 'print'
                 ],
                 ajax: {
-                    url : '{{route("plant")}}',
+                    url : '{{route("price_rendaan")}}',
                     data: {data:'index'}
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'plant_code', name: 'plant_code', orderable:false},
-                    { data: 'plant_desc', name: 'plant_desc', orderable:false},
-                    { data: 'status', name: 'filter_status', orderable:false},
+                    { data: 'material_name', name: 'material.material_name', orderable:false},
+                    { data: 'periode_name', name: 'periode.periode_name', orderable:false},
+                    { data: 'region_name', name: 'regions.region_name', orderable:false},
+                    { data: 'price_rendaan_desc', name: 'price_rendaan_desc', orderable:false},
+                    { data: 'price_rendaan_value', name: 'price_rendaan_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
-
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [4,3]}
+                    {className: 'text-center', targets: [0,6]}
                 ],
 
             })
         }
+
 
         $('#submit').on('click', function () {
             Swal.fire({
@@ -174,12 +224,14 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('insert_plant')}}',
+                        url: '{{route('insert_price_rendaan')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            code: $('#code_plant').val(),
-                            deskripsi: $('#deskripsi_plant').val(),
-                            is_active: $('#is_active').val(),
+                            material_id: $('#data_main_material').val(),
+                            periode_id: $('#data_main_periode').val(),
+                            region_id: $('#data_main_region').val(),
+                            price_rendaan_desc: $('#price_rendaan_desc').val(),
+                            price_rendaan_value: $('#price_rendaan_value').val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
@@ -207,7 +259,7 @@
             })
         })
 
-        function update_plant(id) {
+        function update_price_rendaan(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -225,13 +277,15 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('update_plant')}}',
+                        url: '{{route('update_price_rendaan')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
-                            code: $('#edit_code_plant'+id).val(),
-                            deskripsi: $('#edit_deskripsi_plant'+id).val(),
-                            is_active: $('#edit_is_active'+id).val(),
+                            material_id: $('#edit_data_main_material'+id).val(),
+                            periode_id: $('#edit_data_main_periode'+id).val(),
+                            region_id: $('#edit_data_main_region'+id).val(),
+                            price_rendaan_desc: $('#edit_price_rendaan_desc'+id).val(),
+                            price_rendaan_value: $('#edit_price_rendaan_value'+id).val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
@@ -253,7 +307,7 @@
             })
         }
 
-        function delete_plant(id) {
+        function delete_price_rendaan(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -265,13 +319,13 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
+                
                     $.ajax({
                         type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_plant')}}',
+                        url: '{{route('delete_price_rendaan')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
