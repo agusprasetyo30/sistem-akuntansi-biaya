@@ -110,6 +110,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [PlantController::class, 'create'])->name('insert_plant');
             Route::post('update', [PlantController::class, 'update'])->name('update_plant');
             Route::post('delete', [PlantController::class, 'delete'])->name('delete_plant');
+            Route::post('import', [PlantController::class, 'import'])->name('import_plant');
         });
 
         Route::group(['prefix' => 'kategori-material'], function () {

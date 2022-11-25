@@ -24,9 +24,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
+            {{-- <div class="card-header">
                 <div class="card-title">Basic DataTable</div>
-            </div>
+            </div> --}}
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
@@ -80,6 +80,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
+                searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -136,7 +137,8 @@
                     });
                 },
                 buttons: [
-                    'pageLength', 'csv', 'pdf', 'excel', 'print'
+                    { extend: 'pageLength', className: 'mb-5' },
+                    { extend: 'excel', className: 'mb-5' }
                 ],
                 ajax: {
                     url : '{{route("kategori_produk")}}',
