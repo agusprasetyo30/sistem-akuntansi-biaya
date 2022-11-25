@@ -14,6 +14,7 @@
     <div class="page-rightheader">
         <div class="btn-list">
             {{-- <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button> --}}
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button>
             <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
         </div>
     </div>
@@ -24,9 +25,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
+            {{-- <div class="card-header">
                 <div class="card-title">Basic DataTable</div>
-            </div>
+            </div> --}}
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
@@ -56,6 +57,7 @@
             </div>
         </div>
         @include('pages.master.plant.add')
+        @include('pages.master.plant.import')
     </div>
 </div>
 <!-- /Row -->
@@ -80,6 +82,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
+                searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -107,7 +110,7 @@
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
                                 appendTo($(column.header()).empty()).
@@ -116,7 +119,7 @@
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control custom-select select2";
+                                input.className = "form-control form-control-sm custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
                                     options += '<option value="">Semua</option>';
@@ -136,7 +139,8 @@
                     });
                 },
                 buttons: [
-                    'pageLength', 'csv', 'pdf', 'excel', 'print'
+                    { extend: 'pageLength', className: 'mb-5' },
+                    { extend: 'excel', className: 'mb-5' }
                 ],
                 ajax: {
                     url : '{{route("plant")}}',
@@ -151,7 +155,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [4,3]}
+                    {className: 'text-center', targets: [0,4,3]}
                 ],
 
             })
@@ -195,6 +199,60 @@
                             }else {
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
+                            }
+
+
+                        }
+                    })
+
+                }
+
+            })
+        })
+
+        $('#submit-import').on('click', function () {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data akan segera import",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#019267',
+                cancelButtonColor: '#EF4B4B',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Kembali'
+            }).then((result) =>{
+                if (result.value){
+                    let file = new FormData($("#form-input")[0]);
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        contentType: false,
+                        url: '{{route('import_plant')}}',
+                        data: file,
+                        success:function (response) {
+                            if (response.Code === 200){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                $('#is_active').val('').trigger("change");
+                                toastr.success('Data Berhasil Disimpan', 'Success')
+                                get_data()
+                            }else if (response.Code === 0){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 500){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                response.msg.forEach(element => {
+                                    toastr.warning(element, 'Warning')
+                                });
+                            }else {
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
 
