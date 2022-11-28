@@ -24,4 +24,15 @@ class KategoriMaterial extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function get_kategori($id)
+    {
+        $result = DB::table(DB::raw('kategori_material km'))
+            ->leftJoin(DB::raw('material mat'), 'mat.kategori_material_id', '=', 'km.id')
+            ->where('mat.kategori_material_id', $id)
+            ->whereNull('mat.deleted_at');
+
+        $result = $result->first();
+        return $result;
+    }
 }

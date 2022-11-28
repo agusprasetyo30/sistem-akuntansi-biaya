@@ -18,7 +18,7 @@ class Controller extends BaseController
 
     public function accessForbidden()
     {
-    	return response()->view('errors.403');
+        return response()->view('errors.403');
     }
 
     public function makeValidMsg($validator)
@@ -26,12 +26,8 @@ class Controller extends BaseController
         $msg = '';
 
         foreach ($validator->errors()->all() as $message)
-            $msg .= '<p>'.$message.'</p>';
+            $msg .= '<p>' . $message . '</p>';
 
-        return response()->json([
-            'title'=>'Oopss...',
-            'msg'=>$msg,
-            'type'=>'error'
-        ], 400);
+        return response()->json(['Code' => 400, 'msg' => $msg]);
     }
 }
