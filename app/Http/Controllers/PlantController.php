@@ -8,6 +8,7 @@ use App\Models\Plant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class PlantController extends Controller
 {
@@ -22,12 +23,14 @@ class PlantController extends Controller
     public function create(Request $request)
     {
         try {
-            $request->validate([
-                "code" => 'required',
-                "deskripsi" => 'required',
-                "is_active" => 'required',
-            ]);
+            $validator = Validator::make($request->all(), [
+                'code' => 'required|unique:plant,plant_code',
+                'deskripsi' => 'required',
+                'is_active' => 'required',
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['plant_code'] = $request->code;
             $input['plant_desc'] = $request->deskripsi;

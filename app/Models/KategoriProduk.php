@@ -24,4 +24,15 @@ class KategoriProduk extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function get_kategori($id)
+    {
+        $result = DB::table(DB::raw('kategori_produk kp'))
+            ->leftJoin(DB::raw('produk prod'), 'prod.kategori_produk_id', '=', 'kp.id')
+            ->where('prod.kategori_produk_id', $id)
+            ->whereNull('prod.deleted_at');
+
+        $result = $result->first();
+        return $result;
+    }
 }

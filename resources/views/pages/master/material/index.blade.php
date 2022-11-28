@@ -236,6 +236,14 @@
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
+                            }else {
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
                         },
                         error: function (response) {

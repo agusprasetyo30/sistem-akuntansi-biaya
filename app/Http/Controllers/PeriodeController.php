@@ -7,6 +7,7 @@ use App\Models\Periode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class PeriodeController extends Controller
 {
@@ -21,12 +22,15 @@ class PeriodeController extends Controller
     public function create(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "nama" => 'required',
                 "awal_periode" => 'required',
                 "akhir_periode" => 'required',
                 "is_active" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['periode_name'] = $request->nama;
             $input['awal_periode'] = $request->awal_periode;

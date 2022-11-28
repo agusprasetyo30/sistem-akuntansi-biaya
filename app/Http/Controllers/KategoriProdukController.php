@@ -7,24 +7,29 @@ use App\Models\KategoriProduk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class KategoriProdukController extends Controller
 {
-    public function index(Request $request, KategoriProdukDataTable $kategoriprodukDataTable){
-        if ($request->data == 'index'){
+    public function index(Request $request, KategoriProdukDataTable $kategoriprodukDataTable)
+    {
+        if ($request->data == 'index') {
             return $kategoriprodukDataTable->render('pages.master.kategori_produk.index');
         }
         return view('pages.master.kategori_produk.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
-            $request->validate([
-                "nama" => 'required',
-                "deskripsi" => 'required',
-                "is_active" => 'required',
-            ]);
+            $validator = Validator::make($request->all(), [
+                'nama' => 'required',
+                'deskripsi' => 'required',
+                'is_active' => 'required',
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['kategori_produk_name'] = $request->nama;
             $input['kategori_produk_desc'] = $request->deskripsi;
@@ -37,12 +42,13 @@ class KategoriProdukController extends Controller
             KategoriProduk::create($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         try {
             $request->validate([
                 "nama" => 'required',
@@ -60,20 +66,27 @@ class KategoriProdukController extends Controller
                 ->where('id', $request->id)->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         try {
-            KategoriProduk::where('id', $request->id)
-                ->update([
-                    'deleted_at' => Carbon::now(),
-                    'deleted_by' => auth()->user()->id
-                ]);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
-        }catch (\Exception $exception){
+            $produk = KategoriProduk::get_kategori($request->id);
+
+            if ($produk != null) {
+                return response()->json(['Code' => 502, 'msg' => 'Kategori masih digunakan, kategori hanya bisa dinonaktifkan']);
+            } else {
+                KategoriProduk::where('id', $request->id)
+                    ->update([
+                        'deleted_at' => Carbon::now(),
+                        'deleted_by' => auth()->user()->id
+                    ]);
+                return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            }
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

@@ -7,27 +7,32 @@ use App\Models\Regions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Validator;
 
 class RegionsController extends Controller
 {
-    public function index(Request $request, RegionDataTable $regionDataTable){
-        if ($request->data == 'index'){
-//            dd($request->data);
+    public function index(Request $request, RegionDataTable $regionDataTable)
+    {
+        if ($request->data == 'index') {
+            //            dd($request->data);
             return $regionDataTable->render('pages.master.regions.index');
         }
         return view('pages.master.regions.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "nama" => 'required',
                 "deskripsi" => 'required',
                 "latitude" => 'required',
                 "longtitude" => 'required',
                 "is_active" => 'required',
-            ]);
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['region_name'] = $request->nama;
             $input['region_desc'] = $request->deskripsi;
@@ -42,12 +47,13 @@ class RegionsController extends Controller
             Regions::create($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         try {
             $request->validate([
                 "nama" => 'required',
@@ -69,13 +75,14 @@ class RegionsController extends Controller
                 ->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
-//            dd($exception);
+        } catch (\Exception $exception) {
+            //            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         try {
             $input['deleted_at'] = Carbon::now();
             $input['deleted_by'] = auth()->user()->id;
@@ -83,7 +90,7 @@ class RegionsController extends Controller
             Regions::where('id', $request->id)
                 ->update($input);
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

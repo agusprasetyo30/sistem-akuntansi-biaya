@@ -190,10 +190,10 @@
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
-                            }else if (response.Code === 0){
+                            }else if (response.Code === 400){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
@@ -282,8 +282,8 @@
                             if (response.Code === 200){
                                 toastr.success('Data Berhasil Dihapus', 'Success')
                                 get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 502){
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
