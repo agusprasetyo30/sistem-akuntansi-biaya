@@ -8,6 +8,8 @@ use App\Models\Material;
 use App\Models\periode;
 use App\Models\Plant;
 use App\Models\Regions;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -159,5 +161,61 @@ class SelectController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function role(Request $request){
+        $search = $request->search;
+        if ($search == '') {
+            $role = Role::limit(10)
+                ->where('is_active', 't')
+                ->get();
+        } else {
+            $role = Role::where('nama_role', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($role as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->nama_role
+            );
+        }
+
+        return response()->json($response);
+    }
+
+
+
+//    Helper
+
+    public function check_username(Request $request){
+        try {
+            $data = User::where('username', $request->search)
+                ->count();
+            if ($data != 0){
+                return response()->json(['Code' => 201, 'msg' => 'Data Berasil Ditemukan']);
+            }else{
+                return response()->json(['Code' => 200, 'msg' => 'Data Tidak Tersedia']);
+            }
+        }catch (\Exception $exception){
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function check_email(Request $request){
+        try {
+            $data = User::where('email', $request->search)
+                ->count();
+            if ($data != 0){
+                return response()->json(['Code' => 201, 'msg' => 'Data Berasil Ditemukan']);
+            }else{
+                return response()->json(['Code' => 200, 'msg' => 'Data Tidak Tersedia']);
+            }
+        }catch (\Exception $exception){
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
     }
 }
