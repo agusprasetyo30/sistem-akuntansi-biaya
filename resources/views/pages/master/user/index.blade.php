@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Role</h4>
+            <h4 class="page-title mb-0 text-primary">Management Users</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -25,7 +25,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Management Role</div>
+                    <div class="card-title">Management Users</div>
                 </div>
                 <div class="card-body">
                     <div class="">
@@ -62,10 +62,32 @@
         $(document).ready(function () {
             get_data()
 
-            $('#is_active').select2({
+            $('#login_method').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
+                placeholder: 'Pilih Metode',
                 width: '100%'
+            })
+
+            $('#data_main_role').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Role',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('role_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             })
 
         })
@@ -167,28 +189,46 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('insert_role')}}',
+                        url: '{{route('insert_user')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            role: $('#role').val(),
-                            status: $('#is_active').val(),
+                            nama: $('#nama').val(),
+                            username: $('#username').val(),
+                            role: $('#data_main_role').val(),
+                            metode: $('#login_method').val(),
+                            email: $('#email').val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
-                                $('#is_active').val('').trigger("change");
+                                $('#data_main_role').val('').trigger("change");
+                                $('#login_method').val('').trigger("change");
+                                $('#username').removeClass('is-invalid');
+                                $('#username').removeClass('is-valid');
+                                $('#email').removeClass('is-invalid');
+                                $('#email').removeClass('is-valid');
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("");
-                                $('#is_active').val('').trigger("change");
+                                $('#data_main_role').val('').trigger("change");
+                                $('#login_method').val('').trigger("change");
+                                $('#username').removeClass('is-invalid');
+                                $('#username').removeClass('is-valid');
+                                $('#email').removeClass('is-invalid');
+                                $('#email').removeClass('is-valid');
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                             }else {
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("");
-                                $('#is_active').val('').trigger("change");
+                                $('#data_main_role').val('').trigger("change");
+                                $('#login_method').val('').trigger("change");
+                                $('#username').removeClass('is-invalid');
+                                $('#username').removeClass('is-valid');
+                                $('#email').removeClass('is-invalid');
+                                $('#email').removeClass('is-valid');
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
                         }
@@ -199,7 +239,59 @@
             })
         })
 
-        function update_role(id) {
+        $('#username').on('keyup', function () {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('helper_username')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    search: $('#username').val(),
+                },
+                success:function (response) {
+                    if (response.Code === 200){
+                        $('#username').removeClass('is-invalid');
+                        $('#username').addClass('is-valid');
+                    }else if (response.Code === 201){
+                        $('#username').removeClass('is-valid');
+                        $('#username').addClass('is-invalid');
+                        $('#submit').prop('disabled', 'true');
+                    }else {
+                        toastr.error('Terdapat Kesalahan System', 'System Error')
+                    }
+                }
+            })
+        })
+
+        $('#email').on('keyup', function () {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('helper_email')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    search: $('#email').val(),
+                },
+                success:function (response) {
+                    if (response.Code === 200){
+                        $('#email').removeClass('is-invalid');
+                        $('#email').addClass('is-valid');
+                    }else if (response.Code === 201){
+                        $('#email').removeClass('is-valid');
+                        $('#email').addClass('is-invalid');
+                        $('#submit').prop('disabled', 'true');
+                    }else {
+                        toastr.error('Terdapat Kesalahan System', 'System Error')
+                    }
+                }
+            })
+        })
+
+        function update_user(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -217,12 +309,15 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('update_role')}}',
+                        url: '{{route('update_user')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
-                            role: $('#edit_role'+id).val(),
-                            status: $('#edit_is_active'+id).val(),
+                            nama: $('#edit_name'+id).val(),
+                            username: $('#edit_username'+id).val(),
+                            role: $('#edit_data_main_role'+id).val(),
+                            metode: $('#edit_login_method'+id).val(),
+                            email: $('#edit_email'+id).val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
@@ -244,7 +339,7 @@
             })
         }
 
-        function delete_role(id) {
+        function delete_user(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -262,7 +357,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_role')}}',
+                        url: '{{route('delete_user')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,

@@ -152,9 +152,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'user'], function () {
             Route::get('/', [UserController::class, 'index'])->name('user');
-            Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
-            Route::post('update', [RoleController::class, 'update'])->name('update_role');
-            Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
+            Route::post('insert', [UserController::class, 'create'])->name('insert_user');
+            Route::post('update', [UserController::class, 'update'])->name('update_user');
+            Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
         });
 
         // Main Select2
@@ -165,6 +165,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
             Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
+            Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
+
+//            Helper
+            Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
+            Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
         });
     });
 

@@ -268,18 +268,9 @@ if (!function_exists('status_is_active')){
 
         );
 
-//        if (isNullOrEmptyString($id)) {
-//            return $status;
-//        } else {
-//            if (is_numeric($id) && isset($status[$id])) {
-//                return $status[$id];
-//            }
-//        }
-
         return $status;
     }
 }
-
 
 if (!function_exists('status_is_dummy')){
     function status_is_dummy(){
@@ -290,5 +281,16 @@ if (!function_exists('status_is_dummy')){
         );
 
         return $status;
+    }
+}
+
+if (!function_exists('login_method')){
+    function login_method(){
+        $login_method = array(
+            'DB'=>'DATABASE',
+            'SSO'=>'SSO',
+        );
+
+        return $login_method;
     }
 }
