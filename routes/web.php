@@ -22,6 +22,8 @@ use App\Http\Controllers\QtyRenDaanController;
 use App\Http\Controllers\QtyRenProdController;
 use App\Http\Controllers\SaldoAwalController;
 use App\Http\Controllers\TotalDaanController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -141,6 +143,20 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
         });
 
+        Route::group(['prefix' => 'role'], function () {
+            Route::get('/', [RoleController::class, 'index'])->name('role');
+            Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
+            Route::post('update', [RoleController::class, 'update'])->name('update_role');
+            Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
+        });
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [UserController::class, 'index'])->name('user');
+            Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
+            Route::post('update', [RoleController::class, 'update'])->name('update_role');
+            Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
+        });
+
         // Main Select2
         Route::group(['prefix' => 'main_data'], function () {
             Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
@@ -201,6 +217,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
             Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
         });
+
+
     });
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);

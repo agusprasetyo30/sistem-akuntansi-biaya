@@ -28,6 +28,8 @@
 				<li><a href="{{url('master/periode')}}" class="slide-item"> Periode</a></li>
 				<li><a href="{{url('master/plant')}}" class="slide-item"> Plant</a></li>
                 <li><a href="{{route('regions')}}" class="slide-item"> Region</a></li>
+                <li><a href="{{route('role')}}" class="slide-item"> Role</a></li>
+                <li><a href="{{route('user')}}" class="slide-item"> Users</a></li>
 			</ul>
 		</li>
 		<li class="slide">

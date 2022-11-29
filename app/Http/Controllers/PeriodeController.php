@@ -27,10 +27,11 @@ class PeriodeController extends Controller
                 "akhir_periode" => 'required',
                 "is_active" => 'required',
             ]);
+//            dd($request);
 
             $input['periode_name'] = $request->nama;
-            $input['awal_periode'] = $request->awal_periode;
-            $input['akhir_periode'] = $request->akhir_periode;
+            $input['awal_periode'] = date('Y-m-d H:i:s', strtotime($request->awal_periode));
+            $input['akhir_periode'] = date('Y-m-d H:i:s', strtotime($request->akhir_periode));
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -41,6 +42,7 @@ class PeriodeController extends Controller
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
+//            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
