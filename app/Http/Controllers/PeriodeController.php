@@ -33,8 +33,8 @@ class PeriodeController extends Controller
                 return $this->makeValidMsg($validator);
 
             $input['periode_name'] = $request->nama;
-            $input['awal_periode'] = $request->awal_periode;
-            $input['akhir_periode'] = $request->akhir_periode;
+            $input['awal_periode'] = date('Y-m-d H:i:s', strtotime($request->awal_periode));
+            $input['akhir_periode'] = date('Y-m-d H:i:s', strtotime($request->akhir_periode));
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
