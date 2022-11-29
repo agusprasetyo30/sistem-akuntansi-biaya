@@ -16,14 +16,14 @@ class CreatePeriodeTable extends Migration
         Schema::create('periode', function (Blueprint $table) {
             $table->id();
             $table->string('periode_name')->nullable();
-            $table->dateTime('awal_periode')->nullable();
-            $table->dateTime('akhir_periode')->nullable();
+            $table->timestamp('awal_periode')->nullable();
+            $table->timestamp('akhir_periode')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->dateTime('created_at');
+            $table->timestamp('created_at');
             $table->integer('created_by');
-            $table->dateTime('updated_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
             $table->integer('updated_by')->nullable();
-            $table->dateTime('deleted_at')->nullable();
+            $table->timestamp('deleted_at')->nullable();
             $table->integer('deleted_by')->nullable();
         });
     }
