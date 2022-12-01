@@ -55,12 +55,8 @@
                 </div>
             </div>
             @include('pages.master.kategori_material.add')
-<<<<<<< HEAD
-        </div>
-=======
             @include('pages.master.kategori_material.import')
         </div> 
->>>>>>> 83c98e5 (import : add import in master menu)
     </div>
 </div>
 <!-- /Row -->

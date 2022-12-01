@@ -61,12 +61,8 @@
                 </div>
             </div>
             @include('pages.master.material.add')
-<<<<<<< HEAD
-        </div>
-=======
             @include('pages.master.material.import')
         </div> 
->>>>>>> 83c98e5 (import : add import in master menu)
     </div>
 </div>
 <!-- /Row -->
