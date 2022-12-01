@@ -24,9 +24,9 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
-                {{-- <div class="card-header">
-                    <div class="card-title">Basic DataTable</div>
-                </div> --}}
+                <div class="card-header">
+                    <div class="card-title">COST CENTER</div>
+                </div>
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
@@ -103,7 +103,7 @@
             $("#dt_cost_center").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
-                searching: false,
+                // searching: false,
                 sortable: false,
                 processing: true,
                 serverSide: true,

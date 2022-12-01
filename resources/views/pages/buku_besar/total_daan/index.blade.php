@@ -59,7 +59,7 @@
                 </div>
             </div>
             @include('pages.buku_besar.total_daan.add')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -144,7 +144,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
-                searching: false,
+                // searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -321,7 +321,7 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-                
+
                     $.ajax({
                         type: "POST",
                         headers: {

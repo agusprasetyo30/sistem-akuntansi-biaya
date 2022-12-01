@@ -59,7 +59,7 @@
                 </div>
             </div>
             @include('pages.master.produk.add')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -76,7 +76,7 @@
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
-            
+
             $('#is_dummy').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
@@ -112,7 +112,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
-                searching: false,
+                // searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -156,7 +156,7 @@
                                     @foreach (status_is_active() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
-                                } 
+                                }
                                 else if (iName == 'dummy'){
                                     options += '<option value="">Semua</option>';
                                     @foreach (status_is_dummy() as $key => $value)
@@ -198,7 +198,7 @@
 
             })
         }
-        
+
         $('#submit').on('click', function () {
             Swal.fire({
                 title: 'Apakah anda yakin?',
