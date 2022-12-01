@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\RegionDataTable;
+use App\Imports\RegionsImport;
 use App\Models\Regions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -91,6 +92,33 @@ class RegionsController extends Controller
                 ->update($input);
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $file = $request->file('file')->store('import');
+            $import = new RegionsImport;
+            $import->import($file);
+
+            $data_fail = $import->failures();
+
+            if ($import->failures()->isNotEmpty()) {
+                $err = [];
+
+                foreach ($data_fail as $rows) {
+                    $er = implode(' ', array_values($rows->errors()));
+                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                    array_push($err, $hasil);
+                }
+                // dd(implode(' ', $err));
+                return response()->json(['Code' => 500, 'msg' => $err]);
+            }
+
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

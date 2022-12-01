@@ -22,7 +22,7 @@ class RegionDataTable extends DataTable
     public function dataTable($query)
     {
 //        $query = Regions::query();
-        $query = DB::table('regions');
+        $query = DB::table('regions')->whereNull('deleted_at');
 //        dd($query->get());
         return datatables()
             ->query($query)
