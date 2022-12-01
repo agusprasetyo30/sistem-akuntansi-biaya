@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\PeriodeDataTable;
+use App\Imports\PeriodeImport;
 use App\Models\Periode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class PeriodeController extends Controller
 
     public function create(Request $request)
     {
+        dd(date('Y-m-d H:i:s', strtotime($request->awal_periode)));
         try {
             $validator = Validator::make($request->all(), [
                 "nama" => 'required',
@@ -85,6 +87,33 @@ class PeriodeController extends Controller
                 ]);
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $file = $request->file('file')->store('import');
+            $import = new PeriodeImport;
+            $import->import($file);
+
+            $data_fail = $import->failures();
+
+            if ($import->failures()->isNotEmpty()) {
+                $err = [];
+
+                foreach ($data_fail as $rows) {
+                    $er = implode(' ', array_values($rows->errors()));
+                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                    array_push($err, $hasil);
+                }
+                // dd(implode(' ', $err));
+                return response()->json(['Code' => 500, 'msg' => $err]);
+            }
+
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

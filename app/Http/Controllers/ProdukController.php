@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\ProdukDataTable;
+use App\Imports\ProdukImport;
 use App\Models\Produk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -106,6 +107,33 @@ class ProdukController extends Controller
             return setResponse([
                 'code' => 400,
             ]);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $file = $request->file('file')->store('import');
+            $import = new ProdukImport;
+            $import->import($file);
+
+            $data_fail = $import->failures();
+
+            if ($import->failures()->isNotEmpty()) {
+                $err = [];
+
+                foreach ($data_fail as $rows) {
+                    $er = implode(' ', array_values($rows->errors()));
+                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                    array_push($err, $hasil);
+                }
+                // dd(implode(' ', $err));
+                return response()->json(['Code' => 500, 'msg' => $err]);
+            }
+
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 }
