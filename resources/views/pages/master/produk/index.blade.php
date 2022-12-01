@@ -59,12 +59,8 @@
                 </div>
             </div>
             @include('pages.master.produk.add')
-<<<<<<< HEAD
-        </div>
-=======
             @include('pages.master.produk.import')
         </div> 
->>>>>>> 83c98e5 (import : add import in master menu)
     </div>
 </div>
 <!-- /Row -->
