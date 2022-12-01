@@ -55,7 +55,7 @@
                 </div>
             </div>
             @include('pages.master.kategori_produk.add')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -66,7 +66,7 @@
     <script>
         $(document).ready(function () {
             get_data()
-            
+
             $('#is_active').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
@@ -80,7 +80,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
-                searching: false,
+                // searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],

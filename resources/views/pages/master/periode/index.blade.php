@@ -96,7 +96,7 @@
             scrollX: true,
             dom: 'Bfrtip',
             // sortable: false,
-            searching: false,
+            // searching: false,
             processing: true,
             serverSide: true,
             order: [

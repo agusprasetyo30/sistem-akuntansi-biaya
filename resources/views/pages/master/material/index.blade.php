@@ -61,7 +61,7 @@
                 </div>
             </div>
             @include('pages.master.material.add')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -114,7 +114,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
-                searching: false,
+                // searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -158,7 +158,7 @@
                                     @foreach (status_is_active() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
-                                } 
+                                }
                                 if (iName == 'dummy'){
                                     options += '<option value="">Semua</option>';
                                     @foreach (status_is_dummy() as $key => $value)

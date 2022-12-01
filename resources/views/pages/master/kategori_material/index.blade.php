@@ -55,7 +55,7 @@
                 </div>
             </div>
             @include('pages.master.kategori_material.add')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -80,7 +80,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
-                searching: false,
+                // searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],

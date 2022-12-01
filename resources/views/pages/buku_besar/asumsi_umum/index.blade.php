@@ -102,7 +102,7 @@
             $("#dt_cost_center").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
-                searching: false,
+                // searching: false,
                 sortable: false,
                 processing: true,
                 serverSide: true,
