@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
+use App\Models\Kurs;
 use App\Models\Material;
 use App\Models\periode;
 use App\Models\Plant;
@@ -181,6 +182,30 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->id,
                 "text" => $items->nama_role
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function kurs(Request $request){
+        $search = $request->search;
+        if ($search == '') {
+            $kurs = Kurs::limit(10)
+                ->get();
+        } else {
+            $kurs = Kurs::where('year', 'ilike', '%' . $search . '%')
+                ->orWhere('month', 'ilike', '%' . $search . '%')
+                ->orWhere('usd_rate', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($kurs as $items) {
+            $response[] = array(
+                "id" => $items->usd_rate,
+                "text" => $items->month.'/'.$items->year.' - '.rupiah($items->usd_rate)
             );
         }
 

@@ -13,9 +13,9 @@ class AsumsiUmumController extends Controller
     {
         if ($request->data == 'index') {
             //            dd($request->data);
-            return $asumsiUmumDataTable->render('pages.buku_besar.asumsi_umum.index');
+            return $asumsiUmumDataTable->render('pages.master.asumsi_umum.index');
         }
-        return view('pages.buku_besar.asumsi_umum.index');
+        return view('pages.master.asumsi_umum.index');
     }
 
     public function create(Request $request)

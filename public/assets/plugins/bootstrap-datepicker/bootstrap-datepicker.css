@@ -4,7 +4,7 @@
  * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
  */
 
-.datepicker {   
+.datepicker {
     background-color: #fff;
     border: 1px solid #e9ebfa;
     font-family: "Roboto", sans-serif;
@@ -13,7 +13,7 @@
     margin: 1px 0 0;
     display: none;
     width: auto !important;
-    z-index: 5 !important;
+    /*z-index: 5 !important;*/
     direction: ltr;
     border-radius: 5px;
     box-shadow: 0px 16px 18px rgba(6, 10, 48, .1);
@@ -384,7 +384,7 @@
 }
 .datepicker table tr td span:hover,
 .datepicker table tr td span.focused {
-  background: #664dc9 !important;
+  background: #019166 !important;
   color:#ffffff !important
 }
 .datepicker table tr td span.disabled,
@@ -588,5 +588,5 @@
 }
 .dark-theme .datepicker .datepicker-years td {
 	border:none;
-}		
+}
 /*# sourceMappingURL=bootstrap-datepicker.css.map */

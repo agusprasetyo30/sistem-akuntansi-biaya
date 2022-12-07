@@ -1,6 +1,6 @@
 (function($) {
 	"use strict";
-	
+
 	// Toolbar extra buttons
 	var btnFinish = $('<button></button>').text('Finish')
 		.addClass('btn btn-primary')
@@ -21,7 +21,7 @@
 							  toolbarExtraButtons: [btnFinish, btnCancel]
 							}
 	});
-		
+
 	// Arrows Smart Wizard 1
 	$('#smartwizard-1').smartWizard({
 			selected: 0,
@@ -32,7 +32,7 @@
 							  toolbarExtraButtons: [btnFinish, btnCancel]
 							}
 	});
-			
+
 	// Circles Smart Wizard 1
 	$('#smartwizard-2').smartWizard({
 			selected: 0,
@@ -43,16 +43,16 @@
 							  toolbarExtraButtons: [btnFinish, btnCancel]
 							}
 	});
-			
+
 	// Dots Smart Wizard 1
 	$('#smartwizard-3').smartWizard({
 			selected: 0,
 			theme: 'dots',
 			transitionEffect:'fade',
 			showStepURLhash: false,
-			toolbarSettings: {	
+			toolbarSettings: {
 							  toolbarExtraButtons: [btnFinish, btnCancel]
 							}
 	});
-	
+
 })(jQuery);
