@@ -19,6 +19,8 @@ class CreateManagementRoleTable extends Migration
             $table->foreignId('role_id')->references('id')->on('role')->onUpdate('cascade');
             $table->string('username');
             $table->string('login_method')->default('DB');
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
             $table->timestamps();
         });
     }

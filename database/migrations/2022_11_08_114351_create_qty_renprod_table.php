@@ -15,9 +15,11 @@ class CreateQtyRenProdTable extends Migration
     {
         Schema::create('qty_renprod', function (Blueprint $table) {
             $table->id();
-            $table->integer('material_id');
-            $table->integer('periode_id');
-            $table->integer('region_id');
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->string('material_produk_code')->unsigned();
+            $table->foreign('material_produk_code')->references('material_produk_code')->on('material_produk');
+            $table->timestamp('month_year');
             $table->string('qty_renprod_desc');
             $table->float('qty_renprod_value');
             $table->dateTime('created_at');

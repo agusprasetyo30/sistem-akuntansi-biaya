@@ -15,6 +15,8 @@ class CreateKategoriMaterialTable extends Migration
     {
         Schema::create('kategori_material', function (Blueprint $table) {
             $table->id();
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
             $table->string('kategori_material_name');
             $table->string('kategori_material_desc');
             $table->boolean('is_active')->default(true);
