@@ -52,7 +52,7 @@
                         <div id="step-11" class="">
                             <form class="asumsi_form" id="form-2" novalidate>
                                 <div class="row" id="section_asumsi">
-                                    <input readonly style="display:none;" type="text" value="" id="periode">
+
                                 </div>
                             </form>
                         </div>

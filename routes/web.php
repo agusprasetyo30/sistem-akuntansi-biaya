@@ -174,11 +174,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
             Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
-            Route::get('/kurs_select', [SelectController::class, 'kurs'])->name('kurs_select');
+
 
 //            Helper
             Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
+            Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
         });
     });
 

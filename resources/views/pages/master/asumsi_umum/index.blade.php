@@ -23,6 +23,7 @@
     <!-- Row -->
     <div class="row">
         <div class="col-12">
+
             <div class="card">
                 <div class="card-body">
                     <div class="">
@@ -32,13 +33,19 @@
                                 <tr>
                                     <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
                                     <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSION</th>
-                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">RANGE BULAN</th>
+                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">SALDO AWAL</th>
+                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">JUMLAH BULAN</th>
+                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">AWAL PERIODE</th>
+                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">AKHIR PERIODE</th>
                                     <th data-type='text' data-name='action' class="border-bottom-0 text-center">ACTION</th>
                                 </tr>
                                 <tr>
                                     <th data-type='text' data-name='nomor' ></th>
                                     <th data-type='text' data-name='version' ></th>
-                                    <th data-type='text' data-name='range' ></th>
+                                    <th data-type='text' data-name='saldo_awal' ></th>
+                                    <th data-type='text' data-name='jumlah_bulan' ></th>
+                                    <th data-type='text' data-name='awal_periode' ></th>
+                                    <th data-type='text' data-name='akhir_periode' ></th>
                                     <th data-type='text' data-name='action'></th>
                                 </tr>
                                 </thead>
@@ -63,6 +70,8 @@
             var funArr = [];
             let loop = 0;
             var answersList = [];
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+            ];
 
             get_data()
 
@@ -219,9 +228,11 @@
                 var d = Date.parse(data[0] + data[1]);
                 console.log(d);
                 if(!isNaN(d)){
+
                     var date = new Date(d);
                     var month = date.getMonth()+1
-                    var result = date.getDate() +"/"+ month +"/"+ date.getFullYear();
+                    // var month = date.toLocaleDateString('default', { month: 'long' })
+                    var result = month +"/"+ date.getFullYear();
                     return result;
                 }
                 return -1;
@@ -243,34 +254,36 @@
                     if (i===0){
                         periode = data;
                     }else {
-                        periode = moment(periode, "DD/MM/YYYY").add(1, 'months').format('DD/MM/YYYY');
+                        periode = moment(periode, "MM/YYYY").add(1, 'months').format('MM/YYYY');
                     }
-                    var html = '<div class="col-md-12"><strong>PERIODE :'+periode+'</strong><input readonly style="display:none;" type="text" value="'+periode+'" id="periode'+i+'"></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Kurs  <span class="text-red">*</span></label><select class="form-control" name="currency" id="currency'+i+'"></select></div></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Ajustment <span class="text-red">*</span></label><input type="text" class="form-control" name="ajustment" id="ajustment'+i+'" placeholder="Ajustment"></div></div>';
+                    var html = '<div class="col-md-12"><strong>PERIODE :'+periode+'</strong><input readonly style="display:none;" type="text" value="'+periode+'" id="periode'+i+'"></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Kurs  <span class="text-red">*</span></label><input class="form-control" type="text" name="currency" id="currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="1.000.000.00"></div></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Ajustment (%) <span class="text-red">*</span></label><input class="form-control" type="number" placeholder="0" required name="ajustment" id="ajustment'+i+'" min="0" step="0.01" title="ajustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
 
                     $('#section_asumsi').append(html);
 
-                    $('#currency'+i).select2({
-                        dropdownParent: $('#modal_add'),
-                        placeholder: 'Pilih Krus',
-                        width: '100%',
-                        tags:true,
-                        allowClear: false,
-                        ajax: {
-                            url: "{{ route('kurs_select') }}",
-                            dataType: 'json',
-                            delay: 250,
-                            data: function (params) {
-                                return {
-                                    search: params.term
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            }
+                    $('#currency'+i).on({
+                        keyup: function() {
+                            formatCurrency($(this));
+                        },
+                        blur: function() {
+                            formatCurrency($(this), "blur");
+                        },
+                    });
+
+                    $.ajax({
+                        url: "{{ route('helper_kurs') }}",
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{
+                            _token: "{{ csrf_token() }}",
+                            periode:periode
+                        },
+                        success:function (response) {
+                            $('#currency'+i).val(response.data_kurs).trigger('keyup');
                         }
                     })
+
 
                 }
 
@@ -349,13 +362,16 @@
                     },
                     columns: [
                         { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                        { data: 'version', name: 'version', orderable:false},
-                        { data: 'data_bulan', name: 'data_bulan', orderable:false},
+                        { data: 'c_version', name: 'version', orderable:false},
+                        { data: 'c_saldo_awal', name: 'c_saldo_awal', orderable:false},
+                        { data: 'c_data_bulan', name: 'c_data_bulan', orderable:false},
+                        { data: 'c_awal_periode', name: 'c_awal_periode', orderable:false},
+                        { data: 'c_akhir_periode', name: 'c_akhir_periode', orderable:false},
                         { data: 'action', name: 'action', orderable:false, searchable: false},
 
                     ],
                     columnDefs:[
-                        {className: 'text-center', targets: [0,1,2,3]}
+                        {className: 'text-center', targets: [0,1,2,3,4,5]}
                     ],success:function (){
 
                     }
@@ -378,8 +394,6 @@
                         if(answersList.length !== 0){
                             answersList = []
                         }
-
-
                         var value = true;
 
                         console.log(typeof(loop))
@@ -387,16 +401,19 @@
                             console.log(i);
                             var kurs = $('#currency'+i).val();
                             var ajust = $('#ajustment'+i).val();
+                            var periode = $('#periode'+i).val();
 
                             if (kurs !== undefined && ajust !== undefined){
                                 answersList.push({
                                     kurs:kurs,
                                     ajustment: ajust,
+                                    peride_month: periode,
                                 });
                             }else {
                                 answersList.push({
                                     kurs:false,
                                     ajustment: false,
+                                    peride_month: periode,
                                 });
                                 value = false
                             }
@@ -411,10 +428,12 @@
                                 url: '{{route('insert_asumsi_umum')}}',
                                 data: {
                                     _token: "{{ csrf_token() }}",
-                                    id_periode: $('#data_main_periode').val(),
-                                    kurs: $('#kurs').val(),
-                                    handling_bb: $('#handling_bb').val(),
-                                    // data_saldo_awal: $('#data_saldo_awal').val(),
+                                    versi: $('#nama_versi').val(),
+                                    jumlah_bulan: $('#jumlah_bulan').val(),
+                                    start_date: $('#tanggal_awal').val(),
+                                    asumsi:answersList
+                                    // kurs: $('#kurs').val(),
+                                    // handling_bb: $('#handling_bb').val(),
                                 },
                                 success:function (response) {
                                     if (response.Code === 200){

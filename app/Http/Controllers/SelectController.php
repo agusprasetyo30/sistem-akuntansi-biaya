@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 class SelectController extends Controller
 {
@@ -242,5 +243,24 @@ class SelectController extends Controller
         }catch (\Exception $exception){
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function check_kurs(Request $request){
+
+        $data = explode('/', $request->periode);
+
+        $kurs = DB::table('kurs')
+            ->where('month', '=', check_month($data[0]-1))
+            ->where('year', '=', $data[1])
+            ->first();
+
+        if ($kurs == null){
+            return response()->json(['Code' => 200, 'data_kurs' => ''       ]);
+        }else{
+
+            return response()->json(['Code' => 200, 'data_kurs' => $kurs->usd_rate]);
+        }
+
+
     }
 }

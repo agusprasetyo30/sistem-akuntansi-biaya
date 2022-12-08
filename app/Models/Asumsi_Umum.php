@@ -12,10 +12,14 @@ class Asumsi_Umum extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'periode_id',
-        'kurs',
-        'handling_bb',
-//        'data_saldo_awal',
+        'version_id',
+        'usd_rate',
+        'ajustment',
+        'month',
+        'year',
+        'saldo_awal',
+        'awal_periode',
+        'akhir_periode',
         'created_by',
         'created_at',
         'updated_at',
