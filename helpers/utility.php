@@ -1,6 +1,7 @@
 <?php
 
 use Intervention\Image\Facades\Image;
+use Carbon\Carbon;
 // use Image;
 
 function secureToken()
@@ -294,3 +295,39 @@ if (!function_exists('login_method')){
         return $login_method;
     }
 }
+
+if (!function_exists('rupiah')){
+    function rupiah($angka){
+
+        $hasil_rupiah = "Rp " . number_format($angka,3,',','.');
+        return $hasil_rupiah;
+
+    }
+}
+
+if (!function_exists('check_month')){
+    function check_month($periode){
+        $monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $data = str_split($periode);
+
+//        dd(count($data));
+        if (count($data) == 1){
+            return $monthNames[$periode];
+        }else{
+            if ($data[0] == 0){
+                return $monthNames[$data[1]];
+            }else{
+                return $monthNames[$periode];
+            }
+        }
+    }
+}
+
+if (!function_exists('format_month')){
+    function format_month($date){
+        $data = Carbon::parse($date)->format('F-Y');
+        return $data;
+    }
+}
+
+

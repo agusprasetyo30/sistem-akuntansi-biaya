@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
+use App\Models\Kurs;
 use App\Models\Material;
 use App\Models\periode;
 use App\Models\Plant;
@@ -12,6 +13,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\Framework\isEmpty;
 
 class SelectController extends Controller
 {
@@ -187,6 +189,30 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function kurs(Request $request){
+        $search = $request->search;
+        if ($search == '') {
+            $kurs = Kurs::limit(10)
+                ->get();
+        } else {
+            $kurs = Kurs::where('year', 'ilike', '%' . $search . '%')
+                ->orWhere('month', 'ilike', '%' . $search . '%')
+                ->orWhere('usd_rate', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($kurs as $items) {
+            $response[] = array(
+                "id" => $items->usd_rate,
+                "text" => $items->month.'/'.$items->year.' - '.rupiah($items->usd_rate)
+            );
+        }
+
+        return response()->json($response);
+    }
+
 
 
 //    Helper
@@ -217,5 +243,24 @@ class SelectController extends Controller
         }catch (\Exception $exception){
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function check_kurs(Request $request){
+
+        $data = explode('/', $request->periode);
+
+        $kurs = DB::table('kurs')
+            ->where('month', '=', check_month($data[0]-1))
+            ->where('year', '=', $data[1])
+            ->first();
+
+        if ($kurs == null){
+            return response()->json(['Code' => 200, 'data_kurs' => ''       ]);
+        }else{
+
+            return response()->json(['Code' => 200, 'data_kurs' => $kurs->usd_rate]);
+        }
+
+
     }
 }

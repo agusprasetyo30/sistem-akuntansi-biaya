@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropDataSaldoAwalFromAsumsiUmumTable extends Migration
+class CreateVersionAsumsiTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class DropDataSaldoAwalFromAsumsiUmumTable extends Migration
      */
     public function up()
     {
-        Schema::table('asumsi_umum', function (Blueprint $table) {
-            $table->dropColumn('data_saldo_awal');
+        Schema::create('version_asumsi', function (Blueprint $table) {
+            $table->id();
+            $table->string('version')->unique();
+            $table->integer('data_bulan');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class DropDataSaldoAwalFromAsumsiUmumTable extends Migration
      */
     public function down()
     {
-        Schema::table('asumsi_umum', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('version_asumsi');
     }
 }

@@ -24,6 +24,7 @@ use App\Http\Controllers\SaldoAwalController;
 use App\Http\Controllers\TotalDaanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KursController;
 
 /*
 |--------------------------------------------------------------------------
@@ -157,6 +158,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
         });
 
+        Route::group(['prefix' => 'kurs'], function () {
+            Route::get('/', [KursController::class, 'index'])->name('kurs');
+            Route::post('insert', [KursController::class, 'create'])->name('insert_kurs');
+            Route::post('update', [KursController::class, 'update'])->name('update_kurs');
+            Route::post('delete', [KursController::class, 'delete'])->name('delete_kurs');
+        });
+
         // Main Select2
         Route::group(['prefix' => 'main_data'], function () {
             Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
@@ -167,9 +175,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
             Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
 
+
 //            Helper
             Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
+            Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
         });
     });
 

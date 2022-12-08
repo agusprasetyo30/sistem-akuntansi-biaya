@@ -2,56 +2,33 @@
 
 namespace App\DataTables\Master;
 
-use App\Models\Asumsi_Umum;
-use App\Models\Master\AsumsiUmum;
-use App\Models\Version_Asumsi;
-use Carbon\Carbon;
+use App\Models\Kurs;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class AsumsiUmumDataTable extends DataTable
+class KursDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
+
     public function dataTable($query)
     {
-        $query = Asumsi_Umum::select('version_asumsi.data_bulan', 'version_asumsi.version', 'asumsi_umum.*')
-            ->leftJoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id');
+        $query = Kurs::query();
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->addColumn('c_version', function ($query){
-                return $query->version.'('.$query->month.')';
+            ->addColumn('mata_uang', function ($query){
+                return rupiah($query->usd_rate);
             })
-            ->addColumn('c_data_bulan', function ($query){
-                $data = "<p>".$query->data_bulan." Bulan</p>";
-
-                return $data;
-            })
-            ->addColumn('c_saldo_awal', function ($query){
-                return format_month($query->saldo_awal);
-            })
-            ->addColumn('c_awal_periode', function ($query){
-                return format_month($query->awal_periode);
-            })
-            ->addColumn('c_akhir_periode', function ($query){
-                return format_month($query->akhir_periode);
-            })
-            ->addColumn('action', 'pages.master.asumsi_umum.action')
+            ->addColumn('action', 'pages.master.kurs.action')
             ->escapeColumns([]);
     }
 
     public function html()
     {
         return $this->builder()
-            ->setTableId('master\asumsiumum-table')
+            ->setTableId('dt_kurs')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -92,6 +69,6 @@ class AsumsiUmumDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Master\AsumsiUmum_' . date('YmdHis');
+        return 'Master/Kurs_' . date('YmdHis');
     }
 }
