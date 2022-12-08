@@ -22,13 +22,13 @@ class AsumsiUmumDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = Asumsi_Umum::select('version_asumsi.data_bulan', 'version_asumsi.version', 'asumsi_umum.*')
-            ->leftJoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id');
+        $query = Version_Asumsi::select('version_asumsi.*')
+            ->leftJoin('asumsi_umum', 'version_asumsi.id', '=', 'asumsi_umum.version_id')->distinct();
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
             ->addColumn('c_version', function ($query){
-                return $query->version.'('.$query->month.')';
+                return $query->version;
             })
             ->addColumn('c_data_bulan', function ($query){
                 $data = "<p>".$query->data_bulan." Bulan</p>";

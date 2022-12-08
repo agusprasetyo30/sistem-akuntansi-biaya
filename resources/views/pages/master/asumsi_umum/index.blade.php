@@ -226,7 +226,6 @@
 
                 var data = toDate(parameter);
                 var d = Date.parse(data[0] + data[1]);
-                console.log(d);
                 if(!isNaN(d)){
 
                     var date = new Date(d);
@@ -256,7 +255,7 @@
                     }else {
                         periode = moment(periode, "MM/YYYY").add(1, 'months').format('MM/YYYY');
                     }
-                    var html = '<div class="col-md-12"><strong>PERIODE :'+periode+'</strong><input readonly style="display:none;" type="text" value="'+periode+'" id="periode'+i+'"></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Kurs  <span class="text-red">*</span></label><input class="form-control" type="text" name="currency" id="currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="1.000.000.00"></div></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Ajustment (%) <span class="text-red">*</span></label><input class="form-control" type="number" placeholder="0" required name="ajustment" id="ajustment'+i+'" min="0" step="0.01" title="ajustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
+                    var html = '<div class="col-md-12"><strong>PERIODE :'+periode+'</strong><input readonly style="display:none;" type="text" value="'+periode+'" id="periode'+i+'"></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Kurs  <span class="text-red">*</span></label><input class="form-control" type="text" name="currency" id="currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="1.000.000.00"></div></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Ajustment (%) <span class="text-red">*</span></label><input class="form-control" type="number" placeholder="0" required name="adjustment" id="adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
 
                     $('#section_asumsi').append(html);
 
@@ -396,21 +395,20 @@
                         }
                         var value = true;
                         for (let i = 0; i<loop; i++){
-                            console.log(i);
                             var kurs = $('#currency'+i).val();
-                            var ajust = $('#ajustment'+i).val();
+                            var ajust = $('#adjustment'+i).val();
                             var periode = $('#periode'+i).val();
 
                             if (kurs !== '' && ajust !== '' && kurs !== 'Rp ,00'){
                                 answersList.push({
                                     kurs:kurs,
-                                    ajustment: ajust,
+                                    adjustment: ajust,
                                     peride_month: periode,
                                 });
                             }else {
                                 answersList.push({
                                     kurs:false,
-                                    ajustment: false,
+                                    adjustment: false,
                                     peride_month: periode,
                                 });
                                 value = false
@@ -457,8 +455,6 @@
                         }else {
                             toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                         }
-
-                        console.log(answersList);
                     }
 
                 })

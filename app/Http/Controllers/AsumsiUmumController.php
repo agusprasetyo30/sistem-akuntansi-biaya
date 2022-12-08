@@ -28,59 +28,37 @@ class AsumsiUmumController extends Controller
                 "start_date" => 'required',
                 "asumsi" => 'required',
             ]);
-            dd($request);
 
             DB::transaction(function () use ($request){
-                $input_versi['version'] = $request->versi;
-                $input_versi['data_bulan'] = $request->jumlah_bulan;
-
-                $versi = Version_Asumsi::create($input_versi);
+                $lenght_data = count($request->asumsi);
 
                 foreach ($request->asumsi as $key=>$items){
-                    $value = true;
-                    $date = explode('/', $items['peride_month']);
+                    $saldo_awal = Carbon::createFromFormat('m/Y', $request->asumsi[$key]['peride_month'])->subMonth()->format('Y-m-01 00:00:00');
+                    $month_year = Carbon::createFromFormat('m/Y', $items['peride_month'])->format('Y-m-01 00:00:00');
 
-                    $cek_saldo_awal = Carbon::createFromFormat('m/Y', $request->asumsi[0]['peride_month'])->format('Y-m-01 H:i:s');
+                    if ($key==0){
+                        $awal_periode = Carbon::createFromFormat('m/Y', $request->asumsi[0]['peride_month'])->format('Y-m-01 00:00:00');
+                        $akhir_periode = Carbon::createFromFormat('m/Y', $request->asumsi[$lenght_data - 1]['peride_month'])->format('Y-m-01 00:00:00');
 
-
-                    if ($key == 0){
-                        $cek_data_saldo_awal = DB::table('asumsi_umum')->where('saldo_awal', '<', $cek_saldo_awal)->orderByDesc('id')->first();
-                        if ($cek_data_saldo_awal != null){
-                            $saldo_awal = $cek_data_saldo_awal->saldo_awal;
-                            $value = false;
-                        }else{
-                            $saldo_awal = $cek_saldo_awal;
-                        }
-
-                        if (count($request->asumsi) == 1){
-                            $awal_periode = $cek_saldo_awal;
-                            $akhir_periode = $cek_saldo_awal;
-                        }else{
-                            $awal_periode = $cek_saldo_awal;
-                            $akhir_periode = Carbon::createFromFormat('m/Y', $request->asumsi[count($request->asumsi) - 1]['peride_month'])->format('Y-m-01 H:i:s');
-                        }
-
-                    }else{
-                        if ($value){
-                            $saldo_awal = Carbon::createFromFormat('m/Y', $request->asumsi[$key-1]['peride_month'])->format('Y-m-01 H:i:s');
-                        }else{
-                            $saldo_awal = Carbon::createFromFormat('m/Y', $request->asumsi[0]['peride_month'])->format('Y-m-01 H:i:s');
-                        }
+                        $input_versi['version'] = $request->versi;
+                        $input_versi['data_bulan'] = $request->jumlah_bulan;
+                        $input_versi['awal_periode'] = $awal_periode;
+                        $input_versi['akhir_periode'] = $akhir_periode;
+                        $input_versi['saldo_awal'] = $saldo_awal;
+//                        dd($input_versi);
+                        $versi = Version_Asumsi::create($input_versi);
                     }
-
                     $input['version_id'] = $versi->id;
                     $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $items['kurs'])));
-                    $input['ajustment'] = (double) $items['ajustment'];
-                    $input['month'] = check_month(((int) $date[0]) - 1);
-                    $input['year'] = $date[1];
+                    $input['adjustment'] = (double) $items['adjustment'];
+                    $input['month_year'] = $month_year;
                     $input['saldo_awal'] = $saldo_awal;
-                    $input['awal_periode'] = $awal_periode;
-                    $input['akhir_periode'] = $akhir_periode;
                     $input['created_by'] = auth()->user()->id;
                     $input['updated_by'] = auth()->user()->id;
                     $input['created_at'] = Carbon::now();
                     $input['updated_at'] = Carbon::now();
 
+//                    dd($input);
                     Asumsi_Umum::create($input);
                 }
             });
