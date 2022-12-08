@@ -17,12 +17,9 @@ class CreateAsumsiUmumTable extends Migration
             $table->id();
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
             $table->double('usd_rate', 8, 2);
-            $table->double('ajustment', 8, 2);
-            $table->string('month');
-            $table->string('year');
+            $table->double('adjustment', 8, 2);
+            $table->timestamp('month_year');
             $table->timestamp('saldo_awal');
-            $table->timestamp('awal_periode');
-            $table->timestamp('akhir_periode');
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->integer('deleted_by')->nullable();
