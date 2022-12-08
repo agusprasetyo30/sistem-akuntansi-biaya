@@ -46,7 +46,6 @@ class AsumsiUmumController extends Controller
                         $input_versi['akhir_periode'] = $akhir_periode;
                         $input_versi['saldo_awal'] = $saldo_awal;
                         $input_versi['company_code'] = 'B000';
-//                        dd($input_versi);
                         $versi = Version_Asumsi::create($input_versi);
                     }
                     $input['version_id'] = $versi->id;
@@ -67,7 +66,7 @@ class AsumsiUmumController extends Controller
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
-            dd($exception);
+//            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
