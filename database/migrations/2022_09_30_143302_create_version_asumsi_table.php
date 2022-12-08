@@ -20,6 +20,7 @@ class CreateVersionAsumsiTable extends Migration
             $table->timestamp('awal_periode');
             $table->timestamp('akhir_periode');
             $table->timestamp('saldo_awal');
+            $table->string('company_code');
             $table->timestamps();
         });
     }

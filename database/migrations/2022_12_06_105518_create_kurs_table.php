@@ -18,6 +18,7 @@ class CreateKursTable extends Migration
             $table->double('usd_rate', 8, 2);
             $table->string('month');
             $table->string('year');
+            $table->string('company_code');
             $table->timestamps();
         });
     }
