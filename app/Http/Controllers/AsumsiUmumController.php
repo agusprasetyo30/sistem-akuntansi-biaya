@@ -14,7 +14,6 @@ class AsumsiUmumController extends Controller
     public function index(Request $request, AsumsiUmumDataTable $asumsiUmumDataTable)
     {
         if ($request->data == 'index') {
-            //            dd($request->data);
             return $asumsiUmumDataTable->render('pages.master.asumsi_umum.index');
         }
         return view('pages.master.asumsi_umum.index');
@@ -29,6 +28,7 @@ class AsumsiUmumController extends Controller
                 "start_date" => 'required',
                 "asumsi" => 'required',
             ]);
+            dd($request);
 
             DB::transaction(function () use ($request){
                 $input_versi['version'] = $request->versi;
