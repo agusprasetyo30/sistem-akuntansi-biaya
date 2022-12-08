@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\ProdukDataTable;
+use App\Exports\ProdukExport;
 use App\Imports\ProdukImport;
 use App\Models\Produk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class ProdukController extends Controller
@@ -135,5 +137,10 @@ class ProdukController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ProdukExport, 'produk.xlsx');
     }
 }

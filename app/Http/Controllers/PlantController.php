@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\PlantDataTable;
+use App\Exports\PlantExport;
 use App\Imports\PlantImport;
+use App\Models\Periode;
 use App\Models\Plant;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PlantController extends Controller
 {
@@ -111,5 +115,10 @@ class PlantController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new PlantExport, 'plant.xlsx');
     }
 }

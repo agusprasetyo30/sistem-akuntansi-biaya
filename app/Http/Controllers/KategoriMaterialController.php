@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\KategoriMaterialDataTable;
+use App\Exports\KategoriMaterialExport;
 use App\Imports\KategoriMaterialImport;
 use App\Models\KategoriMaterial;
 use Carbon\Carbon;
@@ -118,5 +119,10 @@ class KategoriMaterialController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new KategoriMaterialExport, 'kategori_material.xlsx');
     }
 }

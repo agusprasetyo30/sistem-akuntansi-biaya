@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\RegionDataTable;
+use App\Exports\RegionsExport;
 use App\Imports\RegionsImport;
 use App\Models\Regions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class RegionsController extends Controller
@@ -121,5 +123,10 @@ class RegionsController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new RegionsExport, 'regions.xlsx');
     }
 }

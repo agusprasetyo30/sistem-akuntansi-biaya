@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\QtyRenProdDataTable;
+use App\Exports\QtyRenProdExport;
 use App\Models\QtyRenProd;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class QtyRenProdController extends Controller
 {
@@ -87,5 +89,12 @@ class QtyRenProdController extends Controller
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export(Request $request)
+    {
+        $version = $request->version;
+
+        return Excel::download(new QtyRenProdExport($version), 'qty_renprod.xlsx');
     }
 }

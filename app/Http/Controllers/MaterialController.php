@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\MaterialDataTable;
+use App\Exports\MaterialExport;
 use App\Imports\MaterialImport;
 use App\Models\Material;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class MaterialController extends Controller
@@ -139,5 +141,10 @@ class MaterialController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new MaterialExport, 'material.xlsx');
     }
 }

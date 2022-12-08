@@ -92,7 +92,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [MaterialController::class, 'create'])->name('insert_material');
             Route::post('update', [MaterialController::class, 'update'])->name('update_material');
             Route::post('delete', [MaterialController::class, 'delete'])->name('delete_material');
-            Route::post('import', [MaterialController::class, 'import'])->name('import_material');
         });
 
         Route::group(['prefix' => 'produk'], function () {
@@ -100,7 +99,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [ProdukController::class, 'create'])->name('insert_produk');
             Route::post('update', [ProdukController::class, 'update'])->name('update_produk');
             Route::post('delete', [ProdukController::class, 'delete'])->name('delete_produk');
-            Route::post('import', [ProdukController::class, 'import'])->name('import_produk');
         });
 
         Route::group(['prefix' => 'periode'], function () {
@@ -108,7 +106,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [PeriodeController::class, 'create'])->name('insert_periode');
             Route::post('update', [PeriodeController::class, 'update'])->name('update_periode');
             Route::post('delete', [PeriodeController::class, 'delete'])->name('delete_periode');
-            Route::post('import', [PeriodeController::class, 'import'])->name('import_periode');
         });
 
         Route::group(['prefix' => 'plant'], function () {
@@ -124,7 +121,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [KategoriMaterialController::class, 'create'])->name('insert_kategori_material');
             Route::post('update', [KategoriMaterialController::class, 'update'])->name('update_kategori_material');
             Route::post('delete', [KategoriMaterialController::class, 'delete'])->name('delete_kategori_material');
-            Route::post('import', [KategoriMaterialController::class, 'import'])->name('import_kategori_material');
         });
 
         Route::group(['prefix' => 'kategori-produk'], function () {
@@ -132,7 +128,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [KategoriProdukController::class, 'create'])->name('insert_kategori_produk');
             Route::post('update', [KategoriProdukController::class, 'update'])->name('update_kategori_produk');
             Route::post('delete', [KategoriProdukController::class, 'delete'])->name('delete_kategori_produk');
-            Route::post('import', [KategoriProdukController::class, 'import'])->name('import_kategori_produk');
         });
 
         Route::group(['prefix' => 'regions'], function () {
@@ -140,7 +135,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [RegionsController::class, 'create'])->name('insert_regions');
             Route::post('update', [RegionsController::class, 'update'])->name('update_regions');
             Route::post('delete', [RegionsController::class, 'delete'])->name('delete_regions');
-            Route::post('import', [RegionsController::class, 'import'])->name('import_regions');
+        });
+
+        Route::group(['prefix' => 'cost_center'], function () {
+            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
+            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
+            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
+            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
         });
 
         Route::group(['prefix' => 'role'], function () {
