@@ -15,6 +15,7 @@ class Kurs extends Model
         'usd_rate',
         'month',
         'year',
+        'company_code',
         'created_at',
         'updated_at',
     ];

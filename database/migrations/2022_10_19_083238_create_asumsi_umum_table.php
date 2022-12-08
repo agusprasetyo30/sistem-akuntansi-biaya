@@ -24,6 +24,8 @@ class CreateAsumsiUmumTable extends Migration
             $table->integer('updated_by');
             $table->integer('deleted_by')->nullable();
             $table->timestamp('deleted_at')->nullable();
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
             $table->timestamps();
         });
     }

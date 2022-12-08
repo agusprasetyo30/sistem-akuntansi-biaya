@@ -45,6 +45,7 @@ class AsumsiUmumController extends Controller
                         $input_versi['awal_periode'] = $awal_periode;
                         $input_versi['akhir_periode'] = $akhir_periode;
                         $input_versi['saldo_awal'] = $saldo_awal;
+                        $input_versi['company_code'] = 'B000';
 //                        dd($input_versi);
                         $versi = Version_Asumsi::create($input_versi);
                     }
@@ -53,6 +54,7 @@ class AsumsiUmumController extends Controller
                     $input['adjustment'] = (double) $items['adjustment'];
                     $input['month_year'] = $month_year;
                     $input['saldo_awal'] = $saldo_awal;
+                    $input['company_code'] = 'B000';
                     $input['created_by'] = auth()->user()->id;
                     $input['updated_by'] = auth()->user()->id;
                     $input['created_at'] = Carbon::now();

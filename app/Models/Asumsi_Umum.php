@@ -17,6 +17,7 @@ class Asumsi_Umum extends Model
         'adjustment',
         'month_year',
         'saldo_awal',
+        'company_code',
         'created_by',
         'created_at',
         'updated_at',
