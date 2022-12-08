@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'username' => 'PilotJinix',
             'email' => 'PilotJinix@gmail.com',
             'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B001',
         ]);
 
         User::create([
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
             'username' => 'Super_Admin',
             'email' => 'Super_Admin@gmail.com',
             'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B001',
         ]);
 
         User::create([
@@ -33,6 +35,7 @@ class UserSeeder extends Seeder
             'username' => 'Admin_Company',
             'email' => 'Admin_Company@gmail.com',
             'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B001',
         ]);
 
         User::create([
@@ -40,6 +43,7 @@ class UserSeeder extends Seeder
             'username' => 'Approval',
             'email' => 'Approval@gmail.com',
             'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B001',
         ]);
 
         User::create([
@@ -47,6 +51,7 @@ class UserSeeder extends Seeder
             'username' => 'Reviewer',
             'email' => 'Reviewer@gmail.com',
             'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B001',
         ]);
 
         User::create([
@@ -54,6 +59,7 @@ class UserSeeder extends Seeder
             'username' => 'Bpo',
             'email' => 'Bpo@gmail.com',
             'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B001',
         ]);
     }
 }

@@ -17,6 +17,8 @@ class CreateRoleTable extends Migration
             $table->id();
             $table->string('nama_role');
             $table->boolean('is_active')->default(true);
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
             $table->timestamps();
         });
     }

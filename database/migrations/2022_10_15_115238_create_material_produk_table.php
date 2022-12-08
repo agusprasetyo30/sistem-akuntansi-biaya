@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePriceRendaanTable extends Migration
+class CreateMaterialProdukTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,17 @@ class CreatePriceRendaanTable extends Migration
      */
     public function up()
     {
-        Schema::create('price_rendaan', function (Blueprint $table) {
-            $table->id();
+        Schema::create('material_produk', function (Blueprint $table) {
+            $table->string('material_produk_code')->primary();
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
-            $table->string('material_produk_code')->unsigned();
-            $table->foreign('material_produk_code')->references('material_produk_code')->on('material_produk');
-            $table->foreignId('region_id')->references('id')->on('regions')->onUpdate('cascade')->onDelete('cascade');
-            $table->timestamp('month_year');
-            $table->string('price_rendaan_desc');
-            $table->float('price_rendaan_value');
+            $table->foreignId('kategori_material_id')->references('id')->on('kategori_material')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('kategori_produk_id')->references('id')->on('kategori_produk')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('material_produk_name')->nullable();
+            $table->text('material_produk_desc')->nullable();
+            $table->string('material_produk_uom')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_dummy')->default(true);
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();
@@ -39,6 +40,6 @@ class CreatePriceRendaanTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('price_rendaan');
+        Schema::dropIfExists('material_produk');
     }
 }

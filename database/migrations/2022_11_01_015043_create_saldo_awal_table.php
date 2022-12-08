@@ -15,12 +15,16 @@ class CreateSaldoAwalTable extends Migration
     {
         Schema::create('saldo_awal', function (Blueprint $table) {
             $table->id();
-            $table->string('company_code')->nullable();
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->timestamp('month_year')->nullable();
             $table->string('gl_account')->nullable();
             $table->string('valuation_class')->nullable();
             $table->string('price_control')->nullable();
-            $table->integer('material_id');
-            $table->integer('plant_id');
+            $table->string('material_produk_code')->unsigned();
+            $table->foreign('material_produk_code')->references('material_produk_code')->on('material_produk');
+            $table->string('plant_code')->unsigned();
+            $table->foreign('plant_code')->references('plant_code')->on('plant');
             $table->string('total_stock')->nullable();
             $table->string('total_value')->nullable();
             $table->string('nilai_satuan')->nullable();
