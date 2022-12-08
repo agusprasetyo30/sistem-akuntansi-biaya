@@ -17,31 +17,31 @@ class RoleSeeder extends Seeder
         Role::create([
             'nama_role' => 'Super_Admin',
             'is_active' => true,
-            'company_code'=> 'B001',
+            'company_code'=> 'B000',
         ]);
 
         Role::create([
             'nama_role' => 'Admin_Company',
             'is_active' => true,
-            'company_code'=> 'B001',
+            'company_code'=> 'B000',
         ]);
 
         Role::create([
             'nama_role' => 'Approval',
             'is_active' => true,
-            'company_code'=> 'B001',
+            'company_code'=> 'B000',
         ]);
 
         Role::create([
             'nama_role' => 'Reviewer',
             'is_active' => true,
-            'company_code'=> 'B001',
+            'company_code'=> 'B000',
         ]);
 
         Role::create([
             'nama_role' => 'Bpo',
             'is_active' => true,
-            'company_code'=> 'B001',
+            'company_code'=> 'B000',
         ]);
     }
 }

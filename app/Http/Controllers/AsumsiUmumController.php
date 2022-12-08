@@ -112,4 +112,34 @@ class AsumsiUmumController extends Controller
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
+
+    // Helper
+    public function view(Request $request){
+        try {
+            $data['version'] = Version_Asumsi::where('id', $request->id)
+                ->first();
+
+            $data['asumsi'] = Asumsi_Umum::where('version_id', $request->id)
+                ->get();
+
+            return response()->json(['code' => 200, 'data' => $data]);
+        }catch (\Exception $exception){
+            return response()->json(['code' => 500, 'data' => '']);
+        }
+    }
+
+    public function view_edit(Request $request){
+        try {
+            $date = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-01 00:00:00');
+
+
+            $data['asumsi'] = Asumsi_Umum::where('version_id', $request->id)
+                ->where('awal_periode', '=', $date)
+                ->first;
+
+            return response()->json(['code' => 200, 'data' => $data]);
+        }catch (\Exception $exception){
+            return response()->json(['code' => 500, 'data' => '']);
+        }
+    }
 }

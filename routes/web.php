@@ -209,6 +209,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
             Route::post('update', [AsumsiUmumController::class, 'update'])->name('update_asumsi_umum');
             Route::post('delete', [AsumsiUmumController::class, 'delete'])->name('delete_asumsi_umum');
+
+            // view
+
+            Route::post('view_asumsi_umum', [AsumsiUmumController::class, 'view'])->name('view_asumsi_umum');
+            Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
+
         });
 
         Route::group(['prefix' => 'saldo-awal'], function () {

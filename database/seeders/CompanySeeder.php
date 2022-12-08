@@ -15,7 +15,7 @@ class CompanySeeder extends Seeder
     public function run()
     {
         DB::table('company')->insert([
-            'company_code' => 'B001',
+            'company_code' => 'B000',
             'company_name' => 'Petrokimi Gresik',
             'link_sso' => 'test_link',
             'created_at' => '2022-09-30 16:31:42',
