@@ -58,6 +58,7 @@ class KursController extends Controller
             $input['month'] = $date[0];
             $input['year'] = $date[1];
             $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $request->kurs)));
+            $input['company_code'] = 'B000';
 
 //            dd($input);
             DB::transaction(function () use ($input, $request){

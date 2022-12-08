@@ -17,6 +17,7 @@ class Version_Asumsi extends Model
         'awal_periode',
         'akhir_periode',
         'saldo_awal',
+        'company_code',
         'created_at',
         'updated_at',
     ];
