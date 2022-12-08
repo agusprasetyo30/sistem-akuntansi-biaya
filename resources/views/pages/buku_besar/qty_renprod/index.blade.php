@@ -13,7 +13,7 @@
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
-            <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button>
             <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
         </div>
     </div>
@@ -59,6 +59,7 @@
                 </div>
             </div>
             @include('pages.buku_besar.qty_renprod.add')
+            @include('pages.buku_besar.qty_renprod.import')
         </div>
     </div>
 </div>
@@ -136,6 +137,13 @@
                     }
                 }
             })
+
+            $('#version').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%'
+            })
+
         })
 
         function get_data(){
@@ -208,7 +216,6 @@
             })
         }
 
-
         $('#submit').on('click', function () {
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -258,6 +265,40 @@
 
                 }
 
+            })
+        })
+
+        $('#submit-export').on('click', function () {
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                type: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('export_qty_renprod')}}',
+                data: {
+                    version: $('#version').val(),
+                },
+                success:function (result, status, xhr) {
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : 'qty_renprod.xlsx');
+
+                    // The actual download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                }
             })
         })
 

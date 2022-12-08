@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\PeriodeDataTable;
+use App\Exports\PeriodeExport;
 use App\Imports\PeriodeImport;
 use App\Models\Periode;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PeriodeController extends Controller
 {
@@ -116,5 +118,10 @@ class PeriodeController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new PeriodeExport, 'periode.xlsx');
     }
 }

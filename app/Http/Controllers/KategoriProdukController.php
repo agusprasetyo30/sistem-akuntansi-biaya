@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\KategoriProdukDataTable;
+use App\Exports\KategoriProdukExport;
 use App\Imports\KategoriProdukImport;
 use App\Models\KategoriProduk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
 class KategoriProdukController extends Controller
@@ -117,5 +119,10 @@ class KategoriProdukController extends Controller
         } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new KategoriProdukExport, 'kategori_export.xlsx');
     }
 }

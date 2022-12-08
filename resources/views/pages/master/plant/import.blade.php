@@ -17,7 +17,7 @@
                                 <div class="col-lg mb-3">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template  ( <a href="#">Download Template</a> )</li>
+                                        <li>Format harus sesuai template ( <a href="{{ route('export_plant') }}">Download Template</a> )</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol> 
                                 </div>
