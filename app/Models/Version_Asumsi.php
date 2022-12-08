@@ -14,6 +14,9 @@ class Version_Asumsi extends Model
     protected $fillable = [
         'version',
         'data_bulan',
+        'awal_periode',
+        'akhir_periode',
+        'saldo_awal',
         'created_at',
         'updated_at',
     ];

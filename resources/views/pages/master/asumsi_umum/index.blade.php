@@ -395,15 +395,13 @@
                             answersList = []
                         }
                         var value = true;
-
-                        console.log(typeof(loop))
                         for (let i = 0; i<loop; i++){
                             console.log(i);
                             var kurs = $('#currency'+i).val();
                             var ajust = $('#ajustment'+i).val();
                             var periode = $('#periode'+i).val();
 
-                            if (kurs !== undefined && ajust !== undefined){
+                            if (kurs !== '' && ajust !== '' && kurs !== 'Rp ,00'){
                                 answersList.push({
                                     kurs:kurs,
                                     ajustment: ajust,

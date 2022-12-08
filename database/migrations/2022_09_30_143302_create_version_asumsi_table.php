@@ -17,6 +17,9 @@ class CreateVersionAsumsiTable extends Migration
             $table->id();
             $table->string('version')->unique();
             $table->integer('data_bulan');
+            $table->timestamp('awal_periode');
+            $table->timestamp('akhir_periode');
+            $table->timestamp('saldo_awal');
             $table->timestamps();
         });
     }
