@@ -523,7 +523,6 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
                     $.ajax({
                         type: "POST",
                         headers: {

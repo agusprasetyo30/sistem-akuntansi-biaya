@@ -193,6 +193,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
             Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
+            Route::post('/check_kursv1', [SelectController::class, 'check_kursv1'])->name('helper_kursv1');
         });
     });
 

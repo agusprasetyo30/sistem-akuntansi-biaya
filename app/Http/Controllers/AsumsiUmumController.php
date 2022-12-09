@@ -102,11 +102,8 @@ class AsumsiUmumController extends Controller
     {
         try {
 
-            $input['deleted_at'] = Carbon::now();
-            $input['deleted_by'] = auth()->user()->id;
-
-            Asumsi_Umum::where('id', $request->id)
-                ->update($input);
+            Version_Asumsi::where('id', $request->id)
+                ->delete();
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
@@ -129,15 +126,20 @@ class AsumsiUmumController extends Controller
     }
 
     public function view_edit(Request $request){
+
         try {
             $date = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-01 00:00:00');
 
+            $data = Asumsi_Umum::where('version_id', $request->id)
+                ->where('month_year', '=', $date)
+                ->first();
 
-            $data['asumsi'] = Asumsi_Umum::where('version_id', $request->id)
-                ->where('awal_periode', '=', $date)
-                ->first;
+            if ($data != null){
+                return response()->json(['code' => 200, 'data' => $data]);
+            }else{
+                return response()->json(['code' => 201, 'data' => '']);
+            }
 
-            return response()->json(['code' => 200, 'data' => $data]);
         }catch (\Exception $exception){
             return response()->json(['code' => 500, 'data' => '']);
         }

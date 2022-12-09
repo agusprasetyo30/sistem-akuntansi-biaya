@@ -193,6 +193,9 @@ var helpDateFormat = function (value, mode = 'se')
         case 'eng1':
         return helpMonth(month, 'eng')+'-'+year;
         break;
+        case 'eng2':
+        return month+'-'+year;
+        break;
 		default:
 		return 'Undefined';
 		break;

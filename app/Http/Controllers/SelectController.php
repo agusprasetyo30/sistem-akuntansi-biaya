@@ -11,6 +11,7 @@ use App\Models\Plant;
 use App\Models\Regions;
 use App\Models\Role;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isEmpty;
@@ -259,6 +260,25 @@ class SelectController extends Controller
         }else{
 
             return response()->json(['Code' => 200, 'data_kurs' => $kurs->usd_rate]);
+        }
+
+
+    }
+
+    public function check_kursv1(Request $request){
+
+        $data = Carbon::createFromFormat('Y-m-d', $request->periode)->format('Y-m-01 00:00:00');
+
+        $asumsi = DB::table('asumsi_umum')
+            ->where('month_year','=', $data)
+            ->where('version_id', '=', $request->id)
+            ->first();
+
+        if ($asumsi == null){
+            return response()->json(['Code' => 200, 'data_kurs' => '']);
+        }else{
+
+            return response()->json(['Code' => 200, 'data_kurs' => $asumsi->usd_rate]);
         }
 
 
