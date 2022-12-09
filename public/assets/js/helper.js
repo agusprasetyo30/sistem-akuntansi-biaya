@@ -1,4 +1,4 @@
-var preventLeaving = function () {        
+var preventLeaving = function () {
 	window.onbeforeunload = function() {
 		return "Are you sure you want to navigate away?";
 	}
@@ -12,7 +12,7 @@ var helpCurrency = function(value='', symbol='', thousandSeparator='.', centSepa
 		}else{
 			value = value.replace(' ', '');
 		}
-	}	
+	}
 
 	value = roundTo(value, lengthOfCent);
 	value = String(value);
@@ -156,7 +156,7 @@ var helpDateFormat = function (value, mode = 'se')
 	year = help_date.getFullYear(),
 	day = help_date.getDay(),
 	text_month = (month + 1);
-	
+
 	if(date < 10){
 		date = '0'+date;
 	}
@@ -187,6 +187,15 @@ var helpDateFormat = function (value, mode = 'se')
 		case 'bi':
 		return helpMonth(month)+' '+year;
 		break;
+        case 'eng':
+        return helpMonth(month, 'eng')+' '+year;
+        break;
+        case 'eng1':
+        return helpMonth(month, 'eng')+'-'+year;
+        break;
+        case 'eng2':
+        return month+'-'+year;
+        break;
 		default:
 		return 'Undefined';
 		break;
@@ -224,7 +233,7 @@ var helpTime = function (value, category=24, mode='2', separator='.') {
 		case '3' :
 		return hours+separator+minutes+separator+milliseconds+end;
 		break;
-		default: 
+		default:
 		return hours+separator+minutes+end;
 		break;
 	}

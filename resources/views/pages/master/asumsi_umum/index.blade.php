@@ -70,6 +70,7 @@
             var funArr = [];
             let loop = 0;
             var answersList = [];
+
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
             ];
 
@@ -288,96 +289,6 @@
 
             }
 
-            function get_data(){
-                $('#dt_version').DataTable().clear().destroy();
-                $("#dt_version").DataTable({
-                    scrollX: true,
-                    dom: 'Bfrtip',
-                    // searching: false,
-                    sortable: false,
-                    processing: true,
-                    serverSide: true,
-                    fixedHeader: {
-                        header: true,
-                        headerOffset: $('#main_header').height()
-                    },
-                    initComplete: function () {
-
-                        $('.dataTables_scrollHead').css('overflow', 'auto');
-                        $('.dataTables_scrollHead').on('scroll', function () {
-                            // console.log('data')
-                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                        });
-
-                        $(document).on('scroll', function () {
-                            $('.dtfh-floatingparenthead').on('scroll', function () {
-                                $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                            });
-                        })
-
-                        this.api().columns().every(function (index) {
-                            var column = this;
-                            var data_type = this.header().getAttribute('data-type');
-                            var iName = this.header().getAttribute('data-name');
-                            var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
-                            if (isSearchable){
-                                if (data_type == 'text'){
-                                    var input = document.createElement("input");
-                                    input.className = "form-control";
-                                    input.styleName = "width: 100%;";
-                                    $(input).
-                                    appendTo($(column.header()).empty()).
-                                    on('change clear', function () {
-                                        column.search($(this).val(), false, false, true).draw();
-                                    });
-                                }else if (data_type == 'select'){
-                                    var input = document.createElement("select");
-                                    input.className = "form-control custom-select select2";
-                                    var options = "";
-                                    if (iName == 'status'){
-                                        options += '<option value="">Semua</option>';
-                                        @foreach (status_is_active() as $key => $value)
-                                            options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                        @endforeach
-                                    }
-                                    input.innerHTML = options
-                                    $(input).appendTo($(column.header()).empty())
-                                        .on('change clear', function () {
-                                            column.search($(this).val(), false, false, true).draw();
-                                        });
-
-                                }
-                            }
-
-                        });
-                    },
-                    buttons: [
-                        { extend: 'pageLength', className: 'mb-5' },
-                        { extend: 'excel', className: 'mb-5' }
-                    ],
-                    ajax: {
-                        url : '{{route("asumsi_umum")}}',
-                        data: {data:'index'}
-                    },
-                    columns: [
-                        { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                        { data: 'c_version', name: 'version', orderable:false},
-                        { data: 'c_saldo_awal', name: 'c_saldo_awal', orderable:false},
-                        { data: 'c_data_bulan', name: 'c_data_bulan', orderable:false},
-                        { data: 'c_awal_periode', name: 'c_awal_periode', orderable:false},
-                        { data: 'c_akhir_periode', name: 'c_akhir_periode', orderable:false},
-                        { data: 'action', name: 'action', orderable:false, searchable: false},
-
-                    ],
-                    columnDefs:[
-                        {className: 'text-center', targets: [0,1,2,3,4,5]}
-                    ],success:function (){
-
-                    }
-
-                })
-            }
-
             $('#submit').on('click', function () {
                 Swal.fire({
                     title: 'Apakah anda yakin?',
@@ -460,11 +371,100 @@
                 })
             })
 
-        })
+        });
 
+        function get_data(){
+            $('#dt_version').DataTable().clear().destroy();
+            $("#dt_version").DataTable({
+                scrollX: true,
+                dom: 'Bfrtip',
+                // searching: false,
+                sortable: false,
+                processing: true,
+                serverSide: true,
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#main_header').height()
+                },
+                initComplete: function () {
 
+                    $('.dataTables_scrollHead').css('overflow', 'auto');
+                    $('.dataTables_scrollHead').on('scroll', function () {
+                        // console.log('data')
+                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                    });
+
+                    $(document).on('scroll', function () {
+                        $('.dtfh-floatingparenthead').on('scroll', function () {
+                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                        });
+                    })
+
+                    this.api().columns().every(function (index) {
+                        var column = this;
+                        var data_type = this.header().getAttribute('data-type');
+                        var iName = this.header().getAttribute('data-name');
+                        var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
+                        if (isSearchable){
+                            if (data_type == 'text'){
+                                var input = document.createElement("input");
+                                input.className = "form-control";
+                                input.styleName = "width: 100%;";
+                                $(input).
+                                appendTo($(column.header()).empty()).
+                                on('change clear', function () {
+                                    column.search($(this).val(), false, false, true).draw();
+                                });
+                            }else if (data_type == 'select'){
+                                var input = document.createElement("select");
+                                input.className = "form-control custom-select select2";
+                                var options = "";
+                                if (iName == 'status'){
+                                    options += '<option value="">Semua</option>';
+                                    @foreach (status_is_active() as $key => $value)
+                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                    @endforeach
+                                }
+                                input.innerHTML = options
+                                $(input).appendTo($(column.header()).empty())
+                                    .on('change clear', function () {
+                                        column.search($(this).val(), false, false, true).draw();
+                                    });
+
+                            }
+                        }
+
+                    });
+                },
+                buttons: [
+                    { extend: 'pageLength', className: 'mb-5' },
+                    { extend: 'excel', className: 'mb-5' }
+                ],
+                ajax: {
+                    url : '{{route("asumsi_umum")}}',
+                    data: {data:'index'}
+                },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
+                    { data: 'c_version', name: 'version', orderable:false},
+                    { data: 'c_saldo_awal', name: 'c_saldo_awal', orderable:false},
+                    { data: 'c_data_bulan', name: 'c_data_bulan', orderable:false},
+                    { data: 'c_awal_periode', name: 'c_awal_periode', orderable:false},
+                    { data: 'c_akhir_periode', name: 'c_akhir_periode', orderable:false},
+                    { data: 'action', name: 'action', orderable:false, searchable: false},
+
+                ],
+                columnDefs:[
+                    {className: 'text-center', targets: [0,1,2,3,4,5]}
+                ],success:function (){
+
+                }
+
+            })
+        }
 
         function update_asumsi_umum(id) {
+            var answersList_edit = [];
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -476,35 +476,70 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
+                    var lenght = $('#edit_jumlah_bulan'+id).val()
 
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_asumsi_umum')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                            id_periode: $('#edit_data_main_periode'+id).val(),
-                            kurs: $('#edit_kurs'+id).val(),
-                            handling_bb: $('#edit_handling_bb'+id).val(),
-                            data_saldo_awal: $('#edit_data_saldo_awal'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                    if(answersList_edit.length !== 0){
+                        answersList_edit = []
+                    }
+
+                    var value_edit = true;
+
+                    for (let j = 0 ; j < lenght ; j++){
+                        var kurs = $('#edit_currency'+j+id).val();
+                        var adjustment = $('#edit_adjustment'+j+id).val();
+                        var periode = $('#edit_periode'+j+id).val();
+
+                        if(kurs !== '' && adjustment !== '' && periode !== ''){
+                            answersList_edit.push({
+                                kurs:kurs,
+                                adjustment:adjustment,
+                                periode:periode,
+                            });
+                        }else{
+                            answersList_edit.push({
+                                kurs:'',
+                                adjustment:'',
+                                periode:'',
+                            });
+                            value_edit = false
                         }
-                    })
+                    }
+
+                    if (value_edit === true){
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '{{route('update_asumsi_umum')}}',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                id: id,
+                                nama_version: $('#edit_nama_versi'+id).val(),
+                                jumlah_bulan: $('#edit_jumlah_bulan'+id).val(),
+                                tanggal: $('#edit_tanggal_awal'+id).val(),
+                                answer:answersList_edit
+                            },
+                            success:function (response) {
+                                if (response.Code === 200){
+                                    $('#modal_edit'+id).modal('hide');
+                                    toastr.success('Data Berhasil Disimpan', 'Success')
+                                    get_data()
+                                }else if (response.Code === 0){
+                                    $('#modal_edit'+id).modal('hide');
+                                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                                }else {
+                                    $('#modal_edit'+id).modal('hide');
+                                    toastr.error('Terdapat Kesalahan System', 'System Error')
+                                }
+                            }
+                        })
+                    }else {
+                        toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                    }
+                    console.log(answersList_edit);
+
+
 
                 }
 
@@ -523,7 +558,6 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -536,7 +570,7 @@
                         },
                         success:function (response) {
                             if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
+                                toastr.success('Data Berhasil Dihapus', 'Success');
                                 get_data()
                             }else if (response.Code === 0){
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')

@@ -22,8 +22,7 @@ class AsumsiUmumDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = Version_Asumsi::select('version_asumsi.*')
-            ->leftJoin('asumsi_umum', 'version_asumsi.id', '=', 'asumsi_umum.version_id')->distinct();
+        $query = Version_Asumsi::select('version_asumsi.*');
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()

@@ -193,6 +193,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
             Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
+            Route::post('/check_kursv1', [SelectController::class, 'check_kursv1'])->name('helper_kursv1');
         });
     });
 
@@ -209,6 +210,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
             Route::post('update', [AsumsiUmumController::class, 'update'])->name('update_asumsi_umum');
             Route::post('delete', [AsumsiUmumController::class, 'delete'])->name('delete_asumsi_umum');
+
+            // view
+
+            Route::post('view_asumsi_umum', [AsumsiUmumController::class, 'view'])->name('view_asumsi_umum');
+            Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
+
         });
 
         Route::group(['prefix' => 'saldo-awal'], function () {
