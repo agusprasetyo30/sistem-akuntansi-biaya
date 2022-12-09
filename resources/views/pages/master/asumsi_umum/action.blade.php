@@ -6,7 +6,7 @@
 
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
-    <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Detail Asumsi Umum</h5>
@@ -76,7 +76,7 @@
 
 <!-- Modal Edit-->
 <div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
-    <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Asumsi Umum</h5>
@@ -96,6 +96,7 @@
                                 <div class="form-group">
                                     <label for="nama_versi">Nama Versi <span class="text-red">*</span></label>
                                     <input type="text" class="form-control" id="edit_nama_versi{{$model->id}}" placeholder="Ext : 202001" required>
+                                    <input type="text" id="id{{$model->id}}" style="display: none;">
                                     <div class="valid-feedback">
                                         Terlihat Bagus!
                                     </div>
@@ -147,6 +148,7 @@
 <script>
 
     $('#detail_view'+{{$model->id}}).on('click', function () {
+        var html2='';
         $("#detail_section_asumsi"+{{$model->id}}).empty();
         $('#detail_data_asumsi'+{{$model->id}}).smartWizard({
             selected: 0,
@@ -165,6 +167,7 @@
                 id:'{{$model->id}}'
             },
             success:function (response) {
+                console.log(response)
                 if (response.code === 200){
                     console.log(response.data['version'])
                     $('#detail_nama_versi'+{{$model->id}}).val(response.data['version'].version)
@@ -172,21 +175,21 @@
                     $('#detail_tanggal_akhir'+{{$model->id}}).val(helpDateFormat(response.data['version'].akhir_periode, 'eng'))
 
                     for (let i = 0 ; i < response.data['asumsi'].length ; i++){
-                        var html = '<div class="col-md-12">' +
+                        html2 = '<div class="col-md-12">' +
                             '<strong>PERIODE :'+helpDateFormat(response.data['asumsi'][i]['month_year'], 'eng')+'</strong>' +
                             '</div>' +
                             '<div class="col-sm-6 col-md-6">' +
                             '<div class="form-group">' +
                             '<label class="form-label">Kurs  <span class="text-red">*</span></label>' +
-                            '<input disabled class="form-control" type="text" name="detail_currency" id="detail_currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
+                            '<input disabled class="form-control" type="text" name="detail_currency" id="detail_currency'+i+''+{{$model->id}}+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
                             '</div><div class="col-sm-6 col-md-6">' +
                             '<div class="form-group">' +
                             '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
-                            '<input disabled class="form-control" type="number" placeholder="0" required name="detail_adjustment" id="detail_adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
+                            '<input disabled class="form-control" type="number" placeholder="0" required name="detail_adjustment" id="detail_adjustment'+i+''+{{$model->id}}+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
 
-                        $('#detail_section_asumsi'+{{$model->id }}).append(html);
+                        $('#detail_section_asumsi'+{{$model->id }}).append(html2);
 
-                        $('#detail_currency'+i).on({
+                        $('#detail_currency'+i+{{$model->id}}).on({
                             keyup: function() {
                                 formatCurrency($(this));
                             },
@@ -198,9 +201,8 @@
                             }
                         });
 
-                        $('#detail_currency'+i).val(response.data['asumsi'][i]['usd_rate']).trigger('keyup');
-                        $('#detail_adjustment'+i).val(response.data['asumsi'][i]['adjustment']).trigger('keyup');
-
+                        $('#detail_currency'+i+{{$model->id}}).val(response.data['asumsi'][i]['usd_rate']).trigger('keyup');
+                        $('#detail_adjustment'+i+{{$model->id}}).val(response.data['asumsi'][i]['adjustment']).trigger('keyup');
 
                     }
 
@@ -242,39 +244,6 @@
                         autoclose:true,
                     }).val(helpDateFormat(date, 'eng1'));
 
-                    {{--for (let i = 0 ; i < response.data['asumsi'].length ; i++){--}}
-                    {{--    var html = '<div class="col-md-12">' +--}}
-                    {{--        '<strong>PERIODE :'+helpDateFormat(response.data['asumsi'][i]['month_year'], 'eng')+'</strong>' +--}}
-                    {{--        '</div>' +--}}
-                    {{--        '<div class="col-sm-6 col-md-6">' +--}}
-                    {{--        '<div class="form-group">' +--}}
-                    {{--        '<label class="form-label">Kurs  <span class="text-red">*</span></label>' +--}}
-                    {{--        '<input class="form-control" type="text" name="edit_currency" id="edit_currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +--}}
-                    {{--        '</div><div class="col-sm-6 col-md-6">' +--}}
-                    {{--        '<div class="form-group">' +--}}
-                    {{--        '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +--}}
-                    {{--        '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment" id="edit_adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';--}}
-
-                    {{--    $('#edit_section_asumsi'+{{$model->id }}).append(html);--}}
-
-                    {{--    $('#edit_currency'+i).on({--}}
-                    {{--        keyup: function() {--}}
-                    {{--            formatCurrency($(this));--}}
-                    {{--        },--}}
-                    {{--        blur: function() {--}}
-                    {{--            formatCurrency($(this), "blur");--}}
-                    {{--        },--}}
-                    {{--        show:function () {--}}
-                    {{--            formatCurrency($(this));--}}
-                    {{--        }--}}
-                    {{--    });--}}
-
-                    {{--    $('#edit_currency'+i).val(response.data['asumsi'][i]['usd_rate']).trigger('keyup');--}}
-                    {{--    $('#edit_adjustment'+i).val(response.data['asumsi'][i]['adjustment']).trigger('keyup');--}}
-
-
-                    {{--}--}}
-
                 }
             }
         })
@@ -292,16 +261,20 @@
                     return false;
                 }
                 if (currentStepIdx === 0){
+                    var data_id;
                     let month = $('#edit_jumlah_bulan'+{{$model->id}}).val();
                     var param;
-                    for (let i = 0; i < month ; i++){
-                        if (i === 0){
+                    for (let x = 0; x < month ; x++){
+                        if (x === 0){
+                            data_id = {{$model->id}};
                             param = parser_edit($('#edit_tanggal_awal'+{{$model->id}}).val())
                         }else {
                             param = moment(param, "MM/YYYY").add(1, 'months').format('MM/YYYY');
                         }
 
-                        data_first_edit(joining(param), i)
+
+                        data_first_edit(joining(param), x, data_id)
+                        // console.log(joining(param))
                     }
 
                     // $('#submit').prop('disabled', false);
@@ -355,8 +328,8 @@
         return result;
     }
 
-    function data_first_edit(d, id) {
-        console.log('dwad')
+    function data_first_edit(d, id, data_id) {
+        console.log(d)
         $.ajax({
             type: "POST",
             headers: {
@@ -365,41 +338,44 @@
             url: '{{route('view_edit_asumsi_umum')}}',
             data: {
                 _token: "{{ csrf_token() }}",
-                id:'{{$model->id}}',
+                id:data_id,
                 date:d
             },
             success:function (response) {
+                console.log(response)
                 var html1;
-                if (response.code == 200){
+                if (response.code === 200){
                     html1 = '<div class="col-md-12">' +
                         '<strong>PERIODE :'+helpDateFormat(d, 'eng')+'</strong>' +
                         '</div>' +
                         '<div class="col-sm-6 col-md-6">' +
+                        '<input id="edit_periode'+id+''+data_id+'" value="'+helpDateFormat(d)+'" style="display: none;">'+
                         '<div class="form-group">' +
                         '<label class="form-label">Kurs  <span class="text-red">*</span></label>' +
-                        '<input class="form-control" type="text" name="edit_currency'+id+'" id="edit_currency'+id+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
+                        '<input class="form-control" type="text" name="edit_currency" id="edit_currency'+id+''+data_id+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
                         '</div><div class="col-sm-6 col-md-6">' +
                         '<div class="form-group">' +
                         '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
-                        '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment'+id+'" id="edit_adjustment'+id+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
+                        '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment" id="edit_adjustment'+id+''+data_id+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
                 }else {
                     html1 = '<div class="col-md-12">' +
                         '<strong>PERIODE :'+helpDateFormat(d, 'eng')+'</strong>' +
                         '</div>' +
                         '<div class="col-sm-6 col-md-6">' +
+                        '<input id="edit_periode'+id+''+data_id+'" value="'+helpDateFormat(d)+'" style="display: none;">'+
                         '<div class="form-group">' +
                         '<label class="form-label">Kurs  <span class="text-red">*</span></label>' +
-                        '<input class="form-control" type="text" name="edit_currency" id="edit_currency'+id+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
+                        '<input class="form-control" type="text" name="edit_currency" id="edit_currency'+id+''+data_id+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
                         '</div><div class="col-sm-6 col-md-6">' +
                         '<div class="form-group">' +
                         '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
-                        '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment'+id+'" id="edit_adjustment'+id+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
+                        '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment" id="edit_adjustment'+id+''+data_id+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
 
                 }
 
-                $('#edit_section_asumsi'+{{$model->id }}).append(html1);
+                $('#edit_section_asumsi'+data_id).append(html1);
 
-                $('#edit_currency'+id).on({
+                $('#edit_currency'+id+data_id).on({
                     keyup: function() {
                         formatCurrency($(this));
                     },
@@ -410,14 +386,14 @@
                         formatCurrency($(this));
                     }
                 });
-                console.log(response)
 
-                $('#edit_currency'+id).val(response.data['usd_rate']).trigger('keyup');
-                $('#edit_adjustment'+id).val(response.data['adjustment']).trigger('keyup');
+                $('#edit_currency'+id+data_id).val(response.data['usd_rate']).trigger('keyup');
+                $('#edit_adjustment'+id+data_id).val(response.data['adjustment']).trigger('keyup');
             }
         })
 
     }
+
     function formatNumber(n) {
         // format number 1000000 to 1,234,567
         return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -489,5 +465,10 @@
         caret_pos = updated_len - original_len + caret_pos;
         input[0].setSelectionRange(caret_pos, caret_pos);
     }
+
+    {{--$("#modal_edit"+{{$model->id}}).on('hide.bs.modal', function(){--}}
+    {{--    $("#edit_data_asumsi"+{{$model->id}}).smartWizard("setState", 0, 'error');--}}
+    {{--    $("#edit_data_asumsi"+{{$model->id}}).smartWizard('fixHeight');--}}
+    {{--});--}}
 
 </script>

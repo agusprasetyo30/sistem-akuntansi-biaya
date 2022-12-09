@@ -74,26 +74,62 @@ class AsumsiUmumController extends Controller
     public function update(Request $request)
     {
         try {
-            //            dd($request);
             $request->validate([
-                "id_periode" => 'required',
-                "kurs" => 'required',
-                "handling_bb" => 'required',
-                "data_saldo_awal" => 'required',
+                "id" => 'required',
+                "nama_version" => 'required',
+                "jumlah_bulan" => 'required',
+                "tanggal" => 'required',
+                "answer" => 'required',
             ]);
+//            dd($request);
 
-            $input['periode_id'] = $request->id_periode;
-            $input['kurs'] = $request->kurs;
-            $input['handling_bb'] = $request->handling_bb;
-            $input['updated_by'] = auth()->user()->id;
-            $input['updated_at'] = Carbon::now();
+            DB::transaction(function () use ($request){
+                $lenght_data = count($request->answer);
 
-            Asumsi_Umum::where('id', $request->id)
-                ->update($input);
+
+                foreach ($request->answer as $key =>$items){
+                    $saldo_awal = Carbon::createFromFormat('Y-m-d', $items['periode'])->subMonth()->format('Y-m-01 00:00:00');
+                    if ($key == 0){
+                        $input_version['version'] = $request->nama_version;
+                        $input_version['data_bulan'] = $request->jumlah_bulan;
+                        $input_version['awal_periode'] = Carbon::createFromFormat('Y-m-d', $request->answer[0]['periode'])->format('Y-m-01 00:00:00');
+                        $input_version['akhir_periode'] = Carbon::createFromFormat('Y-m-d', $request->answer[$lenght_data-1]['periode'])->format('Y-m-01 00:00:00');
+                        $input_version['company_code'] = 'B000';
+
+                        Version_Asumsi::where('id', $request->id)
+                            ->update($input_version);
+                    }
+//                    dd($request);
+                    $input['version_id'] = $request->id;
+                    $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $items['kurs'])));
+                    $input['adjustment'] = (double) $items['adjustment'];
+                    $input['month_year'] = Carbon::createFromFormat('Y-m-d', $items['periode'])->format('Y-m-01 00:00:00');
+                    $input['saldo_awal'] = $saldo_awal;
+                    $input['company_code'] = 'B000';
+                    $input['created_by'] = auth()->user()->id;
+                    $input['updated_by'] = auth()->user()->id;
+//                    $input['updated_at'] = Carbon::now();
+
+                    $cek_data = Asumsi_Umum::where('version_id', $request->id)
+                        ->where('month_year', Carbon::createFromFormat('Y-m-d', $items['periode'])->format('Y-m-01 00:00:00'))
+                        ->first();
+
+                    if ($cek_data == null){
+                        $input['created_by'] = auth()->user()->id;
+                        Asumsi_Umum::create($input);
+                    }else{
+                        Asumsi_Umum::where('version_id', $request->id)
+                            ->where('month_year', Carbon::createFromFormat('Y-m-d', $items['periode'])->format('Y-m-01 00:00:00'))
+                            ->update($input);
+                    }
+
+                }
+
+            });
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
-            //            dd($exception);
+                        dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
@@ -130,9 +166,12 @@ class AsumsiUmumController extends Controller
         try {
             $date = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-01 00:00:00');
 
+//            dd($request, $request->date ,$date);
             $data = Asumsi_Umum::where('version_id', $request->id)
                 ->where('month_year', '=', $date)
                 ->first();
+
+//            dd($data, $date);
 
             if ($data != null){
                 return response()->json(['code' => 200, 'data' => $data]);
