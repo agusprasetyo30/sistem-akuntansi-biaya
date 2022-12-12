@@ -22,10 +22,8 @@
 			<span class="side-menu__label">Master</span><i class="angle fe fe-chevron-right"></i></a>
 			<ul class="slide-menu">
 				<li><a href="{{url('master/kategori-material')}}" class="slide-item"> Kategori Material</a></li>
-				<li><a href="{{url('master/kategori-produk')}}" class="slide-item"> Kategori Produk</a></li>
+				<li><a href="{{url('master/group-account')}}" class="slide-item"> Group Account</a></li>
 				<li><a href="{{url('master/material')}}" class="slide-item"> Material</a></li>
-				<li><a href="{{url('master/produk')}}" class="slide-item"> Produk</a></li>
-{{--				<li><a href="{{url('master/periode')}}" class="slide-item"> Periode</a></li>--}}
 				<li><a href="{{url('master/plant')}}" class="slide-item"> Plant</a></li>
                 <li><a href="{{route('asumsi_umum')}}" class="slide-item"> Asumsi Umum</a></li>
                 <li><a href="{{route('kurs')}}" class="slide-item"> Kurs</a></li>

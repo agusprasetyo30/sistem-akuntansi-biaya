@@ -20,9 +20,9 @@ class CreateMaterialTable extends Migration
             $table->foreignId('kategori_material_id')->references('id')->on('kategori_material')->onUpdate('cascade')->onDelete('cascade');
             $table->string('group_account_code')->unsigned();
             $table->foreign('group_account_code')->references('group_account_code')->on('group_account');
-            $table->string('material_produk_name')->nullable();
-            $table->text('material_produk_desc')->nullable();
-            $table->string('material_produk_uom')->nullable();
+            $table->string('material_name')->nullable();
+            $table->text('material_desc')->nullable();
+            $table->string('material_uom')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_dummy')->default(true);
             $table->dateTime('created_at');

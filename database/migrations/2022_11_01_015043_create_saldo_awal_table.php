@@ -30,7 +30,6 @@ class CreateSaldoAwalTable extends Migration
             $table->string('total_stock')->nullable();
             $table->string('total_value')->nullable();
             $table->string('nilai_satuan')->nullable();
-            $table->timestamp('month_year')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();
