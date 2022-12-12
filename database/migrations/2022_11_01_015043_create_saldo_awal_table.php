@@ -21,10 +21,12 @@ class CreateSaldoAwalTable extends Migration
             $table->string('gl_account')->nullable();
             $table->string('valuation_class')->nullable();
             $table->string('price_control')->nullable();
-            $table->string('material_produk_code')->unsigned();
-            $table->foreign('material_produk_code')->references('material_produk_code')->on('material_produk');
+            $table->string('material_code')->unsigned();
+            $table->foreign('material_code')->references('material_code')->on('material');
             $table->string('plant_code')->unsigned();
             $table->foreign('plant_code')->references('plant_code')->on('plant');
+            $table->string('version')->unsigned();
+            $table->foreign('version')->references('version')->on('version_asumsi')->onUpdate('cascade');
             $table->string('total_stock')->nullable();
             $table->string('total_value')->nullable();
             $table->string('nilai_satuan')->nullable();

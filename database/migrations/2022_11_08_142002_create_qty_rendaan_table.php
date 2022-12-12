@@ -17,8 +17,8 @@ class CreateQtyRendaanTable extends Migration
             $table->id();
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
-            $table->string('material_produk_code')->unsigned();
-            $table->foreign('material_produk_code')->references('material_produk_code')->on('material_produk');
+            $table->string('material_code')->unsigned();
+            $table->foreign('material_code')->references('material_code')->on('material');
             $table->foreignId('region_id')->references('id')->on('regions')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamp('month_year');
             $table->string('qty_rendaan_desc');
