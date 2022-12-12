@@ -24,6 +24,7 @@ use App\Http\Controllers\SaldoAwalController;
 use App\Http\Controllers\TotalDaanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KursController;
 use App\Http\Controllers\CompanyController;
 
 /*
