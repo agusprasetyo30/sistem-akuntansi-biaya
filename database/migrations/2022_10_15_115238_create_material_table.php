@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKategoriProdukTable extends Migration
+class CreateMaterialTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,18 @@ class CreateKategoriProdukTable extends Migration
      */
     public function up()
     {
-        Schema::create('kategori_produk', function (Blueprint $table) {
-            $table->id();
+        Schema::create('material', function (Blueprint $table) {
+            $table->string('material_code')->primary();
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
-            $table->string('kategori_produk_name');
-            $table->string('kategori_produk_desc');
+            $table->foreignId('kategori_material_id')->references('id')->on('kategori_material')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('group_account_code')->unsigned();
+            $table->foreign('group_account_code')->references('group_account_code')->on('group_account');
+            $table->string('material_produk_name')->nullable();
+            $table->text('material_produk_desc')->nullable();
+            $table->string('material_produk_uom')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_dummy')->default(true);
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();
@@ -36,6 +41,6 @@ class CreateKategoriProdukTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kategori_produk');
+        Schema::dropIfExists('material_produk');
     }
 }

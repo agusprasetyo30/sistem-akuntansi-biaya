@@ -17,11 +17,15 @@ class CreateConsRateTable extends Migration
             $table->id();
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
+            $table->string('material_code')->unsigned();
+            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->string('version')->unsigned();
+            $table->foreign('version')->references('version')->on('version_asumsi')->onUpdate('cascade');
             $table->string('plant_code')->unsigned();
             $table->foreign('plant_code')->references('plant_code')->on('plant');
-            $table->string('cons_rate');
-            $table->string('cons_rate_desc');
+            $table->double('cons_rate', 8, 2);
             $table->boolean('is_active')->default(true);
+            $table->timestamp('month_year')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by');
             $table->integer('deleted_by')->nullable();
