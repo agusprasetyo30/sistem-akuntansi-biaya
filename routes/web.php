@@ -25,6 +25,7 @@ use App\Http\Controllers\TotalDaanController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KursController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -169,6 +170,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [UserController::class, 'create'])->name('insert_user');
             Route::post('update', [UserController::class, 'update'])->name('update_user');
             Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
+        });
+        
+        Route::group(['prefix' => 'company'], function () {
+            Route::get('/', [CompanyController::class, 'index'])->name('company');
+            Route::post('insert', [CompanyController::class, 'create'])->name('insert_company');
+            Route::post('update', [CompanyController::class, 'update'])->name('update_company');
+            Route::post('delete', [CompanyController::class, 'delete'])->name('delete_company');
+            Route::post('import', [CompanyController::class, 'import'])->name('import_company');
         });
 
         Route::group(['prefix' => 'kurs'], function () {
