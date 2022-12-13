@@ -137,8 +137,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit" onclick="update_asumsi_umum({{$model->id}})" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <button type="button" id="submit_edit{{$model->id}}" onclick="update_asumsi_umum({{$model->id}})" class="btn btn-primary">Simpan</button>
+                <button type="button" id="kembali{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <button id="loader{{$model->id}}" type="button" class="btn btn-success btn-loaders btn-icon" style="display: none;">Harap Tunggu, Proses Sedang Berjalan !</button>
             </div>
         </div>
     </div>
@@ -146,6 +147,7 @@
 <!--/div-->
 
 <script>
+
 
     $('#detail_view'+{{$model->id}}).on('click', function () {
         var html2='';
@@ -167,9 +169,7 @@
                 id:'{{$model->id}}'
             },
             success:function (response) {
-                console.log(response)
                 if (response.code === 200){
-                    console.log(response.data['version'])
                     $('#detail_nama_versi'+{{$model->id}}).val(response.data['version'].version)
                     $('#detail_tanggal_awal'+{{$model->id}}).val(helpDateFormat(response.data['version'].awal_periode, 'eng'))
                     $('#detail_tanggal_akhir'+{{$model->id}}).val(helpDateFormat(response.data['version'].akhir_periode, 'eng'))
@@ -232,7 +232,6 @@
             },
             success:function (response) {
                 if (response.code === 200){
-                    console.log(response.data['version'])
                     $('#edit_nama_versi'+{{$model->id}}).val(response.data['version'].version)
                     $('#edit_jumlah_bulan'+{{$model->id}}).val(response.data['version'].data_bulan)
                     var date = new Date(response.data['version'].awal_periode)
@@ -251,6 +250,7 @@
 
     $("#edit_data_asumsi"+{{$model->id}}).on("leaveStep", function(e, anchorObject, currentStepIdx, nextStepIdx, stepDirection) {
         // Validate only on forward movement
+
         if (nextStepIdx === 'forward') {
             let form = document.getElementById('{{$model->id}}edit_form-' + (currentStepIdx + 1));
             if (form) {
@@ -261,6 +261,7 @@
                     return false;
                 }
                 if (currentStepIdx === 0){
+
                     var data_id;
                     let month = $('#edit_jumlah_bulan'+{{$model->id}}).val();
                     var param;
@@ -271,11 +272,12 @@
                         }else {
                             param = moment(param, "MM/YYYY").add(1, 'months').format('MM/YYYY');
                         }
-
-
-                        data_first_edit(joining(param), x, data_id)
-                        // console.log(joining(param))
+                        data_first_edit(joining(param), x, data_id);
+                        // console.log(result)
                     }
+
+                    // data_array.forEach(myFunction)
+                    // console.log(data_array['html1'])
 
                     // $('#submit').prop('disabled', false);
                 }
@@ -329,9 +331,11 @@
     }
 
     function data_first_edit(d, id, data_id) {
-        console.log(d)
+        // var result;
+        var html1;
         $.ajax({
             type: "POST",
+            async:false,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -342,8 +346,6 @@
                 date:d
             },
             success:function (response) {
-                console.log(response)
-                var html1;
                 if (response.code === 200){
                     html1 = '<div class="col-md-12">' +
                         '<strong>PERIODE :'+helpDateFormat(d, 'eng')+'</strong>' +
@@ -389,9 +391,9 @@
 
                 $('#edit_currency'+id+data_id).val(response.data['usd_rate']).trigger('keyup');
                 $('#edit_adjustment'+id+data_id).val(response.data['adjustment']).trigger('keyup');
+
             }
         })
-
     }
 
     function formatNumber(n) {
@@ -466,9 +468,5 @@
         input[0].setSelectionRange(caret_pos, caret_pos);
     }
 
-    {{--$("#modal_edit"+{{$model->id}}).on('hide.bs.modal', function(){--}}
-    {{--    $("#edit_data_asumsi"+{{$model->id}}).smartWizard("setState", 0, 'error');--}}
-    {{--    $("#edit_data_asumsi"+{{$model->id}}).smartWizard('fixHeight');--}}
-    {{--});--}}
 
 </script>

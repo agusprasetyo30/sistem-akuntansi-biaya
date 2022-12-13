@@ -39,6 +39,7 @@ class PlantController extends Controller
             $input['plant_code'] = $request->code;
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
+            $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
@@ -57,6 +58,7 @@ class PlantController extends Controller
         try {
             $request->validate([
                 "code" => 'required',
+//                "old_plant" => 'required',
                 "deskripsi" => 'required',
                 "is_active" => 'required',
             ]);
@@ -64,11 +66,12 @@ class PlantController extends Controller
             $input['plant_code'] = $request->code;
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
+            $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
-            DB::table('plant')
-                ->where('id', $request->id)->update($input);
+            Plant::where('plant_code', $request->id)
+                ->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
@@ -79,7 +82,7 @@ class PlantController extends Controller
     public function delete(Request $request)
     {
         try {
-            Plant::where('id', $request->id)
+            Plant::where('plant_code', $request->id)
                 ->update([
                     'deleted_at' => Carbon::now(),
                     'deleted_by' => auth()->user()->id

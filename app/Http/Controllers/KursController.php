@@ -31,7 +31,7 @@ class KursController extends Controller
             $input['month'] = $date[0];
             $input['year'] = $date[1];
             $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',$request->kurs));
-            $input['company_code'] = 'B000';
+
 //            dd($input);
             DB::transaction(function () use ($input){
                 Kurs::create($input);
@@ -39,7 +39,7 @@ class KursController extends Controller
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
-            dd($exception);
+
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
@@ -58,16 +58,14 @@ class KursController extends Controller
             $input['month'] = $date[0];
             $input['year'] = $date[1];
             $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $request->kurs)));
-            $input['company_code'] = 'B000';
 
-//            dd($input);
             DB::transaction(function () use ($input, $request){
                 Kurs::where('id', $request->id)
                     ->update($input);
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
-            dd($exception);
+
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
