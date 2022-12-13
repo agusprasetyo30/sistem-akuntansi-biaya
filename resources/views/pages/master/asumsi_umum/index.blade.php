@@ -66,6 +66,7 @@
 
 @section('scripts')
     <script>
+        var data_array = [];
         $(document).ready(function () {
             var funArr = [];
             let loop = 0;
@@ -537,7 +538,6 @@
                     }else {
                         toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                     }
-                    console.log(answersList_edit);
 
 
 
