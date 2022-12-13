@@ -26,10 +26,12 @@ class MaterialController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                "material_code" => 'required|unique:material,material_code',
                 "material_name" => 'required',
                 "material_desc" => 'required',
+                "group_account_code" => 'required',
                 "kategori_material_id" => 'required',
-                "uom" => 'required',
+                "material_uom" => 'required',
                 "is_dummy" => 'required',
                 "is_active" => 'required',
             ], validatorMsg());
@@ -37,10 +39,13 @@ class MaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $input['company_code'] = 'B000';
+            $input['material_code'] = $request->material_code;
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;
+            $input['group_account_code'] = $request->group_account_code;
             $input['kategori_material_id'] = $request->kategori_material_id;
-            $input['uom'] = $request->uom;
+            $input['material_uom'] = $request->material_uom;
             $input['is_dummy'] = $request->is_dummy;
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
@@ -48,71 +53,68 @@ class MaterialController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
+            // dd($input);
             Material::create($input);
 
-            // return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-            return setResponse([
-                'code' => 200,
-                'title' => 'Data Berhasil Disimpan'
-            ]);
-        } catch (\Exception $error) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
     public function update(Request $request)
     {
         try {
-            $request->validate([
-                "material_name" => 'required',
-                "material_desc" => 'required',
-                "kategori_material_id" => 'required',
-                "uom" => 'required',
-                "is_dummy" => 'required',
-                "is_active" => 'required',
-            ]);
+            $data = Material::where('material_code', $request->post('id'))->first();
 
+            if (!$data)
+                return response()->json(['Code' => 400, 'msg' => 'Data Tidak Ditemukan!']);
+
+            $required['material_name'] = 'required';
+            $required['material_desc'] = 'required';
+            $required['group_account_code'] = 'required';
+            $required['kategori_material_id'] = 'required';
+            $required['material_uom'] = 'required';
+            $required['is_dummy'] = 'required';
+            $required['is_active'] = 'required';
+
+            if ($data->material_code != $request->post('material_code'))
+                $required['material_code'] = 'required|unique:material,material_code';
+
+            $validator = Validator::make($request->all(), $required, validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $input['company_code'] = 'B000';
+            $input['material_code'] = $request->material_code;
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;
+            $input['group_account_code'] = $request->group_account_code;
             $input['kategori_material_id'] = $request->kategori_material_id;
-            $input['uom'] = $request->uom;
+            $input['material_uom'] = $request->material_uom;
             $input['is_dummy'] = $request->is_dummy;
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
 
-            DB::table('material')->where('id', $request->id)->update($input);
+            DB::table('material')->where('material_code', $request->id)->update($input);
 
-            return setResponse([
-                'code' => 200,
-                'title' => 'Data Berhasil Disimpan'
-            ]);
-        } catch (\Exception $error) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
     public function delete(Request $request)
     {
         try {
-            Material::where('id', $request->id)
-                ->update([
-                    'deleted_at' => Carbon::now(),
-                    'deleted_by' => auth()->user()->id
-                ]);
-            return setResponse([
-                'code' => 200,
-                'title' => 'Data Berhasil Disimpan',
-            ]);
-        } catch (\Exception $error) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            Material::where('material_code', $request->id)->delete();
+
+            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+        } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
@@ -129,9 +131,13 @@ class MaterialController extends Controller
                 $err = [];
 
                 foreach ($data_fail as $rows) {
-                    $er = implode(' ', array_values($rows->errors()));
-                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                    array_push($err, $hasil);
+                    try {
+                        $er = implode(' ', array_values($rows->errors()));
+                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                        array_push($err, $hasil);
+                    } catch (\Throwable $th) {
+                        return response()->json(['Code' => $th->getCode(), 'msg' => $th->getMessage()]);
+                    }
                 }
                 // dd(implode(' ', $err));
                 return response()->json(['Code' => 500, 'msg' => $err]);

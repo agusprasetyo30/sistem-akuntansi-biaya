@@ -12,6 +12,6 @@ class MaterialExport implements WithHeadings
      */
     public function headings(): array
     {
-        return ["material_name", "material_desc", "kategori_material_id", "uom", "is_dummy", "is_active"];
+        return ["material_code", "material_name", "material_desc", "group_account_code", "kategori_material_id", "material_uom", "is_active", "is_dummy"];
     }
 }

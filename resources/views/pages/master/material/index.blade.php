@@ -34,8 +34,10 @@
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
+                                <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE</th>
                                 <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
                                 <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
+                                <th data-type='text' data-name='group_account_code' class="border-bottom-0 text-center">GROUP ACCOUNT</th>
                                 <th data-type='text' data-name='kategori' class="border-bottom-0 text-center">KATEGORI</th>
                                 <th data-type='text' data-name='uom' class="border-bottom-0 text-center">UOM</th>
                                 <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
@@ -44,8 +46,10 @@
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
+                                <th data-type='text' data-name='code' class="text-center"></th>
                                 <th data-type='text' data-name='nama' class="text-center"></th>
                                 <th data-type='text' data-name='deskripsi' class="text-center"></th>
+                                <th data-type='text' data-name='group_account_code' class="text-center"></th>
                                 <th data-type='text' data-name='kategori' class="text-center"></th>
                                 <th data-type='text' data-name='uom' class="text-center"></th>
                                 <th data-type='select' data-name='status' class="text-center"></th>
@@ -93,6 +97,28 @@
                 allowClear: false,
                 ajax: {
                     url: "{{ route('kategori_material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#group_account_code').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Group Account',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('group_account_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -186,18 +212,20 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
+                    { data: 'DT_RowIndex', name: 'material_code', searchable: false, orderable:true},
+                    { data: 'material_code', name: 'material_code', orderable:false},
                     { data: 'material_name', name: 'material_name', orderable:false},
                     { data: 'material_desc', name: 'material_desc', orderable:false},
+                    { data: 'group_account_desc', name: 'group_account.group_account_desc', orderable:false},
                     { data: 'kategori_material_name', name: 'kategori_material.kategori_material_name', orderable:false},
-                    { data: 'uom', name: 'uom', orderable:false},
+                    { data: 'material_uom', name: 'material_uom', orderable:false},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'dummy', name: 'filter_dummy', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,5,6,7]}
+                    {className: 'text-center', targets: [0,7,8,9]}
                 ],
 
             })
@@ -223,15 +251,17 @@
                         url: '{{route('insert_material')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
+                            material_code: $('#material_code').val(),
                             material_name: $('#material_name').val(),
                             material_desc: $('#material_desc').val(),
+                            group_account_code: $('#group_account_code').val(),
                             kategori_material_id: $('#kategori_material_id').val(),
-                            uom: $('#uom').val(),
+                            material_uom: $('#material_uom').val(),
                             is_active: $('#is_active').val(),
                             is_dummy: $('#is_dummy').val(),
                         },
                         success:function (response) {
-                            if (response.code === 200){
+                            if (response.Code === 200){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
                                 $('#is_active').val('').trigger("change");
@@ -299,8 +329,6 @@
                                 $("#modal_import input").val("")
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
-
-
                         }
                     })
 
@@ -331,18 +359,30 @@
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
+                            material_code: $('#edit_material_code'+id).val(),
                             material_name: $('#edit_material_name'+id).val(),
                             material_desc: $('#edit_material_desc'+id).val(),
+                            group_account_code: $('#edit_group_account_code'+id).val(),
                             kategori_material_id: $('#edit_kategori_material_id'+id).val(),
-                            uom: $('#edit_uom'+id).val(),
+                            material_uom: $('#edit_material_uom'+id).val(),
                             is_active: $('#edit_is_active'+id).val(),
                             is_dummy: $('#edit_is_dummy'+id).val(),
                         },
                         success:function (response) {
-                            if (response.code === 200){
+                            if (response.Code === 200){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_edit'+id).modal('hide');
+                                $("#modal_edit input"+id).val("")
+                                toastr.warning(response.msg, 'Warning')
+                            }else if (response.Code === 0){
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else {
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
                         },
                         error: function (response) {
@@ -379,9 +419,11 @@
                             id: id,
                         },
                         success:function (response) {
-                            if (response.code === 200){
+                            if (response.Code === 200){
                                 toastr.success('Data Berhasil Dihapus', 'Success')
                                 get_data()
+                            } else {
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
                         },
                         error: function (response) {

@@ -6,17 +6,15 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriMaterialController;
-use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ModalController;
-use App\Http\Controllers\PeriodeController;
 use App\Http\Controllers\PlantController;
-use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RegionsController;
 use App\Http\Controllers\CostCenterController;
 use App\Http\Controllers\SelectController;
 use App\Http\Controllers\AsumsiUmumController;
+use App\Http\Controllers\GroupAccountController;
 use App\Http\Controllers\PriceRenDaanController;
 use App\Http\Controllers\QtyRenDaanController;
 use App\Http\Controllers\QtyRenProdController;
@@ -97,24 +95,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [MaterialController::class, 'export'])->name('export_material');
         });
 
-        Route::group(['prefix' => 'produk'], function () {
-            Route::get('/', [ProdukController::class, 'index'])->name('produk');
-            Route::post('insert', [ProdukController::class, 'create'])->name('insert_produk');
-            Route::post('update', [ProdukController::class, 'update'])->name('update_produk');
-            Route::post('delete', [ProdukController::class, 'delete'])->name('delete_produk');
-            Route::post('import', [ProdukController::class, 'import'])->name('import_produk');
-            Route::get('export', [ProdukController::class, 'export'])->name('export_produk');
-        });
-
-        Route::group(['prefix' => 'periode'], function () {
-            Route::get('/', [PeriodeController::class, 'index'])->name('periode');
-            Route::post('insert', [PeriodeController::class, 'create'])->name('insert_periode');
-            Route::post('update', [PeriodeController::class, 'update'])->name('update_periode');
-            Route::post('delete', [PeriodeController::class, 'delete'])->name('delete_periode');
-            Route::post('import', [PeriodeController::class, 'import'])->name('import_periode');
-            Route::get('export', [PeriodeController::class, 'export'])->name('export_periode');
-        });
-
         Route::group(['prefix' => 'plant'], function () {
             Route::get('/', [PlantController::class, 'index'])->name('plant');
             Route::post('insert', [PlantController::class, 'create'])->name('insert_plant');
@@ -131,15 +111,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [KategoriMaterialController::class, 'delete'])->name('delete_kategori_material');
             Route::post('import', [KategoriMaterialController::class, 'import'])->name('import_kategori_material');
             Route::get('export', [KategoriMaterialController::class, 'export'])->name('export_kategori_material');
-        });
-
-        Route::group(['prefix' => 'kategori-produk'], function () {
-            Route::get('/', [KategoriProdukController::class, 'index'])->name('kategori_produk');
-            Route::post('insert', [KategoriProdukController::class, 'create'])->name('insert_kategori_produk');
-            Route::post('update', [KategoriProdukController::class, 'update'])->name('update_kategori_produk');
-            Route::post('delete', [KategoriProdukController::class, 'delete'])->name('delete_kategori_produk');
-            Route::post('import', [KategoriProdukController::class, 'import'])->name('import_kategori_produk');
-            Route::get('export', [KategoriProdukController::class, 'export'])->name('export_kategori_produk');
         });
 
         Route::group(['prefix' => 'regions'], function () {
@@ -187,6 +158,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [KursController::class, 'delete'])->name('delete_kurs');
         });
 
+        Route::group(['prefix' => 'group-account'], function () {
+            Route::get('/', [GroupAccountController::class, 'index'])->name('group_account');
+            Route::post('insert', [GroupAccountController::class, 'create'])->name('insert_group_account');
+            Route::post('update', [GroupAccountController::class, 'update'])->name('update_group_account');
+            Route::post('delete', [GroupAccountController::class, 'delete'])->name('delete_group_account');
+            Route::post('import', [GroupAccountController::class, 'import'])->name('import_group_account');
+            Route::get('export', [GroupAccountController::class, 'export'])->name('export_group_account');
+        });
+
         // Main Select2
         Route::group(['prefix' => 'main_data'], function () {
             Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
@@ -196,9 +176,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
             Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
+            Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
 
 
-//            Helper
+            //            Helper
             Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
             Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
@@ -224,7 +205,6 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::post('view_asumsi_umum', [AsumsiUmumController::class, 'view'])->name('view_asumsi_umum');
             Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
-
         });
 
         Route::group(['prefix' => 'saldo-awal'], function () {
@@ -262,8 +242,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
             Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
         });
-
-
     });
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);

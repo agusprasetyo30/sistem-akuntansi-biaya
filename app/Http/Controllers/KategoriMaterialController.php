@@ -34,6 +34,7 @@ class KategoriMaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $input['company_code'] = 'B000';
             $input['kategori_material_name'] = $request->nama;
             $input['kategori_material_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
@@ -53,12 +54,16 @@ class KategoriMaterialController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
-                "nama" => 'required',
-                "deskripsi" => 'required',
-                "is_active" => 'required',
-            ]);
+            $validator = Validator::make($request->all(), [
+                'nama' => 'required',
+                'deskripsi' => 'required',
+                'is_active' => 'required',
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $input['company_code'] = 'B000';
             $input['kategori_material_name'] = $request->nama;
             $input['kategori_material_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
@@ -79,14 +84,11 @@ class KategoriMaterialController extends Controller
         try {
             $material = KategoriMaterial::get_kategori($request->id);
 
-            if ($material != null) {
+            if ($material) {
                 return response()->json(['Code' => 502, 'msg' => 'Kategori masih digunakan, kategori hanya bisa dinonaktifkan']);
             } else {
-                KategoriMaterial::where('id', $request->id)
-                    ->update([
-                        'deleted_at' => Carbon::now(),
-                        'deleted_by' => auth()->user()->id
-                    ]);
+                KategoriMaterial::where('id', $request->id)->delete();
+
                 return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
             }
         } catch (\Exception $exception) {

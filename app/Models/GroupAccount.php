@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class KategoriMaterial extends Model
+class GroupAccount extends Model
 {
     use HasFactory;
 
-    protected $table = 'kategori_material';
-    protected $primaryKey = 'id';
+    protected $table = 'group_account';
+    protected $primaryKey = 'group_account_code';
 
     protected $fillable = [
         'company_code',
-        'kategori_material_name',
-        'kategori_material_desc',
+        'group_account_code',
+        'group_account_desc',
         'is_active',
         'created_at',
         'created_by',
@@ -26,11 +26,11 @@ class KategoriMaterial extends Model
         'deleted_by'
     ];
 
-    public function get_kategori($id)
+    public function get_account($id)
     {
-        $result = DB::table(DB::raw('kategori_material km'))
-            ->leftJoin(DB::raw('material mat'), 'mat.kategori_material_id', '=', 'km.id')
-            ->where('mat.kategori_material_id', $id)
+        $result = DB::table(DB::raw('group_account ga'))
+            ->leftJoin(DB::raw('material mat'), 'mat.group_account_code', '=', 'ga.group_account_code')
+            ->where('mat.group_account_code', $id)
             ->whereNull('mat.deleted_at');
 
         $result = $result->first();

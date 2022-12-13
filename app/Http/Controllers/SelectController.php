@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GroupAccount;
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
 use App\Models\Kurs;
@@ -91,25 +92,27 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
-    public function kategori_produk(Request $request)
+    public function group_account(Request $request)
     {
         $search = $request->search;
         if ($search == '') {
-            $kategori_produk = KategoriProduk::limit(10)
+            $group_account = GroupAccount::limit(10)
                 ->where('is_active', 't')
+                ->whereNull('deleted_at')
                 ->get();
         } else {
-            $kategori_produk = KategoriProduk::where('kategori_produk_name', 'ilike', '%' . $search . '%')
+            $group_account = GroupAccount::where('group_account_code', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
+                ->whereNull('deleted_at')
                 ->get();
         }
 
         $response = array();
-        foreach ($kategori_produk as $items) {
+        foreach ($group_account as $items) {
             $response[] = array(
-                "id" => $items->id,
-                "text" => $items->kategori_produk_name
+                "id" => $items->group_account_code,
+                "text" => $items->group_account_code . ' ' . $items->group_account_desc,
             );
         }
 
@@ -166,7 +169,8 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
-    public function role(Request $request){
+    public function role(Request $request)
+    {
         $search = $request->search;
         if ($search == '') {
             $role = Role::limit(10)
@@ -190,7 +194,8 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
-    public function kurs(Request $request){
+    public function kurs(Request $request)
+    {
         $search = $request->search;
         if ($search == '') {
             $kurs = Kurs::limit(10)
@@ -207,7 +212,7 @@ class SelectController extends Controller
         foreach ($kurs as $items) {
             $response[] = array(
                 "id" => $items->usd_rate,
-                "text" => $items->month.'/'.$items->year.' - '.rupiah($items->usd_rate)
+                "text" => $items->month . '/' . $items->year . ' - ' . rupiah($items->usd_rate)
             );
         }
 
@@ -216,71 +221,71 @@ class SelectController extends Controller
 
 
 
-//    Helper
+    //    Helper
 
-    public function check_username(Request $request){
+    public function check_username(Request $request)
+    {
         try {
             $data = User::where('username', $request->search)
                 ->count();
-            if ($data != 0){
+            if ($data != 0) {
                 return response()->json(['Code' => 201, 'msg' => 'Data Berasil Ditemukan']);
-            }else{
+            } else {
                 return response()->json(['Code' => 200, 'msg' => 'Data Tidak Tersedia']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function check_email(Request $request){
+    public function check_email(Request $request)
+    {
         try {
             $data = User::where('email', $request->search)
                 ->count();
-            if ($data != 0){
+            if ($data != 0) {
                 return response()->json(['Code' => 201, 'msg' => 'Data Berasil Ditemukan']);
-            }else{
+            } else {
                 return response()->json(['Code' => 200, 'msg' => 'Data Tidak Tersedia']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function check_kurs(Request $request){
+    public function check_kurs(Request $request)
+    {
 
         $data = explode('/', $request->periode);
 
         $kurs = DB::table('kurs')
-            ->where('month', '=', check_month($data[0]-1))
+            ->where('month', '=', check_month($data[0] - 1))
             ->where('year', '=', $data[1])
             ->first();
 
-        if ($kurs == null){
-            return response()->json(['Code' => 200, 'data_kurs' => ''       ]);
-        }else{
+        if ($kurs == null) {
+            return response()->json(['Code' => 200, 'data_kurs' => '']);
+        } else {
 
             return response()->json(['Code' => 200, 'data_kurs' => $kurs->usd_rate]);
         }
-
-
     }
 
-    public function check_kursv1(Request $request){
+    public function check_kursv1(Request $request)
+    {
 
         $data = Carbon::createFromFormat('Y-m-d', $request->periode)->format('Y-m-01 00:00:00');
 
         $asumsi = DB::table('asumsi_umum')
-            ->where('month_year','=', $data)
+            ->where('month_year', '=', $data)
             ->where('version_id', '=', $request->id)
             ->first();
 
-        if ($asumsi == null){
+        if ($asumsi == null) {
             return response()->json(['Code' => 200, 'data_kurs' => '']);
-        }else{
+        } else {
 
             return response()->json(['Code' => 200, 'data_kurs' => $asumsi->usd_rate]);
         }
-
-
     }
 }
