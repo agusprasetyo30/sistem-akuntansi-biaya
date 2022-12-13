@@ -15,8 +15,6 @@ class CreateRegionsTable extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
             $table->string('region_name');
             $table->string('region_desc');
             $table->boolean('is_active')->default(true);
