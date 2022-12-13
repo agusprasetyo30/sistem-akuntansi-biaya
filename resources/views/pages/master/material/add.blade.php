@@ -13,12 +13,22 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label>Code </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Code" name="material_code" id="material_code" autocomplete="off">
+                            </div>
+                            <div class="form-group">
                                 <label>Nama </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nama" name="material_name" id="material_name" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Deskripsi </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Deskripsi" name="material_desc" id="material_desc" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Group Account</label>
+                                <select name="group_account_code" id="group_account_code" class="form-control custom-select select2">
+                                    <option value="" selected>Pilih Group Account</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Kategori</label>
@@ -28,7 +38,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Uom </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="UOM" name="uom" id="uom" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="UOM" name="material_uom" id="material_uom" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Periode</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Group Account</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -13,26 +13,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Nama </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Nama Periode"
-                                    name="periode_name" id="periode_name" autocomplete="off">
+                                <label>Code </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Kode Account" name="group_account_code" id="group_account_code" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Awal Periode </label>
-                                <input class="form-control form-control-sm fc-datepicker" placeholder="DD-MM-YYYY"
-                                    name="awal_periode" id="awal_periode" type="text">
-                            </div>
-                            <div class="form-group">
-                                <label>Akhir Periode </label>
-                                <input class="form-control form-control-sm fc-datepicker" placeholder="DD-MM-YYYY"
-                                    type="text" name="akhir_periode" id="akhir_periode">
+                                <label>Deskripsi </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Account" name="group_account_desc" id="group_account_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>
                                 <select name="is_active" id="is_active" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_is_active() as $key => $value)
-                                    <option value="{{ $key }}">{{ $value}}</option>
+                                        <option value="{{ $key }}">{{ $value}}</option>
                                     @endforeach
                                 </select>
                             </div>

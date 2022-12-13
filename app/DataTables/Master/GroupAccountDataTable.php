@@ -2,14 +2,15 @@
 
 namespace App\DataTables\Master;
 
-use Illuminate\Support\Facades\DB;
+use App\Models\Master\GroupAccount;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Illuminate\Support\Facades\DB;
 
-class KategoriProdukDataTable extends DataTable
+class GroupAccountDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -19,29 +20,28 @@ class KategoriProdukDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('kategori_produk')->whereNull('deleted_at');
+        $query = DB::table('group_account')->whereNull('deleted_at');
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('status', function ($query){
-                if ($query->is_active == true){
+            ->addColumn('status', function ($query) {
+                if ($query->is_active == true) {
                     $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Aktif</span>";
-                }else{
+                } else {
                     $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Aktif</span>";
                 }
 
                 return $span;
             })
-            ->filterColumn('filter_status', function ($query, $keyword){
+            ->filterColumn('filter_status', function ($query, $keyword) {
 
-                if ($keyword == true){
+                if ($keyword == true) {
                     $query->where('is_active', true);
-                }elseif ($keyword == false){
+                } elseif ($keyword == false) {
                     $query->where('is_active', false);
                 }
-
             })
-            ->addColumn('action', 'pages.master.kategori_produk.action')
+            ->addColumn('action', 'pages.master.group_account.action')
             ->escapeColumns([]);
     }
 
@@ -49,7 +49,7 @@ class KategoriProdukDataTable extends DataTable
     {
         return $this->builder()
             ->addTableClass('table table-bordered text-nowrap key-buttons')
-            ->setTableId('dt_kategori_produk')
+            ->setTableId('dt_group_account')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -72,10 +72,10 @@ class KategoriProdukDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),
@@ -90,6 +90,6 @@ class KategoriProdukDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Master\KategoriProduk_' . date('YmdHis');
+        return 'Master\GroupAccount_' . date('YmdHis');
     }
 }

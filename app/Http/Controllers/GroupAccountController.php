@@ -2,52 +2,50 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\Master\PeriodeDataTable;
-use App\Exports\PeriodeExport;
-use App\Imports\PeriodeImport;
-use App\Models\Periode;
-use Carbon\Carbon;
+use App\DataTables\Master\GroupAccountDataTable;
+use App\Exports\GroupAccountExport;
+use App\Imports\GroupAccountImport;
+use App\Models\GroupAccount;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Validator;
 
-class PeriodeController extends Controller
+class GroupAccountController extends Controller
 {
-    public function index(Request $request, PeriodeDataTable $periodeDataTable)
+    public function index(Request $request, GroupAccountDataTable $groupaccountDataTable)
     {
         if ($request->data == 'index') {
-            return $periodeDataTable->render('pages.master.periode.index');
+            return $groupaccountDataTable->render('pages.master.group_account.index');
         }
-        return view('pages.master.periode.index');
+        return view('pages.master.group_account.index');
     }
 
     public function create(Request $request)
     {
-        dd(date('Y-m-d H:i:s', strtotime($request->awal_periode)));
         try {
             $validator = Validator::make($request->all(), [
-                "nama" => 'required',
-                "awal_periode" => 'required',
-                "akhir_periode" => 'required',
-                "is_active" => 'required',
+                'code' => 'required|unique:group_account,group_account_code',
+                'deskripsi' => 'required',
+                'is_active' => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['periode_name'] = $request->nama;
-            $input['awal_periode'] = date('Y-m-d H:i:s', strtotime($request->awal_periode));
-            $input['akhir_periode'] = date('Y-m-d H:i:s', strtotime($request->akhir_periode));
+            $input['company_code'] = 'B000';
+            $input['group_account_code'] = $request->code;
+            $input['group_account_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            Periode::create($input);
+            GroupAccount::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
@@ -56,22 +54,31 @@ class PeriodeController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
-                "nama" => 'required',
-                "awal_periode" => 'required',
-                "akhir_periode" => 'required',
-                "is_active" => 'required',
-            ]);
+            $data = GroupAccount::where('group_account_code', $request->post('id'))->first();
 
-            $input['periode_name'] = $request->nama;
-            $input['awal_periode'] = date('Y-m-d', strtotime($request->awal_periode));
-            $input['akhir_periode'] = date('Y-m-d', strtotime($request->akhir_periode));
+            if (!$data)
+                return response()->json(['Code' => 400, 'msg' => 'Data Tidak Ditemukan!']);
+
+            $required['deskripsi'] = 'required';
+
+            if ($data->group_account_code != $request->post('code'))
+                $required['code'] = 'required|unique:group_account,group_account_code';
+
+            $validator = Validator::make($request->all(), $required, validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $input['company_code'] = 'B000';
+            $input['group_account_code'] = $request->code;
+            $input['group_account_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
-            DB::table('periode')
-                ->where('id', $request->id)->update($input);
+
+            DB::table('group_account')
+                ->where('group_account_code', $request->id)->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
@@ -82,12 +89,15 @@ class PeriodeController extends Controller
     public function delete(Request $request)
     {
         try {
-            Periode::where('id', $request->id)
-                ->update([
-                    'deleted_at' => Carbon::now(),
-                    'deleted_by' => auth()->user()->id
-                ]);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            $group_account = GroupAccount::get_account($request->id);
+
+            if ($group_account) {
+                return response()->json(['Code' => 502, 'msg' => 'Account masih digunakan, Account hanya bisa dinonaktifkan']);
+            } else {
+                GroupAccount::where('group_account_code', $request->id)->delete();
+
+                return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            }
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
@@ -97,7 +107,7 @@ class PeriodeController extends Controller
     {
         try {
             $file = $request->file('file')->store('import');
-            $import = new PeriodeImport;
+            $import = new GroupAccountImport;
             $import->import($file);
 
             $data_fail = $import->failures();
@@ -122,6 +132,6 @@ class PeriodeController extends Controller
 
     public function export()
     {
-        return Excel::download(new PeriodeExport, 'periode.xlsx');
+        return Excel::download(new GroupAccountExport, 'group_account.xlsx');
     }
 }

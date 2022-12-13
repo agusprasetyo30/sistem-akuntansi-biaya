@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Kategori Material</h4>
+        <h4 class="page-title mb-0 text-primary">Group Account</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -30,18 +30,18 @@
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_kategori_material" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                        <table id="dt_group_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
+                                <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE</th>
                                 <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
                                 <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='nama' class="text-center"></th>
+                                <th data-type='text' data-name='code' class="text-center"></th>
                                 <th data-type='text' data-name='deskripsi' class="text-center"></th>
                                 <th data-type='select' data-name='status' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
@@ -54,8 +54,8 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.kategori_material.add')
-            @include('pages.master.kategori_material.import')
+            @include('pages.master.group_account.add')
+            @include('pages.master.group_account.import')
         </div> 
     </div>
 </div>
@@ -76,8 +76,8 @@
         })
 
         function get_data(){
-            $('#dt_kategori_material').DataTable().clear().destroy();
-            $("#dt_kategori_material").DataTable({
+            $('#dt_group_account').DataTable().clear().destroy();
+            $("#dt_group_account").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 // sortable: false,
@@ -142,19 +142,19 @@
                     { extend: 'excel', className: 'mb-5' }
                 ],
                 ajax: {
-                    url : '{{route("kategori_material")}}',
+                    url : '{{route("group_account")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'kategori_material_name', name: 'kategori_material_name', orderable:false},
-                    { data: 'kategori_material_desc', name: 'kategori_material_desc', orderable:false},
+                    { data: 'DT_RowIndex', name: 'group_account_code', searchable: false, orderable:true},
+                    { data: 'group_account_code', name: 'group_account_code', orderable:false},
+                    { data: 'group_account_desc', name: 'group_account_desc', orderable:false},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,4,3]}
+                    {className: 'text-center', targets: [0,4]}
                 ],
 
             })
@@ -177,11 +177,11 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('insert_kategori_material')}}',
+                        url: '{{route('insert_group_account')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            nama: $('#kategori_material_name').val(),
-                            deskripsi: $('#kategori_material_desc').val(),
+                            code: $('#group_account_code').val(),
+                            deskripsi: $('#group_account_desc').val(),
                             is_active: $('#is_active').val(),
                         },
                         success:function (response) {
@@ -228,7 +228,7 @@
                         },
                         processData: false,
                         contentType: false,
-                        url: '{{route('import_kategori_material')}}',
+                        url: '{{route('import_group_account')}}',
                         data: file,
                         success:function (response) {
                             if (response.Code === 200){
@@ -258,7 +258,7 @@
             })
         })
 
-        function update_kategori_material(id) {
+        function update_group_account(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -270,18 +270,17 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
                     $.ajax({
                         type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('update_kategori_material')}}',
+                        url: '{{route('update_group_account')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            id: id,
-                            nama: $('#edit_kategori_material_name'+id).val(),
-                            deskripsi: $('#edit_kategori_material_desc'+id).val(),
+                            id : id,
+                            code: $('#edit_group_account_code'+id).val(),
+                            deskripsi: $('#edit_group_account_desc'+id).val(),
                             is_active: $('#edit_is_active'+id).val(),
                         },
                         success:function (response) {
@@ -291,7 +290,7 @@
                                 get_data()
                             }else if (response.Code === 400){
                                 $('#modal_edit'+id).modal('hide');
-                                $("#modal_edit input"+id).val("")
+                                // $("#modal_edit input"+id).val("")
                                 toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
@@ -308,7 +307,7 @@
             })
         }
 
-        function delete_kategori_material(id) {
+        function delete_group_account(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -326,7 +325,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_kategori_material')}}',
+                        url: '{{route('delete_group_account')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -347,5 +346,6 @@
 
             })
         }
+
     </script>
 @endsection

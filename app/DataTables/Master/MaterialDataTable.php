@@ -21,48 +21,47 @@ class MaterialDataTable extends DataTable
     public function dataTable($query)
     {
         $query = DB::table('material')
-            ->select('material.*', 'kategori_material.kategori_material_name')
+            ->select('material.*', 'kategori_material.kategori_material_name', 'group_account.group_account_code', 'group_account.group_account_desc')
             ->leftJoin('kategori_material', 'kategori_material.id', '=', 'material.kategori_material_id')
+            ->leftJoin('group_account', 'group_account.group_account_code', '=', 'material.group_account_code')
             ->whereNull('material.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('status', function ($query){
-                if ($query->is_active == true){
+            ->addColumn('status', function ($query) {
+                if ($query->is_active == true) {
                     $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Aktif</span>";
-                }else{
+                } else {
                     $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Aktif</span>";
                 }
 
                 return $span;
             })
-            ->addColumn('dummy', function ($query){
-                if ($query->is_dummy == true){
+            ->addColumn('dummy', function ($query) {
+                if ($query->is_dummy == true) {
                     $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
-                }else{
+                } else {
                     $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
 
                 return $span;
             })
-            ->filterColumn('filter_status', function ($query, $keyword){
+            ->filterColumn('filter_status', function ($query, $keyword) {
 
-                if ($keyword == true){
+                if ($keyword == true) {
                     $query->where('material.is_active', true);
-                }elseif ($keyword == false){
+                } elseif ($keyword == false) {
                     $query->where('material.is_active', false);
                 }
-
             })
-            ->filterColumn('filter_dummy', function ($query, $keyword){
+            ->filterColumn('filter_dummy', function ($query, $keyword) {
 
-                if ($keyword == true){
+                if ($keyword == true) {
                     $query->where('is_dummy', true);
-                }elseif ($keyword == false){
+                } elseif ($keyword == false) {
                     $query->where('is_dummy', false);
                 }
-
             })
             ->addColumn('action', 'pages.master.material.action')
             ->escapeColumns([]);
@@ -95,10 +94,10 @@ class MaterialDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),

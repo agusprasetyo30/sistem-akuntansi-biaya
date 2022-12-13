@@ -11,13 +11,16 @@ class Material extends Model
     use HasFactory;
 
     protected $table = 'material';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'material_code';
 
     protected $fillable = [
+        'company_code',
+        'material_code',
         'material_name',
         'material_desc',
         'kategori_material_id',
-        'uom',
+        'group_account_code',
+        'material_uom',
         'is_active',
         'is_dummy',
         'created_at',
