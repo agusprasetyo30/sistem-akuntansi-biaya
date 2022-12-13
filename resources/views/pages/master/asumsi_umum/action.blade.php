@@ -147,6 +147,7 @@
 
 <script>
 
+    var data_array = [];
     $('#detail_view'+{{$model->id}}).on('click', function () {
         var html2='';
         $("#detail_section_asumsi"+{{$model->id}}).empty();
@@ -261,9 +262,11 @@
                     return false;
                 }
                 if (currentStepIdx === 0){
+                    data_array = [];
+                    const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
                     var data_id;
                     let month = $('#edit_jumlah_bulan'+{{$model->id}}).val();
-                    var param;
+                    var param = [];
                     for (let x = 0; x < month ; x++){
                         if (x === 0){
                             data_id = {{$model->id}};
@@ -271,11 +274,11 @@
                         }else {
                             param = moment(param, "MM/YYYY").add(1, 'months').format('MM/YYYY');
                         }
-
-
-                        data_first_edit(joining(param), x, data_id)
-                        // console.log(joining(param))
+                        data_first_edit(joining(param), x, data_id);
+                        // console.log(result)
                     }
+                    data_array.sort('index')
+                    console.log(data_array);
 
                     // $('#submit').prop('disabled', false);
                 }
@@ -329,6 +332,8 @@
     }
 
     function data_first_edit(d, id, data_id) {
+        // var result;
+        var html1;
         console.log(d)
         $.ajax({
             type: "POST",
@@ -342,8 +347,7 @@
                 date:d
             },
             success:function (response) {
-                console.log(response)
-                var html1;
+                console.log(response, d)
                 if (response.code === 200){
                     html1 = '<div class="col-md-12">' +
                         '<strong>PERIODE :'+helpDateFormat(d, 'eng')+'</strong>' +
@@ -389,9 +393,16 @@
 
                 $('#edit_currency'+id+data_id).val(response.data['usd_rate']).trigger('keyup');
                 $('#edit_adjustment'+id+data_id).val(response.data['adjustment']).trigger('keyup');
+
+                data_array.push({
+                    index:id,
+                    html:html1
+                })
+                // result = html1;
+                // console.log(result)
+                // return result;
             }
         })
-
     }
 
     function formatNumber(n) {
@@ -465,10 +476,5 @@
         caret_pos = updated_len - original_len + caret_pos;
         input[0].setSelectionRange(caret_pos, caret_pos);
     }
-
-    {{--$("#modal_edit"+{{$model->id}}).on('hide.bs.modal', function(){--}}
-    {{--    $("#edit_data_asumsi"+{{$model->id}}).smartWizard("setState", 0, 'error');--}}
-    {{--    $("#edit_data_asumsi"+{{$model->id}}).smartWizard('fixHeight');--}}
-    {{--});--}}
 
 </script>

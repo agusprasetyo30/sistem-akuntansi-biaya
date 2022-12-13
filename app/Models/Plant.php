@@ -11,12 +11,13 @@ class Plant extends Model
     use HasFactory;
 
     protected $table = 'plant';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'plant_code';
 
     protected $fillable = [
         'plant_code',
         'plant_desc',
         'is_active',
+        'company_code',
         'created_at',
         'created_by',
         'updated_at',

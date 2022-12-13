@@ -35,7 +35,7 @@
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
+                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">KODE PLANT</th>
                                 <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
                                 <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
@@ -147,7 +147,7 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
+                    { data: 'DT_RowIndex', name: 'plant_code', searchable: false, orderable:true},
                     { data: 'plant_code', name: 'plant_code', orderable:false},
                     { data: 'plant_desc', name: 'plant_desc', orderable:false},
                     { data: 'status', name: 'filter_status', orderable:false},
