@@ -12,6 +12,7 @@ class Plant extends Model
 
     protected $table = 'plant';
     protected $primaryKey = 'plant_code';
+    protected $keyType = 'string';
 
     protected $fillable = [
         'plant_code',
