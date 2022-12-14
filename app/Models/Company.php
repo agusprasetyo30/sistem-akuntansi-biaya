@@ -12,6 +12,7 @@ class Company extends Model
 
     protected $table = 'company';
     protected $primaryKey = 'company_code';
+    protected $keyType = 'string';
     //protected $guarded = ['company_code'];
 
     protected $fillable = [

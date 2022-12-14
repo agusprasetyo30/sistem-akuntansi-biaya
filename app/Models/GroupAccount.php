@@ -12,6 +12,7 @@ class GroupAccount extends Model
 
     protected $table = 'group_account';
     protected $primaryKey = 'group_account_code';
+    protected $keyType = 'string';
 
     protected $fillable = [
         'company_code',
