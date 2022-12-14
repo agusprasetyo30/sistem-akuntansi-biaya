@@ -196,6 +196,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
         });
 
+        Route::group(['prefix' => 'consrate'], function () {
+            Route::get('/', [CostCenterController::class, 'index'])->name('consrate');
+            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_consrate');
+            Route::post('update', [CostCenterController::class, 'update'])->name('update_consrate');
+            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_consrate');
+        });
+
         Route::group(['prefix' => 'asumsi_umum'], function () {
             Route::get('/', [AsumsiUmumController::class, 'index'])->name('asumsi_umum');
             Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
