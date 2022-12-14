@@ -38,7 +38,8 @@
 			<span class="side-menu__label">Buku Besar</span><i class="angle fe fe-chevron-right"></i></a>
 			<ul class="slide-menu">
 {{--                <li><a href="{{route('asumsi_umum')}}" class="slide-item"> Asumsi Umum</a></li>--}}
-                <li><a href="{{route('cost_center')}}" class="slide-item"> Cost Center</a></li>
+{{--                <li><a href="{{route('cost_center')}}" class="slide-item"> Cost Center</a></li>--}}
+                <li><a href="{{route('consrate')}}" class="slide-item"> Consumption Rate</a></li>
 				<li><a href="{{url('buku-besar/saldo-awal')}}" class="slide-item"> Saldo Awal</a></li>
 				<li><a href="{{url('buku-besar/qty-renprod')}}" class="slide-item"> Kuantiti Rencana Produksi</a></li>
 				<li><a href="{{url('buku-besar/qty-rendaan')}}" class="slide-item"> Kuantiti Rencana Pengadaan</a></li>
