@@ -7,11 +7,11 @@ use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
 use App\Models\Kurs;
 use App\Models\Material;
-use App\Models\periode;
 use App\Models\Plant;
 use App\Models\Regions;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Version_Asumsi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,42 +25,20 @@ class SelectController extends Controller
         //        dd($request);
         if ($search == '') {
             $plant = Plant::limit(10)
+                ->where('is_active', 't')
                 ->get();
         } else {
             $plant = Plant::where('plant_code', 'ilike', '%' . $search . '%')
                 ->limit(10)
+                ->where('is_active', 't')
                 ->get();
         }
 
         $response = array();
         foreach ($plant as $items) {
             $response[] = array(
-                "id" => $items->id,
+                "id" => $items->plant_code,
                 "text" => $items->plant_code
-            );
-        }
-
-        return response()->json($response);
-    }
-
-    public function periode(Request $request)
-    {
-        $search = $request->search;
-        //        dd($request);
-        if ($search == '') {
-            $plant = Periode::limit(10)
-                ->get();
-        } else {
-            $plant = periode::where('periode_name', 'ilike', '%' . $search . '%')
-                ->limit(10)
-                ->get();
-        }
-
-        $response = array();
-        foreach ($plant as $items) {
-            $response[] = array(
-                "id" => $items->id,
-                "text" => $items->periode_name
             );
         }
 
@@ -127,7 +105,7 @@ class SelectController extends Controller
                 ->where('is_active', 't')
                 ->get();
         } else {
-            $material = Material::where('material_name', 'ilike', '%' . $search . '%')
+            $material = Material::where('material_code', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
                 ->get();
@@ -136,8 +114,8 @@ class SelectController extends Controller
         $response = array();
         foreach ($material as $items) {
             $response[] = array(
-                "id" => $items->id,
-                "text" => $items->material_name
+                "id" => $items->material_code,
+                "text" => $items->material_code . ' ' . $items->material_name
             );
         }
 
@@ -213,6 +191,29 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->usd_rate,
                 "text" => $items->month . '/' . $items->year . ' - ' . rupiah($items->usd_rate)
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function version(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $asumsi = Version_Asumsi::limit(10)
+                ->get();
+        } else {
+            $asumsi = Version_Asumsi::where('version', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($asumsi as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->version
             );
         }
 

@@ -291,7 +291,6 @@
                                 get_data()
                             }else if (response.Code === 400){
                                 $('#modal_edit'+id).modal('hide');
-                                $("#modal_edit input"+id).val("")
                                 toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');

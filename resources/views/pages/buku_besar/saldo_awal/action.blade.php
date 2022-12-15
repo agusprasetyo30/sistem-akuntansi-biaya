@@ -18,13 +18,13 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Company Code </label>
+                                <label>Versi </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Company Code" value="{{$model->company_code}}" name="detail_company_code"
-                                    id="detail_company_code" autocomplete="off">
+                                    placeholder="Nama Versi" value="{{$model->version}}" name="detail_version
+                                    id="detail_version" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>GL Account </label>
+                                <label>G/L Account </label>
                                 <input disabled type="text" class="form-control form-control-sm"
                                     placeholder="GL Account " value="{{$model->gl_account}}" name="detail_gl_account"
                                     id="detail_gl_account" autocomplete="off">
@@ -44,8 +44,8 @@
                             <div class="form-group">
                                 <label>Material </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->material_name}}" name="detail_material_name"
-                                    id="detail_material_name" autocomplete="off">
+                                    placeholder="Nama Kategori" value="{{$model->material_code}} {{$model->material_name}}" name="detail_material_code"
+                                    id="detail_material_code" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Kode Plant </label>
@@ -54,16 +54,16 @@
                                     id="detail_plant_name" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Total Stock </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Total Stock" value="{{$model->total_stock}}" name="detail_total_stock"
-                                    id="detail_total_stock" autocomplete="off">
-                            </div>
-                            <div class="form-group">
                                 <label>Total Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
                                     placeholder="Total Value" value="{{$model->total_value}}" name="detail_total_value"
                                     id="detail_total_value" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Stock </label>
+                                <input disabled type="text" class="form-control form-control-sm"
+                                    placeholder="Total Stock" value="{{$model->total_stock}}" name="detail_total_stock"
+                                    id="detail_total_stock" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Nilai Satuan </label>
@@ -99,10 +99,10 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Company Code </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Company Code"
-                                    value="{{$model->company_code}}" name="edit_company_code"
-                                    id="edit_company_code{{$model->id}}" autocomplete="off">
+                                <label class="form-label">Versi</label>
+                                <select name="main_version" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>GL Account </label>
@@ -122,36 +122,17 @@
                                     value="{{$model->price_control}}" name="edit_price_control"
                                     id="edit_price_control{{$model->id}}" autocomplete="off">
                             </div>
-                            {{-- <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_id}}" selected>{{$model->material_name}}</option>
-                                </select>
-                            </div> --}}
                             <div class="form-group">
                                 <label class="form-label">Material</label>
                                 <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_id}}" selected>{{$model->material_name}}</option>
+                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} {{$model->material_name}}</option>
                                 </select>
-
-                                {{-- <label class="form-label">Kategori Produk</label>
-                                <select name="kategori_produk_id" id="kategori_produk_id" class="form-control custom-select select2">
-                                    @foreach ($kategori as $row)
-                                        <option value="{{ $row->id }}" {{ $res->kategori_produk_id == $row->id ? "selected" : "" }}>{{ $row->kategori_produk_name }}</option>							
-                                    @endforeach
-                                </select> --}}
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Kode Plant</label>
                                 <select name="main_plant" id="edit_data_main_plant{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->plant_id}}" selected>{{$model->plant_code}}</option>
+                                    <option value="{{$model->plant_code}}" selected>{{$model->plant_code}}</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Total Stock </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Total Stock"
-                                    value="{{$model->total_stock}}" name="edit_total_stock"
-                                    id="edit_total_stock{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Total Value </label>
@@ -160,10 +141,10 @@
                                     id="edit_total_value{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Nilai Satuan </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Nilai Satuan"
-                                    value="{{$model->nilai_satuan}}" name="edit_nilai_satuan"
-                                    id="edit_nilai_satuan{{$model->id}}" autocomplete="off">
+                                <label>Total Stock </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Total Stock"
+                                    value="{{$model->total_stock}}" name="edit_total_stock"
+                                    id="edit_total_stock{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -224,6 +205,33 @@
                 }
             }
         })
+
+        $('#edit_data_main_version'+{{$model->id}}).select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih Versi',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('version_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
+
+        $('#edit_total_value'+{{$model->id}}).on('keyup', function(){
+            let rupiah = formatRupiah($(this).val(), "Rp. ")
+            $(this).val(rupiah)
+        });
     })
 
 </script>

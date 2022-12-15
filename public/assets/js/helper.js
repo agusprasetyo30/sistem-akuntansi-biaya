@@ -441,3 +441,21 @@ var ajax_select2 = function({select_id, url, ajaxData = null, value = "", option
 var helpCurrencyFormat = function({value = 0, symbol = "", thousandSeparator = ".", centSeparator = ",", defaultCent = "", lengthOfCent = 3}) {
 	return helpCurrency(value, symbol, thousandSeparator, centSeparator, defaultCent, lengthOfCent);
 }
+
+/* Fungsi formatRupiah */
+var formatRupiah = function(angka, prefix) {
+    var number_string = angka.replace(/[^,\d]/g, "").toString(),
+        split = number_string.split(","),
+        sisa = split[0].length % 3,
+        rupiah = split[0].substr(0, sisa),
+        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+    // tambahkan titik jika yang di input sudah menjadi angka ribuan
+    if (ribuan) {
+        separator = sisa ? "." : "";
+        rupiah += separator + ribuan.join(".");
+    }
+
+    rupiah = split[1] != undefined ? rupiah + "," + split[1] : rupiah;
+    return prefix == undefined ? rupiah : rupiah ? "Rp. " + rupiah : "";
+}
