@@ -213,6 +213,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [SaldoAwalController::class, 'create'])->name('insert_saldo_awal');
             Route::post('update', [SaldoAwalController::class, 'update'])->name('update_saldo_awal');
             Route::post('delete', [SaldoAwalController::class, 'delete'])->name('delete_saldo_awal');
+            Route::post('import', [SaldoAwalController::class, 'import'])->name('import_saldo_awal');
+            Route::get('export', [SaldoAwalController::class, 'export'])->name('export_saldo_awal');
         });
 
         Route::group(['prefix' => 'qty-renprod'], function () {

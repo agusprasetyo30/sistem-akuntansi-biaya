@@ -13,6 +13,7 @@ class Saldo_Awal extends Model
 
     protected $fillable = [
         'company_code',
+        'month_year',
         'gl_account',
         'valuation_class',
         'price_control',

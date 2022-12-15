@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\SaldoAwalDataTable;
+use App\Exports\SaldoAwalExport;
+use App\Imports\SaldoAwalImport;
 use App\Models\Saldo_Awal;
 use App\Models\Version_Asumsi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SaldoAwalController extends Controller
 {
@@ -124,5 +127,41 @@ class SaldoAwalController extends Controller
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            if (!$request->file('file')) {
+                return response()->json(['Code' => 0]);
+            }
+
+            $file = $request->file('file')->store('import');
+            $import = new SaldoAwalImport;
+            $import->import($file);
+
+            $data_fail = $import->failures();
+
+            if ($import->failures()->isNotEmpty()) {
+                $err = [];
+
+                foreach ($data_fail as $rows) {
+                    $er = implode(' ', array_values($rows->errors()));
+                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                    array_push($err, $hasil);
+                }
+                // dd(implode(' ', $err));
+                return response()->json(['Code' => 500, 'msg' => $err]);
+            }
+
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new SaldoAwalExport, 'saldo_awal.xlsx');
     }
 }
