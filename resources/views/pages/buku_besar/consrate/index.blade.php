@@ -30,23 +30,29 @@
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_cost_center" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                            <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                                 <thead>
                                 <tr>
                                     <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
                                     <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE PLANT</th>
-                                    <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
-                                    <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
+                                    <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSION - PERIODE</th>
+                                    <th data-type='text' data-name='produk' class="border-bottom-0 text-center">PRODUK</th>
+                                    <th data-type='text' data-name='material' class="border-bottom-0 text-center">MATERIAL</th>
+                                    <th data-type='text' data-name='uom' class="border-bottom-0 text-center">UOM</th>
+                                    <th data-type='text' data-name='consrate' class="border-bottom-0 text-center">CONSRATE</th>
                                     <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
-                                    <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
+                                    <th data-type='text' data-name='action' class="border-bottom-0 text-center">ACTION</th>
                                 </tr>
                                 <tr>
                                     <th data-type='text' data-name='nomor' class="text-center"></th>
                                     <th data-type='text' data-name='code' class="text-center"></th>
-                                    <th data-type='text' data-name='nama' class="text-center"></th>
-                                    <th data-type='text' data-name='deskripsi' class="text-center"></th>
+                                    <th data-type='text' data-name='version' class="text-center"></th>
+                                    <th data-type='text' data-name='produk' class="text-center"></th>
+                                    <th data-type='text' data-name='material' class="text-center"></th>
+                                    <th data-type='text' data-name='uom' class="text-center"></th>
+                                    <th data-type='text' data-name='consrate' class="text-center"></th>
                                     <th data-type='select' data-name='status' class="text-center"></th>
-                                    <th data-type='text' data-name='nomor' class="text-center"></th>
+                                    <th data-type='text' data-name='action' class="text-center"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -57,7 +63,7 @@
                     </div>
                 </div>
             </div>
-            @include('pages.buku_besar.cost_center.add')
+            @include('pages.buku_besar.consrate.add')
         </div>
     </div>
     <!-- /Row -->
@@ -67,7 +73,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            // get_data()
+            get_data()
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -91,6 +97,100 @@
                 }
             })
 
+            $('#data_main_version').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var data_version = $('#data_main_version').val();
+                $('#data_detal_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
+
+            $('#data_main_produk').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var data_produk = $('#data_main_produk').val();
+                $('#data_main_material').append('<option selected disabled value="">Pilih Material</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Material',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('material_keyword_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                produk:data_produk
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
+
             $('#is_active').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
@@ -98,94 +198,95 @@
             })
         })
 
-        {{--function get_data(){--}}
-        {{--    $('#dt_cost_center').DataTable().clear().destroy();--}}
-        {{--    $("#dt_cost_center").DataTable({--}}
-        {{--        scrollX: true,--}}
-        {{--        dom: 'Bfrtip',--}}
-        {{--        // searching: false,--}}
-        {{--        sortable: false,--}}
-        {{--        processing: true,--}}
-        {{--        serverSide: true,--}}
-        {{--        fixedHeader: {--}}
-        {{--            header: true,--}}
-        {{--            headerOffset: $('#main_header').height()--}}
-        {{--        },--}}
-        {{--        initComplete: function () {--}}
+        function get_data(){
+            $('#dt_consrate').DataTable().clear().destroy();
+            $("#dt_consrate").DataTable({
+                scrollX: true,
+                dom: 'Bfrtip',
+                // searching: false,
+                sortable: false,
+                processing: true,
+                serverSide: true,
+                fixedHeader: {
+                    header: true,
+                    headerOffset: $('#main_header').height()
+                },
+                initComplete: function () {
 
-        {{--            $('.dataTables_scrollHead').css('overflow', 'auto');--}}
-        {{--            $('.dataTables_scrollHead').on('scroll', function () {--}}
-        {{--                // console.log('data')--}}
-        {{--                $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());--}}
-        {{--            });--}}
+                    $('.dataTables_scrollHead').css('overflow', 'auto');
+                    $('.dataTables_scrollHead').on('scroll', function () {
+                        // console.log('data')
+                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                    });
 
-        {{--            $(document).on('scroll', function () {--}}
-        {{--                $('.dtfh-floatingparenthead').on('scroll', function () {--}}
-        {{--                    $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());--}}
-        {{--                });--}}
-        {{--            })--}}
+                    $(document).on('scroll', function () {
+                        $('.dtfh-floatingparenthead').on('scroll', function () {
+                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                        });
+                    })
 
-        {{--            this.api().columns().every(function (index) {--}}
-        {{--                var column = this;--}}
-        {{--                var data_type = this.header().getAttribute('data-type');--}}
-        {{--                var iName = this.header().getAttribute('data-name');--}}
-        {{--                var isSearchable = column.settings()[0].aoColumns[index].bSearchable;--}}
-        {{--                if (isSearchable){--}}
-        {{--                    if (data_type == 'text'){--}}
-        {{--                        var input = document.createElement("input");--}}
-        {{--                        input.className = "form-control";--}}
-        {{--                        input.styleName = "width: 100%;";--}}
-        {{--                        $(input).--}}
-        {{--                        appendTo($(column.header()).empty()).--}}
-        {{--                        on('change clear', function () {--}}
-        {{--                            column.search($(this).val(), false, false, true).draw();--}}
-        {{--                        });--}}
-        {{--                    }else if (data_type == 'select'){--}}
-        {{--                        var input = document.createElement("select");--}}
-        {{--                        input.className = "form-control custom-select select2";--}}
-        {{--                        var options = "";--}}
-        {{--                        if (iName == 'status'){--}}
-        {{--                            options += '<option value="">Semua</option>';--}}
-        {{--                            @foreach (status_is_active() as $key => $value)--}}
-        {{--                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';--}}
-        {{--                            @endforeach--}}
-        {{--                        }--}}
-        {{--                        input.innerHTML = options--}}
-        {{--                        $(input).appendTo($(column.header()).empty())--}}
-        {{--                            .on('change clear', function () {--}}
-        {{--                                column.search($(this).val(), false, false, true).draw();--}}
-        {{--                            });--}}
+                    this.api().columns().every(function (index) {
+                        var column = this;
+                        var data_type = this.header().getAttribute('data-type');
+                        var iName = this.header().getAttribute('data-name');
+                        var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
+                        if (isSearchable){
+                            if (data_type == 'text'){
+                                var input = document.createElement("input");
+                                input.className = "form-control";
+                                input.styleName = "width: 100%;";
+                                $(input).
+                                appendTo($(column.header()).empty()).
+                                on('change clear', function () {
+                                    column.search($(this).val(), false, false, true).draw();
+                                });
+                            }else if (data_type == 'select'){
+                                var input = document.createElement("select");
+                                input.className = "form-control custom-select select2";
+                                var options = "";
+                                if (iName == 'status'){
+                                    options += '<option value="">Semua</option>';
+                                    @foreach (status_is_active() as $key => $value)
+                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                    @endforeach
+                                }
+                                input.innerHTML = options
+                                $(input).appendTo($(column.header()).empty())
+                                    .on('change clear', function () {
+                                        column.search($(this).val(), false, false, true).draw();
+                                    });
 
-        {{--                    }--}}
-        {{--                }--}}
+                            }
+                        }
 
-        {{--            });--}}
-        {{--        },--}}
-        {{--        buttons: [--}}
-        {{--            { extend: 'pageLength', className: 'mb-5' },--}}
-        {{--            { extend: 'excel', className: 'mb-5' }--}}
-        {{--        ],--}}
-        {{--        ajax: {--}}
-        {{--            url : '{{route("cost_center")}}',--}}
-        {{--            data: {data:'index'}--}}
-        {{--        },--}}
-        {{--        columns: [--}}
-        {{--            { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},--}}
-        {{--            { data: 'plant_code', name: '.plant.plant_code', orderable:false},--}}
-        {{--            { data: 'cost_center', name: 'cost_center', orderable:false},--}}
-        {{--            { data: 'cost_center_desc', name: 'cost_center_desc', orderable:false},--}}
-        {{--            { data: 'status', name: 'filter_status', orderable:false},--}}
-        {{--            { data: 'action', name: 'action', orderable:false, searchable: false},--}}
+                    });
+                },
+                buttons: [
+                    { extend: 'pageLength', className: 'mb-5' },
+                    { extend: 'excel', className: 'mb-5' }
+                ],
+                ajax: {
+                    url : '{{route("consrate")}}',
+                    data: {data:'index'}
+                },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
+                    { data: 'plant_code', name: 'plant_code', orderable:false},
+                    { data: 'version_periode', name: 'filter_version_periode', orderable:false},
+                    { data: 'product', name: 'filter_product', orderable:false},
+                    { data: 'material', name: 'filter_material', orderable:false},
+                    { data: 'uom', name: 'filter_uom', orderable:false},
+                    { data: 'cons_rate', name: 'cons_rate', orderable:false},
+                    { data: 'status', name: 'filter_status', orderable:false},
+                    { data: 'action', name: 'action', orderable:false, searchable: false},
 
-        {{--        ],--}}
-        {{--        columnDefs:[--}}
-        {{--            {className: 'text-center', targets: [4,5]}--}}
-        {{--        ],success:function (){--}}
+                ],
+                columnDefs:[
+                    {className: 'text-center', targets: [4,5]}
+                ]
 
-        {{--        }--}}
-
-        {{--    })--}}
-        {{--}--}}
+            })
+        }
 
         $('#submit').on('click', function () {
             Swal.fire({
@@ -204,12 +305,15 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('insert_cost_center')}}',
+                        url: '{{route('insert_consrate')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id_plant: $('#data_main_plant').val(),
-                            code: $('#code_cost_center').val(),
-                            deskripsi: $('#cost_center_desc').val(),
+                            version: $('#data_main_version').val(),
+                            id_asumsi: $('#data_detal_version').val(),
+                            produk: $('#data_main_produk').val(),
+                            material: $('#data_main_material').val(),
+                            consrate: $('#consrate').val(),
                             is_active: $('#is_active').val(),
                         },
                         success:function (response) {
@@ -217,16 +321,32 @@
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
                                 $('#data_main_plant').val('').trigger("change");
+                                $('#data_main_version').val('').trigger("change");
+                                $('#data_detal_version').val('').trigger("change");
+                                $('#data_main_produk').val('').trigger("change");
+                                $('#data_main_material').val('').trigger("change");
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
+                                $('#data_main_plant').val('').trigger("change");
+                                $('#data_main_version').val('').trigger("change");
+                                $('#data_detal_version').val('').trigger("change");
+                                $('#data_main_produk').val('').trigger("change");
+                                $('#data_main_material').val('').trigger("change");
+                                $('#is_active').val('').trigger("change");
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                             }else {
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
+                                $('#data_main_plant').val('').trigger("change");
+                                $('#data_main_version').val('').trigger("change");
+                                $('#data_detal_version').val('').trigger("change");
+                                $('#data_main_produk').val('').trigger("change");
+                                $('#data_main_material').val('').trigger("change");
+                                $('#is_active').val('').trigger("change");
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
 
@@ -239,7 +359,7 @@
             })
         })
 
-        function update_cost_center(id) {
+        function update_consrate(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -257,13 +377,16 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('update_cost_center')}}',
+                        url: '{{route('update_consrate')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
                             id_plant: $('#edit_data_main_plant'+id).val(),
-                            code: $('#edit_code_cost_center'+id).val(),
-                            deskripsi: $('#edit_cost_center_desc'+id).val(),
+                            version: $('#edit_data_main_version'+id).val(),
+                            id_asumsi: $('#edit_data_detal_version'+id).val(),
+                            produk: $('#edit_data_main_produk'+id).val(),
+                            material: $('#edit_data_main_material'+id).val(),
+                            consrate: $('#edit_consrate'+id).val(),
                             is_active: $('#edit_is_active'+id).val(),
                         },
                         success:function (response) {
@@ -286,7 +409,7 @@
             })
         }
 
-        function delete_cost_center(id) {
+        function delete_consrate(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -304,7 +427,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_cost_center')}}',
+                        url: '{{route('delete_consrate')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,

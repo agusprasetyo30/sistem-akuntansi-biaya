@@ -17,8 +17,7 @@ class CreateConsRateTable extends Migration
             $table->id();
             $table->string('plant_code')->unsigned();
             $table->foreign('plant_code')->references('plant_code')->on('plant');
-            $table->string('version')->unsigned();
-            $table->foreign('version')->references('version')->on('version_asumsi')->onUpdate('cascade');
+            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade');
             $table->string('product_code')->unsigned();
             $table->foreign('product_code')->references('material_code')->on('material');
             $table->string('material_code')->unsigned();
