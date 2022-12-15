@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Cost Center</h4>
+            <h4 class="page-title mb-0 text-primary">Consumption Ratio</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -67,7 +67,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            get_data()
+            // get_data()
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -98,94 +98,94 @@
             })
         })
 
-        function get_data(){
-            $('#dt_cost_center').DataTable().clear().destroy();
-            $("#dt_cost_center").DataTable({
-                scrollX: true,
-                dom: 'Bfrtip',
-                // searching: false,
-                sortable: false,
-                processing: true,
-                serverSide: true,
-                fixedHeader: {
-                    header: true,
-                    headerOffset: $('#main_header').height()
-                },
-                initComplete: function () {
+        {{--function get_data(){--}}
+        {{--    $('#dt_cost_center').DataTable().clear().destroy();--}}
+        {{--    $("#dt_cost_center").DataTable({--}}
+        {{--        scrollX: true,--}}
+        {{--        dom: 'Bfrtip',--}}
+        {{--        // searching: false,--}}
+        {{--        sortable: false,--}}
+        {{--        processing: true,--}}
+        {{--        serverSide: true,--}}
+        {{--        fixedHeader: {--}}
+        {{--            header: true,--}}
+        {{--            headerOffset: $('#main_header').height()--}}
+        {{--        },--}}
+        {{--        initComplete: function () {--}}
 
-                    $('.dataTables_scrollHead').css('overflow', 'auto');
-                    $('.dataTables_scrollHead').on('scroll', function () {
-                        // console.log('data')
-                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                    });
+        {{--            $('.dataTables_scrollHead').css('overflow', 'auto');--}}
+        {{--            $('.dataTables_scrollHead').on('scroll', function () {--}}
+        {{--                // console.log('data')--}}
+        {{--                $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());--}}
+        {{--            });--}}
 
-                    $(document).on('scroll', function () {
-                        $('.dtfh-floatingparenthead').on('scroll', function () {
-                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                        });
-                    })
+        {{--            $(document).on('scroll', function () {--}}
+        {{--                $('.dtfh-floatingparenthead').on('scroll', function () {--}}
+        {{--                    $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());--}}
+        {{--                });--}}
+        {{--            })--}}
 
-                    this.api().columns().every(function (index) {
-                        var column = this;
-                        var data_type = this.header().getAttribute('data-type');
-                        var iName = this.header().getAttribute('data-name');
-                        var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
-                        if (isSearchable){
-                            if (data_type == 'text'){
-                                var input = document.createElement("input");
-                                input.className = "form-control";
-                                input.styleName = "width: 100%;";
-                                $(input).
-                                appendTo($(column.header()).empty()).
-                                on('change clear', function () {
-                                    column.search($(this).val(), false, false, true).draw();
-                                });
-                            }else if (data_type == 'select'){
-                                var input = document.createElement("select");
-                                input.className = "form-control custom-select select2";
-                                var options = "";
-                                if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }
-                                input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
-                                    .on('change clear', function () {
-                                        column.search($(this).val(), false, false, true).draw();
-                                    });
+        {{--            this.api().columns().every(function (index) {--}}
+        {{--                var column = this;--}}
+        {{--                var data_type = this.header().getAttribute('data-type');--}}
+        {{--                var iName = this.header().getAttribute('data-name');--}}
+        {{--                var isSearchable = column.settings()[0].aoColumns[index].bSearchable;--}}
+        {{--                if (isSearchable){--}}
+        {{--                    if (data_type == 'text'){--}}
+        {{--                        var input = document.createElement("input");--}}
+        {{--                        input.className = "form-control";--}}
+        {{--                        input.styleName = "width: 100%;";--}}
+        {{--                        $(input).--}}
+        {{--                        appendTo($(column.header()).empty()).--}}
+        {{--                        on('change clear', function () {--}}
+        {{--                            column.search($(this).val(), false, false, true).draw();--}}
+        {{--                        });--}}
+        {{--                    }else if (data_type == 'select'){--}}
+        {{--                        var input = document.createElement("select");--}}
+        {{--                        input.className = "form-control custom-select select2";--}}
+        {{--                        var options = "";--}}
+        {{--                        if (iName == 'status'){--}}
+        {{--                            options += '<option value="">Semua</option>';--}}
+        {{--                            @foreach (status_is_active() as $key => $value)--}}
+        {{--                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';--}}
+        {{--                            @endforeach--}}
+        {{--                        }--}}
+        {{--                        input.innerHTML = options--}}
+        {{--                        $(input).appendTo($(column.header()).empty())--}}
+        {{--                            .on('change clear', function () {--}}
+        {{--                                column.search($(this).val(), false, false, true).draw();--}}
+        {{--                            });--}}
 
-                            }
-                        }
+        {{--                    }--}}
+        {{--                }--}}
 
-                    });
-                },
-                buttons: [
-                    { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5' }
-                ],
-                ajax: {
-                    url : '{{route("cost_center")}}',
-                    data: {data:'index'}
-                },
-                columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'plant_code', name: '.plant.plant_code', orderable:false},
-                    { data: 'cost_center', name: 'cost_center', orderable:false},
-                    { data: 'cost_center_desc', name: 'cost_center_desc', orderable:false},
-                    { data: 'status', name: 'filter_status', orderable:false},
-                    { data: 'action', name: 'action', orderable:false, searchable: false},
+        {{--            });--}}
+        {{--        },--}}
+        {{--        buttons: [--}}
+        {{--            { extend: 'pageLength', className: 'mb-5' },--}}
+        {{--            { extend: 'excel', className: 'mb-5' }--}}
+        {{--        ],--}}
+        {{--        ajax: {--}}
+        {{--            url : '{{route("cost_center")}}',--}}
+        {{--            data: {data:'index'}--}}
+        {{--        },--}}
+        {{--        columns: [--}}
+        {{--            { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},--}}
+        {{--            { data: 'plant_code', name: '.plant.plant_code', orderable:false},--}}
+        {{--            { data: 'cost_center', name: 'cost_center', orderable:false},--}}
+        {{--            { data: 'cost_center_desc', name: 'cost_center_desc', orderable:false},--}}
+        {{--            { data: 'status', name: 'filter_status', orderable:false},--}}
+        {{--            { data: 'action', name: 'action', orderable:false, searchable: false},--}}
 
-                ],
-                columnDefs:[
-                    {className: 'text-center', targets: [4,5]}
-                ],success:function (){
+        {{--        ],--}}
+        {{--        columnDefs:[--}}
+        {{--            {className: 'text-center', targets: [4,5]}--}}
+        {{--        ],success:function (){--}}
 
-                }
+        {{--        }--}}
 
-            })
-        }
+        {{--    })--}}
+        {{--}--}}
 
         $('#submit').on('click', function () {
             Swal.fire({

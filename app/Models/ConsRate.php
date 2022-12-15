@@ -13,10 +13,12 @@ class ConsRate extends Model
 
     protected $fillable = [
         'company_code',
+        'product_code',
         'material_code',
         'version',
         'plant_code',
         'cons_rate',
+        'month_year',
         'is_active',
         'month_year',
         'created_by',

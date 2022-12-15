@@ -24,6 +24,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KursController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ConsRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -197,10 +198,10 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::group(['prefix' => 'consrate'], function () {
-            Route::get('/', [CostCenterController::class, 'index'])->name('consrate');
-            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_consrate');
-            Route::post('update', [CostCenterController::class, 'update'])->name('update_consrate');
-            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_consrate');
+            Route::get('/', [ConsRateController::class, 'index'])->name('consrate');
+            Route::post('insert', [ConsRateController::class, 'create'])->name('insert_consrate');
+            Route::post('update', [ConsRateController::class, 'update'])->name('update_consrate');
+            Route::post('delete', [ConsRateController::class, 'delete'])->name('delete_consrate');
         });
 
         Route::group(['prefix' => 'asumsi_umum'], function () {
