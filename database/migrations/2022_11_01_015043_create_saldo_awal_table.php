@@ -25,11 +25,10 @@ class CreateSaldoAwalTable extends Migration
             $table->foreign('material_code')->references('material_code')->on('material');
             $table->string('plant_code')->unsigned();
             $table->foreign('plant_code')->references('plant_code')->on('plant');
-            $table->string('version')->unsigned();
-            $table->foreign('version')->references('version')->on('version_asumsi')->onUpdate('cascade');
-            $table->string('total_stock')->nullable();
-            $table->string('total_value')->nullable();
-            $table->string('nilai_satuan')->nullable();
+            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
+            $table->double('total_stock', 8, 2)->nullable();
+            $table->double('total_value', 8, 2)->nullable();
+            $table->double('nilai_satuan', 8, 2)->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

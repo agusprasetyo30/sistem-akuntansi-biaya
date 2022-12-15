@@ -142,7 +142,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [UserController::class, 'update'])->name('update_user');
             Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
         });
-        
+
         Route::group(['prefix' => 'company'], function () {
             Route::get('/', [CompanyController::class, 'index'])->name('company');
             Route::post('insert', [CompanyController::class, 'create'])->name('insert_company');
@@ -177,6 +177,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
             Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
             Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
+            Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
 
 
             //            Helper

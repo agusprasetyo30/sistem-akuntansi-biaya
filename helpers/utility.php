@@ -19,7 +19,8 @@ function uniquecode()
     return substr(str_shuffle("0123456789abcdefghijklmnopqrstvwxyz"), 0, 6);
 }
 
-function clean($string = null) {
+function clean($string = null)
+{
     return ($string) ? strip_tags($string) : '';
 }
 
@@ -191,81 +192,83 @@ function splitMonth($date = null, $lang = 'en')
 
 function helpIndoDay($var)
 {
-	$dayArray = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu");
-	if(array_key_exists($var, $dayArray )){
-		return $dayArray[$var];
-	}else{
-		return 'Undefined';
-	}
+    $dayArray = array("Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu");
+    if (array_key_exists($var, $dayArray)) {
+        return $dayArray[$var];
+    } else {
+        return 'Undefined';
+    }
 }
 
 function helpIndoMonth($num)
 {
-	$monthArray = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
-	if(array_key_exists($num, $monthArray)){
-		return $monthArray[$num];
-	}else{
-		return 'Undefined';
-	}
+    $monthArray = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");
+    if (array_key_exists($num, $monthArray)) {
+        return $monthArray[$num];
+    } else {
+        return 'Undefined';
+    }
 }
 
 function helpDate($var, $mode = 'se')
-   {
-   	switch($mode){
-   		case 'se':
-   		return date('Y-m-d', strtotime($var));
-   		break;
-   		case 'si':
-   		return date('d-m-Y', strtotime($var));
-   		break;
-   		case 'me':
-   		return date('F d, Y', strtotime($var));
-   		break;
-   		case 'mi':
-   		$day = date('d', strtotime($var));
-   		$month = date('n', strtotime($var));
-   		$year = date('Y', strtotime($var));
+{
+    switch ($mode) {
+        case 'se':
+            return date('Y-m-d', strtotime($var));
+            break;
+        case 'si':
+            return date('d-m-Y', strtotime($var));
+            break;
+        case 'me':
+            return date('F d, Y', strtotime($var));
+            break;
+        case 'mi':
+            $day = date('d', strtotime($var));
+            $month = date('n', strtotime($var));
+            $year = date('Y', strtotime($var));
 
-   		$month = helpIndoMonth($month - 1);
-   		return $day.' '.$month.' '.$year;
-   		break;
-   		case 'le':
-   		return date('l F d, Y', strtotime($var));
-   		break;
-   		case 'li':
-   		$dow = date('w', strtotime($var));
-   		$day = date('d', strtotime($var));
-   		$month = date('n', strtotime($var));
-   		$year = date('Y', strtotime($var));
+            $month = helpIndoMonth($month - 1);
+            return $day . ' ' . $month . ' ' . $year;
+            break;
+        case 'le':
+            return date('l F d, Y', strtotime($var));
+            break;
+        case 'li':
+            $dow = date('w', strtotime($var));
+            $day = date('d', strtotime($var));
+            $month = date('n', strtotime($var));
+            $year = date('Y', strtotime($var));
 
-   		$hari = helpIndoDay($dow);
-   		$month = helpIndoMonth($month - 1);
-   		return $hari .', '. $day.' '.$month.' '.$year;
-   		break;
-   		case 'bi':
-   		$month = date('n', strtotime($var));
-   		$year = date('Y', strtotime($var));
+            $hari = helpIndoDay($dow);
+            $month = helpIndoMonth($month - 1);
+            return $hari . ', ' . $day . ' ' . $month . ' ' . $year;
+            break;
+        case 'bi':
+            $month = date('n', strtotime($var));
+            $year = date('Y', strtotime($var));
 
-   		$month = helpIndoMonth($month - 1);
-   		return $month.' '.$year;
-   		break;
-   		default:
-   		return 'Undefined';
-   		break;
+            $month = helpIndoMonth($month - 1);
+            return $month . ' ' . $year;
+            break;
+        default:
+            return 'Undefined';
+            break;
     }
 }
 
 if (!function_exists("isNullOrEmptyString")) {
-    function isNullOrEmptyString($str) {
+    function isNullOrEmptyString($str)
+    {
         return (!isset($str) || trim($str) === "");
     }
 }
 
-if (!function_exists('status_is_active')){
-    function status_is_active(){
+if (!function_exists('status_is_active')) {
+    function status_is_active()
+    {
         $status = array(
-            true=>'Aktif',
-            false=>'Tidak Aktif',
+            true => 'Aktif',
+            false => 'Tidak Aktif',
 
         );
 
@@ -273,11 +276,12 @@ if (!function_exists('status_is_active')){
     }
 }
 
-if (!function_exists('status_is_dummy')){
-    function status_is_dummy(){
+if (!function_exists('status_is_dummy')) {
+    function status_is_dummy()
+    {
         $status = array(
-            true=>'Iya',
-            false=>'Tidak',
+            true => 'Iya',
+            false => 'Tidak',
 
         );
 
@@ -285,49 +289,50 @@ if (!function_exists('status_is_dummy')){
     }
 }
 
-if (!function_exists('login_method')){
-    function login_method(){
+if (!function_exists('login_method')) {
+    function login_method()
+    {
         $login_method = array(
-            'DB'=>'DATABASE',
-            'SSO'=>'SSO',
+            'DB' => 'DATABASE',
+            'SSO' => 'SSO',
         );
 
         return $login_method;
     }
 }
 
-if (!function_exists('rupiah')){
-    function rupiah($angka){
+if (!function_exists('rupiah')) {
+    function rupiah($angka)
+    {
 
-        $hasil_rupiah = "Rp " . number_format($angka,3,',','.');
+        $hasil_rupiah = "Rp " . number_format($angka, 2, ',', '.');
         return $hasil_rupiah;
-
     }
 }
 
-if (!function_exists('check_month')){
-    function check_month($periode){
+if (!function_exists('check_month')) {
+    function check_month($periode)
+    {
         $monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         $data = str_split($periode);
 
-//        dd(count($data));
-        if (count($data) == 1){
+        //        dd(count($data));
+        if (count($data) == 1) {
             return $monthNames[$periode];
-        }else{
-            if ($data[0] == 0){
+        } else {
+            if ($data[0] == 0) {
                 return $monthNames[$data[1]];
-            }else{
+            } else {
                 return $monthNames[$periode];
             }
         }
     }
 }
 
-if (!function_exists('format_month')){
-    function format_month($date){
+if (!function_exists('format_month')) {
+    function format_month($date)
+    {
         $data = Carbon::parse($date)->format('F-Y');
         return $data;
     }
 }
-
-

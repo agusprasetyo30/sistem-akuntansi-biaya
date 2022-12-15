@@ -19,14 +19,21 @@ class SaldoAwalDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('saldo_awal')->select('saldo_awal.*', 'material.material_name', 'plant.plant_code')
-        ->leftjoin('material','material.id', '=', 'saldo_awal.material_id')
-        ->leftjoin('plant','plant.id', '=', 'saldo_awal.plant_id')
-        ->whereNull('saldo_awal.deleted_at');
+        $query = DB::table('saldo_awal')->select('saldo_awal.*', 'material.material_code', 'material.material_name', 'plant.plant_code', 'plant.plant_desc', 'version_asumsi.version')
+            ->leftjoin('material', 'material.material_code', '=', 'saldo_awal.material_code')
+            ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'saldo_awal.version_id')
+            ->whereNull('saldo_awal.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->editColumn('total_value', function ($query) {
+                return rupiah($query->total_value);
+            })
+            ->editColumn('nilai_satuan', function ($query) {
+                return rupiah($query->nilai_satuan);
+            })
             ->addColumn('action', 'pages.buku_besar.saldo_awal.action')
             ->escapeColumns([]);
     }
@@ -58,10 +65,10 @@ class SaldoAwalDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),

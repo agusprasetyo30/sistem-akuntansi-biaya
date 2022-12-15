@@ -34,11 +34,10 @@
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='company_code' class="border-bottom-0 text-center">COMPANY CODE</th>
-                                <th data-type='text' data-name='gl_account' class="border-bottom-0 text-center">GL ACCOUNT</th>
+                                <th data-type='text' data-name='gl_account' class="border-bottom-0 text-center">G/L ACCOUNT</th>
                                 <th data-type='text' data-name='valuation_class' class="border-bottom-0 text-center">VALUATION CLASS</th>
                                 <th data-type='text' data-name='price_control' class="border-bottom-0 text-center">PRICE CONTROL</th>
-                                <th data-type='text' data-name='material' class="border-bottom-0 text-center">MATERIAL</th>
+                                <th data-type='text' data-name='material_code' class="border-bottom-0 text-center">MATERIAL</th>
                                 <th data-type='text' data-name='plant' class="border-bottom-0 text-center">PLANT</th>
                                 <th data-type='text' data-name='total_stock' class="border-bottom-0 text-center">TOTAL STOCK</th>
                                 <th data-type='text' data-name='total_value' class="border-bottom-0 text-center">TOTAL VALUE</th>
@@ -47,11 +46,10 @@
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='company_code' class="text-center"></th>
                                 <th data-type='text' data-name='gl_account' class="text-center"></th>
                                 <th data-type='text' data-name='valuation_class' class="text-center"></th>
                                 <th data-type='text' data-name='price_control' class="text-center"></th>
-                                <th data-type='text' data-name='material' class="text-center"></th>
+                                <th data-type='text' data-name='material_code' class="text-center"></th>
                                 <th data-type='text' data-name='plant' class="text-center"></th>
                                 <th data-type='text' data-name='total_stock' class="text-center"></th>
                                 <th data-type='text' data-name='total_value' class="text-center"></th>
@@ -122,6 +120,33 @@
                     }
                 }
             })
+
+            $('#data_main_version').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#total_value').on('keyup', function(){
+                let rupiah = formatRupiah($(this).val(), "Rp. ")
+                $(this).val(rupiah)
+            });
         })
 
         function get_data(){
@@ -180,11 +205,10 @@
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'company_code', name: 'company_code', orderable:false},
                     { data: 'gl_account', name: 'gl_account', orderable:false},
                     { data: 'valuation_class', name: 'valuation_class', orderable:false},
                     { data: 'price_control', name: 'price_control', orderable:false},
-                    { data: 'material_name', name: 'material.material_name', orderable:false},
+                    { data: 'material_code', name: 'material.material_code', orderable:false},
                     { data: 'plant_code', name: 'plant.plant_code', orderable:false},
                     { data: 'total_stock', name: 'total_stock', orderable:false},
                     { data: 'total_value', name: 'total_value', orderable:false},
@@ -192,7 +216,7 @@
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,10]}
+                    {className: 'text-center', targets: [0,9]}
                 ],
 
             })
@@ -218,12 +242,12 @@
                         url: '{{route('insert_saldo_awal')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            company_code: $('#company_code').val(),
+                            version_id: $('#data_main_version').val(),
                             gl_account: $('#gl_account').val(),
                             valuation_class: $('#valuation_class').val(),
                             price_control: $('#price_control').val(),
-                            material_id: $('#data_main_material').val(),
-                            plant_id: $('#data_main_plant').val(),
+                            material_code: $('#data_main_material').val(),
+                            plant_code: $('#data_main_plant').val(),
                             total_stock: $('#total_stock').val(),
                             total_value: $('#total_value').val(),
                             nilai_satuan: $('#nilai_satuan').val(),
@@ -235,6 +259,10 @@
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
@@ -276,12 +304,12 @@
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
-                            company_code: $('#edit_company_code'+id).val(),
+                            version_id: $('#edit_data_main_version'+id).val(),
                             gl_account: $('#edit_gl_account'+id).val(),
                             valuation_class: $('#edit_valuation_class'+id).val(),
                             price_control: $('#edit_price_control'+id).val(),
-                            material_id: $('#edit_data_main_material'+id).val(),
-                            plant_id: $('#edit_data_main_plant'+id).val(),
+                            material_code: $('#edit_data_main_material'+id).val(),
+                            plant_code: $('#edit_data_main_plant'+id).val(),
                             total_stock: $('#edit_total_stock'+id).val(),
                             total_value: $('#edit_total_value'+id).val(),
                             nilai_satuan: $('#edit_nilai_satuan'+id).val(),
@@ -291,6 +319,9 @@
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
@@ -333,6 +364,8 @@
                             if (response.Code === 200){
                                 toastr.success('Data Berhasil Dihapus', 'Success')
                                 get_data()
+                            }else if (response.Code === 502){
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                             }else {

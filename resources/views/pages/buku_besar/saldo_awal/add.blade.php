@@ -14,12 +14,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Company Code </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Company Code" name="company_code"
-                                    id="company_code" autocomplete="off">
-                            </div>
+                                <label class="form-label">Versi Asumsi</label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>  
                             <div class="form-group">
-                                <label>GL Account </label>
+                                <label>G/L Account </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="GL Account" name="gl_account"
                                     id="gl_account" autocomplete="off">
                             </div>
@@ -46,20 +47,20 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Total Stock </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Total Stock" name="total_stock"
-                                    id="total_stock" autocomplete="off">
-                            </div>
-                            <div class="form-group">
                                 <label>Total Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Total value" name="total_value"
                                     id="total_value" autocomplete="off">
                             </div>
                             <div class="form-group">
+                                <label>Total Stock </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Total Stock" name="total_stock"
+                                    id="total_stock" autocomplete="off">
+                            </div>
+                            {{-- <div class="form-group">
                                 <label>Nilai Satuan </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nilai Satuan" name="nilai_satuan"
                                     id="nilai_satuan" autocomplete="off">
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
