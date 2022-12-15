@@ -99,6 +99,10 @@ class KategoriMaterialController extends Controller
     public function import(Request $request)
     {
         try {
+            if (!$request->file('file')) {
+                return response()->json(['Code' => 0]);
+            }
+
             $file = $request->file('file')->store('import');
             $import = new KategoriMaterialImport;
             $import->import($file);
