@@ -5,7 +5,7 @@
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true">
-    <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Detail Saldo Awal</h5>
@@ -86,7 +86,7 @@
 <!-- Modal Edit-->
 <div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true" style="text-align: start;">
-    <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Saldo Awal</h5>
