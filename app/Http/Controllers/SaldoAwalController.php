@@ -136,8 +136,9 @@ class SaldoAwalController extends Controller
                 return response()->json(['Code' => 0]);
             }
 
+            $version = $request->version;
             $file = $request->file('file')->store('import');
-            $import = new SaldoAwalImport;
+            $import = new SaldoAwalImport($version);
             $import->import($file);
 
             $data_fail = $import->failures();

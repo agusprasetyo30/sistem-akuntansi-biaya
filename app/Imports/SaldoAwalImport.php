@@ -16,6 +16,14 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure
 {
     use Importable, SkipsErrors, SkipsFailures;
+
+    protected $version;
+
+    function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     /**
      * @param array $row
      *
@@ -24,12 +32,12 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
     public function model(array $row)
     {
         $satuan = $row['total_value'] / $row['total_stock'];
-        $my = Version_Asumsi::where('id', $row['version_id'])->first();
+        $my = Version_Asumsi::where('id', $this->version)->first();
 
         return new Saldo_Awal([
             'company_code' => 'B000',
             'month_year' => $my->saldo_awal,
-            'version_id' => $row['version_id'],
+            'version_id' => $this->version,
             'gl_account' => $row['gl_account'],
             'valuation_class' => $row['valuation_class'],
             'price_control' => $row['price_control'],

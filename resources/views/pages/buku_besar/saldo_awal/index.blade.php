@@ -148,6 +148,28 @@
                 let rupiah = formatRupiah($(this).val(), "Rp. ")
                 $(this).val(rupiah)
             });
+
+            $('#version').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
         })
 
         function get_data(){
