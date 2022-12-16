@@ -25,7 +25,7 @@ class GroupAccountImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
         return new GroupAccount([
             'group_account_code' => $row['group_account_code'],
             'group_account_desc' => $row['group_account_desc'],
-            'company_code' => 'B000',
+            'company_code' => auth()->user()->company_code,
             'is_active' => $row['is_active'],
             'created_by' => auth()->user()->id,
         ]);

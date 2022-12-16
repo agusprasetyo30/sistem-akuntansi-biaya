@@ -17,22 +17,24 @@ class PlantImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
 {
     use Importable, SkipsErrors, SkipsFailures;
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     public function model(array $row)
     {
         return new Plant([
             'plant_code' => $row['plant_code'],
             'plant_desc' => $row['plant_desc'],
             'is_active' => $row['is_active'],
+            'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
         ]);
     }
 
-    public function rules(): array{
-        return[
+    public function rules(): array
+    {
+        return [
             'plant_code' => ['unique:plant,plant_code']
         ];
     }

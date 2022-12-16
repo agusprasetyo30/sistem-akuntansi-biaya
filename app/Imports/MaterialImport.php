@@ -30,7 +30,7 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
             'group_account_code' => $row['group_account_code'],
             'kategori_material_id' => $row['kategori_material_id'],
             'material_uom' => $row['material_uom'],
-            'company_code' => 'B000',
+            'company_code' => auth()->user()->company_code,
             'is_dummy' => $row['is_dummy'],
             'is_active' => $row['is_active'],
             'created_by' => auth()->user()->id,

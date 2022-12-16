@@ -45,7 +45,7 @@ class SaldoAwalController extends Controller
 
             $my = Version_Asumsi::where('id', $request->version_id)->first();
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['version_id'] = $request->version_id;
             $input['month_year'] = $my->saldo_awal;
             $input['gl_account'] = $request->gl_account;
@@ -71,7 +71,6 @@ class SaldoAwalController extends Controller
 
     public function update(Request $request)
     {
-        // dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "gl_account" => 'required',
@@ -92,7 +91,7 @@ class SaldoAwalController extends Controller
 
             $my = Version_Asumsi::where('id', $request->version_id)->first();
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['version_id'] = $request->version_id;
             $input['month_year'] = $my->saldo_awal;
             $input['gl_account'] = $request->gl_account;

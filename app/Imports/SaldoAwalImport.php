@@ -35,7 +35,7 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
         $my = Version_Asumsi::where('id', $this->version)->first();
 
         return new Saldo_Awal([
-            'company_code' => 'B000',
+            'company_code' => auth()->user()->company_code,
             'month_year' => $my->saldo_awal,
             'version_id' => $this->version,
             'gl_account' => $row['gl_account'],

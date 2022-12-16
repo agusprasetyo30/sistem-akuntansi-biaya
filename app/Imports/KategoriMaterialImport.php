@@ -25,7 +25,7 @@ class KategoriMaterialImport implements ToModel, WithHeadingRow, SkipsOnError, W
         return new KategoriMaterial([
             'kategori_material_name' => $row['kategori_material_name'],
             'kategori_material_desc' => $row['kategori_material_desc'],
-            'company_code' => 'B000',
+            'company_code' => auth()->user()->company_code,
             'is_active' => $row['is_active'],
             'created_by' => auth()->user()->id,
         ]);
