@@ -39,7 +39,7 @@ class PlantController extends Controller
             $input['plant_code'] = $request->code;
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
@@ -58,7 +58,7 @@ class PlantController extends Controller
         try {
             $request->validate([
                 "code" => 'required',
-//                "old_plant" => 'required',
+                //                "old_plant" => 'required',
                 "deskripsi" => 'required',
                 "is_active" => 'required',
             ]);
@@ -66,7 +66,7 @@ class PlantController extends Controller
             $input['plant_code'] = $request->code;
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
@@ -96,6 +96,10 @@ class PlantController extends Controller
     public function import(Request $request)
     {
         try {
+            if (!$request->file('file')) {
+                return response()->json(['Code' => 0]);
+            }
+
             $file = $request->file('file')->store('import');
             $import = new PlantImport;
             $import->import($file);

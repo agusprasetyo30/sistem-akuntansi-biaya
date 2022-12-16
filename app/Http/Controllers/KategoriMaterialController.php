@@ -34,7 +34,7 @@ class KategoriMaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['kategori_material_name'] = $request->nama;
             $input['kategori_material_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
@@ -63,7 +63,7 @@ class KategoriMaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['kategori_material_name'] = $request->nama;
             $input['kategori_material_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;

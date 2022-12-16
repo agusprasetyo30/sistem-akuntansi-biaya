@@ -39,7 +39,7 @@ class MaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_code;
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;
@@ -86,7 +86,7 @@ class MaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_code;
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;

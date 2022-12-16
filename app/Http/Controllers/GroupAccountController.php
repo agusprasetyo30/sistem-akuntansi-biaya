@@ -34,7 +34,7 @@ class GroupAccountController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['group_account_code'] = $request->code;
             $input['group_account_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
@@ -69,7 +69,7 @@ class GroupAccountController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['group_account_code'] = $request->code;
             $input['group_account_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
