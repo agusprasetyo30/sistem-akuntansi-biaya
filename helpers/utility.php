@@ -330,9 +330,25 @@ if (!function_exists('check_month')) {
 }
 
 if (!function_exists('format_month')) {
-    function format_month($date)
+    function format_month($date, $method = 'def')
     {
-        $data = Carbon::parse($date)->format('F-Y');
-        return $data;
+        switch ($method){
+            case 'def':
+                $data = Carbon::parse($date)->format('F-Y');
+                return $data;
+                break;
+            case 'se':
+                $data = Carbon::parse($date)->format('m-Y');
+                return $data;
+                break;
+            case 'bi':
+                $data = Carbon::parse($date)->format('m/Y');
+                return $data;
+                break;
+            default:
+                return 'Undefined';
+                break;
+        }
     }
 }
+

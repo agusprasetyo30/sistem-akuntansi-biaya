@@ -24,6 +24,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KursController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ConsRateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -174,10 +175,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/kategori_material', [SelectController::class, 'kategori_material'])->name('kategori_material_select');
             Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
             Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
+            Route::get('/material_keyword_select', [SelectController::class, 'material_keyword'])->name('material_keyword_select');
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
             Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
             Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
             Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
+            Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
 
 
             //            Helper
@@ -194,6 +197,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
             Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
             Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
+        });
+
+        Route::group(['prefix' => 'consrate'], function () {
+            Route::get('/', [ConsRateController::class, 'index'])->name('consrate');
+            Route::post('insert', [ConsRateController::class, 'create'])->name('insert_consrate');
+            Route::post('update', [ConsRateController::class, 'update'])->name('update_consrate');
+            Route::post('delete', [ConsRateController::class, 'delete'])->name('delete_consrate');
         });
 
         Route::group(['prefix' => 'asumsi_umum'], function () {

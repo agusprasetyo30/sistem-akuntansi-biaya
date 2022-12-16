@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asumsi_Umum;
 use App\Models\GroupAccount;
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
@@ -115,7 +116,37 @@ class SelectController extends Controller
         foreach ($material as $items) {
             $response[] = array(
                 "id" => $items->material_code,
-                "text" => $items->material_code . ' ' . $items->material_name
+                "text" => $items->material_code . ' - ' . $items->material_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function material_keyword(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $material = Material::limit(10)
+                ->where('material_code', '!=', $request->produk)
+                ->where('is_active', 't')
+                ->get();
+        } else {
+            $material = Material::where('material_code', '!=', $request->produk)
+                ->where(function ($query) use ($search){
+                    $query->where('material_code', 'ilike', '%' . $search . '%')
+                        ->orWhere('material_name', 'ilike', '%' . $search . '%');
+                })
+                ->limit(10)
+                ->where('is_active', 't')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($material as $items) {
+            $response[] = array(
+                "id" => $items->material_code,
+                "text" => $items->material_code . ' - ' . $items->material_name
             );
         }
 
@@ -214,6 +245,31 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->id,
                 "text" => $items->version
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function version_detail(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $asumsi = Asumsi_Umum::where('version_id', $request->version)
+                ->limit(10)
+                ->get();
+        } else {
+            $asumsi = Asumsi_Umum::where('version_id', $request->version)
+                ->where('month_year', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($asumsi as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => format_month($items->month_year, 'se')
             );
         }
 
