@@ -1,7 +1,7 @@
 
 <!-- Modal Add-->
 <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="largemodal" aria-hidden="true" style="text-align: start;">
-    <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Tambah Saldo Awal</h5>
