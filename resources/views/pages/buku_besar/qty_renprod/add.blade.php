@@ -12,22 +12,28 @@
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12">
+                            {{-- <div class="form-group">
+                                <label class="form-label">Versi Asumsi</label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div> --}}
+                            <div class="form-group">
+                                <label class="form-label">Versi Asumsi</label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bulan</label>
+                                <select name="detail_version" id="data_detail_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi Terlebih Dahulu</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">Material</label>
                                 <select name="main_material" id="data_main_material" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Material</option>
-                                </select>
-                            </div>                   
-                            <div class="form-group">
-                                <label class="form-label">Periode</label>
-                                <select name="main_periode" id="data_main_periode" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Periode</option>
-                                </select>
-                            </div>                   
-                            <div class="form-group">
-                                <label class="form-label">Region</label>
-                                <select name="main_region" id="data_main_region" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Region</option>
                                 </select>
                             </div>
                             <div class="form-group">

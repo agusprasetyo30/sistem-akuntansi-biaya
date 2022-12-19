@@ -19,15 +19,20 @@ class QtyRenProdDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('qty_renprod')->select('qty_renprod.*', 'material.material_name', 'periode.periode_name', 'regions.region_name')
-            ->leftjoin('material', 'material.id', '=', 'qty_renprod.material_id')
-            ->leftjoin('periode', 'periode.id', '=', 'qty_renprod.periode_id')
-            ->leftjoin('regions', 'regions.id', '=', 'qty_renprod.region_id')
+        $query = DB::table('qty_renprod')->select('qty_renprod.*', 'material.material_name', 'material.material_code', 'version_asumsi.version')
+            ->leftjoin('material', 'material.material_code', '=', 'qty_renprod.material_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_renprod.version_id')
             ->whereNull('qty_renprod.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->editColumn('month_year', function ($query) {
+                return helpDate($query->month_year, 'bi');
+            })
+            ->editColumn('qty_renprod_value', function ($query) {
+                return rupiah($query->qty_renprod_value);
+            })
             ->addColumn('action', 'pages.buku_besar.qty_renprod.action')
             ->escapeColumns([]);
     }

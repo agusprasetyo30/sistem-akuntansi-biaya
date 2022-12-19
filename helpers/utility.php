@@ -248,7 +248,7 @@ function helpDate($var, $mode = 'se')
             $year = date('Y', strtotime($var));
 
             $month = helpIndoMonth($month - 1);
-            return $month . ' ' . $year;
+            return $year . ' ' . $month;
             break;
         default:
             return 'Undefined';
@@ -332,7 +332,7 @@ if (!function_exists('check_month')) {
 if (!function_exists('format_month')) {
     function format_month($date, $method = 'def')
     {
-        switch ($method){
+        switch ($method) {
             case 'def':
                 $data = Carbon::parse($date)->format('F-Y');
                 return $data;
@@ -352,3 +352,11 @@ if (!function_exists('format_month')) {
     }
 }
 
+
+if (!function_exists('formatRupiah')) {
+    function formatRupiah($angka)
+    {
+        $hasil_rupiah = "Rp. " . number_format($angka, 0, ',', '.');
+        return $hasil_rupiah;
+    }
+}

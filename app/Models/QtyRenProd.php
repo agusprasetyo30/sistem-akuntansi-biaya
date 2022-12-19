@@ -12,9 +12,10 @@ class QtyRenProd extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'material_id',
-        'periode_id',
-        'region_id',
+        'company_code',
+        'material_code',
+        'version_id',
+        'month_year',
         'qty_renprod_desc',
         'qty_renprod_value',
         'created_by',
@@ -24,5 +25,4 @@ class QtyRenProd extends Model
         'deleted_at',
         'deleted_by'
     ];
-
 }

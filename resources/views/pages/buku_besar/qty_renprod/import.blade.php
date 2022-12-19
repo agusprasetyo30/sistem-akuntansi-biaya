@@ -14,29 +14,20 @@
                     <div class="col-md-12 mt1">
                         <div class="row">
                             <div class="col-md-12">
-                                {{-- <div class="form-group">
-                                    <select name="version" id="version" class="form-control form-control-sm custom-select select2 select2-hidden-accessible">
-                                        <option value="" disabled selected></option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                    </select>
-                                </div> --}}
                                 <div class="col-lg mb-3">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template 
-                                                <select name="version" id="version" class="form-control form-control-sm custom-select select2 select2-hidden-accessible">
-                                                    <option value="" disabled selected></option>
-                                                    <option value="1">1</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                </select>
-                                            ( <a href="#" id="submit-export" >Download Template</a> )
+                                        <li>Format harus sesuai template ( <a href="#" id="submit-export" >Download Template</a> )
                                         </li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol> 
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label">Versi Asumsi</label>
+                                    <select name="version" id="version" class="form-control custom-select select2">
+                                        <option value="" disabled selected>Pilih Versi</option>
+                                    </select>
+                                </div>  
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
                                 </div>
