@@ -21,7 +21,7 @@ class CreateAsumsiUmumTable extends Migration
             $table->timestamp('month_year');
             $table->timestamp('saldo_awal');
             $table->integer('created_by');
-            $table->integer('updated_by');
+            $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->string('company_code')->unsigned();
