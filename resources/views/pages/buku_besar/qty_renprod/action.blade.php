@@ -73,12 +73,6 @@
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
-                            {{-- <div class="form-group">
-                                <label class="form-label">Versi</label>
-                                <select name="main_version" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
-                                </select>
-                            </div> --}}
                             <div class="form-group">
                                 <label class="form-label">Versi <span class="text-red">*</span></label>
                                 <select name="edit_data_main_version{{$model->id}}" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
@@ -151,28 +145,6 @@
         }
     })
 
-    // $('#edit_data_main_version'+{{$model->id}}).select2({
-    //     dropdownParent: $('#modal_edit'+{{$model->id}}),
-    //     placeholder: 'Pilih Versi',
-    //     width: '100%',
-    //     allowClear: false,
-    //     ajax: {
-    //         url: "{{ route('version_select') }}",
-    //         dataType: 'json',
-    //         delay: 250,
-    //         data: function (params) {
-    //             return {
-    //                 search: params.term
-    //             };
-    //         },
-    //         processResults: function(response) {
-    //             return {
-    //                 results: response
-    //             };
-    //         }
-    //     }
-    // })
-
     $('#edit_data_main_version'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Versi',
@@ -220,7 +192,6 @@
         });
     })
 
-    var version = $('#edit_data_main_version'+{{$model->id}}).val();
     $('#edit_data_detail_version'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Bulan',
@@ -233,7 +204,7 @@
             data: function (params) {
                 return {
                     search: params.term,
-                    version:version
+                    version: $('#edit_data_main_version'+{{$model->id}}).val()
 
                 };
             },

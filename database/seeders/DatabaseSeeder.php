@@ -18,5 +18,11 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(ManagementRoleSeeder::class);
+        $this->call(KategoriMaterialSeeder::class);
+        $this->call(GroupAccountSeeder::class);
+        $this->call(MaterialSeeder::class);
+        $this->call(PlantSeeder::class);
+        $this->call(VersionAsumsiSeeder::class);
+        $this->call(AsumsiUmumSeeder::class);
     }
 }
