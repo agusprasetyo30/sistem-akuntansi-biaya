@@ -204,6 +204,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [ConsRateController::class, 'create'])->name('insert_consrate');
             Route::post('update', [ConsRateController::class, 'update'])->name('update_consrate');
             Route::post('delete', [ConsRateController::class, 'delete'])->name('delete_consrate');
+            Route::post('import', [ConsRateController::class, 'import'])->name('import_consrate');
+            Route::get('export', [ConsRateController::class, 'export'])->name('export_consrate');
         });
 
         Route::group(['prefix' => 'asumsi_umum'], function () {

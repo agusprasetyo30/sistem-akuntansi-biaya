@@ -13,12 +13,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label">Kode Plant <span class="text-red">*</span></label>
-                                <select name="main_plant" id="data_main_plant" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
                                 <select name="main_version" id="data_main_version" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Versi</option>
@@ -28,6 +22,12 @@
                                 <label class="form-label">Bulan <span class="text-red">*</span></label>
                                 <select name="detail_version" id="data_detal_version" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Kode Plant <span class="text-red">*</span></label>
+                                <select name="main_plant" id="data_main_plant" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Status</option>
                                 </select>
                             </div>
                             <div class="form-group">
