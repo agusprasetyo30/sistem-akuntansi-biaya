@@ -34,18 +34,18 @@
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
+                                <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSI</th>
+                                <th data-type='text' data-name='month_year' class="border-bottom-0 text-center">MONTH YEAR</th>
                                 <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
-                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">PERIODE</th>
-                                <th data-type='text' data-name='region_id' class="border-bottom-0 text-center">REGION</th>
                                 <th data-type='text' data-name='qty_renprod_desc' class="border-bottom-0 text-center">DESKRIPSI</th>
                                 <th data-type='text' data-name='qty_renprod_value' class="border-bottom-0 text-center">VALUE</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='material_id' class="text-center"></th>
-                                <th data-type='text' data-name='periode_id' class="text-center"></th>
-                                <th data-type='text' data-name='region_id' class="text-center"></th>
+                                <th data-type='text' data-name='version' class="text-center"></th>
+                                <th data-type='text' data-name='month_year' class="text-center"></th>
+                                <th data-type='text' data-name='material_code' class="text-center"></th>
                                 <th data-type='text' data-name='qty_renprod_desc' class="text-center"></th>
                                 <th data-type='text' data-name='qty_renprod_value' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
@@ -72,28 +72,6 @@
         $(document).ready(function () {
             get_data()
 
-            $('#data_main_periode').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih periode',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('periode_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
-            })
-
             $('#data_main_material').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Material',
@@ -116,13 +94,82 @@
                 }
             })
 
-            $('#data_main_region').select2({
+            // $('#data_main_version').select2({
+            //     dropdownParent: $('#modal_add'),
+            //     placeholder: 'Pilih Versi',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('version_select') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
+
+            $('#data_main_version').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih region',
+                placeholder: 'Pilih Versi',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('region_select') }}",
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var data_version = $('#data_main_version').val();
+                $('#data_detail_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
+
+            $('#version').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -138,11 +185,10 @@
                 }
             })
 
-            $('#version').select2({
-                dropdownParent: $('#modal_import'),
-                placeholder: 'Pilih Versi',
-                width: '100%'
-            })
+            $('#qty_renprod_value').on('keyup', function(){
+                let rupiah = formatRupiah($(this).val(), "Rp. ")
+                $(this).val(rupiah)
+            });
 
         })
 
@@ -202,15 +248,15 @@
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'material_name', name: 'material.material_name', orderable:false},
-                    { data: 'periode_name', name: 'periode.periode_name', orderable:false},
-                    { data: 'region_name', name: 'regions.region_name', orderable:false},
+                    { data: 'version', name: 'version_asumsi.version', orderable:false},
+                    { data: 'month_year', name: 'month_year', orderable:false},
+                    { data: 'material_code', name: 'material.material_code', orderable:false},
                     { data: 'qty_renprod_desc', name: 'qty_renprod_desc', orderable:false},
                     { data: 'qty_renprod_value', name: 'qty_renprod_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,6]}
+                    {className: 'text-center', targets: [0,4]}
                 ],
 
             })
@@ -236,11 +282,11 @@
                         url: '{{route('insert_qty_renprod')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            material_id: $('#data_main_material').val(),
-                            periode_id: $('#data_main_periode').val(),
-                            region_id: $('#data_main_region').val(),
+                            material_code: $('#data_main_material').val(),
                             qty_renprod_desc: $('#qty_renprod_desc').val(),
                             qty_renprod_value: $('#qty_renprod_value').val(),
+                            version_id: $('#data_main_version').val(),
+                            month_year: $('#data_detail_version').val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
@@ -249,6 +295,10 @@
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
@@ -324,17 +374,20 @@
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
-                            material_id: $('#edit_data_main_material'+id).val(),
-                            periode_id: $('#edit_data_main_periode'+id).val(),
-                            region_id: $('#edit_data_main_region'+id).val(),
+                            material_code: $('#edit_data_main_material'+id).val(),
                             qty_renprod_desc: $('#edit_qty_renprod_desc'+id).val(),
                             qty_renprod_value: $('#edit_qty_renprod_value'+id).val(),
+                            version_id: $('#edit_data_main_version'+id).val(),
+                            month_year: $('#edit_data_detail_version'+id).val(),
                         },
                         success:function (response) {
                             if (response.Code === 200){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_edit'+id).modal('hide');
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
@@ -377,6 +430,8 @@
                             if (response.Code === 200){
                                 toastr.success('Data Berhasil Dihapus', 'Success')
                                 get_data()
+                            }else if (response.Code === 502){
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                             }else {
