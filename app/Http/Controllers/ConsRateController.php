@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\ConsRateDataTable;
+use App\Exports\ConsRateExport;
+use App\Exports\SaldoAwalExport;
+use App\Imports\ConsRateImport;
+use App\Jobs\ConsRatePodcast;
 use App\Models\Asumsi_Umum;
 use App\Models\ConsRate;
 use App\Models\CostCenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ConsRateController extends Controller
 {
@@ -176,6 +183,45 @@ class ConsRateController extends Controller
                 ->delete();
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         }catch (\Exception $exception){
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new ConsRateExport(), 'cons_rate.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+//        dd($request);
+        try {
+            $excel = Excel::toArray(new ConsRateImport(), $request->file);
+            $colect = collect($excel[0]);
+            $version = $request->version;
+            $header = $colect[0];
+            unset($colect[0]);
+
+            DB::transaction(function () use ($colect, $version, $header) {
+                ConsRate::where('version_id', $version)->delete();
+//                $batch = Bus::batch([])->dispatch();
+
+                $colect->chunk(10000)->each(function ($query) use ($header,  $version){
+//                    $batch->add(new ConsRatePodcast($query, $header, $version));
+                    foreach ($query as $data){
+                        $data_consrate = array_combine($header, $data);
+                        $data_consrate['version_id'] = (int) $version;
+                        $data_consrate['company_code'] = 'B000';
+                        $data_consrate['is_active'] = true;
+                        $data_consrate['created_by'] = auth()->user()->id;
+                        $data_consrate['updated_by'] = auth()->user()->id;
+                        ConsRate::create($data_consrate);
+                    }
+                });
+            });
+            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+        }catch (\Exception $exception){
+            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
