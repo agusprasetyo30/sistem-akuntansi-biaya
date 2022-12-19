@@ -208,7 +208,6 @@
         });
     })
 
-    var version = $('#edit_data_main_version'+{{$model->id}}).val();
     $('#edit_data_detal_version'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Bulan',
@@ -221,7 +220,7 @@
             data: function (params) {
                 return {
                     search: params.term,
-                    version:version
+                    version: $('#edit_data_main_version'+{{$model->id}}).val()
 
                 };
             },
