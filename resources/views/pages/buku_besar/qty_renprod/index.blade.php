@@ -36,7 +36,7 @@
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
                                 <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSI</th>
                                 <th data-type='text' data-name='month_year' class="border-bottom-0 text-center">MONTH YEAR</th>
-                                <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
+                                <th data-type='text' data-name='material_name' class="border-bottom-0 text-center">MATERIAL</th>
                                 <th data-type='text' data-name='qty_renprod_desc' class="border-bottom-0 text-center">DESKRIPSI</th>
                                 <th data-type='text' data-name='qty_renprod_value' class="border-bottom-0 text-center">VALUE</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
@@ -45,7 +45,7 @@
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
                                 <th data-type='text' data-name='version' class="text-center"></th>
                                 <th data-type='text' data-name='month_year' class="text-center"></th>
-                                <th data-type='text' data-name='material_code' class="text-center"></th>
+                                <th data-type='text' data-name='material_name' class="text-center"></th>
                                 <th data-type='text' data-name='qty_renprod_desc' class="text-center"></th>
                                 <th data-type='text' data-name='qty_renprod_value' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
@@ -186,7 +186,7 @@
             })
 
             $('#qty_renprod_value').on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp. ")
+                let rupiah = formatRupiah($(this).val(), "Rp ")
                 $(this).val(rupiah)
             });
 
@@ -250,7 +250,7 @@
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
                     { data: 'version', name: 'version_asumsi.version', orderable:false},
                     { data: 'month_year', name: 'month_year', orderable:false},
-                    { data: 'material_code', name: 'material.material_code', orderable:false},
+                    { data: 'material_name', name: 'material.material_name', orderable:false},
                     { data: 'qty_renprod_desc', name: 'qty_renprod_desc', orderable:false},
                     { data: 'qty_renprod_value', name: 'qty_renprod_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},

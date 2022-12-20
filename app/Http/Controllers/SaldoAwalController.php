@@ -40,7 +40,7 @@ class SaldoAwalController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $total_value = (float) str_replace('.', '', str_replace('Rp. ', '', $request->total_value));
+            $total_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->total_value));
             $harga_satuan = $total_value / $request->total_stock;
 
             $my = Version_Asumsi::where('id', $request->version_id)->first();
@@ -86,7 +86,7 @@ class SaldoAwalController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $total_value = (float) str_replace('.', '', str_replace('Rp. ', '', $request->total_value));
+            $total_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->total_value));
             $harga_satuan = $total_value / $request->total_stock;
 
             $my = Version_Asumsi::where('id', $request->version_id)->first();
@@ -133,6 +133,12 @@ class SaldoAwalController extends Controller
         try {
             if (!$request->file('file')) {
                 return response()->json(['Code' => 0]);
+            }
+
+            $sawal = Saldo_Awal::where('version_id', $request->version)->count();
+
+            if ($sawal > 0) {
+                Saldo_Awal::where('version_id', $request->version)->delete();
             }
 
             $version = $request->version;

@@ -33,6 +33,9 @@ class QtyRenProdDataTable extends DataTable
             ->editColumn('qty_renprod_value', function ($query) {
                 return rupiah($query->qty_renprod_value);
             })
+            ->editColumn('material_name', function ($query) {
+                return $query->material_code . ' ' . $query->material_name;
+            })
             ->addColumn('action', 'pages.buku_besar.qty_renprod.action')
             ->escapeColumns([]);
     }

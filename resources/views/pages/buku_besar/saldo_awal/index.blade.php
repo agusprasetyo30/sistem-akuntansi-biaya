@@ -34,10 +34,11 @@
                             <thead>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
+                                <th data-type='text' data-name='month_year' class="border-bottom-0 text-center">PERIODE</th>
                                 <th data-type='text' data-name='gl_account' class="border-bottom-0 text-center">G/L ACCOUNT</th>
                                 <th data-type='text' data-name='valuation_class' class="border-bottom-0 text-center">VALUATION CLASS</th>
                                 <th data-type='text' data-name='price_control' class="border-bottom-0 text-center">PRICE CONTROL</th>
-                                <th data-type='text' data-name='material_code' class="border-bottom-0 text-center">MATERIAL</th>
+                                <th data-type='text' data-name='material_name' class="border-bottom-0 text-center">MATERIAL</th>
                                 <th data-type='text' data-name='plant' class="border-bottom-0 text-center">PLANT</th>
                                 <th data-type='text' data-name='total_stock' class="border-bottom-0 text-center">TOTAL STOCK</th>
                                 <th data-type='text' data-name='total_value' class="border-bottom-0 text-center">TOTAL VALUE</th>
@@ -46,10 +47,11 @@
                             </tr>
                             <tr>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
+                                <th data-type='text' data-name='month_year' class="text-center"></th>
                                 <th data-type='text' data-name='gl_account' class="text-center"></th>
                                 <th data-type='text' data-name='valuation_class' class="text-center"></th>
                                 <th data-type='text' data-name='price_control' class="text-center"></th>
-                                <th data-type='text' data-name='material_code' class="text-center"></th>
+                                <th data-type='text' data-name='material_name' class="text-center"></th>
                                 <th data-type='text' data-name='plant' class="text-center"></th>
                                 <th data-type='text' data-name='total_stock' class="text-center"></th>
                                 <th data-type='text' data-name='total_value' class="text-center"></th>
@@ -145,7 +147,7 @@
             })
 
             $('#total_value').on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp. ")
+                let rupiah = formatRupiah($(this).val(), "Rp ")
                 $(this).val(rupiah)
             });
 
@@ -228,10 +230,11 @@
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
+                    { data: 'month_year', name: 'month_year', orderable:false},
                     { data: 'gl_account', name: 'gl_account', orderable:false},
                     { data: 'valuation_class', name: 'valuation_class', orderable:false},
                     { data: 'price_control', name: 'price_control', orderable:false},
-                    { data: 'material_code', name: 'material.material_code', orderable:false},
+                    { data: 'material_name', name: 'material.material_name', orderable:false},
                     { data: 'plant_code', name: 'plant.plant_code', orderable:false},
                     { data: 'total_stock', name: 'total_stock', orderable:false},
                     { data: 'total_value', name: 'total_value', orderable:false},

@@ -28,6 +28,12 @@ class SaldoAwalDataTable extends DataTable
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->editColumn('month_year', function ($query) {
+                return helpDate($query->month_year, 'bi');
+            })
+            ->editColumn('material_name', function ($query) {
+                return $query->material_code . ' ' . $query->material_name;
+            })
             ->editColumn('total_value', function ($query) {
                 return rupiah($query->total_value);
             })
