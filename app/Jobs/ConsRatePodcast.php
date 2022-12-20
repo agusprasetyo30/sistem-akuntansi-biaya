@@ -43,7 +43,7 @@ class ConsRatePodcast implements ShouldQueue
             $data_consrate['company_code'] = 'B000';
             $data_consrate['is_active'] = true;
             $data_consrate['created_by'] = auth()->user()->id;
-//            $data_consrate['updated_by'] = auth()->user()->id;
+            $data_consrate['updated_by'] = auth()->user()->id;
             ConsRate::create($data_consrate);
         }
     }
