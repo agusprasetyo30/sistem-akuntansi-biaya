@@ -12,6 +12,6 @@ class SaldoAwalExport implements WithHeadings
      */
     public function headings(): array
     {
-        return ["gl_account", "valuation_class", "price_control", "material_code", "plant_code", "version_id", "total_stock", "total_value"];
+        return ["gl_account", "valuation_class", "price_control", "material_code", "plant_code", "total_stock", "total_value"];
     }
 }

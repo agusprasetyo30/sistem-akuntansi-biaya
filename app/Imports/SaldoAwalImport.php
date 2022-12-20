@@ -53,7 +53,6 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
     public function rules(): array
     {
         return [
-            'version_id' => ['required'],
             'gl_account' => ['required'],
             'valuation_class' => ['required'],
             'price_control' => ['required'],

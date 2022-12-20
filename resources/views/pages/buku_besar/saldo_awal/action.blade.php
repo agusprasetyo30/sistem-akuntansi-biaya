@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label>Total Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Total Value" value="{{$model->total_value}}" name="detail_total_value"
+                                    placeholder="Total Value" value="{{helpRupiah($model->total_value)}}" name="detail_total_value"
                                     id="detail_total_value" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -68,7 +68,7 @@
                             <div class="form-group">
                                 <label>Nilai Satuan </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->nilai_satuan}}" name="detail_nilai_satuan"
+                                    placeholder="Nilai Satuan" value="{{helpRupiah($model->nilai_satuan)}}" name="detail_nilai_satuan"
                                     id="detail_nilai_satuan" autocomplete="off">
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                             <div class="form-group">
                                 <label>Total Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Total value"
-                                    value="{{$model->total_value}}" name="edit_total_value"
+                                    value="{{helpRupiah($model->total_value)}}" name="edit_total_value"
                                     id="edit_total_value{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -229,7 +229,7 @@
         })
 
         $('#edit_total_value'+{{$model->id}}).on('keyup', function(){
-            let rupiah = formatRupiah($(this).val(), "Rp. ")
+            let rupiah = formatRupiah($(this).val(), "Rp ")
             $(this).val(rupiah)
         });
     })
