@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\QtyRenProdDataTable;
-use App\Exports\QtyRenProdExport;
+use App\Exports\TemplateQtyRenProdExport;
 use App\Imports\QtyRenProdImport;
 use App\Models\Asumsi_Umum;
 use App\Models\QtyRenProd;
@@ -160,6 +160,6 @@ class QtyRenProdController extends Controller
     {
         $version = $request->version;
 
-        return Excel::download(new QtyRenProdExport($version), 'qty_renprod.xlsx');
+        return Excel::download(new TemplateQtyRenProdExport($version), 'qty_renprod.xlsx');
     }
 }

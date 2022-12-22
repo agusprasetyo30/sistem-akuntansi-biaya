@@ -8,8 +8,9 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class QtyRenProdExport implements WithHeadings
+class QtyRenProdExport implements WithHeadings, WithTitle
 {
     protected $version;
 
@@ -45,5 +46,10 @@ class QtyRenProdExport implements WithHeadings
         }
 
         return $result;
+    }
+
+    public function title(): string
+    {
+        return 'Kuantiti Rencana Produksi';
     }
 }
