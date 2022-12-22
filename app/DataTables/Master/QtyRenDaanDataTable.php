@@ -19,15 +19,34 @@ class QtyRenDaanDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('qty_rendaan')->select('qty_rendaan.*', 'material.material_name', 'periode.periode_name', 'regions.region_name')
-            ->leftjoin('material', 'material.id', '=', 'qty_rendaan.material_id')
-            ->leftjoin('periode', 'periode.id', '=', 'qty_rendaan.periode_id')
+        $query = DB::table('qty_rendaan')
+            ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_name')
+            ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_rendaan.version_id')
             ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
             ->whereNull('qty_rendaan.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->addColumn('version_periode', function ($query){
+                return $query->version.' - '.format_month($query->month_year,'bi');
+            })
+            ->filterColumn('filter_version_periode', function ($query, $keyword){
+                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%')
+                    ->orWhere('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+            })
+            ->addColumn('material', function ($query){
+                return $query->material_code.' - '.$query->material_name;
+            })
+            ->filterColumn('filter_material', function ($query, $keyword){
+                $query->where('qty_rendaan.material_code', 'ilike', '%'.$keyword.'%')
+                    ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+            })
+            ->filterColumn('filter_region',function ($query, $keyword){
+                $query->where('regions.region_name', 'ilike', '%'.$keyword.'%');
+            })
             ->addColumn('action', 'pages.buku_besar.qty_rendaan.action')
             ->escapeColumns([]);
     }

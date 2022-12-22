@@ -20,9 +20,9 @@ class CreateQtyRendaanTable extends Migration
             $table->string('material_code')->unsigned();
             $table->foreign('material_code')->references('material_code')->on('material');
             $table->foreignId('region_id')->references('id')->on('regions')->onUpdate('cascade')->onDelete('cascade');
-            $table->timestamp('month_year');
-            $table->string('qty_rendaan_desc');
-            $table->float('qty_rendaan_value');
+            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade');
+            $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onUpdate('cascade');
+            $table->double('qty_rendaan_value', 8, 2)->default(0);
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

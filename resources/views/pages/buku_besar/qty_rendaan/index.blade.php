@@ -13,7 +13,7 @@
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
-            <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+            <button data-bs-toggle="modal" data-bs-target="#modal_import" class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
             <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
         </div>
     </div>
@@ -35,9 +35,8 @@
                             <tr>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
                                 <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
-                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">PERIODE</th>
-                                <th data-type='text' data-name='region_id' class="border-bottom-0 text-center">REGION</th>
-                                <th data-type='text' data-name='qty_rendaan_desc' class="border-bottom-0 text-center">DESKRIPSI</th>
+                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">VERSION</th>
+                                <th data-type='text' data-name='region' class="border-bottom-0 text-center">REGION</th>
                                 <th data-type='text' data-name='qty_rendaan_value' class="border-bottom-0 text-center">VALUE</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
                             </tr>
@@ -45,8 +44,7 @@
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
                                 <th data-type='text' data-name='material_id' class="text-center"></th>
                                 <th data-type='text' data-name='periode_id' class="text-center"></th>
-                                <th data-type='text' data-name='region_id' class="text-center"></th>
-                                <th data-type='text' data-name='qty_rendaan_desc' class="text-center"></th>
+                                <th data-type='text' data-name='region' class="text-center"></th>
                                 <th data-type='text' data-name='qty_rendaan_value' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
                             </tr>
@@ -59,6 +57,7 @@
                 </div>
             </div>
             @include('pages.buku_besar.qty_rendaan.add')
+            @include('pages.buku_besar.qty_rendaan.import')
         </div>
     </div>
 </div>
@@ -71,13 +70,13 @@
         $(document).ready(function () {
             get_data()
 
-            $('#data_main_periode').select2({
+            $('#data_main_version').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih periode',
+                placeholder: 'Pilih Versi',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('periode_select') }}",
+                    url: "{{ route('version_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -91,6 +90,90 @@
                         };
                     }
                 }
+            }).on('change', function () {
+                var data_version = $('#data_main_version').val();
+                $('#data_detal_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
+
+            $('#version').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#template").css("display", "block");
+            })
+
+            $("#template").on('click', function () {
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    xhrFields:{
+                        responseType: 'blob'
+                    },
+                    url: '{{route('export_qty_renprod')}}',
+                    data: {
+                        temp:$('#version').val()
+                    },
+                    success: function(result, status, xhr) {
+
+                        var disposition = xhr.getResponseHeader('content-disposition');
+                        var matches = /"([^"]*)"/.exec(disposition);
+                        var filename = (matches != null && matches[1] ? matches[1] : 'qty_rendaan.xlsx');
+
+                        // The actual download
+                        var blob = new Blob([result], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename;
+
+                        document.body.appendChild(link);
+
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                })
             })
 
             $('#data_main_material').select2({
@@ -135,6 +218,57 @@
                         };
                     }
                 }
+            })
+
+            $('#submit_import').on('click', function () {
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data akan segera import",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#019267',
+                    cancelButtonColor: '#EF4B4B',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Kembali'
+                }).then((result) =>{
+                    if (result.value){
+                        let file = new FormData($("#form-input-consrate")[0]);
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            processData: false,
+                            contentType: false,
+                            url: '{{route('import_qty_rendaan')}}',
+                            data: file,
+                            success:function (response) {
+                                console.log(response);
+                                if (response.Code === 200){
+                                    $('#modal_import').modal('hide');
+                                    $("#modal_import input").val("")
+                                    $('#is_active').val('').trigger("change");
+                                    toastr.success('Data Berhasil Disimpan', 'Success')
+                                    get_data()
+                                }else if (response.Code === 0){
+                                    $('#modal_import').modal('hide');
+                                    $("#modal_import input").val("")
+                                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                                }else if (response.Code === 500){
+                                    $('#modal_import').modal('hide');
+                                    $("#modal_import input").val("")
+                                    response.msg.forEach(element => {
+                                        toastr.warning(element, 'Warning')
+                                    });
+                                }else {
+                                    $('#modal_import').modal('hide');
+                                    $("#modal_import input").val("")
+                                    toastr.error('Terdapat Kesalahan System', 'System Error')
+                                }
+                            }
+                        })
+                    }
+                })
             })
         })
 
@@ -194,16 +328,15 @@
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'material_name', name: 'material.material_name', orderable:false},
-                    { data: 'periode_name', name: 'periode.periode_name', orderable:false},
-                    { data: 'region_name', name: 'regions.region_name', orderable:false},
-                    { data: 'qty_rendaan_desc', name: 'qty_rendaan_desc', orderable:false},
+                    { data: 'material', name: 'filter_material', orderable:false},
+                    { data: 'version_periode', name: 'filter_version_periode', orderable:false},
+                    { data: 'region_name', name: 'filter_region', orderable:false},
                     { data: 'qty_rendaan_value', name: 'qty_rendaan_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,6]}
-                ],
+                    {className: 'text-center', targets: [0,1,2,3,4,5]}
+                ]
 
             })
         }
@@ -229,10 +362,10 @@
                         url: '{{route('insert_qty_rendaan')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
+                            version_asumsi:$('#data_main_version').val(),
+                            bulan:$('#data_detal_version').val(),
                             material_id: $('#data_main_material').val(),
-                            periode_id: $('#data_main_periode').val(),
                             region_id: $('#data_main_region').val(),
-                            qty_rendaan_desc: $('#qty_rendaan_desc').val(),
                             qty_rendaan_value: $('#qty_rendaan_value').val(),
                         },
                         success:function (response) {
@@ -283,10 +416,10 @@
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
+                            version_asumsi:$('#edit_data_main_version'+id).val(),
+                            bulan:$('#edit_data_detal_version'+id).val(),
                             material_id: $('#edit_data_main_material'+id).val(),
-                            periode_id: $('#edit_data_main_periode'+id).val(),
                             region_id: $('#edit_data_main_region'+id).val(),
-                            qty_rendaan_desc: $('#edit_qty_rendaan_desc'+id).val(),
                             qty_rendaan_value: $('#edit_qty_rendaan_value'+id).val(),
                         },
                         success:function (response) {
