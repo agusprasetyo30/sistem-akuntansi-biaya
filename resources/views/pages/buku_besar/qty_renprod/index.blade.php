@@ -318,6 +318,56 @@
             })
         })
 
+        $('#submit-import').on('click', function () {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data akan segera import",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#019267',
+                cancelButtonColor: '#EF4B4B',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Kembali'
+            }).then((result) =>{
+                if (result.value){
+                    let file = new FormData($("#form-input")[0]);
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        processData: false,
+                        contentType: false,
+                        url: '{{route('import_qty_renprod')}}',
+                        data: file,
+                        success:function (response) {
+                            if (response.Code === 200){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                $('#is_active').val('').trigger("change");
+                                toastr.success('Data Berhasil Disimpan', 'Success')
+                                get_data()
+                            }else if (response.Code === 0){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 500){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                response.msg.forEach(element => {
+                                    toastr.warning(element, 'Warning')
+                                });
+                            }else {
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                toastr.error('Terdapat Kesalahan System', 'System Error')
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
         $('#submit-export').on('click', function () {
             $.ajax({
                 xhrFields: {

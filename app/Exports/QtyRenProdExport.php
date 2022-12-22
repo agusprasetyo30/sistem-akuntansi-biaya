@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Periode;
 use App\Models\QtyRenProd;
+use App\Models\Version_Asumsi;
 use DateInterval;
 use DatePeriod;
 use DateTime;
@@ -25,20 +25,19 @@ class QtyRenProdExport implements WithHeadings
     {
 
         if ($this->version == null) {
-            $asum = Periode::first();
+            $asum = Version_Asumsi::first();
         } else {
-            $asum = Periode::where('id', $this->version)->first();
+            $asum = Version_Asumsi::where('id', $this->version)->first();
         }
 
         // $asum = Periode::where('id', $this->version)->first();
         $awal = date('Y-m-d', strtotime($asum->awal_periode));
-        $akhir = date('Y-m-d', strtotime($asum->akhir_periode));
-
+        $akhir = date('Y-m-d', strtotime($asum->akhir_periode . ' + 1 month'));
         $start = new DateTime($awal);
         $interval = new DateInterval('P1M');
         $end = new DateTime($akhir);
         $period = new DatePeriod($start, $interval, $end);
-        $result = ["material_produk_code", "qty_renprod_desc", "qty_renprod_ket", "qty_renprod_desc"];
+        $result = ["material_code"];
 
         foreach ($period as $dt) {
             $per = $dt->format('Y-m');

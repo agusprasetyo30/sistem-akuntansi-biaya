@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\QtyRenProdDataTable;
 use App\Exports\QtyRenProdExport;
+use App\Imports\QtyRenProdImport;
 use App\Models\Asumsi_Umum;
 use App\Models\QtyRenProd;
 use Carbon\Carbon;
@@ -113,6 +114,44 @@ class QtyRenProdController extends Controller
                 ->update($input);
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            if (!$request->file('file')) {
+                return response()->json(['Code' => 0]);
+            }
+
+            $renprod = QtyRenProd::where('version_id', $request->version)->count();
+
+            if ($renprod > 0) {
+                QtyRenProd::where('version_id', $request->version)->delete();
+            }
+
+            $version = $request->version;
+            $file = $request->file('file')->store('import');
+            $import = new QtyRenProdImport($version);
+            $import->import($file);
+
+            $data_fail = $import->failures();
+
+            if ($import->failures()->isNotEmpty()) {
+                $err = [];
+
+                foreach ($data_fail as $rows) {
+                    $er = implode(' ', array_values($rows->errors()));
+                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                    array_push($err, $hasil);
+                }
+                // dd(implode(' ', $err));
+                return response()->json(['Code' => 500, 'msg' => $err]);
+            }
+
+            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+        } catch (Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
