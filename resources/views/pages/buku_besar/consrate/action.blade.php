@@ -83,12 +83,6 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label class="form-label">Kode Plant <span class="text-red">*</span></label>
-                                <select name="edit_data_main_plant{{$model->id}}" id="edit_data_main_plant{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->plant_code}}" selected>{{$model->plant_code}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
                                 <select name="edit_data_main_version{{$model->id}}" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
@@ -98,6 +92,12 @@
                                 <label class="form-label">Bulan <span class="text-red">*</span></label>
                                 <select name="edit_data_detal_version{{$model->id}}" id="edit_data_detal_version{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->month_year}}" selected>{{format_month($model->month_year, 'se')}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Kode Plant <span class="text-red">*</span></label>
+                                <select name="edit_data_main_plant{{$model->id}}" id="edit_data_main_plant{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->plant_code}}" selected>{{$model->plant_code}}</option>
                                 </select>
                             </div>
                             <div class="form-group">

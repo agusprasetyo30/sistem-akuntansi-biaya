@@ -345,6 +345,10 @@ if (!function_exists('format_month')) {
                 $data = Carbon::parse($date)->format('m/Y');
                 return $data;
                 break;
+            case 'fe':
+                $data = Carbon::parse($date)->format('Y-m-d');
+                return $data;
+                break;
             default:
                 return 'Undefined';
                 break;
