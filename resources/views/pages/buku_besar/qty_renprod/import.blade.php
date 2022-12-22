@@ -14,6 +14,12 @@
                     <div class="col-md-12 mt1">
                         <div class="row">
                             <div class="col-md-12">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Versi Asumsi</label>
+                                    <select name="version" id="version" class="form-control custom-select select2">
+                                        <option value="" disabled selected>Pilih Versi</option>
+                                    </select>
+                                </div>  
                                 <div class="col-lg mb-3">
                                     <b>Ketentuan :</b>
                                     <ol>
@@ -22,12 +28,6 @@
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol> 
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Versi Asumsi</label>
-                                    <select name="version" id="version" class="form-control custom-select select2">
-                                        <option value="" disabled selected>Pilih Versi</option>
-                                    </select>
-                                </div>  
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
                                 </div>
