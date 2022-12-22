@@ -37,6 +37,6 @@ class CreateAsumsiUmumTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asumsi_umum');
+        Schema::dropIfExists('kuantiti_ren_daan');
     }
 }

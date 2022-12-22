@@ -12,11 +12,12 @@ class QtyRenDaan extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'material_id',
-        'periode_id',
+        'material_code',
         'region_id',
-        'qty_rendaan_desc',
+        'asumsi_umum_id',
+        'version_id',
         'qty_rendaan_value',
+        'company_code',
         'created_by',
         'created_at',
         'updated_at',

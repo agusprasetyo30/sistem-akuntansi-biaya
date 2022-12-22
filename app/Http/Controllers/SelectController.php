@@ -333,7 +333,7 @@ class SelectController extends Controller
 
         $data = Carbon::createFromFormat('Y-m-d', $request->periode)->format('Y-m-01 00:00:00');
 
-        $asumsi = DB::table('asumsi_umum')
+        $asumsi = DB::table('kuantiti_ren_daan')
             ->where('month_year', '=', $data)
             ->where('version_id', '=', $request->id)
             ->first();

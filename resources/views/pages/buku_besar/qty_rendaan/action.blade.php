@@ -19,28 +19,22 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Material </label>
+                                <label>Version </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->material_name}}" name="detail_material_name"
-                                    id="detail_material_name" autocomplete="off">
+                                       placeholder="Nama version" value="{{$model->version}} - {{format_month($model->month_year, 'bi')}}" name="detail_version"
+                                       id="detail_version" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Periode </label>
+                                <label>Material </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Plant" value="{{$model->periode_name}}" name="detail_plant_name"
-                                    id="detail_periode_name" autocomplete="off">
+                                    placeholder="Nama Kategori" value="{{$model->material_code}} - {{$model->material_name}}" name="detail_material_name"
+                                    id="detail_material_name" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Region </label>
                                 <input disabled type="text" class="form-control form-control-sm"
                                     placeholder="Total Stock" value="{{$model->region_name}}" name="detail_region_name"
                                     id="detail_region_name" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <label>Deskripsi </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Deskripsi" value="{{$model->qty_rendaan_desc}}" name="detail_qty_rendaan_desc"
-                                    id="detail_qty_rendaan_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
@@ -76,34 +70,32 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_id}}" selected>{{$model->material_name}}</option>
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="edit_data_main_version{{$model->id}}" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Periode</label>
-                                <select name="main_periode" id="edit_data_main_periode{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->periode_id}}" selected>{{$model->periode_name}}</option>
+                                <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                <select name="edit_data_detal_version{{$model->id}}" id="edit_data_detal_version{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->asumsi_umum_id}}" selected>{{format_month($model->month_year, 'se')}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Material</label>
+                                <select name="edit_main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} - {{$model->material_name}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Region</label>
-                                <select name="main_region" id="edit_data_main_region{{$model->id}}" class="form-control custom-select select2">
+                                <select name="edit_data_main_region{{$model->id}}" id="edit_data_main_region{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->region_id}}" selected>{{$model->region_name}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Deskripsi </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi"
-                                    value="{{$model->qty_rendaan_desc}}" name="edit_qty_rendaan_desc"
-                                    id="edit_qty_rendaan_desc{{$model->id}}" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <label>Value </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->qty_rendaan_value}}" name="edit_qty_rendaan_value"
-                                    id="edit_qty_rendaan_value{{$model->id}}" autocomplete="off">
+                                <label class="form-label">Value </label>
+                                <input class="form-control" type="number" value="{{$model->qty_rendaan_value}}" placeholder="0" required name="edit_qty_rendaan_value{{$model->id}}" id="edit_qty_rendaan_value{{$model->id}}" min="0" step="0.01" title="consrate" pattern="^\d+(?:\.\d{1,2})?$" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -120,13 +112,13 @@
 <!--/div-->
 
 <script>
-    $('#edit_data_main_periode'+{{$model->id}}).select2({
+    $('#edit_data_main_version'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih periode',
+        placeholder: 'Pilih Versi',
         width: '100%',
         allowClear: false,
         ajax: {
-            url: "{{ route('periode_select') }}",
+            url: "{{ route('version_select') }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {
@@ -140,7 +132,56 @@
                 };
             }
         }
+    }).on('change', function () {
+        var data_version = $('#edit_data_main_version'+{{$model->id}}).val();
+        $('#edit_data_detal_version'+{{$model->id}}).append('<option selected disabled value="">Pilih Bulan</option>').select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih Bulan',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('version_detail_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                        version:data_version
+
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        });
     })
+
+    $('#edit_data_detal_version'+{{$model->id}}).select2({
+        dropdownParent: $('#modal_edit'+{{$model->id}}),
+        placeholder: 'Pilih Bulan',
+        width: '100%',
+        allowClear: false,
+        ajax: {
+            url: "{{ route('version_detail_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term,
+                    version:$('#edit_data_main_version'+{{$model->id}}).val()
+
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
+    });
 
     $('#edit_data_main_material'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
@@ -165,7 +206,7 @@
     })
 
     $('#edit_data_main_region'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
+        dropdownParent: $('#modal_add'),
         placeholder: 'Pilih region',
         width: '100%',
         allowClear: false,

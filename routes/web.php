@@ -168,6 +168,18 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GroupAccountController::class, 'export'])->name('export_group_account');
         });
 
+        Route::group(['prefix' => 'asumsi_umum'], function () {
+            Route::get('/', [AsumsiUmumController::class, 'index'])->name('asumsi_umum');
+            Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
+            Route::post('update', [AsumsiUmumController::class, 'update'])->name('update_asumsi_umum');
+            Route::post('delete', [AsumsiUmumController::class, 'delete'])->name('delete_asumsi_umum');
+
+            // view
+
+            Route::post('view_asumsi_umum', [AsumsiUmumController::class, 'view'])->name('view_asumsi_umum');
+            Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
+        });
+
         // Main Select2
         Route::group(['prefix' => 'main_data'], function () {
             Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
@@ -208,18 +220,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [ConsRateController::class, 'export'])->name('export_consrate');
         });
 
-        Route::group(['prefix' => 'asumsi_umum'], function () {
-            Route::get('/', [AsumsiUmumController::class, 'index'])->name('asumsi_umum');
-            Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
-            Route::post('update', [AsumsiUmumController::class, 'update'])->name('update_asumsi_umum');
-            Route::post('delete', [AsumsiUmumController::class, 'delete'])->name('delete_asumsi_umum');
-
-            // view
-
-            Route::post('view_asumsi_umum', [AsumsiUmumController::class, 'view'])->name('view_asumsi_umum');
-            Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
-        });
-
         Route::group(['prefix' => 'saldo-awal'], function () {
             Route::get('/', [SaldoAwalController::class, 'index'])->name('saldo_awal');
             Route::post('insert', [SaldoAwalController::class, 'create'])->name('insert_saldo_awal');
@@ -242,6 +242,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [QtyRenDaanController::class, 'create'])->name('insert_qty_rendaan');
             Route::post('update', [QtyRenDaanController::class, 'update'])->name('update_qty_rendaan');
             Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_qty_rendaan');
+            Route::post('export', [QtyRenDaanController::class, 'export'])->name('export_qty_renprod');
+            Route::post('import', [QtyRenDaanController::class, 'import'])->name('import_qty_rendaan');
         });
 
         Route::group(['prefix' => 'price-rendaan'], function () {

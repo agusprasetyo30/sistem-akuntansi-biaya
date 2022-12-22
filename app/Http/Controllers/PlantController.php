@@ -36,7 +36,7 @@ class PlantController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['plant_code'] = $request->code;
+            $input['plant_code'] = strtoupper($request->code);
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = auth()->user()->company_code;
@@ -44,6 +44,7 @@ class PlantController extends Controller
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
+//            dd($input);
 
             Plant::create($input);
 
@@ -58,12 +59,11 @@ class PlantController extends Controller
         try {
             $request->validate([
                 "code" => 'required',
-                //                "old_plant" => 'required',
                 "deskripsi" => 'required',
                 "is_active" => 'required',
             ]);
 
-            $input['plant_code'] = $request->code;
+            $input['plant_code'] = strtoupper($request->code);
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = auth()->user()->company_code;
