@@ -141,40 +141,40 @@
                 $("#template").css("display", "block");
             })
 
-            $("#template").on('click', function () {
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    xhrFields:{
-                        responseType: 'blob'
-                    },
-                    url: '{{route('export_qty_renprod')}}',
-                    data: {
-                        temp:$('#version').val()
-                    },
-                    success: function(result, status, xhr) {
+            // $("#template").on('click', function () {
+            //     $.ajax({
+            //         type: "POST",
+            //         headers: {
+            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //         },
+            //         xhrFields:{
+            //             responseType: 'blob'
+            //         },
+            //         url: '{{route('export_qty_rendaan')}}',
+            //         data: {
+            //             temp:$('#version').val()
+            //         },
+            //         success: function(result, status, xhr) {
 
-                        var disposition = xhr.getResponseHeader('content-disposition');
-                        var matches = /"([^"]*)"/.exec(disposition);
-                        var filename = (matches != null && matches[1] ? matches[1] : 'qty_rendaan.xlsx');
+            //             var disposition = xhr.getResponseHeader('content-disposition');
+            //             var matches = /"([^"]*)"/.exec(disposition);
+            //             var filename = (matches != null && matches[1] ? matches[1] : 'qty_rendaan.xlsx');
 
-                        // The actual download
-                        var blob = new Blob([result], {
-                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                        });
-                        var link = document.createElement('a');
-                        link.href = window.URL.createObjectURL(blob);
-                        link.download = filename;
+            //             // The actual download
+            //             var blob = new Blob([result], {
+            //                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            //             });
+            //             var link = document.createElement('a');
+            //             link.href = window.URL.createObjectURL(blob);
+            //             link.download = filename;
 
-                        document.body.appendChild(link);
+            //             document.body.appendChild(link);
 
-                        link.click();
-                        document.body.removeChild(link);
-                    }
-                })
-            })
+            //             link.click();
+            //             document.body.removeChild(link);
+            //         }
+            //     })
+            // })
 
             $('#data_main_material').select2({
                 dropdownParent: $('#modal_add'),

@@ -243,7 +243,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [QtyRenDaanController::class, 'create'])->name('insert_qty_rendaan');
             Route::post('update', [QtyRenDaanController::class, 'update'])->name('update_qty_rendaan');
             Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_qty_rendaan');
-            Route::post('export', [QtyRenDaanController::class, 'export'])->name('export_qty_renprod');
+            Route::post('export', [QtyRenDaanController::class, 'export'])->name('export_qty_rendaan');
             Route::post('import', [QtyRenDaanController::class, 'import'])->name('import_qty_rendaan');
         });
 
