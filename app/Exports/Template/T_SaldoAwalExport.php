@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Template;
 
-use App\Models\SaldoAwal;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class SaldoAwalExport implements WithHeadings
+class T_SaldoAwalExport implements WithHeadings, WithTitle
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -13,5 +13,10 @@ class SaldoAwalExport implements WithHeadings
     public function headings(): array
     {
         return ["gl_account", "valuation_class", "price_control", "material_code", "plant_code", "total_stock", "total_value"];
+    }
+
+    public function title(): string
+    {
+        return 'Saldo Awal';
     }
 }

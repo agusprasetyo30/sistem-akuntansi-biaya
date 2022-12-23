@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Template;
 
-use App\Models\KategoriMaterial;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class KategoriMaterialExport implements WithHeadings
+class T_KategoriMaterialExport implements WithHeadings, WithTitle
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -13,5 +13,10 @@ class KategoriMaterialExport implements WithHeadings
     public function headings(): array
     {
         return ["kategori_material_name", "kategori_material_desc", "is_active"];
+    }
+
+    public function title(): string
+    {
+        return 'Kategori Material';
     }
 }

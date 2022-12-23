@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\MultipleSheet;
 
+use App\Exports\Master\M_MaterialExport;
+use App\Exports\Template\T_KuantitiRenProdExport;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class TemplateQtyRenProdExport implements WithMultipleSheets
+class MS_KuantitiRenProdExport implements WithMultipleSheets
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -17,8 +19,8 @@ class TemplateQtyRenProdExport implements WithMultipleSheets
     public function sheets(): array
     {
         $sheets = [];
-        $sheets[] = new QtyRenProdExport($this->version);
-        $sheets[] = new MasterMaterialExport();
+        $sheets[] = new T_KuantitiRenProdExport($this->version);
+        $sheets[] = new M_MaterialExport();
         return $sheets;
     }
 }

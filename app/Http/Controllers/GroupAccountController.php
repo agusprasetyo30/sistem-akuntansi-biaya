@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\GroupAccountDataTable;
-use App\Exports\GroupAccountExport;
+use App\Exports\Template\T_GroupAccountExport;
 use App\Imports\GroupAccountImport;
 use App\Models\GroupAccount;
 use Illuminate\Http\Request;
@@ -136,6 +136,6 @@ class GroupAccountController extends Controller
 
     public function export()
     {
-        return Excel::download(new GroupAccountExport, 'group_account.xlsx');
+        return Excel::download(new T_GroupAccountExport, 'group_account.xlsx');
     }
 }

@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\ConsRateDataTable;
-use App\Exports\ConsRateExport;
-use App\Exports\SaldoAwalExport;
+use App\Exports\Template\T_ConsRateExport;
 use App\Imports\ConsRateImport;
 use App\Jobs\ConsRatePodcast;
 use App\Models\Asumsi_Umum;
 use App\Models\ConsRate;
-use App\Models\CostCenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
@@ -18,17 +16,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ConsRateController extends Controller
 {
-    public function index(Request $request, ConsRateDataTable $consRateDataTable){
+    public function index(Request $request, ConsRateDataTable $consRateDataTable)
+    {
 
-        if ($request->data == 'index'){
+        if ($request->data == 'index') {
             return $consRateDataTable->render('pages.buku_besar.consrate.index');
         }
 
         return view('pages.buku_besar.consrate.index');
-
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
             $request->validate([
                 "id_plant" => 'required',
@@ -47,7 +46,7 @@ class ConsRateController extends Controller
             $input['version_id'] = (int) $request->version;
             $input['product_code'] = $request->produk;
             $input['material_code'] = $request->material;
-            $input['cons_rate'] = (double) $request->consrate;
+            $input['cons_rate'] = (float) $request->consrate;
             $input['month_year'] = $data_asumsi->month_year;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = 'B000';
@@ -56,7 +55,7 @@ class ConsRateController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-//            dd($input);
+            //            dd($input);
 
             $data_cek = ConsRate::where([
                 'plant_code' => $request->id_plant,
@@ -65,72 +64,73 @@ class ConsRateController extends Controller
                 'company_code' => 'B000'
             ])->first();
 
-            if ($data_cek == null){
+            if ($data_cek == null) {
                 ConsRate::create($input);
-            }else{
+            } else {
                 ConsRate::where('id', $data_cek->id)->update($input);
             }
 
 
 
-//            ConsRate::where([
-//                'plant_code' => $request->id_plant,
-//                'version_id' => (int) $request->version,
-//                'product_code' => $request->produk,
-//                'company_code' => 'B000'
-//            ])
-//                ->upsert([
-//                [
-//                    'plant_code' => $request->id_plant,
-//                    'version_id' => (int) $request->version,
-//                    'product_code' => $request->produk,
-//                    'material_code' => $request->material,
-//                    'cons_rate' => (double) $request->consrate,
-//                    'month_year' => $data_asumsi->month_year,
-//                    'is_active' => $request->is_active,
-//                    'company_code' => 'B000',
-//                    'created_by' => auth()->user()->id,
-//                    'updated_by' => auth()->user()->id
-//                ],
-//            ],[
-//                'plant_code',
-//                'version_id',
-//                'product_code',
-//                'company_code'
-//            ], [
-//                'material_code',
-//                'cons_rate',
-//                'month_year',
-//                'is_active',
-//                'created_by',
-//                'updated_by'
-//            ]);
+            //            ConsRate::where([
+            //                'plant_code' => $request->id_plant,
+            //                'version_id' => (int) $request->version,
+            //                'product_code' => $request->produk,
+            //                'company_code' => 'B000'
+            //            ])
+            //                ->upsert([
+            //                [
+            //                    'plant_code' => $request->id_plant,
+            //                    'version_id' => (int) $request->version,
+            //                    'product_code' => $request->produk,
+            //                    'material_code' => $request->material,
+            //                    'cons_rate' => (double) $request->consrate,
+            //                    'month_year' => $data_asumsi->month_year,
+            //                    'is_active' => $request->is_active,
+            //                    'company_code' => 'B000',
+            //                    'created_by' => auth()->user()->id,
+            //                    'updated_by' => auth()->user()->id
+            //                ],
+            //            ],[
+            //                'plant_code',
+            //                'version_id',
+            //                'product_code',
+            //                'company_code'
+            //            ], [
+            //                'material_code',
+            //                'cons_rate',
+            //                'month_year',
+            //                'is_active',
+            //                'created_by',
+            //                'updated_by'
+            //            ]);
 
-//            ConsRate::updateOrCreate([
-//                [
-//                    'plant_code' => $request->id_plant,
-//                    'version_id' => (int) $request->version,
-//                    'product_code' => $request->produk,
-//                    'company_code' => 'B000',
-//                    'material_code' => $request->material,
-//                    'cons_rate' => (double) $request->consrate,
-//                    'month_year' => $data_asumsi->month_year,
-//                    'is_active' => $request->is_active,
-//                    'created_by' => auth()->user()->id,
-//                    'updated_by' => auth()->user()->id
-//                ]
-//            ]);
+            //            ConsRate::updateOrCreate([
+            //                [
+            //                    'plant_code' => $request->id_plant,
+            //                    'version_id' => (int) $request->version,
+            //                    'product_code' => $request->produk,
+            //                    'company_code' => 'B000',
+            //                    'material_code' => $request->material,
+            //                    'cons_rate' => (double) $request->consrate,
+            //                    'month_year' => $data_asumsi->month_year,
+            //                    'is_active' => $request->is_active,
+            //                    'created_by' => auth()->user()->id,
+            //                    'updated_by' => auth()->user()->id
+            //                ]
+            //            ]);
 
 
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         try {
             $request->validate([
                 "id_plant" => 'required',
@@ -141,15 +141,15 @@ class ConsRateController extends Controller
                 "consrate" => 'required',
                 "is_active" => 'required',
             ]);
-//            dd($request);
+            //            dd($request);
 
-            if (strpos($request->id_asumsi, '-') == true){
+            if (strpos($request->id_asumsi, '-') == true) {
                 $data_asumsi = Asumsi_Umum::where([
                     'month_year' => $request->id_asumsi,
                     'version_id' => (int) $request->version
                 ])
                     ->first();
-            }else{
+            } else {
                 $data_asumsi = Asumsi_Umum::where('id', $request->id_asumsi)
                     ->first();
             }
@@ -158,7 +158,7 @@ class ConsRateController extends Controller
             $input['version_id'] = (int) $request->version;
             $input['product_code'] = $request->produk;
             $input['material_code'] = $request->material;
-            $input['cons_rate'] = (double) $request->consrate;
+            $input['cons_rate'] = (float) $request->consrate;
             $input['month_year'] = $data_asumsi->month_year;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = 'B000';
@@ -171,30 +171,31 @@ class ConsRateController extends Controller
                 ->update($input);
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
-//            dd($exception);
+        } catch (\Exception $exception) {
+            //            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         try {
             ConsRate::where('id', $request->id)
                 ->delete();
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
     public function export()
     {
-        return Excel::download(new ConsRateExport(), 'cons_rate.xlsx');
+        return Excel::download(new T_ConsRateExport(), 'cons_rate.xlsx');
     }
 
     public function import(Request $request)
     {
-//        dd($request);
+        //        dd($request);
         try {
             $excel = Excel::toArray(new ConsRateImport(), $request->file);
             $colect = collect($excel[0]);
@@ -204,11 +205,11 @@ class ConsRateController extends Controller
 
             DB::transaction(function () use ($colect, $version, $header) {
                 ConsRate::where('version_id', $version)->delete();
-//                $batch = Bus::batch([])->dispatch();
+                //                $batch = Bus::batch([])->dispatch();
 
-                $colect->chunk(10000)->each(function ($query) use ($header,  $version){
-//                    $batch->add(new ConsRatePodcast($query, $header, $version));
-                    foreach ($query as $data){
+                $colect->chunk(10000)->each(function ($query) use ($header,  $version) {
+                    //                    $batch->add(new ConsRatePodcast($query, $header, $version));
+                    foreach ($query as $data) {
                         $data_consrate = array_combine($header, $data);
                         $data_consrate['version_id'] = (int) $version;
                         $data_consrate['company_code'] = 'B000';
@@ -220,8 +221,8 @@ class ConsRateController extends Controller
                 });
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
-        }catch (\Exception $exception){
-//            dd($exception);
+        } catch (\Exception $exception) {
+            //            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

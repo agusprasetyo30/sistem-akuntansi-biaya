@@ -358,6 +358,11 @@
                                 $("#modal_import input").val("")
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
+                        },
+                        error: function(){
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                         }
                     })
                 }
@@ -365,6 +370,7 @@
         })
 
         $('#submit-export').on('click', function () {
+            console.log('asss')
             $.ajax({
                 xhrFields: {
                     responseType: 'blob',
@@ -394,6 +400,11 @@
 
                     link.click();
                     document.body.removeChild(link);
+                },
+                error: function(){
+                    $('#modal_import').modal('hide');
+                    $("#modal_import input").val("")
+                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                 }
             })
         })

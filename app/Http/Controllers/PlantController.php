@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\PlantDataTable;
-use App\Exports\PlantExport;
+use App\Exports\Template\T_PlantExport;
 use App\Imports\PlantImport;
 use App\Models\Periode;
 use App\Models\Plant;
@@ -44,7 +44,7 @@ class PlantController extends Controller
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
-//            dd($input);
+            //            dd($input);
 
             Plant::create($input);
 
@@ -126,6 +126,6 @@ class PlantController extends Controller
 
     public function export()
     {
-        return Excel::download(new PlantExport, 'plant.xlsx');
+        return Excel::download(new T_PlantExport, 'plant.xlsx');
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Master;
 
 use App\Models\Material;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class MasterMaterialExport implements FromQuery, WithTitle, WithHeadings
+class M_MaterialExport implements FromQuery, WithTitle, WithHeadings
 {
     /**
      * @return Builder

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Template;
 
-use App\Models\QtyRenProd;
 use App\Models\Version_Asumsi;
 use DateInterval;
 use DatePeriod;
@@ -10,7 +9,7 @@ use DateTime;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class QtyRenProdExport implements WithHeadings, WithTitle
+class T_KuantitiRenProdExport implements WithHeadings, WithTitle
 {
     protected $version;
 
