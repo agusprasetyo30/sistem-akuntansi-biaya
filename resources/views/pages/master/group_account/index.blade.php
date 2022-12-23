@@ -73,6 +73,10 @@
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
+
+            $('#group_account_code').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
         })
 
         function get_data(){
