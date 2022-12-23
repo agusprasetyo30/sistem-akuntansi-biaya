@@ -15,9 +15,10 @@ use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure
+class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets
 {
     use Importable, SkipsErrors, SkipsFailures;
 
@@ -33,25 +34,44 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
      */
     public function model(array $row)
     {
-        $data = [
-            'company_code' => auth()->user()->company_code,
-            'material_code' => $row['material_code'],
-            'version_id' => $this->version,
-            'month_year' => Carbon::now(),
-            'qty_renprod_desc' => $row['qty_renprod_desc'],
-            'qty_renprod_value' => $row['qty_renprod_value'],
-            'created_by' => auth()->user()->id,
-            'created_at' => Carbon::now(),
-        ];
-
-        QtyRenProd::insert($data);
+        // return $row;
+        // dd($row);
+        $lengthPeriode = count($row);
+        $list = [];
+        $arrHeader = array_keys($row);
+        $arr = array_values($row);
+        for ($i = 1; $i < $lengthPeriode; $i++) {
+            // dd($arrHeader[$i]);
+            // $list = [$arr[0], $arr[$i], $arrHeader[$i]];
+            // $dt = date('Y-m-d', strtotime($arrHeader[$i]));
+            $dy = substr($arrHeader[$i], 0, 4);
+            $dm = substr($arrHeader[$i], 5, 2);
+            $year = $dy . '-' . $dm . '-01';
+            // $dt = date_format($arrHeader[$i], "Y-m-01");
+            $list = [
+                'company_code' => auth()->user()->company_code,
+                'material_code' => $arr[0],
+                'version_id' => $this->version,
+                'month_year' => $year,
+                'qty_renprod_value' => (float) $arr[$i],
+                'created_by' => auth()->user()->id,
+                'created_at' => Carbon::now(),
+            ];
+            QtyRenProd::insert($list);
+        }
     }
 
     public function rules(): array
     {
         return [
-            'company_code' => [''],
-            'material_code' => [''],
+            'material_code' => ['required'],
+        ];
+    }
+
+    public function sheets(): array
+    {
+        return [
+            0 => $this,
         ];
     }
 }

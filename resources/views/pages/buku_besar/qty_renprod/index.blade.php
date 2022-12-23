@@ -37,7 +37,6 @@
                                 <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSI</th>
                                 <th data-type='text' data-name='month_year' class="border-bottom-0 text-center">MONTH YEAR</th>
                                 <th data-type='text' data-name='material_name' class="border-bottom-0 text-center">MATERIAL</th>
-                                <th data-type='text' data-name='qty_renprod_desc' class="border-bottom-0 text-center">DESKRIPSI</th>
                                 <th data-type='text' data-name='qty_renprod_value' class="border-bottom-0 text-center">VALUE</th>
                                 <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
                             </tr>
@@ -46,7 +45,6 @@
                                 <th data-type='text' data-name='version' class="text-center"></th>
                                 <th data-type='text' data-name='month_year' class="text-center"></th>
                                 <th data-type='text' data-name='material_name' class="text-center"></th>
-                                <th data-type='text' data-name='qty_renprod_desc' class="text-center"></th>
                                 <th data-type='text' data-name='qty_renprod_value' class="text-center"></th>
                                 <th data-type='text' data-name='nomor' class="text-center"></th>
                             </tr>
@@ -251,7 +249,6 @@
                     { data: 'version', name: 'version_asumsi.version', orderable:false},
                     { data: 'month_year', name: 'month_year', orderable:false},
                     { data: 'material_name', name: 'material.material_name', orderable:false},
-                    { data: 'qty_renprod_desc', name: 'qty_renprod_desc', orderable:false},
                     { data: 'qty_renprod_value', name: 'qty_renprod_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
@@ -283,7 +280,6 @@
                         data: {
                             _token: "{{ csrf_token() }}",
                             material_code: $('#data_main_material').val(),
-                            qty_renprod_desc: $('#qty_renprod_desc').val(),
                             qty_renprod_value: $('#qty_renprod_value').val(),
                             version_id: $('#data_main_version').val(),
                             month_year: $('#data_detail_version').val(),
@@ -425,7 +421,6 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                             material_code: $('#edit_data_main_material'+id).val(),
-                            qty_renprod_desc: $('#edit_qty_renprod_desc'+id).val(),
                             qty_renprod_value: $('#edit_qty_renprod_value'+id).val(),
                             version_id: $('#edit_data_main_version'+id).val(),
                             month_year: $('#edit_data_detail_version'+id).val(),

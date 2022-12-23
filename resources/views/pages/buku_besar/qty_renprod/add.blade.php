@@ -37,11 +37,6 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Deskripsi </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi" name="qty_renprod_desc"
-                                    id="qty_renprod_desc" autocomplete="off">
-                            </div>
-                            <div class="form-group">
                                 <label>Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Value" name="qty_renprod_value"
                                     id="qty_renprod_value" autocomplete="off">
