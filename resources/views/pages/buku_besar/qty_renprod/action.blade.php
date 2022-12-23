@@ -35,12 +35,6 @@
                                     id="detail_material_code" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Deskripsi </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Deskripsi" value="{{$model->qty_renprod_desc}}" name="detail_qty_renprod_desc"
-                                    id="detail_qty_renprod_desc" autocomplete="off">
-                            </div>
-                            <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
                                     placeholder="Nilai Satuan" value="{{helpRupiah($model->qty_renprod_value)}}" name="detail_qty_renprod_value"
@@ -90,12 +84,6 @@
                                 <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->material_code}}" selected>{{$model->material_code}} {{$model->material_name}}</option>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Deskripsi </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi"
-                                    value="{{$model->qty_renprod_desc}}" name="edit_qty_renprod_desc"
-                                    id="edit_qty_renprod_desc{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
