@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\RegionDataTable;
-use App\Exports\RegionsExport;
+use App\Exports\Template\T_RegionsExport;
 use App\Imports\RegionsImport;
 use App\Models\Regions;
 use Carbon\Carbon;
@@ -127,6 +127,6 @@ class RegionsController extends Controller
 
     public function export()
     {
-        return Excel::download(new RegionsExport, 'regions.xlsx');
+        return Excel::download(new T_RegionsExport, 'regions.xlsx');
     }
 }

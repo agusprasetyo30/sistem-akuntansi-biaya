@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\QtyRenProdDataTable;
-use App\Exports\TemplateQtyRenProdExport;
+use App\Exports\MultipleSheet\MS_KuantitiRenProdExport;
 use App\Imports\QtyRenProdImport;
 use App\Models\Asumsi_Umum;
 use App\Models\QtyRenProd;
@@ -112,6 +112,10 @@ class QtyRenProdController extends Controller
                 return response()->json(['Code' => 0]);
             }
 
+            if (!$request->version) {
+                return response()->json(['Code' => 0]);
+            }
+
             $renprod = QtyRenProd::where('version_id', $request->version)->count();
 
             if ($renprod > 0) {
@@ -152,8 +156,11 @@ class QtyRenProdController extends Controller
 
     public function export(Request $request)
     {
+        if (!$request->version) {
+            return response()->json(['Code' => 500]);
+        }
         $version = $request->version;
 
-        return Excel::download(new TemplateQtyRenProdExport($version), 'qty_renprod.xlsx');
+        return Excel::download(new MS_KuantitiRenProdExport($version), 'qty_renprod.xlsx');
     }
 }

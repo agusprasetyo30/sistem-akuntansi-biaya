@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\MaterialDataTable;
-use App\Exports\MaterialExport;
+use App\Exports\MultipleSheet\MS_MaterialExport;
 use App\Imports\MaterialImport;
 use App\Models\Material;
 use Carbon\Carbon;
@@ -155,6 +155,6 @@ class MaterialController extends Controller
 
     public function export()
     {
-        return Excel::download(new MaterialExport, 'material.xlsx');
+        return Excel::download(new MS_MaterialExport(), 'material.xlsx');
     }
 }

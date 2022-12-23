@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\SaldoAwalDataTable;
-use App\Exports\SaldoAwalExport;
+use App\Exports\Template\T_SaldoAwalExport;
 use App\Imports\SaldoAwalImport;
 use App\Models\Saldo_Awal;
 use App\Models\Version_Asumsi;
@@ -135,6 +135,10 @@ class SaldoAwalController extends Controller
                 return response()->json(['Code' => 0]);
             }
 
+            if (!$request->version) {
+                return response()->json(['Code' => 0]);
+            }
+
             $sawal = Saldo_Awal::where('version_id', $request->version)->count();
 
             if ($sawal > 0) {
@@ -168,6 +172,6 @@ class SaldoAwalController extends Controller
 
     public function export()
     {
-        return Excel::download(new SaldoAwalExport, 'saldo_awal.xlsx');
+        return Excel::download(new T_SaldoAwalExport, 'saldo_awal.xlsx');
     }
 }

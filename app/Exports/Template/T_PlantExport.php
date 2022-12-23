@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Template;
 
-use App\Models\Plant;
-use DateTime;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class PlantExport implements WithHeadings
+class T_PlantExport implements WithHeadings, WithTitle
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -14,5 +13,10 @@ class PlantExport implements WithHeadings
     public function headings(): array
     {
         return ["plant_code", "plant_desc", "is_active"];
+    }
+
+    public function title(): string
+    {
+        return 'Plant';
     }
 }
