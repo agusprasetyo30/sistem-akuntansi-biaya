@@ -106,6 +106,10 @@
 
 <script>
     $(document).ready(function () {
+        $('#edit_group_account_code'+'{{$model->group_account_code}}').keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
+
         $('#edit_is_active' + '{{$model->group_account_code}}').select2({
             dropdownParent: $('#modal_edit' + '{{$model->group_account_code}}'),
             placeholder: 'Pilih Status',

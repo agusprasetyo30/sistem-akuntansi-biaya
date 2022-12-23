@@ -175,6 +175,10 @@
 
 <script>
     $(document).ready(function () {
+        $('#edit_material_code'+'{{$model->material_code}}').keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
+
         $('#edit_is_active'+'{{$model->material_code}}').select2({
             dropdownParent: $('#modal_edit'+'{{$model->material_code}}'),
             placeholder: 'Pilih Kategori',
