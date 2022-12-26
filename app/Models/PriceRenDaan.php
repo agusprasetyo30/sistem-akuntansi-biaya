@@ -12,10 +12,11 @@ class PriceRenDaan extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'material_id',
-        'periode_id',
+        'company_code',
+        'material_code',
         'region_id',
-        'price_rendaan_desc',
+        'version_id',
+        'asumsi_umum_id',
         'price_rendaan_value',
         'created_by',
         'created_at',

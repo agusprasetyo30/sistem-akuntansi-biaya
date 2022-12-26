@@ -13,17 +13,23 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                <select name="detail_version" id="data_detal_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label">Material</label>
                                 <select name="main_material" id="data_main_material" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Material</option>
                                 </select>
-                            </div>                   
-                            <div class="form-group">
-                                <label class="form-label">Periode</label>
-                                <select name="main_periode" id="data_main_periode" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Periode</option>
-                                </select>
-                            </div>                   
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">Region</label>
                                 <select name="main_region" id="data_main_region" class="form-control custom-select select2">
@@ -31,14 +37,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Deskripsi </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi" name="price_rendaan_desc"
-                                    id="price_rendaan_desc" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <label>Value </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="price_rendaan_value"
-                                    id="price_rendaan_value" autocomplete="off">
+                                <label class="form-label">Value </label>
+                                <input class="form-control" type="number" placeholder="0" required name="price_rendaan_value" id="price_rendaan_value" min="0" step="0.01" title="Price Rencana Pengadaan" pattern="^\d+(?:\.\d{1,2})?$" autocomplete="off">
                             </div>
                         </div>
                     </div>

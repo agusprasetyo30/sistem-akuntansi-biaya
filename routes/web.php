@@ -252,6 +252,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [PriceRenDaanController::class, 'create'])->name('insert_price_rendaan');
             Route::post('update', [PriceRenDaanController::class, 'update'])->name('update_price_rendaan');
             Route::post('delete', [PriceRenDaanController::class, 'delete'])->name('delete_price_rendaan');
+            Route::post('export', [PriceRenDaanController::class, 'export'])->name('export_price_rendaan');
+            Route::post('import', [PriceRenDaanController::class, 'import'])->name('import_price_rendaan');
         });
 
         Route::group(['prefix' => 'total-daan'], function () {
