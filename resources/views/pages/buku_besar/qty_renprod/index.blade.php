@@ -181,7 +181,10 @@
                         };
                     }
                 }
+            }).on('change', function () {
+                $("#submit-export").css("display", "block");
             })
+
 
             $('#qty_renprod_value').on('keyup', function(){
                 let rupiah = formatRupiah($(this).val(), "Rp ")
@@ -247,7 +250,7 @@
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
                     { data: 'version', name: 'version_asumsi.version', orderable:false},
-                    { data: 'month_year', name: 'month_year', orderable:false},
+                    { data: 'month_year', name: 'filter_month_year', orderable:false},
                     { data: 'material_name', name: 'material.material_name', orderable:false},
                     { data: 'qty_renprod_value', name: 'qty_renprod_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},

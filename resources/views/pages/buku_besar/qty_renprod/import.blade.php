@@ -14,20 +14,23 @@
                     <div class="col-md-12 mt1">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="form-group mb-3">
-                                    <label class="form-label">Versi Asumsi</label>
-                                    <select name="version" id="version" class="form-control custom-select select2">
-                                        <option value="" disabled selected>Pilih Versi</option>
-                                    </select>
-                                </div>  
-                                <div class="col-lg mb-3">
+                                <div class="col-lg mb-5">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template ( <a href="#" id="submit-export" >Download Template</a> )
-                                        </li>
+                                        <li>Format harus sesuai template</li>
+                                        <li>Template akan tersedia setelah memilih versi</li>
+                                        <li>Jika data value "kosong" maka data akan terisi '0'</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
+                                        <li>Kode Material harus sama dengan kode pada Master Material (data tersedia ditemplate)</li>
                                     </ol> 
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label">Versi Asumsi</label>
+                                    <select name="version" id="version" class="form-control form-control-sm custom-select select2">
+                                        <option value="" disabled selected>Pilih Versi</option>
+                                    </select>
+                                    <button style="display: none;" type="button" class="btn btn-teal mt-2" id="submit-export"><i class="fe fe-download me-2"></i>Download Template</button>
+                                </div>  
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
                                 </div>

@@ -112,9 +112,9 @@ class QtyRenProdController extends Controller
                 return response()->json(['Code' => 0]);
             }
 
-            if (!$request->version) {
-                return response()->json(['Code' => 0]);
-            }
+            // if (!$request->version) {
+            //     return response()->json(['Code' => 0]);
+            // }
 
             $renprod = QtyRenProd::where('version_id', $request->version)->count();
 

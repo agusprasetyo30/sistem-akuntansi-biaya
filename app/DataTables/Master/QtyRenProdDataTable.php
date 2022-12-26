@@ -19,9 +19,10 @@ class QtyRenProdDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('qty_renprod')->select('qty_renprod.*', 'material.material_name', 'material.material_code', 'version_asumsi.version')
+        $query = DB::table('qty_renprod')->select('qty_renprod.*', 'material.material_name', 'material.material_code', 'version_asumsi.version', 'asumsi_umum.month_year')
             ->leftjoin('material', 'material.material_code', '=', 'qty_renprod.material_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_renprod.version_id')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_renprod.asumsi_umum_id')
             ->whereNull('qty_renprod.deleted_at');
 
         return datatables()
@@ -35,6 +36,9 @@ class QtyRenProdDataTable extends DataTable
             })
             ->editColumn('material_name', function ($query) {
                 return $query->material_code . ' ' . $query->material_name;
+            })
+            ->filterColumn('filter_month_year', function ($query, $keyword){
+                $query->where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
             })
             ->addColumn('action', 'pages.buku_besar.qty_renprod.action')
             ->escapeColumns([]);
