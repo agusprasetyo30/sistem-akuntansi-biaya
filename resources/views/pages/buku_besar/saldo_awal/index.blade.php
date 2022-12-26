@@ -343,6 +343,10 @@
                                 $('#modal_import').modal('hide');
                                 $("#modal_import input").val("")
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 500){
                                 $('#modal_import').modal('hide');
                                 $("#modal_import input").val("")

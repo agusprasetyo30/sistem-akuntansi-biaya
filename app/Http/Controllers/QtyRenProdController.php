@@ -107,46 +107,41 @@ class QtyRenProdController extends Controller
 
     public function import(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            "file" => 'required',
+        ], validatorMsg());
+
+        if ($validator->fails())
+            return $this->makeValidMsg($validator);
+
         try {
-            if (!$request->file('file')) {
-                return response()->json(['Code' => 0]);
-            }
+            DB::transaction(function () use ($request){
+                
+                $excel = Excel::toArray(new QtyRenProdImport(), $request->file);
+                $colect = collect($excel[0]);
+                $header = array_keys($colect[0]);
+                $data_versi = explode('_', $header[1]);
+                $version = Asumsi_Umum::where('id', $data_versi[2])->first();
+                QtyRenProd::where('version_id', $version->version_id)->delete();
 
-            // if (!$request->version) {
-            //     return response()->json(['Code' => 0]);
-            // }
+                $file = $request->file('file')->store('import');
+                $import = new QtyRenProdImport();
+                $import->import($file);
 
-            $renprod = QtyRenProd::where('version_id', $request->version)->count();
+                $data_fail = $import->failures();
 
-            if ($renprod > 0) {
-                QtyRenProd::where('version_id', $request->version)->delete();
-            }
+                if ($import->failures()->isNotEmpty()) {
+                    $err = [];
 
-            $version = $request->version;
-            $file = $request->file('file')->store('import');
-            // dd($file);
-            $import = new QtyRenProdImport($version);
-            // $import->onlySheets('Kuantiti Rencana Produksi');
-            $import->import($file);
-
-            // $import = new QtyRenProdImport($version);
-            // $import->onlySheets('Kuantiti Rencana Produksi');
-
-            // Excel::import($import, $file);
-
-            $data_fail = $import->failures();
-
-            if ($import->failures()->isNotEmpty()) {
-                $err = [];
-
-                foreach ($data_fail as $rows) {
-                    $er = implode(' ', array_values($rows->errors()));
-                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                    array_push($err, $hasil);
+                    foreach ($data_fail as $rows) {
+                        $er = implode(' ', array_values($rows->errors()));
+                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                        array_push($err, $hasil);
+                    }
+                    // dd(implode(' ', $err));
+                    return response()->json(['Code' => 500, 'msg' => $err]);
                 }
-                // dd(implode(' ', $err));
-                return response()->json(['Code' => 500, 'msg' => $err]);
-            }
+            });
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
         } catch (Exception $exception) {
