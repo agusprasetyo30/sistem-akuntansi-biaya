@@ -10,10 +10,12 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure
+class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsErrors, SkipsFailures;
     /**
@@ -37,6 +39,16 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
         ]);
     }
 
+    public function batchSize(): int
+    {
+        return 50;
+    }
+    
+    public function chunkSize(): int
+    {
+        return 50;
+    }
+    
     public function rules(): array
     {
         return [

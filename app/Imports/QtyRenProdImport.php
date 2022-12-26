@@ -14,11 +14,13 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets
+class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsErrors, SkipsFailures;
 
@@ -59,6 +61,16 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
             ];
             QtyRenProd::insert($list);
         }
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
+    }
+    
+    public function chunkSize(): int
+    {
+        return 50;
     }
 
     public function rules(): array

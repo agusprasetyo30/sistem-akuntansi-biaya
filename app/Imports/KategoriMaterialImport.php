@@ -9,10 +9,12 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class KategoriMaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure
+class KategoriMaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsErrors, SkipsFailures;
     /**
@@ -29,6 +31,16 @@ class KategoriMaterialImport implements ToModel, WithHeadingRow, SkipsOnError, W
             'is_active' => $row['is_active'],
             'created_by' => auth()->user()->id,
         ]);
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
+    }
+    
+    public function chunkSize(): int
+    {
+        return 50;
     }
 
     public function rules(): array
