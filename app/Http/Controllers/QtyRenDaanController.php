@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\QtyRenDaanDataTable;
-use App\Exports\KuantitiRenDaanExport;
+use App\Exports\MultipleSheet\MS_KuantitiRenDaanExport;
+use App\Exports\Template\T_KuantitiRenDaanExport;
 use App\Imports\KuantitiRenDaanImport;
 use App\Models\Asumsi_Umum;
 use App\Models\QtyRenDaan;
@@ -98,7 +99,7 @@ class QtyRenDaanController extends Controller
     {
         $version = $request->temp;
 
-        return Excel::download(new KuantitiRenDaanExport($version), 'qty_rendaan.xlsx', null, [\Maatwebsite\Excel\Excel::XLSX]);
+        return Excel::download(new MS_KuantitiRenDaanExport($version), 'qty_rendaan.xlsx', null, [\Maatwebsite\Excel\Excel::XLSX]);
     }
 
     public function import(Request $request)
@@ -109,30 +110,32 @@ class QtyRenDaanController extends Controller
             $header = $colect[0];
             unset($colect[0]);
             DB::transaction(function () use ($colect, $header){
-                $versi = null;
-                foreach ($colect as $key => $items){
-                    $result = [];
-                    foreach ($header as $head => $data){
-                        if ($head > 1){
-                            $temp_date = explode('|', $data);
-                            $input['qty_rendaan_value'] = $items[$head];
-                            $input['asumsi_umum_id'] = $temp_date[1];
-                            if ($versi == null){
-                                $versi = $temp_date[1];
-                                $data_version = Asumsi_Umum::where('id', $versi)
-                                    ->first();
+                $colect->chunk(20)->each(function ($query) use ($header){
+                    $versi = null;
+                    foreach ($query as $items){
+                        $result = [];
+                        foreach ($header as $head => $data){
+                            if ($head > 1){
+                                $temp_date = explode('|', $data);
+                                $input['qty_rendaan_value'] = $items[$head];
+                                $input['asumsi_umum_id'] = $temp_date[1];
+                                if ($versi == null){
+                                    $versi = $temp_date[1];
+                                    $data_version = Asumsi_Umum::where('id', $versi)
+                                        ->first();
+                                }
+                                $input['version_id'] = $data_version->version_id;
+                                $input['company_code'] = auth()->user()->company_code;
+                                $input['created_by'] = auth()->user()->id;
+                                $input['updated_by'] = auth()->user()->id;
+                                array_push($result, $input);
+                            }else{
+                                $input[$data] = $items[$head];
                             }
-                            $input['version_id'] = $data_version->version_id;
-                            $input['company_code'] = auth()->user()->company_code;
-                            $input['created_by'] = auth()->user()->id;
-                            $input['updated_by'] = auth()->user()->id;
-                            array_push($result, $input);
-                        }else{
-                            $input[$data] = $items[$head];
                         }
+                        collect($result)->each(function ($result){QtyRenDaan::create($result);});
                     }
-                    collect($result)->each(function ($result){QtyRenDaan::create($result);});
-                }
+                });
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         }catch (\Exception $exception){
