@@ -9,11 +9,13 @@ use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -21,24 +23,12 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets, WithBatchInserts, WithChunkReading
+class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets, WithBatchInserts, WithChunkReading, ToCollection
 {
     use Importable, SkipsErrors, SkipsFailures;
 
-    protected $version;
-
-    function __construct($version)
-    {
-        $this->version = $version;
-    }
-
-    /**
-     * @param Collection $collection
-     */
     public function model(array $row)
     {
-        // return $row;
-        // dd($row);
         $lengthPeriode = count($row);
         $list = [];
         $arrHeader = array_keys($row);
@@ -64,6 +54,7 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
                 'created_by' => auth()->user()->id,
                 'created_at' => Carbon::now(),
             ];
+
             QtyRenProd::insert($list);
         }
     }
@@ -90,5 +81,10 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
         return [
             0 => $this,
         ];
+    }
+
+    public function collection(Collection $collection)
+    {
+        return $collection;
     }
 }
