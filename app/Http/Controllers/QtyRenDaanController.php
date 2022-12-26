@@ -104,38 +104,61 @@ class QtyRenDaanController extends Controller
 
     public function import(Request $request)
     {
+        $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
+//        try {
+//            $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
+//            $colect = collect($excel[0]);
+//            $header = $colect[0];
+//            unset($colect[0]);
+//            DB::transaction(function () use ($colect, $header){
+//                $colect->chunk(20)->each(function ($query) use ($header){
+//                    $versi = null;
+//                    foreach ($query as $items){
+//                        $result = [];
+//                        foreach ($header as $head => $data){
+//                            if ($head > 1){
+//                                $temp_date = explode('|', $data);
+//                                $input['qty_rendaan_value'] = $items[$head];
+//                                $input['asumsi_umum_id'] = $temp_date[1];
+//                                if ($versi == null){
+//                                    $versi = $temp_date[1];
+//                                    $data_version = Asumsi_Umum::where('id', $versi)
+//                                        ->first();
+//                                }
+//                                $input['version_id'] = $data_version->version_id;
+//                                $input['company_code'] = auth()->user()->company_code;
+//                                $input['created_by'] = auth()->user()->id;
+//                                $input['updated_by'] = auth()->user()->id;
+//                                array_push($result, $input);
+//                            }else{
+//                                $input[$data] = $items[$head];
+//                            }
+//                        }
+//                        collect($result)->each(function ($result){QtyRenDaan::create($result);});
+//                    }
+//                });
+//            });
+//            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+//        }catch (\Exception $exception){
+//            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+//        }
+
         try {
-            $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
-            $colect = collect($excel[0]);
-            $header = $colect[0];
-            unset($colect[0]);
-            DB::transaction(function () use ($colect, $header){
-                $colect->chunk(20)->each(function ($query) use ($header){
-                    $versi = null;
-                    foreach ($query as $items){
-                        $result = [];
-                        foreach ($header as $head => $data){
-                            if ($head > 1){
-                                $temp_date = explode('|', $data);
-                                $input['qty_rendaan_value'] = $items[$head];
-                                $input['asumsi_umum_id'] = $temp_date[1];
-                                if ($versi == null){
-                                    $versi = $temp_date[1];
-                                    $data_version = Asumsi_Umum::where('id', $versi)
-                                        ->first();
-                                }
-                                $input['version_id'] = $data_version->version_id;
-                                $input['company_code'] = auth()->user()->company_code;
-                                $input['created_by'] = auth()->user()->id;
-                                $input['updated_by'] = auth()->user()->id;
-                                array_push($result, $input);
-                            }else{
-                                $input[$data] = $items[$head];
-                            }
-                        }
-                        collect($result)->each(function ($result){QtyRenDaan::create($result);});
-                    }
-                });
+            DB::transaction(function () use ($request){
+                $request->validate([
+                    'file' => 'required'
+                ]);
+                $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
+                $colect = collect($excel[0]);
+                $header = array_keys($colect[0]);
+                $data_versi = explode('_', $header[2]);
+                $version = Asumsi_Umum::where('id', $data_versi[2])->first();
+                QtyRenDaan::where('version_id', $version->version_id)->delete();
+
+                $file = $request->file('file')->store('import');
+
+                $data = new KuantitiRenDaanImport();
+                $data->import($file);
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         }catch (\Exception $exception){

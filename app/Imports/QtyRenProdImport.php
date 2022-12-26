@@ -48,7 +48,7 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
             // dd($arrHeader[$i]);
             // $list = [$arr[0], $arr[$i], $arrHeader[$i]];
             // $dt = date('Y-m-d', strtotime($arrHeader[$i]));
-            
+
             $asum_id = substr($arrHeader[$i], 8);
             $verasum = Asumsi_Umum::where('id',$asum_id)->first();
             // $dy = substr($arrHeader[$i], 0, 4);
@@ -72,7 +72,7 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
     {
         return 50;
     }
-    
+
     public function chunkSize(): int
     {
         return 50;
