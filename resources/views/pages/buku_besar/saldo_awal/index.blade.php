@@ -171,6 +171,8 @@
                         };
                     }
                 }
+            }).on('change', function () {
+                $("#submit-export").css("display", "block");
             })
         })
 
@@ -354,6 +356,45 @@
                             }
                         }
                     })
+                }
+            })
+        })
+
+        $('#submit-export').on('click', function () {
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                type: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('export_saldo_awal')}}',
+                data: {
+                    version: $('#version').val(),
+                },
+                success:function (result, status, xhr) {
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : 'saldo_awal.xlsx');
+
+                    // The actual download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(){
+                    $('#modal_import').modal('hide');
+                    $("#modal_import input").val("")
+                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                 }
             })
         })

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\SaldoAwalDataTable;
-use App\Exports\Template\T_SaldoAwalExport;
+use App\Exports\MultipleSheet\MS_SaldoAwalExport;
 use App\Imports\SaldoAwalImport;
 use App\Models\Saldo_Awal;
 use App\Models\Version_Asumsi;
@@ -135,15 +135,15 @@ class SaldoAwalController extends Controller
                 return response()->json(['Code' => 0]);
             }
 
-            if (!$request->version) {
-                return response()->json(['Code' => 0]);
-            }
+            // if (!$request->version) {
+            //     return response()->json(['Code' => 0]);
+            // }
 
-            $sawal = Saldo_Awal::where('version_id', $request->version)->count();
+            // $sawal = Saldo_Awal::where('version_id', $request->version)->count();
 
-            if ($sawal > 0) {
-                Saldo_Awal::where('version_id', $request->version)->delete();
-            }
+            // if ($sawal > 0) {
+            //     Saldo_Awal::where('version_id', $request->version)->delete();
+            // }
 
             $version = $request->version;
             $file = $request->file('file')->store('import');
@@ -170,8 +170,13 @@ class SaldoAwalController extends Controller
         }
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new T_SaldoAwalExport, 'saldo_awal.xlsx');
+        if (!$request->version) {
+            return response()->json(['Code' => 500]);
+        }
+        $version = $request->version;
+
+        return Excel::download(new MS_SaldoAwalExport($version), 'saldo_awal.xlsx');
     }
 }
