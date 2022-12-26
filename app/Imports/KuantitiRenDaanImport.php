@@ -2,6 +2,8 @@
 
 namespace App\Imports;
 
+use App\Models\Asumsi_Umum;
+use App\Models\QtyRenDaan;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -17,7 +19,7 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets, WithBatchInserts, WithChunkReading
+class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets, WithBatchInserts, WithChunkReading, ToCollection
 {
     use Importable, SkipsErrors, SkipsFailures;
 
@@ -25,32 +27,33 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
     {
         $lengthPeriode = count($row);
         $list = [];
+        $versi = null;
         $arrHeader = array_keys($row);
         $arr = array_values($row);
 
-        dd($arr, $row);
-        for ($i = 1; $i < $lengthPeriode; $i++) {
-            if ($i==2){
-                dd('dwadaw', $arrHeader[$i], $arrHeader);
-            }
+        for ($i = 0; $i < $lengthPeriode; $i++) {
 
-            // $list = [$arr[0], $arr[$i], $arrHeader[$i]];
-            // $dt = date('Y-m-d', strtotime($arrHeader[$i]));
-//            $dy = substr($arrHeader[$i], 0, 4);
-//            $dm = substr($arrHeader[$i], 5, 2);
-//            $year = $dy . '-' . $dm . '-01';
-//            // $dt = date_format($arrHeader[$i], "Y-m-01");
-//            $list = [
-//                'company_code' => auth()->user()->company_code,
-//                'material_code' => $arr[0],
-//                'version_id' => $this->version,
-//                'month_year' => $year,
-//                'qty_renprod_value' => (float) $arr[$i],
-//                'created_by' => auth()->user()->id,
-//                'created_at' => Carbon::now(),
-//            ];
+            if ($i > 1){
+                $temp_date = explode('_', $arrHeader[$i]);
+
+                $input['qty_rendaan_value'] = $arr[$i];
+                $input['asumsi_umum_id'] = $temp_date[2];
+                if ($versi == null){
+                    $versi = $temp_date[2];
+                    $data_version = Asumsi_Umum::where('id', $versi)
+                        ->first();
+
+                }
+                $input['version_id'] = $data_version->version_id;
+                $input['company_code'] = auth()->user()->company_code;
+                $input['created_by'] = auth()->user()->id;
+                $input['updated_by'] = auth()->user()->id;
+                array_push($list, $input);
+            }else{
+                $input[$arrHeader[$i]] = $arr[$i];
+            }
         }
-        dd($row, $lengthPeriode, $arrHeader, $arr, $list);
+        collect($list)->each(function ($result){QtyRenDaan::create($result);});
     }
 
     public function batchSize(): int
@@ -67,6 +70,7 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
     {
         return [
             'material_code' => ['required'],
+            'region_id' => ['required'],
         ];
     }
 
@@ -76,11 +80,13 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
             0 => $this,
         ];
     }
+
+    public function collection(Collection $collection)
+    {
+        return $collection;
+    }
 //    /**
 //    * @param Collection $collection
 //    */
-//    public function collection(Collection $collection)
-//    {
-//        return $collection;
-//    }
+
 }

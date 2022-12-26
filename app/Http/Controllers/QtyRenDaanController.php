@@ -104,11 +104,7 @@ class QtyRenDaanController extends Controller
 
     public function import(Request $request)
     {
-//        $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
-        $file = $request->file('file')->store('import');
-
-        $data = new KuantitiRenDaanImport();
-        $data->import($file);
+        $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
 //        try {
 //            $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
 //            $colect = collect($excel[0]);
@@ -146,5 +142,27 @@ class QtyRenDaanController extends Controller
 //        }catch (\Exception $exception){
 //            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
 //        }
+
+        try {
+            DB::transaction(function () use ($request){
+                $request->validate([
+                    'file' => 'required'
+                ]);
+                $excel = Excel::toArray(new KuantitiRenDaanImport(), $request->file);
+                $colect = collect($excel[0]);
+                $header = array_keys($colect[0]);
+                $data_versi = explode('_', $header[2]);
+                $version = Asumsi_Umum::where('id', $data_versi[2])->first();
+                QtyRenDaan::where('version_id', $version->version_id)->delete();
+
+                $file = $request->file('file')->store('import');
+
+                $data = new KuantitiRenDaanImport();
+                $data->import($file);
+            });
+            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+        }catch (\Exception $exception){
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
     }
 }

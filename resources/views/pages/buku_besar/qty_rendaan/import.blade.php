@@ -28,7 +28,7 @@
                                     <select name="version" id="version" class="form-control custom-select select2">
                                         <option value="" disabled selected>Pilih Versi</option>
                                     </select>
-                                    <button style="display: none;" type="button" class="btn btn-teal mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
+                                    <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
