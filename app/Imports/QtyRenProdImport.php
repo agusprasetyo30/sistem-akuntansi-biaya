@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Models\Asumsi_Umum;
 use App\Models\QtyRenProd;
 use App\Models\Version_Asumsi;
 use Carbon\Carbon;
@@ -42,20 +43,23 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
         $list = [];
         $arrHeader = array_keys($row);
         $arr = array_values($row);
-        dd($arr);
+
         for ($i = 1; $i < $lengthPeriode; $i++) {
             // dd($arrHeader[$i]);
             // $list = [$arr[0], $arr[$i], $arrHeader[$i]];
             // $dt = date('Y-m-d', strtotime($arrHeader[$i]));
-            $dy = substr($arrHeader[$i], 0, 4);
-            $dm = substr($arrHeader[$i], 5, 2);
-            $year = $dy . '-' . $dm . '-01';
+
+            $asum_id = substr($arrHeader[$i], 8);
+            $verasum = Asumsi_Umum::where('id',$asum_id)->first();
+            // $dy = substr($arrHeader[$i], 0, 4);
+            // $dm = substr($arrHeader[$i], 5, 2);
+            // $year = $dy . '-' . $dm . '-01';
             // $dt = date_format($arrHeader[$i], "Y-m-01");
             $list = [
                 'company_code' => auth()->user()->company_code,
                 'material_code' => $arr[0],
-                'version_id' => $this->version,
-                'month_year' => $year,
+                'version_id' => $verasum->version_id,
+                'asumsi_umum_id' => (int) $asum_id,
                 'qty_renprod_value' => (float) $arr[$i],
                 'created_by' => auth()->user()->id,
                 'created_at' => Carbon::now(),
