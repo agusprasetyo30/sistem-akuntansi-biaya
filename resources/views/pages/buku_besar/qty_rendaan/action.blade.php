@@ -206,7 +206,7 @@
     })
 
     $('#edit_data_main_region'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_add'),
+        dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih region',
         width: '100%',
         allowClear: false,
