@@ -249,7 +249,7 @@
                                     $("#modal_import input").val("")
                                     $('#is_active').val('').trigger("change");
                                     toastr.success('Data Berhasil Disimpan', 'Success')
-                                    get_data()
+                                    // get_data()
                                 }else if (response.Code === 0){
                                     $('#modal_import').modal('hide');
                                     $("#modal_import input").val("")
