@@ -15,7 +15,7 @@ class M_KategoriMaterialExport implements FromQuery, WithTitle, WithHeadings
     public function query()
     {
         return KategoriMaterial::query()
-            ->select('company_code', 'kategori_material_name', 'kategori_material_desc');
+            ->select('id', 'company_code', 'kategori_material_name', 'kategori_material_desc');
     }
     /**
      * @return string
@@ -27,6 +27,6 @@ class M_KategoriMaterialExport implements FromQuery, WithTitle, WithHeadings
 
     public function headings(): array
     {
-        return ["company_code", "kategori_material_name", "kategori_material_desc"];
+        return ["id", "company_code", "kategori_material_name", "kategori_material_desc"];
     }
 }

@@ -10,10 +10,12 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure
+class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsErrors, SkipsFailures;
 
@@ -50,6 +52,16 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
         ]);
     }
 
+    public function batchSize(): int
+    {
+        return 50;
+    }
+    
+    public function chunkSize(): int
+    {
+        return 50;
+    }
+    
     public function rules(): array
     {
         return [

@@ -9,11 +9,13 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Throwable;
 
-class PlantImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure
+class PlantImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading
 {
     use Importable, SkipsErrors, SkipsFailures;
     /**
@@ -30,6 +32,16 @@ class PlantImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
         ]);
+    }
+
+    public function batchSize(): int
+    {
+        return 50;
+    }
+    
+    public function chunkSize(): int
+    {
+        return 50;
     }
 
     public function rules(): array
