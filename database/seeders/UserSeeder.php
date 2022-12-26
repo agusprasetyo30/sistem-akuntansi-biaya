@@ -61,5 +61,13 @@ class UserSeeder extends Seeder
             'password'=> bcrypt('Petrokimia1'),
             'company_code'=> 'B000',
         ]);
+
+        User::create([
+            'name' => 'bayu',
+            'username' => 'bayu',
+            'email' => 'bayu@gmail.com',
+            'password'=> bcrypt('Petrokimia1'),
+            'company_code'=> 'B000',
+        ]);
     }
 }

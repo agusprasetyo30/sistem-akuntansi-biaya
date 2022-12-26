@@ -20,7 +20,7 @@ class CreateQtyRenProdTable extends Migration
             $table->string('material_code')->unsigned();
             $table->foreign('material_code')->references('material_code')->on('material');
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
-            $table->timestamp('month_year');
+            $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onUpdate('cascade');
             $table->float('qty_renprod_value');
             $table->dateTime('created_at');
             $table->integer('created_by');

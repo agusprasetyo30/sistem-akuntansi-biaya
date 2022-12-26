@@ -24,5 +24,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PlantSeeder::class);
         $this->call(VersionAsumsiSeeder::class);
         $this->call(AsumsiUmumSeeder::class);
+        $this->call(RegionSeeder::class);
     }
 }
