@@ -13,9 +13,10 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading
+class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading, WithMultipleSheets
 {
     use Importable, SkipsErrors, SkipsFailures;
     /**
@@ -58,6 +59,13 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
             'group_account_code' => ['required'],
             'kategori_material_id' => ['required'],
             'material_uom' => ['required'],
+        ];
+    }
+
+    public function sheets(): array
+    {
+        return [
+            0 => $this,
         ];
     }
 }

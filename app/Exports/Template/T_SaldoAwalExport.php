@@ -7,12 +7,22 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class T_SaldoAwalExport implements WithHeadings, WithTitle
 {
+    protected $version;
+
+    function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     /**
      * @return \Illuminate\Support\Collection
      */
     public function headings(): array
     {
-        return ["gl_account", "valuation_class", "price_control", "material_code", "plant_code", "total_stock", "total_value"];
+        $result = ["gl_account", "valuation_class", "price_control", "material_code", "plant_code", "total_stock", "total_value"];
+        array_push($result,'version_id_' . $this->version);
+        
+        return $result;
     }
 
     public function title(): string

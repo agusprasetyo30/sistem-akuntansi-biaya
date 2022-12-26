@@ -373,7 +373,6 @@
         })
 
         $('#submit-export').on('click', function () {
-            console.log('asss')
             $.ajax({
                 xhrFields: {
                     responseType: 'blob',

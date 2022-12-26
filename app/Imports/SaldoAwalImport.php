@@ -13,9 +13,10 @@ use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithValidation;
 
-class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading
+class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading, WithMultipleSheets
 {
     use Importable, SkipsErrors, SkipsFailures;
 
@@ -33,13 +34,19 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
      */
     public function model(array $row)
     {
-        $satuan = $row['total_value'] / $row['total_stock'];
-        $my = Version_Asumsi::where('id', $this->version)->first();
+        $arrHeader = array_keys($row);
+        $arrVer = substr($arrHeader[7], 11);
 
+        $satuan = $row['total_value'] / $row['total_stock'];
+        // $my = Version_Asumsi::where('id', $this->version)->first();
+        $my = Version_Asumsi::where('id', $arrVer)->first();
+        
         return new Saldo_Awal([
             'company_code' => auth()->user()->company_code,
+            // 'month_year' => $my->saldo_awal,
+            // 'version_id' => $this->version,
             'month_year' => $my->saldo_awal,
-            'version_id' => $this->version,
+            'version_id' => (int) $arrVer,
             'gl_account' => $row['gl_account'],
             'valuation_class' => $row['valuation_class'],
             'price_control' => $row['price_control'],
@@ -72,6 +79,13 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
             'plant_code' => ['required'],
             'total_stock' => ['required'],
             'total_value' => ['required'],
+        ];
+    }
+
+    public function sheets(): array
+    {
+        return [
+            0 => $this,
         ];
     }
 }
