@@ -6,8 +6,9 @@ use App\Models\Asumsi_Umum;
 use App\Models\QtyRenDaan;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class T_KuantitiRenDaanExport implements WithHeadings
+class T_KuantitiRenDaanExport implements WithHeadings, WithTitle
 {
     protected $version;
 
@@ -16,6 +17,10 @@ class T_KuantitiRenDaanExport implements WithHeadings
         $this->version = $version;
     }
 
+    public function title(): string
+    {
+        return 'Template Kuantiti Rencana Pengadaan';
+    }
 
     public function headings(): array
     {
@@ -28,7 +33,6 @@ class T_KuantitiRenDaanExport implements WithHeadings
                 $temp = format_month($items->month_year, 'fe') . '|' . $items->id;
                 array_push($template, $temp);
             }
-
             return $template;
         } catch (\Exception $exception) {
             return $template;

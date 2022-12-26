@@ -37,6 +37,9 @@ class QtyRenDaanDataTable extends DataTable
                 $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%')
                     ->orWhere('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
             })
+            ->addColumn('value', function ($query){
+                return rupiah($query->qty_rendaan_value);
+            })
             ->addColumn('material', function ($query){
                 return $query->material_code.' - '.$query->material_name;
             })

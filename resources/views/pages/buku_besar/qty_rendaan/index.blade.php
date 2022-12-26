@@ -141,40 +141,40 @@
                 $("#template").css("display", "block");
             })
 
-            // $("#template").on('click', function () {
-            //     $.ajax({
-            //         type: "POST",
-            //         headers: {
-            //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            //         },
-            //         xhrFields:{
-            //             responseType: 'blob'
-            //         },
-            //         url: '{{route('export_qty_rendaan')}}',
-            //         data: {
-            //             temp:$('#version').val()
-            //         },
-            //         success: function(result, status, xhr) {
+            $("#template").on('click', function () {
+                $.ajax({
+                     type: "POST",
+                     headers: {
+                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                     },
+                     xhrFields:{
+                         responseType: 'blob'
+                     },
+                     url: '{{route('export_qty_rendaan')}}',
+                     data: {
+                         temp:$('#version').val()
+                     },
+                     success: function(result, status, xhr) {
 
-            //             var disposition = xhr.getResponseHeader('content-disposition');
-            //             var matches = /"([^"]*)"/.exec(disposition);
-            //             var filename = (matches != null && matches[1] ? matches[1] : 'qty_rendaan.xlsx');
+                         var disposition = xhr.getResponseHeader('content-disposition');
+                         var matches = /"([^"]*)"/.exec(disposition);
+                         var filename = (matches != null && matches[1] ? matches[1] : 'qty_rendaan.xlsx');
 
-            //             // The actual download
-            //             var blob = new Blob([result], {
-            //                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-            //             });
-            //             var link = document.createElement('a');
-            //             link.href = window.URL.createObjectURL(blob);
-            //             link.download = filename;
+                         // The actual download
+                         var blob = new Blob([result], {
+                             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                         });
+                         var link = document.createElement('a');
+                         link.href = window.URL.createObjectURL(blob);
+                         link.download = filename;
 
-            //             document.body.appendChild(link);
+                         document.body.appendChild(link);
 
-            //             link.click();
-            //             document.body.removeChild(link);
-            //         }
-            //     })
-            // })
+                         link.click();
+                         document.body.removeChild(link);
+                     }
+                 })
+             })
 
             $('#data_main_material').select2({
                 dropdownParent: $('#modal_add'),
@@ -331,7 +331,7 @@
                     { data: 'material', name: 'filter_material', orderable:false},
                     { data: 'version_periode', name: 'filter_version_periode', orderable:false},
                     { data: 'region_name', name: 'filter_region', orderable:false},
-                    { data: 'qty_rendaan_value', name: 'qty_rendaan_value', orderable:false},
+                    { data: 'value', name: 'qty_rendaan_value', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
