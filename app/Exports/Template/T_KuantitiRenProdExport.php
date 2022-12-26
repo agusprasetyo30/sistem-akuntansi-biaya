@@ -2,6 +2,7 @@
 
 namespace App\Exports\Template;
 
+use App\Models\Asumsi_Umum;
 use App\Models\Version_Asumsi;
 use DateInterval;
 use DatePeriod;
@@ -24,26 +25,30 @@ class T_KuantitiRenProdExport implements WithHeadings, WithTitle
     public function headings(): array
     {
 
-        if ($this->version == null) {
-            $asum = Version_Asumsi::first();
-        } else {
-            $asum = Version_Asumsi::where('id', $this->version)->first();
-        }
+        // if ($this->version == null) {
+        //     $asum = Version_Asumsi::first();
+        // } else {
+        //     $asum = Version_Asumsi::where('id', $this->version)->first();
+        // }
 
+        // $asum = Version_Asumsi::where('id', $this->version)->first();
+
+        $period = Asumsi_Umum::where('version_id', $this->version)->get();
+        
         // $asum = Periode::where('id', $this->version)->first();
-        $awal = date('Y-m-d', strtotime($asum->awal_periode));
-        $akhir = date('Y-m-d', strtotime($asum->akhir_periode . ' + 1 month'));
-        $start = new DateTime($awal);
-        $interval = new DateInterval('P1M');
-        $end = new DateTime($akhir);
-        $period = new DatePeriod($start, $interval, $end);
+        // $awal = date('Y-m-d', strtotime($asum->awal_periode));
+        // $akhir = date('Y-m-d', strtotime($asum->akhir_periode . ' + 1 month'));
+        // $start = new DateTime($awal);
+        // $interval = new DateInterval('P1M');
+        // $end = new DateTime($akhir);
+        // $period = new DatePeriod($start, $interval, $end);
         $result = ["material_code"];
 
         foreach ($period as $dt) {
-            $per = $dt->format('Y-m');
+            $per = format_month($dt->month_year,'ye').' | '.$dt->id;
             array_push($result, $per);
         }
-
+        
         return $result;
     }
 
