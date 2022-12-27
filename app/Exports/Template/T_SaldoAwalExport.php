@@ -20,7 +20,6 @@ class T_SaldoAwalExport implements WithHeadings, WithTitle
     public function headings(): array
     {
         $result = ["gl_account", "valuation_class", "price_control", "material_code", "plant_code", "total_stock", "total_value"];
-        array_push($result,'version_id_' . $this->version);
         
         return $result;
     }

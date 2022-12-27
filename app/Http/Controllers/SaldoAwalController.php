@@ -132,22 +132,23 @@ class SaldoAwalController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "file" => 'required',
+            "version" => 'required',
         ], validatorMsg());
 
         if ($validator->fails())
             return $this->makeValidMsg($validator);
-
+            
         try {
             DB::transaction(function () use ($request){
-                
-                $excel = Excel::toArray(new SaldoAwalImport(), $request->file);
-                $colect = collect($excel[0]);
-                $header = array_keys($colect[0]);
-                $data_versi = explode('_', $header[7]);
-                Saldo_Awal::where('version_id', $data_versi[2])->delete();
+                $version = $request->version;
+                // $excel = Excel::toArray(new SaldoAwalImport($version), $request->file);
+                // $colect = collect($excel[0]);
+                // $header = array_keys($colect[0]);
+                // $data_versi = explode('_', $header[7]);
+                Saldo_Awal::where('version_id', $version)->delete();
 
                 $file = $request->file('file')->store('import');
-                $import = new SaldoAwalImport();
+                $import = new SaldoAwalImport($version);
                 $import->import($file);
 
                 $data_fail = $import->failures();
