@@ -36,7 +36,7 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
             if ($i > 1){
                 $temp_date = explode('_', $arrHeader[$i]);
 
-                $input['qty_rendaan_value'] = $arr[$i];
+                $input['qty_rendaan_value'] = $arr[$i] != null ? $arr[$i]:0;
                 $input['asumsi_umum_id'] = $temp_date[2];
                 if ($versi == null){
                     $versi = $temp_date[2];
@@ -53,6 +53,7 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
                 $input[$arrHeader[$i]] = $arr[$i];
             }
         }
+        dd($list);
         collect($list)->each(function ($result){QtyRenDaan::create($result);});
     }
 

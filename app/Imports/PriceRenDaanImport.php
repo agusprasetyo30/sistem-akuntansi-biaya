@@ -37,7 +37,7 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
             if ($i > 1){
                 $temp_date = explode('_', $arrHeader[$i]);
 
-                $input['price_rendaan_value'] = $arr[$i];
+                $input['price_rendaan_value'] = $arr[$i] != null ? $arr[$i]:0;
                 $input['asumsi_umum_id'] = $temp_date[2];
                 if ($versi == null){
                     $versi = $temp_date[2];

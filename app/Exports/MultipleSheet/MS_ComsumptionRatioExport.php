@@ -22,6 +22,7 @@ class MS_ComsumptionRatioExport implements WithMultipleSheets
     {
         $sheets = [];
         $sheets[] = new T_ConsRateExport($this->version);
+        $sheets[] = new M_PlantExport();
         $sheets[] = new M_MaterialExport();
         $sheets[] = new M_AsumsiUmumExport();
         return $sheets;
