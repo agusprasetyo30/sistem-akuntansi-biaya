@@ -66,7 +66,7 @@ class AsumsiUmumController extends Controller
 
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
-//            dd($exception);
+            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
