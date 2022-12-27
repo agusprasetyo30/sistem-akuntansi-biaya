@@ -15,7 +15,6 @@ class VersionAsumsiSeeder extends Seeder
     public function run()
     {
         DB::table('version_asumsi')->insert([
-            'id' => 1,
             'company_code' => 'B000',
             'version' => '2022v1',
             'data_bulan' => '4',
@@ -26,7 +25,6 @@ class VersionAsumsiSeeder extends Seeder
         ]);
 
         DB::table('version_asumsi')->insert([
-            'id' => 2,
             'company_code' => 'B000',
             'version' => '2022v2',
             'data_bulan' => '5',

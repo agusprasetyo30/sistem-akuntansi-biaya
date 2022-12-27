@@ -11,10 +11,17 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class MS_ComsumptionRatioExport implements WithMultipleSheets
 {
+    protected $version;
+
+    public function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function sheets(): array
     {
         $sheets = [];
-        $sheets[] = new T_ConsRateExport();
+        $sheets[] = new T_ConsRateExport($this->version);
         $sheets[] = new M_MaterialExport();
         $sheets[] = new M_AsumsiUmumExport();
         return $sheets;

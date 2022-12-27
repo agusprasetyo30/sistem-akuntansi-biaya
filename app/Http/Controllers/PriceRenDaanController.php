@@ -98,7 +98,7 @@ class PriceRenDaanController extends Controller
     {
         $version = $request->temp;
 
-        return Excel::download(new MS_PriceRenDaanExport($version), 'price_rendaan.xlsx', null, [\Maatwebsite\Excel\Excel::XLSX]);
+        return Excel::download(new MS_PriceRenDaanExport($version), 'price_rendaan.xlsx');
     }
 
     public function import(Request $request)

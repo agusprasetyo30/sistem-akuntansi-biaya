@@ -15,7 +15,6 @@ class AsumsiUmumSeeder extends Seeder
     public function run()
     {
         DB::table('asumsi_umum')->insert([
-            'id' => 1,
             'company_code' => 'B000',
             'version_id' => 1,
             'usd_rate' => '10500',
@@ -27,7 +26,6 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 2,
             'company_code' => 'B000',
             'version_id' => 1,
             'usd_rate' => '10900',
@@ -39,7 +37,7 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 3,
+
             'company_code' => 'B000',
             'version_id' => 1,
             'usd_rate' => '11100',
@@ -51,7 +49,6 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 4,
             'company_code' => 'B000',
             'version_id' => 1,
             'usd_rate' => '11400',
@@ -63,7 +60,6 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 5,
             'company_code' => 'B000',
             'version_id' => 2,
             'usd_rate' => '11500',
@@ -74,7 +70,6 @@ class AsumsiUmumSeeder extends Seeder
             'created_by' => '1',
         ]);
         DB::table('asumsi_umum')->insert([
-            'id' => 6,
             'company_code' => 'B000',
             'version_id' => 2,
             'usd_rate' => '11300',
@@ -86,7 +81,6 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 7,
             'company_code' => 'B000',
             'version_id' => 2,
             'usd_rate' => '11400',
@@ -98,7 +92,6 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 8,
             'company_code' => 'B000',
             'version_id' => 2,
             'usd_rate' => '11500',
@@ -110,7 +103,6 @@ class AsumsiUmumSeeder extends Seeder
         ]);
 
         DB::table('asumsi_umum')->insert([
-            'id' => 9,
             'company_code' => 'B000',
             'version_id' => 2,
             'usd_rate' => '11600',

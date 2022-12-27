@@ -46,11 +46,11 @@
 				<li><a href="{{url('buku-besar/qty-rendaan')}}" class="slide-item"> Kuantiti Rencana Pengadaan</a></li>
 				<li><a href="{{url('buku-besar/price-rendaan')}}" class="slide-item"> Price Rencana Pengadaan</a></li>
 				<li><a href="{{url('buku-besar/total-daan')}}" class="slide-item"> Total Pengadaan</a></li>
-				<!-- <li><a href="#" class="slide-item"> ZCO</a></li>
-				<li><a href="#" class="slide-item"> SALR</a></li>
+				<li><a href="{{url('buku-besar/zco')}}" class="slide-item"> ZCO</a></li>
+				<li><a href="{{url('buku-besar/salr')}}" class="slide-item"> SALR</a></li>
 				<li><a href="#" class="slide-item"> Laba Rugi</a></li>
 				<li><a href="#" class="slide-item"> Pakai Jual</a></li>
-				<li><a href="#" class="slide-item"> Balans</a></li> -->
+				<li><a href="#" class="slide-item"> Balans</a></li>
 			</ul>
 		</li>
 		<li class="slide">

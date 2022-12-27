@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Saldo Awal</h5>
+                <h5 class="modal-title" id="largemodal1">Import Consumption Ratio</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -17,7 +17,9 @@
                                 <div class="col-lg mb-5">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template ( <a href="{{ route('export_consrate') }}">Download Template</a> )</li>
+                                        <li>Format harus sesuai template</li>
+                                        <li>Template akan tersedia setelah memilih versi</li>
+{{--                                        <li>Jika data value "kosong" maka data akan terisi '0'</li>--}}
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol>
                                 </div>
@@ -26,6 +28,7 @@
                                     <select name="version" id="version" class="form-control custom-select select2">
                                         <option value="" disabled selected>Pilih Versi</option>
                                     </select>
+                                    <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
