@@ -25,7 +25,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">CONSUMPTION RATE</div>
+                    <div class="card-title">CONSUMPTION RATIO</div>
                 </div>
                 <div class="card-body">
                     <div class="">
@@ -169,6 +169,43 @@
                         };
                     }
                 }
+            }).on('change', function () {
+                $("#template").css("display", "block");
+            })
+
+            $("#template").on('click', function () {
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    xhrFields:{
+                        responseType: 'blob'
+                    },
+                    url: '{{route('export_consrate')}}',
+                    data: {
+                        temp:$('#version').val()
+                    },
+                    success: function(result, status, xhr) {
+
+                        var disposition = xhr.getResponseHeader('content-disposition');
+                        var matches = /"([^"]*)"/.exec(disposition);
+                        var filename = (matches != null && matches[1] ? matches[1] : 'cons_rate.xlsx');
+
+                        // The actual download
+                        var blob = new Blob([result], {
+                            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                        });
+                        var link = document.createElement('a');
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = filename;
+
+                        document.body.appendChild(link);
+
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                })
             })
 
             $('#data_main_version').select2({

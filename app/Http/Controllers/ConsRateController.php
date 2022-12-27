@@ -19,7 +19,11 @@ class ConsRateController extends Controller
 {
     public function index(Request $request, ConsRateDataTable $consRateDataTable)
     {
+//        $data = Asumsi_Umum::query()
+//            ->select('version_asumsi.id', 'version_asumsi.version', DB::raw("date_part( 'year' :: TEXT, asumsi_umum.month_year )||'-'|| lpad(date_part( 'month' :: TEXT, asumsi_umum.month_year)::TEXT, 2, '0') as month_year"), DB::raw("date_part( 'year' :: TEXT, asumsi_umum.saldo_awal )||'-'|| lpad(date_part( 'month' :: TEXT, asumsi_umum.asumsi_umum.saldo_awal)::TEXT, 2, '0') as saldo_awal"))
+//            ->leftJoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id')->get();
 
+//        dd($data);
         if ($request->data == 'index') {
             return $consRateDataTable->render('pages.buku_besar.consrate.index');
         }
@@ -136,37 +140,33 @@ class ConsRateController extends Controller
         }
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new MS_ComsumptionRatioExport(), 'cons_rate.xlsx');
+        $version = $request->temp;
+
+        return Excel::download(new MS_ComsumptionRatioExport($version), 'cons_rate.xlsx');
     }
 
     public function import(Request $request)
     {
         //        dd($request);
         try {
-            $excel = Excel::toArray(new ConsRateImport(), $request->file);
-            $colect = collect($excel[0]);
-            $version = $request->version;
-            $header = $colect[0];
-            unset($colect[0]);
 
-            DB::transaction(function () use ($colect, $version, $header) {
-                ConsRate::where('version_id', $version)->delete();
-                //                $batch = Bus::batch([])->dispatch();
+            DB::transaction(function () use ($request) {
+                $request->validate([
+                    'file' => 'required'
+                ]);
 
-                $colect->chunk(10000)->each(function ($query) use ($header,  $version) {
-                    //                    $batch->add(new ConsRatePodcast($query, $header, $version));
-                    foreach ($query as $data) {
-                        $data_consrate = array_combine($header, $data);
-                        $data_consrate['version_id'] = (int) $version;
-                        $data_consrate['company_code'] = 'B000';
-                        $data_consrate['is_active'] = true;
-                        $data_consrate['created_by'] = auth()->user()->id;
-                        $data_consrate['updated_by'] = auth()->user()->id;
-                        ConsRate::create($data_consrate);
-                    }
-                });
+                $excel = Excel::toArray(new ConsRateImport(), $request->file);
+                $colect = collect($excel[0]);
+                $header = array_keys($colect[0]);
+                $data_versi = explode('_', $header[1]);
+                ConsRate::where('version_id', $data_versi[2])->delete();
+
+                $file = $request->file('file')->store('import');
+
+                $data = new ConsRateImport();
+                $data->import($file);
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
