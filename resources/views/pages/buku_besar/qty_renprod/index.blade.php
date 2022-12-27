@@ -345,7 +345,8 @@
                                 $("#modal_import input").val("")
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
-                                setTimeout(location.reload(), 4000);
+                                get_data();
+                                // setTimeout(location.reload(), 4000);
                             }else if (response.Code === 0){
                                 $('#modal_import').modal('hide');
                                 $("#modal_import input").val("")

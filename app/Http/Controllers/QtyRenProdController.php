@@ -35,15 +35,12 @@ class QtyRenProdController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $data_asumsi = Asumsi_Umum::where('id', $request->month_year)
-                ->first();
-
             $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
-
+            
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_code;
             $input['version_id'] = $request->version_id;
-            $input['month_year'] = $data_asumsi->month_year;
+            $input['asumsi_umum_id'] = $request->month_year;
             $input['qty_renprod_value'] = $qty_renprod_value;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -70,14 +67,12 @@ class QtyRenProdController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $data_asumsi = Asumsi_Umum::where('id', $request->month_year)->first();
-
             $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
-
+            
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_code;
             $input['version_id'] = $request->version_id;
-            $input['month_year'] = $data_asumsi->month_year;
+            $input['asumsi_umum_id'] = $request->month_year;
             $input['qty_renprod_value'] = $qty_renprod_value;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();

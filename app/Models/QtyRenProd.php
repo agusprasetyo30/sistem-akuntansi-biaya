@@ -15,7 +15,7 @@ class QtyRenProd extends Model
         'company_code',
         'material_code',
         'version_id',
-        'month_year',
+        'asumsi_umum_id',
         'qty_renprod_desc',
         'qty_renprod_value',
         'created_by',
