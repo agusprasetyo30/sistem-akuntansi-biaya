@@ -260,9 +260,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'total-daan'], function () {
             Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
-            Route::post('insert', [TotalDaanController::class, 'create'])->name('insert_total_daan');
-            Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
-            Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
         });
 
         Route::group(['prefix' => 'zco'], function () {
