@@ -66,6 +66,10 @@
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
+
+            $('#company_code').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
         })
 
         function get_data(){

@@ -34,7 +34,7 @@ class CompanyController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = $request->company_code;
+            $input['company_code'] = strtoupper($request->company_code);
             $input['company_name'] = $request->company_name;
             $input['link_sso'] = $request->link_sso;
             $input['is_active'] = $request->is_active;
@@ -61,7 +61,7 @@ class CompanyController extends Controller
                 "is_active" => 'required',
             ]);
 
-            $input['company_code'] = $request->company_code;
+            $input['company_code'] = strtoupper($request->company_code);
             $input['company_name'] = $request->company_name;
             $input['link_sso'] = $request->link_sso;
             $input['is_active'] = $request->is_active;
