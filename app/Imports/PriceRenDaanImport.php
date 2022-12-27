@@ -21,6 +21,13 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithMultipleSheets, WithBatchInserts, WithChunkReading, ToCollection
 {
     use Importable, SkipsErrors, SkipsFailures;
+
+    protected $version;
+
+    public function __construct($version)
+    {
+        $this->version = $version;
+    }
     /**
     * @param Collection $collection
     */
@@ -28,7 +35,6 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
     {
         $lengthPeriode = count($row);
         $list = [];
-        $versi = null;
         $arrHeader = array_keys($row);
         $arr = array_values($row);
 
@@ -36,16 +42,16 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
 
             if ($i > 1){
                 $temp_date = explode('_', $arrHeader[$i]);
+                $date = $temp_date[0].'-'.$temp_date[1];
+
+                $versi = Asumsi_Umum::where('month_year', 'ilike', '%'.$date.'%')
+                    ->where('version_id', $this->version)
+                    ->first();
 
                 $input['price_rendaan_value'] = $arr[$i] != null ? $arr[$i]:0;
-                $input['asumsi_umum_id'] = $temp_date[2];
-                if ($versi == null){
-                    $versi = $temp_date[2];
-                    $data_version = Asumsi_Umum::where('id', $versi)
-                        ->first();
+                $input['asumsi_umum_id'] = $versi->id;
 
-                }
-                $input['version_id'] = $data_version->version_id;
+                $input['version_id'] = $this->version;
                 $input['company_code'] = auth()->user()->company_code;
                 $input['created_by'] = auth()->user()->id;
                 $input['updated_by'] = auth()->user()->id;

@@ -21,16 +21,21 @@ class ConsRateImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
 {
     use Importable, SkipsErrors, SkipsFailures;
 
+    protected $version;
+
+    public function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function model(array $row){
         $arrHeader = array_keys($row);
-        $temp_versi = explode('_', $arrHeader[1]);
-        $version = $temp_versi[2];
         $arrHeader[1]='month_year';
         $arrvalue = array_values($row);
         $arrvalue[1] = $arrvalue[1].'-01';
         $arrvalue[4] = $arrvalue[4] != null ? $arrvalue[4] : 0;
         $data = array_combine($arrHeader, $arrvalue);
-        $data['version_id'] = $version;
+        $data['version_id'] = $this->version;
         $data['company_code'] = 'B000';
         $data['created_by'] = auth()->user()->id;
         $data['updated_by'] = auth()->user()->id;

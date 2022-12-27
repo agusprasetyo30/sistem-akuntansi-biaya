@@ -38,7 +38,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value </label>
-                                <input class="form-control" type="number" placeholder="0" required name="price_rendaan_value" id="price_rendaan_value" min="0" step="0.01" title="Price Rencana Pengadaan" pattern="^\d+(?:\.\d{1,2})?$" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="0" required name="price_rendaan_value" id="price_rendaan_value" autocomplete="off">
                             </div>
                         </div>
                     </div>

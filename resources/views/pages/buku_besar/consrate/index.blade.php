@@ -101,17 +101,54 @@
             })
 
             $('#submit_import').on('click', function () {
-
-                if ($('#version').val() === null){
+                var versi = $('#version').val();
+                if (versi === null){
                     toastr.warning('Data Versi Asumsi Harus diisi', 'Warning')
                 }else {
+                    console.log(versi)
                     $.ajax({
                         type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        processData: false,
-                        contentType: false,
+                        url: '{{route('check_consrate')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            version:$('#version').val()
+                        },
+                        success:function (response) {
+                            if (response.Code === 200){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data akan segera dikirim",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        submit()
+                                    }
+                                })
+                            }else if (response.Code === 201){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        submit()
+                                    }
+                                })
+                            }
+                        }
                     })
                 }
             })

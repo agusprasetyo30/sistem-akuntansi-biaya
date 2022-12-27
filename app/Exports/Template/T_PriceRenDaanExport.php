@@ -29,7 +29,7 @@ class T_PriceRenDaanExport implements WithHeadings, WithTitle
                 ->get();
 
             foreach ($data as $items) {
-                $temp = format_month($items->month_year, 'ye') . ' | ' . $items->id;
+                $temp = format_month($items->month_year, 'ye');
                 array_push($template, $temp);
             }
             return $template;
