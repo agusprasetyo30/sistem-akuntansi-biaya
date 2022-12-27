@@ -174,4 +174,18 @@ class ConsRateController extends Controller
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
+
+    public function check(Request $request){
+        try {
+            $check = ConsRate::where('version_id', $request->version)
+                ->first();
+            if ($check == null){
+                return response()->json(['Code' => 200, 'msg' => 'Data ']);
+            }else{
+                return response()->json(['Code' => 201, 'msg' => 'Data Berasil Disimpan']);
+            }
+        }catch (\Exception $exception){
+
+        }
+    }
 }

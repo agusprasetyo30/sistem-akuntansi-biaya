@@ -20,12 +20,17 @@ class ConsRateDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->addColumn('version_periode', function ($query){
-                return $query->version.' - '.format_month($query->month_year,'bi');
+            ->addColumn('version', function ($query){
+                return $query->version;
             })
-            ->filterColumn('filter_version_periode', function ($query, $keyword){
-                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('cons_rate.month_year', 'ilike', '%'.$keyword.'%');
+            ->addColumn('periode', function ($query){
+                return format_month($query->month_year,'bi');
+            })
+            ->filterColumn('filter_version', function ($query, $keyword){
+                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%');
+            })
+            ->filterColumn('filter_periode', function ($query, $keyword){
+                $query->Where('cons_rate.month_year', 'ilike', '%'.$keyword.'%');
             })
             ->addColumn('product', function ($query){
                 return $query->product_code.' - '.$query->product_name;
