@@ -74,6 +74,10 @@
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
+
+            $('#code_plant').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
         })
 
         function get_data(){
