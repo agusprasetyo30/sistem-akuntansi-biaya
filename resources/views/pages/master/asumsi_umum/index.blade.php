@@ -13,7 +13,7 @@
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
-                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+{{--                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>--}}
                 <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
             </div>
         </div>

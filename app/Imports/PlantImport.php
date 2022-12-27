@@ -26,7 +26,7 @@ class PlantImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
     public function model(array $row)
     {
         return new Plant([
-            'plant_code' => $row['plant_code'],
+            'plant_code' => strtoupper($row['plant_code']),
             'plant_desc' => $row['plant_desc'],
             'is_active' => $row['is_active'],
             'company_code' => auth()->user()->company_code,
@@ -38,7 +38,7 @@ class PlantImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
     {
         return 50;
     }
-    
+
     public function chunkSize(): int
     {
         return 50;
