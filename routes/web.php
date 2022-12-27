@@ -25,6 +25,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\KursController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ConsRateController;
+use App\Http\Controllers\SalrController;
+use App\Http\Controllers\ZcoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -261,6 +263,24 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [TotalDaanController::class, 'create'])->name('insert_total_daan');
             Route::post('update', [TotalDaanController::class, 'update'])->name('update_total_daan');
             Route::post('delete', [TotalDaanController::class, 'delete'])->name('delete_total_daan');
+        });
+
+        Route::group(['prefix' => 'zco'], function () {
+            Route::get('/', [ZcoController::class, 'index'])->name('zco');
+            Route::post('insert', [ZcoController::class, 'create'])->name('insert_zco');
+            Route::post('update', [ZcoController::class, 'update'])->name('update_zco');
+            Route::post('delete', [ZcoController::class, 'delete'])->name('delete_zco');
+            Route::post('export', [ZcoController::class, 'export'])->name('export_zco');
+            Route::post('import', [ZcoController::class, 'import'])->name('import_zco');
+        });
+
+        Route::group(['prefix' => 'salr'], function () {
+            Route::get('/', [SalrController::class, 'index'])->name('salr');
+            Route::post('insert', [SalrController::class, 'create'])->name('insert_salr');
+            Route::post('update', [SalrController::class, 'update'])->name('update_salr');
+            Route::post('delete', [SalrController::class, 'delete'])->name('delete_salr');
+            Route::post('export', [SalrController::class, 'export'])->name('export_salr');
+            Route::post('import', [SalrController::class, 'import'])->name('import_salr');
         });
     });
 
