@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\ConsRateDataTable;
+use App\Exports\MultipleSheet\MS_ComsumptionRatioExport;
 use App\Exports\Template\T_ConsRateExport;
 use App\Imports\ConsRateImport;
 use App\Jobs\ConsRatePodcast;
@@ -69,62 +70,9 @@ class ConsRateController extends Controller
             } else {
                 ConsRate::where('id', $data_cek->id)->update($input);
             }
-
-
-
-            //            ConsRate::where([
-            //                'plant_code' => $request->id_plant,
-            //                'version_id' => (int) $request->version,
-            //                'product_code' => $request->produk,
-            //                'company_code' => 'B000'
-            //            ])
-            //                ->upsert([
-            //                [
-            //                    'plant_code' => $request->id_plant,
-            //                    'version_id' => (int) $request->version,
-            //                    'product_code' => $request->produk,
-            //                    'material_code' => $request->material,
-            //                    'cons_rate' => (double) $request->consrate,
-            //                    'month_year' => $data_asumsi->month_year,
-            //                    'is_active' => $request->is_active,
-            //                    'company_code' => 'B000',
-            //                    'created_by' => auth()->user()->id,
-            //                    'updated_by' => auth()->user()->id
-            //                ],
-            //            ],[
-            //                'plant_code',
-            //                'version_id',
-            //                'product_code',
-            //                'company_code'
-            //            ], [
-            //                'material_code',
-            //                'cons_rate',
-            //                'month_year',
-            //                'is_active',
-            //                'created_by',
-            //                'updated_by'
-            //            ]);
-
-            //            ConsRate::updateOrCreate([
-            //                [
-            //                    'plant_code' => $request->id_plant,
-            //                    'version_id' => (int) $request->version,
-            //                    'product_code' => $request->produk,
-            //                    'company_code' => 'B000',
-            //                    'material_code' => $request->material,
-            //                    'cons_rate' => (double) $request->consrate,
-            //                    'month_year' => $data_asumsi->month_year,
-            //                    'is_active' => $request->is_active,
-            //                    'created_by' => auth()->user()->id,
-            //                    'updated_by' => auth()->user()->id
-            //                ]
-            //            ]);
-
-
-
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
-            dd($exception);
+//            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
@@ -190,7 +138,7 @@ class ConsRateController extends Controller
 
     public function export()
     {
-        return Excel::download(new T_ConsRateExport(), 'cons_rate.xlsx');
+        return Excel::download(new MS_ComsumptionRatioExport(), 'cons_rate.xlsx');
     }
 
     public function import(Request $request)
