@@ -220,6 +220,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [ConsRateController::class, 'delete'])->name('delete_consrate');
             Route::post('import', [ConsRateController::class, 'import'])->name('import_consrate');
             Route::post('export', [ConsRateController::class, 'export'])->name('export_consrate');
+            Route::post('check', [ConsRateController::class, 'check'])->name('check_consrate');
         });
 
         Route::group(['prefix' => 'saldo-awal'], function () {
@@ -247,6 +248,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_qty_rendaan');
             Route::post('export', [QtyRenDaanController::class, 'export'])->name('export_qty_rendaan');
             Route::post('import', [QtyRenDaanController::class, 'import'])->name('import_qty_rendaan');
+            Route::post('check', [QtyRenDaanController::class, 'check'])->name('check_qty_rendaan');
         });
 
         Route::group(['prefix' => 'price-rendaan'], function () {
@@ -256,6 +258,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [PriceRenDaanController::class, 'delete'])->name('delete_price_rendaan');
             Route::post('export', [PriceRenDaanController::class, 'export'])->name('export_price_rendaan');
             Route::post('import', [PriceRenDaanController::class, 'import'])->name('import_price_rendaan');
+            Route::post('check', [PriceRenDaanController::class, 'check'])->name('check_price_rendaan');
         });
 
         Route::group(['prefix' => 'total-daan'], function () {

@@ -15,7 +15,9 @@ class M_RegionsExport implements FromQuery, WithTitle, WithHeadings
 
     public function query()
     {
-        $data = Regions::query()->where('is_active','=', true);
+        $data = Regions::query()
+            ->select('id', 'region_name')
+            ->where('is_active','=', true);
         return $data;
     }
 

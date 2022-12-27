@@ -41,7 +41,7 @@ class PriceRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_id'] = $request->region_id;
-            $input['price_rendaan_value'] = $request->price_rendaan_value;
+            $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
             $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -68,7 +68,7 @@ class PriceRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_id'] = $request->region_id;
-            $input['price_rendaan_value'] = $request->price_rendaan_value;
+            $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
             $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -106,21 +106,32 @@ class PriceRenDaanController extends Controller
         try {
             DB::transaction(function () use ($request){
                 $request->validate([
-                    'file' => 'required'
+                    'file' => 'required',
+                    'version' => 'required'
                 ]);
-                $excel = Excel::toArray(new PriceRenDaanImport(), $request->file);
-                $colect = collect($excel[0]);
-                $header = array_keys($colect[0]);
-                $data_versi = explode('_', $header[2]);
-                $version = Asumsi_Umum::where('id', $data_versi[2])->first();
-                PriceRenDaan::where('version_id', $version->version_id)->delete();
+
+                PriceRenDaan::where('version_id', $request->version_id)->delete();
 
                 $file = $request->file('file')->store('import');
 
-                $data = new PriceRenDaanImport();
+                $data = new PriceRenDaanImport($request->version);
                 $data->import($file);
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+        }catch (\Exception $exception){
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function check(Request $request){
+        try {
+            $check = PriceRenDaan::where('version_id', $request->version)
+                ->first();
+            if ($check == null){
+                return response()->json(['Code' => 200, 'msg' => 'Data Tidak Ada']);
+            }else{
+                return response()->json(['Code' => 201, 'msg' => 'Data Ada']);
+            }
         }catch (\Exception $exception){
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }

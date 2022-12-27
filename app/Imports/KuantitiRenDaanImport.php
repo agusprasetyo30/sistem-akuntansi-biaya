@@ -23,11 +23,17 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
 {
     use Importable, SkipsErrors, SkipsFailures;
 
+    protected $version;
+
+    public function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function model(array $row)
     {
         $lengthPeriode = count($row);
         $list = [];
-        $versi = null;
         $arrHeader = array_keys($row);
         $arr = array_values($row);
 
@@ -35,16 +41,16 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
 
             if ($i > 1){
                 $temp_date = explode('_', $arrHeader[$i]);
+                $date = $temp_date[0].'-'.$temp_date[1];
+
+                $versi = Asumsi_Umum::where('month_year', 'ilike', '%'.$date.'%')
+                    ->where('version_id', $this->version)
+                    ->first();
 
                 $input['qty_rendaan_value'] = $arr[$i] != null ? $arr[$i]:0;
-                $input['asumsi_umum_id'] = $temp_date[2];
-                if ($versi == null){
-                    $versi = $temp_date[2];
-                    $data_version = Asumsi_Umum::where('id', $versi)
-                        ->first();
+                $input['asumsi_umum_id'] = $versi->id;
 
-                }
-                $input['version_id'] = $data_version->version_id;
+                $input['version_id'] = $this->version;
                 $input['company_code'] = auth()->user()->company_code;
                 $input['created_by'] = auth()->user()->id;
                 $input['updated_by'] = auth()->user()->id;
@@ -53,7 +59,7 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
                 $input[$arrHeader[$i]] = $arr[$i];
             }
         }
-        dd($list);
+//        dd($list);
         collect($list)->each(function ($result){QtyRenDaan::create($result);});
     }
 

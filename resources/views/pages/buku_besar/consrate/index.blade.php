@@ -34,8 +34,9 @@
                                 <thead>
                                 <tr>
                                     <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
+                                    <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSION</th>
+                                    <th data-type='text' data-name='periode' class="border-bottom-0 text-center">PERIODE</th>
                                     <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE PLANT</th>
-                                    <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSION - PERIODE</th>
                                     <th data-type='text' data-name='produk' class="border-bottom-0 text-center">PRODUK</th>
                                     <th data-type='text' data-name='material' class="border-bottom-0 text-center">MATERIAL</th>
                                     <th data-type='text' data-name='uom' class="border-bottom-0 text-center">UOM</th>
@@ -45,8 +46,9 @@
                                 </tr>
                                 <tr>
                                     <th data-type='text' data-name='nomor' class="text-center"></th>
-                                    <th data-type='text' data-name='code' class="text-center"></th>
                                     <th data-type='text' data-name='version' class="text-center"></th>
+                                    <th data-type='text' data-name='periode' class="text-center"></th>
+                                    <th data-type='text' data-name='code' class="text-center"></th>
                                     <th data-type='text' data-name='produk' class="text-center"></th>
                                     <th data-type='text' data-name='material' class="text-center"></th>
                                     <th data-type='text' data-name='uom' class="text-center"></th>
@@ -99,55 +101,95 @@
             })
 
             $('#submit_import').on('click', function () {
-                Swal.fire({
-                    title: 'Apakah anda yakin?',
-                    text: "Data akan segera import",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#019267',
-                    cancelButtonColor: '#EF4B4B',
-                    confirmButtonText: 'Konfirmasi',
-                    cancelButtonText: 'Kembali'
-                }).then((result) =>{
-                    if (result.value){
-                        let file = new FormData($("#form-input-consrate")[0]);
-                        $.ajax({
-                            type: "POST",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            processData: false,
-                            contentType: false,
-                            url: '{{route('import_consrate')}}',
-                            data: file,
-                            success:function (response) {
-                                console.log(response);
-                                if (response.Code === 200){
-                                    $('#modal_import').modal('hide');
-                                    $("#modal_import input").val("")
-                                    $('#is_active').val('').trigger("change");
-                                    toastr.success('Data Berhasil Disimpan', 'Success')
-                                    get_data()
-                                }else if (response.Code === 0){
-                                    $('#modal_import').modal('hide');
-                                    $("#modal_import input").val("")
-                                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                                }else if (response.Code === 500){
-                                    $('#modal_import').modal('hide');
-                                    $("#modal_import input").val("")
-                                    response.msg.forEach(element => {
-                                        toastr.warning(element, 'Warning')
-                                    });
-                                }else {
-                                    $('#modal_import').modal('hide');
-                                    $("#modal_import input").val("")
-                                    toastr.error('Terdapat Kesalahan System', 'System Error')
-                                }
+                var versi = $('#version').val();
+                if (versi === null){
+                    toastr.warning('Data Versi Asumsi Harus diisi', 'Warning')
+                }else {
+                    console.log(versi)
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{route('check_consrate')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            version:$('#version').val()
+                        },
+                        success:function (response) {
+                            if (response.Code === 200){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data akan segera dikirim",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        submit()
+                                    }
+                                })
+                            }else if (response.Code === 201){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        submit()
+                                    }
+                                })
                             }
-                        })
+                        }
+                    })
+                }
+            })
+
+            function submit() {
+                let file = new FormData($("#form-input-consrate")[0]);
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    processData: false,
+                    contentType: false,
+                    url: '{{route('import_consrate')}}',
+                    data: file,
+                    success:function (response) {
+                        console.log(response);
+                        if (response.Code === 200){
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            $('#is_active').val('').trigger("change");
+                            toastr.success('Data Berhasil Disimpan', 'Success')
+                            get_data()
+                        }else if (response.Code === 0){
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                        }else if (response.Code === 500){
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            response.msg.forEach(element => {
+                                toastr.warning(element, 'Warning')
+                            });
+                        }else {
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            toastr.error('Terdapat Kesalahan System', 'System Error')
+                        }
                     }
                 })
-            })
+            }
 
             $('#version').select2({
                 dropdownParent: $('#modal_import'),
@@ -322,6 +364,7 @@
                     header: true,
                     headerOffset: $('#main_header').height()
                 },
+
                 initComplete: function () {
 
                     $('.dataTables_scrollHead').css('overflow', 'auto');
@@ -353,7 +396,7 @@
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control custom-select select2";
+                                input.className = "form-control status custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
                                     options += '<option value="">Semua</option>';
@@ -371,6 +414,7 @@
                         }
 
                     });
+
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -381,9 +425,10 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'version', name: 'filter_version', orderable:false},
+                    { data: 'periode', name: 'filter_periode', orderable:false},
                     { data: 'plant_code', name: 'plant_code', orderable:false},
-                    { data: 'version_periode', name: 'filter_version_periode', orderable:false},
                     { data: 'product', name: 'filter_product', orderable:false},
                     { data: 'material', name: 'filter_material', orderable:false},
                     { data: 'uom', name: 'filter_uom', orderable:false},
@@ -393,7 +438,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [4,5]}
+                    {className: 'text-center', targets: [0,1,2,3,4,5,6,7,8]}
                 ]
 
             })
@@ -464,7 +509,6 @@
 
                         }
                     })
-
                 }
 
             })

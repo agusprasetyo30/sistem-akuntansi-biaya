@@ -142,36 +142,43 @@ class ConsRateController extends Controller
 
     public function export(Request $request)
     {
-        $version = $request->temp;
-
-        return Excel::download(new MS_ComsumptionRatioExport($version), 'cons_rate.xlsx');
+        return Excel::download(new MS_ComsumptionRatioExport(), 'cons_rate.xlsx');
     }
 
     public function import(Request $request)
     {
-        //        dd($request);
         try {
-
             DB::transaction(function () use ($request) {
                 $request->validate([
-                    'file' => 'required'
+                    'file' => 'required',
+                    'version' => 'required'
                 ]);
 
-                $excel = Excel::toArray(new ConsRateImport(), $request->file);
-                $colect = collect($excel[0]);
-                $header = array_keys($colect[0]);
-                $data_versi = explode('_', $header[1]);
-                ConsRate::where('version_id', $data_versi[2])->delete();
+                ConsRate::where('version_id', $request->version)->delete();
 
                 $file = $request->file('file')->store('import');
 
-                $data = new ConsRateImport();
+                $data = new ConsRateImport($request->version);
                 $data->import($file);
             });
             return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
         } catch (\Exception $exception) {
             //            dd($exception);
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function check(Request $request){
+        try {
+            $check = ConsRate::where('version_id', $request->version)
+                ->first();
+            if ($check == null){
+                return response()->json(['Code' => 200, 'msg' => 'Data ']);
+            }else{
+                return response()->json(['Code' => 201, 'msg' => 'Data Berasil Disimpan']);
+            }
+        }catch (\Exception $exception){
+
         }
     }
 }
