@@ -27,11 +27,13 @@ class SelectController extends Controller
         if ($search == '') {
             $plant = Plant::limit(10)
                 ->where('is_active', 't')
+                ->whereNull('deleted_at')
                 ->get();
         } else {
             $plant = Plant::where('plant_code', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
+                ->whereNull('deleted_at')
                 ->get();
         }
 
