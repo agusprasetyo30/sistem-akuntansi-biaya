@@ -29,10 +29,6 @@
                                             </div>
                                             <div class="ms-3 text-center">
                                                 <div class="fs-18 mb-5 font-weight-bold text-white">Sistem Proyeksi <p class="mb-1 font-weight-bold text-white">Akutansi Biaya <p class="mb-1 font-weight-bold text-white">PT. Petrokimia Gresik </div>
-                                                <!-- <div class="fs-18 mb-6 font-weight-bold text-white">PT Petrokimia Gresik</div>
-                                                <div class="mb-6 text-white-50">
-                                                    Details Text
-                                                </div> -->
                                             </div>
                                             <div class="ms-4 br-6 mt-8">
                                                 <img src="{{asset('assets/images/brand/logog20.png')}}"
