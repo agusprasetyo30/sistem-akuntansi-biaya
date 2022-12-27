@@ -28,6 +28,7 @@ class ConsRateImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
         $arrHeader[1]='month_year';
         $arrvalue = array_values($row);
         $arrvalue[1] = $arrvalue[1].'-01';
+        $arrvalue[4] = $arrvalue[4] != null ? $arrvalue[4] : 0;
         $data = array_combine($arrHeader, $arrvalue);
         $data['version_id'] = $version;
         $data['company_code'] = 'B000';
