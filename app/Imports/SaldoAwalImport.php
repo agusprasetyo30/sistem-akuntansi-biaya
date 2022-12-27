@@ -23,21 +23,28 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
 {
     use Importable, SkipsErrors, SkipsFailures;
 
+    protected $version;
+
+    function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function model(array $row)
     {
-        $arrHeader = array_keys($row);
-        $arrVer = substr($arrHeader[7], 11);
-
+        // $arrHeader = array_keys($row);
+        // $arrVer = substr($arrHeader[7], 11);
+        
         $satuan = $row['total_value'] / $row['total_stock'];
         // $my = Version_Asumsi::where('id', $this->version)->first();
-        $my = Version_Asumsi::where('id', $arrVer)->first();
-        
+        $my = Version_Asumsi::where('id', $this->version)->first();
+        // dd($this->version);
         return new Saldo_Awal([
             'company_code' => auth()->user()->company_code,
             // 'month_year' => $my->saldo_awal,
             // 'version_id' => $this->version,
             'month_year' => $my->saldo_awal,
-            'version_id' => (int) $arrVer,
+            'version_id' => $this->version,
             'gl_account' => $row['gl_account'],
             'valuation_class' => $row['valuation_class'],
             'price_control' => $row['price_control'],
