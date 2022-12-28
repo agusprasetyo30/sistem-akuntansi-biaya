@@ -28,6 +28,13 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
 {
     use Importable, SkipsErrors, SkipsFailures;
 
+    protected $version;
+
+    function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function model(array $row)
     {
         $lengthPeriode = count($row);
@@ -36,12 +43,16 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
         $arr = array_values($row);
 
         for ($i = 1; $i < $lengthPeriode; $i++) {
-            // dd($arrHeader[$i]);
+            // $dy = substr($arrHeader[$i], 0, 4);
+            $head = str_replace("_", "-", $arrHeader[$i]);
+            $periode = $head . '-01 00:00:00';
+            $verasum = Asumsi_Umum::where('version_id', $this->version)->where('month_year', $periode)->first();
+
             // $list = [$arr[0], $arr[$i], $arrHeader[$i]];
             // $dt = date('Y-m-d', strtotime($arrHeader[$i]));
 
-            $asum_id = substr($arrHeader[$i], 8);
-            $verasum = Asumsi_Umum::where('id',$asum_id)->first();
+            // $asum_id = substr($arrHeader[$i], 8);
+            // $verasum = Asumsi_Umum::where('id', $asum_id)->first();
             // $dy = substr($arrHeader[$i], 0, 4);
             // $dm = substr($arrHeader[$i], 5, 2);
             // $year = $dy . '-' . $dm . '-01';
@@ -49,8 +60,8 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
             $list = [
                 'company_code' => auth()->user()->company_code,
                 'material_code' => $arr[0],
-                'version_id' => $verasum->version_id,
-                'asumsi_umum_id' => (int) $asum_id,
+                'version_id' => $this->version,
+                'asumsi_umum_id' => $verasum->id,
                 'qty_renprod_value' => (float) $arr[$i],
                 'created_by' => auth()->user()->id,
                 'created_at' => Carbon::now(),

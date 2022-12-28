@@ -230,6 +230,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [SaldoAwalController::class, 'delete'])->name('delete_saldo_awal');
             Route::post('import', [SaldoAwalController::class, 'import'])->name('import_saldo_awal');
             Route::get('export', [SaldoAwalController::class, 'export'])->name('export_saldo_awal');
+            Route::post('check', [SaldoAwalController::class, 'check'])->name('check_saldo_awal');
         });
 
         Route::group(['prefix' => 'qty-renprod'], function () {
@@ -239,6 +240,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [QtyRenProdController::class, 'delete'])->name('delete_qty_renprod');
             Route::post('import', [QtyRenProdController::class, 'import'])->name('import_qty_renprod');
             Route::get('export', [QtyRenProdController::class, 'export'])->name('export_qty_renprod');
+            Route::post('check', [QtyRenProdController::class, 'check'])->name('check_qty_renprod');
         });
 
         Route::group(['prefix' => 'qty-rendaan'], function () {

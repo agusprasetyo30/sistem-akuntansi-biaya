@@ -49,18 +49,18 @@
                             <div class="form-group">
                                 <label>Total Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Total value" name="total_value"
-                                    id="total_value" autocomplete="off">
+                                    id="total_value" autocomplete="off" onkeyup="nilai_satuan()">
                             </div>
                             <div class="form-group">
                                 <label>Total Stock </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Total Stock" name="total_stock"
-                                    id="total_stock" autocomplete="off">
+                                    id="total_stock" autocomplete="off" onkeyup="nilai_satuan()">
                             </div>
-                            {{-- <div class="form-group">
+                            <div class="form-group">
                                 <label>Nilai Satuan </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nilai Satuan" name="nilai_satuan"
-                                    id="nilai_satuan" autocomplete="off">
-                            </div> --}}
+                                    id="nilai_satuan" autocomplete="off" readonly>
+                            </div>
                         </div>
                     </div>
                 </div>
