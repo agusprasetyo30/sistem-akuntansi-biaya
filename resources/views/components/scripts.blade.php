@@ -112,6 +112,12 @@
 <!--Date Range Picker-->
 <script src="{{asset('assets/plugins/bootstrap-datepicker/bootstrap-datepicker.js')}}"></script>
 
+<!-- INTERNAL Clipboard js -->
+<script src="{{asset('assets/plugins/clipboard/clipboard.min.js')}}"></script>
+<script src="{{asset('assets/plugins/clipboard/clipboard.js')}}"></script>
+
+<!-- INTERNAL Prism js -->
+<script src="{{asset('assets/plugins/prism/prism.js')}}"></script>
 @yield('scripts')
 
 <!-- Custom js-->

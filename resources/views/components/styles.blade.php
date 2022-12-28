@@ -68,6 +68,9 @@
 <!-- INTERNAL multi css-->
 <link rel="stylesheet" href="{{asset('assets/plugins/multi/multi.min.css')}}">
 
+<!-- INTERNAL Prism Css -->
+<link href="{{asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
+
 @yield('styles')
 
 <!-- Color Skin css -->

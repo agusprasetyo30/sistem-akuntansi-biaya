@@ -101,50 +101,68 @@
             })
 
             $('#submit_import').on('click', function () {
-                $.ajax({
-                    type: "POST",
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: '{{route('check_consrate')}}',
-                    data: {
-                        _token: "{{ csrf_token() }}",
-                        version:$('#version').val()
-                    },
-                    success:function (response) {
-                        if (response.Code === 200){
-                            Swal.fire({
-                                title: 'Apakah anda yakin?',
-                                text: "Data akan segera dikirim",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#019267',
-                                cancelButtonColor: '#EF4B4B',
-                                confirmButtonText: 'Konfirmasi',
-                                cancelButtonText: 'Kembali'
-                            }).then((result) =>{
-                                if (result.value){
-                                    importStore()
-                                }
-                            })
-                        }else if (response.Code === 201){
-                            Swal.fire({
-                                title: 'Apakah anda yakin?',
-                                text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#019267',
-                                cancelButtonColor: '#EF4B4B',
-                                confirmButtonText: 'Konfirmasi',
-                                cancelButtonText: 'Kembali'
-                            }).then((result) =>{
-                                if (result.value){
-                                    importStore()
-                                }
-                            })
+                $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+                if ($('#version').val() !== null && $('#file').val() !== ''){
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{route('check_consrate')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            version:$('#version').val()
+                        },
+                        success:function (response) {
+                            if (response.Code === 200){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data akan segera dikirim",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        importStore()
+                                    }else {
+                                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                    }
+                                })
+                            }else if (response.Code === 201){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        importStore()
+                                    }else {
+                                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                    }
+                                })
+                            }
                         }
-                    }
-                })
+                    })
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Silakan Isi Data Tersebut",
+                        icon: 'error',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                }
+
             })
 
             function importStore() {
@@ -159,7 +177,7 @@
                     url: '{{route('import_consrate')}}',
                     data: file,
                     success:function (response) {
-                        console.log(response);
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         if (response.Code === 200){
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")

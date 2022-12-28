@@ -39,8 +39,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_import" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit_import" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
             </div>
         </div>
     </div>
