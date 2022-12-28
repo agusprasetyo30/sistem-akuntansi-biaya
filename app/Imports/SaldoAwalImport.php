@@ -34,7 +34,7 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
     {
         // $arrHeader = array_keys($row);
         // $arrVer = substr($arrHeader[7], 11);
-        
+
         $satuan = $row['total_value'] / $row['total_stock'];
         // $my = Version_Asumsi::where('id', $this->version)->first();
         $my = Version_Asumsi::where('id', $this->version)->first();
@@ -61,12 +61,12 @@ class SaldoAwalImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
     {
         return 50;
     }
-    
+
     public function chunkSize(): int
     {
         return 50;
     }
-    
+
     public function rules(): array
     {
         return [

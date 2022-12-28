@@ -249,7 +249,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        submit()
+                                        importStore()
                                     }
                                 })
                             }else if (response.Code === 201){
@@ -264,7 +264,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        submit()
+                                        importStore()
                                     }
                                 })
                             }
@@ -273,7 +273,7 @@
                 }
             })
 
-            function submit() {
+            function importStore() {
                 let file = new FormData($("#form-input-consrate")[0]);
                 $.ajax({
                     type: "POST",
@@ -296,6 +296,10 @@
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
                             toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                        }else if (response.Code === 400){
+                            $('#modal_add').modal('hide');
+                            $("#modal_add input").val("")
+                            toastr.warning(response.msg, 'Warning')
                         }else if (response.Code === 500){
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
@@ -307,6 +311,10 @@
                             $("#modal_import input").val("")
                             toastr.error('Terdapat Kesalahan System', 'System Error')
                         }
+                    },error:function () {
+                        $('#modal_import').modal('hide');
+                        $("#modal_import input").val("")
+                        toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                     }
                 })
             }
@@ -424,6 +432,10 @@
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
@@ -475,6 +487,10 @@
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
@@ -516,6 +532,10 @@
                                 get_data()
                             }else if (response.Code === 0){
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }

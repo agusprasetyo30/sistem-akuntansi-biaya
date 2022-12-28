@@ -101,11 +101,8 @@
             })
 
             $('#submit_import').on('click', function () {
-                var versi = $('#version').val();
-                if (versi === null){
-                    toastr.warning('Data Versi Asumsi Harus diisi', 'Warning')
-                }else {
-                    console.log(versi)
+                $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+                if ($('#version').val() !== null && $('#file').val() !== ''){
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -129,7 +126,9 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        submit()
+                                        importStore()
+                                    }else {
+                                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                                     }
                                 })
                             }else if (response.Code === 201){
@@ -144,16 +143,29 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        submit()
+                                        importStore()
+                                    }else {
+                                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                                     }
                                 })
                             }
                         }
                     })
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Silakan Isi Data Tersebut",
+                        icon: 'error',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
+
             })
 
-            function submit() {
+            function importStore() {
                 let file = new FormData($("#form-input-consrate")[0]);
                 $.ajax({
                     type: "POST",
@@ -165,7 +177,7 @@
                     url: '{{route('import_consrate')}}',
                     data: file,
                     success:function (response) {
-                        console.log(response);
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         if (response.Code === 200){
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
@@ -176,6 +188,10 @@
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
                             toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                        }else if (response.Code === 400){
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            toastr.warning(response.msg, 'Warning')
                         }else if (response.Code === 500){
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
@@ -396,7 +412,7 @@
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control status custom-select select2";
+                                input.className = "status form-control custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
                                     options += '<option value="">Semua</option>';
@@ -409,6 +425,12 @@
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
+
+                                $('.status').select2({
+                                    placeholder: 'Pilih Status',
+                                    width: '100%',
+                                    allowClear: false,
+                                })
 
                             }
                         }
@@ -442,6 +464,8 @@
                 ]
 
             })
+
+
         }
 
         $('#submit').on('click', function () {
@@ -484,6 +508,10 @@
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
@@ -552,6 +580,10 @@
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
@@ -593,6 +625,10 @@
                                 get_data()
                             }else if (response.Code === 0){
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
