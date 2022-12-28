@@ -9,6 +9,7 @@ use App\Models\Management_Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class KursController extends Controller
 {
@@ -21,10 +22,13 @@ class KursController extends Controller
 
     public function create(Request $request){
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "tanggal" => 'required',
                 "kurs" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $date = explode("-",$request->tanggal);
 
@@ -47,10 +51,13 @@ class KursController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "tanggal" => 'required',
                 "kurs" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
 //            dd($request);
             $date = explode("-",$request->tanggal);

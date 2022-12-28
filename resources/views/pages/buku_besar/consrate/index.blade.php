@@ -101,59 +101,53 @@
             })
 
             $('#submit_import').on('click', function () {
-                var versi = $('#version').val();
-                if (versi === null){
-                    toastr.warning('Data Versi Asumsi Harus diisi', 'Warning')
-                }else {
-                    console.log(versi)
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('check_consrate')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            version:$('#version').val()
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                Swal.fire({
-                                    title: 'Apakah anda yakin?',
-                                    text: "Data akan segera dikirim",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#019267',
-                                    cancelButtonColor: '#EF4B4B',
-                                    confirmButtonText: 'Konfirmasi',
-                                    cancelButtonText: 'Kembali'
-                                }).then((result) =>{
-                                    if (result.value){
-                                        submit()
-                                    }
-                                })
-                            }else if (response.Code === 201){
-                                Swal.fire({
-                                    title: 'Apakah anda yakin?',
-                                    text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#019267',
-                                    cancelButtonColor: '#EF4B4B',
-                                    confirmButtonText: 'Konfirmasi',
-                                    cancelButtonText: 'Kembali'
-                                }).then((result) =>{
-                                    if (result.value){
-                                        submit()
-                                    }
-                                })
-                            }
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route('check_consrate')}}',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        version:$('#version').val()
+                    },
+                    success:function (response) {
+                        if (response.Code === 200){
+                            Swal.fire({
+                                title: 'Apakah anda yakin?',
+                                text: "Data akan segera dikirim",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#019267',
+                                cancelButtonColor: '#EF4B4B',
+                                confirmButtonText: 'Konfirmasi',
+                                cancelButtonText: 'Kembali'
+                            }).then((result) =>{
+                                if (result.value){
+                                    importStore()
+                                }
+                            })
+                        }else if (response.Code === 201){
+                            Swal.fire({
+                                title: 'Apakah anda yakin?',
+                                text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#019267',
+                                cancelButtonColor: '#EF4B4B',
+                                confirmButtonText: 'Konfirmasi',
+                                cancelButtonText: 'Kembali'
+                            }).then((result) =>{
+                                if (result.value){
+                                    importStore()
+                                }
+                            })
                         }
-                    })
-                }
+                    }
+                })
             })
 
-            function submit() {
+            function importStore() {
                 let file = new FormData($("#form-input-consrate")[0]);
                 $.ajax({
                     type: "POST",
@@ -176,6 +170,10 @@
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
                             toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                        }else if (response.Code === 400){
+                            $('#modal_import').modal('hide');
+                            $("#modal_import input").val("")
+                            toastr.warning(response.msg, 'Warning')
                         }else if (response.Code === 500){
                             $('#modal_import').modal('hide');
                             $("#modal_import input").val("")
@@ -492,6 +490,10 @@
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
                                 get_data()
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
@@ -560,6 +562,10 @@
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
@@ -601,6 +607,10 @@
                                 get_data()
                             }else if (response.Code === 0){
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            }else if (response.Code === 400){
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                toastr.warning(response.msg, 'Warning')
                             }else {
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }

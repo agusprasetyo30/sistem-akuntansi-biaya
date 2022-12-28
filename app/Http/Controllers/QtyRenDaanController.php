@@ -11,6 +11,7 @@ use App\Models\QtyRenDaan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class QtyRenDaanController extends Controller
@@ -26,13 +27,16 @@ class QtyRenDaanController extends Controller
     public function create(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "version_asumsi" => 'required',
                 "bulan" => 'required',
                 "material_id" => 'required',
                 "region_id" => 'required',
                 "qty_rendaan_value" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
 
             $input['version_id'] = $request->version_asumsi;
@@ -54,13 +58,16 @@ class QtyRenDaanController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "version_asumsi" => 'required',
                 "bulan" => 'required',
                 "material_id" => 'required',
                 "region_id" => 'required',
                 "qty_rendaan_value" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
@@ -102,12 +109,16 @@ class QtyRenDaanController extends Controller
     public function import(Request $request)
     {
         try {
-            DB::transaction(function () use ($request){
-                $request->validate([
-                    'file' => 'required',
-                    'version' => 'required'
-                ]);
 
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+                "version" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            DB::transaction(function () use ($request){
                 QtyRenDaan::where('version_id', $request->version)->delete();
 
                 $file = $request->file('file')->store('import');

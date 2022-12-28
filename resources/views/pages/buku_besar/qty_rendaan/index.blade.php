@@ -225,7 +225,6 @@
                 if (versi === null){
                     toastr.warning('Data Versi Asumsi Harus diisi', 'Warning')
                 }else {
-                    console.log(versi)
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -249,7 +248,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        submit()
+                                        importStore()
                                     }
                                 })
                             }else if (response.Code === 201){
@@ -264,7 +263,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        submit()
+                                        importStore()
                                     }
                                 })
                             }
@@ -273,7 +272,7 @@
                 }
             })
 
-            function submit() {
+            function importStore() {
                 let file = new FormData($("#form-input-consrate")[0]);
                 $.ajax({
                     type: "POST",

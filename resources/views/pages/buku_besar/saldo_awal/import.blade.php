@@ -19,7 +19,7 @@
                                     <ol>
                                         <li>Format harus sesuai template
                                         <li>Sistem akan memproses sheet pertama saja</li>
-                                    </ol> 
+                                    </ol>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Versi Asumsi</label>
@@ -27,7 +27,7 @@
                                         <option value="" disabled selected>Pilih Versi</option>
                                     </select>
                                     <button style="display: none;" type="button" class="btn btn-primary mt-2" id="submit-export"><i class="fe fe-download me-2"></i>Download Template</button>
-                                </div>  
+                                </div>
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
                                 </div>

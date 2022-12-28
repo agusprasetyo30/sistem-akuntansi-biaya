@@ -57,11 +57,14 @@ class PlantController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
-                "code" => 'required',
-                "deskripsi" => 'required',
-                "is_active" => 'required',
-            ]);
+            $validator = Validator::make($request->all(), [
+                'code' => 'required|unique:plant,plant_code',
+                'deskripsi' => 'required',
+                'is_active' => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['plant_code'] = strtoupper($request->code);
             $input['plant_desc'] = $request->deskripsi;

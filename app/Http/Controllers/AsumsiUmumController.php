@@ -8,6 +8,7 @@ use App\Models\Version_Asumsi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class AsumsiUmumController extends Controller
 {
@@ -22,12 +23,17 @@ class AsumsiUmumController extends Controller
     public function create(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "versi" => 'required',
                 "jumlah_bulan" => 'required',
                 "start_date" => 'required',
                 "asumsi" => 'required',
-            ]);
+                "price_rendaan_value" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
 
             DB::transaction(function () use ($request){
                 $lenght_data = count($request->asumsi);
@@ -74,13 +80,17 @@ class AsumsiUmumController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "id" => 'required',
                 "nama_version" => 'required',
                 "jumlah_bulan" => 'required',
                 "tanggal" => 'required',
                 "answer" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
 //            dd($request);
 
             DB::transaction(function () use ($request){
