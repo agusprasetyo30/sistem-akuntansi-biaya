@@ -396,7 +396,7 @@
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control status custom-select select2";
+                                input.className = "status form-control custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
                                     options += '<option value="">Semua</option>';
@@ -409,6 +409,12 @@
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
+
+                                $('.status').select2({
+                                    placeholder: 'Pilih Status',
+                                    width: '100%',
+                                    allowClear: false,
+                                })
 
                             }
                         }
@@ -442,6 +448,8 @@
                 ]
 
             })
+
+
         }
 
         $('#submit').on('click', function () {
