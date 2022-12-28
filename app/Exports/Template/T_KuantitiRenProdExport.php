@@ -34,7 +34,7 @@ class T_KuantitiRenProdExport implements WithHeadings, WithTitle
         // $asum = Version_Asumsi::where('id', $this->version)->first();
 
         $period = Asumsi_Umum::where('version_id', $this->version)->get();
-        
+
         // $asum = Periode::where('id', $this->version)->first();
         // $awal = date('Y-m-d', strtotime($asum->awal_periode));
         // $akhir = date('Y-m-d', strtotime($asum->akhir_periode . ' + 1 month'));
@@ -45,10 +45,10 @@ class T_KuantitiRenProdExport implements WithHeadings, WithTitle
         $result = ["material_code"];
 
         foreach ($period as $dt) {
-            $per = format_month($dt->month_year,'ye').' | '.$dt->id;
+            $per = format_month($dt->month_year, 'ye');
             array_push($result, $per);
         }
-        
+
         return $result;
     }
 

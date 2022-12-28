@@ -137,9 +137,9 @@ class SaldoAwalController extends Controller
 
         if ($validator->fails())
             return $this->makeValidMsg($validator);
-            
+
         try {
-            DB::transaction(function () use ($request){
+            DB::transaction(function () use ($request) {
                 $version = $request->version;
                 // $excel = Excel::toArray(new SaldoAwalImport($version), $request->file);
                 // $colect = collect($excel[0]);
@@ -180,5 +180,18 @@ class SaldoAwalController extends Controller
         $version = $request->version;
 
         return Excel::download(new MS_SaldoAwalExport($version), 'saldo_awal.xlsx');
+    }
+
+    public function check(Request $request)
+    {
+        try {
+            $check = Saldo_Awal::where('version_id', $request->version)
+                ->first();
+            if ($check == null) {
+                return response()->json(['Code' => 200, 'msg' => 'Data ']);
+            } else {
+                return response()->json(['Code' => 201, 'msg' => 'Data Berasil Disimpan']);
+            }
+        } catch (\Exception $exception) { }
     }
 }

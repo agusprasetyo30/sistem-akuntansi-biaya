@@ -36,7 +36,7 @@ class QtyRenProdController extends Controller
                 return $this->makeValidMsg($validator);
 
             $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
-            
+
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_code;
             $input['version_id'] = $request->version_id;
@@ -68,7 +68,7 @@ class QtyRenProdController extends Controller
                 return $this->makeValidMsg($validator);
 
             $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
-            
+
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_code;
             $input['version_id'] = $request->version_id;
@@ -104,23 +104,24 @@ class QtyRenProdController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "file" => 'required',
+            "version" => 'required',
         ], validatorMsg());
 
         if ($validator->fails())
             return $this->makeValidMsg($validator);
 
         try {
-            DB::transaction(function () use ($request){
-                
-                $excel = Excel::toArray(new QtyRenProdImport(), $request->file);
-                $colect = collect($excel[0]);
-                $header = array_keys($colect[0]);
-                $data_versi = explode('_', $header[1]);
-                $version = Asumsi_Umum::where('id', $data_versi[2])->first();
-                QtyRenProd::where('version_id', $version->version_id)->delete();
+            DB::transaction(function () use ($request) {
+                $version = $request->version;
+                // $excel = Excel::toArray(new QtyRenProdImport($version), $request->file);
+                // $colect = collect($excel[0]);
+                // $header = array_keys($colect[0]);
+                // $data_versi = explode('_', $header[1]);
+                // $version = Asumsi_Umum::where('id', $data_versi[2])->first();
+                QtyRenProd::where('version_id', $version)->delete();
 
                 $file = $request->file('file')->store('import');
-                $import = new QtyRenProdImport();
+                $import = new QtyRenProdImport($version);
                 $import->import($file);
 
                 $data_fail = $import->failures();
@@ -152,5 +153,20 @@ class QtyRenProdController extends Controller
         $version = $request->version;
 
         return Excel::download(new MS_KuantitiRenProdExport($version), 'qty_renprod.xlsx');
+    }
+
+    public function check(Request $request)
+    {
+        try {
+            $check = QtyRenProd::where('version_id', $request->version)
+                ->first();
+            if ($check == null) {
+                return response()->json(['Code' => 200, 'msg' => 'Data Tidak Ada']);
+            } else {
+                return response()->json(['Code' => 201, 'msg' => 'Data Ada']);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
     }
 }

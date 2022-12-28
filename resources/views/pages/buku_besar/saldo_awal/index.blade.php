@@ -174,7 +174,19 @@
             }).on('change', function () {
                 $("#submit-export").css("display", "block");
             })
+
+            nilai_satuan()
+
         })
+
+        function nilai_satuan(){
+            let total = $('#total_value').val()
+            let stok = $('#total_stock').val()
+            let res = total.substring(3)
+            let result = res.replaceAll(".", "")
+            let nilsa = parseInt(result) / parseInt(stok) || 0
+            $("#nilai_satuan").val(nilsa)
+        }
 
         function get_data(){
             $('#dt_saldo_awal').DataTable().clear().destroy();
@@ -310,59 +322,153 @@
             })
         })
 
+        // $('#submit-import').on('click', function () {
+        //     Swal.fire({
+        //         title: 'Apakah anda yakin?',
+        //         text: "Data akan segera import",
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#019267',
+        //         cancelButtonColor: '#EF4B4B',
+        //         confirmButtonText: 'Konfirmasi',
+        //         cancelButtonText: 'Kembali'
+        //     }).then((result) =>{
+        //         importStore()
+        //         // if (result.value){
+        //         //     let file = new FormData($("#form-input")[0]);
+        //         //     $.ajax({
+        //         //         type: "POST",
+        //         //         headers: {
+        //         //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         //         },
+        //         //         processData: false,
+        //         //         contentType: false,
+        //         //         url: '{{route('import_saldo_awal')}}',
+        //         //         data: file,
+        //         //         success:function (response) {
+        //         //             if (response.Code === 200){
+        //         //                 $('#modal_import').modal('hide');
+        //         //                 $("#modal_import input").val("")
+        //         //                 $('#is_active').val('').trigger("change");
+        //         //                 toastr.success('Data Berhasil Disimpan', 'Success')
+        //         //                 get_data()
+        //         //             }else if (response.Code === 0){
+        //         //                 $('#modal_import').modal('hide');
+        //         //                 $("#modal_import input").val("")
+        //         //                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+        //         //             }else if (response.Code === 400){
+        //         //                 $('#modal_import').modal('hide');
+        //         //                 $("#modal_import input").val("")
+        //         //                 toastr.warning(response.msg, 'Warning')
+        //         //             }else if (response.Code === 500){
+        //         //                 $('#modal_import').modal('hide');
+        //         //                 $("#modal_import input").val("")
+        //         //                 response.msg.forEach(element => {
+        //         //                     toastr.warning(element, 'Warning')
+        //         //                 });
+        //         //             }else {
+        //         //                 $('#modal_import').modal('hide');
+        //         //                 $("#modal_import input").val("")
+        //         //                 toastr.error('Terdapat Kesalahan System', 'System Error')
+        //         //             }
+        //         //         }
+        //         //     })
+        //         // }
+        //     })
+        // })
+
         $('#submit-import').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera import",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    let file = new FormData($("#form-input")[0]);
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        processData: false,
-                        contentType: false,
-                        url: '{{route('import_saldo_awal')}}',
-                        data: file,
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else if (response.Code === 400){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.warning(response.msg, 'Warning')
-                            }else if (response.Code === 500){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                response.msg.forEach(element => {
-                                    toastr.warning(element, 'Warning')
-                                });
-                            }else {
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('check_saldo_awal')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    version:$('#version').val()
+                },
+                success:function (response) {
+                    if (response.Code === 200){
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: "Data akan segera dikirim",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Kembali'
+                        }).then((result) =>{
+                            if (result.value){
+                                importStore()
                             }
-                        }
-                    })
+                        })
+                    }else if (response.Code === 201){
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Kembali'
+                        }).then((result) =>{
+                            if (result.value){
+                                importStore()
+                            }
+                        })
+                    }
                 }
             })
         })
+
+        function importStore() {
+            let file = new FormData($("#form-input")[0]);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
+                url: '{{route('import_saldo_awal')}}',
+                data: file,
+                success:function (response) {
+                    if (response.Code === 200){
+                        $('#modal_import').modal('hide');
+                        $("#modal_import input").val("")
+                        $('#is_active').val('').trigger("change");
+                        toastr.success('Data Berhasil Disimpan', 'Success')
+                        get_data()
+                    }else if (response.Code === 0){
+                        $('#modal_import').modal('hide');
+                        $("#modal_import input").val("")
+                        toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                    }else if (response.Code === 400){
+                        $('#modal_import').modal('hide');
+                        $("#modal_import input").val("")
+                        toastr.warning(response.msg, 'Warning')
+                    }else if (response.Code === 500){
+                        $('#modal_import').modal('hide');
+                        $("#modal_import input").val("")
+                        response.msg.forEach(element => {
+                            toastr.warning(element, 'Warning')
+                        });
+                    }else {
+                        $('#modal_import').modal('hide');
+                        $("#modal_import input").val("")
+                        toastr.error('Terdapat Kesalahan System', 'System Error')
+                    }
+                },
+                error: function(){
+                    $('#modal_import').modal('hide');
+                    $("#modal_import input").val("")
+                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                }
+            })
+        }
 
         $('#submit-export').on('click', function () {
             $.ajax({
