@@ -276,6 +276,20 @@ if (!function_exists('status_is_active')) {
     }
 }
 
+if (!function_exists('status_dt')) {
+    function status_dt()
+    {
+        $status = array(
+            'all' => 'Semua',
+            true => 'Aktif',
+            false => 'Tidak Aktif',
+
+        );
+
+        return $status;
+    }
+}
+
 if (!function_exists('status_is_dummy')) {
     function status_is_dummy()
     {

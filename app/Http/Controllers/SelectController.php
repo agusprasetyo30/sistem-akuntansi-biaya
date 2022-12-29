@@ -347,4 +347,90 @@ class SelectController extends Controller
             return response()->json(['Code' => 200, 'data_kurs' => $asumsi->usd_rate]);
         }
     }
+
+    //  Datatable
+    public function version_dt(Request $request){
+        $search = $request->search;
+        if ($search == 'all') {
+            $asumsi = Version_Asumsi::limit(10)
+                ->get();
+        } else {
+            $asumsi = Version_Asumsi::where('version', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($asumsi as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->version
+            );
+        }
+        return response()->json($response);
+    }
+
+    public function material_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $material = Material::limit(10)
+                ->where('is_active', 't')
+                ->get();
+        } else {
+            $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($material as $items) {
+            $response[] = array(
+                "id" => $items->material_code,
+                "text" => $items->material_code . ' - ' . $items->material_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function plant_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $plant = Plant::limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $plant = Plant::where('plant_code', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($plant as $items) {
+            $response[] = array(
+                "id" => $items->plant_code,
+                "text" => $items->plant_code
+            );
+        }
+
+        return response()->json($response);
+    }
 }

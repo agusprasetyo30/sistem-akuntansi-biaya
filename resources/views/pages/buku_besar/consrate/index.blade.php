@@ -36,9 +36,9 @@
                                     <th data-type='text' data-name='nomor' class="text-center">NO</th>
                                     <th data-type='select' data-name='version' class="text-center">VERSION</th>
                                     <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
-                                    <th data-type='text' data-name='code' class="text-center">CODE PLANT</th>
-                                    <th data-type='text' data-name='produk' class="text-center">PRODUK</th>
-                                    <th data-type='text' data-name='material' class="text-center">MATERIAL</th>
+                                    <th data-type='select' data-name='code' class="text-center">CODE PLANT</th>
+                                    <th data-type='select' data-name='produk' class="text-center">PRODUK</th>
+                                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
                                     <th data-type='text' data-name='uom' class="text-center">UOM</th>
                                     <th data-type='text' data-name='consrate' class="text-center">CONSRATE</th>
                                     <th data-type='select' data-name='status' class="text-center">STATUS</th>
@@ -411,15 +411,23 @@
                                 var input = document.createElement("select");
                                 var options = "";
                                 if (iName == 'status'){
-                                    input.className = "status form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
+                                    input.className = "status_search form-control custom-select select2";
+                                    @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
 
 
                                 }else if (iName == 'version'){
-                                    input.className = "version form-control custom-select select2";
+                                    input.className = "version_search form-control custom-select select2";
+
+                                }else if(iName == 'produk'){
+                                    input.className = "produk_search form-control custom-select select2";
+
+                                }else if (iName == 'material'){
+                                    input.className = "material_search form-control custom-select select2";
+
+                                }else if (iName == 'code'){
+                                    input.className = "plant_search form-control custom-select select2";
 
                                 }
                                 input.innerHTML = options
@@ -432,17 +440,77 @@
                         }else {
                             cell.empty()
                         }
-                        $('.status').select2({
+                        $('.status_search').select2({
                             placeholder: 'Pilih Status',
                             width: '100%',
                             allowClear: false,
                         })
 
-                        $('.version').select2({
+                        $('.version_search').select2({
                             placeholder: 'Pilih Versi',
                             allowClear: false,
                             ajax: {
-                                url: "{{ route('version_select') }}",
+                                url: "{{ route('version_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.produk_search').select2({
+                            placeholder: 'Pilih Produk',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.plant_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('plant_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -473,11 +541,11 @@
                     { data: 'DT_RowIndex', name: 'id', searchable: false,orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'periode', name: 'filter_periode', orderable:true},
-                    { data: 'plant_code', name: 'plant_code', orderable:false},
-                    { data: 'product', name: 'filter_product', orderable:false},
-                    { data: 'material', name: 'filter_material', orderable:false},
-                    { data: 'uom', name: 'filter_uom', orderable:false},
-                    { data: 'cons_rate', name: 'cons_rate', orderable:false},
+                    { data: 'plant_code', name: 'filter_plant', orderable:true},
+                    { data: 'product', name: 'filter_product', orderable:true},
+                    { data: 'material', name: 'filter_material', orderable:true},
+                    { data: 'uom', name: 'filter_uom', orderable:true},
+                    { data: 'cons_rate', name: 'cons_rate', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
@@ -486,84 +554,53 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5,6,7,8]}
                 ]
 
-            }).columns.adjust();
+            })
 
         }
 
         $('#submit').on('click', function () {
             $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dikirim",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('insert_consrate')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id_plant: $('#data_main_plant').val(),
-                            version: $('#data_main_version').val(),
-                            id_asumsi: $('#data_detal_version').val(),
-                            produk: $('#data_main_produk').val(),
-                            material: $('#data_main_material').val(),
-                            consrate: $('#consrate').val(),
-                            is_active: $('#is_active').val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#data_main_plant').val('').trigger("change");
-                                $('#data_main_version').val('').trigger("change");
-                                $('#data_detal_version').val('').trigger("change");
-                                $('#data_main_produk').val('').trigger("change");
-                                $('#data_main_material').val('').trigger("change");
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                get_data()
-                            }else if (response.Code === 400){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                toastr.warning(response.msg, 'Warning')
-                            }else if (response.Code === 0){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#data_main_plant').val('').trigger("change");
-                                $('#data_main_version').val('').trigger("change");
-                                $('#data_detal_version').val('').trigger("change");
-                                $('#data_main_produk').val('').trigger("change");
-                                $('#data_main_material').val('').trigger("change");
-                                $('#is_active').val('').trigger("change");
-                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#data_main_plant').val('').trigger("change");
-                                $('#data_main_version').val('').trigger("change");
-                                $('#data_detal_version').val('').trigger("change");
-                                $('#data_main_produk').val('').trigger("change");
-                                $('#data_main_material').val('').trigger("change");
-                                $('#is_active').val('').trigger("change");
-                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_consrate')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id_plant: $('#data_main_plant').val(),
+                    version: $('#data_main_version').val(),
+                    id_asumsi: $('#data_detal_version').val(),
+                    produk: $('#data_main_produk').val(),
+                    material: $('#data_main_material').val(),
+                    consrate: $('#consrate').val(),
+                    is_active: $('#is_active').val(),
+                },
+                success:function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#modal_add').modal('hide');
+                            $("#modal_add input").val("")
+                            $('#data_main_plant').val('').trigger("change");
+                            $('#data_main_version').val('').trigger("change");
+                            $('#data_detal_version').val('').trigger("change");
+                            $('#data_main_produk').val('').trigger("change");
+                            $('#data_main_material').val('').trigger("change");
+                            $('#is_active').val('').trigger("change");
+                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            get_data()
                         }
                     })
+                },
+                error:function (response) {
+                    handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
-
             })
         })
 
