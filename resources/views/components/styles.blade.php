@@ -71,6 +71,9 @@
 <!-- INTERNAL Prism Css -->
 <link href="{{asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
 
+<!-- Plugin -->
+{{--<link rel="stylesheet" href="https://dhobi.github.io/datatables.colResize/jquery.dataTables.colResize.css">--}}
+
 @yield('styles')
 
 <!-- Color Skin css -->

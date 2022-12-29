@@ -118,6 +118,7 @@
 
 <!-- INTERNAL Prism js -->
 <script src="{{asset('assets/plugins/prism/prism.js')}}"></script>
+{{--<script src="https://dhobi.github.io/datatables.colResize/jquery.dataTables.colResize.js"></script>--}}
 @yield('scripts')
 
 <!-- Custom js-->
