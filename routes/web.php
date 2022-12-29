@@ -202,6 +202,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
             Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
             Route::post('/check_kursv1', [SelectController::class, 'check_kursv1'])->name('helper_kursv1');
+
+            //            Datatable
+            Route::get('/version_dt', [SelectController::class, 'version_dt'])->name('version_dt');
+            Route::get('/material_dt', [SelectController::class, 'material_dt'])->name('material_dt');
+            Route::get('/plant_dt', [SelectController::class, 'plant_dt'])->name('plant_dt');
         });
     });
 

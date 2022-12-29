@@ -44,7 +44,7 @@ var ewpTable = function (data) {
         +'<tbody><tr><td>&nbsp;</td></tr></tbody>'
         +((setFooter == true) ? '<tfoot><tr>' + tfoot + '</tr></tfoot>' : '')
         +'</table>';
-        
+
         return html;
 	}
 }
@@ -81,7 +81,7 @@ var ewpDatatables = function (data) {
 			"aoColumns": column,
 			"aaSorting": [data.sorting],
 			"lengthMenu": [ 10, 25, 50, 75, 100 ],
-            language: { 
+            language: {
                 search: "",
                 searchPlaceholder: "Search...",
             },
@@ -92,7 +92,7 @@ var ewpDatatables = function (data) {
                     var theme = el.data('theme') ? 'tooltip-' + el.data('theme') : '';
                     var width = el.data('width') == 'auto' ? 'tooltop-auto-width' : '';
                     var trigger = el.data('trigger') ? el.data('trigger') : 'hover';
-            
+
                     $(el).tooltip({
                         trigger: trigger,
                         template: '<div class="tooltip ' + theme + ' ' + width + '" role="tooltip">\
@@ -101,7 +101,7 @@ var ewpDatatables = function (data) {
                         </div>'
                     });
                 }
-            
+
                 var initTooltips = function() {
                     // init bootstrap tooltips
                     $('[data-toggle="tooltip"]').each(function() {
@@ -146,14 +146,16 @@ var handleError = function (response) {
         Swal.fire('Oopss...', 'Unprocessable Entity', 'error')
         return false
     }
-    
+
     // Swal.fire(response.responseJSON.title, response.responseJSON.msg, response.responseJSON.type)
 
     Swal.fire({
         title: response.responseJSON.title,
         html: response.responseJSON.msg,
-        icon: response.responseJSON.type,
-        allowOutsideClick: false
+        icon: 'warning',
+        allowOutsideClick: false,
+        confirmButtonColor: "#019267",
+        confirmButtonText: 'Konfirmasi',
     })
 
 }
