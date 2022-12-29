@@ -60,12 +60,12 @@ class ConsRateController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            //            dd($input);
 
             $data_cek = ConsRate::where([
                 'plant_code' => $request->id_plant,
                 'version_id' => (int) $request->version,
                 'product_code' => $request->produk,
+                'month_year' => $data_asumsi->month_year,
                 'company_code' => 'B000'
             ])->first();
 

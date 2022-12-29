@@ -26,8 +26,14 @@ class ConsRateDataTable extends DataTable
             ->addColumn('periode', function ($query){
                 return format_month($query->month_year,'bi');
             })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.version', $order);
+            })
+            ->orderColumn('filter_periode', function ($query, $order) {
+                $query->orderBy('cons_rate.month_year', $order);
+            })
             ->filterColumn('filter_version', function ($query, $keyword){
-                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%');
+                $query->where('version_asumsi.id', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_periode', function ($query, $keyword){
                 $query->Where('cons_rate.month_year', 'ilike', '%'.$keyword.'%');
@@ -89,42 +95,7 @@ class ConsRateDataTable extends DataTable
      *
      * @return \Yajra\DataTables\Html\Builder
      */
-    public function html()
-    {
-        return $this->builder()
-                    ->setTableId('consrate-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
-    }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
-    protected function getColumns()
-    {
-        return [
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-        ];
-    }
 
     /**
      * Get filename for export.

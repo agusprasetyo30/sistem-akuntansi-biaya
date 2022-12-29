@@ -30,31 +30,19 @@
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                            <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                    <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSION</th>
-                                    <th data-type='text' data-name='periode' class="border-bottom-0 text-center">PERIODE</th>
-                                    <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE PLANT</th>
-                                    <th data-type='text' data-name='produk' class="border-bottom-0 text-center">PRODUK</th>
-                                    <th data-type='text' data-name='material' class="border-bottom-0 text-center">MATERIAL</th>
-                                    <th data-type='text' data-name='uom' class="border-bottom-0 text-center">UOM</th>
-                                    <th data-type='text' data-name='consrate' class="border-bottom-0 text-center">CONSRATE</th>
-                                    <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
-                                    <th data-type='text' data-name='action' class="border-bottom-0 text-center">ACTION</th>
-                                </tr>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center"></th>
-                                    <th data-type='text' data-name='version' class="text-center"></th>
-                                    <th data-type='text' data-name='periode' class="text-center"></th>
-                                    <th data-type='text' data-name='code' class="text-center"></th>
-                                    <th data-type='text' data-name='produk' class="text-center"></th>
-                                    <th data-type='text' data-name='material' class="text-center"></th>
-                                    <th data-type='text' data-name='uom' class="text-center"></th>
-                                    <th data-type='text' data-name='consrate' class="text-center"></th>
-                                    <th data-type='select' data-name='status' class="text-center"></th>
-                                    <th data-type='text' data-name='action' class="text-center"></th>
+                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                    <th data-type='select' data-name='version' class="text-center">VERSION</th>
+                                    <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
+                                    <th data-type='text' data-name='code' class="text-center">CODE PLANT</th>
+                                    <th data-type='text' data-name='produk' class="text-center">PRODUK</th>
+                                    <th data-type='text' data-name='material' class="text-center">MATERIAL</th>
+                                    <th data-type='text' data-name='uom' class="text-center">UOM</th>
+                                    <th data-type='text' data-name='consrate' class="text-center">CONSRATE</th>
+                                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -76,6 +64,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_consrate thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_consrate thead');
+
             get_data()
 
             $('#data_main_plant').select2({
@@ -372,6 +365,10 @@
             $("#dt_consrate").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
+                // bSortCellsTop: true,
                 // searching: false,
                 sortable: false,
                 processing: true,
@@ -380,9 +377,7 @@
                     header: true,
                     headerOffset: $('#main_header').height()
                 },
-
                 initComplete: function () {
-
                     $('.dataTables_scrollHead').css('overflow', 'auto');
                     $('.dataTables_scrollHead').on('scroll', function () {
                         // console.log('data')
@@ -391,12 +386,14 @@
 
                     $(document).on('scroll', function () {
                         $('.dtfh-floatingparenthead').on('scroll', function () {
+
                             $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
@@ -406,34 +403,60 @@
                                 input.className = "form-control";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "status form-control custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
+                                    input.className = "status form-control custom-select select2";
                                     options += '<option value="">Semua</option>';
                                     @foreach (status_is_active() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
+
+
+                                }else if (iName == 'version'){
+                                    input.className = "version form-control custom-select select2";
+
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
-                                $('.status').select2({
-                                    placeholder: 'Pilih Status',
-                                    width: '100%',
-                                    allowClear: false,
-                                })
-
                             }
+                        }else {
+                            cell.empty()
                         }
+                        $('.status').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
+
+                        $('.version').select2({
+                            placeholder: 'Pilih Versi',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('version_select') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
 
                     });
 
@@ -447,9 +470,9 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
-                    { data: 'version', name: 'filter_version', orderable:false},
-                    { data: 'periode', name: 'filter_periode', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false,orderable:false},
+                    { data: 'version', name: 'filter_version', orderable:true},
+                    { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'plant_code', name: 'plant_code', orderable:false},
                     { data: 'product', name: 'filter_product', orderable:false},
                     { data: 'material', name: 'filter_material', orderable:false},
@@ -463,12 +486,12 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5,6,7,8]}
                 ]
 
-            })
-
+            }).columns.adjust();
 
         }
 
         $('#submit').on('click', function () {
+            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dikirim",
@@ -507,10 +530,12 @@
                                 $('#data_main_material').val('').trigger("change");
                                 $('#is_active').val('').trigger("change");
                                 toastr.success('Data Berhasil Disimpan', 'Success')
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 get_data()
                             }else if (response.Code === 400){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 toastr.warning(response.msg, 'Warning')
                             }else if (response.Code === 0){
                                 $('#modal_add').modal('hide');
@@ -521,6 +546,7 @@
                                 $('#data_main_produk').val('').trigger("change");
                                 $('#data_main_material').val('').trigger("change");
                                 $('#is_active').val('').trigger("change");
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                             }else {
                                 $('#modal_add').modal('hide');
@@ -531,10 +557,9 @@
                                 $('#data_main_produk').val('').trigger("change");
                                 $('#data_main_material').val('').trigger("change");
                                 $('#is_active').val('').trigger("change");
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
-
-
                         }
                     })
                 }
@@ -543,6 +568,7 @@
         })
 
         function update_consrate(id) {
+            $("#submit_edit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera disimpan",
@@ -576,16 +602,20 @@
                             if (response.Code === 200){
                                 $('#modal_edit'+id).modal('hide');
                                 toastr.success('Data Berhasil Disimpan', 'Success')
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 get_data()
                             }else if (response.Code === 0){
                                 $('#modal_edit'+id).modal('hide');
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
                             }else if (response.Code === 400){
                                 $('#modal_add').modal('hide');
                                 $("#modal_add input").val("")
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 toastr.warning(response.msg, 'Warning')
                             }else {
                                 $('#modal_edit'+id).modal('hide');
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
                         }
