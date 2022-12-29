@@ -146,6 +146,14 @@ var handleError = function (response) {
         Swal.fire('Oopss...', 'Unprocessable Entity', 'error')
         return false
     }
+    
+    // Swal.fire(response.responseJSON.title, response.responseJSON.msg, response.responseJSON.type)
 
-    Swal.fire(response.responseJSON.title, response.responseJSON.msg, response.responseJSON.type)
+    Swal.fire({
+        title: response.responseJSON.title,
+        html: response.responseJSON.msg,
+        icon: response.responseJSON.type,
+        allowOutsideClick: false
+    })
+
 }

@@ -61,11 +61,27 @@ class SaldoAwalController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            Saldo_Awal::create($input);
+            $data_saldo_awal = Saldo_Awal::where([
+                'company_code' => auth()->user()->company_code,
+                'plant_code' => $request->plant_code,
+                'version_id' => (int) $request->version_id,
+                'material_code' => $request->material_code,
+            ])->first();
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            if (!$data_saldo_awal) {
+                Saldo_Awal::create($input);
+            } else {
+                Saldo_Awal::where('id', $data_saldo_awal->id)->update($input);
+            }
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -108,23 +124,31 @@ class SaldoAwalController extends Controller
             Saldo_Awal::where('id', $request->id)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function delete(Request $request)
     {
         try {
-            $input['deleted_at'] = Carbon::now();
-            $input['deleted_by'] = auth()->user()->id;
-
             Saldo_Awal::where('id', $request->id)
-                ->update($input);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+                ->delete();
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -162,21 +186,32 @@ class SaldoAwalController extends Controller
                         array_push($err, $hasil);
                     }
                     // dd(implode(' ', $err));
-                    return response()->json(['Code' => 500, 'msg' => $err]);
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                    ]);
                 }
             });
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function export(Request $request)
     {
         if (!$request->version) {
-            return response()->json(['Code' => 500]);
+            return setResponse([
+                'code' => 500,
+            ]);
         }
+
         $version = $request->version;
 
         return Excel::download(new MS_SaldoAwalExport($version), 'saldo_awal.xlsx');
@@ -188,9 +223,15 @@ class SaldoAwalController extends Controller
             $check = Saldo_Awal::where('version_id', $request->version)
                 ->first();
             if ($check == null) {
-                return response()->json(['Code' => 200, 'msg' => 'Data ']);
+                return setResponse([
+                    'code' => 200,
+                ]);
             } else {
-                return response()->json(['Code' => 201, 'msg' => 'Data Berasil Disimpan']);
+                return setResponse([
+                    'code' => 201,
+                    'title' => 'Apakah anda yakin?',
+                    'message' => 'Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?'
+                ]);
             }
         } catch (\Exception $exception) { }
     }
