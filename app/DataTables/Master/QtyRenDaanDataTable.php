@@ -30,12 +30,11 @@ class QtyRenDaanDataTable extends DataTable
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('version_periode', function ($query){
-                return $query->version.' - '.format_month($query->month_year,'bi');
+            ->addColumn('version', function ($query){
+                return $query->version;
             })
-            ->filterColumn('filter_version_periode', function ($query, $keyword){
-                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+            ->addColumn('periode', function ($query){
+                return format_month($query->month_year,'bi');
             })
             ->addColumn('value', function ($query){
                 return rupiah($query->qty_rendaan_value);
@@ -43,12 +42,34 @@ class QtyRenDaanDataTable extends DataTable
             ->addColumn('material', function ($query){
                 return $query->material_code.' - '.$query->material_name;
             })
+            ->filterColumn('filter_version', function ($query, $keyword){
+                if ($keyword != 'all'){
+                    $query->where('version_asumsi.id', 'ilike', '%'.$keyword.'%');
+                }
+            })
+            ->filterColumn('filter_periode', function ($query, $keyword){
+                $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+            })
             ->filterColumn('filter_material', function ($query, $keyword){
-                $query->where('qty_rendaan.material_code', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+                if ($keyword != 'all'){
+                    $query->where('qty_rendaan.material_code', 'ilike', '%'.$keyword.'%')
+                        ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+                }
             })
             ->filterColumn('filter_region',function ($query, $keyword){
                 $query->where('regions.region_name', 'ilike', '%'.$keyword.'%');
+            })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.version', $order);
+            })
+            ->orderColumn('filter_periode', function ($query, $order) {
+                $query->orderBy('asumsi_umum.month_year', $order);
+            })
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('qty_rendaan.material_code', $order);
+            })
+            ->orderColumn('filter_region', function ($query, $order) {
+                $query->orderBy('regions.region_name', $order);
             })
             ->addColumn('action', 'pages.buku_besar.qty_rendaan.action')
             ->escapeColumns([]);
@@ -62,7 +83,6 @@ class QtyRenDaanDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1)
             ->buttons(
                 Button::make('create'),
                 Button::make('export'),
@@ -72,25 +92,6 @@ class QtyRenDaanDataTable extends DataTable
             );
     }
 
-    /**
-     * Get columns.
-     *
-     * @return array
-     */
-    protected function getColumns()
-    {
-        return [
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-        ];
-    }
 
     /**
      * Get filename for export.

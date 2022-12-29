@@ -33,20 +33,13 @@
                         <table id="dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                             <thead>
                             <tr>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
-                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">VERSION</th>
-                                <th data-type='text' data-name='region' class="border-bottom-0 text-center">REGION</th>
-                                <th data-type='text' data-name='qty_rendaan_value' class="border-bottom-0 text-center">VALUE</th>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
-                            </tr>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='material_id' class="text-center"></th>
-                                <th data-type='text' data-name='periode_id' class="text-center"></th>
-                                <th data-type='text' data-name='region' class="text-center"></th>
-                                <th data-type='text' data-name='qty_rendaan_value' class="text-center"></th>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
+                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
+                                <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
+                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                                <th data-type='text' data-name='region' class="text-center">REGION</th>
+                                <th data-type='text' data-name='qty_rendaan_value' class="text-center">VALUE</th>
+                                <th data-type='text' data-name='aksi' class="text-center">ACTION</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -68,6 +61,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_qty_rendaan thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_qty_rendaan thead');
+
             get_data()
 
             $('#data_main_version').select2({
@@ -221,10 +219,10 @@
             })
 
             $('#submit_import').on('click', function () {
-                var versi = $('#version').val();
-                if (versi === null){
-                    toastr.warning('Data Versi Asumsi Harus diisi', 'Warning')
-                }else {
+                $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+                $("#back_import").attr("disabled", true);
+
+                if ($('#version').val() !== null && $('#file').val() !== ''){
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -249,6 +247,9 @@
                                 }).then((result) =>{
                                     if (result.value){
                                         importStore()
+                                    }else {
+                                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                        $("#back_import").attr("disabled", true);
                                     }
                                 })
                             }else if (response.Code === 201){
@@ -264,9 +265,26 @@
                                 }).then((result) =>{
                                     if (result.value){
                                         importStore()
+                                    }else {
+                                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                        $("#back_import").attr("disabled", false);
                                     }
                                 })
                             }
+                        }
+                    })
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Silakan Isi Data Tersebut",
+                        icon: 'warning',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        if (result.value){
+                            $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#back_import").attr("disabled", false);
                         }
                     })
                 }
@@ -284,28 +302,26 @@
                     url: '{{route('import_qty_rendaan')}}',
                     data: file,
                     success:function (response) {
-                        console.log(response);
-                        if (response.Code === 200){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            $('#is_active').val('').trigger("change");
-                            toastr.success('Data Berhasil Disimpan', 'Success')
-                            get_data()
-                        }else if (response.Code === 0){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                        }else if (response.Code === 500){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            response.msg.forEach(element => {
-                                toastr.warning(element, 'Warning')
-                            });
-                        }else {
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            toastr.error('Terdapat Kesalahan System', 'System Error')
-                        }
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        Swal.fire({
+                            title: response.title,
+                            text: response.message,
+                            icon: response.type,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#019267',
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                            .then((result) => {
+                                if (result.value) {
+                                    get_data()
+                                    $('#modal_import').modal('hide')
+                                    $("#modal_import input").val("")
+                                }
+                            })
+                    },error: function (response) {
+                        handleError(response)
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
                     }
                 })
             }
@@ -321,6 +337,7 @@
             $("#dt_qty_rendaan").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
                 // sortable: false,
                 // searching: false,
                 processing: true,
@@ -342,8 +359,9 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
@@ -353,12 +371,81 @@
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
+                            }else if (data_type == 'select'){
+                                var input = document.createElement("select");
+                                var options = "";
+                                if (iName == 'status'){
+                                    input.className = "status_search form-control custom-select select2";
+                                    @foreach (status_dt() as $key => $value)
+                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                    @endforeach
+                                }else if (iName == 'material'){
+                                    input.className = "material_search form-control custom-select select2";
+
+                                }else if (iName == 'version'){
+                                    input.className = "version_search form-control custom-select select2";
+
+                                }
+
+                                input.innerHTML = options
+                                $(input).appendTo(cell.empty())
+                                    .on('change clear', function () {
+                                        column.search($(this).val(), false, false, true).draw();
+                                    });
                             }
+                        }else {
+                            cell.empty()
                         }
+
+                        $('.status_search').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
+
+                        $('.version_search').select2({
+                            placeholder: 'Pilih Versi',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('version_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
 
                     });
                 },
@@ -371,11 +458,12 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'material', name: 'filter_material', orderable:false},
-                    { data: 'version_periode', name: 'filter_version_periode', orderable:false},
-                    { data: 'region_name', name: 'filter_region', orderable:false},
-                    { data: 'value', name: 'qty_rendaan_value', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'version', name: 'filter_version', orderable:true},
+                    { data: 'periode', name: 'filter_periode', orderable:true},
+                    { data: 'material', name: 'filter_material', orderable:true},
+                    { data: 'region_name', name: 'filter_region', orderable:true},
+                    { data: 'value', name: 'qty_rendaan_value', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
@@ -387,102 +475,91 @@
 
 
         $('#submit').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dikirim",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('insert_qty_rendaan')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            version_asumsi:$('#data_main_version').val(),
-                            bulan:$('#data_detal_version').val(),
-                            material_id: $('#data_main_material').val(),
-                            region_id: $('#data_main_region').val(),
-                            qty_rendaan_value: $('#qty_rendaan_value').val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
-
-
+            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_qty_rendaan')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    version_asumsi:$('#data_main_version').val(),
+                    bulan:$('#data_detal_version').val(),
+                    material_id: $('#data_main_material').val(),
+                    region_id: $('#data_main_region').val(),
+                    qty_rendaan_value: $('#qty_rendaan_value').val(),
+                },
+                success:function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#modal_add').modal('hide');
+                            $("#modal_add input").val("")
+                            $('#data_main_plant').val('').trigger("change");
+                            $('#data_main_version').val('').trigger("change");
+                            $('#data_detal_version').val('').trigger("change");
+                            $('#data_main_produk').val('').trigger("change");
+                            $('#data_main_material').val('').trigger("change");
+                            $('#is_active').val('').trigger("change");
+                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            get_data()
                         }
                     })
-
+                },
+                error:function (response) {
+                    handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
-
             })
         })
 
         function update_qty_rendaan(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_qty_rendaan')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                            version_asumsi:$('#edit_data_main_version'+id).val(),
-                            bulan:$('#edit_data_detal_version'+id).val(),
-                            material_id: $('#edit_data_main_material'+id).val(),
-                            region_id: $('#edit_data_main_region'+id).val(),
-                            qty_rendaan_value: $('#edit_qty_rendaan_value'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
-                        }
+            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_qty_rendaan')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    version_asumsi:$('#edit_data_main_version'+id).val(),
+                    bulan:$('#edit_data_detal_version'+id).val(),
+                    material_id: $('#edit_data_main_material'+id).val(),
+                    region_id: $('#edit_data_main_region'+id).val(),
+                    qty_rendaan_value: $('#edit_qty_rendaan_value'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     })
-
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_edit'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                get_data()
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit"+id).attr("disabled", false);
                 }
-
             })
         }
 
@@ -509,15 +586,21 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        get_data()
+                                    }
+                                })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 

@@ -91,6 +91,12 @@ class ConsRateDataTable extends DataTable
             ->orderColumn('filter_uom', function ($query, $order) {
                 $query->orderBy('material.material_uom', $order);
             })
+            ->orderColumn('filter_product', function ($query, $order) {
+                $query->orderBy('cons_rate.product_code', $order);
+            })
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('cons_rate.material_code', $order);
+            })
             ->addColumn('action', 'pages.buku_besar.consrate.action')
             ->escapeColumns([]);
     }
