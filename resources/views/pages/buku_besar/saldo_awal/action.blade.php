@@ -3,7 +3,7 @@
 <a class="btn bg-danger-transparent" onclick="delete_saldo_awal({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -84,7 +84,7 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -149,7 +149,7 @@
                             <div class="form-group">
                                 <label>Nilai Satuan </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nilai Satuan"
-                                    value="" name="edit_nilai_satuan"
+                                    value="{{$model->nilai_satuan}}" name="edit_nilai_satuan"
                                     id="edit_nilai_satuan" autocomplete="off" readonly>
                             </div>
                         </div>

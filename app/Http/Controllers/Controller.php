@@ -28,6 +28,10 @@ class Controller extends BaseController
         foreach ($validator->errors()->all() as $message)
             $msg .= '<p>' . $message . '</p>';
 
-        return response()->json(['Code' => 400, 'msg' => $msg]);
+        return response()->json([
+            'title' => 'Oopss...',
+            'msg' => $msg,
+            'type' => 'error'
+        ], 400);
     }
 }
