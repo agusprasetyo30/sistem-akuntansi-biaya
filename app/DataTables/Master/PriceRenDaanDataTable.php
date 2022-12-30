@@ -30,12 +30,11 @@ class PriceRenDaanDataTable extends DataTable
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('version_periode', function ($query){
-                return $query->version.' - '.format_month($query->month_year,'bi');
+            ->addColumn('version', function ($query){
+                return $query->version;
             })
-            ->filterColumn('filter_version_periode', function ($query, $keyword){
-                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+            ->addColumn('periode', function ($query){
+                return format_month($query->month_year,'bi');
             })
             ->addColumn('value', function ($query){
                 return rupiah($query->price_rendaan_value);
@@ -43,12 +42,34 @@ class PriceRenDaanDataTable extends DataTable
             ->addColumn('material', function ($query){
                 return $query->material_code.' - '.$query->material_name;
             })
+            ->filterColumn('filter_version', function ($query, $keyword){
+                if ($keyword != 'all'){
+                    $query->where('version_asumsi.id', 'ilike', '%'.$keyword.'%');
+                }
+            })
+            ->filterColumn('filter_periode', function ($query, $keyword){
+                $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+            })
             ->filterColumn('filter_material', function ($query, $keyword){
-                $query->where('price_rendaan.material_code', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+                if ($keyword != 'all'){
+                    $query->where('price_rendaan.material_code', 'ilike', '%'.$keyword.'%')
+                        ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+                }
             })
             ->filterColumn('filter_region',function ($query, $keyword){
                 $query->where('regions.region_name', 'ilike', '%'.$keyword.'%');
+            })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.version', $order);
+            })
+            ->orderColumn('filter_periode', function ($query, $order) {
+                $query->orderBy('asumsi_umum.month_year', $order);
+            })
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('price_rendaan.material_code', $order);
+            })
+            ->orderColumn('filter_region', function ($query, $order) {
+                $query->orderBy('regions.region_name', $order);
             })
             ->addColumn('action', 'pages.buku_besar.price_rendaan.action')
             ->escapeColumns([]);

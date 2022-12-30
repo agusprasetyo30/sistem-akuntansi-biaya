@@ -33,7 +33,6 @@
                         <table id="dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                             <thead>
                             <tr>
-                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
                                 <th data-type='select' data-name='version' class="text-center">VERSI</th>
                                 <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
                                 <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
@@ -271,6 +270,11 @@
                                     }
                                 })
                             }
+                        },
+                        error: function (response) {
+                            handleError(response)
+                            $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#back_import").attr("disabled", false);
                         }
                     })
                 }else {
@@ -318,7 +322,8 @@
                                     $("#modal_import input").val("")
                                 }
                             })
-                    },error: function (response) {
+                    },
+                    error: function (response) {
                         handleError(response)
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
@@ -375,7 +380,8 @@
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-                            }else if (data_type == 'select'){
+                            }
+                            else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
                                 if (iName == 'status'){
@@ -458,7 +464,6 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'material', name: 'filter_material', orderable:true},
@@ -495,7 +500,9 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     }).then((result) => {
                         if (result.value) {
                             $('#modal_add').modal('hide');
