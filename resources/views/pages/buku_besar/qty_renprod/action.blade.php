@@ -4,7 +4,7 @@
 
 
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
@@ -53,7 +53,7 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
@@ -76,7 +76,7 @@
                             <div class="form-group">
                                 <label class="form-label">Bulan <span class="text-red">*</span></label>
                                 <select name="edit_data_detail_version{{$model->id}}" id="edit_data_detail_version{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->month_year}}" selected>{{format_month($model->month_year, 'se')}}</option>
+                                    <option value="{{$model->asumsi_umum_id}}" selected>{{format_month($model->month_year, 'se')}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -192,7 +192,7 @@
             data: function (params) {
                 return {
                     search: params.term,
-                    version: $('#edit_data_main_version'+{{$model->id}}).val()
+                    version:$('#edit_data_main_version'+{{$model->id}}).val()
 
                 };
             },

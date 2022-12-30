@@ -37,50 +37,70 @@ class QtyRenProdDataTable extends DataTable
             ->editColumn('material_name', function ($query) {
                 return $query->material_code . ' ' . $query->material_name;
             })
-            ->filterColumn('filter_month_year', function ($query, $keyword){
-                $query->where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('material.material_code', $order);
+            })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.id', $order);
+            })
+            ->orderColumn('filter_month_year', function ($query, $order) {
+                $query->orderBy('asumsi_umum.month_year', $order);
+            })
+            ->filterColumn('filter_material', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('material.material_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_month_year', function ($query, $keyword) {
+                $query->where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
             })
             ->addColumn('action', 'pages.buku_besar.qty_renprod.action')
             ->escapeColumns([]);
     }
 
-    public function html()
-    {
-        return $this->builder()
-            ->addTableClass('table table-bordered text-nowrap key-buttons')
-            ->setTableId('dt_qty_renprod')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1)
-            ->buttons(
-                Button::make('create'),
-                Button::make('export'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            );
-    }
+    // public function html()
+    // {
+    //     return $this->builder()
+    //         ->addTableClass('table table-bordered text-nowrap key-buttons')
+    //         ->setTableId('dt_qty_renprod')
+    //         ->columns($this->getColumns())
+    //         ->minifiedAjax()
+    //         ->dom('Bfrtip')
+    //         ->orderBy(1)
+    //         ->buttons(
+    //             Button::make('create'),
+    //             Button::make('export'),
+    //             Button::make('print'),
+    //             Button::make('reset'),
+    //             Button::make('reload')
+    //         );
+    // }
 
     /**
      * Get columns.
      *
      * @return array
      */
-    protected function getColumns()
-    {
-        return [
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-        ];
-    }
+    // protected function getColumns()
+    // {
+    //     return [
+    //         Column::computed('action')
+    //             ->exportable(false)
+    //             ->printable(false)
+    //             ->width(60)
+    //             ->addClass('text-center'),
+    //         Column::make('id'),
+    //         Column::make('add your columns'),
+    //         Column::make('created_at'),
+    //         Column::make('updated_at'),
+    //     ];
+    // }
 
     /**
      * Get filename for export.

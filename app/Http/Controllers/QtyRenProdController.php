@@ -47,11 +47,27 @@ class QtyRenProdController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            QtyRenProd::create($input);
+            $data_renprod = QtyRenProd::where([
+                'company_code' => auth()->user()->company_code,
+                'material_code' => $request->material_code,
+                'version_id' => (int) $request->version_id,
+                'asumsi_umum_id' => $request->month_year,
+            ])->first();
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            if (!$data_renprod) {
+                QtyRenProd::create($input);
+            } else {
+                QtyRenProd::where('id', $data_renprod->id)->update($input);
+            }
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -80,23 +96,31 @@ class QtyRenProdController extends Controller
             QtyRenProd::where('id', $request->id)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function delete(Request $request)
     {
         try {
-            $input['deleted_at'] = Carbon::now();
-            $input['deleted_by'] = auth()->user()->id;
-
             QtyRenProd::where('id', $request->id)
-                ->update($input);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+                ->delete();
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -135,20 +159,30 @@ class QtyRenProdController extends Controller
                         array_push($err, $hasil);
                     }
                     // dd(implode(' ', $err));
-                    return response()->json(['Code' => 500, 'msg' => $err]);
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                    ]);
                 }
             });
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function export(Request $request)
     {
         if (!$request->version) {
-            return response()->json(['Code' => 500]);
+            return setResponse([
+                'code' => 500,
+            ]);
         }
         $version = $request->version;
 
@@ -161,12 +195,20 @@ class QtyRenProdController extends Controller
             $check = QtyRenProd::where('version_id', $request->version)
                 ->first();
             if ($check == null) {
-                return response()->json(['Code' => 200, 'msg' => 'Data Tidak Ada']);
+                return setResponse([
+                    'code' => 200,
+                ]);
             } else {
-                return response()->json(['Code' => 201, 'msg' => 'Data Ada']);
+                return setResponse([
+                    'code' => 201,
+                    'title' => 'Apakah anda yakin?',
+                    'message' => 'Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?'
+                ]);
             }
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 }

@@ -40,47 +40,64 @@ class SaldoAwalDataTable extends DataTable
             ->editColumn('nilai_satuan', function ($query) {
                 return rupiah($query->nilai_satuan);
             })
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('material.material_code', $order);
+            })
+            ->orderColumn('filter_plant', function ($query, $order) {
+                $query->orderBy('plant.plant_code', $order);
+            })
+            ->filterColumn('filter_material', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('material.material_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_plant', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('plant.plant_code', 'ilike', '%' . $keyword . '%');
+                }
+            })
             ->addColumn('action', 'pages.buku_besar.saldo_awal.action')
             ->escapeColumns([]);
     }
 
-    public function html()
-    {
-        return $this->builder()
-            ->addTableClass('table table-bordered text-nowrap key-buttons')
-            ->setTableId('dt_saldo_awal')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1)
-            ->buttons(
-                Button::make('create'),
-                Button::make('export'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            );
-    }
+    // public function html()
+    // {
+    //     return $this->builder()
+    //         ->addTableClass('table table-bordered text-nowrap key-buttons')
+    //         ->setTableId('dt_saldo_awal')
+    //         ->columns($this->getColumns())
+    //         ->minifiedAjax()
+    //         ->dom('Bfrtip')
+    //         ->orderBy(1)
+    //         ->buttons(
+    //             Button::make('create'),
+    //             Button::make('export'),
+    //             Button::make('print'),
+    //             Button::make('reset'),
+    //             Button::make('reload')
+    //         );
+    // }
 
     /**
      * Get columns.
      *
      * @return array
      */
-    protected function getColumns()
-    {
-        return [
-            Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
-            Column::make('id'),
-            Column::make('add your columns'),
-            Column::make('created_at'),
-            Column::make('updated_at'),
-        ];
-    }
+    // protected function getColumns()
+    // {
+    //     return [
+    //         Column::computed('action')
+    //             ->exportable(false)
+    //             ->printable(false)
+    //             ->width(60)
+    //             ->addClass('text-center'),
+    //         Column::make('id'),
+    //         Column::make('add your columns'),
+    //         Column::make('created_at'),
+    //         Column::make('updated_at'),
+    //     ];
+    // }
 
     /**
      * Get filename for export.
