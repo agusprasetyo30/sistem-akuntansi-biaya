@@ -30,7 +30,7 @@
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
+                            <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
                                 <thead>
                                 <tr>
                                     <th data-type='text' data-name='nomor' class="text-center">NO</th>
@@ -95,6 +95,7 @@
 
             $('#submit_import').on('click', function () {
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+                $("#back_import").attr("disabled", true);
                 if ($('#version').val() !== null && $('#file').val() !== ''){
                     $.ajax({
                         type: "POST",
@@ -122,6 +123,7 @@
                                         importStore()
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                        $("#back_import").attr("disabled", true);
                                     }
                                 })
                             }else if (response.Code === 201){
@@ -139,6 +141,7 @@
                                         importStore()
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                        $("#back_import").attr("disabled", false);
                                     }
                                 })
                             }
@@ -148,12 +151,16 @@
                     Swal.fire({
                         title: 'PERINGATAN',
                         text: "Silakan Isi Data Tersebut",
-                        icon: 'error',
+                        icon: 'warning',
                         confirmButtonColor: '#019267',
                         cancelButtonColor: '#EF4B4B',
                         confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        if (result.value){
+                            $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#back_import").attr("disabled", false);
+                        }
                     })
-                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
 
             })
@@ -171,31 +178,25 @@
                     data: file,
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                        if (response.Code === 200){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            $('#is_active').val('').trigger("change");
-                            toastr.success('Data Berhasil Disimpan', 'Success')
-                            get_data()
-                        }else if (response.Code === 0){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                        }else if (response.Code === 400){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            toastr.warning(response.msg, 'Warning')
-                        }else if (response.Code === 500){
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            response.msg.forEach(element => {
-                                toastr.warning(element, 'Warning')
-                            });
-                        }else {
-                            $('#modal_import').modal('hide');
-                            $("#modal_import input").val("")
-                            toastr.error('Terdapat Kesalahan System', 'System Error')
-                        }
+                        Swal.fire({
+                            title: response.title,
+                            text: response.message,
+                            icon: response.type,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#019267',
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                            .then((result) => {
+                                if (result.value) {
+                                    get_data()
+                                    $('#modal_import').modal('hide')
+                                    $("#modal_import input").val("")
+                                }
+                            })
+                    },error: function (response) {
+                        handleError(response)
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
                     }
                 })
             }
@@ -363,16 +364,16 @@
         function get_data(){
             $('#dt_consrate').DataTable().clear().destroy();
             $("#dt_consrate").DataTable({
-                scrollX: true,
+                bAutoWidth: true,
+                scrollCollapse: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
-                autoWidth:true,
-                scrollCollapse: true,
                 // bSortCellsTop: true,
                 // searching: false,
                 sortable: false,
                 processing: true,
                 serverSide: true,
+                scrollX: true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -537,8 +538,21 @@
                     url : '{{route("consrate")}}',
                     data: {data:'index'}
                 },
+                // columns: [
+                //     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false, width:'5%'},
+                //     { data: 'version', name: 'filter_version', orderable:true, width:'15%'},
+                //     { data: 'periode', name: 'filter_periode', orderable:true, width:'15%'},
+                //     { data: 'plant_code', name: 'filter_plant', orderable:true, width:'15%'},
+                //     { data: 'product', name: 'filter_product', orderable:true, width:'25%'},
+                //     { data: 'material', name: 'filter_material', orderable:true, width:'25%'},
+                //     { data: 'uom', name: 'filter_uom', orderable:true, width:'5%'},
+                //     { data: 'cons_rate', name: 'cons_rate', orderable:true, width:'15%'},
+                //     { data: 'status', name: 'filter_status', orderable:false, width:'15'},
+                //     { data: 'action', name: 'action', orderable:false, searchable: false, width:'85%'},
+                //
+                // ],
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false,orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'plant_code', name: 'filter_plant', orderable:true},
@@ -554,8 +568,7 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5,6,7,8]}
                 ]
 
-            })
-
+            });
         }
 
         $('#submit').on('click', function () {
@@ -605,61 +618,49 @@
         })
 
         function update_consrate(id) {
-            $("#submit_edit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_consrate')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                            id_plant: $('#edit_data_main_plant'+id).val(),
-                            version: $('#edit_data_main_version'+id).val(),
-                            id_asumsi: $('#edit_data_detal_version'+id).val(),
-                            produk: $('#edit_data_main_produk'+id).val(),
-                            material: $('#edit_data_main_material'+id).val(),
-                            consrate: $('#edit_consrate'+id).val(),
-                            is_active: $('#edit_is_active'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
+            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_consrate')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    id_plant: $('#edit_data_main_plant'+id).val(),
+                    version: $('#edit_data_main_version'+id).val(),
+                    id_asumsi: $('#edit_data_detal_version'+id).val(),
+                    produk: $('#edit_data_main_produk'+id).val(),
+                    material: $('#edit_data_main_material'+id).val(),
+                    consrate: $('#edit_consrate'+id).val(),
+                    is_active: $('#edit_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_edit'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else if (response.Code === 400){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                toastr.warning(response.msg, 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
                             }
-                        }
-                    })
-
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit"+id).attr("disabled", false);
                 }
-
             })
         }
 
@@ -686,19 +687,21 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else if (response.Code === 400){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.warning(response.msg, 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        get_data()
+                                    }
+                                })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 

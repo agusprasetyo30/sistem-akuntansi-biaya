@@ -49,9 +49,14 @@ class QtyRenDaanController extends Controller
             $input['updated_by'] = auth()->user()->id;
             QtyRenDaan::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -81,10 +86,14 @@ class QtyRenDaanController extends Controller
             QtyRenDaan::where('id', $request->id)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-//            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -93,9 +102,14 @@ class QtyRenDaanController extends Controller
         try {
             QtyRenDaan::where('id', $request->id)
                 ->delete();
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -123,12 +137,25 @@ class QtyRenDaanController extends Controller
 
                 $file = $request->file('file')->store('import');
 
-                $data = new KuantitiRenDaanImport($request->version);
-                $data->import($file);
+                $import = new KuantitiRenDaanImport($request->version);
+                $import->import($file);
+
+                $data_fail = $import->failures();
+                if ($data_fail->isNotEmpty()){
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                    ]);
+                }
             });
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         }catch (\Exception $exception){
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 

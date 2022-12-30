@@ -20,6 +20,7 @@
         "tailwindcss": "^3.1.0"
     },
     "dependencies": {
+        "datatables.net-colresize-unofficial": "^1.7.0",
         "moment": "^2.29.4"
     }
 }

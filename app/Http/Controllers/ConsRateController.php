@@ -130,10 +130,14 @@ class ConsRateController extends Controller
             ConsRate::where('id', $request->id)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            //            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -142,9 +146,14 @@ class ConsRateController extends Controller
         try {
             ConsRate::where('id', $request->id)
                 ->delete();
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -169,13 +178,25 @@ class ConsRateController extends Controller
 
                 $file = $request->file('file')->store('import');
 
-                $data = new ConsRateImport($request->version);
-                $data->import($file);
+                $import = new ConsRateImport($request->version);
+                $import->import($file);
+
+                $data_fail = $import->failures();
+                if ($data_fail->isNotEmpty()){
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                    ]);
+                }
             });
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (\Exception $exception) {
-            //            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -189,7 +210,7 @@ class ConsRateController extends Controller
                 return response()->json(['Code' => 201, 'msg' => 'Data Berasil Disimpan']);
             }
         }catch (\Exception $exception){
-
+            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 }
