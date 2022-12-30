@@ -11,7 +11,7 @@
 
 
 
-.dtfh-floatingparent{
+.dtfh-floatingparent {
     background-color: white;
     height: max-content !important;
     display: block !important;
@@ -42,6 +42,12 @@ main,
 nav,
 section {
     display: block
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: right;
+    visibility: hidden;
 }
 
 .nav-sidebar li ul {
@@ -29999,7 +30005,7 @@ a.text-dark:hover {
     }
 
     abbr[title]:after {
-        content: " ("attr(title) ")"
+        content: " (" attr(title) ")"
     }
 
     pre {
@@ -48608,7 +48614,7 @@ body.rtl {
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
-  
+
     display: -webkit-box;
     display: -webkit-flex;
     display: -moz-box;
@@ -48617,46 +48623,46 @@ body.rtl {
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 177px 130px 33px 95px;
-  }
+}
 
-  @media (max-width: 992px) {
+@media (max-width: 992px) {
     .wrap-login100 {
-      padding: 177px 90px 33px 85px;
+        padding: 177px 90px 33px 85px;
     }
-  
+
     .login100-pic {
-      width: 35%;
+        width: 35%;
     }
-  
+
     .login100-form {
-      width: 50%;
+        width: 50%;
     }
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
     .wrap-login100 {
-      padding: 100px 80px 33px 80px;
+        padding: 100px 80px 33px 80px;
     }
-  
+
     .login100-pic {
-      display: none;
+        display: none;
     }
-  
+
     .login100-form {
-      width: 100%;
+        width: 100%;
     }
-  }
-  
-  @media (max-width: 576px) {
+}
+
+@media (max-width: 576px) {
     .wrap-login100 {
-      padding: 100px 15px 33px 15px;
+        padding: 100px 15px 33px 15px;
     }
-  }
+}
 
 .login100-pic {
     width: 316px;
-  }
-  
-  .login100-pic img {
+}
+
+.login100-pic img {
     max-width: 100%;
-  }
+}

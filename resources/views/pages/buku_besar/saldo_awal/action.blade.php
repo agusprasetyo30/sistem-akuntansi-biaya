@@ -149,8 +149,8 @@
                             <div class="form-group">
                                 <label>Nilai Satuan </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nilai Satuan"
-                                    value="{{$model->nilai_satuan}}" name="edit_nilai_satuan"
-                                    id="edit_nilai_satuan" autocomplete="off" readonly>
+                                    value="" name="edit_nilai_satuan"
+                                    id="edit_nilai_satuan{{$model->id}}" autocomplete="off" readonly>
                             </div>
                         </div>
                     </div>
@@ -248,7 +248,7 @@
             let res = total.substring(3)
             let result = res.replaceAll(".", "")
             let nilsa = parseInt(result) / parseInt(stok) || 0
-            $("#edit_nilai_satuan").val(nilsa)
+            $("#edit_nilai_satuan"+{{$model->id}}).val(nilsa)
         }
 
 </script>
