@@ -138,18 +138,18 @@
                                 <label>Total Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Total value"
                                     value="{{helpRupiah($model->total_value)}}" name="edit_total_value"
-                                    id="edit_total_value{{$model->id}}" autocomplete="off" onkeyup="edit_nilai_satuan()">
+                                    id="edit_total_value{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Total Stock </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Total Stock"
                                     value="{{$model->total_stock}}" name="edit_total_stock"
-                                    id="edit_total_stock{{$model->id}}" autocomplete="off" onkeyup="edit_nilai_satuan()">
+                                    id="edit_total_stock{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Nilai Satuan </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nilai Satuan"
-                                    value="" name="edit_nilai_satuan"
+                                    value="{{$model->nilai_satuan}}" name="edit_nilai_satuan"
                                     id="edit_nilai_satuan{{$model->id}}" autocomplete="off" readonly>
                             </div>
                         </div>
@@ -235,20 +235,25 @@
         })
 
         $('#edit_total_value'+{{$model->id}}).on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp ")
-                $(this).val(rupiah)
-            });
-        
-        edit_nilai_satuan()
-    })
-
-    function edit_nilai_satuan(){
-            let total = $('#edit_total_value'+{{$model->id}}).val()
-            let stok = $('#edit_total_stock'+{{$model->id}}).val()
-            let res = total.substring(3)
+            let totalval = $(this).val()
+            let stockval = $('#edit_total_stock'+{{$model->id}}).val()
+            let res = totalval.substring(3)
             let result = res.replaceAll(".", "")
-            let nilsa = parseInt(result) / parseInt(stok) || 0
-            $("#edit_nilai_satuan"+{{$model->id}}).val(nilsa)
-        }
+            let cal = parseInt(result) / parseInt(stockval) || 0
+            let rupiah = formatRupiah($(this).val(), "Rp ")
+            $("#edit_nilai_satuan"+{{$model->id}}).val(cal)
+            $(this).val(rupiah)
+        });
+
+        $('#edit_total_stock'+{{$model->id}}).on('keyup', function(){
+            let stockval = $(this).val()
+            let totalval = $('#edit_total_value'+{{$model->id}}).val()
+            let res = totalval.substring(3)
+            let result = res.replaceAll(".", "")
+            let cal = parseInt(result) / parseInt(stockval) || 0
+            $("#edit_nilai_satuan"+{{$model->id}}).val(cal)
+        });
+        
+    })
 
 </script>
