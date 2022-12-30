@@ -23,29 +23,21 @@
                                 <div class="col-lg-6 p-0">
                                     <div class="text-justified text-white p-5 register-1 overflow-hidden">
                                         <div class="custom-content">
-                                            <div class="ms-4 mb-8 br-2">
-                                                <img src="{{asset('assets/images/brand/logopipg.png')}}"
-                                                    class="header-brand-img desktop-lgo" alt="Petrokimia logo" style="width:300px;height:70px;" class="center">
-                                            </div>
-                                            <div class="ms-3 text-center">
-                                                <div class="fs-18 mb-5 font-weight-bold text-white">Sistem Proyeksi <p class="mb-1 font-weight-bold text-white">Akutansi Biaya <p class="mb-1 font-weight-bold text-white">PT. Petrokimia Gresik </div>
-                                            </div>
-                                            <div class="ms-4 br-6 mt-8">
-                                                <img src="{{asset('assets/images/brand/logog20.png')}}"
-                                                    class="header-brand-img desktop-lgo" alt="Petrokimia logo" style="width:300px;height:70px;" class="center">
-                                            </div>
+                                        <div class="login100-pic js-tilt mx-auto mt-6 mb-6">
+                                            <img src="{{asset('assets/images/brand/img-01.png')}}" alt="IMG">
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-10 col-lg-6 p-0 mx-auto">
                                     <div class="bg-white text-dark br-7 br-tl-0 br-bl-0">
                                         <div class="card-body">
-                                            <div class="text-center mt-3 mb-3">
+                                            <div class="text-center mt-2 mb-2">
                                             <img src="{{asset('assets/images/brand/logopg.png')}}"
                                                     class="header-brand-img desktop-lgo" alt="logo" style="width:120px;height:50px;">
-                                                <!-- <h3 class="mb-2">Log In</h3> -->
-                                                <p>
-                                                <a href="javascript:void(0);" class="mb-2"><h5>Silahkan Login</h5></a>
+                                            </div>
+                                            <div class="text-center mt-3 mb-3">
+                                                <h3 class="mb-2">Silahkan Login</h3>
                                             </div>
                                             <!-- Session Status -->
                                             {{-- <x-auth-session-status class="mb-4" :status="session('status')" /> --}}
