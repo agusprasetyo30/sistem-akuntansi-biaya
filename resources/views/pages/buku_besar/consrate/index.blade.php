@@ -33,7 +33,6 @@
                             <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
                                     <th data-type='select' data-name='version' class="text-center">VERSION</th>
                                     <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
                                     <th data-type='select' data-name='code' class="text-center">CODE PLANT</th>
@@ -145,6 +144,11 @@
                                     }
                                 })
                             }
+                        },
+                        error: function (response) {
+                            handleError(response)
+                            $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#back_import").attr("disabled", false);
                         }
                     })
                 }else {
@@ -152,8 +156,8 @@
                         title: 'PERINGATAN',
                         text: "Silakan Isi Data Tersebut",
                         icon: 'warning',
-                        confirmButtonColor: '#019267',
                         cancelButtonColor: '#EF4B4B',
+                        confirmButtonColor: '#019267',
                         confirmButtonText: 'Konfirmasi',
                     }).then((result)=>{
                         if (result.value){
@@ -538,21 +542,7 @@
                     url : '{{route("consrate")}}',
                     data: {data:'index'}
                 },
-                // columns: [
-                //     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false, width:'5%'},
-                //     { data: 'version', name: 'filter_version', orderable:true, width:'15%'},
-                //     { data: 'periode', name: 'filter_periode', orderable:true, width:'15%'},
-                //     { data: 'plant_code', name: 'filter_plant', orderable:true, width:'15%'},
-                //     { data: 'product', name: 'filter_product', orderable:true, width:'25%'},
-                //     { data: 'material', name: 'filter_material', orderable:true, width:'25%'},
-                //     { data: 'uom', name: 'filter_uom', orderable:true, width:'5%'},
-                //     { data: 'cons_rate', name: 'cons_rate', orderable:true, width:'15%'},
-                //     { data: 'status', name: 'filter_status', orderable:false, width:'15'},
-                //     { data: 'action', name: 'action', orderable:false, searchable: false, width:'85%'},
-                //
-                // ],
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'plant_code', name: 'filter_plant', orderable:true},
@@ -594,7 +584,9 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     }).then((result) => {
                         if (result.value) {
                             $('#modal_add').modal('hide');

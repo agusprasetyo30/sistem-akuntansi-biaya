@@ -1,12 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="modal_import" tabindex="-1" role="dialog" aria-labelledby="largemodal" aria-hidden="true">
+<div class="modal fade" id="modal_import" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="largemodal" aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Import Price Rencana Pengadaan</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
             </div>
             <div class="modal-body">
                 <form method="POST" id="form-input-consrate" enctype="multipart/form-data">
@@ -39,8 +36,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_import" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit_import" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="back_import" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
             </div>
         </div>
     </div>
