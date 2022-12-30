@@ -22,7 +22,7 @@
 
 <!-- Row -->
 <div class="row">
-    <div class="col-12">
+    {{-- <div class="col-12">
         <div class="card">
             <div class="card-body">
                 <div class="">
@@ -52,8 +52,68 @@
                 </div>
             </div>
         </div>
+    </div> --}}
+
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading p-0 bg-light">
+                        <div class="tabs-menu1 ">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li class=""> <a href="#tab5" class="active" data-bs-toggle="tab">Vertikal</a> </li>
+                                <li> <a href="#tab6" data-bs-toggle="tab">Horizontal</a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active " id="tab5">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="">
+                                                <div class="table-responsive" id="table-wrapper">
+                                                    <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                                                        <thead>
+                                                        <tr>
+                                                            <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
+                                                            <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
+                                                            <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">VERSION</th>
+                                                            <th data-type='text' data-name='region' class="border-bottom-0 text-center">REGION</th>
+                                                            <th data-type='text' data-name='qty_rendaan_value' class="border-bottom-0 text-center">VALUE</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th data-type='text' data-name='nomor' class="text-center"></th>
+                                                            <th data-type='text' data-name='material_id' class="text-center"></th>
+                                                            <th data-type='text' data-name='periode_id' class="text-center"></th>
+                                                            <th data-type='text' data-name='region' class="text-center"></th>
+                                                            <th data-type='text' data-name='qty_rendaan_value' class="text-center"></th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                            
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="tab6">
+                                <p> default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
 <!-- /Row -->
 
 @endsection()
