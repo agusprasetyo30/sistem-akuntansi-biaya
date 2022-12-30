@@ -233,6 +233,10 @@ class SaldoAwalController extends Controller
                     'message' => 'Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?'
                 ]);
             }
-        } catch (\Exception $exception) { }
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
     }
 }

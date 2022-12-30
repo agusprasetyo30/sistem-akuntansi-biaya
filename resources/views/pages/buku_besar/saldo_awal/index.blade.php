@@ -30,33 +30,20 @@
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_saldo_awal" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                            <table id="dt_saldo_awal" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                    <th data-type='text' data-name='month_year' class="border-bottom-0 text-center">PERIODE</th>
-                                    <th data-type='text' data-name='gl_account' class="border-bottom-0 text-center">G/L ACCOUNT</th>
-                                    <th data-type='text' data-name='valuation_class' class="border-bottom-0 text-center">VALUATION CLASS</th>
-                                    <th data-type='text' data-name='price_control' class="border-bottom-0 text-center">PRICE CONTROL</th>
-                                    <th data-type='text' data-name='material_name' class="border-bottom-0 text-center">MATERIAL</th>
-                                    <th data-type='text' data-name='plant' class="border-bottom-0 text-center">PLANT</th>
-                                    <th data-type='text' data-name='total_stock' class="border-bottom-0 text-center">TOTAL STOCK</th>
-                                    <th data-type='text' data-name='total_value' class="border-bottom-0 text-center">TOTAL VALUE</th>
-                                    <th data-type='text' data-name='nilai_satuan' class="border-bottom-0 text-center">NILAI SATUAN</th>
-                                    <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
-                                </tr>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center"></th>
-                                    <th data-type='text' data-name='month_year' class="text-center"></th>
-                                    <th data-type='text' data-name='gl_account' class="text-center"></th>
-                                    <th data-type='text' data-name='valuation_class' class="text-center"></th>
-                                    <th data-type='text' data-name='price_control' class="text-center"></th>
-                                    <th data-type='text' data-name='material_name' class="text-center"></th>
-                                    <th data-type='text' data-name='plant' class="text-center"></th>
-                                    <th data-type='text' data-name='total_stock' class="text-center"></th>
-                                    <th data-type='text' data-name='total_value' class="text-center"></th>
-                                    <th data-type='text' data-name='nilai_satuan' class="text-center"></th>
-                                    <th data-type='text' data-name='nomor' class="text-center"></th>
+                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                    <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
+                                    <th data-type='text' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
+                                    <th data-type='text' data-name='valuation_class' class="text-center">VALUATION CLASS</th>
+                                    <th data-type='text' data-name='price_control' class="text-center">PRICE CONTROL</th>
+                                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                                    <th data-type='select' data-name='plant' class="text-center">PLANT</th>
+                                    <th data-type='text' data-name='total_stock' class="text-center">TOTAL STOCK</th>
+                                    <th data-type='text' data-name='total_value' class="text-center">TOTAL VALUE</th>
+                                    <th data-type='text' data-name='nilai_satuan' class="text-center">NILAI SATUAN</th>
+                                    <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -78,6 +65,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_saldo_awal thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_saldo_awal thead');
+
             get_data()
 
             $('#data_main_plant').select2({
@@ -193,8 +185,19 @@
             $("#dt_saldo_awal").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
+                // autoWidth:true,
+                scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
+                "aoColumns": [
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false },
+                    { "bSortable": false }
+                ],
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -214,23 +217,83 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
+
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
+                                input.className = "form-control";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
+                            }else if (data_type == 'select'){
+                                var input = document.createElement("select");
+                                var options = "";
+                                if (iName == 'material'){
+                                    input.className = "material_search form-control custom-select select2";
+
+                                }else if(iName == 'plant'){
+                                    input.className = "plant_search form-control custom-select select2";
+
+                                }
+
+                                input.innerHTML = options
+                                $(input).appendTo(cell.empty())
+                                    .on('change clear', function () {
+                                        column.search($(this).val(), false, false, true).draw();
+                                    });
                             }
+                        } else {
+                            cell.empty()
                         }
+
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.plant_search').select2({
+                            placeholder: 'Pilih Plant',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('plant_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
 
                     });
                 },
@@ -243,20 +306,20 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'month_year', name: 'month_year', orderable:false},
-                    { data: 'gl_account', name: 'gl_account', orderable:false},
-                    { data: 'valuation_class', name: 'valuation_class', orderable:false},
-                    { data: 'price_control', name: 'price_control', orderable:false},
-                    { data: 'material_name', name: 'material.material_name', orderable:false},
-                    { data: 'plant_code', name: 'plant.plant_code', orderable:false},
-                    { data: 'total_stock', name: 'total_stock', orderable:false},
-                    { data: 'total_value', name: 'total_value', orderable:false},
-                    { data: 'nilai_satuan', name: 'nilai_satuan', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'month_year', name: 'month_year', orderable:true},
+                    { data: 'gl_account', name: 'gl_account', orderable:true},
+                    { data: 'valuation_class', name: 'valuation_class', orderable:true},
+                    { data: 'price_control', name: 'price_control', orderable:true},
+                    { data: 'material_name', name: 'filter_material', orderable:true},
+                    { data: 'plant_code', name: 'filter_plant', orderable:true},
+                    { data: 'total_stock', name: 'total_stock', orderable:true},
+                    { data: 'total_value', name: 'total_value', orderable:true},
+                    { data: 'nilai_satuan', name: 'nilai_satuan', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,9]}
+                    {className: 'text-center', targets: [0,10]}
                 ],
 
             })
