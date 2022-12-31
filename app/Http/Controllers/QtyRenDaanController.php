@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\Master\H_QtyRenDaanDataTable;
 use App\DataTables\Master\QtyRenDaanDataTable;
 use App\Exports\MultipleSheet\MS_KuantitiRenDaanExport;
 use App\Exports\Template\T_KuantitiRenDaanExport;
@@ -16,10 +17,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class QtyRenDaanController extends Controller
 {
-    public function index(Request $request, QtyRenDaanDataTable $qtyrendaanDataTable)
+    public function index(Request $request, QtyRenDaanDataTable $qtyrendaanDataTable, H_QtyRenDaanDataTable $h_QtyRenDaanDataTable)
     {
         if ($request->data == 'index') {
             return $qtyrendaanDataTable->render('pages.buku_besar.qty_rendaan.index');
+        }elseif ($request->data == 'horizontal'){
+            return $h_QtyRenDaanDataTable->with(['version' => $request->version])->render('pages.buku_besar.qty_rendaan.index');
+        }elseif ($request->data == 'version'){
+            $asumsi = DB::table('asumsi_umum')
+                ->where('version_id',$request->version)
+                ->orderBy('month_year', 'ASC')
+                ->get();
+            return response()->json(['code' => 200, 'asumsi' => $asumsi]);
         }
         return view('pages.buku_besar.qty_rendaan.index');
     }
