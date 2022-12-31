@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="largemodal1">Import Price Rencana Pengadaan</h5>
             </div>
             <div class="modal-body">
-                <form method="POST" id="form-input-consrate" enctype="multipart/form-data">
+                <form method="POST" id="form_input_price_daan" enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-12 mt1">
                         <div class="row">

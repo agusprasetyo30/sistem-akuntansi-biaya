@@ -76,8 +76,8 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
     public function rules(): array
     {
         return [
-            'material_code' => ['required'],
-            'region_id' => ['required'],
+            'material_code' => 'required',
+            'region_id' => 'required',
         ];
     }
 

@@ -48,7 +48,13 @@ class PriceRenDaanDataTable extends DataTable
                 }
             })
             ->filterColumn('filter_periode', function ($query, $keyword){
-                $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+                $temp = explode('/', $keyword);
+                if (count($temp) == 1){
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+                }elseif (count($temp) == 2){
+                    $keyword = $temp[1].'-'.$temp[0];
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+                }
             })
             ->filterColumn('filter_material', function ($query, $keyword){
                 if ($keyword != 'all'){
@@ -58,6 +64,10 @@ class PriceRenDaanDataTable extends DataTable
             })
             ->filterColumn('filter_region',function ($query, $keyword){
                 $query->where('regions.region_name', 'ilike', '%'.$keyword.'%');
+            })
+            ->filterColumn('filter_price_rendaan_value',function ($query, $keyword){
+                $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
+                $query->where('price_rendaan.price_rendaan_value', 'ilike', '%'.$keyword.'%');
             })
             ->orderColumn('filter_version', function ($query, $order) {
                 $query->orderBy('version_asumsi.version', $order);
@@ -70,6 +80,9 @@ class PriceRenDaanDataTable extends DataTable
             })
             ->orderColumn('filter_region', function ($query, $order) {
                 $query->orderBy('regions.region_name', $order);
+            })
+            ->orderColumn('filter_price_rendaan_value', function ($query, $order) {
+                $query->orderBy('qty_rendaan.qty_price_rendaan.price_rendaan_value', $order);
             })
             ->addColumn('action', 'pages.buku_besar.price_rendaan.action')
             ->escapeColumns([]);
