@@ -332,7 +332,7 @@
             })
 
             function importStore() {
-                let file = new FormData($("#form-input-consrate")[0]);
+                let file = new FormData($("#form_input_price_daan")[0]);
                 $.ajax({
                     type: "POST",
                     headers: {
@@ -436,10 +436,20 @@
                                 var input = document.createElement("input");
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
+
+                                if(iName == 'price_rendaan_value'){
+                                    input.id = 'price_rendaan_value_search'
+                                }
+
                                 $(input).
                                 appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
+                                });
+
+                                $('#price_rendaan_value_search').on('keyup', function(){
+                                    let rupiah = formatRupiah($(this).val(), "Rp ")
+                                    $(this).val(rupiah)
                                 });
                             }
                             else if (data_type == 'select'){
