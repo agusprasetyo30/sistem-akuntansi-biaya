@@ -30,31 +30,19 @@
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_material" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                        <table id="dt_material" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
                             <thead>
                             <tr>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
-                                <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
-                                <th data-type='text' data-name='group_account_code' class="border-bottom-0 text-center">GROUP ACCOUNT</th>
-                                <th data-type='text' data-name='kategori' class="border-bottom-0 text-center">KATEGORI</th>
-                                <th data-type='text' data-name='uom' class="border-bottom-0 text-center">UOM</th>
-                                <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
-                                <th data-type='select' data-name='dummy' class="border-bottom-0 text-center">DUMMY</th>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
-                            </tr>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='code' class="text-center"></th>
-                                <th data-type='text' data-name='nama' class="text-center"></th>
-                                <th data-type='text' data-name='deskripsi' class="text-center"></th>
-                                <th data-type='text' data-name='group_account_code' class="text-center"></th>
-                                <th data-type='text' data-name='kategori' class="text-center"></th>
-                                <th data-type='text' data-name='uom' class="text-center"></th>
-                                <th data-type='select' data-name='status' class="text-center"></th>
-                                <th data-type='select' data-name='dummy' class="text-center"></th>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
+                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                <th data-type='text' data-name='code' class="text-center">CODE</th>
+                                <th data-type='text' data-name='nama' class="text-center">NAMA</th>
+                                <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
+                                <th data-type='select' data-name='group_account' class="text-center">GROUP ACCOUNT</th>
+                                <th data-type='select' data-name='kategori_material' class="text-center">KATEGORI</th>
+                                <th data-type='text' data-name='uom' class="text-center">UOM</th>
+                                <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                                <th data-type='select' data-name='dummy' class="text-center">DUMMY</th>
+                                <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -76,6 +64,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_material thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_material thead');
+
             get_data()
 
             $('#is_active').select2({
@@ -144,6 +137,9 @@
             $("#dt_material").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
                 processing: true,
@@ -165,45 +161,106 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
+                                input.className = "form-control";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control form-control-sm custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
+                                    input.className = "status_search form-control custom-select select2";
+                                    @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
-                                }
-                                if (iName == 'dummy'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_dummy() as $key => $value)
+
+                                } else if (iName == 'dummy'){
+                                    input.className = "dummy_search form-control custom-select select2";
+                                    @foreach (dummy_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
+
+                                } else if(iName == 'group_account'){
+                                    input.className = "group_account_search form-control custom-select select2";
+
+                                } else if(iName == 'kategori_material'){
+                                    input.className = "kategori_material_search form-control custom-select select2";
+
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
                             }
+                        }else {
+                            cell.empty()
                         }
+
+                        $('.status_search').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
+
+                        $('.dummy_search').select2({
+                            placeholder: 'Pilih Dummy',
+                            width: '100%',
+                            allowClear: false,
+                        })
+
+                        $('.group_account_search').select2({
+                            placeholder: 'Pilih Group Account',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('group_account_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.kategori_material_search').select2({
+                            placeholder: 'Pilih Kategori Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('kategori_material_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
 
                     });
                 },
@@ -216,13 +273,13 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'material_code', searchable: false, orderable:true},
-                    { data: 'material_code', name: 'material_code', orderable:false},
-                    { data: 'material_name', name: 'material_name', orderable:false},
-                    { data: 'material_desc', name: 'material_desc', orderable:false},
-                    { data: 'group_account_desc', name: 'group_account.group_account_desc', orderable:false},
-                    { data: 'kategori_material_name', name: 'kategori_material.kategori_material_name', orderable:false},
-                    { data: 'material_uom', name: 'material_uom', orderable:false},
+                    { data: 'DT_RowIndex', name: 'material_code', searchable: false, orderable:false},
+                    { data: 'material_code', name: 'material_code', orderable:true},
+                    { data: 'material_name', name: 'material_name', orderable:true},
+                    { data: 'material_desc', name: 'material_desc', orderable:true},
+                    { data: 'group_account_desc', name: 'filter_group_account', orderable:true},
+                    { data: 'kategori_material_name', name: 'filter_kategori_material', orderable:true},
+                    { data: 'material_uom', name: 'material_uom', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'dummy', name: 'filter_dummy', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},

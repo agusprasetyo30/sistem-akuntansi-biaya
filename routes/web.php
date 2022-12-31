@@ -207,6 +207,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/version_dt', [SelectController::class, 'version_dt'])->name('version_dt');
             Route::get('/material_dt', [SelectController::class, 'material_dt'])->name('material_dt');
             Route::get('/plant_dt', [SelectController::class, 'plant_dt'])->name('plant_dt');
+            Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
+            Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
         });
     });
 

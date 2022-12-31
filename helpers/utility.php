@@ -303,6 +303,20 @@ if (!function_exists('status_is_dummy')) {
     }
 }
 
+if (!function_exists('dummy_dt')) {
+    function dummy_dt()
+    {
+        $status = array(
+            'all' => 'Semua',
+            true => 'Iya',
+            false => 'Tidak',
+
+        );
+
+        return $status;
+    }
+}
+
 if (!function_exists('login_method')) {
     function login_method()
     {

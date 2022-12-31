@@ -33,18 +33,11 @@
                         <table id="dt_kategori_material" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                             <thead>
                             <tr>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
-                                <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
-                                <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
-                            </tr>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='nama' class="text-center"></th>
-                                <th data-type='text' data-name='deskripsi' class="text-center"></th>
-                                <th data-type='select' data-name='status' class="text-center"></th>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
+                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                <th data-type='text' data-name='nama' class="text-center">NAMA</th>
+                                <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
+                                <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                                <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -66,6 +59,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_kategori_material thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_kategori_material thead');
+
             get_data()
 
             $('#is_active').select2({
@@ -80,6 +78,9 @@
             $("#dt_kategori_material").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
                 processing: true,
@@ -101,39 +102,48 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
+                                input.className = "form-control";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control form-control-sm custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
+                                    input.className = "status_search form-control custom-select select2";
+                                    @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
+
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
                             }
+                        }else {
+                            cell.empty()
                         }
+
+                        $('.status_search').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
 
                     });
                 },
@@ -146,9 +156,9 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'kategori_material_name', name: 'kategori_material_name', orderable:false},
-                    { data: 'kategori_material_desc', name: 'kategori_material_desc', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'kategori_material_name', name: 'kategori_material_name', orderable:true},
+                    { data: 'kategori_material_desc', name: 'kategori_material_desc', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 

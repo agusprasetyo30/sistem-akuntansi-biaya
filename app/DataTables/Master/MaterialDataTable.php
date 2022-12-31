@@ -48,7 +48,6 @@ class MaterialDataTable extends DataTable
                 return $span;
             })
             ->filterColumn('filter_status', function ($query, $keyword) {
-
                 if ($keyword == true) {
                     $query->where('material.is_active', true);
                 } elseif ($keyword == false) {
@@ -56,11 +55,20 @@ class MaterialDataTable extends DataTable
                 }
             })
             ->filterColumn('filter_dummy', function ($query, $keyword) {
-
                 if ($keyword == true) {
                     $query->where('is_dummy', true);
                 } elseif ($keyword == false) {
                     $query->where('is_dummy', false);
+                }
+            })
+            ->filterColumn('filter_kategori_material', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('kategori_material.kategori_material_name', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_group_account', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('group_account.group_account_code', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->addColumn('action', 'pages.master.material.action')
