@@ -135,7 +135,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $material = Material::where('material_code', '!=', $request->produk)
-                ->where(function ($query) use ($search){
+                ->where(function ($query) use ($search) {
                     $query->where('material_code', 'ilike', '%' . $search . '%')
                         ->orWhere('material_name', 'ilike', '%' . $search . '%');
                 })
@@ -349,7 +349,8 @@ class SelectController extends Controller
     }
 
     //  Datatable
-    public function version_dt(Request $request){
+    public function version_dt(Request $request)
+    {
         $search = $request->search;
         if ($search == 'all') {
             $asumsi = Version_Asumsi::limit(10)
@@ -428,6 +429,68 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->plant_code,
                 "text" => $items->plant_code
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function kategori_material_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $kat_material = KategoriMaterial::limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $kat_material = KategoriMaterial::where('kategori_material_name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($kat_material as $items) {
+            $response[] = array(
+                "id" => $items->kategori_material_name,
+                "text" => $items->kategori_material_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function group_account_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $group_acc = GroupAccount::limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_acc = GroupAccount::where('group_account_code', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($group_acc as $items) {
+            $response[] = array(
+                "id" => $items->group_account_code,
+                "text" => $items->group_account_desc
             );
         }
 
