@@ -236,166 +236,120 @@
         }
 
         $('#submit').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dikirim",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('insert_material')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            material_code: $('#material_code').val(),
-                            material_name: $('#material_name').val(),
-                            material_desc: $('#material_desc').val(),
-                            group_account_code: $('#group_account_code').val(),
-                            kategori_material_id: $('#kategori_material_id').val(),
-                            material_uom: $('#material_uom').val(),
-                            is_active: $('#is_active').val(),
-                            is_dummy: $('#is_dummy').val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 400){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.warning(response.msg, 'Warning')
-                            }else {
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
-                        },
-                        error: function (response) {
-                            handleError(response)
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_material')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    material_code: $('#material_code').val(),
+                    material_name: $('#material_name').val(),
+                    material_desc: $('#material_desc').val(),
+                    group_account_code: $('#group_account_code').val(),
+                    kategori_material_id: $('#kategori_material_id').val(),
+                    material_uom: $('#material_uom').val(),
+                    is_active: $('#is_active').val(),
+                    is_dummy: $('#is_dummy').val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            get_data()
+                            $('#modal_add').modal('hide')
+                            $("#modal_add input").val("")
                         }
                     })
+                },
+                error: function (response) {
+                    handleError(response)
                 }
             })
         })
 
         $('#submit-import').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera import",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    let file = new FormData($("#form-input")[0]);
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        processData: false,
-                        contentType: false,
-                        url: '{{route('import_material')}}',
-                        data: file,
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else if (response.Code === 500){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                response.msg.forEach(element => {
-                                    toastr.warning(element, 'Warning')
-                                });
-                            }else {
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back-import").attr("disabled", true);
+            let file = new FormData($("#form-input")[0]);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
+                url: '{{route('import_material')}}',
+                data: file,
+                success:function (response) {
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
+                    Swal.fire({
+                        title: response.title,
+                        text: response.message,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            get_data()
+                            $('#modal_import').modal('hide')
+                            $("#modal_import input").val("")
                         }
                     })
-
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
                 }
-
             })
         })
 
         function update_material(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_material')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                            material_code: $('#edit_material_code'+id).val(),
-                            material_name: $('#edit_material_name'+id).val(),
-                            material_desc: $('#edit_material_desc'+id).val(),
-                            group_account_code: $('#edit_group_account_code'+id).val(),
-                            kategori_material_id: $('#edit_kategori_material_id'+id).val(),
-                            material_uom: $('#edit_material_uom'+id).val(),
-                            is_active: $('#edit_is_active'+id).val(),
-                            is_dummy: $('#edit_is_dummy'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 400){
-                                $('#modal_edit'+id).modal('hide');
-                                $("#modal_edit input"+id).val("")
-                                toastr.warning(response.msg, 'Warning')
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
-                        },
-                        error: function (response) {
-                            handleError(response)
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_material')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    material_code: $('#edit_material_code'+id).val(),
+                    material_name: $('#edit_material_name'+id).val(),
+                    material_desc: $('#edit_material_desc'+id).val(),
+                    group_account_code: $('#edit_group_account_code'+id).val(),
+                    kategori_material_id: $('#edit_kategori_material_id'+id).val(),
+                    material_uom: $('#edit_material_uom'+id).val(),
+                    is_active: $('#edit_is_active'+id).val(),
+                    is_dummy: $('#edit_is_dummy'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            get_data()
+                            $('#modal_edit'+id).modal('hide')
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
                         }
                     })
-
+                },
+                error: function (response) {
+                    handleError(response)
                 }
-
             })
         }
 
@@ -422,13 +376,18 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            } else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false
+                            })
+                            .then((result) => {
+                                if (result.value) {
+                                    get_data()
+                                }
+                            })
                         },
                         error: function (response) {
                             handleError(response)

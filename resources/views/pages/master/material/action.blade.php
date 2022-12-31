@@ -4,7 +4,7 @@
 
 
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->material_code)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_detail'.$model->material_code)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
@@ -89,7 +89,7 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->material_code)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_edit'.$model->material_code)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">

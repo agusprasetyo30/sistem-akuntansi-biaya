@@ -48,9 +48,14 @@ class PlantController extends Controller
 
             Plant::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -76,9 +81,14 @@ class PlantController extends Controller
             Plant::where('plant_code', $request->id)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -90,18 +100,26 @@ class PlantController extends Controller
                     'deleted_at' => Carbon::now(),
                     'deleted_by' => auth()->user()->id
                 ]);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function import(Request $request)
     {
         try {
-            if (!$request->file('file')) {
-                return response()->json(['Code' => 0]);
-            }
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $file = $request->file('file')->store('import');
             $import = new PlantImport;
@@ -118,12 +136,21 @@ class PlantController extends Controller
                     array_push($err, $hasil);
                 }
                 // dd(implode(' ', $err));
-                return response()->json(['Code' => 500, 'msg' => $err]);
+                return setResponse([
+                    'code' => 500,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $err
+                ]);
             }
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 

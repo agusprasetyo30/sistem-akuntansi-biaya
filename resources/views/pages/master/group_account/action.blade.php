@@ -4,7 +4,7 @@
 
 
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->group_account_code)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_detail'.$model->group_account_code)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
@@ -54,7 +54,7 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->group_account_code)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_edit'.$model->group_account_code)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
     aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
