@@ -19,8 +19,6 @@ class QtyRenDaanController extends Controller
 {
     public function index(Request $request, QtyRenDaanDataTable $qtyrendaanDataTable, H_QtyRenDaanDataTable $h_QtyRenDaanDataTable)
     {
-        $asumsi = 4;
-        $material = 3;
         if ($request->data == 'index') {
             return $qtyrendaanDataTable->render('pages.buku_besar.qty_rendaan.index');
         }elseif ($request->data == 'horizontal'){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\Master\H_PriceRenDaanDataTable;
 use App\DataTables\Master\PriceRenDaanDataTable;
 use App\Exports\MultipleSheet\MS_KuantitiRenDaanExport;
 use App\Exports\MultipleSheet\MS_PriceRenDaanExport;
@@ -18,10 +19,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class PriceRenDaanController extends Controller
 {
-    public function index(Request $request, PriceRenDaanDataTable $pricerendaanDataTable)
+    public function index(Request $request, PriceRenDaanDataTable $pricerendaanDataTable, H_PriceRenDaanDataTable $h_PriceRenDaanDataTable)
     {
         if ($request->data == 'index') {
             return $pricerendaanDataTable->render('pages.buku_besar.price_rendaan.index');
+        }elseif ($request->data == 'horizontal'){
+            return $h_PriceRenDaanDataTable->with(['version' => $request->version])->render('pages.buku_besar.price_rendaan.index');
+        }elseif ($request->data == 'version'){
+            $asumsi = DB::table('asumsi_umum')
+                ->where('version_id',$request->version)
+                ->orderBy('month_year', 'ASC')
+                ->get();
+            return response()->json(['code' => 200, 'asumsi' => $asumsi]);
         }
         return view('pages.buku_besar.price_rendaan.index');
     }
