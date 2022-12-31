@@ -45,9 +45,14 @@ class GroupAccountController extends Controller
 
             GroupAccount::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -57,7 +62,10 @@ class GroupAccountController extends Controller
             $data = GroupAccount::where('group_account_code', $request->post('id'))->first();
 
             if (!$data)
-                return response()->json(['Code' => 400, 'msg' => 'Data Tidak Ditemukan!']);
+                return setResponse([
+                    'code' => 400,
+                    'title' => 'Data Tidak Ditemukan!'
+                ]);
 
             $required['deskripsi'] = 'required';
 
@@ -80,9 +88,14 @@ class GroupAccountController extends Controller
             DB::table('group_account')
                 ->where('group_account_code', $request->id)->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -92,23 +105,34 @@ class GroupAccountController extends Controller
             $group_account = GroupAccount::get_account($request->id);
 
             if ($group_account) {
-                return response()->json(['Code' => 502, 'msg' => 'Account masih digunakan, Account hanya bisa dinonaktifkan']);
+                return setResponse([
+                    'code' => 400,
+                    'title' => 'Account masih digunakan, Account hanya bisa dinonaktifkan!'
+                ]);
             } else {
                 GroupAccount::where('group_account_code', $request->id)->delete();
 
-                return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Data berhasil dihapus'
+                ]);
             }
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function import(Request $request)
     {
         try {
-            if (!$request->file('file')) {
-                return response()->json(['Code' => 0]);
-            }
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $file = $request->file('file')->store('import');
             $import = new GroupAccountImport;
@@ -124,13 +148,22 @@ class GroupAccountController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                // dd(implode(' ', $err));
-                return response()->json(['Code' => 500, 'msg' => $err]);
+                dd(implode(' ', $err));
+                return setResponse([
+                    'code' => 500,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $err
+                ]);
             }
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 

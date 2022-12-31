@@ -165,148 +165,111 @@
         }
 
         $('#submit').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dikirim",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('insert_group_account')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            code: $('#group_account_code').val(),
-                            deskripsi: $('#group_account_desc').val(),
-                            is_active: $('#is_active').val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 400){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.warning(response.msg, 'Warning')
-                            }else {
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_group_account')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    code: $('#group_account_code').val(),
+                    deskripsi: $('#group_account_desc').val(),
+                    is_active: $('#is_active').val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            get_data()
+                            $('#modal_add').modal('hide')
+                            $("#modal_add input").val("")
                         }
                     })
-
+                },
+                error: function (response) {
+                    handleError(response)
                 }
-
             })
+
         })
 
         $('#submit-import').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera import",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    let file = new FormData($("#form-input")[0]);
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        processData: false,
-                        contentType: false,
-                        url: '{{route('import_group_account')}}',
-                        data: file,
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else if (response.Code === 500){
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                response.msg.forEach(element => {
-                                    toastr.warning(element, 'Warning')
-                                });
-                            }else {
-                                $('#modal_import').modal('hide');
-                                $("#modal_import input").val("")
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back-import").attr("disabled", true);
+            let file = new FormData($("#form-input")[0]);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
+                url: '{{route('import_group_account')}}',
+                data: file,
+                success:function (response) {
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
+                    Swal.fire({
+                        title: response.title,
+                        text: response.message,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            get_data()
+                            $('#modal_import').modal('hide')
+                            $("#modal_import input").val("")
                         }
                     })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
                 }
             })
         })
 
         function update_group_account(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_group_account')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id : id,
-                            code: $('#edit_group_account_code'+id).val(),
-                            deskripsi: $('#edit_group_account_desc'+id).val(),
-                            is_active: $('#edit_is_active'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 400){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning(response.msg, 'Warning')
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_group_account')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id : id,
+                    code: $('#edit_group_account_code'+id).val(),
+                    deskripsi: $('#edit_group_account_desc'+id).val(),
+                    is_active: $('#edit_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            get_data()
+                            $('#modal_edit'+id).modal('hide')
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
                         }
                     })
-
+                },
+                error: function (response) {
+                    handleError(response)
                 }
-
             })
         }
 
@@ -333,15 +296,21 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            }else if (response.Code === 502){
-                                toastr.warning(response.msg, 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false
+                            })
+                            .then((result) => {
+                                if (result.value) {
+                                    get_data()
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 

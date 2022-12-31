@@ -56,9 +56,14 @@ class MaterialController extends Controller
             // dd($input);
             Material::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -68,7 +73,10 @@ class MaterialController extends Controller
             $data = Material::where('material_code', $request->post('id'))->first();
 
             if (!$data)
-                return response()->json(['Code' => 400, 'msg' => 'Data Tidak Ditemukan!']);
+                return setResponse([
+                    'code' => 400,
+                    'title' => 'Data Tidak Ditemukan!'
+                ]);
 
             $required['material_name'] = 'required';
             $required['material_desc'] = 'required';
@@ -101,9 +109,14 @@ class MaterialController extends Controller
 
             DB::table('material')->where('material_code', $request->id)->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -112,18 +125,26 @@ class MaterialController extends Controller
         try {
             Material::where('material_code', $request->id)->delete();
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function import(Request $request)
     {
         try {
-            if (!$request->file('file')) {
-                return response()->json(['Code' => 0]);
-            }
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $file = $request->file('file')->store('import');
             $import = new MaterialImport;
@@ -144,12 +165,21 @@ class MaterialController extends Controller
                     }
                 }
                 // dd(implode(' ', $err));
-                return response()->json(['Code' => 500, 'msg' => $err]);
+                return setResponse([
+                    'code' => 500,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $err
+                ]);
             }
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
