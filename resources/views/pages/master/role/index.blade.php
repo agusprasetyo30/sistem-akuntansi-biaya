@@ -228,7 +228,8 @@
                                 $('#modal_edit'+id).modal('hide')
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_edit"+id).attr("disabled", false);
                                 get_data()
                             }
                         })
@@ -269,7 +270,9 @@
                                 title: response.title,
                                 text: response.msg,
                                 icon: response.type,
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#019267',
+                                confirmButtonText: 'Konfirmasi',
                             })
                                 .then((result) => {
                                     if (result.value) {

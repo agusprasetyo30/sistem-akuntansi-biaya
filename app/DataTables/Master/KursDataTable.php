@@ -21,6 +21,28 @@ class KursDataTable extends DataTable
             ->addColumn('mata_uang', function ($query){
                 return rupiah($query->usd_rate);
             })
+            ->addColumn('periode', function ($query){
+                return format_month($query->month_year, 'bi');
+            })
+            ->filterColumn('filter_periode', function ($query, $keyword){
+                $temp = explode('/', $keyword);
+                if (count($temp) == 1){
+                    $query->Where('month_year', 'ilike', '%'.$keyword.'%');
+                }elseif (count($temp) == 2){
+                    $keyword = $temp[1].'-'.$temp[0];
+                    $query->Where('month_year', 'ilike', '%'.$keyword.'%');
+                }
+            })
+            ->filterColumn('filter_mata_uang', function ($query, $keyword){
+                $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
+                $query->where('usd_rate', 'ilike', '%'.$keyword.'%');
+            })
+            ->orderColumn('filter_mata_uang', function ($query, $order){
+                $query->orderBy('usd_rate', $order);
+            })
+            ->orderColumn('filter_periode', function ($query, $order){
+                $query->orderBy('month_year', $order);
+            })
             ->addColumn('action', 'pages.master.kurs.action')
             ->escapeColumns([]);
     }

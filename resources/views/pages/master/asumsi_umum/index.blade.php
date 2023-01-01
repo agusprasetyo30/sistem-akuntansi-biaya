@@ -31,22 +31,13 @@
                             <table id="dt_version" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                    <th data-type='text' data-name='version' class="border-bottom-0 text-center">VERSION</th>
-                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">SALDO AWAL</th>
-                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">JUMLAH BULAN</th>
-                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">AWAL PERIODE</th>
-                                    <th data-type='text' data-name='range' class="border-bottom-0 text-center">AKHIR PERIODE</th>
-                                    <th data-type='text' data-name='action' class="border-bottom-0 text-center">ACTION</th>
-                                </tr>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' ></th>
-                                    <th data-type='text' data-name='version' ></th>
-                                    <th data-type='text' data-name='saldo_awal' ></th>
-                                    <th data-type='text' data-name='jumlah_bulan' ></th>
-                                    <th data-type='text' data-name='awal_periode' ></th>
-                                    <th data-type='text' data-name='akhir_periode' ></th>
-                                    <th data-type='text' data-name='action'></th>
+                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                    <th data-type='text' data-name='version' class="text-center">VERSION</th>
+                                    <th data-type='text' data-name='saldo_awal' class="text-center">SALDO AWAL</th>
+                                    <th data-type='text' data-name='jumlah_bulan' class="text-center">JUMLAH BULAN</th>
+                                    <th data-type='text' data-name='awal_periode' class="text-center">AWAL PERIODE</th>
+                                    <th data-type='text' data-name='akhir_periode' class="text-center">AKHIR PERIODE</th>
+                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -68,12 +59,16 @@
     <script>
         var data_array = [];
         $(document).ready(function () {
+            $('#dt_version thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_version thead');
+
             var funArr = [];
             let loop = 0;
             var answersList = [];
 
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
-            ];
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
             get_data()
 
@@ -326,7 +321,6 @@
                                 value = false
                             }
                         }
-
                         if (value === true){
                             $.ajax({
                                 type: "POST",
@@ -340,32 +334,44 @@
                                     jumlah_bulan: $('#jumlah_bulan').val(),
                                     start_date: $('#tanggal_awal').val(),
                                     asumsi:answersList
-                                    // kurs: $('#kurs').val(),
-                                    // handling_bb: $('#handling_bb').val(),
                                 },
                                 success:function (response) {
-                                    if (response.Code === 200){
-                                        $('#modal_add').modal('hide');
-                                        $("#modal_add input").val("")
-                                        $('#data_main_plant').val('').trigger("change");
-                                        $('#is_active').val('').trigger("change");
-                                        toastr.success('Data Berhasil Disimpan', 'Success')
-                                        get_data()
-                                    }else if (response.Code === 0){
-                                        $('#modal_add').modal('hide');
-                                        $("#modal_add input").val("")
-                                        toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                                    }else {
-                                        $('#modal_add').modal('hide');
-                                        $("#modal_add input").val("")
-                                        toastr.error('Terdapat Kesalahan System', 'System Error')
-                                    }
-
-
+                                    Swal.fire({
+                                        title: response.title,
+                                        text: response.msg,
+                                        icon: response.type,
+                                        allowOutsideClick: false,
+                                        confirmButtonColor: '#019267',
+                                        confirmButtonText: 'Konfirmasi',
+                                    }).then((result)=>{
+                                        if (result.value) {
+                                            $('#modal_add').modal('hide');
+                                            $("#modal_add input").val("")
+                                            $('#data_main_plant').val('').trigger("change");
+                                            $('#is_active').val('').trigger("change");
+                                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                            get_data()
+                                        }
+                                    })
+                                },
+                                error:function (response) {
+                                    handleError(response)
+                                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 }
                             })
                         }else {
-                            toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                            Swal.fire({
+                                title: 'PERINGATAN',
+                                text: "Silakan Isi Data Tersebut",
+                                icon: 'warning',
+                                confirmButtonColor: '#019267',
+                                cancelButtonColor: '#EF4B4B',
+                                confirmButtonText: 'Konfirmasi',
+                            }).then((result)=>{
+                                if (result.value){
+                                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                }
+                            })
                         }
                     }
 
@@ -379,8 +385,9 @@
             $("#dt_version").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
-                // searching: false,
-                sortable: false,
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 processing: true,
                 serverSide: true,
                 fixedHeader: {
@@ -401,8 +408,9 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
@@ -412,7 +420,7 @@
                                 input.className = "form-control";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo($(cell.empty()).empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
@@ -427,12 +435,14 @@
                                     @endforeach
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
                             }
+                        }else {
+                            cell.empty()
                         }
 
                     });
@@ -446,25 +456,25 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'c_version', name: 'version', orderable:false},
-                    { data: 'c_saldo_awal', name: 'c_saldo_awal', orderable:false},
-                    { data: 'c_data_bulan', name: 'c_data_bulan', orderable:false},
-                    { data: 'c_awal_periode', name: 'c_awal_periode', orderable:false},
-                    { data: 'c_akhir_periode', name: 'c_akhir_periode', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'c_version', name: 'version', orderable:true},
+                    { data: 'c_saldo_awal', name: 'filter_c_saldo_awal', orderable:true},
+                    { data: 'c_data_bulan', name: 'filter_bulan', orderable:true},
+                    { data: 'c_awal_periode', name: 'filter_c_awal_periode', orderable:true},
+                    { data: 'c_akhir_periode', name: 'filter_c_akhir_periode', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
-                ],success:function (){
-
-                }
+                ],
 
             })
         }
 
         function update_asumsi_umum(id) {
+            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit"+id).attr("disabled", true);
             var answersList_edit = [];
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -521,26 +531,49 @@
                                 tanggal: $('#edit_tanggal_awal'+id).val(),
                                 answer:answersList_edit
                             },
-                            success:function (response) {
-                                if (response.Code === 200){
-                                    $('#modal_edit'+id).modal('hide');
-                                    toastr.success('Data Berhasil Disimpan', 'Success')
-                                    get_data()
-                                }else if (response.Code === 0){
-                                    $('#modal_edit'+id).modal('hide');
-                                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                                }else {
-                                    $('#modal_edit'+id).modal('hide');
-                                    toastr.error('Terdapat Kesalahan System', 'System Error')
-                                }
+
+                            success: function (response) {
+                                Swal.fire({
+                                    title: response.title,
+                                    text: response.msg,
+                                    icon: response.type,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: '#019267',
+                                    confirmButtonText: 'Konfirmasi',
+                                })
+                                    .then((result) => {
+                                        if (result.value) {
+                                            $('#modal_edit'+id).modal('hide')
+                                            $('body').removeClass('modal-open');
+                                            $('.modal-backdrop').remove();
+                                            $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                            $("#back_edit"+id).attr("disabled", false);
+                                            get_data()
+                                        }
+                                    })
+                            },
+                            error: function (response) {
+                                handleError(response)
+                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_edit"+id).attr("disabled", false);
                             }
+
                         })
                     }else {
-                        toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                        Swal.fire({
+                            title: 'PERINGATAN',
+                            text: "Silakan Isi Data Tersebut",
+                            icon: 'warning',
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result)=>{
+                            if (result.value){
+                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_edit"+id).attr("disabled", false);
+                            }
+                        })
                     }
-
-
-
                 }
 
             })
@@ -568,15 +601,23 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success');
-                                get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#019267',
+                                confirmButtonText: 'Konfirmasi',
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        get_data()
+                                    }
+                                })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 
@@ -586,5 +627,4 @@
         }
 
     </script>
-    {{--    <script src="{{asset('assets/js/pages/regions.js')}}"></script>--}}
 @endsection

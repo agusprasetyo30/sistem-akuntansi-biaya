@@ -16,8 +16,7 @@ class CreateKursTable extends Migration
         Schema::create('kurs', function (Blueprint $table) {
             $table->id();
             $table->double('usd_rate', 8, 2);
-            $table->string('month');
-            $table->string('year');
+            $table->timestamp('month_year');
             $table->timestamps();
         });
     }

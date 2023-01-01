@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="largemodal" aria-hidden="true">
+<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="largemodal" aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -22,15 +22,9 @@
                                     Harus Diisi.
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label class="form-label">Kurs  <span class="text-red">*</span></label>
-                                <div class="input-icon">
-                                    <span class="input-icon-addon text-primary">
-                                        <p>Rp</p>
-                                    </span>
-                                    <input class="form-control" type="text" name="currency" id="currency" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="1.000.000.00">
-                                </div>
+                                <label class="form-label">Kurs <span class="text-red">*</span></label>
+                                <input class="form-control" type="text" placeholder="0" required name="currency" id="currency" autocomplete="off">
                                 <div class="valid-feedback">
                                     Terlihat Bagus!
                                 </div>
@@ -43,8 +37,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
             </div>
         </div>
     </div>

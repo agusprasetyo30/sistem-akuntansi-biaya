@@ -19,7 +19,7 @@
                             <form id="form-1" novalidate>
                                 <div class="form-group">
                                     <label for="nama_versi">Nama Versi <span class="text-red">*</span></label>
-                                    <input type="text" class="form-control" id="nama_versi" placeholder="Ext : 202001" required>
+                                    <input type="text" class="form-control" id="nama_versi" placeholder="Ext : 202001" autocomplete="off" required>
                                     <div class="valid-feedback">
                                         Terlihat Bagus!
                                     </div>
@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="jumlah_bulan">Jumlah Bulan <span class="text-red">*</span></label>
-                                    <input type="number" min="1" max="12" class="form-control" id="jumlah_bulan" placeholder="Jumlah Bulan" required>
+                                    <input type="number" min="1" max="12" class="form-control" id="jumlah_bulan" placeholder="Jumlah Bulan" autocomplete="off" required>
                                     <div class="valid-feedback">
                                         Terlihat Bagus!
                                     </div>
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tanggal_awal">Tanggal Awal <span class="text-red">*</span></label>
-                                    <input type="text" class="form-control" id="tanggal_awal" placeholder="Bulan-Tahun" required>
+                                    <input type="text" class="form-control" id="tanggal_awal" placeholder="Bulan-Tahun" autocomplete="off" required>
                                     <div class="valid-feedback">
                                         Terlihat Bagus!
                                     </div>

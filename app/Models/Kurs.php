@@ -13,8 +13,7 @@ class Kurs extends Model
 
     protected $fillable = [
         'usd_rate',
-        'month',
-        'year',
+        'month_year',
         'created_at',
         'updated_at',
     ];
