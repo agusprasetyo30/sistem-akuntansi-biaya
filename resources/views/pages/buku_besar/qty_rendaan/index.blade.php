@@ -435,10 +435,20 @@
                                 var input = document.createElement("input");
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
+
+                                if(iName == 'qty_rendaan_value'){
+                                    input.id = 'qty_rendaan_value_search'
+                                }
+
                                 $(input).
                                 appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
+                                });
+
+                                $('#qty_rendaan_value_search').on('keyup', function(){
+                                    let rupiah = formatRupiah($(this).val(), "Rp ")
+                                    $(this).val(rupiah)
                                 });
                             }
                             else if (data_type == 'select'){
@@ -528,7 +538,7 @@
                     { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'material', name: 'filter_material', orderable:true},
                     { data: 'region_name', name: 'filter_region', orderable:true},
-                    { data: 'value', name: 'qty_rendaan_value', orderable:true},
+                    { data: 'value', name: 'filter_qty_rendaan_value', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[

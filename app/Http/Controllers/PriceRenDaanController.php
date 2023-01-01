@@ -141,29 +141,38 @@ class PriceRenDaanController extends Controller
                 "version" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()){
                 return $this->makeValidMsg($validator);
+            }
 
-            DB::transaction(function () use ($request){
-                PriceRenDaan::where('version_id', $request->version_id)->delete();
+            $transaction = DB::transaction(function () use ($request){
+                $empty_excel = Excel::toArray(new PriceRenDaanImport($request->version), $request->file('file'));
+                if ($empty_excel[0]){
+                    $file = $request->file('file')->store('import');
 
-                $file = $request->file('file')->store('import');
+                    PriceRenDaan::where('version_id', $request->version)->delete();
+                    $import = new PriceRenDaanImport($request->version);
+                    $import->import($file);
 
-                $import = new PriceRenDaanImport($request->version);
-                $import->import($file);
+                    $data_fail = $import->failures();
 
-                $data_fail = $import->failures();
-                if ($data_fail->isNotEmpty()){
-                    return setResponse([
-                        'code' => 500,
-                        'title' => 'Gagal meng-import data',
-                    ]);
+                }else{
+                    $data_fail = [];
                 }
+                return $data_fail;
             });
-            return setResponse([
-                'code' => 200,
-                'title' => 'Berhasil meng-import data'
-            ]);
+
+            if ($transaction->isNotEmpty()){
+                return setResponse([
+                    'code' => 500,
+                    'title' => 'Gagal meng-import data',
+                ]);
+            }else{
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Berhasil meng-import data'
+                ]);
+            }
         }catch (\Exception $exception){
             return setResponse([
                 'code' => 400,
