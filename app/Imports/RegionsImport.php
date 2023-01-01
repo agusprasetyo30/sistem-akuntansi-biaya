@@ -24,14 +24,6 @@ class RegionsImport implements ToModel, WithHeadingRow, SkipsOnError, WithValida
     */
     public function model(array $row)
     {
-        // return new Regions([
-        //     'region_name' => $row['region_name'],
-        //     'region_desc' => $row['region_desc'],
-        //     'latitude' => $row['latitude'],
-        //     'longtitude' => $row['longtitude'],
-        //     'is_active' => $row['is_active'],
-        //     'created_by' => auth()->user()->id,
-        // ]);
 
         $data = [
             'region_name' => $row['region_name'],
@@ -48,12 +40,12 @@ class RegionsImport implements ToModel, WithHeadingRow, SkipsOnError, WithValida
     {
         return 50;
     }
-    
+
     public function chunkSize(): int
     {
         return 50;
     }
-    
+
     public function rules(): array{
         return[
             'region_name' => ['required'],

@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -20,22 +21,25 @@ class UserController extends Controller
 
     public function create(Request $request){
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "role" => 'required',
                 "nama" => 'required',
                 "username" => 'required',
-                "email" => 'required',
                 "metode" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['name'] = $request->nama;
             $input['username'] = $request->username;
-            $input['email'] = $request->email;
             $input['password'] = bcrypt('Petrokimia1');
+            $input['company_code'] = 'B000';
 
             $input_management['role_id'] = (int) $request->role;
             $input_management['login_method'] = $request->metode;
             $input_management['username'] = $request->username;
+            $input_management['company_code'] = 'B000';
 
             DB::transaction(function () use ($input, $input_management){
                 $user = User::create($input);
@@ -45,32 +49,39 @@ class UserController extends Controller
                 Management_Role::create($input_management);
             });
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-//            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function update(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "role" => 'required',
                 "nama" => 'required',
                 "username" => 'required',
-                "email" => 'required',
                 "metode" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['name'] = $request->nama;
             $input['username'] = $request->username;
-            $input['email'] = $request->email;
             $input['password'] = bcrypt('Petrokimia1');
+            $input['company_code'] = 'B000';
 
             $input_management['role_id'] = (int) $request->role;
             $input_management['login_method'] = $request->metode;
             $input_management['username'] = $request->username;
+            $input_management['company_code'] = 'B000';
 
             DB::transaction(function () use ($input, $input_management, $request){
                 User::where('id', $request->id)
@@ -79,9 +90,14 @@ class UserController extends Controller
                 Management_Role::where('user_id', $request->id)
                     ->update($input_management);
             });
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -92,9 +108,14 @@ class UserController extends Controller
                 ->delete();
             User::where('id', $request->id)
                 ->delete();
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 }

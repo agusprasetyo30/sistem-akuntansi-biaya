@@ -197,7 +197,8 @@
                                     $("#modal_import input").val("")
                                 }
                             })
-                    },error: function (response) {
+                    },
+                    error: function (response) {
                         handleError(response)
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
@@ -405,7 +406,7 @@
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
                                 appendTo(cell.empty()).

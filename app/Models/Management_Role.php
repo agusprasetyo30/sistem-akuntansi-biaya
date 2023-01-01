@@ -17,7 +17,8 @@ class Management_Role extends Model
         'username',
         'login_method',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'company_code'
     ];
 
 }

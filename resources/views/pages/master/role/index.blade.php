@@ -32,16 +32,10 @@
                             <table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                    <th data-type='text' data-name='role' class="border-bottom-0 text-center">ROLE</th>
-                                    <th data-type='text' data-name='status' class="border-bottom-0 text-center">STATUS</th>
-                                    <th data-type='text' data-name='action' class="border-bottom-0 text-center">ACTION</th>
-                                </tr>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center"></th>
-                                    <th data-type='text' data-name='role' class="text-center"></th>
-                                    <th data-type='select' data-name='status' class="text-center"></th>
-                                    <th data-type='text' data-name='action' class="text-center"></th>
+                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                    <th data-type='text' data-name='role' class="text-center">ROLE</th>
+                                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -59,6 +53,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_role thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_role thead');
+
             get_data()
 
             $('#is_active').select2({
@@ -74,7 +73,9 @@
             $("#dt_role").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
-                sortable: false,
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 processing: true,
                 serverSide: true,
                 fixedHeader: {
@@ -95,39 +96,47 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
+                                    input.className = "status_search form-control custom-select select2";
                                     options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
+                                    @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
                             }
+                        }else {
+                            cell.empty()
                         }
+                        $('.status_search').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
 
                     });
                 },
@@ -139,107 +148,96 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'nama_role', name: 'nama_role', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'nama_role', name: 'nama_role', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
+                columnDefs:[
+                    {className: 'text-center', targets: [0,1,2,3]}
+                ]
 
             })
         }
 
         $('#submit').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dikirim",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('insert_role')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            role: $('#role').val(),
-                            status: $('#is_active').val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#is_active').val('').trigger("change");
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("");
-                                $('#is_active').val('').trigger("change");
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("");
-                                $('#is_active').val('').trigger("change");
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_role')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    role: $('#role').val(),
+                    status: $('#is_active').val(),
+                },
+                success:function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        if (result.value) {
+                            $('#modal_add').modal('hide');
+                            $("#modal_add input").val("")
+                            $('#is_active').val('').trigger("change");
+                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            get_data()
                         }
                     })
-
+                },
+                error:function (response) {
+                    handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
-
             })
         })
 
         function update_role(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_role')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                            role: $('#edit_role'+id).val(),
-                            status: $('#edit_is_active'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
-                        }
+            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_role')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    role: $('#edit_role'+id).val(),
+                    status: $('#edit_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     })
-
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_edit'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                get_data()
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit"+id).attr("disabled", false);
                 }
-
             })
         }
 
@@ -266,15 +264,21 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        get_data()
+                                    }
+                                })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 
@@ -283,5 +287,4 @@
             })
         }
     </script>
-    {{--    <script src="{{asset('assets/js/pages/regions.js')}}"></script>--}}
 @endsection

@@ -56,14 +56,11 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
+<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Region</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -100,8 +97,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit" onclick="update_region({{$model->id}})" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_region({{$model->id}})" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="back_edit{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
             </div>
         </div>
     </div>

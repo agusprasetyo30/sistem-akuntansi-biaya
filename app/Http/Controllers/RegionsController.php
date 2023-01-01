@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class RegionsController extends Controller
 {
@@ -37,6 +37,7 @@ class RegionsController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+
             $input['region_name'] = $request->nama;
             $input['region_desc'] = $request->deskripsi;
             $input['latitude'] = $request->latitude;
@@ -49,22 +50,30 @@ class RegionsController extends Controller
 
             Regions::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function update(Request $request)
     {
         try {
-            $request->validate([
+            $validator = Validator::make($request->all(), [
                 "nama" => 'required',
                 "deskripsi" => 'required',
                 "latitude" => 'required',
                 "longtitude" => 'required',
                 "is_active" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['region_name'] = $request->nama;
             $input['region_desc'] = $request->deskripsi;
@@ -77,10 +86,14 @@ class RegionsController extends Controller
             Regions::where('id', $request->id)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            //            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -92,9 +105,14 @@ class RegionsController extends Controller
 
             Regions::where('id', $request->id)
                 ->update($input);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -115,13 +133,22 @@ class RegionsController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                // dd(implode(' ', $err));
-                return response()->json(['Code' => 500, 'msg' => $err]);
+                if ($data_fail->isNotEmpty()){
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                    ]);
+                }
             }
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
-        } catch (Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
