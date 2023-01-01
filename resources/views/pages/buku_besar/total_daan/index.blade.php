@@ -22,38 +22,6 @@
 
 <!-- Row -->
 <div class="row">
-    {{-- <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="">
-                    <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                            <thead>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
-                                <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">VERSION</th>
-                                <th data-type='text' data-name='region' class="border-bottom-0 text-center">REGION</th>
-                                <th data-type='text' data-name='qty_rendaan_value' class="border-bottom-0 text-center">VALUE</th>
-                            </tr>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
-                                <th data-type='text' data-name='material_id' class="text-center"></th>
-                                <th data-type='text' data-name='periode_id' class="text-center"></th>
-                                <th data-type='text' data-name='region' class="text-center"></th>
-                                <th data-type='text' data-name='qty_rendaan_value' class="text-center"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
@@ -62,48 +30,46 @@
                         <div class="tabs-menu1 ">
                             <!-- Tabs -->
                             <ul class="nav panel-tabs">
-                                <li class=""> <a href="#tab5" class="active" data-bs-toggle="tab">Vertikal</a> </li>
-                                <li> <a href="#tab6" data-bs-toggle="tab">Horizontal</a> </li>
+                                <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
+                                <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
                             </ul>
                         </div>
                     </div>
                     <div class="panel-body tabs-menu-body">
                         <div class="tab-content">
-                            <div class="tab-pane active " id="tab5">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="">
-                                                <div class="table-responsive" id="table-wrapper">
-                                                    <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                                        <thead>
-                                                        <tr>
-                                                            <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                                            <th data-type='text' data-name='material_id' class="border-bottom-0 text-center">MATERIAL</th>
-                                                            <th data-type='text' data-name='periode_id' class="border-bottom-0 text-center">VERSION</th>
-                                                            <th data-type='text' data-name='region' class="border-bottom-0 text-center">REGION</th>
-                                                            <th data-type='text' data-name='qty_rendaan_value' class="border-bottom-0 text-center">VALUE</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th data-type='text' data-name='nomor' class="text-center"></th>
-                                                            <th data-type='text' data-name='material_id' class="text-center"></th>
-                                                            <th data-type='text' data-name='periode_id' class="text-center"></th>
-                                                            <th data-type='text' data-name='region' class="text-center"></th>
-                                                            <th data-type='text' data-name='qty_rendaan_value' class="text-center"></th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                            
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <div class="tab-pane active " id="vertical">
+                                <div class="">
+                                    <div class="table-responsive" id="table-wrapper">
+                                        <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                                            <thead>
+                                            <tr>
+                                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
+                                                <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
+                                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                                                <th data-type='text' data-name='region' class="text-center">REGION</th>
+                                                <th data-type='text' data-name='qty_rendaan_value' class="text-center">VALUE</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane " id="tab6">
-                                <p> default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like</p>
+                            <div class="tab-pane " id="horizontal">
+                                <div class="mb-2 row">
+                                    <div class="form-group">
+                                        <label class="form-label">VERSI</label>
+                                        <select id="filter_version" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="mt-auto">
+                                    <div class="table-responsive" id="dinamic_table">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -122,6 +88,34 @@
     <script>
         $(document).ready(function () {
             get_data()
+
+            $('#tabs_vertical').on('click', function () {
+                get_data()
+            })
+
+            $('#filter_version').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
         })
 
         function get_data(){
@@ -189,6 +183,56 @@
                     {className: 'text-center', targets: [0]}
                 ],
 
+            })
+        }
+
+        function get_data_horiz(){
+            var table = '<table id="h_dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
+            var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
+            var column = [
+                { data: 'material', orderable:false},
+                { data: 'region_name', orderable:false}
+            ]
+            $("#dinamic_table").append(table);
+            $.ajax({
+                type: "GET",
+                url : '{{route("total_daan")}}',
+                data: {
+                    data:'version',
+                    version:$('#filter_version').val()
+                },
+                success:function (response) {
+                    for (let i = 0; i < response.asumsi.length;i++){
+                        column.push({ data: i.toString(), orderable:false})
+                        kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
+                    }
+                    $("#dinamic_tr").append(kolom);
+                    $('#h_dt_total_daan').DataTable().clear().destroy();
+                    $("#h_dt_total_daan").DataTable({
+                        scrollX: true,
+                        dom: 'Bfrtip',
+                        orderCellsTop: true,
+                        processing: true,
+                        serverSide: true,
+                        fixedHeader: {
+                            header: true,
+                            headerOffset: $('#main_header').height()
+                        },
+                        buttons: [
+                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'excel', className: 'mb-5' }
+                        ],
+                        ajax: {
+                            url : '{{route("total_daan")}}',
+                            data: {
+                                data:'horizontal',
+                                version:$('#filter_version').val()
+                            }
+                        },
+                        columns: column,
+
+                    })
+                }
             })
         }
     </script>

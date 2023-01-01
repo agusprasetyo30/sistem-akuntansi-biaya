@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\Master\H_QtyRenProdDataTable;
 use App\DataTables\Master\QtyRenProdDataTable;
 use App\Exports\MultipleSheet\MS_KuantitiRenProdExport;
 use App\Imports\QtyRenProdImport;
@@ -15,10 +16,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class QtyRenProdController extends Controller
 {
-    public function index(Request $request, QtyRenProdDataTable $qtyrenprodDataTable)
+    public function index(Request $request, QtyRenProdDataTable $qtyrenprodDataTable, H_QtyRenProdDataTable $h_QtyRenProdDataTable)
     {
         if ($request->data == 'index') {
             return $qtyrenprodDataTable->render('pages.buku_besar.qty_renprod.index');
+        } elseif ($request->data == 'horizontal') {
+            return $h_QtyRenProdDataTable->with(['version' => $request->version])->render('pages.buku_besar.qty_renprod.index');
+        } elseif ($request->data == 'version') {
+            $asumsi = DB::table('asumsi_umum')
+                ->where('version_id', $request->version)
+                ->orderBy('month_year', 'ASC')
+                ->get();
+            return response()->json(['code' => 200, 'asumsi' => $asumsi]);
         }
         return view('pages.buku_besar.qty_renprod.index');
     }

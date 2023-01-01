@@ -24,29 +24,58 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            {{-- <div class="card-header">
-                <div class="card-title">Basic Kuantiti Rencana Produksi</div>
-            </div> --}}
             <div class="card-body">
-                <div class="">
-                    <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                            <thead>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
-                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
-                                <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
-                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                <th data-type='text' data-name='qty_renprod_value' class="text-center">VALUE</th>
-                                <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading p-0 bg-light">
+                        <div class="tabs-menu1 ">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
+                                <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active " id="vertical">
+                                <div class="">
+                                    <div class="table-responsive" id="table-wrapper">
+                                        <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                                            <thead>
+                                            <tr>
+                                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
+                                                <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
+                                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                                                <th data-type='text' data-name='qty_renprod_value' class="text-center">VALUE</th>
+                                                <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="horizontal">
+                                <div class="mb-2 row">
+                                    <div class="form-group">
+                                        <label class="form-label">VERSI</label>
+                                        <select id="filter_version" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
 
-                            </tbody>
-                        </table>
+                                </div>
+                                <div class="mt-auto">
+                                    <div class="table-responsive" id="dinamic_table">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
             @include('pages.buku_besar.qty_renprod.add')
             @include('pages.buku_besar.qty_renprod.import')
@@ -66,6 +95,10 @@
                 .appendTo('#dt_qty_renprod thead');
 
             get_data()
+
+            $('#tabs_vertical').on('click', function () {
+                get_data()
+            })
 
             $('#data_main_material').select2({
                 dropdownParent: $('#modal_add'),
@@ -160,11 +193,34 @@
                 $("#submit-export").css("display", "block");
             })
 
-
             $('#qty_renprod_value').on('keyup', function(){
                 let rupiah = formatRupiah($(this).val(), "Rp ")
                 $(this).val(rupiah)
             });
+
+            $('#filter_version').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
 
         })
 
@@ -297,6 +353,55 @@
                     {className: 'text-center', targets: [0,5]}
                 ],
 
+            })
+        }
+
+        function get_data_horiz(){
+            var table = '<table id="h_dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
+            var kolom = '<th class="text-center">MATERIAL</th>'
+            var column = [
+                { data: 'material', orderable:false},
+            ]
+            $("#dinamic_table").append(table);
+            $.ajax({
+                type: "GET",
+                url : '{{route("qty_renprod")}}',
+                data: {
+                    data:'version',
+                    version:$('#filter_version').val()
+                },
+                success:function (response) {
+                    for (let i = 0; i < response.asumsi.length;i++){
+                        column.push({ data: i.toString(), orderable:false})
+                        kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
+                    }
+                    $("#dinamic_tr").append(kolom);
+                    $('#h_dt_qty_renprod').DataTable().clear().destroy();
+                    $("#h_dt_qty_renprod").DataTable({
+                        scrollX: true,
+                        dom: 'Bfrtip',
+                        orderCellsTop: true,
+                        processing: true,
+                        serverSide: true,
+                        fixedHeader: {
+                            header: true,
+                            headerOffset: $('#main_header').height()
+                        },
+                        buttons: [
+                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'excel', className: 'mb-5' }
+                        ],
+                        ajax: {
+                            url : '{{route("qty_renprod")}}',
+                            data: {
+                                data:'horizontal',
+                                version:$('#filter_version').val()
+                            }
+                        },
+                        columns: column,
+
+                    })
+                }
             })
         }
 
