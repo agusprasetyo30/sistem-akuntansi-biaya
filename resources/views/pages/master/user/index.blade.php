@@ -13,7 +13,7 @@
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
-                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+{{--                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>--}}
                 <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
             </div>
         </div>
@@ -33,16 +33,10 @@
                             <table id="dt_users" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nama' class="border-bottom-0 text-center">NAMA</th>
-                                    <th data-type='text' data-name='username' class="border-bottom-0 text-center">USERNAME</th>
-                                    <th data-type='text' data-name='role' class="border-bottom-0 text-center">ROLE</th>
-                                    <th data-type='text' data-name='action' class="border-bottom-0 text-center">ACTION</th>
-                                </tr>
-                                <tr>
-                                    <th data-type='text' data-name='nama' class="text-center"></th>
-                                    <th data-type='text' data-name='username' class="text-center"></th>
-                                    <th data-type='select' data-name='role' class="text-center"></th>
-                                    <th data-type='text' data-name='action' class="text-center"></th>
+                                    <th data-type='text' data-name='nama' class="text-center">NAMA</th>
+                                    <th data-type='text' data-name='username' class="text-center">USERNAME</th>
+                                    <th data-type='text' data-name='role' class="text-center">ROLE</th>
+                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
                                 </tr>
                                 </thead>
                             </table>
@@ -60,6 +54,11 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
+            $('#dt_users thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_users thead');
+
             get_data()
 
             $('#login_method').select2({
@@ -97,7 +96,9 @@
             $("#dt_users").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
-                sortable: false,
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 processing: true,
                 serverSide: true,
                 fixedHeader: {
@@ -118,39 +119,47 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
+                                    input.className = "status_search form-control custom-select select2";
+                                    @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
                             }
+                        }else {
+                            cell.empty()
                         }
+
+                        $('.status_search').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
 
                     });
                 },
@@ -162,80 +171,58 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'name', name: 'users.name', orderable:false},
-                    { data: 'username', name: 'users.username', orderable:false},
-                    { data: 'nama_role', name: 'role.nama_role', orderable:false},
+                    { data: 'name', name: 'users.name', orderable:true},
+                    { data: 'username', name: 'users.username', orderable:true},
+                    { data: 'nama_role', name: 'role.nama_role', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
-
+                columnDefs:[
+                    {className: 'text-center', targets: [0,1,2,3]}
+                ]
             })
         }
 
         $('#submit').on('click', function () {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dikirim",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('insert_user')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            nama: $('#nama').val(),
-                            username: $('#username').val(),
-                            role: $('#data_main_role').val(),
-                            metode: $('#login_method').val(),
-                            email: $('#email').val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("")
-                                $('#data_main_role').val('').trigger("change");
-                                $('#login_method').val('').trigger("change");
-                                $('#username').removeClass('is-invalid');
-                                $('#username').removeClass('is-valid');
-                                $('#email').removeClass('is-invalid');
-                                $('#email').removeClass('is-valid');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("");
-                                $('#data_main_role').val('').trigger("change");
-                                $('#login_method').val('').trigger("change");
-                                $('#username').removeClass('is-invalid');
-                                $('#username').removeClass('is-valid');
-                                $('#email').removeClass('is-invalid');
-                                $('#email').removeClass('is-valid');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_add').modal('hide');
-                                $("#modal_add input").val("");
-                                $('#data_main_role').val('').trigger("change");
-                                $('#login_method').val('').trigger("change");
-                                $('#username').removeClass('is-invalid');
-                                $('#username').removeClass('is-valid');
-                                $('#email').removeClass('is-invalid');
-                                $('#email').removeClass('is-valid');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_user')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    nama: $('#nama').val(),
+                    username: $('#username').val(),
+                    role: $('#data_main_role').val(),
+                    metode: $('#login_method').val(),
+                },
+                success:function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        if (result.value) {
+                            $('#modal_add').modal('hide');
+                            $("#modal_add input").val("")
+                            $('#data_main_role').val('').trigger("change");
+                            $('#login_method').val('').trigger("change");
+                            $('#username').removeClass('is-invalid');
+                            $('#username').removeClass('is-valid');
+                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            get_data()
                         }
                     })
-
+                },
+                error:function (response) {
+                    handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
-
             })
         })
 
@@ -265,77 +252,48 @@
             })
         })
 
-        $('#email').on('keyup', function () {
+
+        function update_user(id) {
+            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit"+id).attr("disabled", true);
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('helper_email')}}',
+                url: '{{route('update_user')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    search: $('#email').val(),
+                    id: id,
+                    nama: $('#edit_name'+id).val(),
+                    username: $('#edit_username'+id).val(),
+                    role: $('#edit_data_main_role'+id).val(),
+                    metode: $('#edit_login_method'+id).val(),
                 },
-                success:function (response) {
-                    if (response.Code === 200){
-                        $('#email').removeClass('is-invalid');
-                        $('#email').addClass('is-valid');
-                    }else if (response.Code === 201){
-                        $('#email').removeClass('is-valid');
-                        $('#email').addClass('is-invalid');
-                        $('#submit').prop('disabled', 'true');
-                    }else {
-                        toastr.error('Terdapat Kesalahan System', 'System Error')
-                    }
-                }
-            })
-        })
-
-        function update_user(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('update_user')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                            nama: $('#edit_name'+id).val(),
-                            username: $('#edit_username'+id).val(),
-                            role: $('#edit_data_main_role'+id).val(),
-                            metode: $('#edit_login_method'+id).val(),
-                            email: $('#edit_email'+id).val(),
-                        },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+id).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
-                        }
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     })
-
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_edit'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                get_data()
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit"+id).attr("disabled", false);
                 }
-
             })
         }
 
@@ -351,7 +309,6 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -362,15 +319,21 @@
                             _token: "{{ csrf_token() }}",
                             id: id,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false
+                            })
+                                .then((result) => {
+                                    if (result.value) {
+                                        get_data()
+                                    }
+                                })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 
@@ -379,5 +342,4 @@
             })
         }
     </script>
-    {{--    <script src="{{asset('assets/js/pages/regions.js')}}"></script>--}}
 @endsection
