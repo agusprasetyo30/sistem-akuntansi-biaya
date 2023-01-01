@@ -28,7 +28,6 @@ class AsumsiUmumController extends Controller
                 "jumlah_bulan" => 'required',
                 "start_date" => 'required',
                 "asumsi" => 'required',
-                "price_rendaan_value" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -70,10 +69,14 @@ class AsumsiUmumController extends Controller
                 }
             });
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-//            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -137,10 +140,14 @@ class AsumsiUmumController extends Controller
 
             });
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-                        dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -150,9 +157,14 @@ class AsumsiUmumController extends Controller
 
             Version_Asumsi::where('id', $request->id)
                 ->delete();
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 

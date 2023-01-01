@@ -676,7 +676,7 @@
                                 $('#modal_edit'+id).modal('hide')
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 get_data()
                             }
                         })

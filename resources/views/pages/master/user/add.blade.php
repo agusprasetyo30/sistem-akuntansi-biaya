@@ -1,12 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="largemodal" aria-hidden="true">
+<div class="modal fade" id="modal_add" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="largemodal" aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Tambah Users</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -24,16 +21,6 @@
                                 </div>
                                 <div id="validationServerUsernameFeedback" class="invalid-feedback">
                                     Username sudah ada.
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email </label>
-                                <input type="email" class="form-control form-control-sm" placeholder="Masukkan Email" name="email" id="email" autocomplete="off" required>
-                                <div class="valid-feedback">
-                                    Terlihat Bagus!
-                                </div>
-                                <div id="validationServerUsernameFeedback" class="invalid-feedback">
-                                    Email sudah ada.
                                 </div>
                             </div>
                             <div class="form-group">
@@ -56,8 +43,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit" class="btn btn-primary">Simpan</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
             </div>
         </div>
     </div>

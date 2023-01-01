@@ -32,19 +32,22 @@ class KursController extends Controller
 
             $date = explode("-",$request->tanggal);
 
-            $input['month'] = $date[0];
-            $input['year'] = $date[1];
-            $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',$request->kurs));
+            $input['month_year'] = $date[1].'-'.$date[0].'-01';
+            $input['usd_rate'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->kurs));
 
-//            dd($input);
             DB::transaction(function () use ($input){
                 Kurs::create($input);
             });
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
 
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -62,18 +65,22 @@ class KursController extends Controller
 //            dd($request);
             $date = explode("-",$request->tanggal);
 
-            $input['month'] = $date[0];
-            $input['year'] = $date[1];
-            $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $request->kurs)));
+            $input['month_year'] = $date[1].'-'.$date[0].'-01';
+            $input['usd_rate'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->kurs));
 
             DB::transaction(function () use ($input, $request){
                 Kurs::where('id', $request->id)
                     ->update($input);
             });
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
 
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -82,9 +89,14 @@ class KursController extends Controller
         try {
             Kurs::where('id', $request->id)
                 ->delete();
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil dihapus'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 }

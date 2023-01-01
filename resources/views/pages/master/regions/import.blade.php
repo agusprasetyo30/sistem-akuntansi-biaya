@@ -19,7 +19,7 @@
                                     <ol>
                                         <li>Format harus sesuai template  ( <a href="{{ route('export_regions') }}">Download Template</a> )</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
-                                    </ol> 
+                                    </ol>
                                 </div>
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
@@ -30,8 +30,10 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit-import" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit_import" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="back_import" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
             </div>
         </div>
     </div>

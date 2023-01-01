@@ -75,14 +75,11 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
+<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Asumsi Umum</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
             </div>
             <div class="modal-body">
                 <div id="edit_data_asumsi{{$model->id}}">
@@ -137,9 +134,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit{{$model->id}}" onclick="update_asumsi_umum({{$model->id}})" class="btn btn-primary">Simpan</button>
+                <button type="button" disabled id="submit_edit{{$model->id}}" onclick="update_asumsi_umum({{$model->id}})" class="btn btn-primary">Simpan</button>
                 <button type="button" id="kembali{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
-                <button id="loader{{$model->id}}" type="button" class="btn btn-success btn-loaders btn-icon" style="display: none;">Harap Tunggu, Proses Sedang Berjalan !</button>
             </div>
         </div>
     </div>
@@ -231,6 +227,7 @@
                 id:'{{$model->id}}'
             },
             success:function (response) {
+
                 if (response.code === 200){
                     $('#edit_nama_versi'+{{$model->id}}).val(response.data['version'].version)
                     $('#edit_jumlah_bulan'+{{$model->id}}).val(response.data['version'].data_bulan)
@@ -276,10 +273,7 @@
                         // console.log(result)
                     }
 
-                    // data_array.forEach(myFunction)
-                    // console.log(data_array['html1'])
-
-                    // $('#submit').prop('disabled', false);
+                    $("#submit_edit"+{{$model->id}}).attr('class', 'btn btn-primary').attr("disabled", false);
                 }
                 $("#edit_data_asumsi"+{{$model->id}}).smartWizard("unsetState", [currentStepIdx], 'error');
 
