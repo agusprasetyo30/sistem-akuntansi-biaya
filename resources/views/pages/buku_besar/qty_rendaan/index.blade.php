@@ -637,6 +637,7 @@
                             $('#data_main_material').val('').trigger("change");
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })

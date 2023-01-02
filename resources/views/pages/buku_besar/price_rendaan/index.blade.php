@@ -42,22 +42,7 @@
                         <div class="tab-content">
                             <div class="tab-pane active " id="vertical">
                                 <div class="">
-                                    <div class="table-responsive" id="table-wrapper">
-                                        <table id="dt_price_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                            <thead>
-                                            <tr>
-                                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
-                                                <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
-                                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                                <th data-type='text' data-name='region' class="text-center">REGION</th>
-                                                <th data-type='text' data-name='price_rendaan_value' class="text-center">VALUE</th>
-                                                <th data-type='text' data-name='aksi' class="text-center">ACTION</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
+                                    <div class="table-responsive" id="table_main">
                                     </div>
                                 </div>
                             </div>
@@ -78,8 +63,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
             @include('pages.buku_besar.price_rendaan.add')
             @include('pages.buku_besar.price_rendaan.import')
@@ -92,11 +75,23 @@
 
 @section('scripts')
     <script>
+        var table_main_dt = '<table id="dt_price_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
+            '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
+            '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
+            '<th data-type="text" data-name="region" class="text-center">REGION</th>' +
+            '<th data-type="text" data-name="price_rendaan_value" class="text-center">VALUE</th>' +
+            '<th data-type="text" data-name="aksi" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
+
         $(document).ready(function () {
-            $('#dt_price_rendaan thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_price_rendaan thead');
+
             get_data()
 
             $('#tabs_vertical').on('click', function () {
@@ -399,6 +394,13 @@
         })
 
         function get_data(){
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_price_rendaan thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_price_rendaan thead');
+
             $('#dt_price_rendaan').DataTable().clear().destroy();
             $("#dt_price_rendaan").DataTable({
                 scrollX: true,
@@ -635,6 +637,7 @@
                             $('#data_main_material').val('').trigger("change");
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })
@@ -679,6 +682,7 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -723,6 +727,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })

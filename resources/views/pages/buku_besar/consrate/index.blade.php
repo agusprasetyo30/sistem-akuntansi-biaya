@@ -29,25 +29,7 @@
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
-                                <thead>
-                                <tr>
-                                    <th data-type='select' data-name='version' class="text-center">VERSION</th>
-                                    <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
-                                    <th data-type='select' data-name='code' class="text-center">CODE PLANT</th>
-                                    <th data-type='select' data-name='produk' class="text-center">PRODUK</th>
-                                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                    <th data-type='text' data-name='uom' class="text-center">UOM</th>
-                                    <th data-type='text' data-name='consrate' class="text-center">CONSRATE</th>
-                                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
-                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
+                        <div class="table-responsive" id="table_main">
                         </div>
                     </div>
                 </div>
@@ -62,11 +44,26 @@
 
 @section('scripts')
     <script>
+
+        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="select" data-name="version" class="text-center">VERSION</th>' +
+            '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
+            '<th data-type="select" data-name="code" class="text-center">CODE PLANT</th>' +
+            '<th data-type="select" data-name="produk" class="text-center">PRODUK</th>' +
+            '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
+            '<th data-type="text" data-name="uom" class="text-center">UOM</th>' +
+            '<th data-type="text" data-name="consrate" class="text-center">CONSRATE</th>' +
+            '<th data-type="select" data-name="status" class="text-center">STATUS</th>' +
+            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
         $(document).ready(function () {
-            $('#dt_consrate thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_consrate thead');
+
 
             get_data()
 
@@ -367,6 +364,15 @@
         })
 
         function get_data(){
+            $('#table_main').append(table_main_dt)
+
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_consrate thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_consrate thead');
+
             $('#dt_consrate').DataTable().clear().destroy();
             $("#dt_consrate").DataTable({
                 bAutoWidth: true,
@@ -599,6 +605,7 @@
                             $('#data_main_material').val('').trigger("change");
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })
@@ -645,6 +652,7 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -689,6 +697,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })
