@@ -42,22 +42,8 @@
                         <div class="tab-content">
                             <div class="tab-pane active " id="vertical">
                                 <div class="">
-                                    <div class="table-responsive" id="table-wrapper">
-                                        <table id="dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                            <thead>
-                                            <tr>
-                                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
-                                                <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
-                                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                                <th data-type='text' data-name='region' class="text-center">REGION</th>
-                                                <th data-type='text' data-name='qty_rendaan_value' class="text-center">VALUE</th>
-                                                <th data-type='text' data-name='aksi' class="text-center">ACTION</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+                                    <div class="table-responsive" id="table_main">
 
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -87,15 +73,26 @@
 </div>
 <!-- /Row -->
 
+
 @endsection()
 
 @section('scripts')
     <script>
+        var table_main_dt = '<table id="dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
+            '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
+            '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
+            '<th data-type="text" data-name="region" class="text-center">REGION</th>' +
+            '<th data-type="text" data-name="qty_rendaan_value" class="text-center">VALUE</th>' +
+            '<th data-type="text" data-name="aksi" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
         $(document).ready(function () {
-            $('#dt_qty_rendaan thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_qty_rendaan thead');
 
             get_data()
 
@@ -398,6 +395,13 @@
         })
 
         function get_data(){
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_qty_rendaan thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_qty_rendaan thead');
+
             $('#dt_qty_rendaan').DataTable().clear().destroy();
             $("#dt_qty_rendaan").DataTable({
                 scrollX: true,
@@ -677,6 +681,7 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -721,6 +726,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })
