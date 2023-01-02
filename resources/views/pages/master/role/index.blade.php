@@ -45,7 +45,6 @@
         var table_main_dt = '<table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="nomor" class="text-center">NO</th>' +
             '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
             '<th data-type="select" data-name="status" class="text-center">STATUS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
@@ -154,14 +153,13 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'nama_role', name: 'nama_role', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3]}
+                    {className: 'text-center', targets: [0,1,2]}
                 ]
 
             })
