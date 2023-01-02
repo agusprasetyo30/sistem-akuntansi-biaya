@@ -45,7 +45,7 @@
 @section('scripts')
     <script>
 
-        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="select" data-name="version" class="text-center">VERSION</th>' +
@@ -364,8 +364,6 @@
         })
 
         function get_data(){
-            $('#table_main').append(table_main_dt)
-
             $('#table_main').append(table_main_dt)
 
             $('#dt_consrate thead tr')
