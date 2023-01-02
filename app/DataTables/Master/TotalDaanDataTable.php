@@ -49,11 +49,15 @@ class TotalDaanDataTable extends DataTable
                     ->whereNull('price_rendaan.deleted_at')
                     ->first();
 
-                // dd($query2->price_rendaan_value, $query->qty_rendaan_value);
-                if ($query->qty_rendaan_value > 0 && $query2->price_rendaan_value == 0) {
+                $val_qty_rendaan = $query ? $query->qty_rendaan_value : 0;
+                $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
+                $val_adjustment = $query ? $query->adjustment : 0;
+                $val_kurs = $query ? $query->usd_rate : 0;
+
+                if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
                     return '-';
                 } else {
-                    $result = $query->qty_rendaan_value * ($query2->price_rendaan_value * (1 + $query->adjustment) * $query->usd_rate);
+                    $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
                     return rupiah($result);
                 }
             })

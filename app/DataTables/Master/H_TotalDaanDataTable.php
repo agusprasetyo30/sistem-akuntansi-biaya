@@ -58,14 +58,17 @@ class H_TotalDaanDataTable extends DataTable
                     ->whereNull('price_rendaan.deleted_at')
                     ->first();
 
-                if ($rendaanAsumsi->qty_rendaan_value > 0 && $query2->price_rendaan_value == 0) {
+                $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;
+                $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
+                $val_adjustment = $rendaanAsumsi ? $rendaanAsumsi->adjustment : 0;
+                $val_kurs = $rendaanAsumsi ? $rendaanAsumsi->usd_rate : 0;
+
+                if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
                     return '-';
                 } else {
-                    $result = $rendaanAsumsi->qty_rendaan_value * ($query2->price_rendaan_value * (1 + $rendaanAsumsi->adjustment) * $rendaanAsumsi->usd_rate);
+                    $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
                     return rupiah($result);
                 }
-
-                // return $rendaanAsumsi ? rupiah($rendaanAsumsi->qty_rendaan_value) : '-';
             });
         }
         return $datatable;
