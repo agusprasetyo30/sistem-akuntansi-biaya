@@ -228,6 +228,7 @@
                     kurs: $('#edit_currency'+id).val(),
                 },
                 success: function (response) {
+                    $("#edit_tanggal"+id).attr("disabled", true);
                     Swal.fire({
                         title: response.title,
                         text: response.msg,
@@ -243,6 +244,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
+                                $("#edit_tanggal"+id).attr("disabled", false);
                                 get_data()
                             }
                         })
