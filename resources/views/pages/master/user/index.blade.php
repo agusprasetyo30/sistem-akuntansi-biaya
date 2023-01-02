@@ -29,16 +29,6 @@
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table_main">
-                            <table id="dt_users" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                <thead>
-                                <tr>
-                                    <th data-type="text" data-name='nama' class="text-center">NAMA</th>
-                                    <th data-type='text' data-name='username' class="text-center">USERNAME</th>
-                                    <th data-type='text' data-name='role' class="text-center">ROLE</th>
-                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
-                                </tr>
-                                </thead>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -52,12 +42,20 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
-            $('#dt_users thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_users thead');
+        var table_main_dt = '<table id="dt_users" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="text" data-name="nama" class="text-center">NAMA</th>' +
+            '<th data-type="text" data-name="username" class="text-center">USERNAME</th>' +
+            '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
+            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
 
+        $(document).ready(function () {
             get_data()
 
             $('#login_method').select2({
@@ -91,6 +89,15 @@
         })
 
         function get_data(){
+
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_users thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_users thead');
+
+
             $('#dt_users').DataTable().clear().destroy();
             $("#dt_users").DataTable({
                 scrollX: true,
@@ -214,6 +221,7 @@
                             $('#username').removeClass('is-invalid');
                             $('#username').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })
@@ -285,6 +293,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -330,6 +339,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })

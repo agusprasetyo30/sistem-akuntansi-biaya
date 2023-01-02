@@ -97,6 +97,7 @@
             get_data()
 
             $('#tabs_vertical').on('click', function () {
+                $("#table_main").empty();
                 get_data()
             })
 
@@ -350,9 +351,11 @@
                         })
                             .then((result) => {
                                 if (result.value) {
-                                    get_data()
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
+                                    $("#table_main").empty();
+                                    update_dt_horizontal()
+                                    get_data()
                                 }
                             })
                     },
@@ -602,6 +605,13 @@
             })
         }
 
+        function update_dt_horizontal() {
+            if ($('#filter_version').val() != null){
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            }
+        }
+
         $('#submit').on('click', function () {
             $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $.ajax({
@@ -638,6 +648,7 @@
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                             $("#table_main").empty();
+                            update_dt_horizontal()
                             get_data()
                         }
                     })
@@ -683,6 +694,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#table_main").empty();
+                                update_dt_horizontal()
                                 get_data()
                             }
                         })
@@ -723,11 +735,14 @@
                                 title: response.title,
                                 text: response.msg,
                                 icon: response.type,
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#019267',
+                                confirmButtonText: 'Konfirmasi',
                             })
                                 .then((result) => {
                                     if (result.value) {
                                         $("#table_main").empty();
+                                        update_dt_horizontal()
                                         get_data()
                                     }
                                 })

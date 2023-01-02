@@ -29,21 +29,7 @@
             </div>
             <div class="card-body">
                 <div class="">
-                    <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_region" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                            <thead>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="text-center">NAMA</th>
-                                <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
-                                <th data-type='select' data-name='status' class="text-center">STATUS</th>
-                                <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                    <div class="table-responsive" id="table_main">
                     </div>
                 </div>
             </div>
@@ -58,12 +44,21 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
-            $('#dt_region thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_region thead');
+        var table_main_dt = '<table id="dt_region" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="text" data-name="nomor" class="text-center">NO</th>' +
+            '<th data-type="text" data-name="nama" class="text-center">NAMA</th>' +
+            '<th data-type="text" data-name="deskripsi" class="text-center">USERNAME</th>' +
+            '<th data-type="select" data-name="status" class="text-center">ROLE</th>' +
+            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
 
+        $(document).ready(function () {
             get_data()
 
             $('#is_active').select2({
@@ -74,6 +69,13 @@
         })
 
         function get_data(){
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_region thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_region thead');
+
             $('#dt_region').DataTable().clear().destroy();
             $("#dt_region").DataTable({
                 scrollX: true,
@@ -155,15 +157,12 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'region_name', name: 'region_name', orderable:false},
-                    { data: 'region_desc', name: 'region_desc', orderable:false},
+                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'region_name', name: 'region_name', orderable:true},
+                    { data: 'region_desc', name: 'region_desc', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
-                ],
-                columnDefs:[
-                    {className: 'text-center', targets: [4,3]}
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0,1,2,3,4]}
@@ -201,6 +200,7 @@
                             $("#modal_add input").val("")
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })
@@ -272,10 +272,11 @@
                     })
                         .then((result) => {
                             if (result.value) {
-                                get_data()
                                 $('#modal_import').modal('hide');
                                 $("#modal_import input").val("")
                                 $('#is_active').val('').trigger("change");
+                                $("#table_main").empty();
+                                get_data()
                             }
                         })
                 },
@@ -322,6 +323,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -368,6 +370,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })

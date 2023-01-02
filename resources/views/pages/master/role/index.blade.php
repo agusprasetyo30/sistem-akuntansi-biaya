@@ -28,17 +28,7 @@
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                <thead>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
-                                    <th data-type='text' data-name='role' class="text-center">ROLE</th>
-                                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
-                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
-                                </tr>
-                                </thead>
-                            </table>
+                        <div class="table-responsive" id="table_main">
                         </div>
                     </div>
                 </div>
@@ -52,12 +42,20 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
-            $('#dt_role thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_role thead');
+        var table_main_dt = '<table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="text" data-name="nomor" class="text-center">NO</th>' +
+            '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
+            '<th data-type="select" data-name="status" class="text-center">STATUS</th>' +
+            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
 
+        $(document).ready(function () {
             get_data()
 
             $('#is_active').select2({
@@ -69,6 +67,14 @@
         })
 
         function get_data(){
+
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_role thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_role thead');
+
             $('#dt_role').DataTable().clear().destroy();
             $("#dt_role").DataTable({
                 scrollX: true,
@@ -188,6 +194,7 @@
                             $("#modal_add input").val("")
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })
@@ -230,6 +237,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -276,6 +284,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })
