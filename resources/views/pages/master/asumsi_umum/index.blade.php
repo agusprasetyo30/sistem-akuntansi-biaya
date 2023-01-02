@@ -45,7 +45,6 @@
         var table_main_dt = '<table id="dt_version" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="nomor" class="text-center">NO</th>' +
             '<th data-type="text" data-name="version" class="text-center">VERSI</th>' +
             '<th data-type="text" data-name="saldo_awal" class="text-center">SALDO AWAL</th>' +
             '<th data-type="text" data-name="jumlah_bulan" class="text-center">JUMLAH BULAN</th>' +
@@ -460,7 +459,6 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'c_version', name: 'version', orderable:true},
                     { data: 'c_saldo_awal', name: 'filter_c_saldo_awal', orderable:true},
                     { data: 'c_data_bulan', name: 'filter_bulan', orderable:true},

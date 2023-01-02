@@ -18,7 +18,7 @@ class T_PriceRenDaanExport implements WithHeadings, WithTitle
 
     public function title(): string
     {
-        return 'Template Kuantiti Rencana Pengadaan';
+        return 'Kuantiti Rencana Pengadaan';
     }
 
     public function headings(): array
