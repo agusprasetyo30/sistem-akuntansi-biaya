@@ -161,6 +161,7 @@
                 <thead>
                 <tr>
                     <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                    <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
                     <th data-type='text' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
                     <th data-type='text' data-name='valuation_class' class="text-center">VALUATION CLASS</th>
@@ -238,8 +239,11 @@
                                 if (iName == 'material'){
                                     input.className = "material_search form-control custom-select select2";
 
-                                }else if(iName == 'plant'){
+                                } else if(iName == 'plant'){
                                     input.className = "plant_search form-control custom-select select2";
+
+                                } else if(iName == 'version'){
+                                    input.className = "version_search form-control custom-select select2";
 
                                 }
 
@@ -293,6 +297,26 @@
                             }
                         })
 
+                        $('.version_search').select2({
+                            placeholder: 'Pilih Versi',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('version_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
                     });
                 },
                 buttons: [
@@ -305,6 +329,7 @@
                 },
                 columns: [
                     { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'month_year', orderable:true},
                     { data: 'gl_account', name: 'gl_account', orderable:true},
                     { data: 'valuation_class', name: 'valuation_class', orderable:true},

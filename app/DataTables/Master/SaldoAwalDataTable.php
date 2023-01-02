@@ -29,7 +29,7 @@ class SaldoAwalDataTable extends DataTable
             ->query($query)
             ->addIndexColumn()
             ->editColumn('month_year', function ($query) {
-                return helpDate($query->month_year, 'bi');
+                return format_month($query->month_year, 'bi');
             })
             ->editColumn('material_name', function ($query) {
                 return $query->material_code . ' ' . $query->material_name;
@@ -46,6 +46,9 @@ class SaldoAwalDataTable extends DataTable
             ->orderColumn('filter_plant', function ($query, $order) {
                 $query->orderBy('plant.plant_code', $order);
             })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.id', $order);
+            })
             ->filterColumn('filter_material', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('material.material_code', 'ilike', '%' . $keyword . '%')
@@ -55,6 +58,12 @@ class SaldoAwalDataTable extends DataTable
             ->filterColumn('filter_plant', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('plant.plant_code', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('version_asumsi.version', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->addColumn('action', 'pages.buku_besar.saldo_awal.action')
