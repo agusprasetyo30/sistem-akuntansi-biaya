@@ -29,7 +29,7 @@ class QtyRenProdDataTable extends DataTable
             ->query($query)
             ->addIndexColumn()
             ->editColumn('month_year', function ($query) {
-                return helpDate($query->month_year, 'bi');
+                return format_month($query->month_year, 'bi');
             })
             ->editColumn('qty_renprod_value', function ($query) {
                 return rupiah($query->qty_renprod_value);
@@ -54,11 +54,22 @@ class QtyRenProdDataTable extends DataTable
             })
             ->filterColumn('filter_version', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('version_asumsi.version', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->filterColumn('filter_month_year', function ($query, $keyword) {
-                $query->where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+                $temp = explode('/', $keyword);
+                if (count($temp) == 1) {
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+                } elseif (count($temp) == 2) {
+                    $keyword = $temp[1] . '-' . $temp[0];
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_qty_renprod_value', function ($query, $keyword) {
+                $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
+                $query->where('qty_renprod.qty_renprod_value', 'ilike', '%' . $keyword . '%');
             })
             ->addColumn('action', 'pages.buku_besar.qty_renprod.action')
             ->escapeColumns([]);

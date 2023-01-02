@@ -47,6 +47,15 @@ class MaterialDataTable extends DataTable
 
                 return $span;
             })
+            ->editColumn('group_account_desc', function ($query) {
+                return $query->group_account_code . ' ' . $query->group_account_desc;
+            })
+            ->orderColumn('filter_kategori_material', function ($query, $order) {
+                $query->orderBy('kategori_material.kategori_material_name', $order);
+            })
+            ->orderColumn('filter_group_account', function ($query, $order) {
+                $query->orderBy('group_account.group_account_code', $order);
+            })
             ->filterColumn('filter_status', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     if ($keyword == true) {
@@ -67,12 +76,14 @@ class MaterialDataTable extends DataTable
             })
             ->filterColumn('filter_kategori_material', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('kategori_material.kategori_material_name', 'ilike', '%' . $keyword . '%');
+                    $query->where('kategori_material.kategori_material_name', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('kategori_material.id', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->filterColumn('filter_group_account', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('group_account.group_account_code', 'ilike', '%' . $keyword . '%');
+                    $query->where('group_account.group_account_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('group_account.group_account_desc', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->addColumn('action', 'pages.master.material.action')

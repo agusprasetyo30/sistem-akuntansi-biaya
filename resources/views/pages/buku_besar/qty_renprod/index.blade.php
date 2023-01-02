@@ -283,7 +283,7 @@
                                 if (iName == 'material'){
                                     input.className = "material_search form-control custom-select select2";
 
-                                }else if(iName == 'version'){
+                                } else if(iName == 'version'){
                                     input.className = "version_search form-control custom-select select2";
 
                                 }
@@ -353,7 +353,7 @@
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'filter_month_year', orderable:true},
                     { data: 'material_name', name: 'filter_material', orderable:true},
-                    { data: 'qty_renprod_value', name: 'qty_renprod_value', orderable:true},
+                    { data: 'qty_renprod_value', name: 'filter_qty_renprod_value', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[

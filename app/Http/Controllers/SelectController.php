@@ -384,6 +384,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->orWhere('material_name', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
                 ->get();
@@ -476,6 +477,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $group_acc = GroupAccount::where('group_account_code', 'ilike', '%' . $search . '%')
+                ->orWhere('group_account_desc', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
                 ->whereNull('deleted_at')
@@ -490,7 +492,7 @@ class SelectController extends Controller
         foreach ($group_acc as $items) {
             $response[] = array(
                 "id" => $items->group_account_code,
-                "text" => $items->group_account_desc
+                "text" => $items->group_account_code . ' - ' . $items->group_account_desc
             );
         }
 
