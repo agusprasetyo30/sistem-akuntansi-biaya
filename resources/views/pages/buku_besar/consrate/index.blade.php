@@ -48,9 +48,9 @@
         var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="select" data-name="version" class="text-center">VERSION</th>' +
+            '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
             '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
-            '<th data-type="select" data-name="code" class="text-center">CODE PLANT</th>' +
+            '<th data-type="select" data-name="code" class="text-center">PLANT</th>' +
             '<th data-type="select" data-name="produk" class="text-center">PRODUK</th>' +
             '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
             '<th data-type="text" data-name="uom" class="text-center">UOM</th>' +

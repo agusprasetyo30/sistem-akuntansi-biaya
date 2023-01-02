@@ -46,7 +46,7 @@
             '<thead>' +
             '<tr>' +
             '<th data-type="text" data-name="tahun" class="text-center">PERIODE</th>' +
-            '<th data-type="text" data-name="usd" class="text-center">USERNAME</th>' +
+            '<th data-type="text" data-name="usd" class="text-center">KURS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
