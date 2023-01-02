@@ -145,10 +145,10 @@ class KategoriMaterialController extends Controller
                 ]);
             }
 
-            // return setResponse([
-            //     'code' => 200,
-            //     'title' => 'Berhasil meng-import data'
-            // ]);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (Exception $exception) {
             return setResponse([
                 'code' => 400,

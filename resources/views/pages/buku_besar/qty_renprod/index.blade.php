@@ -40,21 +40,7 @@
                             <div class="tab-pane active " id="vertical">
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
-                                        <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                            <thead>
-                                            <tr>
-                                                <th data-type='text' data-name='nomor' class="text-center">NO</th>
-                                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
-                                                <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
-                                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                                <th data-type='text' data-name='qty_renprod_value' class="text-center">VALUE</th>
-                                                <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                
-                                            </tbody>
-                                        </table>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -89,15 +75,10 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            $('#dt_qty_renprod thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_qty_renprod thead');
-
-            get_data()
+            table()
 
             $('#tabs_vertical').on('click', function () {
-                get_data()
+                table()
             })
 
             $('#data_main_material').select2({
@@ -224,7 +205,33 @@
 
         })
 
+        function table (){
+            document.getElementById('table-wrapper').innerHTML = `
+            <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                    <th data-type='select' data-name='version' class="text-center">VERSI</th>
+                    <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
+                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                    <th data-type='text' data-name='qty_renprod_value' class="text-center">VALUE</th>
+                    <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>`
+
+            get_data()
+        }
+
         function get_data(){
+            $('#dt_qty_renprod thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_qty_renprod thead');
+
             $('#dt_qty_renprod').DataTable().clear().destroy();
             $("#dt_qty_renprod").DataTable({
                 scrollX: true,
@@ -424,11 +431,14 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
+
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
                         }
@@ -506,11 +516,14 @@
                         title: response.title,
                         text: response.message,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
+
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                         }
@@ -583,12 +596,15 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         console.log(result)
                         if (result.value) {
-                            get_data()
+                            table()
+
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
@@ -630,11 +646,13 @@
                                 title: response.title,
                                 text: response.msg,
                                 icon: response.type,
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
                             })
                             .then((result) => {
                                 if (result.value) {
-                                    get_data()
+                                    table()
                                 }
                             })
                         },

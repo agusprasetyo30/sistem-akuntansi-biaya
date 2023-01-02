@@ -30,26 +30,6 @@
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_saldo_awal" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
-                                <thead>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
-                                    <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
-                                    <th data-type='text' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
-                                    <th data-type='text' data-name='valuation_class' class="text-center">VALUATION CLASS</th>
-                                    <th data-type='text' data-name='price_control' class="text-center">PRICE CONTROL</th>
-                                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                    <th data-type='select' data-name='plant' class="text-center">PLANT</th>
-                                    <th data-type='text' data-name='total_stock' class="text-center">TOTAL STOCK</th>
-                                    <th data-type='text' data-name='total_value' class="text-center">TOTAL VALUE</th>
-                                    <th data-type='text' data-name='nilai_satuan' class="text-center">NILAI SATUAN</th>
-                                    <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
                         </div>
                     </div>
                 </div>
@@ -65,12 +45,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            $('#dt_saldo_awal thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_saldo_awal thead');
-
-            get_data()
+            table()
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -180,7 +155,38 @@
             $("#nilai_satuan").val(nilsa)
         }
 
+        function table (){
+            document.getElementById('table-wrapper').innerHTML = `
+            <table id="dt_saldo_awal" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
+                <thead>
+                <tr>
+                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                    <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
+                    <th data-type='text' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
+                    <th data-type='text' data-name='valuation_class' class="text-center">VALUATION CLASS</th>
+                    <th data-type='text' data-name='price_control' class="text-center">PRICE CONTROL</th>
+                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                    <th data-type='select' data-name='plant' class="text-center">PLANT</th>
+                    <th data-type='text' data-name='total_stock' class="text-center">TOTAL STOCK</th>
+                    <th data-type='text' data-name='total_value' class="text-center">TOTAL VALUE</th>
+                    <th data-type='text' data-name='nilai_satuan' class="text-center">NILAI SATUAN</th>
+                    <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>`
+
+            get_data()
+        }
+        
         function get_data(){
+            $('#dt_saldo_awal thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_saldo_awal thead');
+
             $('#dt_saldo_awal').DataTable().clear().destroy();
             $("#dt_saldo_awal").DataTable({
                 scrollX: true,
@@ -341,11 +347,13 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
                         }
@@ -422,11 +430,13 @@
                         title: response.title,
                         text: response.message,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                         }
@@ -504,12 +514,14 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         console.log(result)
                         if (result.value) {
-                            get_data()
+                            table()
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
@@ -550,11 +562,13 @@
                                 title: response.title,
                                 text: response.msg,
                                 icon: response.type,
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
                             })
                             .then((result) => {
                                 if (result.value) {
-                                    get_data()
+                                    table()
                                 }
                             })
                         },
