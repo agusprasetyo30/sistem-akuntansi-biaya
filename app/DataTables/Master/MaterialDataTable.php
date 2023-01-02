@@ -48,17 +48,21 @@ class MaterialDataTable extends DataTable
                 return $span;
             })
             ->filterColumn('filter_status', function ($query, $keyword) {
-                if ($keyword == true) {
-                    $query->where('material.is_active', true);
-                } elseif ($keyword == false) {
-                    $query->where('material.is_active', false);
+                if ($keyword != 'all') {
+                    if ($keyword == true) {
+                        $query->where('material.is_active', true);
+                    } elseif ($keyword == false) {
+                        $query->where('material.is_active', false);
+                    }
                 }
             })
             ->filterColumn('filter_dummy', function ($query, $keyword) {
-                if ($keyword == true) {
-                    $query->where('is_dummy', true);
-                } elseif ($keyword == false) {
-                    $query->where('is_dummy', false);
+                if ($keyword != 'all') {
+                    if ($keyword == true) {
+                        $query->where('is_dummy', true);
+                    } elseif ($keyword == false) {
+                        $query->where('is_dummy', false);
+                    }
                 }
             })
             ->filterColumn('filter_kategori_material', function ($query, $keyword) {

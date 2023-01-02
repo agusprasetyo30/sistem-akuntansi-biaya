@@ -23,23 +23,23 @@ class KategoriMaterialDataTable extends DataTable
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('status', function ($query){
-                if ($query->is_active == true){
+            ->addColumn('status', function ($query) {
+                if ($query->is_active == true) {
                     $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Aktif</span>";
-                }else{
+                } else {
                     $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Aktif</span>";
                 }
 
                 return $span;
             })
-            ->filterColumn('filter_status', function ($query, $keyword){
-
-                if ($keyword == true){
-                    $query->where('is_active', true);
-                }elseif ($keyword == false){
-                    $query->where('is_active', false);
+            ->filterColumn('filter_status', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    if ($keyword == true) {
+                        $query->where('is_active', true);
+                    } elseif ($keyword == false) {
+                        $query->where('is_active', false);
+                    }
                 }
-
             })
             ->addColumn('action', 'pages.master.kategori_material.action')
             ->escapeColumns([]);
@@ -72,10 +72,10 @@ class KategoriMaterialDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),
