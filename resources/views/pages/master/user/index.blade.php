@@ -13,7 +13,6 @@
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
-{{--                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>--}}
                 <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
             </div>
         </div>
@@ -29,11 +28,11 @@
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="table-responsive" id="table-wrapper">
+                        <div class="table-responsive" id="table_main">
                             <table id="dt_users" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                                 <thead>
                                 <tr>
-                                    <th data-type='text' data-name='nama' class="text-center">NAMA</th>
+                                    <th data-type="text" data-name='nama' class="text-center">NAMA</th>
                                     <th data-type='text' data-name='username' class="text-center">USERNAME</th>
                                     <th data-type='text' data-name='role' class="text-center">ROLE</th>
                                     <th data-type='text' data-name='action' class="text-center">ACTION</th>
