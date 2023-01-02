@@ -4,7 +4,7 @@
 
 
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" aria-labelledby="modal_detail"
+<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail"
     aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">

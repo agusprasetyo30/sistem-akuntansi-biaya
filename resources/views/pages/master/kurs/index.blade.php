@@ -28,16 +28,7 @@
                 </div>
                 <div class="card-body">
                     <div class="">
-                        <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_kurs" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                <thead>
-                                <tr>
-                                    <th data-type='text' data-name='tahun' class="text-center">PERIODE</th>
-                                    <th data-type='text' data-name='usd' class="text-center">USD RATE</th>
-                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
-                                </tr>
-                                </thead>
-                            </table>
+                        <div class="table-responsive" id="table_main">
                         </div>
                     </div>
                 </div>
@@ -51,12 +42,19 @@
 
 @section('scripts')
     <script>
-        $(document).ready(function () {
-            $('#dt_kurs thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_kurs thead');
+        var table_main_dt = '<table id="dt_kurs" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="text" data-name="tahun" class="text-center">PERIODE</th>' +
+            '<th data-type="text" data-name="usd" class="text-center">USERNAME</th>' +
+            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
 
+        $(document).ready(function () {
             get_data()
 
             $('#tanggal').bootstrapdatepicker({
@@ -74,6 +72,14 @@
         })
 
         function get_data(){
+
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_kurs thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_kurs thead');
+
             $('#dt_kurs').DataTable().clear().destroy();
             $("#dt_kurs").DataTable({
                 scrollX: true,
@@ -201,6 +207,7 @@
                             $('#tanggal').removeClass('is-invalid');
                             $('#tanggal').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#table_main").empty();
                             get_data()
                         }
                     })
@@ -245,6 +252,7 @@
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
                                 $("#edit_tanggal"+id).attr("disabled", false);
+                                $("#table_main").empty();
                                 get_data()
                             }
                         })
@@ -291,6 +299,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })

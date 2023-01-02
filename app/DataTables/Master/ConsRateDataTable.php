@@ -73,10 +73,12 @@ class ConsRateDataTable extends DataTable
                 $query->where('material.material_uom', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_status', function ($query, $keyword) {
-                if ($keyword == true) {
-                    $query->where('cons_rate.is_active', true);
-                } elseif ($keyword == false) {
-                    $query->where('cons_rate.is_active', false);
+                if ($keyword != 'all'){
+                    if ($keyword == true) {
+                        $query->where('is_active', true);
+                    } elseif ($keyword == false) {
+                        $query->where('is_active', false);
+                    }
                 }
             })
             ->orderColumn('filter_plant', function ($query, $order) {
