@@ -38,10 +38,12 @@ class RegionDataTable extends DataTable
             })
             ->filterColumn('filter_status', function ($query, $keyword){
 
-                if ($keyword == true){
-                    $query->where('is_active', true);
-                }elseif ($keyword == false){
-                    $query->where('is_active', false);
+                if ($keyword != 'all'){
+                    if ($keyword == true) {
+                        $query->where('is_active', true);
+                    } elseif ($keyword == false) {
+                        $query->where('is_active', false);
+                    }
                 }
 
             })

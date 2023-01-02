@@ -27,23 +27,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="">
-                        <div class="table-responsive" id="table-wrapper">
-                            <table id="dt_version" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                <thead>
-                                <tr>
-                                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
-                                    <th data-type='text' data-name='version' class="text-center">VERSION</th>
-                                    <th data-type='text' data-name='saldo_awal' class="text-center">SALDO AWAL</th>
-                                    <th data-type='text' data-name='jumlah_bulan' class="text-center">JUMLAH BULAN</th>
-                                    <th data-type='text' data-name='awal_periode' class="text-center">AWAL PERIODE</th>
-                                    <th data-type='text' data-name='akhir_periode' class="text-center">AKHIR PERIODE</th>
-                                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-                            </table>
+                        <div class="table-responsive" id="table_main">
                         </div>
                     </div>
                 </div>
@@ -58,11 +42,23 @@
 @section('scripts')
     <script>
         var data_array = [];
+        var table_main_dt = '<table id="dt_version" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">' +
+            '<thead>' +
+            '<tr>' +
+            '<th data-type="text" data-name="nomor" class="text-center">NO</th>' +
+            '<th data-type="text" data-name="version" class="text-center">VERSION</th>' +
+            '<th data-type="text" data-name="saldo_awal" class="text-center">SALDO AWAL</th>' +
+            '<th data-type="text" data-name="jumlah_bulan" class="text-center">JUMLAH BULAN</th>' +
+            '<th data-type="text" data-name="awal_periode" class="text-center">AWAL PERIODE</th>' +
+            '<th data-type="text" data-name="akhir_periode" class="text-center">AKHIR PERIODE</th>' +
+            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '</tr>' +
+            '</thead>' +
+            '<tbody>' +
+            '</tbody>' +
+            '</table>'
         $(document).ready(function () {
-            $('#dt_version thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_version thead');
+
 
             var funArr = [];
             let loop = 0;
@@ -350,6 +346,7 @@
                                             $('#data_main_plant').val('').trigger("change");
                                             $('#is_active').val('').trigger("change");
                                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                            $("#table_main").empty();
                                             get_data()
                                         }
                                     })
@@ -381,6 +378,13 @@
         });
 
         function get_data(){
+            $('#table_main').append(table_main_dt)
+
+            $('#dt_version thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_version thead');
+
             $('#dt_version').DataTable().clear().destroy();
             $("#dt_version").DataTable({
                 scrollX: true,
@@ -417,10 +421,10 @@
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(cell.empty()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
@@ -548,6 +552,7 @@
                                             $('.modal-backdrop').remove();
                                             $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                             $("#back_edit"+id).attr("disabled", false);
+                                            $("#table_main").empty();
                                             get_data()
                                         }
                                     })
@@ -612,6 +617,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
+                                        $("#table_main").empty();
                                         get_data()
                                     }
                                 })
