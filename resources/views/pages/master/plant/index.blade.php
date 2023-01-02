@@ -31,20 +31,7 @@
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_plant" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                            <thead>
-                            <tr>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='nama' class="border-bottom-0 text-center">KODE PLANT</th>
-                                <th data-type='text' data-name='deskripsi' class="border-bottom-0 text-center">DESKRIPSI</th>
-                                <th data-type='select' data-name='status' class="border-bottom-0 text-center">STATUS</th>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
+                        
                     </div>
                 </div>
             </div>
@@ -60,12 +47,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            $('#dt_plant thead tr')
-                .clone(true)
-                .addClass('filters')
-                .appendTo('#dt_plant thead');
-
-            get_data()
+            table()
 
             $('#is_active').select2({
                 dropdownParent: $('#modal_add'),
@@ -78,7 +60,32 @@
             });
         })
 
+        function table (){
+            document.getElementById('table-wrapper').innerHTML = `
+            <table id="dt_plant" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
+                    <th data-type='text' data-name='nama' class="text-center">PLANT</th>
+                    <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
+                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                    <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>`
+
+            get_data()
+        }
+
         function get_data(){
+            $('#dt_plant thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_plant thead');
+
             $('#dt_plant').DataTable().clear().destroy();
             $("#dt_plant").DataTable({
                 scrollX: true,
@@ -193,11 +200,13 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
                         }
@@ -230,11 +239,13 @@
                         title: response.title,
                         text: response.message,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                         }
@@ -268,11 +279,13 @@
                         title: response.title,
                         text: response.msg,
                         icon: response.type,
-                        allowOutsideClick: false
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
                         if (result.value) {
-                            get_data()
+                            table()
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
@@ -313,11 +326,13 @@
                                 title: response.title,
                                 text: response.msg,
                                 icon: response.type,
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
                             })
                             .then((result) => {
                                 if (result.value) {
-                                    get_data()
+                                    table()
                                 }
                             })
                         },

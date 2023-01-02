@@ -62,11 +62,21 @@ class PlantController extends Controller
     public function update(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'code' => 'required|unique:plant,plant_code',
-                'deskripsi' => 'required',
-                'is_active' => 'required',
-            ], validatorMsg());
+            $data = Plant::where('plant_code', $request->post('id'))->first();
+
+            if (!$data)
+                return setResponse([
+                    'code' => 400,
+                    'title' => 'Data Tidak Ditemukan!'
+                ]);
+
+            $required['deskripsi'] = 'required';
+            $required['is_active'] = 'required';
+
+            if ($data->plant_code != $request->post('code'))
+                $required['code'] = 'required|unique:plant,plant_code';
+
+            $validator = Validator::make($request->all(), $required, validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
