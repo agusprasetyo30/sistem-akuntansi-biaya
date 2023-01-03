@@ -189,9 +189,10 @@
                         })
                             .then((result) => {
                                 if (result.value) {
-                                    get_data()
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
+                                    $("#table_main").empty();
+                                    get_data()
                                 }
                             })
                     },

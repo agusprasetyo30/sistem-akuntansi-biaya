@@ -158,7 +158,6 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'region_name', name: 'region_name', orderable:true},
                     { data: 'region_desc', name: 'region_desc', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
@@ -166,7 +165,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3,4]}
+                    {className: 'text-center', targets: [0,1,2,3]}
                 ]
             })
         }
