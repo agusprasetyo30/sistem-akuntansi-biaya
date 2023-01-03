@@ -250,7 +250,7 @@
                     { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'material', name: 'filter_material', orderable:true},
                     { data: 'region_name', name: 'filter_region', orderable:true},
-                    { data: 'value', name: 'value', orderable:false},
+                    { data: 'value', name: 'value', searchable:false, orderable:false},
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0]}
