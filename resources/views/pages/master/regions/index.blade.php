@@ -151,7 +151,7 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3]
-                        } }
+                        }, title: 'Regions' }
                 ],
                 ajax: {
                     url : '{{route("regions")}}',
