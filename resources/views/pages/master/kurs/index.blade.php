@@ -210,6 +210,7 @@
                             $('#tanggal').removeClass('is-invalid');
                             $('#tanggal').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#tanggal").attr("disabled", false);
                             $("#table_main").empty();
                             get_data()
                         }
