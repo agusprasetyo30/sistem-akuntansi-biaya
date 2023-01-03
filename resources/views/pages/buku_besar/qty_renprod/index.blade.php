@@ -413,6 +413,13 @@
             })
         }
 
+        function update_dt_horizontal() {
+            if ($('#filter_version').val() != null){
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            }
+        }
+
         $('#submit').on('click', function () {
             $.ajax({
                 type: "POST",
@@ -438,6 +445,7 @@
                     })
                     .then((result) => {
                         if (result.value) {
+                            update_dt_horizontal()
                             table()
 
                             $('#modal_add').modal('hide')
@@ -523,6 +531,7 @@
                     })
                     .then((result) => {
                         if (result.value) {
+                            update_dt_horizontal()
                             table()
 
                             $('#modal_import').modal('hide')
@@ -604,6 +613,7 @@
                     .then((result) => {
                         console.log(result)
                         if (result.value) {
+                            update_dt_horizontal()
                             table()
 
                             $('#modal_edit'+id).modal('hide')
@@ -653,6 +663,7 @@
                             })
                             .then((result) => {
                                 if (result.value) {
+                                    update_dt_horizontal()
                                     table()
                                 }
                             })
