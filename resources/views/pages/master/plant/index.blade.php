@@ -65,7 +65,6 @@
             <table id="dt_plant" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
-                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
                     <th data-type='text' data-name='nama' class="text-center">PLANT</th>
                     <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
                     <th data-type='select' data-name='status' class="text-center">STATUS</th>
@@ -170,7 +169,7 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'plant_code', searchable: false, orderable:false},
+                    // { data: 'DT_RowIndex', name: 'plant_code', searchable: false, orderable:false},
                     { data: 'plant_code', name: 'plant_code', orderable:true},
                     { data: 'plant_desc', name: 'plant_desc', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
@@ -178,7 +177,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,4,3]}
+                    {className: 'text-center', targets: [0,2,3]}
                 ],
 
             })

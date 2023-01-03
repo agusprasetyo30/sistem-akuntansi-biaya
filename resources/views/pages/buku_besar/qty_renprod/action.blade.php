@@ -10,9 +10,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Detail Kuantiti Rencana Produksi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
-                </button>
+                </button> --}}
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -59,9 +59,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Kuantiti Rencana Produksi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
-                </button>
+                </button> --}}
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">

@@ -31,12 +31,14 @@ class TotalDaanDataTable extends DataTable
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('version_periode', function ($query) {
-                return $query->version . ' - ' . format_month($query->month_year, 'bi');
+            ->addColumn('material', function ($query) {
+                return $query->material_code . ' - ' . $query->material_name;
             })
-            ->filterColumn('filter_version_periode', function ($query, $keyword) {
-                $query->where('version_asumsi.version', 'ilike', '%' . $keyword . '%')
-                    ->orWhere('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+            ->addColumn('version', function ($query) {
+                return $query->version;
+            })
+            ->addColumn('periode', function ($query) {
+                return format_month($query->month_year, 'bi');
             })
             ->addColumn('value', function ($query) {
                 $result = 0;
@@ -61,15 +63,40 @@ class TotalDaanDataTable extends DataTable
                     return rupiah($result);
                 }
             })
-            ->addColumn('material', function ($query) {
-                return $query->material_code . ' - ' . $query->material_name;
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_periode', function ($query, $keyword) {
+                $temp = explode('/', $keyword);
+                if (count($temp) == 1) {
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+                } elseif (count($temp) == 2) {
+                    $keyword = $temp[1] . '-' . $temp[0];
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+                }
             })
             ->filterColumn('filter_material', function ($query, $keyword) {
-                $query->where('qty_rendaan.material_code', 'ilike', '%' . $keyword . '%')
-                    ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
+                if ($keyword != 'all') {
+                    $query->where('qty_rendaan.material_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
+                }
             })
             ->filterColumn('filter_region', function ($query, $keyword) {
                 $query->where('regions.region_name', 'ilike', '%' . $keyword . '%');
+            })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.version', $order);
+            })
+            ->orderColumn('filter_periode', function ($query, $order) {
+                $query->orderBy('asumsi_umum.month_year', $order);
+            })
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('qty_rendaan.material_code', $order);
+            })
+            ->orderColumn('filter_region', function ($query, $order) {
+                $query->orderBy('regions.region_name', $order);
             })
             ->escapeColumns([]);
     }
