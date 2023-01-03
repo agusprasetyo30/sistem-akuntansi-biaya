@@ -158,7 +158,10 @@
                     });
                 },
                 buttons: [
-                    'pageLength', 'csv', 'pdf', 'excel', 'print'
+                    { extend: 'pageLength', className: 'mb-5' },
+                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                        columns:[0,1]
+                        }}
                 ],
                 ajax: {
                     url : '{{route("kurs")}}',
