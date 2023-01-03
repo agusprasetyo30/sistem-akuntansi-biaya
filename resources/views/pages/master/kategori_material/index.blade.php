@@ -53,6 +53,7 @@
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
+
         })
 
         function table (){
@@ -60,7 +61,6 @@
             <table id="dt_kategori_material" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
-                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
                     <th data-type='text' data-name='nama' class="text-center">NAMA</th>
                     <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
                     <th data-type='select' data-name='status' class="text-center">STATUS</th>
@@ -165,7 +165,7 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'kategori_material_name', name: 'kategori_material_name', orderable:true},
                     { data: 'kategori_material_desc', name: 'kategori_material_desc', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
@@ -173,7 +173,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,4,3]}
+                    {className: 'text-center', targets: [0,2,3]}
                 ],
 
             })

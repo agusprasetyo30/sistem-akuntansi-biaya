@@ -210,7 +210,6 @@
             <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
-                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
                     <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
                     <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
@@ -351,7 +350,7 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'filter_month_year', orderable:true},
                     { data: 'material_name', name: 'filter_material', orderable:true},
@@ -359,7 +358,7 @@
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,5]}
+                    {className: 'text-center', targets: [0,4]}
                 ],
 
             })

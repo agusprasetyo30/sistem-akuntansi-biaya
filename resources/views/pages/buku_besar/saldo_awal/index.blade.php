@@ -160,7 +160,6 @@
             <table id="dt_saldo_awal" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
                 <thead>
                 <tr>
-                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
                     <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
                     <th data-type='text' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
@@ -330,7 +329,7 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
+                    // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'month_year', orderable:true},
                     { data: 'gl_account', name: 'gl_account', orderable:true},

@@ -114,7 +114,6 @@
             <table id="dt_material" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
                 <thead>
                 <tr>
-                    <th data-type='text' data-name='nomor' class="text-center">NO</th>
                     <th data-type='text' data-name='code' class="text-center">CODE</th>
                     <th data-type='text' data-name='nama' class="text-center">NAMA</th>
                     <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
@@ -282,7 +281,7 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'material_code', searchable: false, orderable:false},
+                    // { data: 'DT_RowIndex', name: 'material_code', searchable: false, orderable:false},
                     { data: 'material_code', name: 'material_code', orderable:true},
                     { data: 'material_name', name: 'material_name', orderable:true},
                     { data: 'material_desc', name: 'material_desc', orderable:true},
@@ -295,7 +294,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,7,8,9]}
+                    {className: 'text-center', targets: [0,6,7,8]}
                 ],
 
             })

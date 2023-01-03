@@ -46,6 +46,9 @@ class QtyRenProdDataTable extends DataTable
             ->orderColumn('filter_month_year', function ($query, $order) {
                 $query->orderBy('asumsi_umum.month_year', $order);
             })
+            ->orderColumn('filter_qty_renprod_value', function ($query, $order) {
+                $query->orderBy('qty_renprod.qty_renprod_value', $order);
+            })
             ->filterColumn('filter_material', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('material.material_code', 'ilike', '%' . $keyword . '%')

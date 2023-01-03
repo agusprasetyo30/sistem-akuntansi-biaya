@@ -40,20 +40,7 @@
                             <div class="tab-pane active " id="vertical">
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
-                                        <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                            <thead>
-                                            <tr>
-                                                <th data-type='select' data-name='version' class="text-center">VERSI</th>
-                                                <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
-                                                <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
-                                                <th data-type='text' data-name='region' class="text-center">REGION</th>
-                                                <th data-type='text' data-name='qty_rendaan_value' class="text-center">VALUE</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            </tbody>
-                                        </table>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -87,10 +74,10 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            get_data()
+            table()
 
             $('#tabs_vertical').on('click', function () {
-                get_data()
+                table()
             })
 
             $('#filter_version').select2({
@@ -118,11 +105,39 @@
             })
         })
 
+        function table (){
+            document.getElementById('table-wrapper').innerHTML = `
+            <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th data-type='select' data-name='version' class="text-center">VERSI</th>
+                    <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
+                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                    <th data-type='text' data-name='region' class="text-center">REGION</th>
+                    <th data-type='text' data-name='value' class="text-center">VALUE</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>`
+
+            get_data()
+        }
+
         function get_data(){
+            $('#dt_total_daan thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_total_daan thead');
+
             $('#dt_total_daan').DataTable().clear().destroy();
             $("#dt_total_daan").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
                 processing: true,
@@ -144,8 +159,9 @@
                         });
                     })
 
-                    this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
@@ -155,13 +171,70 @@
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
+                            } else if (data_type == 'select'){
+                                var input = document.createElement("select");
+                                var options = "";
+                                if (iName == 'material'){
+                                    input.className = "material_search form-control custom-select select2";
+
+                                } else if(iName == 'version'){
+                                    input.className = "version_search form-control custom-select select2";
+
+                                }
+
+                                input.innerHTML = options
+                                $(input).appendTo(cell.empty())
+                                    .on('change clear', function () {
+                                        column.search($(this).val(), false, false, true).draw();
+                                    });
                             }
+                        } else {
+                            cell.empty()
                         }
 
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.version_search').select2({
+                            placeholder: 'Pilih Versi',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('version_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
                     });
                 },
                 buttons: [
@@ -173,11 +246,11 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:true},
-                    { data: 'material', name: 'filter_material', orderable:false},
-                    { data: 'version_periode', name: 'filter_version_periode', orderable:false},
-                    { data: 'region_name', name: 'filter_region', orderable:false},
-                    { data: 'value', name: 'qty_rendaan_value', orderable:false},
+                    { data: 'version', name: 'filter_version', orderable:true},
+                    { data: 'periode', name: 'filter_periode', orderable:true},
+                    { data: 'material', name: 'filter_material', orderable:true},
+                    { data: 'region_name', name: 'filter_region', orderable:true},
+                    { data: 'value', name: 'value', orderable:false},
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0]}
