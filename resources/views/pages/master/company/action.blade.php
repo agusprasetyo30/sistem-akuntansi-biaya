@@ -4,14 +4,11 @@
 
 
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->company_code)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
+<div class="modal fade" id="{{__('modal_detail'.$model->company_code)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail plant</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
+                <h5 class="modal-title" id="largemodal1">Detail Company</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -43,7 +40,6 @@
                 </div>
             </div>
             <div class="modal-footer">
-{{--                <button type="button" id="submit" class="btn btn-primary">Simpan</button>--}}
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
         </div>
@@ -52,14 +48,11 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->company_code)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
+<div class="modal fade" id="{{__('modal_edit'.$model->company_code)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Master Company</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">

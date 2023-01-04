@@ -29,22 +29,6 @@
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        <table id="dt_company" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-                                <thead>
-                            <tr>
-                                <th data-type='text' data-name='no' class="border-bottom-0 text-center">NO</th>
-                                <th data-type='text' data-name='code' class="border-bottom-0 text-center">CODE</th>
-                                <th data-type='text' data-name='name' class="border-bottom-0 text-center">NAME</th>
-                                <th data-type='text' data-name='nomor' class="border-bottom-0 text-center">ACTION</th>
-                            </tr>
-                            <tr>
-                                <th data-type='text' data-name='no' class="text-center"></th>
-                                <th data-type='text' data-name='code' class="text-center"></th>
-                                <th data-type='text' data-name='name' class="text-center"></th>
-                                <th data-type='text' data-name='nomor' class="text-center"></th>
-                            </tr>
-                                </thead>
-                            </table>
                     </div>
                 </div>
             </div>
@@ -59,7 +43,7 @@
 @section('scripts')
     <script>
         $(document).ready(function () {
-            get_data()
+            table()
 
             $('#is_active').select2({
                 dropdownParent: $('#modal_add'),
@@ -72,11 +56,38 @@
             });
         })
 
+        function table (){
+            document.getElementById('table-wrapper').innerHTML = `
+            <table id="dt_company" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                <tr>
+                    <th data-type='text' data-name='code' class="text-center">CODE</th>
+                    <th data-type='text' data-name='nama' class="text-center">NAMA</th>
+                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                    <th data-type='text' data-name='action' class="text-center">ACTION</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>`
+
+            get_data()
+        }
+
         function get_data(){
+            $('#dt_company thead tr')
+                .clone(true)
+                .addClass('filters')
+                .appendTo('#dt_company thead');
+
             $('#dt_company').DataTable().clear().destroy();
             $("#dt_company").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
+                orderCellsTop: true,
+                autoWidth:true,
+                scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
                 processing: true,
@@ -99,45 +110,58 @@
                     })
 
 
-                this.api().columns().every(function (index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
+                        var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
+                                input.className = "form-control";
                                 input.styleName = "width: 100%;";
                                 $(input).
-                                appendTo($(column.header()).empty()).
+                                appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
-                                input.className = "form-control form-control-sm custom-select select2";
                                 var options = "";
                                 if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
+                                    input.className = "status_search form-control custom-select select2";
+                                    @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
+
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
 
                             }
+                        }else {
+                            cell.empty()
                         }
+
+                        $('.status_search').select2({
+                            placeholder: 'Pilih Status',
+                            width: '100%',
+                            allowClear: false,
+                        })
 
                     });
                 },
+
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5' }
+                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                        columns:[0,1,2,3]
+                        }, title: 'Kategori Matrial'
+                    }
                 ],
 
                 ajax: {
@@ -145,15 +169,16 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'DT_RowIndex', name: 'company_code', searchable: false, orderable:true},
-                    { data: 'company_code', name: 'company_code', orderable:false},
-                    { data: 'company_name', name: 'company_name', orderable: false,},
+                    //{ data: 'DT_RowIndex', name: 'company_code', searchable: false, orderable:true},
+                    { data: 'company_code', name: 'company_code', orderable:true},
+                    { data: 'company_name', name: 'company_name', orderable: true,},
                     //{ data: 'link_sso', name: 'link_sso', searchable: false, orderable:true},
+                    { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,3]}
+                    {className: 'text-center', targets: [0,2,3]}
                 ],
 
             })
