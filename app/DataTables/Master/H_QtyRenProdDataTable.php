@@ -12,15 +12,16 @@ use function PHPUnit\Framework\isEmpty;
 
 class H_QtyRenProdDataTable extends DataTable
 {
-
-
     public function dataTable($query)
     {
+        $cc = auth()->user()->company_code;
+
         $query = DB::table('qty_renprod')
             ->select('qty_renprod.material_code', 'material.material_name')
             ->leftjoin('material', 'material.material_code', '=', 'qty_renprod.material_code')
             ->whereNull('qty_renprod.deleted_at')
             ->where('qty_renprod.version_id', $this->version)
+            ->where('qty_renprod.company_code', $cc)
             ->groupBy('qty_renprod.material_code', 'material.material_name');
 
         $datatable = datatables()

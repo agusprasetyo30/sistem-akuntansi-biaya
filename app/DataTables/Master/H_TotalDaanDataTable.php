@@ -13,16 +13,17 @@ use function PHPUnit\Framework\isEmpty;
 
 class H_TotalDaanDataTable extends DataTable
 {
-
-
     public function dataTable($query)
     {
+        $cc = auth()->user()->company_code;
+
         $query = DB::table('qty_rendaan')
             ->select('qty_rendaan.material_code', 'qty_rendaan.region_id', 'regions.region_name', 'material.material_name')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
             ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
             ->whereNull('qty_rendaan.deleted_at')
             ->where('qty_rendaan.version_id', $this->version)
+            ->where('qty_rendaan.company_code', $cc)
             ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_id', 'regions.region_name', 'material.material_name');
 
         $datatable = datatables()
@@ -48,6 +49,7 @@ class H_TotalDaanDataTable extends DataTable
                     ->first();
 
                 $result = 0;
+                $cc_ = auth()->user()->company_code;
 
                 $query2 = DB::table('price_rendaan')
                     ->select('price_rendaan.price_rendaan_value')
@@ -56,6 +58,7 @@ class H_TotalDaanDataTable extends DataTable
                     ->where('version_id', $this->version)
                     ->where('asumsi_umum_id', $a->id)
                     ->whereNull('price_rendaan.deleted_at')
+                    ->where('price_rendaan.company_code', $cc_)
                     ->first();
 
                 $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;

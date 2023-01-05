@@ -19,7 +19,9 @@ class KategoriMaterialDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('kategori_material')->whereNull('deleted_at');
+        $cc = auth()->user()->company_code;
+
+        $query = DB::table('kategori_material')->where('company_code', $cc)->whereNull('deleted_at');
         return datatables()
             ->query($query)
             ->addIndexColumn()

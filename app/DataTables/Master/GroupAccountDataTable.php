@@ -20,7 +20,9 @@ class GroupAccountDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('group_account')->whereNull('deleted_at');
+        $cc = auth()->user()->company_code;
+
+        $query = DB::table('group_account')->where('company_code', $cc)->whereNull('deleted_at');
         return datatables()
             ->query($query)
             ->addIndexColumn()
