@@ -352,6 +352,7 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
+                                    $("#table_main").empty();
                                     update_dt_horizontal()
                                     get_data()
                                 }
