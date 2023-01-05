@@ -20,10 +20,13 @@ class MaterialDataTable extends DataTable
      */
     public function dataTable($query)
     {
+        $cc = auth()->user()->company_code;
+
         $query = DB::table('material')
             ->select('material.*', 'kategori_material.kategori_material_name', 'group_account.group_account_code', 'group_account.group_account_desc')
             ->leftJoin('kategori_material', 'kategori_material.id', '=', 'material.kategori_material_id')
             ->leftJoin('group_account', 'group_account.group_account_code', '=', 'material.group_account_code')
+            ->where('material.company_code', $cc)
             ->whereNull('material.deleted_at');
 
         return datatables()

@@ -19,6 +19,8 @@ class TotalDaanDataTable extends DataTable
      */
     public function dataTable($query)
     {
+        $cc = auth()->user()->company_code;
+
         $query = DB::table('qty_rendaan')
             ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', 'asumsi_umum.adjustment', 'version_asumsi.version', 'regions.region_name')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
@@ -26,6 +28,7 @@ class TotalDaanDataTable extends DataTable
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_rendaan.version_id')
             ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
             // ->leftjoin('price_rendaan', 'price_rendaan.material_code', '=', 'qty_rendaan.material_code')
+            ->where('qty_rendaan.company_code', $cc)
             ->whereNull('qty_rendaan.deleted_at');
 
         return datatables()
@@ -42,6 +45,8 @@ class TotalDaanDataTable extends DataTable
             })
             ->addColumn('value', function ($query) {
                 $result = 0;
+                $cc_ = auth()->user()->company_code;
+
                 $query2 = DB::table('price_rendaan')
                     ->select('price_rendaan.price_rendaan_value')
                     ->where('material_code', $query->material_code)
@@ -49,6 +54,7 @@ class TotalDaanDataTable extends DataTable
                     ->where('version_id', $query->version_id)
                     ->where('asumsi_umum_id', $query->asumsi_umum_id)
                     ->whereNull('price_rendaan.deleted_at')
+                    ->where('price_rendaan.company_code', $cc_)
                     ->first();
 
                 $val_qty_rendaan = $query ? $query->qty_rendaan_value : 0;

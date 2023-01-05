@@ -19,10 +19,13 @@ class SaldoAwalDataTable extends DataTable
      */
     public function dataTable($query)
     {
+        $cc = auth()->user()->company_code;
+
         $query = DB::table('saldo_awal')->select('saldo_awal.*', 'material.material_code', 'material.material_name', 'plant.plant_code', 'plant.plant_desc', 'version_asumsi.version')
             ->leftjoin('material', 'material.material_code', '=', 'saldo_awal.material_code')
             ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'saldo_awal.version_id')
+            ->where('saldo_awal.company_code', $cc)
             ->whereNull('saldo_awal.deleted_at');
 
         return datatables()

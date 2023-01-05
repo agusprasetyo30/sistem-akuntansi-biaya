@@ -20,7 +20,9 @@ class PlantDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = DB::table('plant')->whereNull('deleted_at');
+        $cc = auth()->user()->company_code;
+
+        $query = DB::table('plant')->where('company_code', $cc)->whereNull('deleted_at');
         return datatables()
             ->query($query)
             ->addIndexColumn()
