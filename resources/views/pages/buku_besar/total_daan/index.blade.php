@@ -53,6 +53,17 @@
                                     </div>
 
                                 </div>
+                                <div class="mb-2 row">
+                                    <div class="form-group">
+                                        <label class="form-label">VALUE</label>
+                                        <select id="filter_val" class="form-control custom-select select2">
+                                            @foreach (value_dt() as $key => $value)
+                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
                                     </div>
@@ -99,6 +110,15 @@
                         };
                     }
                 }
+            }).on('change', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
+
+            $('#filter_val').select2({
+                placeholder: 'Pilih Value',
+                width: '100%',
+                allowClear: false,
             }).on('change', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
@@ -272,7 +292,8 @@
                 url : '{{route("total_daan")}}',
                 data: {
                     data:'version',
-                    version:$('#filter_version').val()
+                    version:$('#filter_version').val(),
+                    val:$('#filter_val').val()
                 },
                 success:function (response) {
                     for (let i = 0; i < response.asumsi.length;i++){
@@ -299,11 +320,19 @@
                             url : '{{route("total_daan")}}',
                             data: {
                                 data:'horizontal',
-                                version:$('#filter_version').val()
+                                version:$('#filter_version').val(),
+                                val:$('#filter_val').val()
                             }
                         },
                         columns: column,
-
+                        createdRow: function ( row, data, index ) {
+                            console.log(data);
+                            if ( data['1'] != null ) {
+                                $('td', row).eq(3).addClass('success');
+                            } else {
+                                $('td', row).eq(3).addClass('danger');
+                            }
+                        },
                     })
                 }
             })
