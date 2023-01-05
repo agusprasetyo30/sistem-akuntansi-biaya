@@ -42,35 +42,129 @@ class H_TotalDaanDataTable extends DataTable
 
         foreach ($asumsi as $key => $a) {
             $datatable->addColumn($key, function ($query) use ($rendaanValues, $a) {
-                $rendaanAsumsi = $rendaanValues
-                    ->where('asumsi_umum_id', $a->id)
-                    ->where('region_id', $query->region_id)
-                    ->where('material_code', $query->material_code)
-                    ->first();
+                // $rendaanAsumsi = $rendaanValues
+                //     ->where('asumsi_umum_id', $a->id)
+                //     ->where('region_id', $query->region_id)
+                //     ->where('material_code', $query->material_code)
+                //     ->first();
 
-                $result = 0;
-                $cc_ = auth()->user()->company_code;
+                // $result = 0;
+                // $cc_ = auth()->user()->company_code;
 
-                $query2 = DB::table('price_rendaan')
-                    ->select('price_rendaan.price_rendaan_value')
-                    ->where('material_code', $query->material_code)
-                    ->where('region_id', $query->region_id)
-                    ->where('version_id', $this->version)
-                    ->where('asumsi_umum_id', $a->id)
-                    ->whereNull('price_rendaan.deleted_at')
-                    ->where('price_rendaan.company_code', $cc_)
-                    ->first();
+                // $query2 = DB::table('price_rendaan')
+                //     ->select('price_rendaan.price_rendaan_value')
+                //     ->where('material_code', $query->material_code)
+                //     ->where('region_id', $query->region_id)
+                //     ->where('version_id', $this->version)
+                //     ->where('asumsi_umum_id', $a->id)
+                //     ->whereNull('price_rendaan.deleted_at')
+                //     ->where('price_rendaan.company_code', $cc_)
+                //     ->first();
 
-                $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;
-                $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
-                $val_adjustment = $rendaanAsumsi ? $rendaanAsumsi->adjustment : 0;
-                $val_kurs = $rendaanAsumsi ? $rendaanAsumsi->usd_rate : 0;
+                // $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;
+                // $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
+                // $val_adjustment = $rendaanAsumsi ? $rendaanAsumsi->adjustment : 0;
+                // $val_kurs = $rendaanAsumsi ? $rendaanAsumsi->usd_rate : 0;
 
-                if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
-                    return '-';
+                // if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
+                //     return '-';
+                // } else {
+                //     $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
+                //     return rupiah($result);
+                // }
+
+                if ($this->val == '0') {
+                    $rendaanAsumsi = $rendaanValues
+                        ->where('asumsi_umum_id', $a->id)
+                        ->where('region_id', $query->region_id)
+                        ->where('material_code', $query->material_code)
+                        ->first();
+
+                    $result = 0;
+                    $cc_ = auth()->user()->company_code;
+
+                    $query2 = DB::table('price_rendaan')
+                        ->select('price_rendaan.price_rendaan_value')
+                        ->where('material_code', $query->material_code)
+                        ->where('region_id', $query->region_id)
+                        ->where('version_id', $this->version)
+                        ->where('asumsi_umum_id', $a->id)
+                        ->whereNull('price_rendaan.deleted_at')
+                        ->where('price_rendaan.company_code', $cc_)
+                        ->first();
+
+                    $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;
+                    $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
+                    $val_adjustment = $rendaanAsumsi ? $rendaanAsumsi->adjustment : 0;
+                    $val_kurs = $rendaanAsumsi ? $rendaanAsumsi->usd_rate : 0;
+
+                    if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
+                        return '-';
+                    } else {
+                        $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
+                        return rupiah($result);
+                    }
+                } elseif ($this->val == '1') {
+                    $rendaanAsumsi = $rendaanValues
+                        ->where('asumsi_umum_id', $a->id)
+                        ->where('region_id', $query->region_id)
+                        ->where('material_code', $query->material_code)
+                        ->first();
+
+                    $result = 0;
+                    $cc_ = auth()->user()->company_code;
+
+                    $query2 = DB::table('price_rendaan')
+                        ->select('price_rendaan.price_rendaan_value')
+                        ->where('material_code', $query->material_code)
+                        ->where('region_id', $query->region_id)
+                        ->where('version_id', $this->version)
+                        ->where('asumsi_umum_id', $a->id)
+                        ->whereNull('price_rendaan.deleted_at')
+                        ->where('price_rendaan.company_code', $cc_)
+                        ->first();
+
+                    $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;
+                    $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
+                    $val_adjustment = $rendaanAsumsi ? $rendaanAsumsi->adjustment : 0;
+                    $val_kurs = $rendaanAsumsi ? $rendaanAsumsi->usd_rate : 0;
+
+                    if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
+                        return '';
+                    } else {
+                        $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
+                        return rupiah($result);
+                    }
                 } else {
-                    $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
-                    return rupiah($result);
+                    $rendaanAsumsi = $rendaanValues
+                        ->where('asumsi_umum_id', $a->id)
+                        ->where('region_id', $query->region_id)
+                        ->where('material_code', $query->material_code)
+                        ->first();
+
+                    $result = 0;
+                    $cc_ = auth()->user()->company_code;
+
+                    $query2 = DB::table('price_rendaan')
+                        ->select('price_rendaan.price_rendaan_value')
+                        ->where('material_code', $query->material_code)
+                        ->where('region_id', $query->region_id)
+                        ->where('version_id', $this->version)
+                        ->where('asumsi_umum_id', $a->id)
+                        ->whereNull('price_rendaan.deleted_at')
+                        ->where('price_rendaan.company_code', $cc_)
+                        ->first();
+
+                    $val_qty_rendaan = $rendaanAsumsi ? $rendaanAsumsi->qty_rendaan_value : 0;
+                    $val_price_daan = $query2 ? $query2->price_rendaan_value : 0;
+                    $val_adjustment = $rendaanAsumsi ? $rendaanAsumsi->adjustment : 0;
+                    $val_kurs = $rendaanAsumsi ? $rendaanAsumsi->usd_rate : 0;
+
+                    if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
+                        return '-';
+                    } else {
+                        return '';
+                    }
                 }
             });
         }

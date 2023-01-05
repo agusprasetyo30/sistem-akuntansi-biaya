@@ -317,6 +317,20 @@ if (!function_exists('dummy_dt')) {
     }
 }
 
+if (!function_exists('value_dt')) {
+    function value_dt()
+    {
+        $status = array(
+            '0' => 'Semua',
+            '1' => 'Dengan Price Pengadaan',
+            '2' => 'Tanpa Price Pengadaan',
+
+        );
+
+        return $status;
+    }
+}
+
 if (!function_exists('login_method')) {
     function login_method()
     {

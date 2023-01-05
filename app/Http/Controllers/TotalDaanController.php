@@ -17,7 +17,7 @@ class TotalDaanController extends Controller
         if ($request->data == 'index') {
             return $totaldaanDataTable->render('pages.buku_besar.total_daan.index');
         } elseif ($request->data == 'horizontal') {
-            return $h_TotalDaanDataTable->with(['version' => $request->version])->render('pages.buku_besar.total_daan.index');
+            return $h_TotalDaanDataTable->with(['version' => $request->version, 'val' => $request->val])->render('pages.buku_besar.total_daan.index');
         } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $request->version)
