@@ -194,6 +194,7 @@
                     kurs: $('#currency').val(),
                 },
                 success:function (response) {
+                    $("#tanggal").attr("disabled", true);
                     Swal.fire({
                         title: response.title,
                         text: response.msg,
