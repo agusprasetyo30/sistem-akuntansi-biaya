@@ -54,12 +54,25 @@ class CompanyController extends Controller
     public function update(Request $request)
     {
         try {
-            $request->validate([
-                "company_code" => 'required',
-                "company_name" => 'required',
-                "link_sso" => 'required',
-                "is_active" => 'required',
-            ]);
+            $data = Company::where('company_code', $request->post('id'))->first();
+
+            if (!$data)
+                return setResponse([
+                    'code' => 400,
+                    'title' => 'Data Tidak Ditemukan!'
+                ]);
+
+            $required['company_name'] = 'required';
+            $required['link_sso'] = 'required';
+            $required['is_active'] = 'required';
+
+            if ($data->company_code != $request->post('company_code'))
+                $required['company_code'] = 'required|unique:company,company_code';
+
+            $validator = Validator::make($request->all(), $required, validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
             $input['company_code'] = strtoupper($request->company_code);
             $input['company_name'] = $request->company_name;
@@ -68,12 +81,17 @@ class CompanyController extends Controller
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
-            DB::table('company')
-                ->where('company_code', $request->company_code)->update($input);
+            Company::where('company_code', $request->id)
+                ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         } catch (\Exception $exception) {
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
