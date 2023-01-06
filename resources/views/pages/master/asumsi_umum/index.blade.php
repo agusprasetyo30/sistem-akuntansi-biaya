@@ -42,7 +42,7 @@
 @section('scripts')
     <script>
         var data_array = [];
-        var table_main_dt = '<table id="dt_version" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">' +
+        var table_main_dt = '<table id="dt_version" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="text" data-name="version" class="text-center">VERSI</th>' +
@@ -345,14 +345,16 @@
                                             $('#data_main_plant').val('').trigger("change");
                                             $('#is_active').val('').trigger("change");
                                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                            $("#table_main").empty();
-                                            get_data()
+                                            // $("#table_main").empty();
+                                            // get_data()
+                                            $('#dt_version').DataTable().ajax.reload();
                                         }
                                     })
                                 },
                                 error:function (response) {
                                     handleError(response)
                                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                    $('#dt_version').DataTable().ajax.reload();
                                 }
                             })
                         }else {
@@ -377,14 +379,14 @@
         });
 
         function get_data(){
-            $('#table_main').append(table_main_dt)
+            $('#table_main').html(table_main_dt)
 
             $('#dt_version thead tr')
                 .clone(true)
                 .addClass('filters')
                 .appendTo('#dt_version thead');
 
-            $('#dt_version').DataTable().clear().destroy();
+            // $('#dt_version').DataTable().clear().destroy();
             $("#dt_version").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
@@ -393,6 +395,7 @@
                 scrollCollapse: true,
                 processing: true,
                 serverSide: true,
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -552,8 +555,9 @@
                                             $('.modal-backdrop').remove();
                                             $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                             $("#back_edit"+id).attr("disabled", false);
-                                            $("#table_main").empty();
-                                            get_data()
+                                            // $("#table_main").empty();
+                                            // get_data()
+                                            $('#dt_version').DataTable().ajax.reload();
                                         }
                                     })
                             },
@@ -561,6 +565,7 @@
                                 handleError(response)
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
+                                $('#dt_version').DataTable().ajax.reload();
                             }
 
                         })
@@ -617,13 +622,15 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        $("#table_main").empty();
-                                        get_data()
+                                        // $("#table_main").empty();
+                                        // get_data()
+                                        $('#dt_version').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
+                            $('#dt_version').DataTable().ajax.reload();
                         }
                     })
 

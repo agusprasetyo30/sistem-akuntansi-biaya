@@ -55,6 +55,7 @@ class RegionsController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -104,7 +105,7 @@ class RegionsController extends Controller
             $input['deleted_by'] = auth()->user()->id;
 
             Regions::where('id', $request->id)
-                ->update($input);
+                ->delete();
             return setResponse([
                 'code' => 200,
                 'title' => 'Data berhasil disimpan'
