@@ -60,7 +60,7 @@
                         <div class="col-md-12" style="text-align: start;">
                         <div class="form-group">
                                 <label>Company Code</label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="Company Code" value="{{$model->company_code}}" name="edit_company_code" id="edit_company_code{{$model->company_code}}" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Company Code" value="{{$model->company_code}}" name="edit_company_code" id="edit_company_code{{$model->company_code}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Company Name </label>
@@ -93,9 +93,15 @@
 <!--/div-->
 
 <script>
-    $('#edit_is_active'+"{{$model->company_code}}").select2({
-        dropdownParent: $('#modal_edit'+"{{$model->company_code}}"),
-        placeholder: 'Pilih Status',
-        width: '100%'
+    $(document).ready(function () {
+        $('#edit_company_code'+'{{$model->company_code}}').keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
+
+        $('#edit_is_active'+"{{$model->company_code}}").select2({
+            dropdownParent: $('#modal_edit'+"{{$model->company_code}}"),
+            placeholder: 'Pilih Status',
+            width: '100%'
+        })
     })
 </script>

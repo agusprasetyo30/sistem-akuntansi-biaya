@@ -159,8 +159,8 @@
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
-                        columns:[0,1,2,3]
-                        }, title: 'Kategori Matrial'
+                        columns:[0,1,2]
+                        }, title: 'Master Company'
                     }
                 ],
 
@@ -237,19 +237,7 @@
         })
 
 
-        function update_company(company_code) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera disimpan",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
+        function update_company(id) {
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -258,30 +246,34 @@
                         url: '{{route('update_company')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            company_code: company_code,
-                            company_code: $('#edit_company_code'+company_code).val(),
-                            company_name: $('#edit_company_name'+company_code).val(),
-                            link_sso: $('#edit_link_sso'+company_code).val(),
-                            is_active: $('#edit_is_active'+company_code).val(),
+                            id: id,
+                            company_code: $('#edit_company_code'+id).val(),
+                            company_name: $('#edit_company_name'+id).val(),
+                            link_sso: $('#edit_link_sso'+id).val(),
+                            is_active: $('#edit_is_active'+id).val(),
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                $('#modal_edit'+company_code).modal('hide');
-                                toastr.success('Data Berhasil Disimpan', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                $('#modal_edit'+company_code).modal('hide');
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                $('#modal_edit'+company_code).modal('hide');
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
+                            })
+                            .then((result) => {
+                                if (result.value) {
+                                    table()
+                                    $('#modal_edit'+id).modal('hide')
+                                    $('body').removeClass('modal-open');
+                                    $('.modal-backdrop').remove();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
-
-                }
-
-            })
         }
 
         function delete_company(company_code) {
