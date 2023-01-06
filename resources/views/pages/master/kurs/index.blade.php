@@ -73,14 +73,14 @@
 
         function get_data(){
 
-            $('#table_main').append(table_main_dt)
+            $('#table_main').html(table_main_dt)
 
             $('#dt_kurs thead tr')
                 .clone(true)
                 .addClass('filters')
                 .appendTo('#dt_kurs thead');
 
-            $('#dt_kurs').DataTable().clear().destroy();
+            // $('#dt_kurs').DataTable().clear().destroy();
             $("#dt_kurs").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
@@ -89,6 +89,7 @@
                 scrollCollapse: true,
                 processing: true,
                 serverSide: true,
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -212,14 +213,16 @@
                             $('#tanggal').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                             $("#tanggal").attr("disabled", false);
-                            $("#table_main").empty();
-                            get_data()
+                            // $("#table_main").empty();
+                            // get_data()
+                            $('#dt_kurs').DataTable().ajax.reload();
                         }
                     })
                 },
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $('#dt_kurs').DataTable().ajax.reload();
                 }
             })
         })
@@ -257,8 +260,9 @@
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
                                 $("#edit_tanggal"+id).attr("disabled", false);
-                                $("#table_main").empty();
-                                get_data()
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_kurs').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -266,6 +270,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
+                    $('#dt_kurs').DataTable().ajax.reload();
                 }
             })
         }
@@ -304,13 +309,15 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        $("#table_main").empty();
-                                        get_data()
+                                        // $("#table_main").empty();
+                                        // get_data()
+                                        $('#dt_kurs').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
+                            $('#dt_kurs').DataTable().ajax.reload();
                         }
                     })
 
