@@ -58,6 +58,7 @@
             '</table>'
 
         $(document).ready(function () {
+
             get_data()
 
             $('#is_active').select2({
@@ -68,14 +69,14 @@
         })
 
         function get_data(){
-            $('#table_main').append(table_main_dt)
+            $('#table_main').html(table_main_dt)
 
             $('#dt_region thead tr')
                 .clone(true)
                 .addClass('filters')
                 .appendTo('#dt_region thead');
 
-            $('#dt_region').DataTable().clear().destroy();
+            // $('#dt_region').DataTable().clear().destroy();
             $("#dt_region").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
@@ -84,6 +85,7 @@
                 scrollCollapse: true,
                 processing: true,
                 serverSide: true,
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -200,14 +202,17 @@
                             $("#modal_add input").val("")
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            $("#table_main").empty();
-                            get_data()
+                            // $("#table_main").empty();
+                            // get_data()
+                            $('#dt_region').DataTable().ajax.reload();
+
                         }
                     })
                 },
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $('#dt_region').DataTable().ajax.reload();
                 }
             })
         })
@@ -275,8 +280,9 @@
                                 $('#modal_import').modal('hide');
                                 $("#modal_import input").val("")
                                 $('#is_active').val('').trigger("change");
-                                $("#table_main").empty();
-                                get_data()
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_region').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -284,6 +290,7 @@
                     handleError(response)
                     $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_import").attr("disabled", false);
+                    $('#dt_region').DataTable().ajax.reload();
                 }
             })
         }
@@ -323,8 +330,9 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
-                                $("#table_main").empty();
-                                get_data()
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_region').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -332,6 +340,8 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
+                    $('#dt_region').DataTable().ajax.reload();
+
                 }
             })
         }
@@ -370,13 +380,15 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        $("#table_main").empty();
-                                        get_data()
+                                        // $("#table_main").empty();
+                                        // get_data()
+                                        $('#dt_region').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
+                            $('#dt_region').DataTable().ajax.reload();
                         }
                     })
 

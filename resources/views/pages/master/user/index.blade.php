@@ -89,8 +89,7 @@
         })
 
         function get_data(){
-
-            $('#table_main').append(table_main_dt)
+            $('#table_main').html(table_main_dt)
 
             $('#dt_users thead tr')
                 .clone(true)
@@ -107,6 +106,7 @@
                 scrollCollapse: true,
                 processing: true,
                 serverSide: true,
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -221,14 +221,16 @@
                             $('#username').removeClass('is-invalid');
                             $('#username').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            $("#table_main").empty();
-                            get_data()
+                            // $("#table_main").empty();
+                            // get_data()
+                            $('#dt_users').DataTable().ajax.reload();
                         }
                     })
                 },
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $('#dt_users').DataTable().ajax.reload();
                 }
             })
         })
@@ -293,8 +295,9 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
-                                $("#table_main").empty();
-                                get_data()
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_users').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -302,6 +305,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
+                    $('#dt_users').DataTable().ajax.reload();
                 }
             })
         }
@@ -339,13 +343,15 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        $("#table_main").empty();
-                                        get_data()
+                                        // $("#table_main").empty();
+                                        // get_data()
+                                        $('#dt_users').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
+                            $('#dt_users').DataTable().ajax.reload();
                         }
                     })
 

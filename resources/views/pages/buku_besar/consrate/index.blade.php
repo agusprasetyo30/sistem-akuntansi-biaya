@@ -45,7 +45,7 @@
 @section('scripts')
     <script>
 
-        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">' +
+        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 220%;">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
@@ -191,8 +191,9 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
-                                    $("#table_main").empty();
-                                    get_data()
+                                    // $("#table_main").empty();
+                                    // get_data()
+                                    $('#dt_consrate').DataTable().ajax.reload();
                                 }
                             })
                     },
@@ -200,6 +201,7 @@
                         handleError(response)
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
+                        $('#dt_consrate').DataTable().ajax.reload();
                     }
                 })
             }
@@ -365,14 +367,13 @@
         })
 
         function get_data(){
-            $('#table_main').append(table_main_dt)
+            $('#table_main').html(table_main_dt)
 
             $('#dt_consrate thead tr')
                 .clone(true)
                 .addClass('filters')
                 .appendTo('#dt_consrate thead');
-
-            $('#dt_consrate').DataTable().clear().destroy();
+            // $('#dt_consrate').DataTable().clear().destroy();
             $("#dt_consrate").DataTable({
                 bAutoWidth: true,
                 scrollCollapse: true,
@@ -384,6 +385,7 @@
                 processing: true,
                 serverSide: true,
                 scrollX: true,
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -606,8 +608,9 @@
                             $('#data_main_material').val('').trigger("change");
                             $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            $("#table_main").empty();
-                            get_data()
+                            // $("#table_main").empty();
+                            // get_data()
+                            $('#dt_consrate').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -653,8 +656,9 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                $("#table_main").empty();
-                                get_data()
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_consrate').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -662,6 +666,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
+                    $('#dt_consrate').DataTable().ajax.reload();
                 }
             })
         }
@@ -698,13 +703,15 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        $("#table_main").empty();
-                                        get_data()
+                                        // $("#table_main").empty();
+                                        // get_data()
+                                        $('#dt_consrate').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
+                            $('#dt_consrate').DataTable().ajax.reload();
                         }
                     })
 
