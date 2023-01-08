@@ -78,7 +78,7 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">' +
+        var table_main_dt = '<table id="dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
@@ -410,7 +410,7 @@
 
             // $('#dt_qty_rendaan').DataTable().clear().destroy();
             $("#dt_qty_rendaan").DataTable({
-                bAutoWidth: true,
+                AutoWidth: true,
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -418,7 +418,7 @@
                 // searching: false,
                 processing: true,
                 serverSide: true,
-                order:[[0, 'desc']],
+                // order:[[0, 'desc']],
                 deferRender:true,
                 fixedHeader: {
                     header: true,
@@ -559,7 +559,8 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
                 ]
 
-            });
+            }).columns.adjust().draw();;
+
         }
 
         function get_data_horiz(){
