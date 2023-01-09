@@ -27,6 +27,9 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ConsRateController;
 use App\Http\Controllers\SalrController;
 use App\Http\Controllers\ZcoController;
+use App\Http\Controllers\GroupAccountFixedCostController;
+use App\Http\Controllers\CostElementController;
+use App\Http\Controllers\GeneralLegderAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +133,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
             Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
             Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
+            Route::post('import', [CostCenterController::class, 'import'])->name('import_cost_center');
+            Route::get('export', [CostCenterController::class, 'export'])->name('export_cost_center');
         });
 
         Route::group(['prefix' => 'role'], function () {
@@ -168,6 +173,33 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [GroupAccountController::class, 'delete'])->name('delete_group_account');
             Route::post('import', [GroupAccountController::class, 'import'])->name('import_group_account');
             Route::get('export', [GroupAccountController::class, 'export'])->name('export_group_account');
+        });
+
+        Route::group(['prefix' => 'group-account-fixed-cost'], function () {
+            Route::get('/', [GroupAccountFixedCostController::class, 'index'])->name('group_account_fc');
+            Route::post('insert', [GroupAccountFixedCostController::class, 'create'])->name('insert_group_account_fc');
+            Route::post('update', [GroupAccountFixedCostController::class, 'update'])->name('update_group_account_fc');
+            Route::post('delete', [GroupAccountFixedCostController::class, 'delete'])->name('delete_group_account_fc');
+            Route::post('import', [GroupAccountFixedCostController::class, 'import'])->name('import_group_account_fc');
+            Route::get('export', [GroupAccountFixedCostController::class, 'export'])->name('export_group_account_fc');
+        });
+
+        Route::group(['prefix' => 'cost-element'], function () {
+            Route::get('/', [CostElementController::class, 'index'])->name('cost_element');
+            Route::post('insert', [CostElementController::class, 'create'])->name('insert_cost_element');
+            Route::post('update', [CostElementController::class, 'update'])->name('update_cost_element');
+            Route::post('delete', [CostElementController::class, 'delete'])->name('delete_cost_element');
+            Route::post('import', [CostElementController::class, 'import'])->name('import_cost_element');
+            Route::get('export', [CostElementController::class, 'export'])->name('export_cost_element');
+        });
+
+        Route::group(['prefix' => 'general-legder-account'], function () {
+            Route::get('/', [GeneralLegderAccountController::class, 'index'])->name('general_legder_account');
+            Route::post('insert', [GeneralLegderAccountController::class, 'create'])->name('insert_general_legder_account');
+            Route::post('update', [GeneralLegderAccountController::class, 'update'])->name('update_general_legder_account');
+            Route::post('delete', [GeneralLegderAccountController::class, 'delete'])->name('delete_general_legder_account');
+            Route::post('import', [GeneralLegderAccountController::class, 'import'])->name('import_general_legder_account');
+            Route::get('export', [GeneralLegderAccountController::class, 'export'])->name('export_general_legder_account');
         });
 
         Route::group(['prefix' => 'asumsi_umum'], function () {
