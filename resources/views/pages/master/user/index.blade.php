@@ -230,7 +230,7 @@
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    $('#dt_users').DataTable().ajax.reload();
+                    // $('#dt_users').DataTable().ajax.reload();
                 }
             })
         })
@@ -305,7 +305,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
-                    $('#dt_users').DataTable().ajax.reload();
+                    // $('#dt_users').DataTable().ajax.reload();
                 }
             })
         }
@@ -351,7 +351,7 @@
                         },
                         error: function (response) {
                             handleError(response)
-                            $('#dt_users').DataTable().ajax.reload();
+                            // $('#dt_users').DataTable().ajax.reload();
                         }
                     })
 

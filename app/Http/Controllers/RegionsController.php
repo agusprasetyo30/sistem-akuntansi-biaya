@@ -55,7 +55,6 @@ class RegionsController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);

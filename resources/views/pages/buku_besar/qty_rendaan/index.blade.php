@@ -365,7 +365,7 @@
                         handleError(response)
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
-                        $('#dt_qty_rendaan').DataTable().ajax.reload();
+                        // $('#dt_qty_rendaan').DataTable().ajax.reload();
                     }
                 })
             }
@@ -662,7 +662,7 @@
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    $('#dt_qty_rendaan').DataTable().ajax.reload();
+                    // $('#dt_qty_rendaan').DataTable().ajax.reload();
                 }
             })
         })
@@ -711,7 +711,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
-                    $('#dt_qty_rendaan').DataTable().ajax.reload();
+                    // $('#dt_qty_rendaan').DataTable().ajax.reload();
                 }
             })
         }
@@ -759,7 +759,7 @@
                         },
                         error: function (response) {
                             handleError(response)
-                            $('#dt_qty_rendaan').DataTable().ajax.reload();
+                            // $('#dt_qty_rendaan').DataTable().ajax.reload();
                         }
                     })
 

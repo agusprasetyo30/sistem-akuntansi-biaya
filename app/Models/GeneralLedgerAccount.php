@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CostCenter extends Model
+class GeneralLedgerAccount extends Model
 {
     use HasFactory;
-    protected $table = 'cost_center';
-    protected $primaryKey = 'cost_center';
-    protected $keyType = 'string';
+    protected $table = 'general_ledger_account';
+    protected $primaryKey = 'general_ledger_account';
 
     protected $fillable = [
-        'cost_center',
-        'cost_center_desc',
+        'general_ledger_account',
+        'group_account_fc_desc',
+        'group_account_fc',
         'company_code',
         'created_by',
         'created_at',

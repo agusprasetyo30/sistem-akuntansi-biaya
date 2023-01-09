@@ -29,7 +29,7 @@ use App\Http\Controllers\SalrController;
 use App\Http\Controllers\ZcoController;
 use App\Http\Controllers\GroupAccountFixedCostController;
 use App\Http\Controllers\CostElementController;
-use App\Http\Controllers\GeneralLegderAccountController;
+use App\Http\Controllers\GeneralLedgerAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -194,12 +194,12 @@ Route::group(['middleware' => 'auth'], function () {
         });
 
         Route::group(['prefix' => 'general-legder-account'], function () {
-            Route::get('/', [GeneralLegderAccountController::class, 'index'])->name('general_legder_account');
-            Route::post('insert', [GeneralLegderAccountController::class, 'create'])->name('insert_general_legder_account');
-            Route::post('update', [GeneralLegderAccountController::class, 'update'])->name('update_general_legder_account');
-            Route::post('delete', [GeneralLegderAccountController::class, 'delete'])->name('delete_general_legder_account');
-            Route::post('import', [GeneralLegderAccountController::class, 'import'])->name('import_general_legder_account');
-            Route::get('export', [GeneralLegderAccountController::class, 'export'])->name('export_general_legder_account');
+            Route::get('/', [GeneralLedgerAccountController::class, 'index'])->name('general_legder_account');
+            Route::post('insert', [GeneralLedgerAccountController::class, 'create'])->name('insert_general_legder_account');
+            Route::post('update', [GeneralLedgerAccountController::class, 'update'])->name('update_general_legder_account');
+            Route::post('delete', [GeneralLedgerAccountController::class, 'delete'])->name('delete_general_legder_account');
+            Route::post('import', [GeneralLedgerAccountController::class, 'import'])->name('import_general_legder_account');
+            Route::get('export', [GeneralLedgerAccountController::class, 'export'])->name('export_general_legder_account');
         });
 
         Route::group(['prefix' => 'asumsi_umum'], function () {
@@ -245,12 +245,12 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'buku-besar'], function () {
-        Route::group(['prefix' => 'cost_center'], function () {
-            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
-            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
-            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
-            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
-        });
+//        Route::group(['prefix' => 'cost_center'], function () {
+//            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
+//            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
+//            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
+//            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
+//        });
 
         Route::group(['prefix' => 'consrate'], function () {
             Route::get('/', [ConsRateController::class, 'index'])->name('consrate');
