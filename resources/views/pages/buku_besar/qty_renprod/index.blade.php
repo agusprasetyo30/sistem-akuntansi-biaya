@@ -445,11 +445,11 @@
                     })
                     .then((result) => {
                         if (result.value) {
-                            update_dt_horizontal()
-                            table()
-
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
+
+                            update_dt_horizontal()
+                            table()
                         }
                     })
                 },
@@ -531,11 +531,11 @@
                     })
                     .then((result) => {
                         if (result.value) {
-                            update_dt_horizontal()
-                            table()
-
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
+
+                            update_dt_horizontal()
+                            table()
                         }
                     })
                 },
@@ -613,12 +613,12 @@
                     .then((result) => {
                         console.log(result)
                         if (result.value) {
-                            update_dt_horizontal()
-                            table()
-
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
+                            
+                            update_dt_horizontal()
+                            table()
                         }
                     })
                 },

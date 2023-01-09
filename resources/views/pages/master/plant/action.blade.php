@@ -93,9 +93,15 @@
 <!--/div-->
 
 <script>
-    $('#edit_is_active'+'{{$model->plant_code}}').select2({
-        dropdownParent: $('#modal_edit'+'{{$model->plant_code}}'),
-        placeholder: 'Pilih Status',
-        width: '100%'
+    $(document).ready(function () {
+        $('#edit_code_plant'+'{{$model->plant_code}}').keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
+
+        $('#edit_is_active'+'{{$model->plant_code}}').select2({
+            dropdownParent: $('#modal_edit'+'{{$model->plant_code}}'),
+            placeholder: 'Pilih Status',
+            width: '100%'
+        })
     })
 </script>

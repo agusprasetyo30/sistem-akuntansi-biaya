@@ -34,8 +34,10 @@ class GroupAccountController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $code = str_replace(" ", "", $request->code);
+
             $input['company_code'] = auth()->user()->company_code;
-            $input['group_account_code'] = $request->code;
+            $input['group_account_code'] = $code;
             $input['group_account_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
@@ -77,8 +79,10 @@ class GroupAccountController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $code = str_replace(" ", "", $request->code);
+
             $input['company_code'] = auth()->user()->company_code;
-            $input['group_account_code'] = $request->code;
+            $input['group_account_code'] = $code;
             $input['group_account_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['created_by'] = auth()->user()->id;
@@ -148,7 +152,7 @@ class GroupAccountController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                dd(implode(' ', $err));
+                // dd(implode(' ', $err));
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',

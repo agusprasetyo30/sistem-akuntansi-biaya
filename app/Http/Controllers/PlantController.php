@@ -36,7 +36,9 @@ class PlantController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['plant_code'] = strtoupper($request->code);
+            $code = str_replace(" ", "", $request->code);
+
+            $input['plant_code'] = $code;
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = auth()->user()->company_code;
@@ -81,7 +83,9 @@ class PlantController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['plant_code'] = strtoupper($request->code);
+            $code = str_replace(" ", "", $request->code);
+
+            $input['plant_code'] = $code;
             $input['plant_desc'] = $request->deskripsi;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = auth()->user()->company_code;

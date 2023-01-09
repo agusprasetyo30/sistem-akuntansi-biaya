@@ -329,9 +329,9 @@
                     })
                     .then((result) => {
                         if (result.value) {
-                            table()
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
+                            table()
                         }
                     })
                 },
@@ -367,9 +367,9 @@
                     })
                     .then((result) => {
                         if (result.value) {
-                            table()
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
+                            table()
                         }
                     })
                 },
@@ -411,10 +411,10 @@
                     })
                     .then((result) => {
                         if (result.value) {
-                            table()
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
+                            table()
                         }
                     })
                 },

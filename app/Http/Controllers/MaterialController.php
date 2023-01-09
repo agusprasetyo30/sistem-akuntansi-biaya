@@ -39,8 +39,10 @@ class MaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $material_code = str_replace(" ", "", $request->material_code);
+
             $input['company_code'] = auth()->user()->company_code;
-            $input['material_code'] = $request->material_code;
+            $input['material_code'] = $material_code;
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;
             $input['group_account_code'] = $request->group_account_code;
@@ -94,8 +96,10 @@ class MaterialController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $material_code = str_replace(" ", "", $request->material_code);
+
             $input['company_code'] = auth()->user()->company_code;
-            $input['material_code'] = $request->material_code;
+            $input['material_code'] = $material_code;
             $input['material_name'] = $request->material_name;
             $input['material_desc'] = $request->material_desc;
             $input['group_account_code'] = $request->group_account_code;
