@@ -13,7 +13,7 @@ class GeneralLedgerAccount extends Model
 
     protected $fillable = [
         'general_ledger_account',
-        'group_account_fc_desc',
+        'general_ledger_account_desc',
         'group_account_fc',
         'company_code',
         'created_by',

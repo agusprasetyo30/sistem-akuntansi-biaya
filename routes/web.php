@@ -227,6 +227,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
             Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
             Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
+            Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
 
 
             //            Helper
@@ -241,16 +242,17 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/plant_dt', [SelectController::class, 'plant_dt'])->name('plant_dt');
             Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
             Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
+            Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
         });
     });
 
     Route::group(['prefix' => 'buku-besar'], function () {
-//        Route::group(['prefix' => 'cost_center'], function () {
-//            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
-//            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
-//            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
-//            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
-//        });
+        //        Route::group(['prefix' => 'cost_center'], function () {
+        //            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
+        //            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
+        //            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
+        //            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
+        //        });
 
         Route::group(['prefix' => 'consrate'], function () {
             Route::get('/', [ConsRateController::class, 'index'])->name('consrate');
