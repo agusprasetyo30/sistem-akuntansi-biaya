@@ -21,39 +21,37 @@ class CostCenterDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = CostCenter::select('cost_center.*', 'plant.plant_code', 'plant.id as id_plant')
-            ->leftJoin('plant', 'plant.id', '=', 'cost_center.plant_id');
+        $query = CostCenter::where('company_code', auth()->user()->company_code);
 
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->addColumn('status', function ($query){
-                if ($query->is_active == true){
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Aktif</span>";
-                }else{
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Aktif</span>";
-                }
-
-
-                return $span;
+            ->addColumn('cost_center', function ($query){
+                return $query->cost_center;
             })
-            ->filterColumn('filter_status', function ($query, $keyword){
-
-                if ($keyword == true){
-                    $query->where('cost_center.is_active', true);
-                }elseif ($keyword == false){
-                    $query->where('cost_center.is_active', false);
-                }
-
+            ->addColumn('cost_center_desc', function ($query){
+                return $query->cost_center_desc;
             })
-            ->addColumn('action', 'pages.buku_besar.cost_center.action')
+            ->filterColumn('filter_cost_center', function ($query, $keyword){
+                $query->where('cost_center', 'ilike', '%'.$keyword.'%');
+            })
+            ->filterColumn('filter_cost_center_desc', function ($query, $keyword){
+                $query->where('cost_center_desc', 'ilike', '%'.$keyword.'%');
+            })
+            ->orderColumn('filter_cost_center', function ($query, $order) {
+                $query->orderBy('cost_center', $order);
+            })
+            ->orderColumn('filter_cost_center_desc', function ($query, $order) {
+                $query->orderBy('cost_center_desc', $order);
+            })
+            ->addColumn('action', 'pages.master.cost_center.action')
             ->escapeColumns([]);
     }
 
     public function html()
     {
         return $this->builder()
-            ->addTableClass('table table-bordered text-nowrap key-buttons')
+            ->addTableClass('table table-bordered text-warp warp key-buttons')
             ->setTableId('dt_cost_center')
             ->columns($this->getColumns())
             ->minifiedAjax()

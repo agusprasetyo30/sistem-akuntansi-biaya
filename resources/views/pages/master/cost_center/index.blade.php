@@ -9,11 +9,14 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Role</h4>
+            <h4 class="page-title mb-0 text-primary">Cost Center</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
+                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"
+                        class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add
+                </button>
             </div>
         </div>
     </div>
@@ -24,16 +27,17 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Management Role</div>
+                    <div class="card-title">COST CENTER</div>
                 </div>
                 <div class="card-body">
                     <div class="">
                         <div class="table-responsive" id="table_main">
+
                         </div>
                     </div>
                 </div>
             </div>
-            @include('pages.master.role.add')
+            @include('pages.master.cost_center.add')
         </div>
     </div>
     <!-- /Row -->
@@ -42,44 +46,34 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+        var table_main_dt = '<table id="dt_cost_center" class="table table-bordered text-wrap key-buttons warp" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
-            '<th data-type="select" data-name="status" class="text-center">STATUS</th>' +
-            '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
+            '<th data-type="text" data-name="cost_center" class="text-center">COST CENTER</th>' +
+            '<th data-type="text" data-name="deskripsi" class="text-center">DESKRIPSI</th>' +
+            '<th data-type="text" data-name="nomor" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
-            '<tbody>' +
-            '</tbody>' +
             '</table>'
-
         $(document).ready(function () {
             get_data()
-
-            $('#is_active').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
         })
 
-        function get_data(){
-            $('#table_main').append(table_main_dt)
+        function get_data() {
+            $('#table_main').html(table_main_dt)
 
-            $('#dt_role thead tr')
+            $('#dt_cost_center thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_role thead');
+                .appendTo('#dt_cost_center thead');
 
-            // $('#dt_role').DataTable().clear().destroy();
-            $("#dt_role").DataTable({
+            $("#dt_cost_center").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
                 autoWidth:true,
                 scrollCollapse: true,
+                sortable: false,
                 processing: true,
                 serverSide: true,
                 deferRender:true,
@@ -107,8 +101,8 @@
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
-                        if (isSearchable){
-                            if (data_type == 'text'){
+                        if (isSearchable) {
+                            if (data_type == 'text') {
                                 var input = document.createElement("input");
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
@@ -117,13 +111,13 @@
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-                            }else if (data_type == 'select'){
+                            } else if (data_type == 'select') {
                                 var input = document.createElement("select");
+                                input.className = "form-control custom-select select2";
                                 var options = "";
-                                if (iName == 'status'){
-                                    input.className = "status_search form-control custom-select select2";
+                                if (iName == 'status') {
                                     options += '<option value="">Semua</option>';
-                                    @foreach (status_dt() as $key => $value)
+                                    @foreach (status_is_active() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
                                 }
@@ -137,26 +131,25 @@
                         }else {
                             cell.empty()
                         }
-                        $('.status_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
 
                     });
                 },
                 buttons: [
-                    'pageLength', 'csv', 'pdf', 'excel', 'print'
+                    {extend: 'pageLength', className: 'mb-5'},
+                    {
+                        extend: 'excel', className: 'mb-5', exportoptions: {
+                            columns: [0, 1, 2]
+                        }, title: 'Consumption Center'
+                    }
                 ],
                 ajax: {
-                    url : '{{route("role")}}',
-                    data: {data:'index'}
+                    url: '{{route("cost_center")}}',
+                    data: {data: 'index'}
                 },
                 columns: [
-                    { data: 'nama_role', name: 'nama_role', orderable:true},
-                    { data: 'status', name: 'filter_status', orderable:false},
-                    { data: 'action', name: 'action', orderable:false, searchable: false},
-
+                    {data: 'cost_center', name: 'filter_cost_center', orderable: true},
+                    {data: 'cost_center_desc', name: 'filter_cost_center_desc', orderable: true},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0,1,2]}
@@ -172,54 +165,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_role')}}',
+                url: '{{route('insert_cost_center')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    role: $('#role').val(),
-                    status: $('#is_active').val(),
-                },
-                success:function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result)=>{
-                        if (result.value) {
-                            $('#modal_add').modal('hide');
-                            $("#modal_add input").val("")
-                            $('#is_active').val('').trigger("change");
-                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            // $("#table_main").empty();
-                            // get_data()
-                            $('#dt_role').DataTable().ajax.reload();
-                        }
-                    })
-                },
-                error:function (response) {
-                    handleError(response)
-                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    // $('#dt_role').DataTable().ajax.reload();
-                }
-            })
-        })
-
-        function update_role(id) {
-            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            $("#back_edit"+id).attr("disabled", true);
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('update_role')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    id: id,
-                    role: $('#edit_role'+id).val(),
-                    status: $('#edit_is_active'+id).val(),
+                    code: $('#code_cost_center').val(),
+                    deskripsi: $('#cost_center_desc').val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -229,30 +179,142 @@
                         allowOutsideClick: false,
                         confirmButtonColor: '#019267',
                         confirmButtonText: 'Konfirmasi',
+                    }).then((result) =>{
+                        $('#modal_add').modal('hide');
+                        $("#modal_add input").val("")
+                        $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $('#dt_cost_center').DataTable().ajax.reload();
+                    })
+                },
+                error:function (response) {
+                    handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    // $('#dt_cost_center').DataTable().ajax.reload();
+                }
+            })
+        })
+
+        $('#submit_import').on('click', function () {
+            $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_import").attr("disabled", true);
+            if ($('#file').val() !== ''){
+                Swal.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data akan segera import",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#019267',
+                    cancelButtonColor: '#EF4B4B',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Kembali'
+                }).then((result) =>{
+                    if (result.value){
+                        importStore()
+                    }
+                })
+
+            }else {
+                Swal.fire({
+                    title: 'PERINGATAN',
+                    text: "Silakan Isi Data Tersebut",
+                    icon: 'warning',
+                    cancelButtonColor: '#EF4B4B',
+                    confirmButtonColor: '#019267',
+                    confirmButtonText: 'Konfirmasi',
+                }).then((result)=>{
+                    if (result.value){
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
+                    }
+                })
+            }
+
+        })
+
+        function importStore(){
+            let file = new FormData($("#form-input")[0]);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
+                url: '{{route('import_cost_center')}}',
+                data: file,
+                success:function (response) {
+                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    Swal.fire({
+                        title: response.title,
+                        text: response.message,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     })
                         .then((result) => {
                             if (result.value) {
-                                $('#modal_edit'+id).modal('hide')
-                                $('body').removeClass('modal-open');
-                                $('.modal-backdrop').remove();
-                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                                $("#back_edit"+id).attr("disabled", false);
-                                // $("#table_main").empty();
-                                // get_data()
-                                $('#dt_role').DataTable().ajax.reload();
+                                $('#modal_import').modal('hide');
+                                $("#modal_import input").val("")
+                                $('#dt_cost_center').DataTable().ajax.reload();
                             }
                         })
                 },
                 error: function (response) {
                     handleError(response)
-                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                    $("#back_edit"+id).attr("disabled", false);
-                    // $('#dt_role').DataTable().ajax.reload();
+                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_import").attr("disabled", false);
+                    // $('#dt_cost_center').DataTable().ajax.reload();
                 }
             })
         }
 
-        function delete_role(id) {
+        function update_cost_center(id) {
+            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_cost_center')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    code: $('#edit_code_cost_center' + id).val(),
+                    deskripsi: $('#edit_cost_center_desc' + id).val(),
+                },
+                success: function (response) {
+                    console.log('s')
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result) => {
+                        if (result.value){
+                            $('#modal_edit'+id).modal('hide')
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
+                            $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#back_edit"+id).attr("disabled", false);
+                            $('#dt_cost_center').DataTable().ajax.reload();
+                        }
+
+                    })
+                },
+                error: function (response) {
+                    console.log('f')
+                    handleError(response)
+                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit"+id).attr("disabled", false);
+                    // $('#dt_cost_center').DataTable().ajax.reload();
+                }
+            })
+        }
+
+        function delete_cost_center(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -262,15 +324,14 @@
                 cancelButtonColor: '#EF4B4B',
                 confirmButtonText: 'Konfirmasi',
                 cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
+            }).then((result) => {
+                if (result.value) {
                     $.ajax({
                         type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_role')}}',
+                        url: '{{route('delete_cost_center')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -283,18 +344,15 @@
                                 allowOutsideClick: false,
                                 confirmButtonColor: '#019267',
                                 confirmButtonText: 'Konfirmasi',
+                            }).then((result) =>{
+                                if (result.value){
+                                    $('#dt_cost_center').DataTable().ajax.reload();
+                                }
                             })
-                                .then((result) => {
-                                    if (result.value) {
-                                        // $("#table_main").empty();
-                                        // get_data()
-                                        $('#dt_role').DataTable().ajax.reload();
-                                    }
-                                })
                         },
                         error: function (response) {
                             handleError(response)
-                            // $('#dt_role').DataTable().ajax.reload();
+                            // $('#dt_cost_center').DataTable().ajax.reload();
                         }
                     })
 
@@ -303,4 +361,5 @@
             })
         }
     </script>
+    {{--    <script src="{{asset('assets/js/pages/regions.js')}}"></script>--}}
 @endsection

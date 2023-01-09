@@ -201,7 +201,7 @@
                         handleError(response)
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
-                        $('#dt_consrate').DataTable().ajax.reload();
+                        // $('#dt_consrate').DataTable().ajax.reload();
                     }
                 })
             }
@@ -666,7 +666,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
-                    $('#dt_consrate').DataTable().ajax.reload();
+                    // $('#dt_consrate').DataTable().ajax.reload();
                 }
             })
         }
@@ -711,7 +711,7 @@
                         },
                         error: function (response) {
                             handleError(response)
-                            $('#dt_consrate').DataTable().ajax.reload();
+                            // $('#dt_consrate').DataTable().ajax.reload();
                         }
                     })
 

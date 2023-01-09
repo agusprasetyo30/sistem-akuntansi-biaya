@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CostCenter extends Model
+class CostElement extends Model
 {
     use HasFactory;
-    protected $table = 'cost_center';
-    protected $primaryKey = 'cost_center';
-    protected $keyType = 'string';
+    protected $table = 'cost_element';
+    protected $primaryKey = 'cost_element';
 
     protected $fillable = [
-        'cost_center',
-        'cost_center_desc',
+        'cost_element',
+        'cost_element_desc',
         'company_code',
         'created_by',
         'created_at',

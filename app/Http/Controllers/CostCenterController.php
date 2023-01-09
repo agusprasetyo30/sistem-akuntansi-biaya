@@ -6,31 +6,32 @@ use App\DataTables\Master\CostCenterDataTable;
 use App\Models\CostCenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CostCenterController extends Controller
 {
     public function index(Request $request, CostCenterDataTable $costCenterDataTable){
         if ($request->data == 'index'){
 //            dd($request->data);
-            return $costCenterDataTable->render('pages.buku_besar.cost_center.index');
+            return $costCenterDataTable->render('pages.master.cost_center.index');
         }
-        return view('pages.buku_besar.cost_center.index');
+        return view('pages.master.cost_center.index');
     }
 
     public function create(Request $request){
         try {
-            $request->validate([
-                "id_plant" => 'required',
+            $validator = Validator::make($request->all(), [
                 "code" => 'required',
                 "deskripsi" => 'required',
-                "is_active" => 'required',
-            ]);
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
 
-            $input['plant_id'] = $request->id_plant;
             $input['cost_center'] = $request->code;
             $input['cost_center_desc'] = $request->deskripsi;
-            $input['is_active'] = $request->is_active;
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
@@ -38,36 +39,46 @@ class CostCenterController extends Controller
 
             CostCenter::create($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         }catch (\Exception $exception){
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
     public function update(Request $request){
         try {
-            $request->validate([
-                "id_plant" => 'required',
+            $validator = Validator::make($request->all(), [
                 "code" => 'required',
                 "deskripsi" => 'required',
-                "is_active" => 'required',
-            ]);
-//            dd($request);
+            ], validatorMsg());
 
-            $input['plant_id'] = $request->id_plant;
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
             $input['cost_center'] = $request->code;
             $input['cost_center_desc'] = $request->deskripsi;
-            $input['is_active'] = $request->is_active;
+            $input['company_code'] = auth()->user()->company_code;
+            $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
+            $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            CostCenter::where('id', $request->id)
+            CostCenter::where('cost_center', $request->code)
                 ->update($input);
 
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         }catch (\Exception $exception){
-//            dd($exception);
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -77,11 +88,16 @@ class CostCenterController extends Controller
             $input['deleted_at'] = Carbon::now();
             $input['deleted_by'] = auth()->user()->id;
 
-            CostCenter::where('id', $request->id)
-                ->update($input);
-            return response()->json(['Code' => 200, 'msg' => 'Data Berasil Disimpan']);
+            CostCenter::where('cost_center', $request->id)
+                ->delete();
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
         }catch (\Exception $exception){
-            return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 }

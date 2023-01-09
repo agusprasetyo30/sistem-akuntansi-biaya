@@ -222,7 +222,7 @@
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    $('#dt_kurs').DataTable().ajax.reload();
+                    // $('#dt_kurs').DataTable().ajax.reload();
                 }
             })
         })
@@ -270,7 +270,7 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
-                    $('#dt_kurs').DataTable().ajax.reload();
+                    // $('#dt_kurs').DataTable().ajax.reload();
                 }
             })
         }
@@ -317,7 +317,7 @@
                         },
                         error: function (response) {
                             handleError(response)
-                            $('#dt_kurs').DataTable().ajax.reload();
+                            // $('#dt_kurs').DataTable().ajax.reload();
                         }
                     })
 
