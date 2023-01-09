@@ -412,8 +412,7 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
-                // sortable: false,
-                // searching: false,
+                autoWidth: true,
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
@@ -546,18 +545,18 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'version', name: 'filter_version', orderable:true},
-                    { data: 'periode', name: 'filter_periode', orderable:true},
-                    { data: 'material', name: 'filter_material', orderable:true},
-                    { data: 'region_name', name: 'filter_region', orderable:true},
-                    { data: 'value', name: 'price_rendaan_value', orderable:true},
-                    { data: 'action', name: 'action', orderable:false, searchable: false},
+                    { width: "15%", data: 'version', name: 'filter_version', orderable:true},
+                    { width: "10%", data: 'periode', name: 'filter_periode', orderable:true},
+                    { width: "20%", data: 'material', name: 'filter_material', orderable:true},
+                    { width: "15%", data: 'region_name', name: 'filter_region', orderable:true},
+                    { width: "20%", data: 'value', name: 'price_rendaan_value', orderable:true},
+                    { width: "20%", data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
                 ]
 
-            })
+            }).columns.adjust().draw();
         }
 
         function get_data_horiz(){
