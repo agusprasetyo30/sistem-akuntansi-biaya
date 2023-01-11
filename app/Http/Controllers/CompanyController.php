@@ -110,7 +110,10 @@ class CompanyController extends Controller
         try {
             Company::where('company_code', $request->company_code)
                 ->delete();
-            return response()->json(['Code' => 200, 'msg' => 'Data Berhasil Dihapus']);
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Data berhasil dihapus'
+                ]);
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }

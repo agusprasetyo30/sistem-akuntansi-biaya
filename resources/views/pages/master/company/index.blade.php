@@ -93,6 +93,7 @@
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -263,10 +264,10 @@
                             })
                             .then((result) => {
                                 if (result.value) {
-                                    table()
                                     $('#modal_edit'+id).modal('hide')
                                     $('body').removeClass('modal-open');
                                     $('.modal-backdrop').remove();
+                                    $('#dt_company').DataTable().ajax.reload();
                                 }
                             })
                         },
@@ -299,15 +300,24 @@
                             _token: "{{ csrf_token() }}",
                             company_code: company_code,
                         },
-                        success:function (response) {
-                            if (response.Code === 200){
-                                toastr.success('Data Berhasil Dihapus', 'Success')
-                                get_data()
-                            }else if (response.Code === 0){
-                                toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                            }else {
-                                toastr.error('Terdapat Kesalahan System', 'System Error')
-                            }
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
+                            })
+                            .then((result) => {
+                                if (result.value) {
+                                    // table()
+                                    $('#dt_company').DataTable().ajax.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            handleError(response)
                         }
                     })
 
