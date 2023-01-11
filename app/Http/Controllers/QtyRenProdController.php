@@ -34,50 +34,50 @@ class QtyRenProdController extends Controller
 
     public function create(Request $request)
     {
-        // try {
-        $validator = Validator::make($request->all(), [
-            "cost_center" => 'required',
-            "qty_renprod_value" => 'required',
-            "version_id" => 'required',
-        ], validatorMsg());
+        try {
+            $validator = Validator::make($request->all(), [
+                "cost_center" => 'required',
+                "qty_renprod_value" => 'required',
+                "version_id" => 'required',
+            ], validatorMsg());
 
-        if ($validator->fails())
-            return $this->makeValidMsg($validator);
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
-        // $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
+            // $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
 
-        $input['company_code'] = auth()->user()->company_code;
-        $input['cost_center'] = $request->cost_center;
-        $input['version_id'] = $request->version_id;
-        $input['asumsi_umum_id'] = $request->month_year;
-        $input['qty_renprod_value'] = $request->qty_renprod_value;
-        $input['created_by'] = auth()->user()->id;
-        $input['updated_by'] = auth()->user()->id;
-        $input['created_at'] = Carbon::now();
-        $input['updated_at'] = Carbon::now();
+            $input['company_code'] = auth()->user()->company_code;
+            $input['cost_center'] = $request->cost_center;
+            $input['version_id'] = $request->version_id;
+            $input['asumsi_umum_id'] = $request->month_year;
+            $input['qty_renprod_value'] = $request->qty_renprod_value;
+            $input['created_by'] = auth()->user()->id;
+            $input['updated_by'] = auth()->user()->id;
+            $input['created_at'] = Carbon::now();
+            $input['updated_at'] = Carbon::now();
 
-        $data_renprod = QtyRenProd::where([
-            'company_code' => auth()->user()->company_code,
-            'cost_center' => $request->cost_center,
-            'version_id' => (int) $request->version_id,
-            'asumsi_umum_id' => $request->month_year,
-        ])->first();
+            $data_renprod = QtyRenProd::where([
+                'company_code' => auth()->user()->company_code,
+                'cost_center' => $request->cost_center,
+                'version_id' => (int) $request->version_id,
+                'asumsi_umum_id' => $request->month_year,
+            ])->first();
 
-        if (!$data_renprod) {
-            QtyRenProd::create($input);
-        } else {
-            QtyRenProd::where('id', $data_renprod->id)->update($input);
+            if (!$data_renprod) {
+                QtyRenProd::create($input);
+            } else {
+                QtyRenProd::where('id', $data_renprod->id)->update($input);
+            }
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
         }
-
-        return setResponse([
-            'code' => 200,
-            'title' => 'Data berhasil disimpan'
-        ]);
-        // } catch (\Exception $exception) {
-        //     return setResponse([
-        //         'code' => 400,
-        //     ]);
-        // }
     }
 
     public function update(Request $request)
