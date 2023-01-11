@@ -562,10 +562,13 @@
 
         function get_data_horiz(){
             var table = '<table id="h_dt_qty_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
+            var kolom = '<th class="text-center">MATERIAL</th>' +
+                '<th class="text-center">REGION</th>' +
+                '<th class="text-center">UOM</th>'
             var column = [
                 { data: 'material', orderable:false},
-                { data: 'region_name', orderable:false}
+                { data: 'region_name', orderable:false},
+                { data: 'uom', orderable:false},
             ]
             $("#dinamic_table").append(table);
             $.ajax({

@@ -47,16 +47,29 @@ class QtyRenDaanController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $check_data = QtyRenDaan::where([
+                'company_code' => auth()->user()->company_code,
+                'version_id' => $request->version_asumsi,
+                'asumsi_umum_id' => $request->bulan,
+                'region_id' => $request->region_id,
+                'material_code' => $request->material_id
+            ])->first();
 
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_id'] = $request->region_id;
             $input['qty_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_rendaan_value));
-            $input['company_code'] = 'B000';
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
-            QtyRenDaan::create($input);
+
+            if ($check_data != null){
+                QtyRenDaan::where('id', $check_data->id)
+                    ->update($input);
+            }else{
+                QtyRenDaan::create($input);
+            }
 
             return setResponse([
                 'code' => 200,
