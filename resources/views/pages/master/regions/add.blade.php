@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Nama Region </label>
+                                <label>Kode Region </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nama Region" name="nama_region" id="nama_region" autocomplete="off">
                             </div>
                             <div class="form-group">

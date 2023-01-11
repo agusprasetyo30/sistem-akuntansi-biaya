@@ -20,11 +20,11 @@ class QtyRenDaanDataTable extends DataTable
     public function dataTable($query)
     {
         $query = DB::table('qty_rendaan')
-            ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_name')
+            ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_desc')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_rendaan.version_id')
-            ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
+            ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
             ->whereNull('qty_rendaan.deleted_at');
 
         return datatables()
@@ -63,7 +63,7 @@ class QtyRenDaanDataTable extends DataTable
                 }
             })
             ->filterColumn('filter_region',function ($query, $keyword){
-                $query->where('regions.region_name', 'ilike', '%'.$keyword.'%');
+                $query->where('regions.region_desc', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_qty_rendaan_value',function ($query, $keyword){
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
@@ -79,7 +79,7 @@ class QtyRenDaanDataTable extends DataTable
                 $query->orderBy('qty_rendaan.material_code', $order);
             })
             ->orderColumn('filter_region', function ($query, $order) {
-                $query->orderBy('regions.region_name', $order);
+                $query->orderBy('regions.region_desc', $order);
             })
             ->orderColumn('filter_qty_rendaan_value', function ($query, $order) {
                 $query->orderBy('qty_rendaan.qty_rendaan_value', $order);

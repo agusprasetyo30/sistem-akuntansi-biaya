@@ -20,11 +20,11 @@ class PriceRenDaanDataTable extends DataTable
     public function dataTable($query)
     {
         $query = DB::table('price_rendaan')
-            ->select('price_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_name')
+            ->select('price_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_desc')
             ->leftjoin('material', 'material.material_code', '=', 'price_rendaan.material_code')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'price_rendaan.version_id')
-            ->leftjoin('regions', 'regions.id', '=', 'price_rendaan.region_id')
+            ->leftjoin('regions', 'regions.region_name', '=', 'price_rendaan.region_name')
             ->whereNull('price_rendaan.deleted_at');
 
         return datatables()
@@ -63,7 +63,7 @@ class PriceRenDaanDataTable extends DataTable
                 }
             })
             ->filterColumn('filter_region',function ($query, $keyword){
-                $query->where('regions.region_name', 'ilike', '%'.$keyword.'%');
+                $query->where('regions.region_desc', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_price_rendaan_value',function ($query, $keyword){
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
@@ -79,7 +79,7 @@ class PriceRenDaanDataTable extends DataTable
                 $query->orderBy('price_rendaan.material_code', $order);
             })
             ->orderColumn('filter_region', function ($query, $order) {
-                $query->orderBy('regions.region_name', $order);
+                $query->orderBy('regions.region_desc', $order);
             })
             ->orderColumn('filter_price_rendaan_value', function ($query, $order) {
                 $query->orderBy('qty_rendaan.qty_price_rendaan.price_rendaan_value', $order);

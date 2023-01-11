@@ -24,7 +24,7 @@ class T_PriceRenDaanExport implements WithHeadings, WithTitle
     public function headings(): array
     {
         try {
-            $template = ['material_code', 'region_id'];
+            $template = ['material_code', 'region_name'];
             $data = Asumsi_Umum::where('version_id', $this->version)
                 ->get();
 

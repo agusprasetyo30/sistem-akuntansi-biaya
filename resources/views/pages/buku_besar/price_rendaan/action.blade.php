@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 <label>Region </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                       placeholder="Total Stock" value="{{$model->region_name}}" name="detail_region_name"
+                                       placeholder="Total Stock" value="{{$model->region_desc}}" name="detail_region_name"
                                        id="detail_region_name" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -84,7 +84,7 @@
                             <div class="form-group">
                                 <label class="form-label">Region</label>
                                 <select name="edit_data_main_region{{$model->id}}" id="edit_data_main_region{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->region_id}}" selected>{{$model->region_name}}</option>
+                                    <option value="{{$model->region_name}}" selected>{{$model->region_desc}}</option>
                                 </select>
                             </div>
                             <div class="form-group">

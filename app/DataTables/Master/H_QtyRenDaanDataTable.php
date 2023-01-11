@@ -18,12 +18,12 @@ class H_QtyRenDaanDataTable extends DataTable
     public function dataTable($query)
     {
         $query = DB::table('qty_rendaan')
-            ->select('qty_rendaan.material_code', 'qty_rendaan.region_id', 'regions.region_name', 'material.material_name', 'material.material_uom')
+            ->select('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name', 'material.material_uom')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
-            ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
+            ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
             ->whereNull('qty_rendaan.deleted_at')
             ->where('qty_rendaan.version_id', $this->version)
-            ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_id', 'regions.region_name', 'material.material_name', 'material.material_uom');
+            ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name', 'material.material_uom');
 
         $datatable = datatables()
             ->query($query)
@@ -45,7 +45,7 @@ class H_QtyRenDaanDataTable extends DataTable
             $datatable->addColumn($key, function ($query) use ($rendaanValues, $a) {
                 $rendaanAsumsi = $rendaanValues
                     ->where('asumsi_umum_id', $a->id)
-                    ->where('region_id', $query->region_id)
+                    ->where('region_name', $query->region_name)
                     ->where('material_code', $query->material_code)
                     ->first();
 

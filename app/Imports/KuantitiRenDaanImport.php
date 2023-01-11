@@ -77,7 +77,7 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
     {
         return [
             'material_code' => ['required'],
-            'region_id' => ['required'],
+            'region_name' => ['required'],
         ];
     }
 

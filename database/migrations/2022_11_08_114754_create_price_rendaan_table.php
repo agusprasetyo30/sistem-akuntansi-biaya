@@ -19,7 +19,8 @@ class CreatePriceRendaanTable extends Migration
             $table->foreign('company_code')->references('company_code')->on('company');
             $table->string('material_code')->unsigned();
             $table->foreign('material_code')->references('material_code')->on('material');
-            $table->foreignId('region_id')->references('id')->on('regions')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('region_name')->unsigned();
+            $table->foreign('region_name')->references('region_name')->on('regions')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade');
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onUpdate('cascade');
             $table->double('price_rendaan_value', 8, 2)->default(0);

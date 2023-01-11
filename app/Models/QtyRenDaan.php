@@ -13,7 +13,7 @@ class QtyRenDaan extends Model
 
     protected $fillable = [
         'material_code',
-        'region_id',
+        'region_name',
         'asumsi_umum_id',
         'version_id',
         'qty_rendaan_value',

@@ -16,7 +16,7 @@ class M_RegionsExport implements FromQuery, WithTitle, WithHeadings
     public function query()
     {
         $data = Regions::query()
-            ->select('id', 'region_name')
+            ->select('region_name', 'region_desc')
             ->where('is_active','=', true);
         return $data;
     }
@@ -28,6 +28,6 @@ class M_RegionsExport implements FromQuery, WithTitle, WithHeadings
 
     public function headings(): array
     {
-        return ["id", "region_name"];
+        return ["region_name", 'region_desc'];
     }
 }
