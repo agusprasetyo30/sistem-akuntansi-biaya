@@ -17,8 +17,8 @@ class CreateQtyRenProdTable extends Migration
             $table->id();
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
-            $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->string('cost_center')->unsigned();
+            $table->foreign('cost_center')->references('cost_center')->on('cost_center');
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onUpdate('cascade');
             $table->float('qty_renprod_value');

@@ -27,7 +27,6 @@
 				<li><a href="{{url('master/gl-account')}}" class="slide-item"> General Ledger</a></li>
 				<li><a href="{{route('group_account_fc')}}" class="slide-item"> Group Account FC</a></li>
 				<li><a href="{{route('general_legder_account')}}" class="slide-item"> General Ledger FC</a></li>
-				<li><a href="{{route('cost_element')}}" class="slide-item"> Const Element</a></li>
 				<li><a href="{{route('cost_center')}}" class="slide-item"> Const Center</a></li>
 				<li><a href="{{url('master/material')}}" class="slide-item"> Material</a></li>
 				<li><a href="{{url('master/plant')}}" class="slide-item"> Plant</a></li>
