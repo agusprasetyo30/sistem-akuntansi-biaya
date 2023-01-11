@@ -56,6 +56,7 @@ class AsumsiUmumController extends Controller
                     $input['version_id'] = $versi->id;
                     $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $items['kurs'])));
                     $input['adjustment'] = (double) $items['adjustment'];
+                    $input['inflasi'] = (double) $items['inflasi'];
                     $input['month_year'] = $month_year;
                     $input['saldo_awal'] = $saldo_awal;
                     $input['company_code'] = 'B000';
@@ -71,7 +72,7 @@ class AsumsiUmumController extends Controller
 
             return setResponse([
                 'code' => 200,
-                'title' => 'Data berhasil dihapus'
+                'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
             return setResponse([
@@ -116,6 +117,7 @@ class AsumsiUmumController extends Controller
                     $input['version_id'] = $request->id;
                     $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $items['kurs'])));
                     $input['adjustment'] = (double) $items['adjustment'];
+                    $input['inflasi'] = (double) $items['inflasi'];
                     $input['month_year'] = Carbon::createFromFormat('Y-m-d', $items['periode'])->format('Y-m-01 00:00:00');
                     $input['saldo_awal'] = $saldo_awal;
                     $input['company_code'] = 'B000';

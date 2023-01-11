@@ -16,6 +16,7 @@ class Asumsi_Umum extends Model
         'usd_rate',
         'adjustment',
         'month_year',
+        'inflasi',
         'saldo_awal',
         'company_code',
         'created_by',

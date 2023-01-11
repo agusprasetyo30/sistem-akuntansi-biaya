@@ -49,6 +49,14 @@ class PriceRenDaanController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $check_data = PriceRenDaan::where([
+                'company_code' => auth()->user()->company_code,
+                'version_id' => $request->version_asumsi,
+                'asumsi_umum_id' => $request->bulan,
+                'region_id' => $request->region_id,
+                'material_code' => $request->material_id
+            ])->first();
+
 
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
@@ -58,7 +66,13 @@ class PriceRenDaanController extends Controller
             $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
-            PriceRenDaan::create($input);
+
+            if ($check_data != null){
+                PriceRenDaan::where('id', $check_data->id)
+                    ->update($input);
+            }else{
+                PriceRenDaan::create($input);
+            }
 
             return setResponse([
                 'code' => 200,

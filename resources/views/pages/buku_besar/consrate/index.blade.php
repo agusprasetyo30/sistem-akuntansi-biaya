@@ -45,7 +45,7 @@
 @section('scripts')
     <script>
 
-        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons" style="width: 220%;">' +
+        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-wrap warp key-buttons" style="width: 200%;">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
@@ -375,7 +375,7 @@
                 .appendTo('#dt_consrate thead');
             // $('#dt_consrate').DataTable().clear().destroy();
             $("#dt_consrate").DataTable({
-                bAutoWidth: true,
+                autoWidth: true,
                 scrollCollapse: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,

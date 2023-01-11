@@ -365,18 +365,22 @@ class SelectController extends Controller
 
     public function check_kurs(Request $request)
     {
-
         $data = explode('/', $request->periode);
 
+        if (strlen($data[0])==1){
+            $date = $data[1].'-0'.$data[0].'-01';
+        }else{
+            $date = $data[1].'-'.$data[0].'-01';
+        }
+
         $kurs = DB::table('kurs')
-            ->where('month', '=', check_month($data[0] - 1))
-            ->where('year', '=', $data[1])
+            ->where('month_year', '=', $date)
             ->first();
+
 
         if ($kurs == null) {
             return response()->json(['Code' => 200, 'data_kurs' => '']);
         } else {
-
             return response()->json(['Code' => 200, 'data_kurs' => $kurs->usd_rate]);
         }
     }
