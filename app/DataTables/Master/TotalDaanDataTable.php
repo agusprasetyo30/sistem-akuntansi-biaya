@@ -65,7 +65,7 @@ class TotalDaanDataTable extends DataTable
                 if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
                     return '-';
                 } else {
-                    $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
+                    $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
                     return rupiah($result);
                 }
             })
