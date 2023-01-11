@@ -25,19 +25,19 @@
                                     id="detail_version" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Month Year </label>
+                                <label>Periode </label>
                                 <input disabled type="text" class="form-control form-control-sm" placeholder="bulan" value="{{format_month($model->month_year,'bi')}}" name="detail_bulan" id="detail_bulan" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Material </label>
+                                <label>Cost Center </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->material_code}} {{$model->material_name}}" name="detail_material_code"
-                                    id="detail_material_code" autocomplete="off">
+                                    placeholder="Nama Kategori" value="{{$model->cost_center}} {{$model->cost_center_desc}}" name="detail_cost_center"
+                                    id="detail_cost_center" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{helpRupiah($model->qty_renprod_value)}}" name="detail_qty_renprod_value"
+                                    placeholder="Nilai Satuan" value="{{$model->qty_renprod_value}}" name="detail_qty_renprod_value"
                                     id="detail_qty_renprod_value" autocomplete="off">
                             </div>
                         </div>
@@ -80,15 +80,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} {{$model->material_name}}</option>
+                                <label class="form-label">Cost Center</label>
+                                <select name="main_cost_center" id="edit_data_main_cost_center{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->cost_center}}" selected>{{$model->cost_center}} {{$model->cost_center_desc}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{helpRupiah($model->qty_renprod_value)}}" name="edit_qty_renprod_value"
+                                    value="{{$model->qty_renprod_value}}" name="edit_qty_renprod_value"
                                     id="edit_qty_renprod_value{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
@@ -106,18 +106,18 @@
 <!--/div-->
 
 <script>
-    $('#edit_qty_renprod_value'+{{$model->id}}).on('keyup', function(){
-        let rupiah = formatRupiah($(this).val(), "Rp ")
-        $(this).val(rupiah)
-    });
+    // $('#edit_qty_renprod_value'+{{$model->id}}).on('keyup', function(){
+    //     let rupiah = formatRupiah($(this).val(), "Rp ")
+    //     $(this).val(rupiah)
+    // });
 
-    $('#edit_data_main_material'+{{$model->id}}).select2({
+    $('#edit_data_main_cost_center'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Material',
+        placeholder: 'Pilih Cost Center',
         width: '100%',
         allowClear: false,
         ajax: {
-            url: "{{ route('material_select') }}",
+            url: "{{ route('cost_center_select') }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {

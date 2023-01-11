@@ -21,7 +21,7 @@
                                         <li>Template akan tersedia setelah memilih versi</li>
                                         <li>Jika data value "kosong" maka data akan terisi '0'</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
-                                        <li>Kode Material harus sama dengan kode pada Master Material (data tersedia ditemplate)</li>
+                                        <li>Kode Cost Center harus sama dengan kode pada Master Cost Center (data tersedia ditemplate)</li>
                                     </ol> 
                                 </div>
                                 <div class="form-group">

@@ -42,7 +42,7 @@ class T_KuantitiRenProdExport implements WithHeadings, WithTitle
         // $interval = new DateInterval('P1M');
         // $end = new DateTime($akhir);
         // $period = new DatePeriod($start, $interval, $end);
-        $result = ["material_code"];
+        $result = ["cost_center"];
 
         foreach ($period as $dt) {
             $per = format_month($dt->month_year, 'ye');

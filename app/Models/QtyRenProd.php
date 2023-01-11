@@ -13,7 +13,7 @@ class QtyRenProd extends Model
 
     protected $fillable = [
         'company_code',
-        'material_code',
+        'cost_center',
         'version_id',
         'asumsi_umum_id',
         'qty_renprod_desc',

@@ -228,6 +228,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
             Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
             Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
+            Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
 
 
             //            Helper
@@ -243,6 +244,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
             Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
             Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
+            Route::get('/cost_center_dt', [SelectController::class, 'cost_center_dt'])->name('cost_center_dt');
         });
     });
 
