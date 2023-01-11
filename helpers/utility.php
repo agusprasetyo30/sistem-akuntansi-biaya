@@ -410,3 +410,11 @@ if (!function_exists('helpRupiah')) {
         return $hasil_rupiah;
     }
 }
+
+function helpDollar($money, $dollar)
+{
+    $res = round($money / $dollar, 2);
+    $res = "$ " . $res;
+
+    return $res;
+}
