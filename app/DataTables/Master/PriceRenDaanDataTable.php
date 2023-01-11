@@ -40,7 +40,7 @@ class PriceRenDaanDataTable extends DataTable
                 if ($this->currency == 'Rupiah'){
                     return rupiah($query->price_rendaan_value);
                 }elseif ($this->currency == 'Dollar'){
-                    return $query->price_rendaan_value / $query->usd_rate;
+                    return helpDollar($query->price_rendaan_value , $query->usd_rate);
                 }
             })
             ->addColumn('material', function ($query){

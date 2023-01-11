@@ -56,7 +56,7 @@ class H_PriceRenDaanDataTable extends DataTable
                 if ($currency == 'Rupiah'){
                     return $pricerendaanAsumsi ? rupiah($pricerendaanAsumsi->price_rendaan_value) : '-';
                 }elseif ($currency == 'Dollar'){
-                    return $pricerendaanAsumsi ? $pricerendaanAsumsi->price_rendaan_value / $pricerendaanAsumsi->usd_rate : '-';
+                    return $pricerendaanAsumsi ? helpDollar($pricerendaanAsumsi->price_rendaan_value, $pricerendaanAsumsi->usd_rate) : '-';
                 }
 
             });
