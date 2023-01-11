@@ -47,7 +47,7 @@
         var table_main_dt = '<table id="dt_region" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="nama" class="text-center">NAMA</th>' +
+            '<th data-type="text" data-name="nama" class="text-center">KODE</th>' +
             '<th data-type="text" data-name="deskripsi" class="text-center">DESKRIPSI</th>' +
             '<th data-type="select" data-name="status" class="text-center">STATUS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +

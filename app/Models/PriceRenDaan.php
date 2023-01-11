@@ -14,7 +14,7 @@ class PriceRenDaan extends Model
     protected $fillable = [
         'company_code',
         'material_code',
-        'region_id',
+        'region_name',
         'version_id',
         'asumsi_umum_id',
         'price_rendaan_value',

@@ -15,8 +15,8 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Nama Region </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="Nama Region" value="{{$model->region_name}}" name="detail_nama_region" id="detail_nama_region" autocomplete="off">
+                                <label>Kode Region </label>
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="Kode Region" value="{{$model->region_name}}" name="detail_nama_region" id="detail_nama_region" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Region Deskripsi </label>
@@ -65,8 +65,8 @@
                         <div class="col-md-12" style="text-align: start;">
 {{--                            <input type="text" class="form-control form-control-sm d-none" placeholder="Nama Region" value="{{$model->id}}" name="edit_id" id="edit_id" autocomplete="off">--}}
                             <div class="form-group">
-                                <label>Nama Region </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Nama Region" value="{{$model->region_name}}" name="edit_nama_region" id="edit_nama_region{{$model->id}}" autocomplete="off">
+                                <label>Kode Region </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Kode Region" value="{{$model->region_name}}" name="edit_nama_region" id="edit_nama_region{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Region Deskripsi </label>

@@ -190,7 +190,7 @@ class SelectController extends Controller
                 ->where('is_active', 't')
                 ->get();
         } else {
-            $region = Regions::where('region_name', 'ilike', '%' . $search . '%')
+            $region = Regions::where('region_desc', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
                 ->get();
@@ -199,8 +199,8 @@ class SelectController extends Controller
         $response = array();
         foreach ($region as $items) {
             $response[] = array(
-                "id" => $items->id,
-                "text" => $items->region_name
+                "id" => $items->region_name,
+                "text" => $items->region_desc
             );
         }
 

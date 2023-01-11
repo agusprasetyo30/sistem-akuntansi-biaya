@@ -548,7 +548,7 @@
                     { width: "15%", data: 'version', name: 'filter_version', orderable:true},
                     { width: "10%", data: 'periode', name: 'filter_periode', orderable:true},
                     { width: "20%", data: 'material', name: 'filter_material', orderable:true},
-                    { width: "15%", data: 'region_name', name: 'filter_region', orderable:true},
+                    { width: "15%", data: 'region_desc', name: 'filter_region', orderable:true},
                     { width: "20%", data: 'value', name: 'filter_qty_rendaan_value', orderable:true},
                     { width: "20%", data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
@@ -567,7 +567,7 @@
                 '<th class="text-center">UOM</th>'
             var column = [
                 { data: 'material', orderable:false},
-                { data: 'region_name', orderable:false},
+                { data: 'region_desc', orderable:false},
                 { data: 'uom', orderable:false},
             ]
             $("#dinamic_table").append(table);

@@ -77,7 +77,7 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
     {
         return [
             'material_code' => 'required',
-            'region_id' => 'required',
+            'region_name' => 'required',
         ];
     }
 

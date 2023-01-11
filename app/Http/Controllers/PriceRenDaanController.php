@@ -53,7 +53,7 @@ class PriceRenDaanController extends Controller
                 'company_code' => auth()->user()->company_code,
                 'version_id' => $request->version_asumsi,
                 'asumsi_umum_id' => $request->bulan,
-                'region_id' => $request->region_id,
+                'region_name' => $request->region_id,
                 'material_code' => $request->material_id
             ])->first();
 
@@ -61,7 +61,7 @@ class PriceRenDaanController extends Controller
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
-            $input['region_id'] = $request->region_id;
+            $input['region_name'] = $request->region_id;
             $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
             $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
@@ -103,7 +103,7 @@ class PriceRenDaanController extends Controller
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
-            $input['region_id'] = $request->region_id;
+            $input['region_name'] = $request->region_id;
             $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
             $input['company_code'] = 'B000';
             $input['created_by'] = auth()->user()->id;
