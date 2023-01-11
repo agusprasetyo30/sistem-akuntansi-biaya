@@ -171,14 +171,18 @@
                         html2 = '<div class="col-md-12">' +
                             '<strong>PERIODE :'+helpDateFormat(response.data['asumsi'][i]['month_year'], 'eng')+'</strong>' +
                             '</div>' +
-                            '<div class="col-sm-6 col-md-6">' +
+                            '<div class="col-sm-4 col-md-4">' +
                             '<div class="form-group">' +
                             '<label class="form-label">Kurs  <span class="text-red">*</span></label>' +
                             '<input disabled class="form-control" type="text" name="detail_currency" id="detail_currency'+i+''+{{$model->id}}+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
-                            '</div><div class="col-sm-6 col-md-6">' +
+                            '</div><div class="col-sm-4 col-md-4">' +
                             '<div class="form-group">' +
                             '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
-                            '<input disabled class="form-control" type="number" placeholder="0" required name="detail_adjustment" id="detail_adjustment'+i+''+{{$model->id}}+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
+                            '<input disabled class="form-control" type="number" placeholder="0" required name="detail_adjustment" id="detail_adjustment'+i+''+{{$model->id}}+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>' +
+                            '<div class="col-sm-4 col-md-4">' +
+                            '<div class="form-group">' +
+                            '<label class="form-label">Inflasi (%) <span class="text-red">*</span></label>' +
+                            '<input disabled class="form-control" type="number" placeholder="0" required name="detail_inflasi" id="detail_inflasi'+i+''+{{$model->id}}+'" min="0" step="0.01" title="inflasi" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
 
                         $('#detail_section_asumsi'+{{$model->id }}).append(html2);
 
@@ -196,6 +200,7 @@
 
                         $('#detail_currency'+i+{{$model->id}}).val(response.data['asumsi'][i]['usd_rate']).trigger('keyup');
                         $('#detail_adjustment'+i+{{$model->id}}).val(response.data['asumsi'][i]['adjustment']).trigger('keyup');
+                        $('#detail_inflasi'+i+{{$model->id}}).val(response.data['asumsi'][i]['inflasi']).trigger('keyup');
 
                     }
 
