@@ -269,7 +269,7 @@
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'periode', name: 'filter_periode', orderable:true},
                     { data: 'material', name: 'filter_material', orderable:true},
-                    { data: 'region_name', name: 'filter_region', orderable:true},
+                    { data: 'region_desc', name: 'filter_region', orderable:true},
                     { data: 'value', name: 'value', searchable:false, orderable:false},
                 ],
                 columnDefs:[
@@ -284,7 +284,7 @@
             var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
             var column = [
                 { data: 'material', orderable:false},
-                { data: 'region_name', orderable:false}
+                { data: 'region_desc', orderable:false}
             ]
             $("#dinamic_table").append(table);
             $.ajax({
@@ -326,11 +326,24 @@
                         },
                         columns: column,
                         createdRow: function ( row, data, index ) {
-                            console.log(data);
-                            if ( data['1'] != null ) {
-                                $('td', row).eq(3).addClass('success');
-                            } else {
-                                $('td', row).eq(3).addClass('danger');
+                            // console.log(data);
+                            // console.log(response.asumsi.length);
+                            // if ( data['1'] != null ) {
+                            //     $('td', row).eq(3).addClass('success');
+                            // } else {
+                            //     $('td', row).eq(3).addClass('danger');
+                            // }
+
+                            for (let i = 0; i < response.asumsi.length;i++){
+                                // console.log(data[i])
+                                if (data[i] === '-') {
+                                    // console.log('yah kosong')
+                                    $('td', row).eq(2+i).css('background-color', 'Red');
+                                } else {
+                                    // console.log('ada isinya loh')
+                                    $('td', row).eq(2+i).css('background-color', 'White');
+                                    // $('td', row).css('background-color', 'Green');
+                                }
                             }
                         },
                     })

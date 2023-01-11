@@ -22,11 +22,11 @@ class TotalDaanDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('qty_rendaan')
-            ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', 'asumsi_umum.adjustment', 'version_asumsi.version', 'regions.region_name')
+            ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', 'asumsi_umum.adjustment', 'version_asumsi.version', 'regions.region_desc')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_rendaan.version_id')
-            ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
+            ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
             // ->leftjoin('price_rendaan', 'price_rendaan.material_code', '=', 'qty_rendaan.material_code')
             ->where('qty_rendaan.company_code', $cc)
             ->whereNull('qty_rendaan.deleted_at');
@@ -50,7 +50,7 @@ class TotalDaanDataTable extends DataTable
                 $query2 = DB::table('price_rendaan')
                     ->select('price_rendaan.price_rendaan_value')
                     ->where('material_code', $query->material_code)
-                    ->where('region_id', $query->region_id)
+                    ->where('region_name', $query->region_name)
                     ->where('version_id', $query->version_id)
                     ->where('asumsi_umum_id', $query->asumsi_umum_id)
                     ->whereNull('price_rendaan.deleted_at')

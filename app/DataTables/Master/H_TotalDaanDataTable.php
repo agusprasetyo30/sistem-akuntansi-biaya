@@ -18,13 +18,13 @@ class H_TotalDaanDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('qty_rendaan')
-            ->select('qty_rendaan.material_code', 'qty_rendaan.region_id', 'regions.region_name', 'material.material_name')
+            ->select('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
-            ->leftjoin('regions', 'regions.id', '=', 'qty_rendaan.region_id')
+            ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
             ->whereNull('qty_rendaan.deleted_at')
             ->where('qty_rendaan.version_id', $this->version)
             ->where('qty_rendaan.company_code', $cc)
-            ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_id', 'regions.region_name', 'material.material_name');
+            ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name');
 
         $datatable = datatables()
             ->query($query)
@@ -35,6 +35,7 @@ class H_TotalDaanDataTable extends DataTable
         $asumsi = DB::table('asumsi_umum')
             ->where('version_id', $this->version)
             ->get();
+
         $rendaanValues = DB::table('qty_rendaan')
             ->whereIn('asumsi_umum_id', $asumsi->pluck('id')->all())
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
@@ -76,7 +77,7 @@ class H_TotalDaanDataTable extends DataTable
                 if ($this->val == '0') {
                     $rendaanAsumsi = $rendaanValues
                         ->where('asumsi_umum_id', $a->id)
-                        ->where('region_id', $query->region_id)
+                        ->where('region_name', $query->region_name)
                         ->where('material_code', $query->material_code)
                         ->first();
 
@@ -86,7 +87,7 @@ class H_TotalDaanDataTable extends DataTable
                     $query2 = DB::table('price_rendaan')
                         ->select('price_rendaan.price_rendaan_value')
                         ->where('material_code', $query->material_code)
-                        ->where('region_id', $query->region_id)
+                        ->where('region_name', $query->region_name)
                         ->where('version_id', $this->version)
                         ->where('asumsi_umum_id', $a->id)
                         ->whereNull('price_rendaan.deleted_at')
@@ -101,13 +102,13 @@ class H_TotalDaanDataTable extends DataTable
                     if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
                         return '-';
                     } else {
-                        $result = $val_qty_rendaan * ($val_price_daan * (1 + $val_adjustment) * $val_kurs);
+                        $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
                         return rupiah($result);
                     }
                 } elseif ($this->val == '1') {
                     $rendaanAsumsi = $rendaanValues
                         ->where('asumsi_umum_id', $a->id)
-                        ->where('region_id', $query->region_id)
+                        ->where('region_name', $query->region_name)
                         ->where('material_code', $query->material_code)
                         ->first();
 
@@ -117,7 +118,7 @@ class H_TotalDaanDataTable extends DataTable
                     $query2 = DB::table('price_rendaan')
                         ->select('price_rendaan.price_rendaan_value')
                         ->where('material_code', $query->material_code)
-                        ->where('region_id', $query->region_id)
+                        ->where('region_name', $query->region_name)
                         ->where('version_id', $this->version)
                         ->where('asumsi_umum_id', $a->id)
                         ->whereNull('price_rendaan.deleted_at')
@@ -138,7 +139,7 @@ class H_TotalDaanDataTable extends DataTable
                 } else {
                     $rendaanAsumsi = $rendaanValues
                         ->where('asumsi_umum_id', $a->id)
-                        ->where('region_id', $query->region_id)
+                        ->where('region_name', $query->region_name)
                         ->where('material_code', $query->material_code)
                         ->first();
 
@@ -148,7 +149,7 @@ class H_TotalDaanDataTable extends DataTable
                     $query2 = DB::table('price_rendaan')
                         ->select('price_rendaan.price_rendaan_value')
                         ->where('material_code', $query->material_code)
-                        ->where('region_id', $query->region_id)
+                        ->where('region_name', $query->region_name)
                         ->where('version_id', $this->version)
                         ->where('asumsi_umum_id', $a->id)
                         ->whereNull('price_rendaan.deleted_at')
