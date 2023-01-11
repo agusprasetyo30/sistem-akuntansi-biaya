@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Group Account</h4>
+        <h4 class="page-title mb-0 text-primary">General Ledger Account</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -34,8 +34,8 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.group_account.add')
-            @include('pages.master.group_account.import')
+            @include('pages.master.gl_account.add')
+            @include('pages.master.gl_account.import')
         </div> 
     </div>
 </div>
@@ -48,25 +48,41 @@
         $(document).ready(function () {
             table()
 
-            $('#is_active').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
-            $('#group_account_code').keyup(function(){
+            $('#gl_account').keyup(function(){
                 this.value = this.value.toUpperCase();
             });
+
+            $('#group_account').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Group Account',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('group_account_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
         })
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_group_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+            <table id="dt_gl_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
                     <th data-type='text' data-name='code' class="text-center">CODE</th>
                     <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
-                    <th data-type='select' data-name='status' class="text-center">STATUS</th>
+                    <th data-type='select' data-name='group_account' class="text-center">GROUP ACCOUNT</th>
                     <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                 </tr>
                 </thead>
@@ -80,13 +96,13 @@
 
 
         function get_data(){
-            $('#dt_group_account thead tr')
+            $('#dt_gl_account thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_group_account thead');
+                .appendTo('#dt_gl_account thead');
 
-            $('#dt_group_account').DataTable().clear().destroy();
-            $("#dt_group_account").DataTable({
+            // $('#dt_gl_account').DataTable().clear().destroy();
+            $("#dt_gl_account").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -138,8 +154,10 @@
                                     @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
+                                } else if(iName == 'group_account'){
+                                    input.className = "group_account_search form-control custom-select select2";
 
-                                }
+                                } 
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
@@ -151,10 +169,24 @@
                             cell.empty()
                         }
 
-                        $('.status_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
+                        $('.group_account_search').select2({
+                            placeholder: 'Pilih Group Account',
                             allowClear: false,
+                            ajax: {
+                                url: "{{ route('group_account_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
                         })
 
                     });
@@ -166,14 +198,14 @@
                         }, title: 'Group Account' }
                 ],
                 ajax: {
-                    url : '{{route("group_account")}}',
+                    url : '{{route("gl_account")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    // { data: 'DT_RowIndex', name: 'group_account_code', searchable: false, orderable:false},
-                    { data: 'group_account_code', name: 'group_account_code', orderable:true},
-                    { data: 'group_account_desc', name: 'group_account_desc', orderable:true},
-                    { data: 'status', name: 'filter_status', orderable:false},
+                    // { data: 'DT_RowIndex', name: 'gl_account', searchable: false, orderable:false},
+                    { data: 'gl_account', name: 'gl_account', orderable:true},
+                    { data: 'gl_account_desc', name: 'gl_account_desc', orderable:true},
+                    { data: 'group_account_code', name: 'filter_group_account', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
@@ -190,12 +222,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_group_account')}}',
+                url: '{{route('insert_gl_account')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    code: $('#group_account_code').val(),
-                    deskripsi: $('#group_account_desc').val(),
-                    is_active: $('#is_active').val(),
+                    gl_account: $('#gl_account').val(),
+                    gl_account_desc: $('#gl_account_desc').val(),
+                    group_account_code: $('#group_account').val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -211,7 +243,7 @@
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
                             // table()
-                            $('#dt_group_account').DataTable().ajax.reload();
+                            $('#dt_gl_account').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -233,7 +265,7 @@
                 },
                 processData: false,
                 contentType: false,
-                url: '{{route('import_group_account')}}',
+                url: '{{route('import_gl_account')}}',
                 data: file,
                 success:function (response) {
                     $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -251,7 +283,7 @@
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                             // table()
-                            $('#dt_group_account').DataTable().ajax.reload();
+                            $('#dt_gl_account').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -263,19 +295,19 @@
             })
         })
 
-        function update_group_account(id) {
+        function update_gl_account(id) {
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_group_account')}}',
+                url: '{{route('update_gl_account')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id : id,
-                    code: $('#edit_group_account_code'+id).val(),
-                    deskripsi: $('#edit_group_account_desc'+id).val(),
-                    is_active: $('#edit_is_active'+id).val(),
+                    gl_account: $('#edit_gl_account'+id).val(),
+                    gl_account_desc: $('#edit_gl_account_desc'+id).val(),
+                    group_account_code: $('#edit_group_account'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -292,7 +324,7 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             // table()
-                            $('#dt_group_account').DataTable().ajax.reload();
+                            $('#dt_gl_account').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -302,7 +334,7 @@
             })
         }
 
-        function delete_group_account(id) {
+        function delete_gl_account(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -320,7 +352,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_group_account')}}',
+                        url: '{{route('delete_gl_account')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -337,7 +369,7 @@
                             .then((result) => {
                                 if (result.value) {
                                     // table()
-                                    $('#dt_group_account').DataTable().ajax.reload();
+                                    $('#dt_gl_account').DataTable().ajax.reload();
                                 }
                             })
                         },

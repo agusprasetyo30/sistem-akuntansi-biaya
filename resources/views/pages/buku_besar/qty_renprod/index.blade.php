@@ -243,6 +243,7 @@
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -449,7 +450,8 @@
                             $("#modal_add input").val("")
 
                             update_dt_horizontal()
-                            table()
+                            // table()
+                            $('#dt_qty_renprod').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -535,7 +537,8 @@
                             $("#modal_import input").val("")
 
                             update_dt_horizontal()
-                            table()
+                            // table()
+                            $('#dt_qty_renprod').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -618,7 +621,8 @@
                             $('.modal-backdrop').remove();
                             
                             update_dt_horizontal()
-                            table()
+                            // table()
+                            $('#dt_qty_renprod').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -664,7 +668,8 @@
                             .then((result) => {
                                 if (result.value) {
                                     update_dt_horizontal()
-                                    table()
+                                    // table()
+                                    $('#dt_qty_renprod').DataTable().ajax.reload();
                                 }
                             })
                         },
