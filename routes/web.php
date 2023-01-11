@@ -30,6 +30,7 @@ use App\Http\Controllers\ZcoController;
 use App\Http\Controllers\GroupAccountFixedCostController;
 use App\Http\Controllers\CostElementController;
 use App\Http\Controllers\GeneralLedgerAccountController;
+use App\Http\Controllers\GLAccountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -184,13 +185,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GroupAccountFixedCostController::class, 'export'])->name('export_group_account_fc');
         });
 
-        Route::group(['prefix' => 'cost-element'], function () {
-            Route::get('/', [CostElementController::class, 'index'])->name('cost_element');
-            Route::post('insert', [CostElementController::class, 'create'])->name('insert_cost_element');
-            Route::post('update', [CostElementController::class, 'update'])->name('update_cost_element');
-            Route::post('delete', [CostElementController::class, 'delete'])->name('delete_cost_element');
-            Route::post('import', [CostElementController::class, 'import'])->name('import_cost_element');
-            Route::get('export', [CostElementController::class, 'export'])->name('export_cost_element');
+        Route::group(['prefix' => 'gl-account'], function () {
+            Route::get('/', [GLAccountController::class, 'index'])->name('gl_account');
+            Route::post('insert', [GLAccountController::class, 'create'])->name('insert_gl_account');
+            Route::post('update', [GLAccountController::class, 'update'])->name('update_gl_account');
+            Route::post('delete', [GLAccountController::class, 'delete'])->name('delete_gl_account');
+            Route::post('import', [GLAccountController::class, 'import'])->name('import_gl_account');
+            Route::get('export', [GLAccountController::class, 'export'])->name('export_gl_account');
         });
 
         Route::group(['prefix' => 'general-legder-account'], function () {
