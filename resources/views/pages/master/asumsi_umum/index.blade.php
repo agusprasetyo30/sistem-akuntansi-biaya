@@ -247,7 +247,28 @@
                     }else {
                         periode = moment(periode, "MM/YYYY").add(1, 'months').format('MM/YYYY');
                     }
-                    var html = '<div class="col-md-12"><strong>PERIODE :'+periode+'</strong><input readonly style="display:none;" type="text" value="'+periode+'" id="periode'+i+'"></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Kurs  <span class="text-red">*</span></label><input class="form-control" type="text" name="currency" id="currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="1.000.000.00"></div></div><div class="col-sm-6 col-md-6"><div class="form-group"><label class="form-label">Ajustment (%) <span class="text-red">*</span></label><input class="form-control" type="number" placeholder="0" required name="adjustment" id="adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>';
+                    var html = '<div class="col-md-12">' +
+                        '<strong>PERIODE :'+periode+'</strong>' +
+                        '<input readonly style="display:none;" type="text" value="'+periode+'" id="periode'+i+'">' +
+                        '</div>' +
+                        '<div class="col-sm-4 col-md-4">' +
+                        '<div class="form-group">' +
+                        '<label class="form-label">Kurs  <span class="text-red">*</span></label>' +
+                        '<input class="form-control" type="text" name="currency" id="currency'+i+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="1.000.000.00">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="col-sm-4 col-md-4">' +
+                        '<div class="form-group">' +
+                        '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
+                        '<input class="form-control" type="number" placeholder="0" required name="adjustment" id="adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="col-sm-4 col-md-4">' +
+                        '<div class="form-group">' +
+                        '<label class="form-label">Inflasi (%) <span class="text-red">*</span></label>' +
+                        '<input class="form-control" type="number" placeholder="0" required name="inflasi" id="inflasi'+i+'" min="0" step="0.01" title="inflasi" pattern="^\d+(?:\.\d{1,2})?$">' +
+                        '</div>' +
+                        '</div>';
 
                     $('#section_asumsi').append(html);
 
@@ -259,6 +280,7 @@
                             formatCurrency($(this), "blur");
                         },
                     });
+
 
                     $.ajax({
                         url: "{{ route('helper_kurs') }}",
@@ -274,10 +296,7 @@
                             $('#currency'+i).val(response.data_kurs).trigger('keyup');
                         }
                     })
-
-
                 }
-
             }
 
             $('#submit').on('click', function () {
@@ -299,18 +318,21 @@
                         for (let i = 0; i<loop; i++){
                             var kurs = $('#currency'+i).val();
                             var ajust = $('#adjustment'+i).val();
+                            var inflasi = $('#inflasi'+i).val();
                             var periode = $('#periode'+i).val();
 
-                            if (kurs !== '' && ajust !== '' && kurs !== 'Rp ,00'){
+                            if (kurs !== '' && ajust !== '' && kurs !== 'Rp ,00' && inflasi !== ''){
                                 answersList.push({
                                     kurs:kurs,
                                     adjustment: ajust,
+                                    inflasi: inflasi,
                                     peride_month: periode,
                                 });
                             }else {
                                 answersList.push({
                                     kurs:false,
                                     adjustment: false,
+                                    inflasi: false,
                                     peride_month: periode,
                                 });
                                 value = false
