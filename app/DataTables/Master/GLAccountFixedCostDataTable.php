@@ -9,7 +9,7 @@ use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\DB;
 
-class GeneralLedgerAccountDataTable extends DataTable
+class GLAccountFixedCostDataTable extends DataTable
 {
     /**
      * Build DataTable class.
@@ -21,25 +21,27 @@ class GeneralLedgerAccountDataTable extends DataTable
     {
         $cc = auth()->user()->company_code;
 
-        $query = DB::table('general_ledger_account')
-            ->select('general_ledger_account.*', 'group_account_fc.group_account_fc', 'group_account_fc.group_account_fc_desc')
-            ->leftJoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'general_ledger_account.group_account_fc')
-            ->where('general_ledger_account.company_code', $cc)
-            ->whereNull('general_ledger_account.deleted_at');
+        $query = DB::table('gl_account_fc')
+            ->select('gl_account_fc.*', 'group_account_fc.group_account_fc', 'group_account_fc.group_account_fc_desc')
+            ->leftJoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+            ->where('gl_account_fc.company_code', $cc)
+            ->whereNull('gl_account_fc.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->editColumn('group_account_fc', function ($query) {
+                return $query->group_account_fc . ' ' . $query->group_account_fc_desc;
+            })
             ->orderColumn('filter_group_account_fc', function ($query, $order) {
                 $query->orderBy('group_account_fc.group_account_fc', $order);
             })
             ->filterColumn('filter_group_account_fc', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('group_account_fc.group_account_fc', 'ilike', '%' . $keyword . '%')
-                        ->orWhere('group_account_fc.group_account_fc_desc', 'ilike', '%' . $keyword . '%');
+                    $query->where('group_account_fc.group_account_fc', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->addColumn('action', 'pages.master.general_ledger_account.action')
+            ->addColumn('action', 'pages.master.gl_account_fc.action')
             ->escapeColumns([]);
     }
 
@@ -47,7 +49,7 @@ class GeneralLedgerAccountDataTable extends DataTable
     {
         return $this->builder()
             ->addTableClass('table table-bordered text-nowrap key-buttons')
-            ->setTableId('dt_general_ledger_account')
+            ->setTableId('dt_gl_account_fc')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
@@ -88,6 +90,6 @@ class GeneralLedgerAccountDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Master\GeneralLedgerAccount_' . date('YmdHis');
+        return 'Master\GLAccountFC_' . date('YmdHis');
     }
 }

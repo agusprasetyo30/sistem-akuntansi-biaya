@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah General Ledger Account</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah General Ledger Account Fixed Cost</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -14,11 +14,11 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Code </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Kode Account" name="general_ledger_account" id="general_ledger_account" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Kode Account" name="gl_account_fc" id="gl_account_fc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Deskripsi </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Account" name="general_ledger_account_desc" id="general_ledger_account_desc" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Account" name="gl_account_fc_desc" id="gl_account_fc_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Group Account</label>

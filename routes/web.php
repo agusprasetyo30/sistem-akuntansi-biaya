@@ -28,9 +28,8 @@ use App\Http\Controllers\ConsRateController;
 use App\Http\Controllers\SalrController;
 use App\Http\Controllers\ZcoController;
 use App\Http\Controllers\GroupAccountFixedCostController;
-use App\Http\Controllers\CostElementController;
-use App\Http\Controllers\GeneralLedgerAccountController;
 use App\Http\Controllers\GLAccountController;
+use App\Http\Controllers\GLAccountFixedCostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -194,13 +193,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GLAccountController::class, 'export'])->name('export_gl_account');
         });
 
-        Route::group(['prefix' => 'general-legder-account'], function () {
-            Route::get('/', [GeneralLedgerAccountController::class, 'index'])->name('general_legder_account');
-            Route::post('insert', [GeneralLedgerAccountController::class, 'create'])->name('insert_general_legder_account');
-            Route::post('update', [GeneralLedgerAccountController::class, 'update'])->name('update_general_legder_account');
-            Route::post('delete', [GeneralLedgerAccountController::class, 'delete'])->name('delete_general_legder_account');
-            Route::post('import', [GeneralLedgerAccountController::class, 'import'])->name('import_general_legder_account');
-            Route::get('export', [GeneralLedgerAccountController::class, 'export'])->name('export_general_legder_account');
+        Route::group(['prefix' => 'gl-account-fc'], function () {
+            Route::get('/', [GLAccountFixedCostController::class, 'index'])->name('gl_account_fc');
+            Route::post('insert', [GLAccountFixedCostController::class, 'create'])->name('insert_gl_account_fc');
+            Route::post('update', [GLAccountFixedCostController::class, 'update'])->name('update_gl_account_fc');
+            Route::post('delete', [GLAccountFixedCostController::class, 'delete'])->name('delete_gl_account_fc');
+            Route::post('import', [GLAccountFixedCostController::class, 'import'])->name('import_gl_account_fc');
+            Route::get('export', [GLAccountFixedCostController::class, 'export'])->name('export_gl_account_fc');
         });
 
         Route::group(['prefix' => 'asumsi_umum'], function () {

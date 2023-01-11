@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">General Ledger Account</h4>
+        <h4 class="page-title mb-0 text-primary">General Ledger Account Fixed Cost</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -34,8 +34,8 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.general_ledger_account.add')
-            @include('pages.master.general_ledger_account.import')
+            @include('pages.master.gl_account_fc.add')
+            @include('pages.master.gl_account_fc.import')
         </div> 
     </div>
 </div>
@@ -48,7 +48,7 @@
         $(document).ready(function () {
             table()
 
-            $('#general_ledger_account').keyup(function(){
+            $('#gl_account_fc').keyup(function(){
                 this.value = this.value.toUpperCase();
             });
 
@@ -77,7 +77,7 @@
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_general_ledger_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+            <table id="dt_gl_account_fc" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
                     <th data-type='text' data-name='code' class="text-center">CODE</th>
@@ -96,13 +96,13 @@
 
 
         function get_data(){
-            $('#dt_general_ledger_account thead tr')
+            $('#dt_gl_account_fc thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_general_ledger_account thead');
+                .appendTo('#dt_gl_account_fc thead');
 
-            // $('#dt_general_ledger_account').DataTable().clear().destroy();
-            $("#dt_general_ledger_account").DataTable({
+            // $('#dt_gl_account_fc').DataTable().clear().destroy();
+            $("#dt_gl_account_fc").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -198,13 +198,13 @@
                         }, title: 'Group Account' }
                 ],
                 ajax: {
-                    url : '{{route("general_legder_account")}}',
+                    url : '{{route("gl_account_fc")}}',
                     data: {data:'index'}
                 },
                 columns: [
                     // { data: 'DT_RowIndex', name: 'general_ledger_account', searchable: false, orderable:false},
-                    { data: 'general_ledger_account', name: 'general_ledger_account', orderable:true},
-                    { data: 'general_ledger_account_desc', name: 'general_ledger_account_desc', orderable:true},
+                    { data: 'gl_account_fc', name: 'gl_account_fc', orderable:true},
+                    { data: 'gl_account_fc_desc', name: 'gl_account_fc_desc', orderable:true},
                     { data: 'group_account_fc', name: 'filter_group_account_fc', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
@@ -222,11 +222,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_general_legder_account')}}',
+                url: '{{route('insert_gl_account_fc')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    general_ledger_account: $('#general_ledger_account').val(),
-                    general_ledger_account_desc: $('#general_ledger_account_desc').val(),
+                    gl_account_fc: $('#gl_account_fc').val(),
+                    gl_account_fc_desc: $('#gl_account_fc_desc').val(),
                     group_account_fc: $('#group_account_fc').val(),
                 },
                 success: function (response) {
@@ -243,7 +243,7 @@
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
                             // table()
-                            $('#dt_general_ledger_account').DataTable().ajax.reload();
+                            $('#dt_gl_account_fc').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -265,7 +265,7 @@
                 },
                 processData: false,
                 contentType: false,
-                url: '{{route('import_general_legder_account')}}',
+                url: '{{route('import_gl_account_fc')}}',
                 data: file,
                 success:function (response) {
                     $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -283,7 +283,7 @@
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                             // table()
-                            $('#dt_general_ledger_account').DataTable().ajax.reload();
+                            $('#dt_gl_account_fc').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -295,18 +295,18 @@
             })
         })
 
-        function update_general_ledger_account(id) {
+        function update_gl_account_fc(id) {
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_general_legder_account')}}',
+                url: '{{route('update_gl_account_fc')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id : id,
-                    general_ledger_account: $('#edit_general_ledger_account'+id).val(),
-                    general_ledger_account_desc: $('#edit_general_ledger_account_desc'+id).val(),
+                    gl_account_fc: $('#edit_gl_account_fc'+id).val(),
+                    gl_account_fc_desc: $('#edit_gl_account_fc_desc'+id).val(),
                     group_account_fc: $('#edit_group_account_fc'+id).val(),
                 },
                 success: function (response) {
@@ -324,7 +324,7 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             // table()
-                            $('#dt_general_ledger_account').DataTable().ajax.reload();
+                            $('#dt_gl_account_fc').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -334,7 +334,7 @@
             })
         }
 
-        function delete_general_ledger_account(id) {
+        function delete_gl_account_fc(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -352,7 +352,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_general_legder_account')}}',
+                        url: '{{route('delete_gl_account_fc')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -369,7 +369,7 @@
                             .then((result) => {
                                 if (result.value) {
                                     // table()
-                                    $('#dt_general_ledger_account').DataTable().ajax.reload();
+                                    $('#dt_gl_account_fc').DataTable().ajax.reload();
                                 }
                             })
                         },

@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class GeneralLedgerAccount extends Model
+class GLAccountFC extends Model
 {
     use HasFactory;
-    protected $table = 'general_ledger_account';
-    protected $primaryKey = 'general_ledger_account';
+    protected $table = 'gl_account_fc';
+    protected $primaryKey = 'gl_account_fc';
 
     protected $fillable = [
-        'general_ledger_account',
-        'general_ledger_account_desc',
+        'gl_account_fc',
+        'gl_account_fc_desc',
         'group_account_fc',
         'company_code',
         'created_by',

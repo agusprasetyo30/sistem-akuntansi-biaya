@@ -2,49 +2,49 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\Master\GeneralLedgerAccountDataTable;
-use App\Exports\MultipleSheet\MS_GeneralLedgerAccountExport;
-use App\Imports\GeneralLedgerAccountImport;
-use App\Models\GeneralLedgerAccount;
+use App\DataTables\Master\GLAccountFixedCostDataTable;
+use App\Exports\MultipleSheet\MS_GLAccountFCExport;
+use App\Imports\GLAccountFCImport;
+use App\Models\GLAccountFC;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Validator;
 
-class GeneralLedgerAccountController extends Controller
+class GLAccountFixedCostController extends Controller
 {
-    public function index(Request $request, GeneralLedgerAccountDataTable $generalledgeraccountDataTable)
+    public function index(Request $request, GLAccountFixedCostDataTable $glaccountfcDataTable)
     {
         if ($request->data == 'index') {
-            return $generalledgeraccountDataTable->render('pages.master.general_ledger_account.index');
+            return $glaccountfcDataTable->render('pages.master.gl_account_fc.index');
         }
-        return view('pages.master.general_ledger_account.index');
+        return view('pages.master.gl_account_fc.index');
     }
 
     public function create(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'general_ledger_account' => 'required|unique:general_ledger_account,general_ledger_account',
-                'general_ledger_account_desc' => 'required',
+                'gl_account_fc' => 'required|unique:gl_account_fc,gl_account_fc',
+                'gl_account_fc_desc' => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $code = str_replace(" ", "", $request->general_ledger_account);
+            $code = str_replace(" ", "", $request->gl_account_fc);
 
             $input['company_code'] = auth()->user()->company_code;
-            $input['general_ledger_account'] = $code;
-            $input['general_ledger_account_desc'] = $request->general_ledger_account_desc;
+            $input['gl_account_fc'] = $code;
+            $input['gl_account_fc_desc'] = $request->gl_account_fc_desc;
             $input['group_account_fc'] = $request->group_account_fc;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            GeneralLedgerAccount::create($input);
+            GLAccountFC::create($input);
 
             return setResponse([
                 'code' => 200,
@@ -60,7 +60,7 @@ class GeneralLedgerAccountController extends Controller
     public function update(Request $request)
     {
         try {
-            $data = GeneralLedgerAccount::where('general_ledger_account', $request->post('id'))->first();
+            $data = GLAccountFC::where('gl_account_fc', $request->post('id'))->first();
 
             if (!$data)
                 return setResponse([
@@ -68,28 +68,28 @@ class GeneralLedgerAccountController extends Controller
                     'title' => 'Data Tidak Ditemukan!'
                 ]);
 
-            $required['general_ledger_account_desc'] = 'required';
+            $required['gl_account_fc_desc'] = 'required';
 
-            if ($data->general_ledger_account != $request->post('general_ledger_account'))
-                $required['general_ledger_account'] = 'required|unique:general_ledger_account,general_ledger_account';
+            if ($data->gl_account_fc != $request->post('gl_account_fc'))
+                $required['gl_account_fc'] = 'required|unique:gl_account_fc,gl_account_fc';
 
             $validator = Validator::make($request->all(), $required, validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $code = str_replace(" ", "", $request->general_ledger_account);
+            $code = str_replace(" ", "", $request->gl_account_fc);
 
             $input['company_code'] = auth()->user()->company_code;
-            $input['general_ledger_account'] = $code;
-            $input['general_ledger_account_desc'] = $request->general_ledger_account_desc;
+            $input['gl_account_fc'] = $code;
+            $input['gl_account_fc_desc'] = $request->gl_account_fc_desc;
             $input['group_account_fc'] = $request->group_account_fc;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
 
-            DB::table('general_ledger_account')
-                ->where('general_ledger_account', $request->id)->update($input);
+            DB::table('gl_account_fc')
+                ->where('gl_account_fc', $request->id)->update($input);
 
             return setResponse([
                 'code' => 200,
@@ -105,7 +105,7 @@ class GeneralLedgerAccountController extends Controller
     public function delete(Request $request)
     {
         try {
-            // $group_account = GeneralLedgerAccount::get_account($request->id);
+            // $group_account = GLAccountFC::get_account($request->id);
 
             // if ($group_account) {
             //     return setResponse([
@@ -113,7 +113,7 @@ class GeneralLedgerAccountController extends Controller
             //         'title' => 'Account masih digunakan, Account hanya bisa dinonaktifkan!'
             //     ]);
             // } else {
-            GeneralLedgerAccount::where('general_ledger_account', $request->id)->delete();
+            GLAccountFC::where('gl_account_fc', $request->id)->delete();
 
             return setResponse([
                 'code' => 200,
@@ -138,7 +138,7 @@ class GeneralLedgerAccountController extends Controller
                 return $this->makeValidMsg($validator);
 
             $file = $request->file('file')->store('import');
-            $import = new GeneralLedgerAccountImport;
+            $import = new GLAccountFCImport;
             $import->import($file);
 
             $data_fail = $import->failures();
@@ -172,6 +172,6 @@ class GeneralLedgerAccountController extends Controller
 
     public function export()
     {
-        return Excel::download(new MS_GeneralLedgerAccountExport, 'general_ledger_account.xlsx');
+        return Excel::download(new MS_GLAccountFCExport, 'gl_account_fc.xlsx');
     }
 }
