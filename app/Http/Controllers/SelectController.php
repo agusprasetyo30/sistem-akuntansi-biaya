@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asumsi_Umum;
+use App\Models\CostCenter;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriMaterial;
@@ -304,6 +305,30 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function cost_center(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $cost_center = CostCenter::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $cost_center = CostCenter::where('cost_center', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($cost_center as $items) {
+            $response[] = array(
+                "id" => $items->cost_center,
+                "text" => $items->cost_center . ' ' . $items->cost_center_desc,
+            );
+        }
+
+        return response()->json($response);
+    }
 
 
     //    Helper
@@ -549,6 +574,36 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->group_account_fc,
                 "text" => $items->group_account_fc . ' - ' . $items->group_account_fc_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function cost_center_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $group_acc = CostCenter::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_acc = CostCenter::where('cost_center', 'ilike', '%' . $search . '%')
+                ->orWhere('cost_center_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($group_acc as $items) {
+            $response[] = array(
+                "id" => $items->cost_center,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc
             );
         }
 

@@ -21,8 +21,8 @@ class QtyRenProdDataTable extends DataTable
     {
         $cc = auth()->user()->company_code;
 
-        $query = DB::table('qty_renprod')->select('qty_renprod.*', 'material.material_name', 'material.material_code', 'version_asumsi.version', 'asumsi_umum.month_year')
-            ->leftjoin('material', 'material.material_code', '=', 'qty_renprod.material_code')
+        $query = DB::table('qty_renprod')->select('qty_renprod.*', 'cost_center.cost_center', 'cost_center.cost_center_desc', 'version_asumsi.version', 'asumsi_umum.month_year')
+            ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_renprod.version_id')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_renprod.asumsi_umum_id')
             ->where('qty_renprod.company_code', $cc)
@@ -35,13 +35,13 @@ class QtyRenProdDataTable extends DataTable
                 return format_month($query->month_year, 'bi');
             })
             ->editColumn('qty_renprod_value', function ($query) {
-                return rupiah($query->qty_renprod_value);
+                return $query->qty_renprod_value;
             })
-            ->editColumn('material_name', function ($query) {
-                return $query->material_code . ' ' . $query->material_name;
+            ->editColumn('cost_center', function ($query) {
+                return $query->cost_center . ' ' . $query->cost_center_desc;
             })
-            ->orderColumn('filter_material', function ($query, $order) {
-                $query->orderBy('material.material_code', $order);
+            ->orderColumn('filter_cost_center', function ($query, $order) {
+                $query->orderBy('cost_center.cost_center', $order);
             })
             ->orderColumn('filter_version', function ($query, $order) {
                 $query->orderBy('version_asumsi.id', $order);
@@ -52,16 +52,15 @@ class QtyRenProdDataTable extends DataTable
             ->orderColumn('filter_qty_renprod_value', function ($query, $order) {
                 $query->orderBy('qty_renprod.qty_renprod_value', $order);
             })
-            ->filterColumn('filter_material', function ($query, $keyword) {
+            ->filterColumn('filter_cost_center', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('material.material_code', 'ilike', '%' . $keyword . '%')
-                        ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
+                    $query->where('cost_center.cost_center', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('cost_center.cost_center_desc', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->filterColumn('filter_version', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%')
-                        ->orWhere('version_asumsi.version', 'ilike', '%' . $keyword . '%');
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->filterColumn('filter_month_year', function ($query, $keyword) {

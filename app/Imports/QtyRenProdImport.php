@@ -59,7 +59,7 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
             // $dt = date_format($arrHeader[$i], "Y-m-01");
             $list = [
                 'company_code' => auth()->user()->company_code,
-                'material_code' => $arr[0],
+                'cost_center' => $arr[0],
                 'version_id' => $this->version,
                 'asumsi_umum_id' => $verasum->id,
                 'qty_renprod_value' => (float) $arr[$i],
@@ -84,7 +84,7 @@ class QtyRenProdImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
     public function rules(): array
     {
         return [
-            'material_code' => ['required'],
+            'cost_center' => ['required'],
         ];
     }
 

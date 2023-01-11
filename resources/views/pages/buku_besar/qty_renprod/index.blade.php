@@ -81,13 +81,13 @@
                 table()
             })
 
-            $('#data_main_material').select2({
+            $('#data_main_cost_center').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Material',
+                placeholder: 'Pilih Cost Center',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('material_select') }}",
+                    url: "{{ route('cost_center_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -174,10 +174,10 @@
                 $("#submit-export").css("display", "block");
             })
 
-            $('#qty_renprod_value').on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp ")
-                $(this).val(rupiah)
-            });
+            // $('#qty_renprod_value').on('keyup', function(){
+            //     let rupiah = formatRupiah($(this).val(), "Rp ")
+            //     $(this).val(rupiah)
+            // });
 
             $('#filter_version').select2({
                 placeholder: 'Pilih Versi',
@@ -212,7 +212,7 @@
                 <tr>
                     <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
-                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                    <th data-type='select' data-name='cost_center' class="text-center">COST CENTER</th>
                     <th data-type='text' data-name='qty_renprod_value' class="text-center">VALUE</th>
                     <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                 </tr>
@@ -279,8 +279,8 @@
                             } else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
-                                if (iName == 'material'){
-                                    input.className = "material_search form-control custom-select select2";
+                                if (iName == 'cost_center'){
+                                    input.className = "cost_center_search form-control custom-select select2";
 
                                 } else if(iName == 'version'){
                                     input.className = "version_search form-control custom-select select2";
@@ -297,11 +297,11 @@
                             cell.empty()
                         }
 
-                        $('.material_search').select2({
-                            placeholder: 'Pilih Material',
+                        $('.cost_center_search').select2({
+                            placeholder: 'Pilih Cost Center',
                             allowClear: false,
                             ajax: {
-                                url: "{{ route('material_dt') }}",
+                                url: "{{ route('cost_center_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -353,12 +353,12 @@
                     // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'filter_month_year', orderable:true},
-                    { data: 'material_name', name: 'filter_material', orderable:true},
+                    { data: 'cost_center', name: 'filter_cost_center', orderable:true},
                     { data: 'qty_renprod_value', name: 'filter_qty_renprod_value', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,4]}
+                    {className: 'text-center', targets: [0,1,3,4]}
                 ],
 
             })
@@ -366,9 +366,9 @@
 
         function get_data_horiz(){
             var table = '<table id="h_dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">MATERIAL</th>'
+            var kolom = '<th class="text-center">COST CENTER</th>'
             var column = [
-                { data: 'material', orderable:false},
+                { data: 'cost_center', orderable:false},
             ]
             $("#dinamic_table").append(table);
             $.ajax({
@@ -429,7 +429,7 @@
                 url: '{{route('insert_qty_renprod')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    material_code: $('#data_main_material').val(),
+                    cost_center: $('#data_main_cost_center').val(),
                     qty_renprod_value: $('#qty_renprod_value').val(),
                     version_id: $('#data_main_version').val(),
                     month_year: $('#data_detail_version').val(),
@@ -596,7 +596,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    material_code: $('#edit_data_main_material'+id).val(),
+                    cost_center: $('#edit_data_main_cost_center'+id).val(),
                     qty_renprod_value: $('#edit_qty_renprod_value'+id).val(),
                     version_id: $('#edit_data_main_version'+id).val(),
                     month_year:$('#edit_data_detail_version'+id).val(),

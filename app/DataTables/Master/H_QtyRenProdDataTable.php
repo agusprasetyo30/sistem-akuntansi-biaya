@@ -17,22 +17,23 @@ class H_QtyRenProdDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('qty_renprod')
-            ->select('qty_renprod.material_code', 'material.material_name')
-            ->leftjoin('material', 'material.material_code', '=', 'qty_renprod.material_code')
+            ->select('qty_renprod.cost_center', 'cost_center.cost_center_desc')
+            ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
             ->whereNull('qty_renprod.deleted_at')
             ->where('qty_renprod.version_id', $this->version)
             ->where('qty_renprod.company_code', $cc)
-            ->groupBy('qty_renprod.material_code', 'material.material_name');
+            ->groupBy('qty_renprod.cost_center', 'cost_center.cost_center_desc');
 
         $datatable = datatables()
             ->query($query)
-            ->addColumn('material', function ($query) {
-                return $query->material_code . ' - ' . $query->material_name;
+            ->addColumn('cost_center', function ($query) {
+                return $query->cost_center . ' ' . $query->cost_center_desc;
             });
 
         $asumsi = DB::table('asumsi_umum')
             ->where('version_id', $this->version)
             ->get();
+
         $renprodValues = DB::table('qty_renprod')
             ->whereIn('asumsi_umum_id', $asumsi->pluck('id')->all())
             ->get();
@@ -41,10 +42,10 @@ class H_QtyRenProdDataTable extends DataTable
             $datatable->addColumn($key, function ($query) use ($renprodValues, $a) {
                 $renprodAsumsi = $renprodValues
                     ->where('asumsi_umum_id', $a->id)
-                    ->where('material_code', $query->material_code)
+                    ->where('cost_center', $query->cost_center)
                     ->first();
 
-                return $renprodAsumsi ? rupiah($renprodAsumsi->qty_renprod_value) : '-';
+                return $renprodAsumsi ? $renprodAsumsi->qty_renprod_value : '-';
             });
         }
 
