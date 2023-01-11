@@ -151,6 +151,7 @@
                 processing: true,
                 serverSide: true,
                 order:[[0, 'desc']],
+                deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
@@ -331,7 +332,8 @@
                         if (result.value) {
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
-                            table()
+                            // table()
+                            $('#dt_material').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -369,7 +371,8 @@
                         if (result.value) {
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
-                            table()
+                            // table()
+                            $('#dt_material').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -414,7 +417,8 @@
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
-                            table()
+                            // table()
+                            $('#dt_material').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -458,7 +462,8 @@
                             })
                             .then((result) => {
                                 if (result.value) {
-                                    table()
+                                    // table()
+                                    $('#dt_material').DataTable().ajax.reload();
                                 }
                             })
                         },
