@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Group Account</h5>
+                <h5 class="modal-title" id="largemodal1">Import Group Account Fixed Cost</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -17,7 +17,7 @@
                                 <div class="col-lg mb-3">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template  ( <a href="{{ route('export_general_legder_account') }}">Download Template</a> )</li>
+                                        <li>Format harus sesuai template  ( <a href="{{ route('export_gl_account_fc') }}">Download Template</a> )</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol> 
                                 </div>

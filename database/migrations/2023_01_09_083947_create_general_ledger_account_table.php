@@ -13,9 +13,9 @@ class CreateGeneralLedgerAccountTable extends Migration
      */
     public function up()
     {
-        Schema::create('general_ledger_account', function (Blueprint $table) {
-            $table->string('general_ledger_account')->primary();
-            $table->string('general_ledger_account_desc');
+        Schema::create('gl_account_fc', function (Blueprint $table) {
+            $table->string('gl_account_fc')->primary();
+            $table->string('gl_account_fc_desc');
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
             $table->string('group_account_fc')->unsigned();
@@ -35,6 +35,6 @@ class CreateGeneralLedgerAccountTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('general_ledger_account');
+        Schema::dropIfExists('gl_account_fc');
     }
 }
