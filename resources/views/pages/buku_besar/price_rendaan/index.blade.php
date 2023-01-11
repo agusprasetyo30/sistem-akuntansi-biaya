@@ -75,7 +75,7 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_price_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+        var table_main_dt = '<table id="dt_price_rendaan" class="table table-bordered text-wrap wrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
@@ -536,6 +536,26 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
+                    {
+                        extend: 'collection',
+                        className: 'mb-5',
+                        text:'Mata Uang',
+                        buttons:[
+                            {
+                                text:'Rupiah',
+                                action: function () {
+                                    $('#dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();
+                                }
+                            },
+                            {
+                                text:'Dollar',
+                                action: function () {
+                                    $('#dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();
+                                }
+                            }
+                        ]
+
+                    },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3,4]
                     }, title: 'Price Rencana Pengadaan'  }
@@ -549,7 +569,7 @@
                     { width: "10%", data: 'periode', name: 'filter_periode', orderable:true},
                     { width: "20%", data: 'material', name: 'filter_material', orderable:true},
                     { width: "15%", data: 'region_desc', name: 'filter_region', orderable:true},
-                    { width: "20%", data: 'value', name: 'price_rendaan_value', orderable:true},
+                    { width: "20%", data: 'value', name: 'price_rendaan_value', orderable:true, searchable: false},
                     { width: "20%", data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
@@ -593,6 +613,26 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
+                            {
+                                extend: 'collection',
+                                className: 'mb-5',
+                                text:'Mata Uang',
+                                buttons:[
+                                    {
+                                        text:'Rupiah',
+                                        action: function () {
+                                            $('#h_dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();
+                                        }
+                                    },
+                                    {
+                                        text:'Dollar',
+                                        action: function () {
+                                            $('#h_dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();
+                                        }
+                                    }
+                                ]
+
+                            },
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {

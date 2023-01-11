@@ -539,6 +539,8 @@
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3,4]
                     }, title: 'Kuantiti Rencana Pengadaan'  }
+
+
                 ],
                 ajax: {
                     url : '{{route("qty_rendaan")}}',
