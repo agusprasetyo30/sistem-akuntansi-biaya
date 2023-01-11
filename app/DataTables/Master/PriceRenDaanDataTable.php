@@ -20,7 +20,7 @@ class PriceRenDaanDataTable extends DataTable
     public function dataTable($query)
     {
         $query = DB::table('price_rendaan')
-            ->select('price_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_desc')
+            ->select('price_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version', 'regions.region_desc', 'asumsi_umum.usd_rate')
             ->leftjoin('material', 'material.material_code', '=', 'price_rendaan.material_code')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'price_rendaan.version_id')
@@ -37,7 +37,11 @@ class PriceRenDaanDataTable extends DataTable
                 return format_month($query->month_year,'bi');
             })
             ->addColumn('value', function ($query){
-                return rupiah($query->price_rendaan_value);
+                if ($this->currency == 'Rupiah'){
+                    return rupiah($query->price_rendaan_value);
+                }elseif ($this->currency == 'Dollar'){
+                    return $query->price_rendaan_value / $query->usd_rate;
+                }
             })
             ->addColumn('material', function ($query){
                 return $query->material_code.' - '.$query->material_name;

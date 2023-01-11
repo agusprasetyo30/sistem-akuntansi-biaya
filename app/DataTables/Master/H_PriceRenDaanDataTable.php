@@ -38,18 +38,27 @@ class H_PriceRenDaanDataTable extends DataTable
             ->where('version_id', $this->version)
             ->get();
         $pricerendaanValues = DB::table('price_rendaan')
+            ->select('price_rendaan.*', 'asumsi_umum.usd_rate')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')
             ->whereIn('asumsi_umum_id', $asumsi->pluck('id')->all())
             ->get();
 
+        $currency = $this->currency;
+
         foreach ($asumsi as $key => $a) {
-            $datatable->addColumn($key, function ($query) use ($pricerendaanValues, $a) {
+            $datatable->addColumn($key, function ($query) use ($pricerendaanValues, $a, $currency) {
                 $pricerendaanAsumsi = $pricerendaanValues
                     ->where('asumsi_umum_id', $a->id)
                     ->where('region_name', $query->region_name)
                     ->where('material_code', $query->material_code)
                     ->first();
 
-                return $pricerendaanAsumsi ? rupiah($pricerendaanAsumsi->price_rendaan_value) : '-';
+                if ($currency == 'Rupiah'){
+                    return $pricerendaanAsumsi ? rupiah($pricerendaanAsumsi->price_rendaan_value) : '-';
+                }elseif ($currency == 'Dollar'){
+                    return $pricerendaanAsumsi ? $pricerendaanAsumsi->price_rendaan_value / $pricerendaanAsumsi->usd_rate : '-';
+                }
+
             });
         }
 
