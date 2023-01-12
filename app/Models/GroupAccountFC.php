@@ -11,6 +11,7 @@ class GroupAccountFC extends Model
     use HasFactory;
     protected $table = 'group_account_fc';
     protected $primaryKey = 'group_account_fc';
+    protected $keyType = 'string';
 
     protected $fillable = [
         'group_account_fc',

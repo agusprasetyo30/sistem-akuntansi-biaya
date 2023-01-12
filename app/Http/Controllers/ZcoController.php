@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\H_ZcoDataTable;
 use App\DataTables\Master\ZcoDataTable;
+use App\Exports\MultipleSheet\MS_ZcoExport;
+use App\Imports\ZcoImport;
 use App\Models\Zco;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -124,91 +126,52 @@ class ZcoController extends Controller
         }
     }
 
-    // public function import(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         "file" => 'required',
-    //         "version" => 'required',
-    //     ], validatorMsg());
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            "file" => 'required',
+        ], validatorMsg());
 
-    //     if ($validator->fails())
-    //         return $this->makeValidMsg($validator);
+        if ($validator->fails())
+            return $this->makeValidMsg($validator);
 
-    //     try {
-    //         DB::transaction(function () use ($request) {
-    //             $version = $request->version;
-    //             // $excel = Excel::toArray(new QtyRenProdImport($version), $request->file);
-    //             // $colect = collect($excel[0]);
-    //             // $header = array_keys($colect[0]);
-    //             // $data_versi = explode('_', $header[1]);
-    //             // $version = Asumsi_Umum::where('id', $data_versi[2])->first();
-    //             QtyRenProd::where('version_id', $version)->delete();
+        try {
+            DB::transaction(function () use ($request) {
+                $file = $request->file('file')->store('import');
+                $import = new ZcoImport();
+                $import->import($file);
 
-    //             $file = $request->file('file')->store('import');
-    //             $import = new QtyRenProdImport($version);
-    //             $import->import($file);
+                $data_fail = $import->failures();
 
-    //             $data_fail = $import->failures();
+                if ($import->failures()->isNotEmpty()) {
+                    $err = [];
 
-    //             if ($import->failures()->isNotEmpty()) {
-    //                 $err = [];
+                    foreach ($data_fail as $rows) {
+                        $er = implode(' ', array_values($rows->errors()));
+                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                        array_push($err, $hasil);
+                    }
+                    // dd(implode(' ', $err));
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                    ]);
+                }
+            });
 
-    //                 foreach ($data_fail as $rows) {
-    //                     $er = implode(' ', array_values($rows->errors()));
-    //                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-    //                     array_push($err, $hasil);
-    //                 }
-    //                 // dd(implode(' ', $err));
-    //                 return setResponse([
-    //                     'code' => 500,
-    //                     'title' => 'Gagal meng-import data',
-    //                 ]);
-    //             }
-    //         });
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
+        } catch (Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
 
-    //         return setResponse([
-    //             'code' => 200,
-    //             'title' => 'Berhasil meng-import data'
-    //         ]);
-    //     } catch (Exception $exception) {
-    //         return setResponse([
-    //             'code' => 400,
-    //         ]);
-    //     }
-    // }
-
-    // public function export(Request $request)
-    // {
-    //     if (!$request->version) {
-    //         return setResponse([
-    //             'code' => 500,
-    //         ]);
-    //     }
-    //     $version = $request->version;
-
-    //     return Excel::download(new MS_KuantitiRenProdExport($version), 'qty_renprod.xlsx');
-    // }
-
-    // public function check(Request $request)
-    // {
-    //     try {
-    //         $check = QtyRenProd::where('version_id', $request->version)
-    //             ->first();
-    //         if ($check == null) {
-    //             return setResponse([
-    //                 'code' => 200,
-    //             ]);
-    //         } else {
-    //             return setResponse([
-    //                 'code' => 201,
-    //                 'title' => 'Apakah anda yakin?',
-    //                 'message' => 'Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?'
-    //             ]);
-    //         }
-    //     } catch (\Exception $exception) {
-    //         return setResponse([
-    //             'code' => 400,
-    //         ]);
-    //     }
-    // }
+    public function export(Request $request)
+    {
+        return Excel::download(new MS_ZcoExport(), 'zco.xlsx');
+    }
 }

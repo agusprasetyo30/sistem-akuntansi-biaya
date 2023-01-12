@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Kuantiti Rencana Produksi</h5>
+                <h5 class="modal-title" id="largemodal1">Import ZCO</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -17,20 +17,11 @@
                                 <div class="col-lg mb-5">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template</li>
-                                        <li>Template akan tersedia setelah memilih versi</li>
-                                        <li>Jika data value "kosong" maka data akan terisi '0'</li>
+                                        
+                                        <li>Format harus sesuai template  ( <a href="#" id="submit-export">Download Template</a> )</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
-                                        <li>Kode Cost Center harus sama dengan kode pada Master Cost Center (data tersedia ditemplate)</li>
                                     </ol> 
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">Versi Asumsi</label>
-                                    <select name="version" id="version" class="form-control form-control-sm custom-select select2">
-                                        <option value="" disabled selected>Pilih Versi</option>
-                                    </select>
-                                    <button style="display: none;" type="button" class="btn btn-primary mt-2" id="submit-export"><i class="fe fe-download me-2"></i>Download Template</button>
-                                </div>  
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
                                 </div>
