@@ -245,6 +245,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
             Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
             Route::get('/cost_center_dt', [SelectController::class, 'cost_center_dt'])->name('cost_center_dt');
+            Route::get('/cost_element_dt', [SelectController::class, 'cost_element_dt'])->name('cost_element_dt');
         });
     });
 

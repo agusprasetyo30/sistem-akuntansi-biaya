@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
+use App\Models\GLAccount;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriMaterial;
@@ -367,10 +368,10 @@ class SelectController extends Controller
     {
         $data = explode('/', $request->periode);
 
-        if (strlen($data[0])==1){
-            $date = $data[1].'-0'.$data[0].'-01';
-        }else{
-            $date = $data[1].'-'.$data[0].'-01';
+        if (strlen($data[0]) == 1) {
+            $date = $data[1] . '-0' . $data[0] . '-01';
+        } else {
+            $date = $data[1] . '-' . $data[0] . '-01';
         }
 
         $kurs = DB::table('kurs')
@@ -608,6 +609,37 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->cost_center,
                 "text" => $items->cost_center . ' - ' . $items->cost_center_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+
+    public function cost_element_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $group_acc = GLAccount::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_acc = GLAccount::where('gl_account', 'ilike', '%' . $search . '%')
+                ->orWhere('gl_account_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($group_acc as $items) {
+            $response[] = array(
+                "id" => $items->gl_account,
+                "text" => $items->gl_account . ' - ' . $items->gl_account_desc
             );
         }
 
