@@ -41,16 +41,13 @@ class SalrDataTable extends DataTable
                 return rupiah($query->value);
             })
             ->filterColumn('filter_group_account', function ($query, $keyword){
-                $query->where('salrs.group_account_fc', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('group_account_fc.group_account_fc_desc', 'ilike', '%'.$keyword.'%');
+                $query->where('salrs.group_account_fc', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_gl_account', function ($query, $keyword){
-                $query->where('salrs.gl_account_fc', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('gl_account_fc.gl_account_fc_desc', 'ilike', '%'.$keyword.'%');
+                $query->where('salrs.gl_account_fc', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_cost_center', function ($query, $keyword){
-                $query->where('salrs.cost_center', 'ilike', '%'.$keyword.'%')
-                    ->orWhere('cost_center.cost_center_desc', 'ilike', '%'.$keyword.'%');
+                $query->where('salrs.cost_center', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_periode', function ($query, $keyword){
                 $temp = explode('/', $keyword);

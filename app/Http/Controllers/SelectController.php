@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
+use App\Models\GLAccountFC;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriMaterial;
@@ -564,6 +565,36 @@ class SelectController extends Controller
         } else {
             $group_acc = GroupAccountFC::where('group_account_fc', 'ilike', '%' . $search . '%')
                 ->orWhere('group_account_fc_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($group_acc as $items) {
+            $response[] = array(
+                "id" => $items->group_account_fc,
+                "text" => $items->group_account_fc . ' - ' . $items->group_account_fc_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function gl_account_fc_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $group_acc = GLAccountFC::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_acc = GLAccountFC::where('gl_account_fc', 'ilike', '%' . $search . '%')
+                ->orWhere('gl_account_fc_desc', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->whereNull('deleted_at')
                 ->get();

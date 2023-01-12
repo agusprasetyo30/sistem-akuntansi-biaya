@@ -1,0 +1,3597 @@
+[
+    {
+        "Deskripsi": "BAG ADM DISTRIBUSI",
+        "Company": "B000",
+        "CostCenter": "B004123000"
+    },
+    {
+        "Deskripsi": "BAG ADM PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B003312000"
+    },
+    {
+        "Deskripsi": "BAG ADM SDM&HRIS",
+        "Company": "B000",
+        "CostCenter": "B006121000"
+    },
+    {
+        "Deskripsi": "BAG ADMIN JOIN COST",
+        "Company": "B000",
+        "CostCenter": "B004323000"
+    },
+    {
+        "Deskripsi": "BAG ALAT BERAT",
+        "Company": "B000",
+        "CostCenter": "B002612000"
+    },
+    {
+        "Deskripsi": "BAG ALAT BERAT",
+        "Company": "B000",
+        "CostCenter": "B003324000"
+    },
+    {
+        "Deskripsi": "BAG AMONIAK",
+        "Company": "B000",
+        "CostCenter": "B002111000"
+    },
+    {
+        "Deskripsi": "BAG AMONIAK IA",
+        "Company": "B000",
+        "CostCenter": "B002111000"
+    },
+    {
+        "Deskripsi": "BAG ASAM FOSFAT IIIA",
+        "Company": "B000",
+        "CostCenter": "B002312000"
+    },
+    {
+        "Deskripsi": "BAG ASAM FOSFAT IIIB",
+        "Company": "B000",
+        "CostCenter": "B002322000"
+    },
+    {
+        "Deskripsi": "BAG BALI-NTB-NTT",
+        "Company": "B000",
+        "CostCenter": "B00432E000"
+    },
+    {
+        "Deskripsi": "BAG BANTEN-DKI-JABAR",
+        "Company": "B000",
+        "CostCenter": "B004328000"
+    },
+    {
+        "Deskripsi": "BAG BENGKEL II",
+        "Company": "B000",
+        "CostCenter": "B002231000"
+    },
+    {
+        "Deskripsi": "BAG BENGKULU-LAMPUNG",
+        "Company": "B000",
+        "CostCenter": "B004327000"
+    },
+    {
+        "Deskripsi": "BAG BNGKL I",
+        "Company": "B000",
+        "CostCenter": "B002121000"
+    },
+    {
+        "Deskripsi": "BAG BNGKL IIB",
+        "Company": "B000",
+        "CostCenter": "B002232000"
+    },
+    {
+        "Deskripsi": "BAG BNGKL III",
+        "Company": "B000",
+        "CostCenter": "B002331000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL ASET/YNM",
+        "Company": "B000",
+        "CostCenter": "B006143000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL FABRIKASI",
+        "Company": "B000",
+        "CostCenter": "B003323000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL HAR IIB",
+        "Company": "B000",
+        "CostCenter": "B002238000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL HAR IIIB",
+        "Company": "B000",
+        "CostCenter": "B002339000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL IIA",
+        "Company": "B000",
+        "CostCenter": "B002215000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL JPP",
+        "Company": "B000",
+        "CostCenter": "B002632000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B002721000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B003311000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PGLHN AIR",
+        "Company": "B000",
+        "CostCenter": "B003331000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PROD I",
+        "Company": "B000",
+        "CostCenter": "B002116000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PROD I",
+        "Company": "B000",
+        "CostCenter": "B002134000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PROD IA",
+        "Company": "B000",
+        "CostCenter": "B002116000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PROD IIB",
+        "Company": "B000",
+        "CostCenter": "B002225000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PROD IIIA",
+        "Company": "B000",
+        "CostCenter": "B002315000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL PROD IIIB",
+        "Company": "B000",
+        "CostCenter": "B002325000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL RUT I",
+        "Company": "B000",
+        "CostCenter": "B002125000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL RUT II",
+        "Company": "B000",
+        "CostCenter": "B002237000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL RUT III",
+        "Company": "B000",
+        "CostCenter": "B002336000"
+    },
+    {
+        "Deskripsi": "BAG CANDAL SAR",
+        "Company": "B000",
+        "CostCenter": "B00432L000"
+    },
+    {
+        "Deskripsi": "BAG FABRIKASI",
+        "Company": "B000",
+        "CostCenter": "B002611000"
+    },
+    {
+        "Deskripsi": "BAG FABRIKASI",
+        "Company": "B000",
+        "CostCenter": "B003321000"
+    },
+    {
+        "Deskripsi": "BAG GYPSUM & ALF3",
+        "Company": "B000",
+        "CostCenter": "B002323000"
+    },
+    {
+        "Deskripsi": "BAG GYPSUM IIIA",
+        "Company": "B000",
+        "CostCenter": "B002313000"
+    },
+    {
+        "Deskripsi": "BAG GYPSUM IIIA",
+        "Company": "B000",
+        "CostCenter": "B002313000"
+    },
+    {
+        "Deskripsi": "BAG GYPSUM IIIA",
+        "Company": "B000",
+        "CostCenter": "B002313000"
+    },
+    {
+        "Deskripsi": "BAG GYPSUM IIIB",
+        "Company": "B000",
+        "CostCenter": "B002323000"
+    },
+    {
+        "Deskripsi": "BAG HAR KAWASAN",
+        "Company": "B000",
+        "CostCenter": "B003334000"
+    },
+    {
+        "Deskripsi": "BAG HAR PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B002724000"
+    },
+    {
+        "Deskripsi": "BAG HAR PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B003314000"
+    },
+    {
+        "Deskripsi": "BAG INSTRUMEN I",
+        "Company": "B000",
+        "CostCenter": "B002124000"
+    },
+    {
+        "Deskripsi": "BAG INSTRUMEN II",
+        "Company": "B000",
+        "CostCenter": "B002236000"
+    },
+    {
+        "Deskripsi": "BAG INSTRUMEN III",
+        "Company": "B000",
+        "CostCenter": "B002335000"
+    },
+    {
+        "Deskripsi": "BAG INTRKNKSI LSTRK",
+        "Company": "B000",
+        "CostCenter": "B002511000"
+    },
+    {
+        "Deskripsi": "BAG JABAR II",
+        "Company": "B000",
+        "CostCenter": "B004329000"
+    },
+    {
+        "Deskripsi": "BAG JATENG I",
+        "Company": "B000",
+        "CostCenter": "B00432A000"
+    },
+    {
+        "Deskripsi": "BAG JATENG II-DIY",
+        "Company": "B000",
+        "CostCenter": "B00432B000"
+    },
+    {
+        "Deskripsi": "BAG JATIM I",
+        "Company": "B000",
+        "CostCenter": "B00432C000"
+    },
+    {
+        "Deskripsi": "BAG JATIM IIA",
+        "Company": "B000",
+        "CostCenter": "B00432D000"
+    },
+    {
+        "Deskripsi": "BAG JUAL JASA",
+        "Company": "B000",
+        "CostCenter": "B004126000"
+    },
+    {
+        "Deskripsi": "BAG KALIMANTAN",
+        "Company": "B000",
+        "CostCenter": "B00432F000"
+    },
+    {
+        "Deskripsi": "BAG KMTRN NON PTRGNK",
+        "Company": "B000",
+        "CostCenter": "B004313000"
+    },
+    {
+        "Deskripsi": "BAG KMTRN NON PTRGNK",
+        "Company": "B000",
+        "CostCenter": "B004311000"
+    },
+    {
+        "Deskripsi": "BAG KMTRN NON PTRGNK",
+        "Company": "B000",
+        "CostCenter": "B004314000"
+    },
+    {
+        "Deskripsi": "BAG KMTRN PTRGNK",
+        "Company": "B000",
+        "CostCenter": "B004312000"
+    },
+    {
+        "Deskripsi": "BAG KTG I&PROD SMPNG",
+        "Company": "B000",
+        "CostCenter": "B002115000"
+    },
+    {
+        "Deskripsi": "BAG LAB PB I",
+        "Company": "B000",
+        "CostCenter": "B002412000"
+    },
+    {
+        "Deskripsi": "BAG LAB PB II",
+        "Company": "B000",
+        "CostCenter": "B002413000"
+    },
+    {
+        "Deskripsi": "BAG LAB PB III",
+        "Company": "B000",
+        "CostCenter": "B002414000"
+    },
+    {
+        "Deskripsi": "BAG LAB UJI KIMIA",
+        "Company": "B000",
+        "CostCenter": "B002411000"
+    },
+    {
+        "Deskripsi": "BAG LISTRIK II",
+        "Company": "B000",
+        "CostCenter": "B002235000"
+    },
+    {
+        "Deskripsi": "BAG LOLA STOCK&IMPOR",
+        "Company": "B000",
+        "CostCenter": "B004223000"
+    },
+    {
+        "Deskripsi": "BAG LSTRK I",
+        "Company": "B000",
+        "CostCenter": "B002123000"
+    },
+    {
+        "Deskripsi": "BAG LSTRK III",
+        "Company": "B000",
+        "CostCenter": "B002334000"
+    },
+    {
+        "Deskripsi": "BAG MALUKU-PAPUA",
+        "Company": "B000",
+        "CostCenter": "B00432I000"
+    },
+    {
+        "Deskripsi": "BAG MEKANIK I",
+        "Company": "B000",
+        "CostCenter": "B002122000"
+    },
+    {
+        "Deskripsi": "BAG MEKANIK IIA",
+        "Company": "B000",
+        "CostCenter": "B002233000"
+    },
+    {
+        "Deskripsi": "BAG MEKANIK IIB",
+        "Company": "B000",
+        "CostCenter": "B002234000"
+    },
+    {
+        "Deskripsi": "BAG MEKANIK IIIA",
+        "Company": "B000",
+        "CostCenter": "B002332000"
+    },
+    {
+        "Deskripsi": "BAG MEKANIK IIIB",
+        "Company": "B000",
+        "CostCenter": "B002333000"
+    },
+    {
+        "Deskripsi": "BAG NAD-SUMUT",
+        "Company": "B000",
+        "CostCenter": "B004324000"
+    },
+    {
+        "Deskripsi": "BAG NPK II/III/IV",
+        "Company": "B000",
+        "CostCenter": "B002222000"
+    },
+    {
+        "Deskripsi": "BAG NPK PH I",
+        "Company": "B000",
+        "CostCenter": "B002211000"
+    },
+    {
+        "Deskripsi": "BAG NPK PH II/III",
+        "Company": "B000",
+        "CostCenter": "B002212000"
+    },
+    {
+        "Deskripsi": "BAG OPS DW BARAT",
+        "Company": "B000",
+        "CostCenter": "B004221000"
+    },
+    {
+        "Deskripsi": "BAG OPS DW TIMUR",
+        "Company": "B000",
+        "CostCenter": "B004222000"
+    },
+    {
+        "Deskripsi": "BAG OPS PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B002723000"
+    },
+    {
+        "Deskripsi": "BAG OPS PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B003313000"
+    },
+    {
+        "Deskripsi": "BAG OPSLOG ACEH SUMU",
+        "Company": "B000",
+        "CostCenter": "B004129000"
+    },
+    {
+        "Deskripsi": "BAG OPSLOG JATIM",
+        "Company": "B000",
+        "CostCenter": "B00412E000"
+    },
+    {
+        "Deskripsi": "BAG OPSLOG JTG DIY2",
+        "Company": "B000",
+        "CostCenter": "B00412B000"
+    },
+    {
+        "Deskripsi": "BAG OPSLOG LMPG BGKL",
+        "Company": "B000",
+        "CostCenter": "B00412A000"
+    },
+    {
+        "Deskripsi": "BAG OPSLOG WIL I",
+        "Company": "B000",
+        "CostCenter": "B00412C000"
+    },
+    {
+        "Deskripsi": "BAG OPSLOG WIL II",
+        "Company": "B000",
+        "CostCenter": "B00412D000"
+    },
+    {
+        "Deskripsi": "BAG PA GUNUNG SARI",
+        "Company": "B000",
+        "CostCenter": "B003333000"
+    },
+    {
+        "Deskripsi": "BAG PANTONG II",
+        "Company": "B000",
+        "CostCenter": "B002214000"
+    },
+    {
+        "Deskripsi": "BAG PC TA",
+        "Company": "B000",
+        "CostCenter": "B002532000"
+    },
+    {
+        "Deskripsi": "BAG PENGOLAHAN AIR",
+        "Company": "B000",
+        "CostCenter": "B002117000"
+    },
+    {
+        "Deskripsi": "BAG PENGOLAHAN AIR",
+        "Company": "B000",
+        "CostCenter": "B003332000"
+    },
+    {
+        "Deskripsi": "BAG PF II/PH IV",
+        "Company": "B000",
+        "CostCenter": "B002221000"
+    },
+    {
+        "Deskripsi": "BAG PLPRN & PNGHN PS",
+        "Company": "B000",
+        "CostCenter": "B004322000"
+    },
+    {
+        "Deskripsi": "BAG PP PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B002722000"
+    },
+    {
+        "Deskripsi": "BAG PPPP",
+        "Company": "B000",
+        "CostCenter": "B002541000"
+    },
+    {
+        "Deskripsi": "BAG PRGDNG JAWA-BALI",
+        "Company": "B000",
+        "CostCenter": "B004125000"
+    },
+    {
+        "Deskripsi": "BAG PSCC",
+        "Company": "B000",
+        "CostCenter": "B002531000"
+    },
+    {
+        "Deskripsi": "BAG PUPUK FOSFAT I",
+        "Company": "B000",
+        "CostCenter": "B002213000"
+    },
+    {
+        "Deskripsi": "BAG RENDAL PROD PB I",
+        "Company": "B000",
+        "CostCenter": "B002452000"
+    },
+    {
+        "Deskripsi": "BAG RENDAL PROD PB I",
+        "Company": "B000",
+        "CostCenter": "B002453000"
+    },
+    {
+        "Deskripsi": "BAG RENDAL PROD PB I",
+        "Company": "B000",
+        "CostCenter": "B002454000"
+    },
+    {
+        "Deskripsi": "BAG SA & UTL IIIB",
+        "Company": "B000",
+        "CostCenter": "B002321000"
+    },
+    {
+        "Deskripsi": "BAG SA&UTILITAS IIIA",
+        "Company": "B000",
+        "CostCenter": "B002311000"
+    },
+    {
+        "Deskripsi": "BAG SARPRAS DIST PSO",
+        "Company": "B000",
+        "CostCenter": "B004321000"
+    },
+    {
+        "Deskripsi": "BAG SARTEK & ADM",
+        "Company": "B000",
+        "CostCenter": "B002633000"
+    },
+    {
+        "Deskripsi": "BAG SHOP ENG & QC",
+        "Company": "B000",
+        "CostCenter": "B003322000"
+    },
+    {
+        "Deskripsi": "BAG SRNA & PRLGKAPAN",
+        "Company": "B000",
+        "CostCenter": "B006142000"
+    },
+    {
+        "Deskripsi": "BAG SULAWESI I",
+        "Company": "B000",
+        "CostCenter": "B00432G000"
+    },
+    {
+        "Deskripsi": "BAG SULAWESI II",
+        "Company": "B000",
+        "CostCenter": "B00432H000"
+    },
+    {
+        "Deskripsi": "BAG SUMBAR-RIAU",
+        "Company": "B000",
+        "CostCenter": "B004325000"
+    },
+    {
+        "Deskripsi": "BAG SUMSEL-BABEL-JAM",
+        "Company": "B000",
+        "CostCenter": "B004326000"
+    },
+    {
+        "Deskripsi": "BAG SUPP&PROD SMPNG",
+        "Company": "B000",
+        "CostCenter": "B002115000"
+    },
+    {
+        "Deskripsi": "BAG TA & RLBLTAS I",
+        "Company": "B000",
+        "CostCenter": "B002126000"
+    },
+    {
+        "Deskripsi": "BAG TA HAR I",
+        "Company": "B000",
+        "CostCenter": "B002126000"
+    },
+    {
+        "Deskripsi": "BAG TA HAR II",
+        "Company": "B000",
+        "CostCenter": "B002239000"
+    },
+    {
+        "Deskripsi": "BAG TA HAR III",
+        "Company": "B000",
+        "CostCenter": "B002337000"
+    },
+    {
+        "Deskripsi": "BAG TEKNIK&KUALITAS",
+        "Company": "B000",
+        "CostCenter": "B002631000"
+    },
+    {
+        "Deskripsi": "BAG TERMINAL I PG",
+        "Company": "B000",
+        "CostCenter": "B004124000"
+    },
+    {
+        "Deskripsi": "BAG TERMINAL II PG",
+        "Company": "B000",
+        "CostCenter": "B004121000"
+    },
+    {
+        "Deskripsi": "BAG TPC",
+        "Company": "B000",
+        "CostCenter": "B002533000"
+    },
+    {
+        "Deskripsi": "BAG TRANSPORT",
+        "Company": "B000",
+        "CostCenter": "B006141000"
+    },
+    {
+        "Deskripsi": "BAG TRANSPORTASI",
+        "Company": "B000",
+        "CostCenter": "B004122000"
+    },
+    {
+        "Deskripsi": "BAG UBB",
+        "Company": "B000",
+        "CostCenter": "B002324000"
+    },
+    {
+        "Deskripsi": "BAG UREA",
+        "Company": "B000",
+        "CostCenter": "B002112000"
+    },
+    {
+        "Deskripsi": "BAG UREA IA",
+        "Company": "B000",
+        "CostCenter": "B002112000"
+    },
+    {
+        "Deskripsi": "BAG UTILITAS IA",
+        "Company": "B000",
+        "CostCenter": "B002114000"
+    },
+    {
+        "Deskripsi": "BAG UTILITAS IB",
+        "Company": "B000",
+        "CostCenter": "B002133000"
+    },
+    {
+        "Deskripsi": "BAG UTILITAS II",
+        "Company": "B000",
+        "CostCenter": "B002224000"
+    },
+    {
+        "Deskripsi": "BAG ZA I/III",
+        "Company": "B000",
+        "CostCenter": "B002113000"
+    },
+    {
+        "Deskripsi": "BAG ZA II",
+        "Company": "B000",
+        "CostCenter": "B002314000"
+    },
+    {
+        "Deskripsi": "BAG ZK I/II & NPK I",
+        "Company": "B000",
+        "CostCenter": "B002223000"
+    },
+    {
+        "Deskripsi": "BAG. ADMINJUL NP",
+        "Company": "B000",
+        "CostCenter": "B004128000"
+    },
+    {
+        "Deskripsi": "BAG. ADMINJUL PUPUK",
+        "Company": "B000",
+        "CostCenter": "B004127000"
+    },
+    {
+        "Deskripsi": "BAG. LOLAHAR GIO",
+        "Company": "B000",
+        "CostCenter": "B002711000"
+    },
+    {
+        "Deskripsi": "BAGIAN AMONIAK IB",
+        "Company": "B000",
+        "CostCenter": "B002131000"
+    },
+    {
+        "Deskripsi": "BAGIAN UREA IB",
+        "Company": "B000",
+        "CostCenter": "B002132000"
+    },
+    {
+        "Deskripsi": "BG ADM OL REGION 6",
+        "Company": "B000",
+        "CostCenter": "B00412F000"
+    },
+    {
+        "Deskripsi": "BG OPSLOG GSMMPP",
+        "Company": "B000",
+        "CostCenter": "B00412G000"
+    },
+    {
+        "Deskripsi": "DEP ADM BISNIS",
+        "Company": "B000",
+        "CostCenter": "B001240000"
+    },
+    {
+        "Deskripsi": "DEP ADM PEMASARAN",
+        "Company": "B000",
+        "CostCenter": "B004320000"
+    },
+    {
+        "Deskripsi": "DEP ADMIN & PENJUALA",
+        "Company": "B000",
+        "CostCenter": "B004120000"
+    },
+    {
+        "Deskripsi": "DEP AKBI",
+        "Company": "B000",
+        "CostCenter": "B005130000"
+    },
+    {
+        "Deskripsi": "DEP ANGGARAN",
+        "Company": "B000",
+        "CostCenter": "B005210000"
+    },
+    {
+        "Deskripsi": "DEP AUDIT KEU & UMUM",
+        "Company": "B000",
+        "CostCenter": "B001120000"
+    },
+    {
+        "Deskripsi": "DEP AUDIT OPR & PROD",
+        "Company": "B000",
+        "CostCenter": "B001110000"
+    },
+    {
+        "Deskripsi": "DEP BANG KORP",
+        "Company": "B000",
+        "CostCenter": "B003210000"
+    },
+    {
+        "Deskripsi": "DEP BANG SDM & ORG",
+        "Company": "B000",
+        "CostCenter": "B006130000"
+    },
+    {
+        "Deskripsi": "DEP BNGKL &FBRKS",
+        "Company": "B000",
+        "CostCenter": "B002610000"
+    },
+    {
+        "Deskripsi": "DEP CANDAL TA",
+        "Company": "B000",
+        "CostCenter": "B002530000"
+    },
+    {
+        "Deskripsi": "DEP CANGUN",
+        "Company": "B000",
+        "CostCenter": "B003230000"
+    },
+    {
+        "Deskripsi": "DEP CSR",
+        "Company": "B000",
+        "CostCenter": "B006020000"
+    },
+    {
+        "Deskripsi": "DEP DAAN BRG",
+        "Company": "B000",
+        "CostCenter": "B003410000"
+    },
+    {
+        "Deskripsi": "DEP DAAN JASA",
+        "Company": "B000",
+        "CostCenter": "B003430000"
+    },
+    {
+        "Deskripsi": "DEP DISWIL II",
+        "Company": "B000",
+        "CostCenter": "B004220000"
+    },
+    {
+        "Deskripsi": "DEP FABRIKASI",
+        "Company": "B000",
+        "CostCenter": "B003320000"
+    },
+    {
+        "Deskripsi": "DEP HAR I",
+        "Company": "B000",
+        "CostCenter": "B002120000"
+    },
+    {
+        "Deskripsi": "DEP HAR II",
+        "Company": "B000",
+        "CostCenter": "B002230000"
+    },
+    {
+        "Deskripsi": "DEP HAR III",
+        "Company": "B000",
+        "CostCenter": "B002330000"
+    },
+    {
+        "Deskripsi": "DEP HUKUM",
+        "Company": "B000",
+        "CostCenter": "B001220000"
+    },
+    {
+        "Deskripsi": "DEP INOVASI & SISMAN",
+        "Company": "B000",
+        "CostCenter": "B006110000"
+    },
+    {
+        "Deskripsi": "DEP INSTEK ROTATING",
+        "Company": "B000",
+        "CostCenter": "B002550000"
+    },
+    {
+        "Deskripsi": "DEP INSTEK STATIK",
+        "Company": "B000",
+        "CostCenter": "B002430000"
+    },
+    {
+        "Deskripsi": "DEP JOP",
+        "Company": "B000",
+        "CostCenter": "B002620000"
+    },
+    {
+        "Deskripsi": "DEP K3",
+        "Company": "B000",
+        "CostCenter": "B002440000"
+    },
+    {
+        "Deskripsi": "DEP KEAMANAN",
+        "Company": "B000",
+        "CostCenter": "B006010000"
+    },
+    {
+        "Deskripsi": "DEP KEUANGAN",
+        "Company": "B000",
+        "CostCenter": "B005110000"
+    },
+    {
+        "Deskripsi": "DEP KOM KORP",
+        "Company": "B000",
+        "CostCenter": "B001210000"
+    },
+    {
+        "Deskripsi": "DEP LOLAPEL",
+        "Company": "B000",
+        "CostCenter": "B002720000"
+    },
+    {
+        "Deskripsi": "DEP LOLAPEL",
+        "Company": "B000",
+        "CostCenter": "B003310000"
+    },
+    {
+        "Deskripsi": "DEP P3E",
+        "Company": "B000",
+        "CostCenter": "B002450000"
+    },
+    {
+        "Deskripsi": "DEP PENGOLAHAN AIR",
+        "Company": "B000",
+        "CostCenter": "B003330000"
+    },
+    {
+        "Deskripsi": "DEP PENJ PD PMGBNGN",
+        "Company": "B000",
+        "CostCenter": "B004240000"
+    },
+    {
+        "Deskripsi": "DEP PENJ PRD NP&JASA",
+        "Company": "B000",
+        "CostCenter": "B004130000"
+    },
+    {
+        "Deskripsi": "DEP PERGUDANGAN",
+        "Company": "B000",
+        "CostCenter": "B002710000"
+    },
+    {
+        "Deskripsi": "DEP PKM",
+        "Company": "B000",
+        "CostCenter": "B005120000"
+    },
+    {
+        "Deskripsi": "DEP PMP",
+        "Company": "B000",
+        "CostCenter": "B004310000"
+    },
+    {
+        "Deskripsi": "DEP PORTOFOLIO BISNI",
+        "Company": "B000",
+        "CostCenter": "B005220000"
+    },
+    {
+        "Deskripsi": "DEP PPBJ",
+        "Company": "B000",
+        "CostCenter": "B003420000"
+    },
+    {
+        "Deskripsi": "DEP PPK",
+        "Company": "B000",
+        "CostCenter": "B002410000"
+    },
+    {
+        "Deskripsi": "DEP PPKOR",
+        "Company": "B000",
+        "CostCenter": "B004230000"
+    },
+    {
+        "Deskripsi": "DEP PROD  I",
+        "Company": "B000",
+        "CostCenter": "B002110000"
+    },
+    {
+        "Deskripsi": "DEP PROD IA",
+        "Company": "B000",
+        "CostCenter": "B002110000"
+    },
+    {
+        "Deskripsi": "DEP PROD IB",
+        "Company": "B000",
+        "CostCenter": "B002130000"
+    },
+    {
+        "Deskripsi": "DEP PROD IIA",
+        "Company": "B000",
+        "CostCenter": "B002210000"
+    },
+    {
+        "Deskripsi": "DEP PROD IIB",
+        "Company": "B000",
+        "CostCenter": "B002220000"
+    },
+    {
+        "Deskripsi": "DEP PRODUKSI IIIA",
+        "Company": "B000",
+        "CostCenter": "B002310000"
+    },
+    {
+        "Deskripsi": "DEP PRODUKSI IIIB",
+        "Company": "B000",
+        "CostCenter": "B002320000"
+    },
+    {
+        "Deskripsi": "DEP PRW I",
+        "Company": "B000",
+        "CostCenter": "B004110000"
+    },
+    {
+        "Deskripsi": "DEP PRW II",
+        "Company": "B000",
+        "CostCenter": "B004210000"
+    },
+    {
+        "Deskripsi": "DEP PSP",
+        "Company": "B000",
+        "CostCenter": "B002540000"
+    },
+    {
+        "Deskripsi": "DEP RELIABILITY",
+        "Company": "B000",
+        "CostCenter": "B002510000"
+    },
+    {
+        "Deskripsi": "DEP RHI",
+        "Company": "B000",
+        "CostCenter": "B006120000"
+    },
+    {
+        "Deskripsi": "DEP RISET",
+        "Company": "B000",
+        "CostCenter": "B003110000"
+    },
+    {
+        "Deskripsi": "DEP RPPHT",
+        "Company": "B000",
+        "CostCenter": "B003120000"
+    },
+    {
+        "Deskripsi": "DEP SAR NON PUPUK",
+        "Company": "B000",
+        "CostCenter": "B004220000"
+    },
+    {
+        "Deskripsi": "DEP TEKINFO",
+        "Company": "B000",
+        "CostCenter": "B003220000"
+    },
+    {
+        "Deskripsi": "DEP TEKNIK & BISNIS",
+        "Company": "B000",
+        "CostCenter": "B002630000"
+    },
+    {
+        "Deskripsi": "DEP TKPMR",
+        "Company": "B000",
+        "CostCenter": "B001230000"
+    },
+    {
+        "Deskripsi": "DEP YANUM",
+        "Company": "B000",
+        "CostCenter": "B006140000"
+    },
+    {
+        "Deskripsi": "DEPT LINGKUNGAN",
+        "Company": "B000",
+        "CostCenter": "B002420000"
+    },
+    {
+        "Deskripsi": "DIREKTORAT KEU & UMU",
+        "Company": "B000",
+        "CostCenter": "B005000000"
+    },
+    {
+        "Deskripsi": "DIREKTORAT OPS & PRO",
+        "Company": "B000",
+        "CostCenter": "B002000000"
+    },
+    {
+        "Deskripsi": "DIREKTORAT PEMASARAN",
+        "Company": "B000",
+        "CostCenter": "B004000000"
+    },
+    {
+        "Deskripsi": "DIREKTORAT SDM&UMUM",
+        "Company": "B000",
+        "CostCenter": "B006000000"
+    },
+    {
+        "Deskripsi": "DIREKTORAT TEKBANG",
+        "Company": "B000",
+        "CostCenter": "B003000000"
+    },
+    {
+        "Deskripsi": "DIREKTORAT UTAMA",
+        "Company": "B000",
+        "CostCenter": "B001000000"
+    },
+    {
+        "Deskripsi": "FUNG PENGEMBANGAN",
+        "Company": "B000",
+        "CostCenter": "B003290000"
+    },
+    {
+        "Deskripsi": "FUNG PENGEMBANGAN",
+        "Company": "B000",
+        "CostCenter": "B003291000"
+    },
+    {
+        "Deskripsi": "KOMISARIS",
+        "Company": "B000",
+        "CostCenter": "B000000000"
+    },
+    {
+        "Deskripsi": "KOMP ADM KEUANGAN",
+        "Company": "B000",
+        "CostCenter": "B005100000"
+    },
+    {
+        "Deskripsi": "KOMP CANDAL HAR",
+        "Company": "B000",
+        "CostCenter": "B002500000"
+    },
+    {
+        "Deskripsi": "KOMP JPP",
+        "Company": "B000",
+        "CostCenter": "B002600000"
+    },
+    {
+        "Deskripsi": "KOMP LOLA GDG & PLBH",
+        "Company": "B000",
+        "CostCenter": "B002700000"
+    },
+    {
+        "Deskripsi": "KOMP MITRA BISNIS",
+        "Company": "B000",
+        "CostCenter": "B004300000"
+    },
+    {
+        "Deskripsi": "KOMP PABRIK  I",
+        "Company": "B000",
+        "CostCenter": "B002100000"
+    },
+    {
+        "Deskripsi": "KOMP PABRIK II",
+        "Company": "B000",
+        "CostCenter": "B002200000"
+    },
+    {
+        "Deskripsi": "KOMP PABRIK III",
+        "Company": "B000",
+        "CostCenter": "B002300000"
+    },
+    {
+        "Deskripsi": "KOMP PENGEMBANGAN",
+        "Company": "B000",
+        "CostCenter": "B003200000"
+    },
+    {
+        "Deskripsi": "KOMP PENJ RETAIL",
+        "Company": "B000",
+        "CostCenter": "B004100000"
+    },
+    {
+        "Deskripsi": "KOMP PENJUALAN KOMER",
+        "Company": "B000",
+        "CostCenter": "B004200000"
+    },
+    {
+        "Deskripsi": "KOMP PRSRANA & UTLS",
+        "Company": "B000",
+        "CostCenter": "B003300000"
+    },
+    {
+        "Deskripsi": "KOMP RENDAL USAHA",
+        "Company": "B000",
+        "CostCenter": "B005200000"
+    },
+    {
+        "Deskripsi": "KOMP RISET",
+        "Company": "B000",
+        "CostCenter": "B003100000"
+    },
+    {
+        "Deskripsi": "KOMP SDM",
+        "Company": "B000",
+        "CostCenter": "B006100000"
+    },
+    {
+        "Deskripsi": "KOMP SESPER",
+        "Company": "B000",
+        "CostCenter": "B001200000"
+    },
+    {
+        "Deskripsi": "KOMP SPI",
+        "Company": "B000",
+        "CostCenter": "B001100000"
+    },
+    {
+        "Deskripsi": "KOMP TEKNIK",
+        "Company": "B000",
+        "CostCenter": "B003400000"
+    },
+    {
+        "Deskripsi": "KOMP TEKNOLOGI",
+        "Company": "B000",
+        "CostCenter": "B002400000"
+    },
+    {
+        "Deskripsi": "KOMP TRANS BISNIS",
+        "Company": "B000",
+        "CostCenter": "B008100000"
+    },
+    {
+        "Deskripsi": "KOMP UMUM",
+        "Company": "B000",
+        "CostCenter": "B006200000"
+    },
+    {
+        "Deskripsi": "P AMONIAK UREA II",
+        "Company": "B000",
+        "CostCenter": "B007020001"
+    },
+    {
+        "Deskripsi": "P CATALOGING",
+        "Company": "B000",
+        "CostCenter": "B007020012"
+    },
+    {
+        "Deskripsi": "P CO2 PLANT",
+        "Company": "B000",
+        "CostCenter": "B007020009"
+    },
+    {
+        "Deskripsi": "P CONSTRUCTION JETTY",
+        "Company": "B000",
+        "CostCenter": "B007020005"
+    },
+    {
+        "Deskripsi": "P CONVEYING SYSTEM",
+        "Company": "B000",
+        "CostCenter": "B007020006"
+    },
+    {
+        "Deskripsi": "P GDG EKSPOR UREA",
+        "Company": "B000",
+        "CostCenter": "B007020016"
+    },
+    {
+        "Deskripsi": "P GUDANG IN BAG 50RB",
+        "Company": "B000",
+        "CostCenter": "B007020007"
+    },
+    {
+        "Deskripsi": "P IMPLEMNTSI ERP-SAP",
+        "Company": "B000",
+        "CostCenter": "B007020011"
+    },
+    {
+        "Deskripsi": "P IPA GUNUNGSARI",
+        "Company": "B000",
+        "CostCenter": "B007020002"
+    },
+    {
+        "Deskripsi": "P PB SODA ASH",
+        "Company": "B000",
+        "CostCenter": "B007020014"
+    },
+    {
+        "Deskripsi": "P PGMN PANTAI III&IV",
+        "Company": "B000",
+        "CostCenter": "B007020008"
+    },
+    {
+        "Deskripsi": "P PGSIAN LH RKLAMASI",
+        "Company": "B000",
+        "CostCenter": "B007020010"
+    },
+    {
+        "Deskripsi": "P PHONSKA V",
+        "Company": "B000",
+        "CostCenter": "B007020003"
+    },
+    {
+        "Deskripsi": "P PNBH DRMAGA TI:C&D",
+        "Company": "B000",
+        "CostCenter": "B007020004"
+    },
+    {
+        "Deskripsi": "P REKLAMASI THP V",
+        "Company": "B000",
+        "CostCenter": "B007020015"
+    },
+    {
+        "Deskripsi": "PENGGEMUKAN SAPI",
+        "Company": "B000",
+        "CostCenter": "B007000001"
+    },
+    {
+        "Deskripsi": "PL BALMIL FURN&SCRUB",
+        "Company": "B000",
+        "CostCenter": "B002213112"
+    },
+    {
+        "Deskripsi": "PL BOILER & AUX",
+        "Company": "B000",
+        "CostCenter": "B002311114"
+    },
+    {
+        "Deskripsi": "PL C. ROOM BOILER",
+        "Company": "B000",
+        "CostCenter": "B002311111"
+    },
+    {
+        "Deskripsi": "PL C. TOWER I",
+        "Company": "B000",
+        "CostCenter": "B002114122"
+    },
+    {
+        "Deskripsi": "PL C. TOWER II",
+        "Company": "B000",
+        "CostCenter": "B002114123"
+    },
+    {
+        "Deskripsi": "PL C.R BOILER B1102",
+        "Company": "B000",
+        "CostCenter": "B002114111"
+    },
+    {
+        "Deskripsi": "PL C.TOWER",
+        "Company": "B000",
+        "CostCenter": "B002114121"
+    },
+    {
+        "Deskripsi": "PL COLER,DRYRCY&COAT",
+        "Company": "B000",
+        "CostCenter": "B002211112"
+    },
+    {
+        "Deskripsi": "PL COOLING TOWER",
+        "Company": "B000",
+        "CostCenter": "B002311124"
+    },
+    {
+        "Deskripsi": "PL COOLING TOWER",
+        "Company": "B000",
+        "CostCenter": "B002321123"
+    },
+    {
+        "Deskripsi": "PL DCS & HVAC",
+        "Company": "B000",
+        "CostCenter": "B002133111"
+    },
+    {
+        "Deskripsi": "PL DEMIN PLANT I",
+        "Company": "B000",
+        "CostCenter": "B002114113"
+    },
+    {
+        "Deskripsi": "PL DEMIN PLANT II",
+        "Company": "B000",
+        "CostCenter": "B002114133"
+    },
+    {
+        "Deskripsi": "PL DIESEL & SS I",
+        "Company": "B000",
+        "CostCenter": "B002114135"
+    },
+    {
+        "Deskripsi": "PL DM PLT,INS&SV AIR",
+        "Company": "B000",
+        "CostCenter": "B002321122"
+    },
+    {
+        "Deskripsi": "PL DMN A,INS&SVCAIR",
+        "Company": "B000",
+        "CostCenter": "B002311122"
+    },
+    {
+        "Deskripsi": "PL DMN B & FO",
+        "Company": "B000",
+        "CostCenter": "B002311123"
+    },
+    {
+        "Deskripsi": "PL FIELD B1102",
+        "Company": "B000",
+        "CostCenter": "B002114112"
+    },
+    {
+        "Deskripsi": "PL GTG/SS II",
+        "Company": "B000",
+        "CostCenter": "B002114134"
+    },
+    {
+        "Deskripsi": "PL GTG/WHB/DCS",
+        "Company": "B000",
+        "CostCenter": "B002114131"
+    },
+    {
+        "Deskripsi": "PL NPK MIXTURE,BBAKU",
+        "Company": "B000",
+        "CostCenter": "B002211114"
+    },
+    {
+        "Deskripsi": "PL PANEL 100/200",
+        "Company": "B000",
+        "CostCenter": "B002213111"
+    },
+    {
+        "Deskripsi": "PL PANEL GEN",
+        "Company": "B000",
+        "CostCenter": "B002311112"
+    },
+    {
+        "Deskripsi": "PL PANEL GEN 12,5",
+        "Company": "B000",
+        "CostCenter": "B002321112"
+    },
+    {
+        "Deskripsi": "PL SCRBR&C.CHMBR,DRY",
+        "Company": "B000",
+        "CostCenter": "B002211113"
+    },
+    {
+        "Deskripsi": "PL SILO,DZ/MT,CONCUR",
+        "Company": "B000",
+        "CostCenter": "B002213113"
+    },
+    {
+        "Deskripsi": "PL STEAM TURB GEN",
+        "Company": "B000",
+        "CostCenter": "B002321111"
+    },
+    {
+        "Deskripsi": "PL TUR,A.TUR,DIESEL",
+        "Company": "B000",
+        "CostCenter": "B002311113"
+    },
+    {
+        "Deskripsi": "PL TURB & AUX 17,5",
+        "Company": "B000",
+        "CostCenter": "B002321113"
+    },
+    {
+        "Deskripsi": "PL TURB 12,5 MW",
+        "Company": "B000",
+        "CostCenter": "B002321114"
+    },
+    {
+        "Deskripsi": "PL UTILTS&AIR CHILER",
+        "Company": "B000",
+        "CostCenter": "B002211111"
+    },
+    {
+        "Deskripsi": "PL WHB  & COMPR.",
+        "Company": "B000",
+        "CostCenter": "B002114132"
+    },
+    {
+        "Deskripsi": "PL WT & ET",
+        "Company": "B000",
+        "CostCenter": "B002311121"
+    },
+    {
+        "Deskripsi": "PL WT & ET",
+        "Company": "B000",
+        "CostCenter": "B002321121"
+    },
+    {
+        "Deskripsi": "PL WTP & ACW",
+        "Company": "B000",
+        "CostCenter": "B002133112"
+    },
+    {
+        "Deskripsi": "PM AGROSOLUTION",
+        "Company": "B000",
+        "CostCenter": "B007020017"
+    },
+    {
+        "Deskripsi": "PM RETAIL MNGMNT",
+        "Company": "B000",
+        "CostCenter": "B007020018"
+    },
+    {
+        "Deskripsi": "PROYEK ALF3 II",
+        "Company": "B000",
+        "CostCenter": "B007020013"
+    },
+    {
+        "Deskripsi": "REGU INST & TELKOM",
+        "Company": "B000",
+        "CostCenter": "B003334220"
+    },
+    {
+        "Deskripsi": "REGU PMNCR,SOUND&PG",
+        "Company": "B000",
+        "CostCenter": "B003334240"
+    },
+    {
+        "Deskripsi": "REGU SARANA TELKOM",
+        "Company": "B000",
+        "CostCenter": "B003334230"
+    },
+    {
+        "Deskripsi": "RU ASAM SULFAT IIIA",
+        "Company": "B000",
+        "CostCenter": "B002311210"
+    },
+    {
+        "Deskripsi": "RU B1102 & SUPP",
+        "Company": "B000",
+        "CostCenter": "B002114110"
+    },
+    {
+        "Deskripsi": "RU BAHAN BAKU",
+        "Company": "B000",
+        "CostCenter": "B002222110"
+    },
+    {
+        "Deskripsi": "RU BB & UTILITAS PH",
+        "Company": "B000",
+        "CostCenter": "B002211110"
+    },
+    {
+        "Deskripsi": "RU BENGKEL ALBER",
+        "Company": "B000",
+        "CostCenter": "B003324210"
+    },
+    {
+        "Deskripsi": "RU BENGKEL BABAT",
+        "Company": "B000",
+        "CostCenter": "B003332210"
+    },
+    {
+        "Deskripsi": "RU BENGKEL G.SARI",
+        "Company": "B000",
+        "CostCenter": "B003333210"
+    },
+    {
+        "Deskripsi": "RU CEMENT RETARDER",
+        "Company": "B000",
+        "CostCenter": "B002313120"
+    },
+    {
+        "Deskripsi": "RU CEMENT RETARDER",
+        "Company": "B000",
+        "CostCenter": "B002313120"
+    },
+    {
+        "Deskripsi": "RU CEMENT RETARDER",
+        "Company": "B000",
+        "CostCenter": "B002313120"
+    },
+    {
+        "Deskripsi": "RU CS,UCW&CMPRSSR",
+        "Company": "B000",
+        "CostCenter": "B002133130"
+    },
+    {
+        "Deskripsi": "RU DEKOR & P KAYU",
+        "Company": "B000",
+        "CostCenter": "B003334140"
+    },
+    {
+        "Deskripsi": "RU EFFLUEN TREATMENT",
+        "Company": "B000",
+        "CostCenter": "B002323120"
+    },
+    {
+        "Deskripsi": "RU GTG & WHB",
+        "Company": "B000",
+        "CostCenter": "B002114130"
+    },
+    {
+        "Deskripsi": "RU HAR ALBER AA",
+        "Company": "B000",
+        "CostCenter": "B002612420"
+    },
+    {
+        "Deskripsi": "RU INS BABAT",
+        "Company": "B000",
+        "CostCenter": "B002643110"
+    },
+    {
+        "Deskripsi": "RU INS BABAT",
+        "Company": "B000",
+        "CostCenter": "B003332230"
+    },
+    {
+        "Deskripsi": "RU INS G.SARI",
+        "Company": "B000",
+        "CostCenter": "B002643120"
+    },
+    {
+        "Deskripsi": "RU INS G.SARI",
+        "Company": "B000",
+        "CostCenter": "B003333230"
+    },
+    {
+        "Deskripsi": "RU KALSINASI KAPUR",
+        "Company": "B000",
+        "CostCenter": "B002323130"
+    },
+    {
+        "Deskripsi": "RU LAPANGAN II",
+        "Company": "B000",
+        "CostCenter": "B002311220"
+    },
+    {
+        "Deskripsi": "RU LISTRIK & REPAIR",
+        "Company": "B000",
+        "CostCenter": "B003324240"
+    },
+    {
+        "Deskripsi": "RU LSTRK & RPAIR BDY",
+        "Company": "B000",
+        "CostCenter": "B003324220"
+    },
+    {
+        "Deskripsi": "RU LSTRK BABAT",
+        "Company": "B000",
+        "CostCenter": "B002642110"
+    },
+    {
+        "Deskripsi": "RU LSTRK BABAT",
+        "Company": "B000",
+        "CostCenter": "B003332220"
+    },
+    {
+        "Deskripsi": "RU LSTRK G.SARI",
+        "Company": "B000",
+        "CostCenter": "B002642120"
+    },
+    {
+        "Deskripsi": "RU LSTRK G.SARI",
+        "Company": "B000",
+        "CostCenter": "B003333220"
+    },
+    {
+        "Deskripsi": "RU LSTRK PRMHN&PRKNT",
+        "Company": "B000",
+        "CostCenter": "B003334210"
+    },
+    {
+        "Deskripsi": "RU LSU & C.TOWER",
+        "Company": "B000",
+        "CostCenter": "B002114120"
+    },
+    {
+        "Deskripsi": "RU MEKANIK & PENDING",
+        "Company": "B000",
+        "CostCenter": "B003334320"
+    },
+    {
+        "Deskripsi": "RU MKNK BABAT",
+        "Company": "B000",
+        "CostCenter": "B002641110"
+    },
+    {
+        "Deskripsi": "RU MKNK G.SARI",
+        "Company": "B000",
+        "CostCenter": "B002641120"
+    },
+    {
+        "Deskripsi": "RU NPK I",
+        "Company": "B000",
+        "CostCenter": "B002223120"
+    },
+    {
+        "Deskripsi": "RU NPK II",
+        "Company": "B000",
+        "CostCenter": "B002222120"
+    },
+    {
+        "Deskripsi": "RU NPK III",
+        "Company": "B000",
+        "CostCenter": "B002222210"
+    },
+    {
+        "Deskripsi": "RU NPK IV",
+        "Company": "B000",
+        "CostCenter": "B002222220"
+    },
+    {
+        "Deskripsi": "RU OLIMAN IIA",
+        "Company": "B000",
+        "CostCenter": "B002233010"
+    },
+    {
+        "Deskripsi": "RU OLIMAN IIB",
+        "Company": "B000",
+        "CostCenter": "B002234010"
+    },
+    {
+        "Deskripsi": "RU OPEN STORAGE",
+        "Company": "B000",
+        "CostCenter": "B003334130"
+    },
+    {
+        "Deskripsi": "RU OPEN STORAGE",
+        "Company": "B000",
+        "CostCenter": "B003334130"
+    },
+    {
+        "Deskripsi": "RU OPS ALBER AA",
+        "Company": "B000",
+        "CostCenter": "B002612410"
+    },
+    {
+        "Deskripsi": "RU P GANGGUAN ALBER",
+        "Company": "B000",
+        "CostCenter": "B003324230"
+    },
+    {
+        "Deskripsi": "RU PANTONG PH",
+        "Company": "B000",
+        "CostCenter": "B002214130"
+    },
+    {
+        "Deskripsi": "RU PANTONG PH II/III",
+        "Company": "B000",
+        "CostCenter": "B002214120"
+    },
+    {
+        "Deskripsi": "RU PELUMASAN",
+        "Company": "B000",
+        "CostCenter": "B002122010"
+    },
+    {
+        "Deskripsi": "RU PELUMSN MKNK IIIA",
+        "Company": "B000",
+        "CostCenter": "B002332010"
+    },
+    {
+        "Deskripsi": "RU PENDINGIN",
+        "Company": "B000",
+        "CostCenter": "B003334330"
+    },
+    {
+        "Deskripsi": "RU PIPA DAN LAS",
+        "Company": "B000",
+        "CostCenter": "B003334310"
+    },
+    {
+        "Deskripsi": "RU PNTONG SP-36 I/II",
+        "Company": "B000",
+        "CostCenter": "B002214110"
+    },
+    {
+        "Deskripsi": "RU PURIFIKASI",
+        "Company": "B000",
+        "CostCenter": "B002313110"
+    },
+    {
+        "Deskripsi": "RU SHF UREA,ZA &PTG",
+        "Company": "B000",
+        "CostCenter": "B002412120"
+    },
+    {
+        "Deskripsi": "RU SHF UREA,ZA &PTG",
+        "Company": "B000",
+        "CostCenter": "B002412120"
+    },
+    {
+        "Deskripsi": "RU SHIFT CR,ALF3&SU",
+        "Company": "B000",
+        "CostCenter": "B002414120"
+    },
+    {
+        "Deskripsi": "RU SHIFT LAB PB IA",
+        "Company": "B000",
+        "CostCenter": "B002412110"
+    },
+    {
+        "Deskripsi": "RU SHIFT LAB PB IB",
+        "Company": "B000",
+        "CostCenter": "B002412310"
+    },
+    {
+        "Deskripsi": "RU SHIFT LAB PB IIA",
+        "Company": "B000",
+        "CostCenter": "B002413110"
+    },
+    {
+        "Deskripsi": "RU SHIFT LAB PB IIB",
+        "Company": "B000",
+        "CostCenter": "B002413210"
+    },
+    {
+        "Deskripsi": "RU SHIFT LAB PB IIIA",
+        "Company": "B000",
+        "CostCenter": "B002414110"
+    },
+    {
+        "Deskripsi": "RU SHIFT LAB PB IIIB",
+        "Company": "B000",
+        "CostCenter": "B002414210"
+    },
+    {
+        "Deskripsi": "RU SHIFT PROD SMPNG",
+        "Company": "B000",
+        "CostCenter": "B002115130"
+    },
+    {
+        "Deskripsi": "RU SIPIL PERUMDIN",
+        "Company": "B000",
+        "CostCenter": "B003334110"
+    },
+    {
+        "Deskripsi": "RU SPL GDNG,JLN&DEKO",
+        "Company": "B000",
+        "CostCenter": "B003334120"
+    },
+    {
+        "Deskripsi": "RU STEAM TURB GEN",
+        "Company": "B000",
+        "CostCenter": "B002311110"
+    },
+    {
+        "Deskripsi": "RU STEAM TURB GEN",
+        "Company": "B000",
+        "CostCenter": "B002321110"
+    },
+    {
+        "Deskripsi": "RU TANK YARD NH3",
+        "Company": "B000",
+        "CostCenter": "B002224130"
+    },
+    {
+        "Deskripsi": "RU TANK YARD PA",
+        "Company": "B000",
+        "CostCenter": "B002224120"
+    },
+    {
+        "Deskripsi": "RU U. 900",
+        "Company": "B000",
+        "CostCenter": "B002224110"
+    },
+    {
+        "Deskripsi": "RU UNIT 100/200",
+        "Company": "B000",
+        "CostCenter": "B002213110"
+    },
+    {
+        "Deskripsi": "RU UNIT 300",
+        "Company": "B000",
+        "CostCenter": "B002213120"
+    },
+    {
+        "Deskripsi": "RU UNIT PROS&GRAN PH",
+        "Company": "B000",
+        "CostCenter": "B002211120"
+    },
+    {
+        "Deskripsi": "RU UNIT ZK I/II",
+        "Company": "B000",
+        "CostCenter": "B002223110"
+    },
+    {
+        "Deskripsi": "RU WT & ET",
+        "Company": "B000",
+        "CostCenter": "B002311120"
+    },
+    {
+        "Deskripsi": "RU WT & ET",
+        "Company": "B000",
+        "CostCenter": "B002321120"
+    },
+    {
+        "Deskripsi": "RU WTP, ACW & DCS",
+        "Company": "B000",
+        "CostCenter": "B002133110"
+    },
+    {
+        "Deskripsi": "RU ZA I",
+        "Company": "B000",
+        "CostCenter": "B002113110"
+    },
+    {
+        "Deskripsi": "RU ZA III",
+        "Company": "B000",
+        "CostCenter": "B002113120"
+    },
+    {
+        "Deskripsi": "SEK ALF3",
+        "Company": "B000",
+        "CostCenter": "B002313200"
+    },
+    {
+        "Deskripsi": "SEK ALF3,KAPUR,PURIF",
+        "Company": "B000",
+        "CostCenter": "B002333300"
+    },
+    {
+        "Deskripsi": "SEK ASAM SULFAT IIIA",
+        "Company": "B000",
+        "CostCenter": "B002311200"
+    },
+    {
+        "Deskripsi": "SEK ASAM SULFAT IIIB",
+        "Company": "B000",
+        "CostCenter": "B002321200"
+    },
+    {
+        "Deskripsi": "SEK BAGGING",
+        "Company": "B000",
+        "CostCenter": "B002233400"
+    },
+    {
+        "Deskripsi": "SEK BAGGING",
+        "Company": "B000",
+        "CostCenter": "B002233400"
+    },
+    {
+        "Deskripsi": "SEK BENGKEL",
+        "Company": "B000",
+        "CostCenter": "B003334300"
+    },
+    {
+        "Deskripsi": "SEK BKL N-LOGAM IIB",
+        "Company": "B000",
+        "CostCenter": "B002232400"
+    },
+    {
+        "Deskripsi": "SEK BKL N-LOGAM IIB",
+        "Company": "B000",
+        "CostCenter": "B002232400"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAP NPK I-",
+        "Company": "B000",
+        "CostCenter": "B002232100"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAP PH IV,",
+        "Company": "B000",
+        "CostCenter": "B002232500"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAP PHI,PF",
+        "Company": "B000",
+        "CostCenter": "B002231400"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAP PHII/I",
+        "Company": "B000",
+        "CostCenter": "B002231100"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAS I",
+        "Company": "B000",
+        "CostCenter": "B002121100"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAS IA",
+        "Company": "B000",
+        "CostCenter": "B002121100"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAS IIIA",
+        "Company": "B000",
+        "CostCenter": "B002331100"
+    },
+    {
+        "Deskripsi": "SEK BNGKL LAS IIIB",
+        "Company": "B000",
+        "CostCenter": "B002331500"
+    },
+    {
+        "Deskripsi": "SEK BNGKL MESIN I",
+        "Company": "B000",
+        "CostCenter": "B002121200"
+    },
+    {
+        "Deskripsi": "SEK BNGKL MESIN III",
+        "Company": "B000",
+        "CostCenter": "B002331200"
+    },
+    {
+        "Deskripsi": "SEK BNGKL MSN",
+        "Company": "B000",
+        "CostCenter": "B002232300"
+    },
+    {
+        "Deskripsi": "SEK BNGKL N-LGM IIA",
+        "Company": "B000",
+        "CostCenter": "B002231300"
+    },
+    {
+        "Deskripsi": "SEK BNGKL N-LGM IIA",
+        "Company": "B000",
+        "CostCenter": "B002231300"
+    },
+    {
+        "Deskripsi": "SEK BNGKL N.LGM III",
+        "Company": "B000",
+        "CostCenter": "B002331400"
+    },
+    {
+        "Deskripsi": "SEK BNGKL SIPIL & NL",
+        "Company": "B000",
+        "CostCenter": "B002231200"
+    },
+    {
+        "Deskripsi": "SEK BNGKL SIPIL I",
+        "Company": "B000",
+        "CostCenter": "B002121300"
+    },
+    {
+        "Deskripsi": "SEK BNGKL SIPIL IIIA",
+        "Company": "B000",
+        "CostCenter": "B002331300"
+    },
+    {
+        "Deskripsi": "SEK BNGKL SIPIL IIIB",
+        "Company": "B000",
+        "CostCenter": "B002331600"
+    },
+    {
+        "Deskripsi": "SEK BNGKL SPL IIB&NL",
+        "Company": "B000",
+        "CostCenter": "B002232200"
+    },
+    {
+        "Deskripsi": "SEK CANDAL",
+        "Company": "B000",
+        "CostCenter": "B003323100"
+    },
+    {
+        "Deskripsi": "SEK CANDAL & IMPORTA",
+        "Company": "B000",
+        "CostCenter": "B004223100"
+    },
+    {
+        "Deskripsi": "SEK DCS,ANALYZER&SHO",
+        "Company": "B000",
+        "CostCenter": "B002124600"
+    },
+    {
+        "Deskripsi": "SEK FABRIKASI",
+        "Company": "B000",
+        "CostCenter": "B003321300"
+    },
+    {
+        "Deskripsi": "SEK GDG CRH",
+        "Company": "B000",
+        "CostCenter": "B004121800"
+    },
+    {
+        "Deskripsi": "SEK GDG FOSFAT I",
+        "Company": "B000",
+        "CostCenter": "B004121300"
+    },
+    {
+        "Deskripsi": "SEK GDG FOSFAT II",
+        "Company": "B000",
+        "CostCenter": "B004121400"
+    },
+    {
+        "Deskripsi": "SEK GDG MLTGNA & TMB",
+        "Company": "B000",
+        "CostCenter": "B004121700"
+    },
+    {
+        "Deskripsi": "SEK GDG NP CAIR & TM",
+        "Company": "B000",
+        "CostCenter": "B004121900"
+    },
+    {
+        "Deskripsi": "SEK GDG NP PDT & TMB",
+        "Company": "B000",
+        "CostCenter": "B004121500"
+    },
+    {
+        "Deskripsi": "SEK GDG PHONSKA",
+        "Company": "B000",
+        "CostCenter": "B004121600"
+    },
+    {
+        "Deskripsi": "SEK GDG UREA",
+        "Company": "B000",
+        "CostCenter": "B004121200"
+    },
+    {
+        "Deskripsi": "SEK GDG ZA",
+        "Company": "B000",
+        "CostCenter": "B004121100"
+    },
+    {
+        "Deskripsi": "SEK GYPSUM IIIA",
+        "Company": "B000",
+        "CostCenter": "B002313100"
+    },
+    {
+        "Deskripsi": "SEK GYPSUM IIIA",
+        "Company": "B000",
+        "CostCenter": "B002313100"
+    },
+    {
+        "Deskripsi": "SEK GYPSUM IIIA",
+        "Company": "B000",
+        "CostCenter": "B002313100"
+    },
+    {
+        "Deskripsi": "SEK GYPSUM IIIB",
+        "Company": "B000",
+        "CostCenter": "B002323100"
+    },
+    {
+        "Deskripsi": "SEK HAR ALAT BERAT",
+        "Company": "B000",
+        "CostCenter": "B003324200"
+    },
+    {
+        "Deskripsi": "SEK HAR PA BABAT",
+        "Company": "B000",
+        "CostCenter": "B003332200"
+    },
+    {
+        "Deskripsi": "SEK HAR PA G.SARI",
+        "Company": "B000",
+        "CostCenter": "B003333200"
+    },
+    {
+        "Deskripsi": "SEK INS ALF3,KAPUR,P",
+        "Company": "B000",
+        "CostCenter": "B002335700"
+    },
+    {
+        "Deskripsi": "SEK INS CR-ALF3",
+        "Company": "B000",
+        "CostCenter": "B002335300"
+    },
+    {
+        "Deskripsi": "SEK INS PA I",
+        "Company": "B000",
+        "CostCenter": "B002335200"
+    },
+    {
+        "Deskripsi": "SEK INS PA II",
+        "Company": "B000",
+        "CostCenter": "B002335800"
+    },
+    {
+        "Deskripsi": "SEK INS SA I/ SU I/",
+        "Company": "B000",
+        "CostCenter": "B002335100"
+    },
+    {
+        "Deskripsi": "SEK INS SA II/ SU II",
+        "Company": "B000",
+        "CostCenter": "B002335600"
+    },
+    {
+        "Deskripsi": "SEK INS UREA,ZA&BAG",
+        "Company": "B000",
+        "CostCenter": "B002124300"
+    },
+    {
+        "Deskripsi": "SEK INS UTL B. BARA",
+        "Company": "B000",
+        "CostCenter": "B002335500"
+    },
+    {
+        "Deskripsi": "SEK INS ZA II & SHOP",
+        "Company": "B000",
+        "CostCenter": "B002335400"
+    },
+    {
+        "Deskripsi": "SEK INST NPK PH IV&N",
+        "Company": "B000",
+        "CostCenter": "B002236300"
+    },
+    {
+        "Deskripsi": "SEK INST PH I,PF I&B",
+        "Company": "B000",
+        "CostCenter": "B002236100"
+    },
+    {
+        "Deskripsi": "SEK INST PH II/III &",
+        "Company": "B000",
+        "CostCenter": "B002236200"
+    },
+    {
+        "Deskripsi": "SEK INST UTL,NPK I&Z",
+        "Company": "B000",
+        "CostCenter": "B002236400"
+    },
+    {
+        "Deskripsi": "SEK INST UTL/SHP/DCS",
+        "Company": "B000",
+        "CostCenter": "B002124100"
+    },
+    {
+        "Deskripsi": "SEK INST W.S.&KTG II",
+        "Company": "B000",
+        "CostCenter": "B002236500"
+    },
+    {
+        "Deskripsi": "SEK INST W.S.&KTG II",
+        "Company": "B000",
+        "CostCenter": "B002236500"
+    },
+    {
+        "Deskripsi": "SEK INST/NH3/DUK",
+        "Company": "B000",
+        "CostCenter": "B002124200"
+    },
+    {
+        "Deskripsi": "SEK INSTRUMEN PBN",
+        "Company": "B000",
+        "CostCenter": "B003314500"
+    },
+    {
+        "Deskripsi": "SEK KTG I&PROD SMPNG",
+        "Company": "B000",
+        "CostCenter": "B002115100"
+    },
+    {
+        "Deskripsi": "SEK LAS",
+        "Company": "B000",
+        "CostCenter": "B002611200"
+    },
+    {
+        "Deskripsi": "SEK LAS",
+        "Company": "B000",
+        "CostCenter": "B003321200"
+    },
+    {
+        "Deskripsi": "SEK LAS & SIPIL PBN",
+        "Company": "B000",
+        "CostCenter": "B003314100"
+    },
+    {
+        "Deskripsi": "SEK LISTRIK PELABUHA",
+        "Company": "B000",
+        "CostCenter": "B003314400"
+    },
+    {
+        "Deskripsi": "SEK LOLA DATA & STOC",
+        "Company": "B000",
+        "CostCenter": "B004125200"
+    },
+    {
+        "Deskripsi": "SEK LOLA GYPSUM",
+        "Company": "B000",
+        "CostCenter": "B002323100"
+    },
+    {
+        "Deskripsi": "SEK LST CR/ALF3&PURI",
+        "Company": "B000",
+        "CostCenter": "B002334300"
+    },
+    {
+        "Deskripsi": "SEK LSTRK ALF3,KAPUR",
+        "Company": "B000",
+        "CostCenter": "B002334700"
+    },
+    {
+        "Deskripsi": "SEK LSTRK NH3/UR IA",
+        "Company": "B000",
+        "CostCenter": "B002123200"
+    },
+    {
+        "Deskripsi": "SEK LSTRK NH3/UR IB",
+        "Company": "B000",
+        "CostCenter": "B002123400"
+    },
+    {
+        "Deskripsi": "SEK LSTRK NH3/UR/DK",
+        "Company": "B000",
+        "CostCenter": "B002123200"
+    },
+    {
+        "Deskripsi": "SEK LSTRK NPK PH IV&",
+        "Company": "B000",
+        "CostCenter": "B002235300"
+    },
+    {
+        "Deskripsi": "SEK LSTRK PA I",
+        "Company": "B000",
+        "CostCenter": "B002334200"
+    },
+    {
+        "Deskripsi": "SEK LSTRK PA II",
+        "Company": "B000",
+        "CostCenter": "B002334600"
+    },
+    {
+        "Deskripsi": "SEK LSTRK PH I, PF I",
+        "Company": "B000",
+        "CostCenter": "B002235100"
+    },
+    {
+        "Deskripsi": "SEK LSTRK PH II/III",
+        "Company": "B000",
+        "CostCenter": "B002235200"
+    },
+    {
+        "Deskripsi": "SEK LSTRK PNTNG/DKPN",
+        "Company": "B000",
+        "CostCenter": "B002123500"
+    },
+    {
+        "Deskripsi": "SEK LSTRK PNTNG/DKPN",
+        "Company": "B000",
+        "CostCenter": "B002123500"
+    },
+    {
+        "Deskripsi": "SEK LSTRK SA I/ SU I",
+        "Company": "B000",
+        "CostCenter": "B002334100"
+    },
+    {
+        "Deskripsi": "SEK LSTRK SA II/ SU",
+        "Company": "B000",
+        "CostCenter": "B002334500"
+    },
+    {
+        "Deskripsi": "SEK LSTRK UTILITAS",
+        "Company": "B000",
+        "CostCenter": "B002123100"
+    },
+    {
+        "Deskripsi": "SEK LSTRK UTL B.BARA",
+        "Company": "B000",
+        "CostCenter": "B002334400"
+    },
+    {
+        "Deskripsi": "SEK LSTRK UTL,NPK I&",
+        "Company": "B000",
+        "CostCenter": "B002235400"
+    },
+    {
+        "Deskripsi": "SEK LSTRK UTL&OFF S",
+        "Company": "B000",
+        "CostCenter": "B002123100"
+    },
+    {
+        "Deskripsi": "SEK LSTRK WS&KTGII",
+        "Company": "B000",
+        "CostCenter": "B002235500"
+    },
+    {
+        "Deskripsi": "SEK LSTRK WS&KTGII",
+        "Company": "B000",
+        "CostCenter": "B002235500"
+    },
+    {
+        "Deskripsi": "SEK LSTRK ZA II & SH",
+        "Company": "B000",
+        "CostCenter": "B002334800"
+    },
+    {
+        "Deskripsi": "SEK LSTRK ZAI/III&SH",
+        "Company": "B000",
+        "CostCenter": "B002123300"
+    },
+    {
+        "Deskripsi": "SEK LSTRK,INS&TELKOM",
+        "Company": "B000",
+        "CostCenter": "B003334200"
+    },
+    {
+        "Deskripsi": "SEK MESIN",
+        "Company": "B000",
+        "CostCenter": "B002611100"
+    },
+    {
+        "Deskripsi": "SEK MESIN",
+        "Company": "B000",
+        "CostCenter": "B003321100"
+    },
+    {
+        "Deskripsi": "SEK MKNK CONV DG PBN",
+        "Company": "B000",
+        "CostCenter": "B003314300"
+    },
+    {
+        "Deskripsi": "SEK MKNK CR/ALF3/PUR",
+        "Company": "B000",
+        "CostCenter": "B002332300"
+    },
+    {
+        "Deskripsi": "SEK MKNK EQUIP PBN",
+        "Company": "B000",
+        "CostCenter": "B003314200"
+    },
+    {
+        "Deskripsi": "SEK MKNK NH3",
+        "Company": "B000",
+        "CostCenter": "B002122200"
+    },
+    {
+        "Deskripsi": "SEK MKNK NH3 IA",
+        "Company": "B000",
+        "CostCenter": "B002122200"
+    },
+    {
+        "Deskripsi": "SEK MKNK NH3 IB",
+        "Company": "B000",
+        "CostCenter": "B002122600"
+    },
+    {
+        "Deskripsi": "SEK MKNK NPK I-IV",
+        "Company": "B000",
+        "CostCenter": "B002234200"
+    },
+    {
+        "Deskripsi": "SEK MKNK PA I",
+        "Company": "B000",
+        "CostCenter": "B002332200"
+    },
+    {
+        "Deskripsi": "SEK MKNK PA II",
+        "Company": "B000",
+        "CostCenter": "B002333200"
+    },
+    {
+        "Deskripsi": "SEK MKNK PF I & BAG",
+        "Company": "B000",
+        "CostCenter": "B002233100"
+    },
+    {
+        "Deskripsi": "SEK MKNK PH I & BAG",
+        "Company": "B000",
+        "CostCenter": "B002233200"
+    },
+    {
+        "Deskripsi": "SEK MKNK PH II/III &",
+        "Company": "B000",
+        "CostCenter": "B002233300"
+    },
+    {
+        "Deskripsi": "SEK MKNK PH IV",
+        "Company": "B000",
+        "CostCenter": "B002234100"
+    },
+    {
+        "Deskripsi": "SEK MKNK SA I/ SU I/",
+        "Company": "B000",
+        "CostCenter": "B002332100"
+    },
+    {
+        "Deskripsi": "SEK MKNK SA II/ SU I",
+        "Company": "B000",
+        "CostCenter": "B002333100"
+    },
+    {
+        "Deskripsi": "SEK MKNK SUPP & BAG",
+        "Company": "B000",
+        "CostCenter": "B002122500"
+    },
+    {
+        "Deskripsi": "SEK MKNK UREA",
+        "Company": "B000",
+        "CostCenter": "B002122300"
+    },
+    {
+        "Deskripsi": "SEK MKNK UREA IA",
+        "Company": "B000",
+        "CostCenter": "B002122300"
+    },
+    {
+        "Deskripsi": "SEK MKNK UREA IB",
+        "Company": "B000",
+        "CostCenter": "B002122700"
+    },
+    {
+        "Deskripsi": "SEK MKNK UTILITAS",
+        "Company": "B000",
+        "CostCenter": "B002122100"
+    },
+    {
+        "Deskripsi": "SEK MKNK UTILITAS ZK",
+        "Company": "B000",
+        "CostCenter": "B002234300"
+    },
+    {
+        "Deskripsi": "SEK MKNK UTL B. BARA",
+        "Company": "B000",
+        "CostCenter": "B002332500"
+    },
+    {
+        "Deskripsi": "SEK MKNK ZA II",
+        "Company": "B000",
+        "CostCenter": "B002332400"
+    },
+    {
+        "Deskripsi": "SEK MKNK ZAI/III&DUK",
+        "Company": "B000",
+        "CostCenter": "B002122400"
+    },
+    {
+        "Deskripsi": "SEK MKNKZAI/III&PLMS",
+        "Company": "B000",
+        "CostCenter": "B002122400"
+    },
+    {
+        "Deskripsi": "SEK ND LAB PB IB",
+        "Company": "B000",
+        "CostCenter": "B002412200"
+    },
+    {
+        "Deskripsi": "SEK NH3 & METERING",
+        "Company": "B000",
+        "CostCenter": "B002124200"
+    },
+    {
+        "Deskripsi": "SEK NPK II/III/IV",
+        "Company": "B000",
+        "CostCenter": "B002222100"
+    },
+    {
+        "Deskripsi": "SEK NPK III/IV",
+        "Company": "B000",
+        "CostCenter": "B002222200"
+    },
+    {
+        "Deskripsi": "SEK NPK PH I",
+        "Company": "B000",
+        "CostCenter": "B002211100"
+    },
+    {
+        "Deskripsi": "SEK NPK PH II",
+        "Company": "B000",
+        "CostCenter": "B002212100"
+    },
+    {
+        "Deskripsi": "SEK NPK PH III",
+        "Company": "B000",
+        "CostCenter": "B002212200"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER AA",
+        "Company": "B000",
+        "CostCenter": "B002612400"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER BB&NP",
+        "Company": "B000",
+        "CostCenter": "B002612300"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER BB&NP",
+        "Company": "B000",
+        "CostCenter": "B003324400"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER NON PB",
+        "Company": "B000",
+        "CostCenter": "B002612200"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER NON PB",
+        "Company": "B000",
+        "CostCenter": "B003324100"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER PABRIK",
+        "Company": "B000",
+        "CostCenter": "B002612100"
+    },
+    {
+        "Deskripsi": "SEK OPS ALBER PABRIK",
+        "Company": "B000",
+        "CostCenter": "B003324300"
+    },
+    {
+        "Deskripsi": "SEK OPS DC LAMPUNG",
+        "Company": "B000",
+        "CostCenter": "B004223200"
+    },
+    {
+        "Deskripsi": "SEK OPS DC MAKASSAR",
+        "Company": "B000",
+        "CostCenter": "B004223400"
+    },
+    {
+        "Deskripsi": "SEK OPS DC MEDAN",
+        "Company": "B000",
+        "CostCenter": "B004223300"
+    },
+    {
+        "Deskripsi": "SEK OPS DC PADANG",
+        "Company": "B000",
+        "CostCenter": "B004223500"
+    },
+    {
+        "Deskripsi": "SEK PA BABAT",
+        "Company": "B000",
+        "CostCenter": "B003332100"
+    },
+    {
+        "Deskripsi": "SEK PA GUNUNG SARI",
+        "Company": "B000",
+        "CostCenter": "B003333100"
+    },
+    {
+        "Deskripsi": "SEK PERANCANGAN",
+        "Company": "B000",
+        "CostCenter": "B003322100"
+    },
+    {
+        "Deskripsi": "SEK PGWS SHIFT",
+        "Company": "B000",
+        "CostCenter": "B002120100"
+    },
+    {
+        "Deskripsi": "SEK PROD SMPNG",
+        "Company": "B000",
+        "CostCenter": "B002115100"
+    },
+    {
+        "Deskripsi": "SEK PUPUK FOSFAT I",
+        "Company": "B000",
+        "CostCenter": "B002213100"
+    },
+    {
+        "Deskripsi": "SEK SHIFT HAR II",
+        "Company": "B000",
+        "CostCenter": "B002230100"
+    },
+    {
+        "Deskripsi": "SEK SHIFT HAR IIB",
+        "Company": "B000",
+        "CostCenter": "B002230200"
+    },
+    {
+        "Deskripsi": "SEK SHIFT HAR III",
+        "Company": "B000",
+        "CostCenter": "B002330100"
+    },
+    {
+        "Deskripsi": "SEK SHIFT MSN/FBRKS",
+        "Company": "B000",
+        "CostCenter": "B002611300"
+    },
+    {
+        "Deskripsi": "SEK SIPIL",
+        "Company": "B000",
+        "CostCenter": "B003334100"
+    },
+    {
+        "Deskripsi": "SEK TEK&PENUNJANG",
+        "Company": "B000",
+        "CostCenter": "B003323200"
+    },
+    {
+        "Deskripsi": "SEK TEKNIS & QC",
+        "Company": "B000",
+        "CostCenter": "B003322200"
+    },
+    {
+        "Deskripsi": "SEK TRNS DRT JTM&BL",
+        "Company": "B000",
+        "CostCenter": "B004122100"
+    },
+    {
+        "Deskripsi": "SEK TRNS DRT JTNG,DI",
+        "Company": "B000",
+        "CostCenter": "B004122300"
+    },
+    {
+        "Deskripsi": "SEK TRNS DRT PTRGNK",
+        "Company": "B000",
+        "CostCenter": "B004122200"
+    },
+    {
+        "Deskripsi": "SEK UJI LIMBAH",
+        "Company": "B000",
+        "CostCenter": "B002411400"
+    },
+    {
+        "Deskripsi": "SEK UREA IA & BAG IA",
+        "Company": "B000",
+        "CostCenter": "B002124300"
+    },
+    {
+        "Deskripsi": "SEK UREA IB/BAG IB",
+        "Company": "B000",
+        "CostCenter": "B002124500"
+    },
+    {
+        "Deskripsi": "SEK UTILITAS IA",
+        "Company": "B000",
+        "CostCenter": "B002114100"
+    },
+    {
+        "Deskripsi": "SEK UTILITAS IB",
+        "Company": "B000",
+        "CostCenter": "B002133100"
+    },
+    {
+        "Deskripsi": "SEK UTILITAS IB/NH3",
+        "Company": "B000",
+        "CostCenter": "B002124400"
+    },
+    {
+        "Deskripsi": "SEK UTILITAS II",
+        "Company": "B000",
+        "CostCenter": "B002224100"
+    },
+    {
+        "Deskripsi": "SEK UTILITAS IIIA",
+        "Company": "B000",
+        "CostCenter": "B002311100"
+    },
+    {
+        "Deskripsi": "SEK UTILITAS IIIB",
+        "Company": "B000",
+        "CostCenter": "B002321100"
+    },
+    {
+        "Deskripsi": "SEK UTL/TANK YARD",
+        "Company": "B000",
+        "CostCenter": "B002234400"
+    },
+    {
+        "Deskripsi": "SEK UTL/TANK YARD",
+        "Company": "B000",
+        "CostCenter": "B002234400"
+    },
+    {
+        "Deskripsi": "SEK ZA I/III",
+        "Company": "B000",
+        "CostCenter": "B002113100"
+    },
+    {
+        "Deskripsi": "SEK ZK I/II & NPK I",
+        "Company": "B000",
+        "CostCenter": "B002223100"
+    },
+    {
+        "Deskripsi": "SEKSI BENGKEL LAS IB",
+        "Company": "B000",
+        "CostCenter": "B002121400"
+    },
+    {
+        "Deskripsi": "SEKSI PERJAKA",
+        "Company": "B000",
+        "CostCenter": "B001201000"
+    },
+    {
+        "Deskripsi": "SK INS UTILITASIA&ZA",
+        "Company": "B000",
+        "CostCenter": "B002124100"
+    },
+    {
+        "Deskripsi": "SMD RPPH",
+        "Company": "B000",
+        "CostCenter": "B003111100"
+    },
+    {
+        "Deskripsi": "SMD RPPHT",
+        "Company": "B000",
+        "CostCenter": "B003121100"
+    },
+    {
+        "Deskripsi": "SMDY RPPH",
+        "Company": "B000",
+        "CostCenter": "B003111000"
+    },
+    {
+        "Deskripsi": "SMDY RPPHT",
+        "Company": "B000",
+        "CostCenter": "B003121000"
+    },
+    {
+        "Deskripsi": "SP RPPH",
+        "Company": "B000",
+        "CostCenter": "B003111110"
+    },
+    {
+        "Deskripsi": "SP RPPHT",
+        "Company": "B000",
+        "CostCenter": "B003121110"
+    },
+    {
+        "Deskripsi": "ST ADMIN PETROGANIK",
+        "Company": "B000",
+        "CostCenter": "B004312300"
+    },
+    {
+        "Deskripsi": "ST CAAN DAAN",
+        "Company": "B000",
+        "CostCenter": "B002631100"
+    },
+    {
+        "Deskripsi": "ST CANDAL HAR IIA",
+        "Company": "B000",
+        "CostCenter": "B002237100"
+    },
+    {
+        "Deskripsi": "ST CANDAL HAR IIB",
+        "Company": "B000",
+        "CostCenter": "B002238100"
+    },
+    {
+        "Deskripsi": "ST CANDAL HAR KWASAN",
+        "Company": "B000",
+        "CostCenter": "B003331300"
+    },
+    {
+        "Deskripsi": "ST CANDAL PA G.SARI",
+        "Company": "B000",
+        "CostCenter": "B003331200"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL I",
+        "Company": "B000",
+        "CostCenter": "B002125100"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL I",
+        "Company": "B000",
+        "CostCenter": "B002336100"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL II",
+        "Company": "B000",
+        "CostCenter": "B002125200"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL II",
+        "Company": "B000",
+        "CostCenter": "B002336200"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL III",
+        "Company": "B000",
+        "CostCenter": "B002125300"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL III",
+        "Company": "B000",
+        "CostCenter": "B002336300"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL IV",
+        "Company": "B000",
+        "CostCenter": "B002336400"
+    },
+    {
+        "Deskripsi": "ST CANDAL WIL V",
+        "Company": "B000",
+        "CostCenter": "B002336500"
+    },
+    {
+        "Deskripsi": "ST CCTPC",
+        "Company": "B000",
+        "CostCenter": "B002543000"
+    },
+    {
+        "Deskripsi": "ST DALOPS",
+        "Company": "B000",
+        "CostCenter": "B002451000"
+    },
+    {
+        "Deskripsi": "ST ENGINEERING",
+        "Company": "B000",
+        "CostCenter": "B002631300"
+    },
+    {
+        "Deskripsi": "ST ENGINEERING INSPE",
+        "Company": "B000",
+        "CostCenter": "B002435000"
+    },
+    {
+        "Deskripsi": "ST ENGINEERING INSPE",
+        "Company": "B000",
+        "CostCenter": "B002555000"
+    },
+    {
+        "Deskripsi": "ST EVA PROS PB I",
+        "Company": "B000",
+        "CostCenter": "B002415000"
+    },
+    {
+        "Deskripsi": "ST EVA PROS PB II",
+        "Company": "B000",
+        "CostCenter": "B002416000"
+    },
+    {
+        "Deskripsi": "ST EVA PROS PB III",
+        "Company": "B000",
+        "CostCenter": "B002417000"
+    },
+    {
+        "Deskripsi": "ST HUB INDISTRIAL",
+        "Company": "B000",
+        "CostCenter": "B006122000"
+    },
+    {
+        "Deskripsi": "ST INSTEK PELABUHAN",
+        "Company": "B000",
+        "CostCenter": "B002436000"
+    },
+    {
+        "Deskripsi": "ST INSTEK ROTATING P",
+        "Company": "B000",
+        "CostCenter": "B002551000"
+    },
+    {
+        "Deskripsi": "ST INSTEK ROTATING P",
+        "Company": "B000",
+        "CostCenter": "B002552000"
+    },
+    {
+        "Deskripsi": "ST INSTEK ROTATING P",
+        "Company": "B000",
+        "CostCenter": "B002553000"
+    },
+    {
+        "Deskripsi": "ST INSTEK RTTNG & UJ",
+        "Company": "B000",
+        "CostCenter": "B002554000"
+    },
+    {
+        "Deskripsi": "ST INSTEK STAKOR & S",
+        "Company": "B000",
+        "CostCenter": "B002434000"
+    },
+    {
+        "Deskripsi": "ST INSTEK STATIK PB",
+        "Company": "B000",
+        "CostCenter": "B002431000"
+    },
+    {
+        "Deskripsi": "ST INSTEK STATIK PB",
+        "Company": "B000",
+        "CostCenter": "B002432000"
+    },
+    {
+        "Deskripsi": "ST INSTEK STATIK PB",
+        "Company": "B000",
+        "CostCenter": "B002433000"
+    },
+    {
+        "Deskripsi": "ST JASA EKSTERNAL",
+        "Company": "B000",
+        "CostCenter": "B006123000"
+    },
+    {
+        "Deskripsi": "ST KJM PGNIK BALI&NT",
+        "Company": "B000",
+        "CostCenter": "B004312700"
+    },
+    {
+        "Deskripsi": "ST KJM PGNIK JATIM",
+        "Company": "B000",
+        "CostCenter": "B004312500"
+    },
+    {
+        "Deskripsi": "ST KJM PGNIK JTG&DIY",
+        "Company": "B000",
+        "CostCenter": "B004312600"
+    },
+    {
+        "Deskripsi": "ST KMTRN NPK CLUSTER",
+        "Company": "B000",
+        "CostCenter": "B004313400"
+    },
+    {
+        "Deskripsi": "ST KMTRN NPK CLUSTER",
+        "Company": "B000",
+        "CostCenter": "B004312400"
+    },
+    {
+        "Deskripsi": "ST KMTRN PHUPBB",
+        "Company": "B000",
+        "CostCenter": "B004312420"
+    },
+    {
+        "Deskripsi": "ST KMTRN PPK ORGNK C",
+        "Company": "B000",
+        "CostCenter": "B004312430"
+    },
+    {
+        "Deskripsi": "ST KMTRN PTRGNK JATE",
+        "Company": "B000",
+        "CostCenter": "B004312200"
+    },
+    {
+        "Deskripsi": "ST KMTRN PTRGNK JATI",
+        "Company": "B000",
+        "CostCenter": "B004312100"
+    },
+    {
+        "Deskripsi": "ST LOLA B.KMIA&ALAT",
+        "Company": "B000",
+        "CostCenter": "B002411500"
+    },
+    {
+        "Deskripsi": "ST LOLA ENERGI",
+        "Company": "B000",
+        "CostCenter": "B002418000"
+    },
+    {
+        "Deskripsi": "ST LOP",
+        "Company": "B000",
+        "CostCenter": "B006127000"
+    },
+    {
+        "Deskripsi": "ST MARKET SUPP BALI-",
+        "Company": "B000",
+        "CostCenter": "B00432K000"
+    },
+    {
+        "Deskripsi": "ST MARKET SUPP JATIM",
+        "Company": "B000",
+        "CostCenter": "B00432J000"
+    },
+    {
+        "Deskripsi": "ST OPERASIONAL DC",
+        "Company": "B000",
+        "CostCenter": "B004223600"
+    },
+    {
+        "Deskripsi": "ST OPS ALBER PBBPPS",
+        "Company": "B000",
+        "CostCenter": "B002612500"
+    },
+    {
+        "Deskripsi": "ST OPS DC CIGADING",
+        "Company": "B000",
+        "CostCenter": "B004122400"
+    },
+    {
+        "Deskripsi": "ST OPS DC CIGADING",
+        "Company": "B000",
+        "CostCenter": "B004122400"
+    },
+    {
+        "Deskripsi": "ST OPS DC GRSK & BWI",
+        "Company": "B000",
+        "CostCenter": "B004122500"
+    },
+    {
+        "Deskripsi": "ST OPS GP",
+        "Company": "B000",
+        "CostCenter": "B004125100"
+    },
+    {
+        "Deskripsi": "ST PENERIMAAN & QC",
+        "Company": "B000",
+        "CostCenter": "B002631200"
+    },
+    {
+        "Deskripsi": "ST PLAN TA AMONIA&IB",
+        "Company": "B000",
+        "CostCenter": "B002126100"
+    },
+    {
+        "Deskripsi": "ST PLAN TA UREAIA&IB",
+        "Company": "B000",
+        "CostCenter": "B002126200"
+    },
+    {
+        "Deskripsi": "ST PLAN UTL,ZA I/III",
+        "Company": "B000",
+        "CostCenter": "B002126300"
+    },
+    {
+        "Deskripsi": "ST PLANNER PA",
+        "Company": "B000",
+        "CostCenter": "B003331100"
+    },
+    {
+        "Deskripsi": "ST PLANNER UTL&SUPP",
+        "Company": "B000",
+        "CostCenter": "B002125200"
+    },
+    {
+        "Deskripsi": "ST PNLITI&KALIBRASI",
+        "Company": "B000",
+        "CostCenter": "B002411300"
+    },
+    {
+        "Deskripsi": "ST PROD MIXTRO",
+        "Company": "B000",
+        "CostCenter": "B004312410"
+    },
+    {
+        "Deskripsi": "ST PROYEK PRBNGKLN",
+        "Company": "B000",
+        "CostCenter": "B002613000"
+    },
+    {
+        "Deskripsi": "ST REKRUT & MK",
+        "Company": "B000",
+        "CostCenter": "B006125000"
+    },
+    {
+        "Deskripsi": "ST RELIABILITAS II",
+        "Company": "B000",
+        "CostCenter": "B002239200"
+    },
+    {
+        "Deskripsi": "ST RELIABILITAS III",
+        "Company": "B000",
+        "CostCenter": "B002337200"
+    },
+    {
+        "Deskripsi": "ST RELIABILITY I",
+        "Company": "B000",
+        "CostCenter": "B002125500"
+    },
+    {
+        "Deskripsi": "ST RELIABILITY II",
+        "Company": "B000",
+        "CostCenter": "B00223A000"
+    },
+    {
+        "Deskripsi": "ST RELIABILITY III",
+        "Company": "B000",
+        "CostCenter": "B002338000"
+    },
+    {
+        "Deskripsi": "ST REMUNERASI",
+        "Company": "B000",
+        "CostCenter": "B006124000"
+    },
+    {
+        "Deskripsi": "ST RENDAL BKL & FBRK",
+        "Company": "B000",
+        "CostCenter": "B002632200"
+    },
+    {
+        "Deskripsi": "ST RENDAL HAR JPP",
+        "Company": "B000",
+        "CostCenter": "B002632100"
+    },
+    {
+        "Deskripsi": "ST SHIFT HAR PELABHN",
+        "Company": "B000",
+        "CostCenter": "B003314010"
+    },
+    {
+        "Deskripsi": "ST SHIFT LAB PB IA",
+        "Company": "B000",
+        "CostCenter": "B002412100"
+    },
+    {
+        "Deskripsi": "ST SHIFT LAB PB IB",
+        "Company": "B000",
+        "CostCenter": "B002412300"
+    },
+    {
+        "Deskripsi": "ST SHIFT LAB PB IIA",
+        "Company": "B000",
+        "CostCenter": "B002413100"
+    },
+    {
+        "Deskripsi": "ST SHIFT LAB PB IIB",
+        "Company": "B000",
+        "CostCenter": "B002413200"
+    },
+    {
+        "Deskripsi": "ST SHIFT LAB PB III",
+        "Company": "B000",
+        "CostCenter": "B002414100"
+    },
+    {
+        "Deskripsi": "ST SHIFT LAB PB IIIB",
+        "Company": "B000",
+        "CostCenter": "B002414200"
+    },
+    {
+        "Deskripsi": "ST SPIMC",
+        "Company": "B000",
+        "CostCenter": "B002542000"
+    },
+    {
+        "Deskripsi": "ST SUPPORTING JUAL",
+        "Company": "B000",
+        "CostCenter": "B00412H000"
+    },
+    {
+        "Deskripsi": "ST TALENT",
+        "Company": "B000",
+        "CostCenter": "B006126000"
+    },
+    {
+        "Deskripsi": "ST TURN AROUND II",
+        "Company": "B000",
+        "CostCenter": "B002239100"
+    },
+    {
+        "Deskripsi": "ST TURN AROUND III",
+        "Company": "B000",
+        "CostCenter": "B002337100"
+    },
+    {
+        "Deskripsi": "ST UJI BAHAN MASUK",
+        "Company": "B000",
+        "CostCenter": "B002411100"
+    },
+    {
+        "Deskripsi": "ST UJI MUTU",
+        "Company": "B000",
+        "CostCenter": "B002411600"
+    },
+    {
+        "Deskripsi": "ST UJI PRODUK",
+        "Company": "B000",
+        "CostCenter": "B002411200"
+    },
+    {
+        "Deskripsi": "STAF PLANNER AMONIAK",
+        "Company": "B000",
+        "CostCenter": "B002125100"
+    },
+    {
+        "Deskripsi": "STAF PLANNER UREA",
+        "Company": "B000",
+        "CostCenter": "B002125300"
+    },
+    {
+        "Deskripsi": "STAF PLANNER ZA&BAG",
+        "Company": "B000",
+        "CostCenter": "B002125400"
+    },
+    {
+        "Deskripsi": "STAF RELIABILITAS I",
+        "Company": "B000",
+        "CostCenter": "B002126200"
+    },
+    {
+        "Deskripsi": "STAF TURN AROUND I",
+        "Company": "B000",
+        "CostCenter": "B002126100"
+    },
+    {
+        "Deskripsi": "TA AMONIAK",
+        "Company": "B000",
+        "CostCenter": "B007030003"
+    },
+    {
+        "Deskripsi": "TA AMONIAK IB",
+        "Company": "B000",
+        "CostCenter": "B007030040"
+    },
+    {
+        "Deskripsi": "TA BAG & SUP IB",
+        "Company": "B000",
+        "CostCenter": "B007030042"
+    },
+    {
+        "Deskripsi": "TA BAGGING",
+        "Company": "B000",
+        "CostCenter": "B007030005"
+    },
+    {
+        "Deskripsi": "TA BAGGING UREA",
+        "Company": "B000",
+        "CostCenter": "B007030019"
+    },
+    {
+        "Deskripsi": "TA BAGGING ZA",
+        "Company": "B000",
+        "CostCenter": "B007030020"
+    },
+    {
+        "Deskripsi": "TA CO2",
+        "Company": "B000",
+        "CostCenter": "B007030009"
+    },
+    {
+        "Deskripsi": "TA CR AF PURI I",
+        "Company": "B000",
+        "CostCenter": "B007030034"
+    },
+    {
+        "Deskripsi": "TA GEN USE IB",
+        "Company": "B000",
+        "CostCenter": "B007030043"
+    },
+    {
+        "Deskripsi": "TA GENUSE P1",
+        "Company": "B000",
+        "CostCenter": "B007030006"
+    },
+    {
+        "Deskripsi": "TA GYPSUM II",
+        "Company": "B000",
+        "CostCenter": "B007030038"
+    },
+    {
+        "Deskripsi": "TA IPA BABAT",
+        "Company": "B000",
+        "CostCenter": "B007030002"
+    },
+    {
+        "Deskripsi": "TA IPA BABAT",
+        "Company": "B000",
+        "CostCenter": "B007030002"
+    },
+    {
+        "Deskripsi": "TA IPA GUNUNG SARI",
+        "Company": "B000",
+        "CostCenter": "B007030001"
+    },
+    {
+        "Deskripsi": "TA NPK I",
+        "Company": "B000",
+        "CostCenter": "B007030026"
+    },
+    {
+        "Deskripsi": "TA NPK II",
+        "Company": "B000",
+        "CostCenter": "B007030027"
+    },
+    {
+        "Deskripsi": "TA NPK III",
+        "Company": "B000",
+        "CostCenter": "B007030028"
+    },
+    {
+        "Deskripsi": "TA NPK IV",
+        "Company": "B000",
+        "CostCenter": "B007030029"
+    },
+    {
+        "Deskripsi": "TA NPK PHONSKA I",
+        "Company": "B000",
+        "CostCenter": "B007030022"
+    },
+    {
+        "Deskripsi": "TA NPK PHONSKA II",
+        "Company": "B000",
+        "CostCenter": "B007030023"
+    },
+    {
+        "Deskripsi": "TA NPK PHONSKA III",
+        "Company": "B000",
+        "CostCenter": "B007030024"
+    },
+    {
+        "Deskripsi": "TA NPK PHONSKA IV",
+        "Company": "B000",
+        "CostCenter": "B007030025"
+    },
+    {
+        "Deskripsi": "TA PA I",
+        "Company": "B000",
+        "CostCenter": "B007030032"
+    },
+    {
+        "Deskripsi": "TA PA II",
+        "Company": "B000",
+        "CostCenter": "B007030036"
+    },
+    {
+        "Deskripsi": "TA PF I",
+        "Company": "B000",
+        "CostCenter": "B007030021"
+    },
+    {
+        "Deskripsi": "TA SA/SU II",
+        "Company": "B000",
+        "CostCenter": "B007030037"
+    },
+    {
+        "Deskripsi": "TA SA/SU/ET I",
+        "Company": "B000",
+        "CostCenter": "B007030033"
+    },
+    {
+        "Deskripsi": "TA UREA",
+        "Company": "B000",
+        "CostCenter": "B007030004"
+    },
+    {
+        "Deskripsi": "TA UREA IB",
+        "Company": "B000",
+        "CostCenter": "B007030041"
+    },
+    {
+        "Deskripsi": "TA UT/SU",
+        "Company": "B000",
+        "CostCenter": "B007030010"
+    },
+    {
+        "Deskripsi": "TA UT/SU B1102",
+        "Company": "B000",
+        "CostCenter": "B007030013"
+    },
+    {
+        "Deskripsi": "TA UT/SU CT I",
+        "Company": "B000",
+        "CostCenter": "B007030014"
+    },
+    {
+        "Deskripsi": "TA UT/SU CT II",
+        "Company": "B000",
+        "CostCenter": "B007030016"
+    },
+    {
+        "Deskripsi": "TA UT/SU DEMIN I",
+        "Company": "B000",
+        "CostCenter": "B007030012"
+    },
+    {
+        "Deskripsi": "TA UT/SU DEMIN II",
+        "Company": "B000",
+        "CostCenter": "B007030015"
+    },
+    {
+        "Deskripsi": "TA UT/SU GTG",
+        "Company": "B000",
+        "CostCenter": "B007030017"
+    },
+    {
+        "Deskripsi": "TA UT/SU LSU",
+        "Company": "B000",
+        "CostCenter": "B007030011"
+    },
+    {
+        "Deskripsi": "TA UT/SU WHB",
+        "Company": "B000",
+        "CostCenter": "B007030018"
+    },
+    {
+        "Deskripsi": "TA UTILITAS BATUBARA",
+        "Company": "B000",
+        "CostCenter": "B007030039"
+    },
+    {
+        "Deskripsi": "TA ZA I",
+        "Company": "B000",
+        "CostCenter": "B007030007"
+    },
+    {
+        "Deskripsi": "TA ZA II",
+        "Company": "B000",
+        "CostCenter": "B007030035"
+    },
+    {
+        "Deskripsi": "TA ZA III",
+        "Company": "B000",
+        "CostCenter": "B007030008"
+    },
+    {
+        "Deskripsi": "TA ZK I",
+        "Company": "B000",
+        "CostCenter": "B007030030"
+    },
+    {
+        "Deskripsi": "TA ZK II",
+        "Company": "B000",
+        "CostCenter": "B007030031"
+    },
+    {
+        "Deskripsi": "U DEMIN EKST 3B",
+        "Company": "B000",
+        "CostCenter": "B007000026"
+    },
+    {
+        "Deskripsi": "U GYPSUM EKST 3B",
+        "Company": "B000",
+        "CostCenter": "B007000027"
+    },
+    {
+        "Deskripsi": "U JASA",
+        "Company": "B000",
+        "CostCenter": "B007000014"
+    },
+    {
+        "Deskripsi": "U KANTONG EK PROD 3B",
+        "Company": "B000",
+        "CostCenter": "B007000020"
+    },
+    {
+        "Deskripsi": "U LISTRIK EKST",
+        "Company": "B000",
+        "CostCenter": "B007000016"
+    },
+    {
+        "Deskripsi": "U PA EKST",
+        "Company": "B000",
+        "CostCenter": "B007000017"
+    },
+    {
+        "Deskripsi": "U PANTONG EKS DC I",
+        "Company": "B000",
+        "CostCenter": "B007000023"
+    },
+    {
+        "Deskripsi": "U PANTONG EKS DC II",
+        "Company": "B000",
+        "CostCenter": "B007000024"
+    },
+    {
+        "Deskripsi": "U PANTONG EKS P IIA",
+        "Company": "B000",
+        "CostCenter": "B007000002"
+    },
+    {
+        "Deskripsi": "U PANTONG EKS P IIIA",
+        "Company": "B000",
+        "CostCenter": "B007000003"
+    },
+    {
+        "Deskripsi": "U PANTONG EKS PGM",
+        "Company": "B000",
+        "CostCenter": "B007000004"
+    },
+    {
+        "Deskripsi": "U PANTONG EKS UREA",
+        "Company": "B000",
+        "CostCenter": "B007000011"
+    },
+    {
+        "Deskripsi": "U PANTONG ZA EKS",
+        "Company": "B000",
+        "CostCenter": "B007000031"
+    },
+    {
+        "Deskripsi": "U PH PLUS EKST",
+        "Company": "B000",
+        "CostCenter": "B007000018"
+    },
+    {
+        "Deskripsi": "U PROD FILLER PLUS",
+        "Company": "B000",
+        "CostCenter": "B007000033"
+    },
+    {
+        "Deskripsi": "U PROD FITRICE",
+        "Company": "B000",
+        "CostCenter": "B007000013"
+    },
+    {
+        "Deskripsi": "U PROD NCG",
+        "Company": "B000",
+        "CostCenter": "B007000006"
+    },
+    {
+        "Deskripsi": "U PROD PETROGANIK PR",
+        "Company": "B000",
+        "CostCenter": "B007000009"
+    },
+    {
+        "Deskripsi": "U PROD PHONSKA ALAM",
+        "Company": "B000",
+        "CostCenter": "B007000028"
+    },
+    {
+        "Deskripsi": "U PROD PHOSGREEN",
+        "Company": "B000",
+        "CostCenter": "B007000010"
+    },
+    {
+        "Deskripsi": "U PROD STARTER PROB",
+        "Company": "B000",
+        "CostCenter": "B007000008"
+    },
+    {
+        "Deskripsi": "U PROD SUSPENSI HYTI",
+        "Company": "B000",
+        "CostCenter": "B007000005"
+    },
+    {
+        "Deskripsi": "U PRODUKSI OCAMIX",
+        "Company": "B000",
+        "CostCenter": "B007000007"
+    },
+    {
+        "Deskripsi": "U SA EKST",
+        "Company": "B000",
+        "CostCenter": "B007000019"
+    },
+    {
+        "Deskripsi": "U STEAM EKST",
+        "Company": "B000",
+        "CostCenter": "B007000015"
+    },
+    {
+        "Deskripsi": "U SURFACTANT EKSTERN",
+        "Company": "B000",
+        "CostCenter": "B007000022"
+    },
+    {
+        "Deskripsi": "UNIT DEMIN EKSTERNAL",
+        "Company": "B000",
+        "CostCenter": "B007000025"
+    },
+    {
+        "Deskripsi": "UNIT JASA EKS O&M",
+        "Company": "B000",
+        "CostCenter": "B007000032"
+    },
+    {
+        "Deskripsi": "UNIT NPK EKSTERNAL",
+        "Company": "B000",
+        "CostCenter": "B007000021"
+    },
+    {
+        "Deskripsi": "UNIT PANTONG II",
+        "Company": "B000",
+        "CostCenter": "B002214100"
+    },
+    {
+        "Deskripsi": "UNIT PANTONG UREA IA",
+        "Company": "B000",
+        "CostCenter": "B002115110"
+    },
+    {
+        "Deskripsi": "UNIT PANTONG UREA IB",
+        "Company": "B000",
+        "CostCenter": "B002133120"
+    },
+    {
+        "Deskripsi": "UNIT PANTONG ZA",
+        "Company": "B000",
+        "CostCenter": "B002115120"
+    },
+    {
+        "Deskripsi": "UNIT PANTONG ZK EKS",
+        "Company": "B000",
+        "CostCenter": "B007000030"
+    },
+    {
+        "Deskripsi": "UNIT PENGANTONGAN EK",
+        "Company": "B000",
+        "CostCenter": "B007000029"
+    },
+    {
+        "Deskripsi": "UNIT PROD MIXTRO",
+        "Company": "B000",
+        "CostCenter": "B007000012"
+    },
+    {
+        "Deskripsi": "UNIT PURIFIKASI I",
+        "Company": "B000",
+        "CostCenter": "B002313110"
+    },
+    {
+        "Deskripsi": "UNIT PURIFIKASI II",
+        "Company": "B000",
+        "CostCenter": "B002323110"
+    }
+]

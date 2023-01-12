@@ -1,0 +1,867 @@
+[
+    {
+        "GL Acc": "610110000",
+        "GL ACC Desc": "Bahan Baku",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "610220000",
+        "GL ACC Desc": "Bahan Pembantu",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "620110001",
+        "GL ACC Desc": "Gaji Pokok",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620120001",
+        "GL ACC Desc": "Tunj.Jabatan",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620120003",
+        "GL ACC Desc": "Tunj.Sarana Kerja",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620120004",
+        "GL ACC Desc": "Tunj.Cuti karyawn",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620120005",
+        "GL ACC Desc": "Tunj.Lembur",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620120006",
+        "GL ACC Desc": "Tunj.Pajak",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130001",
+        "GL ACC Desc": "Pengobatan",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130002",
+        "GL ACC Desc": "BPJS TK/Asuransi",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130003",
+        "GL ACC Desc": "Tunj. Hari Raya",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130004",
+        "GL ACC Desc": "Iuran Pensiun",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130005",
+        "GL ACC Desc": "Iuran Kes.Hr Tua",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130006",
+        "GL ACC Desc": "Pesangon",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130007",
+        "GL ACC Desc": "Insentif Kinerja",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "620130008",
+        "GL ACC Desc": "Jasa Operasi",
+        "Kelompok Acc": "1800"
+    },
+    {
+        "GL Acc": "630110000",
+        "GL ACC Desc": "Suku Cadang",
+        "Kelompok Acc": "900"
+    },
+    {
+        "GL Acc": "640110001",
+        "GL ACC Desc": "Asuransi-Pabrik",
+        "Kelompok Acc": "200"
+    },
+    {
+        "GL Acc": "650110001",
+        "GL ACC Desc": "Penyustn Bangunan",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "650110002",
+        "GL ACC Desc": "Penyustn Pabrik&Alat",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "650130001",
+        "GL ACC Desc": "Penyustn Mesin Bngkl",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "650230000",
+        "GL ACC Desc": "Amort-Bhn Kimia",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "690190005",
+        "GL ACC Desc": "Lain-PeNil Stock",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "690190006",
+        "GL ACC Desc": "Lain-PeNil Aset",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "610320000",
+        "GL ACC Desc": "Kemas Kantong",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "610330000",
+        "GL ACC Desc": "Pengantongan",
+        "Kelompok Acc": "700"
+    },
+    {
+        "GL Acc": "720220000",
+        "GL ACC Desc": "Rg Hapus Aset Tetap",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "670120002",
+        "GL ACC Desc": "Jasa-Bersih Pbrk",
+        "Kelompok Acc": "400"
+    },
+    {
+        "GL Acc": "610310000",
+        "GL ACC Desc": "Kantong",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "610250000",
+        "GL ACC Desc": "Bahan Pelumas",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "610410000",
+        "GL ACC Desc": "Handling Bahan Baku",
+        "Kelompok Acc": "300"
+    },
+    {
+        "GL Acc": "620310000",
+        "GL ACC Desc": "Diklat",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "670120003",
+        "GL ACC Desc": "Jasa-Kuras Sludge",
+        "Kelompok Acc": "400"
+    },
+    {
+        "GL Acc": "670230002",
+        "GL ACC Desc": "Sewa-Alat Berat",
+        "Kelompok Acc": "800"
+    },
+    {
+        "GL Acc": "620210000",
+        "GL ACC Desc": "PD - Dalam Negeri",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "610230000",
+        "GL ACC Desc": "Air Baku",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "650130003",
+        "GL ACC Desc": "Penyustn Alat Kantor",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "660220013",
+        "GL ACC Desc": "Hi & Ho Lini 2",
+        "Kelompok Acc": "300"
+    },
+    {
+        "GL Acc": "610340000",
+        "GL ACC Desc": "Mob. Bagging Unit",
+        "Kelompok Acc": "700"
+    },
+    {
+        "GL Acc": "660210000",
+        "GL ACC Desc": "Distribusi",
+        "Kelompok Acc": "300"
+    },
+    {
+        "GL Acc": "670210004",
+        "GL ACC Desc": "Sewa-Gudang",
+        "Kelompok Acc": "800"
+    },
+    {
+        "GL Acc": "670240002",
+        "GL ACC Desc": "Sewa-Gdg Lini 2",
+        "Kelompok Acc": "800"
+    },
+    {
+        "GL Acc": "690190009",
+        "GL ACC Desc": "Lain-Susut Persdiaan",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "710111000",
+        "GL ACC Desc": "Lb SKur-Real BB",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "720111000",
+        "GL ACC Desc": "Rg SKur-Real BB",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "903000000",
+        "GL ACC Desc": "Ovrhead Pemeliharaan",
+        "Kelompok Acc": "600"
+    },
+    {
+        "GL Acc": "630210001",
+        "GL ACC Desc": "Pemlhr-Pabrik",
+        "Kelompok Acc": "600"
+    },
+    {
+        "GL Acc": "924110001",
+        "GL ACC Desc": "Gaji Pokok",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924120001",
+        "GL ACC Desc": "Tunj.Jabatan",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924120003",
+        "GL ACC Desc": "Tunj.Sarana Kerja",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924120004",
+        "GL ACC Desc": "Tunj.Cuti karyawn",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924120006",
+        "GL ACC Desc": "Tunj.Pajak",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130001",
+        "GL ACC Desc": "Pengobatan",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130002",
+        "GL ACC Desc": "BPJS TK/Asuransi",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130003",
+        "GL ACC Desc": "Tunj. Hari Raya",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130004",
+        "GL ACC Desc": "Iuran Pensiun",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130005",
+        "GL ACC Desc": "Iuran Kes.Hr Tua",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130006",
+        "GL ACC Desc": "Pesangon",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130007",
+        "GL ACC Desc": "Insentif Kinerja",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130008",
+        "GL ACC Desc": "Jasa Operasi",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924130009",
+        "GL ACC Desc": "Tantiem",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924210000",
+        "GL ACC Desc": "PD - Dalam Negeri",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "974110004",
+        "GL ACC Desc": "Jasa-Audit",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "974130001",
+        "GL ACC Desc": "Jasa-Alih Daya",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "994120001",
+        "GL ACC Desc": "Lain-Jamuan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "974110001",
+        "GL ACC Desc": "Jasa-Konsultan",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "954110002",
+        "GL ACC Desc": "Penyustn Pabrik&Alat",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "904000000",
+        "GL ACC Desc": "Overhead Pemeliharaa",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "914220000",
+        "GL ACC Desc": "Bahan Pembantu",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "914410000",
+        "GL ACC Desc": "Handling Bahan Baku",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "924120005",
+        "GL ACC Desc": "Tunj.Lembur",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "924220000",
+        "GL ACC Desc": "PD - Luar Negeri",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "934110000",
+        "GL ACC Desc": "Suku Cadang",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "944210001",
+        "GL ACC Desc": "PBB",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "954110001",
+        "GL ACC Desc": "Penyustn Bangunan",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "974120002",
+        "GL ACC Desc": "Jasa-Bersih Pbrk",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "994190010",
+        "GL ACC Desc": "Lain-Sel. Pembulatan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "914320000",
+        "GL ACC Desc": "Kemas Kantong",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "934210004",
+        "GL ACC Desc": "Pemlhr-Gudang",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "954130001",
+        "GL ACC Desc": "Penyustn Mesin Bngkl",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "934210001",
+        "GL ACC Desc": "Pemlhr-Pabrik",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "934210003",
+        "GL ACC Desc": "Pemlhr-Gedung Ktr",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "974110003",
+        "GL ACC Desc": "Jasa-Manajemen",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "994120004",
+        "GL ACC Desc": "Lain-Makan/Minum",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "924310000",
+        "GL ACC Desc": "Diklat",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "974230002",
+        "GL ACC Desc": "Sewa-Alat Berat",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "914110000",
+        "GL ACC Desc": "Bahan Baku",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "944110001",
+        "GL ACC Desc": "Asuransi-Pabrik",
+        "Kelompok Acc": "1100"
+    },
+    {
+        "GL Acc": "914310000",
+        "GL ACC Desc": "Kantong",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "914330000",
+        "GL ACC Desc": "Pengantongan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "954120001",
+        "GL ACC Desc": "Penyustn Kendaraan",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "974120003",
+        "GL ACC Desc": "Jasa-Kuras Sludge",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "954130003",
+        "GL ACC Desc": "Penyustn Alat Kantor",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "974320000",
+        "GL ACC Desc": "Litbang",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "934210011",
+        "GL ACC Desc": "Pmlhr-Alat Kantor",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "994110003",
+        "GL ACC Desc": "Lain-Kehumasan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994110006",
+        "GL ACC Desc": "Lain-Alat Kerja",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994140007",
+        "GL ACC Desc": "Lain-Kampanye K3",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994110005",
+        "GL ACC Desc": "Lain-Inspksi&Ijin",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "954210000",
+        "GL ACC Desc": "Amort-ATB",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "994110011",
+        "GL ACC Desc": "Lain-Kalibrasi",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "914210000",
+        "GL ACC Desc": "Utilitas",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "944110004",
+        "GL ACC Desc": "Asuransi-Bangunan",
+        "Kelompok Acc": "1100"
+    },
+    {
+        "GL Acc": "954130002",
+        "GL ACC Desc": "Penyustn Alat Berat",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "934210010",
+        "GL ACC Desc": "Pemlhr-Alat Berat",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "994110010",
+        "GL ACC Desc": "Lain-Bahan Bakar",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "914230000",
+        "GL ACC Desc": "Air Baku",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "944120002",
+        "GL ACC Desc": "Asuransi-Bhn Baku",
+        "Kelompok Acc": "1100"
+    },
+    {
+        "GL Acc": "974120004",
+        "GL ACC Desc": "Jasa-Bersih Pasar",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "994190008",
+        "GL ACC Desc": "Lain-Stock Opname",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994120002",
+        "GL ACC Desc": "Lain-Pertemuan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "964220013",
+        "GL ACC Desc": "Hi & Ho Lini 2",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "924130010",
+        "GL ACC Desc": "Penghargaan",
+        "Kelompok Acc": "1200"
+    },
+    {
+        "GL Acc": "994140005",
+        "GL ACC Desc": "Lain-Rekreasi&OR",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "924320000",
+        "GL ACC Desc": "Gerakan Inovasi",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994110002",
+        "GL ACC Desc": "Lain-Media Didik",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994130001",
+        "GL ACC Desc": "Lain-Bina Wilayah",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "934210002",
+        "GL ACC Desc": "Pemlhr-Perumahan",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "934210005",
+        "GL ACC Desc": "Pemlhr-Jalan",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "934210008",
+        "GL ACC Desc": "Pemlhr-Kendarn",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "934210009",
+        "GL ACC Desc": "Pemlhr-Alat Kerja",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "934210013",
+        "GL ACC Desc": "PEMLHR-SARANA TIK",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "944210002",
+        "GL ACC Desc": "Pajak Kendaraan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "944220003",
+        "GL ACC Desc": "Retrib-Kendaraan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "944220006",
+        "GL ACC Desc": "Retrib-Parkir&Tol",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "954140003",
+        "GL ACC Desc": "Penyustn Pro.Inv.Bgn",
+        "Kelompok Acc": "1000"
+    },
+    {
+        "GL Acc": "974210003",
+        "GL ACC Desc": "Sewa-Kantor",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "974220001",
+        "GL ACC Desc": "Sewa-Kendaraan",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "974230001",
+        "GL ACC Desc": "Sewa-Alat Pbk&Ktr",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "974410000",
+        "GL ACC Desc": "Listrik",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994110001",
+        "GL ACC Desc": "Lain-Rumah Tangga",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994110007",
+        "GL ACC Desc": "Lain-Alat Kantor",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994110012",
+        "GL ACC Desc": "Lain-Cetak & Copy",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994140002",
+        "GL ACC Desc": "Lain-Bina Kywn",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "690190010",
+        "GL ACC Desc": "Lain-Sel. Pembulatan",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "660220014",
+        "GL ACC Desc": "Hi & Ho Lini 3",
+        "Kelompok Acc": "300"
+    },
+    {
+        "GL Acc": "670130001",
+        "GL ACC Desc": "Jasa-Alih Daya",
+        "Kelompok Acc": "400"
+    },
+    {
+        "GL Acc": "630210003",
+        "GL ACC Desc": "Pemlhr-Gedung Ktr",
+        "Kelompok Acc": "600"
+    },
+    {
+        "GL Acc": "914250000",
+        "GL ACC Desc": "Bahan Pelumas",
+        "Kelompok Acc": "1700"
+    },
+    {
+        "GL Acc": "994120003",
+        "GL ACC Desc": "Lain-Perayaan",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "994140001",
+        "GL ACC Desc": "Lain-Terima Kywn",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "630290001",
+        "GL ACC Desc": "Kliring-Pemlhr",
+        "Kelompok Acc": "600"
+    },
+    {
+        "GL Acc": "670240003",
+        "GL ACC Desc": "Sewa-Gdg Lini 3",
+        "Kelompok Acc": "800"
+    },
+    {
+        "GL Acc": "944120003",
+        "GL ACC Desc": "Asuransi-SkCadang",
+        "Kelompok Acc": "1100"
+    },
+    {
+        "GL Acc": "994110013",
+        "GL ACC Desc": "Lain-Kelola Limbh",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "630210004",
+        "GL ACC Desc": "Pemlhr-Gudang",
+        "Kelompok Acc": "600"
+    },
+    {
+        "GL Acc": "974240001",
+        "GL ACC Desc": "Sewa-Muka Laut",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "914340000",
+        "GL ACC Desc": "Mob. Bagging Unit",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "690190008",
+        "GL ACC Desc": "Lain-Stock Opname",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "934210012",
+        "GL ACC Desc": "Pemlhr-Taman",
+        "Kelompok Acc": "1500"
+    },
+    {
+        "GL Acc": "974130002",
+        "GL ACC Desc": "Jasa-Perijinan",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "974210001",
+        "GL ACC Desc": "Sewa-Tanah",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "994190005",
+        "GL ACC Desc": "Lain-PeNil Stock",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "974430000",
+        "GL ACC Desc": "Telekomunikasi",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "974230003",
+        "GL ACC Desc": "Sewa-Komputer",
+        "Kelompok Acc": "1600"
+    },
+    {
+        "GL Acc": "974440000",
+        "GL ACC Desc": "Operasional SAP",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "620130010",
+        "GL ACC Desc": "Penghargaan",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "974110002",
+        "GL ACC Desc": "Jasa-Peng. Sistem",
+        "Kelompok Acc": "1300"
+    },
+    {
+        "GL Acc": "620220000",
+        "GL ACC Desc": "PD - Luar Negeri",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "690110014",
+        "GL ACC Desc": "Lain-AUC tdk di kap.",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "994110009",
+        "GL ACC Desc": "Lain-Transportasi",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "974420000",
+        "GL ACC Desc": "Air",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "640210001",
+        "GL ACC Desc": "PBB",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "650120001",
+        "GL ACC Desc": "Penyustn Kendaraan",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "650130002",
+        "GL ACC Desc": "Penyustn Alat Berat",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "610210000",
+        "GL ACC Desc": "Utilitas",
+        "Kelompok Acc": "200"
+    },
+    {
+        "GL Acc": "640110004",
+        "GL ACC Desc": "Asuransi-Bangunan",
+        "Kelompok Acc": "200"
+    },
+    {
+        "GL Acc": "650130002",
+        "GL ACC Desc": "Penyustn Alat Berat",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "650210000",
+        "GL ACC Desc": "Amort-ATB",
+        "Kelompok Acc": "100"
+    },
+    {
+        "GL Acc": "690110005",
+        "GL ACC Desc": "Lain-Inspksi&Ijin",
+        "Kelompok Acc": "500"
+    },
+    {
+        "GL Acc": "670110001",
+        "GL ACC Desc": "Jasa-Konsultan",
+        "Kelompok Acc": "400"
+    },
+    {
+        "GL Acc": "994110015",
+        "GL ACC Desc": "Lain-Denda & Klaim",
+        "Kelompok Acc": "1400"
+    },
+    {
+        "GL Acc": "670230001",
+        "GL ACC Desc": "Sewa-Alat Pbk&Ktr",
+        "Kelompok Acc": "800"
+    }
+]

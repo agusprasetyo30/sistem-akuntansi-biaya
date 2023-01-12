@@ -445,7 +445,6 @@
                                 if(iName == 'price_rendaan_value'){
                                     input.id = 'price_rendaan_value_search'
                                 }
-
                                 $(input).
                                 appendTo(cell.empty()).
                                 on('change clear', function () {
@@ -460,17 +459,12 @@
                             else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
-                                if (iName == 'status'){
-                                    input.className = "status_search form-control custom-select select2";
-                                    @foreach (status_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }else if (iName == 'material'){
-                                    input.className = "material_search form-control custom-select select2";
-
-                                }else if (iName == 'version'){
-                                    input.className = "version_search form-control custom-select select2";
-
+                                if (iName == 'group_account'){
+                                    input.className = "group_account_search form-control custom-select select2";
+                                }else if (iName == 'gl_account'){
+                                    input.className = "gl_account_search form-control custom-select select2";
+                                }else if (iName == 'cost_center'){
+                                    input.className = "cost_center_search form-control custom-select select2";
                                 }
 
                                 input.innerHTML = options
@@ -483,17 +477,12 @@
                             cell.empty()
                         }
 
-                        $('.status_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
 
-                        $('.version_search').select2({
+                        $('.group_account_search').select2({
                             placeholder: 'Pilih Versi',
                             allowClear: false,
                             ajax: {
-                                url: "{{ route('version_dt') }}",
+                                url: "{{ route('group_account_fc_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -509,11 +498,32 @@
                             }
                         })
 
-                        $('.material_search').select2({
-                            placeholder: 'Pilih Material',
+                        $('.gl_account_search').select2({
+                            placeholder: 'Pilih Versi',
                             allowClear: false,
                             ajax: {
-                                url: "{{ route('material_dt') }}",
+                                url: "{{ route('gl_account_fc_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+
+                        $('.cost_center_search').select2({
+                            placeholder: 'Pilih Cost Center',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('cost_center_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -562,12 +572,12 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { width: "15%", data: 'group_account', name: 'filter_group_account', orderable:true},
-                    { width: "10%", data: 'gl_account', name: 'filter_gl_account', orderable:true},
-                    { width: "20%", data: 'cost_center', name: 'filter_cost_center', orderable:true},
-                    { width: "15%", data: 'periode', name: 'filter_periode', orderable:true},
-                    { width: "20%", data: 'value', name: 'filter_value', orderable:true, searchable: false},
-                    { width: "20%", data: 'action', name: 'action', orderable:false, searchable: false},
+                    { data: 'group_account', name: 'filter_group_account', orderable:true},
+                    { data: 'gl_account', name: 'filter_gl_account', orderable:true},
+                    { data: 'cost_center', name: 'filter_cost_center', orderable:true},
+                    { data: 'periode', name: 'filter_periode', orderable:true},
+                    { data: 'value', name: 'filter_value', orderable:true, searchable: false},
+                    { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
