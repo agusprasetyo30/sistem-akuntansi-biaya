@@ -12,34 +12,59 @@
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12">
-                            {{-- <div class="form-group">
-                                <label class="form-label">Versi Asumsi</label>
-                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Versi</option>
-                                </select>
-                            </div> --}}
                             <div class="form-group">
-                                <label class="form-label">Versi Asumsi</label>
-                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Versi</option>
+                                <label class="form-label">Plant</label>
+                                <select name="main_plant" id="data_main_plant" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Plant</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Bulan</label>
-                                <select name="detail_version" id="data_detail_version" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Versi Terlebih Dahulu</option>
+                                <label>Periode </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="periode"
+                                    id="periode" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Produk</label>
+                                <select name="main_produk" id="data_main_produk" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Produk</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Cost Center</label>
-                                <select name="main_cost_center" id="data_main_cost_center" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Cost Center</option>
+                                <label>Produk Qty </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="product_qty"
+                                    id="product_qty" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Cost Element</label>
+                                <select name="main_cost_element" id="data_main_cost_element" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Cost Element</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>Value </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="qty_renprod_value"
-                                    id="qty_renprod_value" autocomplete="off">
+                                <label class="form-label">Material</label>
+                                <select name="main_material" id="data_main_material" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Material</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Qty </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="total_qty"
+                                    id="total_qty" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label>Currency </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="currency"
+                                    id="currency" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label>Total Amount </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="total_amount"
+                                    id="total_amount" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label>Unit Price Produk </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="unit_price_product"
+                                    id="unit_price_product" autocomplete="off">
                             </div>
                         </div>
                     </div>

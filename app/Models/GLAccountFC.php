@@ -10,6 +10,7 @@ class GLAccountFC extends Model
     use HasFactory;
     protected $table = 'gl_account_fc';
     protected $primaryKey = 'gl_account_fc';
+    protected $keyType = 'string';
 
     protected $fillable = [
         'gl_account_fc',

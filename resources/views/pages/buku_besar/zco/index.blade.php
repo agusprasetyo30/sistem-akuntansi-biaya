@@ -602,44 +602,86 @@
         //     })
         // }
 
-        // $('#submit-export').on('click', function () {
-        //     $.ajax({
-        //         xhrFields: {
-        //             responseType: 'blob',
-        //         },
-        //         type: "GET",
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         url: '{{route('export_qty_renprod')}}',
-        //         data: {
-        //             version: $('#version').val(),
-        //         },
-        //         success:function (result, status, xhr) {
-        //             var disposition = xhr.getResponseHeader('content-disposition');
-        //             var matches = /"([^"]*)"/.exec(disposition);
-        //             var filename = (matches != null && matches[1] ? matches[1] : 'qty_renprod.xlsx');
+        $('#submit-import').on('click', function () {
+            $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back-import").attr("disabled", true);
+            let file = new FormData($("#form-input")[0]);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
+                url: '{{route('import_zco')}}',
+                data: file,
+                success:function (response) {
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
+                    Swal.fire({
+                        title: response.title,
+                        text: response.message,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            $('#modal_import').modal('hide')
+                            $("#modal_import input").val("")
+                            // table()
+                            $('#dt_zco').DataTable().ajax.reload();
+                        }
+                    })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
+                }
+            })
 
-        //             // The actual download
-        //             var blob = new Blob([result], {
-        //                 type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-        //             });
-        //             var link = document.createElement('a');
-        //             link.href = window.URL.createObjectURL(blob);
-        //             link.download = filename;
+        })
 
-        //             document.body.appendChild(link);
+        $('#submit-export').on('click', function () {
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                type: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('export_zco')}}',
+                data: {
+                    version: $('#version').val(),
+                },
+                success:function (result, status, xhr) {
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : 'zco.xlsx');
 
-        //             link.click();
-        //             document.body.removeChild(link);
-        //         },
-        //         error: function(){
-        //             $('#modal_import').modal('hide');
-        //             $("#modal_import input").val("")
-        //             toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-        //         }
-        //     })
-        // })
+                    // The actual download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(){
+                    $('#modal_import').modal('hide');
+                    $("#modal_import input").val("")
+                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                }
+            })
+        })
 
         // function update_qty_renprod(id) {
         //     $.ajax({
