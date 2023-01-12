@@ -27,7 +27,7 @@ class GroupAccountFC extends Model
     public function get_account($id)
     {
         $result = DB::table(DB::raw('group_account_fc ga'))
-            ->leftJoin(DB::raw('general_ledger_account gl'), 'gl.group_account_fc', '=', 'ga.group_account_fc')
+            ->leftJoin(DB::raw('gl_account_fc gl'), 'gl.group_account_fc', '=', 'ga.group_account_fc')
             ->where('gl.group_account_fc', $id)
             ->whereNull('gl.deleted_at');
 

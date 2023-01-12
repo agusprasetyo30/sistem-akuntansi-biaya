@@ -139,7 +139,7 @@
                         if (isSearchable){
                             if (data_type == 'text'){
                                 var input = document.createElement("input");
-                                input.className = "form-control";
+                                input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
                                 appendTo(cell.empty()).
