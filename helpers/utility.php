@@ -322,8 +322,8 @@ if (!function_exists('value_dt')) {
     {
         $status = array(
             '0' => 'Semua',
-            '1' => 'Dengan Price Pengadaan',
-            '2' => 'Tanpa Price Pengadaan',
+            '1' => 'With Price',
+            '2' => 'No Price',
 
         );
 

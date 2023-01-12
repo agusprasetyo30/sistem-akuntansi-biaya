@@ -338,11 +338,13 @@
                                 // console.log(data[i])
                                 if (data[i] === '-') {
                                     // console.log('yah kosong')
-                                    $('td', row).eq(2+i).css('background-color', 'Red');
-                                } else {
+                                    $('td', row).eq(2+i).css('background-color', 'Salmon');
+                                } else if (data[i] === "") {
                                     // console.log('ada isinya loh')
-                                    $('td', row).eq(2+i).css('background-color', 'White');
+                                    $('td', row).eq(2+i).css('background-color', 'white');
                                     // $('td', row).css('background-color', 'Green');
+                                } else {
+                                    $('td', row).eq(2+i).css('background-color', 'DarkSeaGreen');
                                 }
                             }
                         },
