@@ -19,23 +19,6 @@ class H_ZcoDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        // $cc = auth()->user()->company_code;
-
-        // $query = DB::table('zco')
-        //     ->select('zco.*', 'produk.material_name as product_name', 'material.material_name', 'material.material_uom')
-        //     ->leftJoin('material as produk', 'produk.material_code', '=', 'zco.product_code')
-        //     ->leftJoin('material as material', 'material.material_code', '=', 'zco.material_code')
-        //     ->leftjoin('plant', 'plant.plant_code', '=', 'zco.plant_code')
-        //     ->where('zco.company_code', $cc)
-        //     ->whereNull('zco.deleted_at');
-
-        // return datatables()
-        //     ->query($query)
-        //     ->addIndexColumn()
-        //     ->addColumn('action', 'pages.buku_besar.zco.action')
-        //     ->escapeColumns([]);
-
-
         $cc = auth()->user()->company_code;
 
         $query = DB::table('zco')
@@ -51,24 +34,23 @@ class H_ZcoDataTable extends DataTable
                 return $query->cost_element . ' ' . $query->gl_account_desc;
             });
 
-        // $asumsi = DB::table('asumsi_umum')
-        //     ->where('version_id', $this->version)
-        //     ->get();
+        $asumsi = DB::table('material')
+            // ->where('version_id', $this->version)
+            ->get();
 
-        // $renprodValues = DB::table('qty_renprod')
-        //     ->whereIn('asumsi_umum_id', $asumsi->pluck('id')->all())
-        //     ->get();
+        $renprodValues = DB::table('zco')
+            ->whereIn('product_code', $asumsi->pluck('material_code')->all())
+            ->get();
 
-        // foreach ($asumsi as $key => $a) {
-        //     $datatable->addColumn($key, function ($query) use ($renprodValues, $a) {
-        //         $renprodAsumsi = $renprodValues
-        //             ->where('asumsi_umum_id', $a->id)
-        //             ->where('cost_center', $query->cost_center)
-        //             ->first();
+        foreach ($asumsi as $key => $a) {
+            $datatable->addColumn($key, function ($query) use ($renprodValues, $a) {
+                $renprodAsumsi = $renprodValues
+                    ->where('product_code', $a->material_code)
+                    ->first();
 
-        //         return $renprodAsumsi ? $renprodAsumsi->qty_renprod_value : '-';
-        //     });
-        // }
+                return $renprodAsumsi ? $renprodAsumsi->total_qty : '-';
+            });
+        }
 
         return $datatable;
     }
@@ -118,6 +100,6 @@ class H_ZcoDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'BukuBesar\ZCO_' . date('YmdHis');
+        return 'BukuBesar\H_ZCO_' . date('YmdHis');
     }
 }

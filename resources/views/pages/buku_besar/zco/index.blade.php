@@ -45,14 +45,14 @@
                                 </div>
                             </div>
                             <div class="tab-pane " id="horizontal">
-                                {{-- <div class="mb-2 row">
+                                <div class="mb-2 row">
                                     <div class="form-group">
-                                        <label class="form-label">VERSI</label>
-                                        <select id="filter_version" class="form-control custom-select select2">
+                                        <label class="form-label">MATERIAL</label>
+                                        <select id="filter_material" class="form-control custom-select select2">
                                         </select>
                                     </div>
 
-                                </div> --}}
+                                </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
                                     </div>
@@ -81,27 +81,121 @@
                 table()
             })
 
-            // $('#data_main_cost_center').select2({
-            //     dropdownParent: $('#modal_add'),
-            //     placeholder: 'Pilih Cost Center',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('cost_center_select') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // })
+            $('#tabs_horizontal').on('click', function () {
+                get_data_horiz()
+            })
+
+            $('#data_main_plant').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Plant',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('plant_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_produk').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Produk',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_cost_element').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Cost Element',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('cost_element_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_material').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#filter_material').select2({
+                placeholder: 'Pilih Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
 
             // $('#data_main_version').select2({
             //     dropdownParent: $('#modal_add'),
@@ -417,54 +511,60 @@
             })
         }
 
-        // function get_data_horiz(){
-        //     var table = '<table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-        //     var kolom = '<th class="text-center">COST ELEMENT</th>'
-        //     var column = [
-        //         { data: 'cost_center', orderable:false},
-        //     ]
-        //     $("#dinamic_table").append(table);
-        //     $.ajax({
-        //         type: "GET",
-        //         url : '{{route("zco")}}',
-        //         data: {
-        //             data:'version',
-        //             // version:$('#filter_version').val()
-        //         },
-        //         success:function (response) {
-        //             for (let i = 0; i < response.asumsi.length;i++){
-        //                 column.push({ data: i.toString(), orderable:false})
-        //                 kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
-        //             }
-        //             $("#dinamic_tr").append(kolom);
-        //             $('#h_dt_zco').DataTable().clear().destroy();
-        //             $("#h_dt_zco").DataTable({
-        //                 scrollX: true,
-        //                 dom: 'Bfrtip',
-        //                 orderCellsTop: true,
-        //                 processing: true,
-        //                 serverSide: true,
-        //                 fixedHeader: {
-        //                     header: true,
-        //                     headerOffset: $('#main_header').height()
-        //                 },
-        //                 buttons: [
-        //                     { extend: 'pageLength', className: 'mb-5' },
-        //                     { extend: 'excel', className: 'mb-5' }
-        //                 ],
-        //                 ajax: {
-        //                     url : '{{route("qty_renprod")}}',
-        //                     data: {
-        //                         data:'horizontal',
-        //                         // version:$('#filter_version').val()
-        //                     }
-        //                 },
-        //                 columns: column,
+        function get_data_horiz(){
+            var table = '<table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
+            var kolom = '<th class="text-center">COST ELEMENT</th>'
+            var column = [
+                { data: 'cost_element', orderable:false},
+            ]
+            $("#dinamic_table").append(table);
+            $.ajax({
+                type: "GET",
+                url : '{{route("zco")}}',
+                data: {
+                    data:'material',
+                    // version:$('#filter_version').val()
+                },
+                success:function (response) {
+                    for (let i = 0; i < response.material.length;i++){
+                        column.push({ data: i.toString(), orderable:false})
+                        kolom += '<th class="text-center">'+ response.material[i].material_code+'</th>';
+                    }
 
-        //             })
-        //         }
-        //     })
-        // }
+                    // for (let i = 0; i < 5;i++){
+                    //     column.push({ data: i.toString(), orderable:false})
+                    //     kolom += '<th class="text-center">cek</th>';
+                    // }
+
+                    $("#dinamic_tr").append(kolom);
+                    $('#h_dt_zco').DataTable().clear().destroy();
+                    $("#h_dt_zco").DataTable({
+                        scrollX: true,
+                        dom: 'Bfrtip',
+                        orderCellsTop: true,
+                        processing: true,
+                        serverSide: true,
+                        fixedHeader: {
+                            header: true,
+                            headerOffset: $('#main_header').height()
+                        },
+                        buttons: [
+                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'excel', className: 'mb-5' }
+                        ],
+                        ajax: {
+                            url : '{{route("zco")}}',
+                            data: {
+                                data:'horizontal',
+                                // version:$('#filter_version').val()
+                            }
+                        },
+                        columns: column,
+
+                    })
+                }
+            })
+        }
 
         // function update_dt_horizontal() {
         //     if ($('#filter_version').val() != null){
@@ -473,134 +573,52 @@
         //     }
         // }
 
-        // $('#submit').on('click', function () {
-        //     $.ajax({
-        //         type: "POST",
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         url: '{{route('insert_qty_renprod')}}',
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             cost_center: $('#data_main_cost_center').val(),
-        //             qty_renprod_value: $('#qty_renprod_value').val(),
-        //             version_id: $('#data_main_version').val(),
-        //             month_year: $('#data_detail_version').val(),
-        //         },
-        //         success: function (response) {
-        //             Swal.fire({
-        //                 title: response.title,
-        //                 text: response.msg,
-        //                 icon: response.type,
-        //                 allowOutsideClick: false,
-        //                 confirmButtonColor: "#019267",
-        //                 confirmButtonText: 'Konfirmasi',
-        //             })
-        //             .then((result) => {
-        //                 if (result.value) {
-        //                     $('#modal_add').modal('hide')
-        //                     $("#modal_add input").val("")
+        $('#submit').on('click', function () {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_zco')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    plant_code: $('#data_main_plant').val(),
+                    periode: $('#periode').val(),
+                    product_code: $('#data_main_produk').val(),
+                    product_qty: $('#product_qty').val(),
+                    cost_element: $('#data_main_cost_element').val(),
+                    material_code: $('#data_main_material').val(),
+                    total_qty: $('#total_qty').val(),
+                    currency: $('#currency').val(),
+                    total_amount: $('#total_amount').val(),
+                    unit_price_product: $('#unit_price_product').val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            $('#modal_add').modal('hide')
+                            $("#modal_add input").val("")
 
-        //                     update_dt_horizontal()
-        //                     // table()
-        //                     $('#dt_zco').DataTable().ajax.reload();
-        //                 }
-        //             })
-        //         },
-        //         error: function (response) {
-        //             handleError(response)
-        //         }
-        //     })
+                            // update_dt_horizontal()
+                            // table()
+                            $('#dt_zco').DataTable().ajax.reload();
+                        }
+                    })
+                },
+                error: function (response) {
+                    handleError(response)
+                }
+            })
 
-        // })
-
-        // $('#submit-import').on('click', function () {
-        //     $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-        //     $("#back-import").attr("disabled", true);
-        //     $.ajax({
-        //         type: "POST",
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         url: '{{route('check_qty_renprod')}}',
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             version:$('#version').val()
-        //         },
-        //         success: function (response) {
-        //             if (response.code == 201) 
-        //             {
-        //                 Swal.fire({
-        //                     title: response.title,
-        //                     text: response.message,
-        //                     icon: 'warning',
-        //                     allowOutsideClick: false,
-        //                     showDenyButton: true,
-        //                     confirmButtonColor: "#019267",
-        //                     confirmButtonText: 'Konfirmasi',
-        //                     denyButtonText: 'Kembali',
-        //                 })
-        //                 .then((result) => {
-        //                     if (result.isConfirmed) {
-        //                         importStore()
-        //                     } else {
-        //                         $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
-        //                         $("#back-import").attr("disabled", false);
-        //                     }
-        //                 })
-        //             } else {
-        //                 importStore()
-        //                 // $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
-        //             }
-        //         },
-        //         error: function (response) {
-        //             handleError(response)
-        //             $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
-        //             $("#back-import").attr("disabled", false);
-        //         }
-        //     })
-        // })
-
-        // function importStore(){
-        //     let file = new FormData($("#form-input")[0]);
-        //     $.ajax({
-        //         type: "POST",
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         processData: false,
-        //         contentType: false,
-        //         url: '{{route('import_qty_renprod')}}',
-        //         data: file,
-        //         success:function (response) {
-        //             $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
-        //             $("#back-import").attr("disabled", false);
-        //             Swal.fire({
-        //                 title: response.title,
-        //                 text: response.message,
-        //                 icon: response.type,
-        //                 allowOutsideClick: false,
-        //                 confirmButtonColor: "#019267",
-        //                 confirmButtonText: 'Konfirmasi',
-        //             })
-        //             .then((result) => {
-        //                 if (result.value) {
-        //                     $('#modal_import').modal('hide')
-        //                     $("#modal_import input").val("")
-
-        //                     update_dt_horizontal()
-        //                     // table()
-        //                     $('#dt_zco').DataTable().ajax.reload();
-        //                 }
-        //             })
-        //         },
-        //         error: function (response) {
-        //             handleError(response)
-        //             $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
-        //             $("#back-import").attr("disabled", false);
-        //         }
-        //     })
-        // }
+        })
 
         $('#submit-import').on('click', function () {
             $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
@@ -683,96 +701,102 @@
             })
         })
 
-        // function update_qty_renprod(id) {
-        //     $.ajax({
-        //         type: "POST",
-        //         headers: {
-        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //         },
-        //         url: '{{route('update_qty_renprod')}}',
-        //         data: {
-        //             _token: "{{ csrf_token() }}",
-        //             id: id,
-        //             cost_center: $('#edit_data_main_cost_center'+id).val(),
-        //             qty_renprod_value: $('#edit_qty_renprod_value'+id).val(),
-        //             version_id: $('#edit_data_main_version'+id).val(),
-        //             month_year:$('#edit_data_detail_version'+id).val(),
-        //         },
-        //         success: function (response) {
-        //             Swal.fire({
-        //                 title: response.title,
-        //                 text: response.msg,
-        //                 icon: response.type,
-        //                 allowOutsideClick: false,
-        //                 confirmButtonColor: "#019267",
-        //                 confirmButtonText: 'Konfirmasi',
-        //             })
-        //             .then((result) => {
-        //                 console.log(result)
-        //                 if (result.value) {
-        //                     $('#modal_edit'+id).modal('hide')
-        //                     $('body').removeClass('modal-open');
-        //                     $('.modal-backdrop').remove();
+        function update_zco(id) {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_zco')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    plant_code: $('#edit_data_main_plant'+id).val(),
+                    periode: $('#edit_periode'+id).val(),
+                    product_code: $('#edit_data_main_produk'+id).val(),
+                    product_qty:$('#edit_product_qty'+id).val(),
+                    cost_element: $('#edit_data_main_cost_element'+id).val(),
+                    material_code:$('#edit_data_main_material'+id).val(),
+                    total_qty: $('#edit_total_qty'+id).val(),
+                    currency:$('#edit_currency'+id).val(),
+                    total_amount: $('#edit_total_amount'+id).val(),
+                    unit_price_product:$('#edit_unit_price_product'+id).val(),
+
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                    .then((result) => {
+                        if (result.value) {
+                            $('#modal_edit'+id).modal('hide')
+                            $('body').removeClass('modal-open');
+                            $('.modal-backdrop').remove();
                             
-        //                     update_dt_horizontal()
-        //                     // table()
-        //                     $('#dt_zco').DataTable().ajax.reload();
-        //                 }
-        //             })
-        //         },
-        //         error: function (response) {
-        //             handleError(response)
-        //         }
-        //     })
+                            // update_dt_horizontal()
+                            // table()
+                            $('#dt_zco').DataTable().ajax.reload();
+                        }
+                    })
+                },
+                error: function (response) {
+                    handleError(response)
+                }
+            })
 
-        // }
+        }
 
-        // function delete_qty_renprod(id) {
-        //     Swal.fire({
-        //         title: 'Apakah anda yakin?',
-        //         text: "Data akan segera dihapus",
-        //         icon: 'warning',
-        //         showCancelButton: true,
-        //         confirmButtonColor: '#019267',
-        //         cancelButtonColor: '#EF4B4B',
-        //         confirmButtonText: 'Konfirmasi',
-        //         cancelButtonText: 'Kembali'
-        //     }).then((result) =>{
-        //         if (result.value){
+        function delete_zco(id) {
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: "Data akan segera dihapus",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#019267',
+                cancelButtonColor: '#EF4B4B',
+                confirmButtonText: 'Konfirmasi',
+                cancelButtonText: 'Kembali'
+            }).then((result) =>{
+                if (result.value){
 
-        //             $.ajax({
-        //                 type: "POST",
-        //                 headers: {
-        //                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        //                 },
-        //                 url: '{{route('delete_qty_renprod')}}',
-        //                 data: {
-        //                     _token: "{{ csrf_token() }}",
-        //                     id: id,
-        //                 },
-        //                 success: function (response) {
-        //                     Swal.fire({
-        //                         title: response.title,
-        //                         text: response.msg,
-        //                         icon: response.type,
-        //                         allowOutsideClick: false,
-        //                         confirmButtonColor: "#019267",
-        //                         confirmButtonText: 'Konfirmasi',
-        //                     })
-        //                     .then((result) => {
-        //                         if (result.value) {
-        //                             update_dt_horizontal()
-        //                             // table()
-        //                             $('#dt_zco').DataTable().ajax.reload();
-        //                         }
-        //                     })
-        //                 },
-        //                 error: function (response) {
-        //                     handleError(response)
-        //                 }
-        //             })
-        //         }
-        //     })
-        // }
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: '{{route('delete_zco')}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id,
+                        },
+                        success: function (response) {
+                            Swal.fire({
+                                title: response.title,
+                                text: response.msg,
+                                icon: response.type,
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
+                            })
+                            .then((result) => {
+                                if (result.value) {
+                                    // update_dt_horizontal()
+                                    // table()
+                                    $('#dt_zco').DataTable().ajax.reload();
+                                }
+                            })
+                        },
+                        error: function (response) {
+                            handleError(response)
+                        }
+                    })
+                }
+            })
+        }
     </script>
 @endsection
