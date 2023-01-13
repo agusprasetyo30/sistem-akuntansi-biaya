@@ -312,7 +312,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [ZcoController::class, 'create'])->name('insert_zco');
             Route::post('update', [ZcoController::class, 'update'])->name('update_zco');
             Route::post('delete', [ZcoController::class, 'delete'])->name('delete_zco');
-            Route::post('export', [ZcoController::class, 'export'])->name('export_zco');
+            Route::get('export', [ZcoController::class, 'export'])->name('export_zco');
             Route::post('import', [ZcoController::class, 'import'])->name('import_zco');
         });
 
