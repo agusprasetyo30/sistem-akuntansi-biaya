@@ -230,6 +230,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
             Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
             Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
+            Route::get('/cost_element', [SelectController::class, 'cost_element'])->name('cost_element_select');
 
 
             //            Helper

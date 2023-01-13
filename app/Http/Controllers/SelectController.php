@@ -139,7 +139,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $group_account = GLAccountFC::where('group_account_fc', '=', $request->group_account)
-                ->where(function ($query) use ($search, $request){
+                ->where(function ($query) use ($search, $request) {
                     $query->where('gl_account_fc', 'ilike', '%' . $search . '%')
                         ->orWhere('gl_account_fc_desc', 'ilike', '%' . $search . '%');
                 })
@@ -363,6 +363,30 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function cost_element(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $cost_center = GLAccount::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $cost_center = GLAccount::where('gl_account', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($cost_center as $items) {
+            $response[] = array(
+                "id" => $items->gl_account,
+                "text" => $items->gl_account . ' ' . $items->gl_account_desc,
+            );
+        }
+
+        return response()->json($response);
+    }
 
     //    Helper
 
