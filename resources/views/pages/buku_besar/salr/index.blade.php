@@ -362,7 +362,7 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
-                                    update_dt_horizontal()
+                                    // update_dt_horizontal()
                                     // $("#table_main").empty();
                                     // get_data()
                                     $('#dt_salr').DataTable().ajax.reload();
@@ -734,7 +734,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_price_rendaan')}}',
+                url: '{{route('update_salr')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
@@ -766,7 +766,7 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                update_dt_horizontal()
+                                // update_dt_horizontal()
                                 // $("#table_main").empty();
                                 // get_data()
                                 $('#dt_salr').DataTable().ajax.reload();
@@ -782,7 +782,7 @@
             })
         }
 
-        function delete_price_rendaan(id) {
+        function delete_salr(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -800,7 +800,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_price_rendaan')}}',
+                        url: '{{route('delete_salr')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -816,7 +816,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        update_dt_horizontal()
+                                        // update_dt_horizontal()
                                         // $("#table_main").empty();
                                         // get_data()
                                         $('#dt_salr').DataTable().ajax.reload();
