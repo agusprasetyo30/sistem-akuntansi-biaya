@@ -159,6 +159,36 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function general_ledger_fc_detail(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $group_account = GLAccountFC::limit(10)
+                ->where('group_account_fc', '=', $request->group_account)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_account = GLAccountFC::where('group_account_fc', '=', $request->group_account)
+                ->where(function ($query) use ($search, $request){
+                    $query->where('gl_account_fc', 'ilike', '%' . $search . '%')
+                        ->orWhere('gl_account_fc_desc', 'ilike', '%' . $search . '%');
+                })
+                ->whereNull('deleted_at')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($group_account as $items) {
+            $response[] = array(
+                "id" => $items->gl_account_fc,
+                "text" => $items->gl_account_fc . ' ' . $items->gl_account_fc_desc,
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function material(Request $request)
     {
         $search = $request->search;

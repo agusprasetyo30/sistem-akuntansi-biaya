@@ -70,28 +70,37 @@ class SalrController extends Controller
     public function update(Request $request)
     {
         try {
-
             $validator = Validator::make($request->all(), [
-                "version_asumsi" => 'required',
-                "bulan" => 'required',
-                "material_id" => 'required',
-                "region_id" => 'required',
-                "price_rendaan_value" => 'required',
+                "ga_account" => 'required',
+                "gl_account" => 'required',
+                "cost_center" => 'required',
+                "tanggal" => 'required',
+                "value" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['version_id'] = $request->version_asumsi;
-            $input['asumsi_umum_id'] = $request->bulan;
+            $timestamps = explode('-', $request->tanggal);
+
+            $input['group_account_fc'] = $request->ga_account;
+            $input['gl_account_fc'] = $request->gl_account;
+            $input['cost_center'] = $request->cost_center;
+            $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['region_name'] = $request->region_id;
-            $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
-            $input['company_code'] = 'B000';
+            $input['periode'] = $timestamps[1].'-'.$timestamps[0].'-01';
+            $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
+            $input['name'] = $request->nama;
+            $input['partner_cost_center'] = $request->partner_cost_center;
+            $input['username'] = $request->username;
+            $input['material_code'] = $request->material;
+            $input['document_number'] = $request->document_num;
+            $input['document_number_text'] = $request->document_num_desc;
+            $input['purchase_order'] = $request->purchase_order;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
-            PriceRenDaan::where('id', $request->id)
+            Salr::where('id', $request->id)
                 ->update($input);
 
             return setResponse([
@@ -99,6 +108,7 @@ class SalrController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
+//            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -109,7 +119,7 @@ class SalrController extends Controller
     {
         try {
 
-            PriceRenDaan::where('id', $request->id)
+            Salr::where('id', $request->id)
                 ->delete();
             return setResponse([
                 'code' => 200,

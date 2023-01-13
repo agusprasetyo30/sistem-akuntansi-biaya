@@ -362,7 +362,7 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
-                                    update_dt_horizontal()
+                                    // update_dt_horizontal()
                                     // $("#table_main").empty();
                                     // get_data()
                                     $('#dt_salr').DataTable().ajax.reload();
@@ -377,11 +377,6 @@
                     }
                 })
             }
-
-            $('#price_rendaan_value').on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp ")
-                $(this).val(rupiah)
-            });
 
             $('#filter_version').select2({
                 placeholder: 'Pilih Versi',
@@ -731,7 +726,7 @@
             })
         })
 
-        function update_price_rendaan(id) {
+        function update_salr(id) {
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back_edit"+id).attr("disabled", true);
             $.ajax({
@@ -739,15 +734,22 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_price_rendaan')}}',
+                url: '{{route('update_salr')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    version_asumsi:$('#edit_data_main_version'+id).val(),
-                    bulan:$('#edit_data_detal_version'+id).val(),
-                    material_id: $('#edit_data_main_material'+id).val(),
-                    region_id: $('#edit_data_main_region'+id).val(),
-                    price_rendaan_value: $('#edit_price_rendaan_value'+id).val(),
+                    ga_account:$('#edit_data_main_ga_account'+id).val(),
+                    gl_account:$('#edit_data_main_gl_account'+id).val(),
+                    cost_center:$('#edit_data_main_cost_center'+id).val(),
+                    tanggal:$('#edit_tanggal'+id).val(),
+                    value:$('#edit_value'+id).val(),
+                    nama:$('#edit_nama'+id).val(),
+                    partner_cost_center:$('#edit_data_main_partner_cost_center'+id).val(),
+                    username:$('#edit_username'+id).val(),
+                    material:$('#edit_data_main_material'+id).val(),
+                    document_num:$('#edit_document_num'+id).val(),
+                    document_num_desc:$('#edit_document_num_desc'+id).val(),
+                    purchase_order:$('#edit_purchase_order'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -764,7 +766,7 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                update_dt_horizontal()
+                                // update_dt_horizontal()
                                 // $("#table_main").empty();
                                 // get_data()
                                 $('#dt_salr').DataTable().ajax.reload();
@@ -780,7 +782,7 @@
             })
         }
 
-        function delete_price_rendaan(id) {
+        function delete_salr(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -798,7 +800,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_price_rendaan')}}',
+                        url: '{{route('delete_salr')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -814,7 +816,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        update_dt_horizontal()
+                                        // update_dt_horizontal()
                                         // $("#table_main").empty();
                                         // get_data()
                                         $('#dt_salr').DataTable().ajax.reload();
