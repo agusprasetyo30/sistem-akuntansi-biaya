@@ -21,6 +21,10 @@ class ZcoController extends Controller
             return $zcoDataTable->render('pages.buku_besar.zco.index');
         } else if ($request->data == 'horizontal') {
             return $h_zcoDataTable->render('pages.buku_besar.zco.index');
+        } elseif ($request->data == 'material') {
+            $material = DB::table('material')
+                ->get();
+            return response()->json(['code' => 200, 'material' => $material]);
         }
 
         return view('pages.buku_besar.zco.index');
