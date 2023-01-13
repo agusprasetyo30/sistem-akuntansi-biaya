@@ -21,10 +21,12 @@ class CreateSalrsTable extends Migration
             $table->foreign('group_account_fc')->references('group_account_fc')->on('group_account_fc');
             $table->string('gl_account_fc')->unsigned();
             $table->foreign('gl_account_fc')->references('gl_account_fc')->on('gl_account_fc');
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
             $table->timestamp('periode');
+            $table->double('value', 8, 2);
             $table->string('name')->nullable();
             $table->string('partner_cost_center')->nullable();
-            $table->string('partner_cost_center_desc')->nullable();
             $table->string('username')->nullable();
             $table->string('material_code')->nullable();
             $table->string('document_number')->nullable();

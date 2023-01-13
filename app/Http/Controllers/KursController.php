@@ -35,8 +35,14 @@ class KursController extends Controller
             $input['month_year'] = $date[1].'-'.$date[0].'-01';
             $input['usd_rate'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->kurs));
 
-            DB::transaction(function () use ($input){
-                Kurs::create($input);
+            $check_data = Kurs::where('month_year', 'ilike', '%'.$date[1].'-'.$date[0].'-01'.'%')->first();
+
+            DB::transaction(function () use ($input, $check_data){
+                if ($check_data == null){
+                    Kurs::create($input);
+                }else{
+                    Kurs::where('id', $check_data->id)->update($input);
+                }
             });
 
             return setResponse([

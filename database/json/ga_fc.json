@@ -1,74 +1,74 @@
 [
     {
-        "Kelompok Acc": "100",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung amortisasi & penyusutan"
+        "Kelompok_Acc": "100",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung amortisasi & penyusutan"
     },
     {
-        "Kelompok Acc": "200",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung amortisasi & penyusutan"
+        "Kelompok_Acc": "200",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung amortisasi & penyusutan"
     },
     {
-        "Kelompok Acc": "300",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung handling"
+        "Kelompok_Acc": "300",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung handling"
     },
     {
-        "Kelompok Acc": "400",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung jasa"
+        "Kelompok_Acc": "400",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung jasa"
     },
     {
-        "Kelompok Acc": "500",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung lain-lain"
+        "Kelompok_Acc": "500",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung lain-lain"
     },
     {
-        "Kelompok Acc": "600",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung pemeliharaan"
+        "Kelompok_Acc": "600",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung pemeliharaan"
     },
     {
-        "Kelompok Acc": "700",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung pengantongan"
+        "Kelompok_Acc": "700",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung pengantongan"
     },
     {
-        "Kelompok Acc": "800",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung sewa"
+        "Kelompok_Acc": "800",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung sewa"
     },
     {
-        "Kelompok Acc": "900",
-        "Kelompok Acc Desc.": "Biaya Overhead langsung Suku Cadang"
+        "Kelompok_Acc": "900",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung Suku Cadang"
     },
     {
-        "Kelompok Acc": "1000",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung amortisasi & penyusutan"
+        "Kelompok_Acc": "1000",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung amortisasi & penyusutan"
     },
     {
-        "Kelompok Acc": "1100",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung asuransi"
+        "Kelompok_Acc": "1100",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung asuransi"
     },
     {
-        "Kelompok Acc": "1200",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung gaji"
+        "Kelompok_Acc": "1200",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung gaji"
     },
     {
-        "Kelompok Acc": "1300",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung gaji"
+        "Kelompok_Acc": "1300",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung gaji"
     },
     {
-        "Kelompok Acc": "1400",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung lain-lain"
+        "Kelompok_Acc": "1400",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung lain-lain"
     },
     {
-        "Kelompok Acc": "1500",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung pemeliharaan"
+        "Kelompok_Acc": "1500",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung pemeliharaan"
     },
     {
-        "Kelompok Acc": "1600",
-        "Kelompok Acc Desc.": "Biaya Overhead tidak langsung sewa"
+        "Kelompok_Acc": "1600",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung sewa"
     },
     {
-        "Kelompok Acc": "1700",
-        "Kelompok Acc Desc.": "Overhead Bahan Penolong"
+        "Kelompok_Acc": "1700",
+        "Kelompok_Acc_Desc": "Overhead Bahan Penolong"
     },
     {
-        "Kelompok Acc": "1800",
-        "Kelompok Acc Desc.": "Biaya Gaji Kesejahteraan Langsung"
+        "Kelompok_Acc": "1800",
+        "Kelompok_Acc_Desc": "Biaya Gaji Kesejahteraan Langsung"
     }
 ]

@@ -228,6 +228,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
             Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
             Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
+            Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
             Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
 
 

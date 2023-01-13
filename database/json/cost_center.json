@@ -35,11 +35,6 @@
         "CostCenter": "B002111000"
     },
     {
-        "Deskripsi": "BAG AMONIAK IA",
-        "Company": "B000",
-        "CostCenter": "B002111000"
-    },
-    {
         "Deskripsi": "BAG ASAM FOSFAT IIIA",
         "Company": "B000",
         "CostCenter": "B002312000"
@@ -140,11 +135,6 @@
         "CostCenter": "B002134000"
     },
     {
-        "Deskripsi": "BAG CANDAL PROD IA",
-        "Company": "B000",
-        "CostCenter": "B002116000"
-    },
-    {
         "Deskripsi": "BAG CANDAL PROD IIB",
         "Company": "B000",
         "CostCenter": "B002225000"
@@ -198,21 +188,6 @@
         "Deskripsi": "BAG GYPSUM IIIA",
         "Company": "B000",
         "CostCenter": "B002313000"
-    },
-    {
-        "Deskripsi": "BAG GYPSUM IIIA",
-        "Company": "B000",
-        "CostCenter": "B002313000"
-    },
-    {
-        "Deskripsi": "BAG GYPSUM IIIA",
-        "Company": "B000",
-        "CostCenter": "B002313000"
-    },
-    {
-        "Deskripsi": "BAG GYPSUM IIIB",
-        "Company": "B000",
-        "CostCenter": "B002323000"
     },
     {
         "Deskripsi": "BAG HAR KAWASAN",
@@ -575,16 +550,6 @@
         "CostCenter": "B004326000"
     },
     {
-        "Deskripsi": "BAG SUPP&PROD SMPNG",
-        "Company": "B000",
-        "CostCenter": "B002115000"
-    },
-    {
-        "Deskripsi": "BAG TA & RLBLTAS I",
-        "Company": "B000",
-        "CostCenter": "B002126000"
-    },
-    {
         "Deskripsi": "BAG TA HAR I",
         "Company": "B000",
         "CostCenter": "B002126000"
@@ -633,11 +598,6 @@
         "Deskripsi": "BAG UBB",
         "Company": "B000",
         "CostCenter": "B002324000"
-    },
-    {
-        "Deskripsi": "BAG UREA",
-        "Company": "B000",
-        "CostCenter": "B002112000"
     },
     {
         "Deskripsi": "BAG UREA IA",
@@ -785,11 +745,6 @@
         "CostCenter": "B003430000"
     },
     {
-        "Deskripsi": "DEP DISWIL II",
-        "Company": "B000",
-        "CostCenter": "B004220000"
-    },
-    {
         "Deskripsi": "DEP FABRIKASI",
         "Company": "B000",
         "CostCenter": "B003320000"
@@ -918,11 +873,6 @@
         "Deskripsi": "DEP PPKOR",
         "Company": "B000",
         "CostCenter": "B004230000"
-    },
-    {
-        "Deskripsi": "DEP PROD  I",
-        "Company": "B000",
-        "CostCenter": "B002110000"
     },
     {
         "Deskripsi": "DEP PROD IA",
@@ -1495,16 +1445,6 @@
         "CostCenter": "B002313120"
     },
     {
-        "Deskripsi": "RU CEMENT RETARDER",
-        "Company": "B000",
-        "CostCenter": "B002313120"
-    },
-    {
-        "Deskripsi": "RU CEMENT RETARDER",
-        "Company": "B000",
-        "CostCenter": "B002313120"
-    },
-    {
         "Deskripsi": "RU CS,UCW&CMPRSSR",
         "Company": "B000",
         "CostCenter": "B002133130"
@@ -1650,11 +1590,6 @@
         "CostCenter": "B003334130"
     },
     {
-        "Deskripsi": "RU OPEN STORAGE",
-        "Company": "B000",
-        "CostCenter": "B003334130"
-    },
-    {
         "Deskripsi": "RU OPS ALBER AA",
         "Company": "B000",
         "CostCenter": "B002612410"
@@ -1703,11 +1638,6 @@
         "Deskripsi": "RU PURIFIKASI",
         "Company": "B000",
         "CostCenter": "B002313110"
-    },
-    {
-        "Deskripsi": "RU SHF UREA,ZA &PTG",
-        "Company": "B000",
-        "CostCenter": "B002412120"
     },
     {
         "Deskripsi": "RU SHF UREA,ZA &PTG",
@@ -1860,19 +1790,9 @@
         "CostCenter": "B002233400"
     },
     {
-        "Deskripsi": "SEK BAGGING",
-        "Company": "B000",
-        "CostCenter": "B002233400"
-    },
-    {
         "Deskripsi": "SEK BENGKEL",
         "Company": "B000",
         "CostCenter": "B003334300"
-    },
-    {
-        "Deskripsi": "SEK BKL N-LOGAM IIB",
-        "Company": "B000",
-        "CostCenter": "B002232400"
     },
     {
         "Deskripsi": "SEK BKL N-LOGAM IIB",
@@ -1905,11 +1825,6 @@
         "CostCenter": "B002121100"
     },
     {
-        "Deskripsi": "SEK BNGKL LAS IA",
-        "Company": "B000",
-        "CostCenter": "B002121100"
-    },
-    {
         "Deskripsi": "SEK BNGKL LAS IIIA",
         "Company": "B000",
         "CostCenter": "B002331100"
@@ -1933,11 +1848,6 @@
         "Deskripsi": "SEK BNGKL MSN",
         "Company": "B000",
         "CostCenter": "B002232300"
-    },
-    {
-        "Deskripsi": "SEK BNGKL N-LGM IIA",
-        "Company": "B000",
-        "CostCenter": "B002231300"
     },
     {
         "Deskripsi": "SEK BNGKL N-LGM IIA",
@@ -2045,16 +1955,6 @@
         "CostCenter": "B002313100"
     },
     {
-        "Deskripsi": "SEK GYPSUM IIIA",
-        "Company": "B000",
-        "CostCenter": "B002313100"
-    },
-    {
-        "Deskripsi": "SEK GYPSUM IIIA",
-        "Company": "B000",
-        "CostCenter": "B002313100"
-    },
-    {
         "Deskripsi": "SEK GYPSUM IIIB",
         "Company": "B000",
         "CostCenter": "B002323100"
@@ -2105,11 +2005,6 @@
         "CostCenter": "B002335600"
     },
     {
-        "Deskripsi": "SEK INS UREA,ZA&BAG",
-        "Company": "B000",
-        "CostCenter": "B002124300"
-    },
-    {
         "Deskripsi": "SEK INS UTL B. BARA",
         "Company": "B000",
         "CostCenter": "B002335500"
@@ -2143,11 +2038,6 @@
         "Deskripsi": "SEK INST UTL/SHP/DCS",
         "Company": "B000",
         "CostCenter": "B002124100"
-    },
-    {
-        "Deskripsi": "SEK INST W.S.&KTG II",
-        "Company": "B000",
-        "CostCenter": "B002236500"
     },
     {
         "Deskripsi": "SEK INST W.S.&KTG II",
@@ -2195,11 +2085,6 @@
         "CostCenter": "B004125200"
     },
     {
-        "Deskripsi": "SEK LOLA GYPSUM",
-        "Company": "B000",
-        "CostCenter": "B002323100"
-    },
-    {
         "Deskripsi": "SEK LST CR/ALF3&PURI",
         "Company": "B000",
         "CostCenter": "B002334300"
@@ -2218,11 +2103,6 @@
         "Deskripsi": "SEK LSTRK NH3/UR IB",
         "Company": "B000",
         "CostCenter": "B002123400"
-    },
-    {
-        "Deskripsi": "SEK LSTRK NH3/UR/DK",
-        "Company": "B000",
-        "CostCenter": "B002123200"
     },
     {
         "Deskripsi": "SEK LSTRK NPK PH IV&",
@@ -2255,11 +2135,6 @@
         "CostCenter": "B002123500"
     },
     {
-        "Deskripsi": "SEK LSTRK PNTNG/DKPN",
-        "Company": "B000",
-        "CostCenter": "B002123500"
-    },
-    {
         "Deskripsi": "SEK LSTRK SA I/ SU I",
         "Company": "B000",
         "CostCenter": "B002334100"
@@ -2283,16 +2158,6 @@
         "Deskripsi": "SEK LSTRK UTL,NPK I&",
         "Company": "B000",
         "CostCenter": "B002235400"
-    },
-    {
-        "Deskripsi": "SEK LSTRK UTL&OFF S",
-        "Company": "B000",
-        "CostCenter": "B002123100"
-    },
-    {
-        "Deskripsi": "SEK LSTRK WS&KTGII",
-        "Company": "B000",
-        "CostCenter": "B002235500"
     },
     {
         "Deskripsi": "SEK LSTRK WS&KTGII",
@@ -2341,11 +2206,6 @@
     },
     {
         "Deskripsi": "SEK MKNK NH3",
-        "Company": "B000",
-        "CostCenter": "B002122200"
-    },
-    {
-        "Deskripsi": "SEK MKNK NH3 IA",
         "Company": "B000",
         "CostCenter": "B002122200"
     },
@@ -2405,11 +2265,6 @@
         "CostCenter": "B002122500"
     },
     {
-        "Deskripsi": "SEK MKNK UREA",
-        "Company": "B000",
-        "CostCenter": "B002122300"
-    },
-    {
         "Deskripsi": "SEK MKNK UREA IA",
         "Company": "B000",
         "CostCenter": "B002122300"
@@ -2445,19 +2300,9 @@
         "CostCenter": "B002122400"
     },
     {
-        "Deskripsi": "SEK MKNKZAI/III&PLMS",
-        "Company": "B000",
-        "CostCenter": "B002122400"
-    },
-    {
         "Deskripsi": "SEK ND LAB PB IB",
         "Company": "B000",
         "CostCenter": "B002412200"
-    },
-    {
-        "Deskripsi": "SEK NH3 & METERING",
-        "Company": "B000",
-        "CostCenter": "B002124200"
     },
     {
         "Deskripsi": "SEK NPK II/III/IV",
@@ -2558,11 +2403,6 @@
         "Deskripsi": "SEK PGWS SHIFT",
         "Company": "B000",
         "CostCenter": "B002120100"
-    },
-    {
-        "Deskripsi": "SEK PROD SMPNG",
-        "Company": "B000",
-        "CostCenter": "B002115100"
     },
     {
         "Deskripsi": "SEK PUPUK FOSFAT I",
@@ -2670,11 +2510,6 @@
         "CostCenter": "B002234400"
     },
     {
-        "Deskripsi": "SEK UTL/TANK YARD",
-        "Company": "B000",
-        "CostCenter": "B002234400"
-    },
-    {
         "Deskripsi": "SEK ZA I/III",
         "Company": "B000",
         "CostCenter": "B002113100"
@@ -2693,11 +2528,6 @@
         "Deskripsi": "SEKSI PERJAKA",
         "Company": "B000",
         "CostCenter": "B001201000"
-    },
-    {
-        "Deskripsi": "SK INS UTILITASIA&ZA",
-        "Company": "B000",
-        "CostCenter": "B002124100"
     },
     {
         "Deskripsi": "SMD RPPH",
@@ -2758,11 +2588,6 @@
         "Deskripsi": "ST CANDAL PA G.SARI",
         "Company": "B000",
         "CostCenter": "B003331200"
-    },
-    {
-        "Deskripsi": "ST CANDAL WIL I",
-        "Company": "B000",
-        "CostCenter": "B002125100"
     },
     {
         "Deskripsi": "ST CANDAL WIL I",
@@ -2980,11 +2805,6 @@
         "CostCenter": "B004122400"
     },
     {
-        "Deskripsi": "ST OPS DC CIGADING",
-        "Company": "B000",
-        "CostCenter": "B004122400"
-    },
-    {
         "Deskripsi": "ST OPS DC GRSK & BWI",
         "Company": "B000",
         "CostCenter": "B004122500"
@@ -3018,11 +2838,6 @@
         "Deskripsi": "ST PLANNER PA",
         "Company": "B000",
         "CostCenter": "B003331100"
-    },
-    {
-        "Deskripsi": "ST PLANNER UTL&SUPP",
-        "Company": "B000",
-        "CostCenter": "B002125200"
     },
     {
         "Deskripsi": "ST PNLITI&KALIBRASI",
@@ -3165,24 +2980,9 @@
         "CostCenter": "B002125100"
     },
     {
-        "Deskripsi": "STAF PLANNER UREA",
-        "Company": "B000",
-        "CostCenter": "B002125300"
-    },
-    {
         "Deskripsi": "STAF PLANNER ZA&BAG",
         "Company": "B000",
         "CostCenter": "B002125400"
-    },
-    {
-        "Deskripsi": "STAF RELIABILITAS I",
-        "Company": "B000",
-        "CostCenter": "B002126200"
-    },
-    {
-        "Deskripsi": "STAF TURN AROUND I",
-        "Company": "B000",
-        "CostCenter": "B002126100"
     },
     {
         "Deskripsi": "TA AMONIAK",
@@ -3238,11 +3038,6 @@
         "Deskripsi": "TA GYPSUM II",
         "Company": "B000",
         "CostCenter": "B007030038"
-    },
-    {
-        "Deskripsi": "TA IPA BABAT",
-        "Company": "B000",
-        "CostCenter": "B007030002"
     },
     {
         "Deskripsi": "TA IPA BABAT",
@@ -3583,11 +3378,6 @@
         "Deskripsi": "UNIT PROD MIXTRO",
         "Company": "B000",
         "CostCenter": "B007000012"
-    },
-    {
-        "Deskripsi": "UNIT PURIFIKASI I",
-        "Company": "B000",
-        "CostCenter": "B002313110"
     },
     {
         "Deskripsi": "UNIT PURIFIKASI II",

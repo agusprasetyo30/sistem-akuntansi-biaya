@@ -26,5 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(VersionAsumsiSeeder::class);
         $this->call(AsumsiUmumSeeder::class);
         $this->call(RegionSeeder::class);
+        $this->call(GroupAccountFCSeeder::class);
+        $this->call(GeneralLedgerAccountFCSeeder::class);
     }
 }

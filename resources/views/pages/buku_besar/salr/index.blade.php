@@ -91,19 +91,31 @@
 
             get_data()
 
+            $('#tanggal').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#value').on('keyup', function(){
+                let rupiah = formatRupiah($(this).val(), "Rp ")
+                $(this).val(rupiah)
+            });
+
             $('#tabs_vertical').on('click', function () {
                 // $("#table_main").empty();
                 // get_data()
                 $('#dt_salr').DataTable().ajax.reload();
             })
 
-            $('#data_main_version').select2({
+            $('#data_main_ga_account').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Versi',
+                placeholder: 'Pilih Group Account',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('version_select') }}",
+                    url: "{{ route('group_account_fc_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -118,20 +130,20 @@
                     }
                 }
             }).on('change', function () {
-                var data_version = $('#data_main_version').val();
-                $('#data_detal_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                var group_account = $('#data_main_ga_account').val();
+                $('#data_main_gl_account').append('<option selected disabled value="">Pilih General Ledger Account</option>').select2({
                     dropdownParent: $('#modal_add'),
-                    placeholder: 'Pilih Bulan',
+                    placeholder: 'Pilih General Ledger Account',
                     width: '100%',
                     allowClear: false,
                     ajax: {
-                        url: "{{ route('version_detail_select') }}",
+                        url: "{{ route('general_ledger_fc_select') }}",
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
                             return {
                                 search: params.term,
-                                version:data_version
+                                group_account:group_account
 
                             };
                         },
@@ -144,13 +156,14 @@
                 });
             })
 
-            $('#version').select2({
-                dropdownParent: $('#modal_import'),
-                placeholder: 'Pilih Versi',
+
+            $('#data_main_cost_center').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Cost Center',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('version_select') }}",
+                    url: "{{ route('cost_center_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -164,8 +177,29 @@
                         };
                     }
                 }
-            }).on('change', function () {
-                $("#template").css("display", "block");
+            })
+
+            $('#data_main_partner_cost_center').select2({
+                dropdownParent: $('#modal_add'),
+                tags : true,
+                placeholder: 'Pilih Cost Center',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('cost_center_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             })
 
             $("#template").on('click', function () {
@@ -210,28 +244,6 @@
                 allowClear: false,
                 ajax: {
                     url: "{{ route('material_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
-            })
-
-            $('#data_main_region').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih region',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('region_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -479,7 +491,7 @@
 
 
                         $('.group_account_search').select2({
-                            placeholder: 'Pilih Versi',
+                            placeholder: 'Pilih Group Account',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('group_account_fc_dt') }}",
@@ -499,7 +511,7 @@
                         })
 
                         $('.gl_account_search').select2({
-                            placeholder: 'Pilih Versi',
+                            placeholder: 'Pilih GL Account',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('gl_account_fc_dt') }}",
@@ -663,7 +675,6 @@
             }
         }
 
-
         $('#submit').on('click', function () {
             $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $.ajax({
@@ -671,14 +682,21 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_price_rendaan')}}',
+                url: '{{route('insert_salr')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    version_asumsi:$('#data_main_version').val(),
-                    bulan:$('#data_detal_version').val(),
-                    material_id: $('#data_main_material').val(),
-                    region_id: $('#data_main_region').val(),
-                    price_rendaan_value: $('#price_rendaan_value').val(),
+                    ga_account:$('#data_main_ga_account').val(),
+                    gl_account:$('#data_main_gl_account').val(),
+                    cost_center:$('#data_main_cost_center').val(),
+                    tanggal:$('#tanggal').val(),
+                    value:$('#value').val(),
+                    nama:$('#nama').val(),
+                    partner_cost_center:$('#data_main_partner_cost_center').val(),
+                    username:$('#username').val(),
+                    material:$('#data_main_material').val(),
+                    document_num:$('#document_num').val(),
+                    document_num_desc:$('#document_num_desc').val(),
+                    purchase_order:$('#purchase_order').val(),
                 },
                 success:function (response) {
                     Swal.fire({
@@ -692,14 +710,13 @@
                         if (result.value) {
                             $('#modal_add').modal('hide');
                             $("#modal_add input").val("")
-                            $('#data_main_plant').val('').trigger("change");
-                            $('#data_main_version').val('').trigger("change");
-                            $('#data_detal_version').val('').trigger("change");
-                            $('#data_main_produk').val('').trigger("change");
+                            $('#data_main_ga_account').val('').trigger("change");
+                            $('#data_main_gl_account').val('').trigger("change");
+                            $('#data_main_cost_center').val('').trigger("change");
+                            $('#data_main_partner_cost_center').val('').trigger("change");
                             $('#data_main_material').val('').trigger("change");
-                            $('#is_active').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            update_dt_horizontal()
+                            // update_dt_horizontal()
                             // $("#table_main").empty();
                             // get_data()
                             $('#dt_salr').DataTable().ajax.reload();
