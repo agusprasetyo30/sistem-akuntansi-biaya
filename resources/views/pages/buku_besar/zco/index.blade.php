@@ -81,10 +81,6 @@
                 table()
             })
 
-            $('#tabs_horizontal').on('click', function () {
-                get_data_horiz()
-            })
-
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Plant',
@@ -566,12 +562,12 @@
             })
         }
 
-        // function update_dt_horizontal() {
-        //     if ($('#filter_version').val() != null){
-        //         $("#dinamic_table").empty();
-        //         get_data_horiz()
-        //     }
-        // }
+        function update_dt_horizontal() {
+            if ($('#filter_material').val() != null){
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            }
+        }
 
         $('#submit').on('click', function () {
             $.ajax({
@@ -607,7 +603,7 @@
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
 
-                            // update_dt_horizontal()
+                            update_dt_horizontal()
                             // table()
                             $('#dt_zco').DataTable().ajax.reload();
                         }
@@ -649,6 +645,7 @@
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                             // table()
+                            update_dt_horizontal()
                             $('#dt_zco').DataTable().ajax.reload();
                         }
                     })
@@ -738,7 +735,7 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             
-                            // update_dt_horizontal()
+                            update_dt_horizontal()
                             // table()
                             $('#dt_zco').DataTable().ajax.reload();
                         }
@@ -785,7 +782,7 @@
                             })
                             .then((result) => {
                                 if (result.value) {
-                                    // update_dt_horizontal()
+                                    update_dt_horizontal()
                                     // table()
                                     $('#dt_zco').DataTable().ajax.reload();
                                 }

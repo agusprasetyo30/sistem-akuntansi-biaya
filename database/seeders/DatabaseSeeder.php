@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RegionSeeder::class);
         $this->call(GroupAccountFCSeeder::class);
         $this->call(GeneralLedgerAccountFCSeeder::class);
+        $this->call(GLAccountSeeder::class);
     }
 }
