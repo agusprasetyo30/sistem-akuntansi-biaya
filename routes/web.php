@@ -228,6 +228,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
             Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
             Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
+            Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
             Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
 
 
@@ -244,18 +245,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
             Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
             Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
+            Route::get('/gl_account_fc_dt', [SelectController::class, 'gl_account_fc_dt'])->name('gl_account_fc_dt');
             Route::get('/cost_center_dt', [SelectController::class, 'cost_center_dt'])->name('cost_center_dt');
             Route::get('/cost_element_dt', [SelectController::class, 'cost_element_dt'])->name('cost_element_dt');
         });
     });
 
     Route::group(['prefix' => 'buku-besar'], function () {
-        //        Route::group(['prefix' => 'cost_center'], function () {
-        //            Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
-        //            Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
-        //            Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
-        //            Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
-        //        });
 
         Route::group(['prefix' => 'consrate'], function () {
             Route::get('/', [ConsRateController::class, 'index'])->name('consrate');

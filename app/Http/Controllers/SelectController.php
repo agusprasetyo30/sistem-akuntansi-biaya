@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
+use App\Models\GLAccountFC;
 use App\Models\GLAccount;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
@@ -122,6 +123,36 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->group_account_fc,
                 "text" => $items->group_account_fc . ' ' . $items->group_account_fc_desc,
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function general_ledger_fc(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $group_account = GLAccountFC::limit(10)
+                ->where('group_account_fc', '=', $request->group_account)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_account = GLAccountFC::where('group_account_fc', '=', $request->group_account)
+                ->where(function ($query) use ($search, $request){
+                    $query->where('gl_account_fc', 'ilike', '%' . $search . '%')
+                        ->orWhere('gl_account_fc_desc', 'ilike', '%' . $search . '%');
+                })
+                ->whereNull('deleted_at')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($group_account as $items) {
+            $response[] = array(
+                "id" => $items->gl_account_fc,
+                "text" => $items->gl_account_fc . ' ' . $items->gl_account_fc_desc,
             );
         }
 
@@ -315,6 +346,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $cost_center = CostCenter::where('cost_center', 'ilike', '%' . $search . '%')
+                ->orWhere('cost_center_desc', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->whereNull('deleted_at')
                 ->get();
@@ -324,7 +356,7 @@ class SelectController extends Controller
         foreach ($cost_center as $items) {
             $response[] = array(
                 "id" => $items->cost_center,
-                "text" => $items->cost_center . ' ' . $items->cost_center_desc,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc,
             );
         }
 
@@ -579,6 +611,36 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->group_account_fc,
                 "text" => $items->group_account_fc . ' - ' . $items->group_account_fc_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function gl_account_fc_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $group_acc = GLAccountFC::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $group_acc = GLAccountFC::where('gl_account_fc', 'ilike', '%' . $search . '%')
+                ->orWhere('gl_account_fc_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($group_acc as $items) {
+            $response[] = array(
+                "id" => $items->group_account_fc,
+                "text" => $items->group_account_fc . ' - ' . $items->gl_account_fc_desc
             );
         }
 

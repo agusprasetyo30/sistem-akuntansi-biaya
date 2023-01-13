@@ -86,7 +86,7 @@ class PriceRenDaanDataTable extends DataTable
                 $query->orderBy('regions.region_desc', $order);
             })
             ->orderColumn('filter_price_rendaan_value', function ($query, $order) {
-                $query->orderBy('qty_rendaan.qty_price_rendaan.price_rendaan_value', $order);
+                $query->orderBy('price_rendaan.price_rendaan_value', $order);
             })
             ->addColumn('action', 'pages.buku_besar.price_rendaan.action')
             ->escapeColumns([]);

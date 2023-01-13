@@ -1,0 +1,74 @@
+[
+    {
+        "Kelompok_Acc": "100",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung amortisasi & penyusutan"
+    },
+    {
+        "Kelompok_Acc": "200",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung amortisasi & penyusutan"
+    },
+    {
+        "Kelompok_Acc": "300",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung handling"
+    },
+    {
+        "Kelompok_Acc": "400",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung jasa"
+    },
+    {
+        "Kelompok_Acc": "500",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung lain-lain"
+    },
+    {
+        "Kelompok_Acc": "600",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung pemeliharaan"
+    },
+    {
+        "Kelompok_Acc": "700",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung pengantongan"
+    },
+    {
+        "Kelompok_Acc": "800",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung sewa"
+    },
+    {
+        "Kelompok_Acc": "900",
+        "Kelompok_Acc_Desc": "Biaya Overhead langsung Suku Cadang"
+    },
+    {
+        "Kelompok_Acc": "1000",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung amortisasi & penyusutan"
+    },
+    {
+        "Kelompok_Acc": "1100",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung asuransi"
+    },
+    {
+        "Kelompok_Acc": "1200",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung gaji"
+    },
+    {
+        "Kelompok_Acc": "1300",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung gaji"
+    },
+    {
+        "Kelompok_Acc": "1400",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung lain-lain"
+    },
+    {
+        "Kelompok_Acc": "1500",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung pemeliharaan"
+    },
+    {
+        "Kelompok_Acc": "1600",
+        "Kelompok_Acc_Desc": "Biaya Overhead tidak langsung sewa"
+    },
+    {
+        "Kelompok_Acc": "1700",
+        "Kelompok_Acc_Desc": "Overhead Bahan Penolong"
+    },
+    {
+        "Kelompok_Acc": "1800",
+        "Kelompok_Acc_Desc": "Biaya Gaji Kesejahteraan Langsung"
+    }
+]

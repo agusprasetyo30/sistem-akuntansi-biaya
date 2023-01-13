@@ -527,12 +527,14 @@
                     for (let j = 0 ; j < lenght ; j++){
                         var kurs = $('#edit_currency'+j+id).val();
                         var adjustment = $('#edit_adjustment'+j+id).val();
+                        var inflasi = $('#edit_inflasi'+j+id).val();
                         var periode = $('#edit_periode'+j+id).val();
 
                         if(kurs !== '' && adjustment !== '' && periode !== ''){
                             answersList_edit.push({
                                 kurs:kurs,
                                 adjustment:adjustment,
+                                inflasi: inflasi,
                                 periode:periode,
                             });
                         }else{
@@ -540,6 +542,7 @@
                                 kurs:'',
                                 adjustment:'',
                                 periode:'',
+                                inflasi: '',
                             });
                             value_edit = false
                         }

@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
-class CostCenterSeeder extends Seeder
+class GroupAccountFCSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,14 +15,14 @@ class CostCenterSeeder extends Seeder
      */
     public function run()
     {
-        $json = File::get("database/json/cost_center.json");
-        $cost_center= json_decode($json);
+        $json = File::get("database/json/ga_fc.json");
+        $gaFC= json_decode($json);
 
-        foreach ($cost_center as $items){
-            DB::table('cost_center')->insert([
-                'cost_center' => $items->CostCenter,
-                'cost_center_desc' => $items->Deskripsi,
+        foreach ($gaFC as $items){
+            DB::table('group_account_fc')->insert([
                 'company_code' => 'B000',
+                'group_account_fc' => $items->Kelompok_Acc,
+                'group_account_fc_desc' => $items->Kelompok_Acc_Desc,
                 'created_at' => '2022-09-30 16:31:42',
                 'created_by' => '1',
             ]);

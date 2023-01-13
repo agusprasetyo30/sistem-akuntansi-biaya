@@ -1,0 +1,862 @@
+[
+    {
+        "GL_Acc": "610110000",
+        "GL_Acc_Desc": "Bahan Baku",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "610220000",
+        "GL_Acc_Desc": "Bahan Pembantu",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "620110001",
+        "GL_Acc_Desc": "Gaji Pokok",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620120001",
+        "GL_Acc_Desc": "Tunj.Jabatan",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620120003",
+        "GL_Acc_Desc": "Tunj.Sarana Kerja",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620120004",
+        "GL_Acc_Desc": "Tunj.Cuti karyawn",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620120005",
+        "GL_Acc_Desc": "Tunj.Lembur",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620120006",
+        "GL_Acc_Desc": "Tunj.Pajak",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130001",
+        "GL_Acc_Desc": "Pengobatan",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130002",
+        "GL_Acc_Desc": "BPJS TK/Asuransi",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130003",
+        "GL_Acc_Desc": "Tunj. Hari Raya",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130004",
+        "GL_Acc_Desc": "Iuran Pensiun",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130005",
+        "GL_Acc_Desc": "Iuran Kes.Hr Tua",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130006",
+        "GL_Acc_Desc": "Pesangon",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130007",
+        "GL_Acc_Desc": "Insentif Kinerja",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "620130008",
+        "GL_Acc_Desc": "Jasa Operasi",
+        "Kelompok_Acc": "1800"
+    },
+    {
+        "GL_Acc": "630110000",
+        "GL_Acc_Desc": "Suku Cadang",
+        "Kelompok_Acc": "900"
+    },
+    {
+        "GL_Acc": "640110001",
+        "GL_Acc_Desc": "Asuransi-Pabrik",
+        "Kelompok_Acc": "200"
+    },
+    {
+        "GL_Acc": "650110001",
+        "GL_Acc_Desc": "Penyustn Bangunan",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "650110002",
+        "GL_Acc_Desc": "Penyustn Pabrik&Alat",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "650130001",
+        "GL_Acc_Desc": "Penyustn Mesin Bngkl",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "650230000",
+        "GL_Acc_Desc": "Amort-Bhn Kimia",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "690190005",
+        "GL_Acc_Desc": "Lain-PeNil Stock",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "690190006",
+        "GL_Acc_Desc": "Lain-PeNil Aset",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "610320000",
+        "GL_Acc_Desc": "Kemas Kantong",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "610330000",
+        "GL_Acc_Desc": "Pengantongan",
+        "Kelompok_Acc": "700"
+    },
+    {
+        "GL_Acc": "720220000",
+        "GL_Acc_Desc": "Rg Hapus Aset Tetap",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "670120002",
+        "GL_Acc_Desc": "Jasa-Bersih Pbrk",
+        "Kelompok_Acc": "400"
+    },
+    {
+        "GL_Acc": "610310000",
+        "GL_Acc_Desc": "Kantong",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "610250000",
+        "GL_Acc_Desc": "Bahan Pelumas",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "610410000",
+        "GL_Acc_Desc": "Handling Bahan Baku",
+        "Kelompok_Acc": "300"
+    },
+    {
+        "GL_Acc": "620310000",
+        "GL_Acc_Desc": "Diklat",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "670120003",
+        "GL_Acc_Desc": "Jasa-Kuras Sludge",
+        "Kelompok_Acc": "400"
+    },
+    {
+        "GL_Acc": "670230002",
+        "GL_Acc_Desc": "Sewa-Alat Berat",
+        "Kelompok_Acc": "800"
+    },
+    {
+        "GL_Acc": "620210000",
+        "GL_Acc_Desc": "PD - Dalam Negeri",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "610230000",
+        "GL_Acc_Desc": "Air Baku",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "650130003",
+        "GL_Acc_Desc": "Penyustn Alat Kantor",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "660220013",
+        "GL_Acc_Desc": "Hi & Ho Lini 2",
+        "Kelompok_Acc": "300"
+    },
+    {
+        "GL_Acc": "610340000",
+        "GL_Acc_Desc": "Mob. Bagging Unit",
+        "Kelompok_Acc": "700"
+    },
+    {
+        "GL_Acc": "660210000",
+        "GL_Acc_Desc": "Distribusi",
+        "Kelompok_Acc": "300"
+    },
+    {
+        "GL_Acc": "670210004",
+        "GL_Acc_Desc": "Sewa-Gudang",
+        "Kelompok_Acc": "800"
+    },
+    {
+        "GL_Acc": "670240002",
+        "GL_Acc_Desc": "Sewa-Gdg Lini 2",
+        "Kelompok_Acc": "800"
+    },
+    {
+        "GL_Acc": "690190009",
+        "GL_Acc_Desc": "Lain-Susut Persdiaan",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "710111000",
+        "GL_Acc_Desc": "Lb SKur-Real BB",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "720111000",
+        "GL_Acc_Desc": "Rg SKur-Real BB",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "903000000",
+        "GL_Acc_Desc": "Ovrhead Pemeliharaan",
+        "Kelompok_Acc": "600"
+    },
+    {
+        "GL_Acc": "630210001",
+        "GL_Acc_Desc": "Pemlhr-Pabrik",
+        "Kelompok_Acc": "600"
+    },
+    {
+        "GL_Acc": "924110001",
+        "GL_Acc_Desc": "Gaji Pokok",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924120001",
+        "GL_Acc_Desc": "Tunj.Jabatan",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924120003",
+        "GL_Acc_Desc": "Tunj.Sarana Kerja",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924120004",
+        "GL_Acc_Desc": "Tunj.Cuti karyawn",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924120006",
+        "GL_Acc_Desc": "Tunj.Pajak",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130001",
+        "GL_Acc_Desc": "Pengobatan",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130002",
+        "GL_Acc_Desc": "BPJS TK/Asuransi",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130003",
+        "GL_Acc_Desc": "Tunj. Hari Raya",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130004",
+        "GL_Acc_Desc": "Iuran Pensiun",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130005",
+        "GL_Acc_Desc": "Iuran Kes.Hr Tua",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130006",
+        "GL_Acc_Desc": "Pesangon",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130007",
+        "GL_Acc_Desc": "Insentif Kinerja",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130008",
+        "GL_Acc_Desc": "Jasa Operasi",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924130009",
+        "GL_Acc_Desc": "Tantiem",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924210000",
+        "GL_Acc_Desc": "PD - Dalam Negeri",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "974110004",
+        "GL_Acc_Desc": "Jasa-Audit",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "974130001",
+        "GL_Acc_Desc": "Jasa-Alih Daya",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "994120001",
+        "GL_Acc_Desc": "Lain-Jamuan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "974110001",
+        "GL_Acc_Desc": "Jasa-Konsultan",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "954110002",
+        "GL_Acc_Desc": "Penyustn Pabrik&Alat",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "904000000",
+        "GL_Acc_Desc": "Overhead Pemeliharaa",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "914220000",
+        "GL_Acc_Desc": "Bahan Pembantu",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "914410000",
+        "GL_Acc_Desc": "Handling Bahan Baku",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "924120005",
+        "GL_Acc_Desc": "Tunj.Lembur",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "924220000",
+        "GL_Acc_Desc": "PD - Luar Negeri",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "934110000",
+        "GL_Acc_Desc": "Suku Cadang",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "944210001",
+        "GL_Acc_Desc": "PBB",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "954110001",
+        "GL_Acc_Desc": "Penyustn Bangunan",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "974120002",
+        "GL_Acc_Desc": "Jasa-Bersih Pbrk",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "994190010",
+        "GL_Acc_Desc": "Lain-Sel. Pembulatan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "914320000",
+        "GL_Acc_Desc": "Kemas Kantong",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "934210004",
+        "GL_Acc_Desc": "Pemlhr-Gudang",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "954130001",
+        "GL_Acc_Desc": "Penyustn Mesin Bngkl",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "934210001",
+        "GL_Acc_Desc": "Pemlhr-Pabrik",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "934210003",
+        "GL_Acc_Desc": "Pemlhr-Gedung Ktr",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "974110003",
+        "GL_Acc_Desc": "Jasa-Manajemen",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "994120004",
+        "GL_Acc_Desc": "Lain-Makan/Minum",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "924310000",
+        "GL_Acc_Desc": "Diklat",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "974230002",
+        "GL_Acc_Desc": "Sewa-Alat Berat",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "914110000",
+        "GL_Acc_Desc": "Bahan Baku",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "944110001",
+        "GL_Acc_Desc": "Asuransi-Pabrik",
+        "Kelompok_Acc": "1100"
+    },
+    {
+        "GL_Acc": "914310000",
+        "GL_Acc_Desc": "Kantong",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "914330000",
+        "GL_Acc_Desc": "Pengantongan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "954120001",
+        "GL_Acc_Desc": "Penyustn Kendaraan",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "974120003",
+        "GL_Acc_Desc": "Jasa-Kuras Sludge",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "954130003",
+        "GL_Acc_Desc": "Penyustn Alat Kantor",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "974320000",
+        "GL_Acc_Desc": "Litbang",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "934210011",
+        "GL_Acc_Desc": "Pmlhr-Alat Kantor",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "994110003",
+        "GL_Acc_Desc": "Lain-Kehumasan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994110006",
+        "GL_Acc_Desc": "Lain-Alat Kerja",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994140007",
+        "GL_Acc_Desc": "Lain-Kampanye K3",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994110005",
+        "GL_Acc_Desc": "Lain-Inspksi&Ijin",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "954210000",
+        "GL_Acc_Desc": "Amort-ATB",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "994110011",
+        "GL_Acc_Desc": "Lain-Kalibrasi",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "914210000",
+        "GL_Acc_Desc": "Utilitas",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "944110004",
+        "GL_Acc_Desc": "Asuransi-Bangunan",
+        "Kelompok_Acc": "1100"
+    },
+    {
+        "GL_Acc": "954130002",
+        "GL_Acc_Desc": "Penyustn Alat Berat",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "934210010",
+        "GL_Acc_Desc": "Pemlhr-Alat Berat",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "994110010",
+        "GL_Acc_Desc": "Lain-Bahan Bakar",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "914230000",
+        "GL_Acc_Desc": "Air Baku",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "944120002",
+        "GL_Acc_Desc": "Asuransi-Bhn Baku",
+        "Kelompok_Acc": "1100"
+    },
+    {
+        "GL_Acc": "974120004",
+        "GL_Acc_Desc": "Jasa-Bersih Pasar",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "994190008",
+        "GL_Acc_Desc": "Lain-Stock Opname",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994120002",
+        "GL_Acc_Desc": "Lain-Pertemuan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "964220013",
+        "GL_Acc_Desc": "Hi & Ho Lini 2",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "924130010",
+        "GL_Acc_Desc": "Penghargaan",
+        "Kelompok_Acc": "1200"
+    },
+    {
+        "GL_Acc": "994140005",
+        "GL_Acc_Desc": "Lain-Rekreasi&OR",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "924320000",
+        "GL_Acc_Desc": "Gerakan Inovasi",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994110002",
+        "GL_Acc_Desc": "Lain-Media Didik",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994130001",
+        "GL_Acc_Desc": "Lain-Bina Wilayah",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "934210002",
+        "GL_Acc_Desc": "Pemlhr-Perumahan",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "934210005",
+        "GL_Acc_Desc": "Pemlhr-Jalan",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "934210008",
+        "GL_Acc_Desc": "Pemlhr-Kendarn",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "934210009",
+        "GL_Acc_Desc": "Pemlhr-Alat Kerja",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "934210013",
+        "GL_Acc_Desc": "PEMLHR-SARANA TIK",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "944210002",
+        "GL_Acc_Desc": "Pajak Kendaraan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "944220003",
+        "GL_Acc_Desc": "Retrib-Kendaraan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "944220006",
+        "GL_Acc_Desc": "Retrib-Parkir&Tol",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "954140003",
+        "GL_Acc_Desc": "Penyustn Pro.Inv.Bgn",
+        "Kelompok_Acc": "1000"
+    },
+    {
+        "GL_Acc": "974210003",
+        "GL_Acc_Desc": "Sewa-Kantor",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "974220001",
+        "GL_Acc_Desc": "Sewa-Kendaraan",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "974230001",
+        "GL_Acc_Desc": "Sewa-Alat Pbk&Ktr",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "974410000",
+        "GL_Acc_Desc": "Listrik",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994110001",
+        "GL_Acc_Desc": "Lain-Rumah Tangga",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994110007",
+        "GL_Acc_Desc": "Lain-Alat Kantor",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994110012",
+        "GL_Acc_Desc": "Lain-Cetak & Copy",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994140002",
+        "GL_Acc_Desc": "Lain-Bina Kywn",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "690190010",
+        "GL_Acc_Desc": "Lain-Sel. Pembulatan",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "660220014",
+        "GL_Acc_Desc": "Hi & Ho Lini 3",
+        "Kelompok_Acc": "300"
+    },
+    {
+        "GL_Acc": "670130001",
+        "GL_Acc_Desc": "Jasa-Alih Daya",
+        "Kelompok_Acc": "400"
+    },
+    {
+        "GL_Acc": "630210003",
+        "GL_Acc_Desc": "Pemlhr-Gedung Ktr",
+        "Kelompok_Acc": "600"
+    },
+    {
+        "GL_Acc": "914250000",
+        "GL_Acc_Desc": "Bahan Pelumas",
+        "Kelompok_Acc": "1700"
+    },
+    {
+        "GL_Acc": "994120003",
+        "GL_Acc_Desc": "Lain-Perayaan",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "994140001",
+        "GL_Acc_Desc": "Lain-Terima Kywn",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "630290001",
+        "GL_Acc_Desc": "Kliring-Pemlhr",
+        "Kelompok_Acc": "600"
+    },
+    {
+        "GL_Acc": "670240003",
+        "GL_Acc_Desc": "Sewa-Gdg Lini 3",
+        "Kelompok_Acc": "800"
+    },
+    {
+        "GL_Acc": "944120003",
+        "GL_Acc_Desc": "Asuransi-SkCadang",
+        "Kelompok_Acc": "1100"
+    },
+    {
+        "GL_Acc": "994110013",
+        "GL_Acc_Desc": "Lain-Kelola Limbh",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "630210004",
+        "GL_Acc_Desc": "Pemlhr-Gudang",
+        "Kelompok_Acc": "600"
+    },
+    {
+        "GL_Acc": "974240001",
+        "GL_Acc_Desc": "Sewa-Muka Laut",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "914340000",
+        "GL_Acc_Desc": "Mob. Bagging Unit",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "690190008",
+        "GL_Acc_Desc": "Lain-Stock Opname",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "934210012",
+        "GL_Acc_Desc": "Pemlhr-Taman",
+        "Kelompok_Acc": "1500"
+    },
+    {
+        "GL_Acc": "974130002",
+        "GL_Acc_Desc": "Jasa-Perijinan",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "974210001",
+        "GL_Acc_Desc": "Sewa-Tanah",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "994190005",
+        "GL_Acc_Desc": "Lain-PeNil Stock",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "974430000",
+        "GL_Acc_Desc": "Telekomunikasi",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "974230003",
+        "GL_Acc_Desc": "Sewa-Komputer",
+        "Kelompok_Acc": "1600"
+    },
+    {
+        "GL_Acc": "974440000",
+        "GL_Acc_Desc": "Operasional SAP",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "620130010",
+        "GL_Acc_Desc": "Penghargaan",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "974110002",
+        "GL_Acc_Desc": "Jasa-Peng. Sistem",
+        "Kelompok_Acc": "1300"
+    },
+    {
+        "GL_Acc": "620220000",
+        "GL_Acc_Desc": "PD - Luar Negeri",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "690110014",
+        "GL_Acc_Desc": "Lain-AUC tdk di kap.",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "994110009",
+        "GL_Acc_Desc": "Lain-Transportasi",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "974420000",
+        "GL_Acc_Desc": "Air",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "640210001",
+        "GL_Acc_Desc": "PBB",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "650120001",
+        "GL_Acc_Desc": "Penyustn Kendaraan",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "610210000",
+        "GL_Acc_Desc": "Utilitas",
+        "Kelompok_Acc": "200"
+    },
+    {
+        "GL_Acc": "640110004",
+        "GL_Acc_Desc": "Asuransi-Bangunan",
+        "Kelompok_Acc": "200"
+    },
+    {
+        "GL_Acc": "650130002",
+        "GL_Acc_Desc": "Penyustn Alat Berat",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "650210000",
+        "GL_Acc_Desc": "Amort-ATB",
+        "Kelompok_Acc": "100"
+    },
+    {
+        "GL_Acc": "690110005",
+        "GL_Acc_Desc": "Lain-Inspksi&Ijin",
+        "Kelompok_Acc": "500"
+    },
+    {
+        "GL_Acc": "670110001",
+        "GL_Acc_Desc": "Jasa-Konsultan",
+        "Kelompok_Acc": "400"
+    },
+    {
+        "GL_Acc": "994110015",
+        "GL_Acc_Desc": "Lain-Denda & Klaim",
+        "Kelompok_Acc": "1400"
+    },
+    {
+        "GL_Acc": "670230001",
+        "GL_Acc_Desc": "Sewa-Alat Pbk&Ktr",
+        "Kelompok_Acc": "800"
+    }
+]
