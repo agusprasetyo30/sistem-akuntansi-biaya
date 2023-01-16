@@ -3,6 +3,7 @@
 namespace App\DataTables\Master;
 
 use App\Models\Master\H_Salr;
+use App\Models\Salr;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -19,27 +20,13 @@ class H_SalrDataTable extends DataTable
      */
     public function dataTable($query)
     {
+//        $query = Salr::select()
+//            ->leftjoin('')
         return datatables()
             ->eloquent($query)
             ->addColumn('action', 'master\h_salr.action');
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Master\H_Salr $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(H_Salr $model)
-    {
-        return $model->newQuery();
-    }
-
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
     public function html()
     {
         return $this->builder()

@@ -266,7 +266,7 @@
                             version:$('#version').val()
                         },
                         success:function (response) {
-                            if (response.Code === 200){
+                            if (response.code === 200){
                                 Swal.fire({
                                     title: 'Apakah anda yakin?',
                                     text: "Data akan segera dikirim",
@@ -284,7 +284,7 @@
                                         $("#back_import").attr("disabled", true);
                                     }
                                 })
-                            }else if (response.Code === 201){
+                            }else if (response.code === 201){
                                 Swal.fire({
                                     title: 'Apakah anda yakin?',
                                     text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",

@@ -325,6 +325,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [SalrController::class, 'delete'])->name('delete_salr');
             Route::post('export', [SalrController::class, 'export'])->name('export_salr');
             Route::post('import', [SalrController::class, 'import'])->name('import_salr');
+            Route::post('check', [SalrController::class, 'check'])->name('check_salr');
         });
     });
 

@@ -48,7 +48,7 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
                     ->where('version_id', $this->version)
                     ->first();
 
-                $input['price_rendaan_value'] = $arr[$i] != null ? $arr[$i]:0;
+                $input['price_rendaan_value'] = $arr[$i] != null ?(double) str_replace('.', '', str_replace('Rp ', '', $arr[$i])) :0;
                 $input['asumsi_umum_id'] = $versi->id;
 
                 $input['version_id'] = $this->version;
