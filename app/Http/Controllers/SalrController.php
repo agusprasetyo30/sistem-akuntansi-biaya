@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\H_SalrDataTable;
 use App\DataTables\Master\SalrDataTable;
+use App\Exports\MultipleSheet\MS_SalrExport;
+use App\Imports\SalrImport;
 use App\Models\Salr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SalrController extends Controller
 {
@@ -42,7 +46,7 @@ class SalrController extends Controller
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
             $input['periode'] = $timestamps[1].'-'.$timestamps[0].'-01';
-            $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
+            $input['value'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
             $input['partner_cost_center'] = $request->partner_cost_center;
             $input['username'] = $request->username;
@@ -60,7 +64,6 @@ class SalrController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -89,7 +92,7 @@ class SalrController extends Controller
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
             $input['periode'] = $timestamps[1].'-'.$timestamps[0].'-01';
-            $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
+            $input['value'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
             $input['partner_cost_center'] = $request->partner_cost_center;
             $input['username'] = $request->username;
@@ -108,7 +111,6 @@ class SalrController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-//            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -134,9 +136,7 @@ class SalrController extends Controller
 
     public function export(Request $request)
     {
-        $version = $request->temp;
-
-        return Excel::download(new MS_PriceRenDaanExport($version), 'price_rendaan.xlsx');
+        return Excel::download(new MS_SalrExport(), 'SALR.xlsx');
     }
 
     public function import(Request $request)
@@ -144,7 +144,7 @@ class SalrController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "file" => 'required',
-                "version" => 'required',
+                'tanggal_import' => 'required'
             ], validatorMsg());
 
             if ($validator->fails()){
@@ -152,12 +152,15 @@ class SalrController extends Controller
             }
 
             $transaction = DB::transaction(function () use ($request){
-                $empty_excel = Excel::toArray(new PriceRenDaanImport($request->version), $request->file('file'));
+                $temp = explode('-', $request->tanggal_import);
+                $timestamp = $temp[1].'-'.$temp[0].'-01';
+                $empty_excel = Excel::toArray(new SalrImport($timestamp), $request->file('file'));
                 if ($empty_excel[0]){
                     $file = $request->file('file')->store('import');
 
-                    PriceRenDaan::where('version_id', $request->version)->delete();
-                    $import = new PriceRenDaanImport($request->version);
+
+                    Salr::where('periode', 'ilike', '%'.$timestamp.'%')->delete();
+                    $import = new SalrImport($timestamp);
                     $import->import($file);
 
                     $data_fail = $import->failures();
@@ -178,6 +181,24 @@ class SalrController extends Controller
                     'code' => 200,
                     'title' => 'Berhasil meng-import data'
                 ]);
+            }
+        }catch (\Exception $exception){
+//            dd($exception);
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function check(Request $request){
+        try {
+            $timestamp = explode('-', $request->periode);
+            $check = Salr::where('periode', 'ilike', '%'.$timestamp[1].'-'.$timestamp[0].'-01'.'%')
+                ->first();
+            if ($check == null){
+                return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
+            }else{
+                return response()->json(['code' => 201, 'msg' => 'Data Ada']);
             }
         }catch (\Exception $exception){
             return setResponse([

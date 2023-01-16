@@ -98,6 +98,15 @@
                 autoclose:true
             });
 
+            $('#tanggal_import').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            }).on('change', function () {
+                $("#template").css("display", "block");
+            });
+
             $('#value').on('keyup', function(){
                 let rupiah = formatRupiah($(this).val(), "Rp ")
                 $(this).val(rupiah)
@@ -211,15 +220,12 @@
                     xhrFields:{
                         responseType: 'blob'
                     },
-                    url: '{{route('export_price_rendaan')}}',
-                    data: {
-                        temp:$('#version').val()
-                    },
+                    url: '{{route('export_salr')}}',
                     success: function(result, status, xhr) {
 
                         var disposition = xhr.getResponseHeader('content-disposition');
                         var matches = /"([^"]*)"/.exec(disposition);
-                        var filename = (matches != null && matches[1] ? matches[1] : 'price_rendaan.xlsx');
+                        var filename = (matches != null && matches[1] ? matches[1] : 'SALR.xlsx');
 
                         // The actual download
                         var blob = new Blob([result], {
@@ -262,20 +268,23 @@
             $('#submit_import').on('click', function () {
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
                 $("#back_import").attr("disabled", true);
+                var date = $('#tanggal_import').val();
 
-                if ($('#version').val() !== null && $('#file').val() !== ''){
+                if ($('#tanggal_import').val() !== null && $('#file').val() !== ''){
+                    let file = new FormData($("#form_input_salr")[0]);
                     $.ajax({
                         type: "POST",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('check_price_rendaan')}}',
+                        url: '{{route('check_salr')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            version:$('#version').val()
+                            periode:$('#tanggal_import').val()
                         },
                         success:function (response) {
-                            if (response.Code === 200){
+                            $("#tanggal_import").attr("disabled", true);
+                            if (response.code === 200){
                                 Swal.fire({
                                     title: 'Apakah anda yakin?',
                                     text: "Data akan segera dikirim",
@@ -287,13 +296,14 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        importStore()
+                                        importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                                         $("#back_import").attr("disabled", true);
+                                        $("#tanggal_import").attr("disabled", false);
                                     }
                                 })
-                            }else if (response.Code === 201){
+                            }else if (response.code === 201){
                                 Swal.fire({
                                     title: 'Apakah anda yakin?',
                                     text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
@@ -305,21 +315,36 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        importStore()
+                                        importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                                         $("#back_import").attr("disabled", false);
+                                        $("#tanggal_import").attr("disabled", false);
                                     }
                                 })
                             }
                         },
                         error: function (response) {
-                            handleError(response)
-                            $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                            $("#back_import").attr("disabled", false);
+                            $("#tanggal_import").attr("disabled", true);
+                            Swal.fire({
+                                title: response.responseJSON.title,
+                                html: response.responseJSON.msg,
+                                icon: 'warning',
+                                allowOutsideClick: false,
+                                confirmButtonColor: "#019267",
+                                confirmButtonText: 'Konfirmasi',
+                            }).then((result) =>{
+                                if (result.value){
+                                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                    $("#back_import").attr("disabled", false);
+                                    $("#tanggal_import").attr("disabled", false);
+                                }
+                            })
+
                         }
                     })
                 }else {
+                    $("#tanggal_import").attr("disabled", true);
                     Swal.fire({
                         title: 'PERINGATAN',
                         text: "Silakan Isi Data Tersebut",
@@ -331,14 +356,14 @@
                         if (result.value){
                             $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                             $("#back_import").attr("disabled", false);
+                            $("#tanggal_import").attr("disabled", false);
                         }
                     })
                 }
 
             })
 
-            function importStore() {
-                let file = new FormData($("#form_input_price_daan")[0]);
+            function importStore(file) {
                 $.ajax({
                     type: "POST",
                     headers: {
@@ -346,7 +371,7 @@
                     },
                     processData: false,
                     contentType: false,
-                    url: '{{route('import_price_rendaan')}}',
+                    url: '{{route('import_salr')}}',
                     data: file,
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -370,10 +395,20 @@
                             })
                     },
                     error: function (response) {
-                        handleError(response)
-                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                        $("#back_import").attr("disabled", false);
-                        // $('#dt_salr').DataTable().ajax.reload();
+                        Swal.fire({
+                            title: 'Oopss...',
+                            text: 'Internal Server Error',
+                            icon: 'error',
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#019267',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result) =>{
+                            if (result.value){
+                                $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_import").attr("disabled", false);
+                                $("#tanggal_import").attr("disabled", false);
+                            }
+                        })
                     }
                 })
             }

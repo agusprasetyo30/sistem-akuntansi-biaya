@@ -3,10 +3,10 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Price Rencana Pengadaan</h5>
+                <h5 class="modal-title" id="largemodal1">Import SALR</h5>
             </div>
             <div class="modal-body">
-                <form method="POST" id="form_input_price_daan" enctype="multipart/form-data">
+                <form method="POST" id="form_input_salr" enctype="multipart/form-data">
                     @csrf
                     <div class="col-md-12 mt1">
                         <div class="row">
@@ -21,10 +21,8 @@
                                     </ol>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Versi Asumsi</label>
-                                    <select name="version" id="version" class="form-control custom-select select2">
-                                        <option value="" disabled selected>Pilih Versi</option>
-                                    </select>
+                                    <label class="form-label">Bulan </label>
+                                    <input type="text" class="form-control" name="tanggal_import" id="tanggal_import" placeholder="Bulan-Tahun" autocomplete="off" required>
                                     <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>
                                 <div class="input-group file-browser mb-5">
