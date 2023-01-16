@@ -57,7 +57,12 @@
             '</table>'
         $(document).ready(function () {
             get_data()
+
+        $('#code_cost_center').keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
         })
+
 
         function get_data() {
             $('#table_main').html(table_main_dt)
