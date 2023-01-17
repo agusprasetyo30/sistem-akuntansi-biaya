@@ -71,3 +71,10 @@
 </div>
 <!--/div-->
 
+<script>
+    $(document).ready(function () {
+        $('#edit_code_cost_center'+'{{$model->cost_center}}').keyup(function(){
+            this.value = this.value.toUpperCase();
+        });
+    })
+</script>
