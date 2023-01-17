@@ -32,6 +32,7 @@
                             <ul class="nav panel-tabs">
                                 <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
                                 <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
+                                <li id="tabs_group_account"> <a href="#group_account" data-bs-toggle="tab">Group Account</a> </li>
                             </ul>
                         </div>
                     </div>
@@ -47,7 +48,7 @@
                             <div class="tab-pane " id="horizontal">
                                 <div class="mb-2 row">
                                     <div class="form-group">
-                                        <label class="form-label">MATERIAL</label>
+                                        <label class="form-label">PRODUK</label>
                                         <select id="filter_material" class="form-control custom-select select2">
                                         </select>
                                     </div>
@@ -57,6 +58,13 @@
                                     <div class="table-responsive" id="dinamic_table">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="tab-pane " id="group_account">
+                                {{-- <div class="">
+                                    <div class="table-responsive" id="table-wrapper">
+                                        
+                                    </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -170,11 +178,11 @@
             })
 
             $('#filter_material').select2({
-                placeholder: 'Pilih Material',
+                placeholder: 'Pilih Produk',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('material_select') }}",
+                    url: "{{ route('material_dt') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -508,10 +516,20 @@
         }
 
         function get_data_horiz(){
-            var table = '<table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">COST ELEMENT</th>'
+            var table = `
+            <table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                    <tr id="dinamic_tr_top">
+                    </tr>
+                    <tr id="dinamic_tr">
+                    </tr>
+                </thead>
+            </table>`
+            // var kolom = '<th class="text-center">BIAYA </th>'
+            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th>'
+            var kolom = ''
             var column = [
-                { data: 'cost_element', orderable:false},
+                { data: 'material_code', orderable:false},
             ]
             $("#dinamic_table").append(table);
             $.ajax({
@@ -519,19 +537,19 @@
                 url : '{{route("zco")}}',
                 data: {
                     data:'material',
-                    // version:$('#filter_version').val()
+                    material:$('#filter_material').val()
                 },
                 success:function (response) {
                     for (let i = 0; i < response.material.length;i++){
-                        column.push({ data: i.toString(), orderable:false})
-                        kolom += '<th class="text-center">'+ response.material[i].material_code+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].material_code+' '+ response.material[i].material_name+'</th>';
+                        kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
-                    // for (let i = 0; i < 5;i++){
-                    //     column.push({ data: i.toString(), orderable:false})
-                    //     kolom += '<th class="text-center">cek</th>';
-                    // }
+                    for (let j = 0; j < response.material.length * 4 ; j++) {
+                        column.push({ data: j.toString(), orderable:false})
+                    }
 
+                    $("#dinamic_tr_top").append(kolom_top);
                     $("#dinamic_tr").append(kolom);
                     $('#h_dt_zco').DataTable().clear().destroy();
                     $("#h_dt_zco").DataTable({
@@ -552,7 +570,7 @@
                             url : '{{route("zco")}}',
                             data: {
                                 data:'horizontal',
-                                // version:$('#filter_version').val()
+                                material:$('#filter_material').val()
                             }
                         },
                         columns: column,
