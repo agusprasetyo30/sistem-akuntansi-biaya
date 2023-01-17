@@ -6,6 +6,7 @@ use App\DataTables\Master\H_SalrDataTable;
 use App\DataTables\Master\SalrDataTable;
 use App\Exports\MultipleSheet\MS_SalrExport;
 use App\Imports\SalrImport;
+use App\Models\CostCenter;
 use App\Models\Salr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +20,28 @@ class SalrController extends Controller
         if ($request->data == 'index') {
             return $salrDataTable->render('pages.buku_besar.salr.index');
         }elseif ($request->data == 'horizontal'){
-            return $h_SalrDataTable->render('pages.buku_besar.salr.index');
+            return $h_SalrDataTable->with([
+                'format' => $request->format_data,
+                'cost_center' => $request->cost_center,
+                'start_month' => $request->start_month,
+                'end_month' => $request->end_month,
+                'moth' => $request->moth,
+                'year' => $request->year,
+                'inflasi' => $request->inflasi,
+                'inflasi_asumsi' => $request->inflasi_asumsi,
+            ])->render('pages.buku_besar.salr.index');
+        }elseif ($request->data == 'dynamic'){
+            $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
+                ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
+                ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
+
+            if ($request->cost_center != 'all'){
+                $cost_center->where('salrs.cost_center', $request->cost_center);
+            }
+
+            $cost_center = $cost_center->get();
+
+            return response()->json(['code' => 200, 'cost_center' => $cost_center]);
         }
         return view('pages.buku_besar.salr.index');
     }

@@ -227,10 +227,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
             Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
             Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
+            Route::get('/version_inflasi', [SelectController::class, 'version_inflasi'])->name('version_inflasi_select');
             Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
             Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
             Route::get('/general_ledger_fc_detail_select', [SelectController::class, 'general_ledger_fc_detail'])->name('general_ledger_fc_detail_select');
             Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
+            Route::get('/cost_center_salr', [SelectController::class, 'cost_center_salr'])->name('cost_center_salr_select');
             Route::get('/cost_element', [SelectController::class, 'cost_element'])->name('cost_element_select');
 
 

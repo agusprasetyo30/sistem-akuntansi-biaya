@@ -15,6 +15,7 @@ use App\Models\Material;
 use App\Models\Plant;
 use App\Models\Regions;
 use App\Models\Role;
+use App\Models\Salr;
 use App\Models\User;
 use App\Models\Version_Asumsi;
 use Carbon\Carbon;
@@ -367,6 +368,36 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function version_inflasi(Request $request)
+    {
+        $search = $request->search;
+        $timestamp = explode('-', $request->periode);
+        if ($search == '') {
+            $asumsi = Asumsi_Umum::select('asumsi_umum.*', 'version_asumsi.version')
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$timestamp[1].'-'.$timestamp[0].'-01'.'%')
+                ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id')
+                ->limit(10)
+                ->get();
+        } else {
+            $asumsi = Asumsi_Umum::select('asumsi_umum.*', 'version_asumsi.version')
+                ->where('version_asumsi.version', 'ilike', '%' . $search . '%')
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$timestamp[1].'-'.$timestamp[0].'-01'.'%')
+                ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($asumsi as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->version.' - '.$items->inflasi
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function cost_center(Request $request)
     {
         $search = $request->search;
@@ -392,6 +423,43 @@ class SelectController extends Controller
 
         return response()->json($response);
     }
+
+    public function cost_center_salr(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
+                ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
+                ->whereNull('salrs.deleted_at')
+                ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc')
+                ->limit(10)
+                ->get();
+        } else {
+            $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
+                ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
+                ->where('salrs.cost_center', 'ilike', '%' . $search . '%')
+                ->orWhere('cost_center.cost_center_desc', 'ilike', '%' . $search . '%')
+                ->whereNull('salrs.deleted_at')
+                ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($cost_center as $items) {
+            $response[] = array(
+                "id" => $items->cost_center,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc,
+            );
+        }
+
+        return response()->json($response);
+    }
+
 
     public function cost_element(Request $request)
     {
