@@ -331,6 +331,18 @@ if (!function_exists('value_dt')) {
     }
 }
 
+if (!function_exists('format_salr')) {
+    function format_salr()
+    {
+        $status = array(
+            '0' => '1 Tahun',
+            '1' => '1 Bulan',
+            '2' => 'Custom',
+        );
+        return $status;
+    }
+}
+
 if (!function_exists('login_method')) {
     function login_method()
     {

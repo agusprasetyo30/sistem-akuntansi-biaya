@@ -44,16 +44,57 @@
                                 </div>
                             </div>
                             <div class="tab-pane " id="horizontal">
-                                <div class="mb-2 row">
+                                <div class="mb-3 row">
                                     <div class="form-group">
-                                        <label class="form-label">VERSI</label>
-                                        <select id="filter_version" class="form-control custom-select select2">
+                                        <label class="form-label">FORMAT TAMPILAN <span class="text-red">*</span></label>
+                                        <select id="filter_format" class="form-control custom-select select2">
+                                            <option selected disabled value="">Pilih Format</option>
+                                            @foreach (format_salr() as $key => $value)
+                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                            @endforeach
                                         </select>
                                     </div>
-
+                                    <div class="form-group" id="cost_center_pick">
+                                        <label class="form-label">COST CENTER <span class="text-red">*</span></label>
+                                        <select id="cost_center_format" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="year_pick" style="display:none;">
+                                        <label class="form-label">TAHUN <span class="text-red">*</span></label>
+                                        <input type="text" class="form-control" name="tahun_satuan_filter1" id="tahun_satuan_filter1" placeholder="Year" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group" id="month_pick_range" style="display:none;">
+                                        <label class="form-label">BULAN <span class="text-red">*</span></label>
+                                        <div class="input-group input-daterange">
+                                            <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="month_pick" style="display:none;">
+                                        <label class="form-label">BULAN <span class="text-red">*</span></label>
+                                        <input type="text" class="form-control" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
+                                    </div>
+                                    <div class="form-group" id="inflasi_pick" style="display:none;">
+                                        <label class="form-label">INFLASI <span class="text-red">*</span></label>
+                                        <select id="filter_inflasi" class="form-control custom-select select2">
+                                            <option selected disabled value="">Pilih Format</option>
+                                            <option value="1">Ya</option>
+                                            <option value="0">Tidak</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="versi_pick" style="display:none;">
+                                        <label class="form-label">VERSI INFLASI <span class="text-red">*</span></label>
+                                        <select id="versi_format" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
+                                    <div class="btn-list">
+                                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                    </div>
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
+
                                     </div>
                                 </div>
                             </div>
@@ -107,14 +148,43 @@
                 $("#template").css("display", "block");
             });
 
+            $('#tahun_satuan_filter1').bootstrapdatepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose:true
+            });
+
+            $('#bulan_filter1').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#bulan_filter2').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#bulan_satuan_filter1').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            }).on('change', function () {
+                $("#inflasi_pick").css("display", "block");
+                list_inflasi()
+            });
+
             $('#value').on('keyup', function(){
                 let rupiah = formatRupiah($(this).val(), "Rp ")
                 $(this).val(rupiah)
             });
 
             $('#tabs_vertical').on('click', function () {
-                // $("#table_main").empty();
-                // get_data()
                 $('#dt_salr').DataTable().ajax.reload();
             })
 
@@ -164,7 +234,6 @@
                     }
                 });
             })
-
 
             $('#data_main_cost_center').select2({
                 dropdownParent: $('#modal_add'),
@@ -413,12 +482,55 @@
                 })
             }
 
-            $('#filter_version').select2({
-                placeholder: 'Pilih Versi',
+            $('#filter_inflasi').select2({
+                placeholder: 'Pilih Format',
+                width: '100%',
+                allowClear: false,
+            }).on('change', function () {
+                if ($('#filter_inflasi').val() === '1'){
+                    $("#versi_pick").css("display", "block");
+                    list_inflasi()
+                }else {
+                    $("#versi_pick").css("display", "none");
+                }
+            })
+
+            $('#filter_format').select2({
+                placeholder: 'Pilih Format',
+                width: '100%',
+                allowClear: false,
+            }).on('change', function () {
+                if ($('#filter_format').val() === '0'){
+                    $("#month_pick_range").css("display", "none");
+                    $("#month_pick").css("display", "none");
+                    $("#inflasi_pick").css("display", "none");
+
+                    $("#year_pick").css("display", "block");
+                }else if ($('#filter_format').val() === '1'){
+                    $("#month_pick_range").css("display", "none");
+                    $("#year_pick").css("display", "none");
+
+                    $("#month_pick").css("display", "block");
+
+                    if ($('#bulan_satuan_filter1').val() === ''){
+                        $("#inflasi_pick").css("display", "block");
+                    }
+
+                }else if($('#filter_format').val() === '2'){
+                    $("#month_pick").css("display", "none");
+                    $("#year_pick").css("display", "none");
+                    $("#inflasi_pick").css("display", "none");
+
+                    $("#month_pick_range").css("display", "block");
+                }
+            })
+
+            $('#cost_center_format').select2({
+                placeholder: 'Pilih Cost Center',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('version_select') }}",
+                    url: "{{ route('cost_center_salr_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -432,10 +544,58 @@
                         };
                     }
                 }
-            }).on('change', function () {
-                $("#dinamic_table").empty();
-                get_data_horiz()
             })
+
+            $('#btn_tampilkan').on('click', function () {
+                let cek = true;
+                if ($('#filter_format').val() !== null && $('#cost_center_format').val() !== null){
+                    if ($('#filter_format').val() === '0'){
+                        if ($('#tahun_satuan_filter1').val() == ''){
+                            cek = false
+                        }
+                    }else if ($('#filter_format').val() === '1'){
+                        if ($('#bulan_satuan_filter1').val() == '' && $('#filter_inflasi').val() === null && $('#versi_format').val() === null){
+                            cek = false
+                        }
+                    }else if ($('#filter_format').val() === '2'){
+                        if ($('#bulan_filter1').val() == '' && $('#bulan_filter2').val() == ''){
+                            cek = false
+                        }
+                    }
+
+                    if (cek){
+                        $("#dinamic_table").empty();
+                        get_data_horiz()
+                    }else {
+                        Swal.fire({
+                            title: 'PERINGATAN',
+                            text: "Silakan Isi Data Tersebut",
+                            icon: 'warning',
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result)=>{
+                            if (result.value){
+                                //
+                            }
+                        })
+                    }
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Silakan Isi Data Tersebut",
+                        icon: 'warning',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        if (result.value){
+                            //
+                        }
+                    })
+                }
+            })
+
         })
 
         function get_data(){
@@ -560,7 +720,6 @@
                             }
                         })
 
-
                         $('.cost_center_search').select2({
                             placeholder: 'Pilih Cost Center',
                             allowClear: false,
@@ -607,7 +766,7 @@
                     {{--},--}}
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3,4]
-                    }, title: 'Price Rencana Pengadaan'  }
+                    }, title: 'SALR'  }
                 ],
                 ajax: {
                     url : '{{route("salr")}}',
@@ -629,26 +788,39 @@
         }
 
         function get_data_horiz(){
-            var table = '<table id="h_dt_salr" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
+            var table = '<table id="h_dt_salr" class="table table-bordered text-wrap wrap key-buttons text-center" style="width: auto;">' +
+                '<thead>' +
+                '<tr id="primary">' +
+                '<th class="align-middle" rowspan="2">Group Account</th>' +
+                '<th class="align-middle" rowspan="2">Group Account Desc</th>' +
+                '</tr>' +
+                '<tr id="secondary">' +
+                '</tr>' +
+                '</thead>' +
+                '</table>'
+            var kolom;
+            var kolom1;
             var column = [
-                { data: 'material', orderable:false},
-                { data: 'region_desc', orderable:false}
+                { width: '5%', data: 'group_account_fc', orderable:false},
+                { width: '20%',data: 'group_account_fc_desc', orderable:false}
             ]
             $("#dinamic_table").append(table);
             $.ajax({
                 type: "GET",
-                url : '{{route("qty_rendaan")}}',
+                url : '{{route("salr")}}',
                 data: {
-                    data:'version',
-                    version:$('#filter_version').val()
+                    data:'dynamic',
+                    cost_center:$('#cost_center_format').val(),
                 },
                 success:function (response) {
-                    for (let i = 0; i < response.asumsi.length;i++){
+                    console.log(response.cost_center)
+                    for (let i = 0; i < response.cost_center.length;i++){
                         column.push({ data: i.toString(), orderable:false})
-                        kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
+                        kolom += '<th class="text-center">'+response.cost_center[i].cost_center+'</th>';
+                        kolom1 += '<th class="text-center">'+response.cost_center[i].cost_center_desc+'</th>';
                     }
-                    $("#dinamic_tr").append(kolom);
+                    $("#primary").append(kolom);
+                    $("#secondary").append(kolom1);
                     $('#h_dt_salr').DataTable().clear().destroy();
                     $("#h_dt_salr").DataTable({
                         scrollX: true,
@@ -685,10 +857,17 @@
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
-                            url : '{{route("price_rendaan")}}',
+                            url : '{{route("salr")}}',
                             data: {
                                 data:'horizontal',
-                                version:$('#filter_version').val()
+                                format_data:$('#filter_format').val(),
+                                cost_center:$('#cost_center_format').val(),
+                                start_month:$('#bulan_filter1').val(),
+                                end_month:$('#bulan_filter2').val(),
+                                moth:$('#bulan_satuan_filter1').val(),
+                                year:$('#tahun_satuan_filter1').val(),
+                                inflasi:$('#filter_inflasi').val(),
+                                inflasi_asumsi:$('#versi_format').val(),
                             }
                         },
                         columns: column,
@@ -703,6 +882,40 @@
                 $("#dinamic_table").empty();
                 get_data_horiz()
             }
+        }
+
+        function list_inflasi() {
+            var periode = $('#bulan_satuan_filter1').val();
+            if (periode !== ''){
+                $('#versi_format').select2({
+                    placeholder: 'Pilih Inflasi',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_inflasi_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                periode:periode
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                })
+            }else {
+                $('#versi_format').select2({
+                    placeholder: 'Pilih Inflasi',
+                    width: '100%',
+                    allowClear: false,
+                })
+            }
+
         }
 
         $('#submit').on('click', function () {
