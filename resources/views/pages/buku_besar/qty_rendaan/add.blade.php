@@ -35,7 +35,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value </label>
-                                <input class="form-control" type="text" placeholder="0" required name="qty_rendaan_value" id="qty_rendaan_value" autocomplete="off">
+                                <input class="form-control" type="number" placeholder="0" min="0.01" step="0.01" required name="qty_rendaan_value" id="qty_rendaan_value" autocomplete="off">
                             </div>
                         </div>
                     </div>

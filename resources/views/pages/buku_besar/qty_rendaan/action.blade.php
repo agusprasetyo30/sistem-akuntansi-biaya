@@ -39,7 +39,7 @@
                             <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="0" value="{{helpRupiah($model->qty_rendaan_value)}}" name="detail_qty_rendaan_value"
+                                    placeholder="0" value="{{$model->qty_rendaan_value}}" name="detail_qty_rendaan_value"
                                     id="detail_qty_rendaan_value" autocomplete="off">
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value </label>
-                                <input class="form-control" type="text" value="{{helpRupiah($model->qty_rendaan_value)}}" placeholder="0" required name="edit_qty_rendaan_value{{$model->id}}" id="edit_qty_rendaan_value{{$model->id}}" autocomplete="off">
+                                <input class="form-control" type="number" min="0.01" step="0.01" value="{{$model->qty_rendaan_value}}" placeholder="0" required name="edit_qty_rendaan_value{{$model->id}}" id="edit_qty_rendaan_value{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -225,8 +225,4 @@
         }
     })
 
-    $('#edit_qty_rendaan_value'+{{$model->id}}).on('keyup', function(){
-        let rupiah = formatRupiah($(this).val(), "Rp ")
-        $(this).val(rupiah)
-    });
 </script>

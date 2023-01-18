@@ -122,10 +122,14 @@ class AsumsiUmumController extends Controller
                         $input_version['akhir_periode'] = Carbon::createFromFormat('Y-m-d', $request->answer[$lenght_data-1]['periode'])->format('Y-m-01 00:00:00');
                         $input_version['company_code'] = 'B000';
 
+                        Asumsi_Umum::where('version_id', $request->id)
+                            ->where('month_year', '<', $input_version['awal_periode'])
+                            ->delete();
+
                         Version_Asumsi::where('id', $request->id)
                             ->update($input_version);
                     }
-//                    dd($request);
+
                     $input['version_id'] = $request->id;
                     $input['usd_rate'] = (double) str_replace(',','.',str_replace('.','',str_replace('Rp ', '', $items['kurs'])));
                     $input['adjustment'] = (double) $items['adjustment'];
@@ -159,7 +163,6 @@ class AsumsiUmumController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
