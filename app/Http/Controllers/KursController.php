@@ -22,9 +22,12 @@ class KursController extends Controller
 
     public function create(Request $request){
         try {
-            $validator = Validator::make($request->all(), [
+            $validasi = $request->all();
+            $validasi['kurs'] =str_replace('.', '', str_replace('Rp ', '', $request->kurs));
+
+            $validator = Validator::make($validasi, [
                 "tanggal" => 'required',
-                "kurs" => 'required',
+                "kurs" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -60,9 +63,12 @@ class KursController extends Controller
     public function update(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $validasi = $request->all();
+            $validasi['kurs'] =str_replace('.', '', str_replace('Rp ', '', $request->kurs));
+
+            $validator = Validator::make($validasi, [
                 "tanggal" => 'required',
-                "kurs" => 'required',
+                "kurs" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())

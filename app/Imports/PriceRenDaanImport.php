@@ -23,10 +23,14 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
     use Importable, SkipsErrors, SkipsFailures;
 
     protected $version;
+    protected $currency;
+    protected $kurs;
 
-    public function __construct($version)
+    public function __construct($version, $currency, $kurs)
     {
         $this->version = $version;
+        $this->currency = $currency;
+        $this->kurs = $kurs;
     }
     /**
     * @param Collection $collection
@@ -50,7 +54,7 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
 
                 $input['price_rendaan_value'] = $arr[$i] != null ?(double) str_replace('.', '', str_replace('Rp ', '', $arr[$i])) :0;
                 $input['asumsi_umum_id'] = $versi->id;
-
+                $input['type_currency'] = $this->currency;
                 $input['version_id'] = $this->version;
                 $input['company_code'] = auth()->user()->company_code;
                 $input['created_by'] = auth()->user()->id;
@@ -60,7 +64,12 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
                 $input[$arrHeader[$i]] = $arr[$i];
             }
         }
-        collect($list)->each(function ($result){PriceRenDaan::create($result);});
+        collect($list)->each(function ($result, $key){
+            if ($this->currency != 'IDR'){
+                $result['price_rendaan_value'] = $result['price_rendaan_value'] * $this->kurs[$key]['usd_rate'];
+            }
+            PriceRenDaan::create($result);
+        });
     }
 
     public function batchSize(): int

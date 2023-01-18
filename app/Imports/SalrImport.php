@@ -49,6 +49,7 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
         ]);
+
     }
 
     public function batchSize(): int

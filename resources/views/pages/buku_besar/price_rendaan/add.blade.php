@@ -1,6 +1,6 @@
 <!-- Modal Add-->
 <div class="modal fade" id="modal_add" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="largemodal" aria-hidden="true" style="text-align: start;">
-    <div class="modal-dialog modal-lg " role="document">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Tambah Price Pengadaan</h5>
@@ -34,7 +34,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Value </label>
+                                <label class="form-label">Format Mata Uang <span class="text-red">*</span></label>
+                                <select name="data_main_mata_uang" id="data_main_mata_uang" class="form-control custom-select select2">
+                                    <option selected disabled value="">Pilih Format Mata Uang</option>
+                                    @foreach (mata_uang() as $key => $value)
+                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group" id="value_pick" style="display: none;">
+                                <label class="form-label">Value <span class="text-red">*</span></label>
                                 <input class="form-control" type="text" placeholder="0" required name="price_rendaan_value" id="price_rendaan_value" autocomplete="off">
                             </div>
                         </div>

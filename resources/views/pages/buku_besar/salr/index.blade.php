@@ -68,7 +68,7 @@
                                         <div class="input-group input-daterange">
                                             <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
                                             <div class="input-group-addon">to</div>
-                                            <input type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                            <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group" id="month_pick" style="display:none;">
@@ -160,14 +160,19 @@
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose:true
+            }).on('change', function () {
+                var periode = moment($('#bulan_filter1').val(), "MM-YYYY").add(1, 'months').format('MM-YYYY');
+                $('#bulan_filter2').attr('disabled', false)
+                    .bootstrapdatepicker({
+                    format: "mm-yyyy",
+                    viewMode: "months",
+                    minViewMode: "months",
+                    autoclose:true,
+                    startDate: periode
+                });
             });
 
-            $('#bulan_filter2').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
-            });
+
 
             $('#bulan_satuan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -554,11 +559,19 @@
                             cek = false
                         }
                     }else if ($('#filter_format').val() === '1'){
-                        if ($('#bulan_satuan_filter1').val() == '' && $('#filter_inflasi').val() === null && $('#versi_format').val() === null){
+                        if ($('#filter_inflasi').val() === '1'){
+                            if ($('#bulan_satuan_filter1').val() === '' || $('#filter_inflasi').val() === null || $('#versi_format').val() === null){
+                                cek = false
+                            }
+                        }else if ($('#filter_inflasi').val() === '0'){
+                            if ($('#bulan_satuan_filter1').val() === '' || $('#filter_inflasi').val() === null ){
+                                cek = false
+                            }
+                        }else {
                             cek = false
                         }
                     }else if ($('#filter_format').val() === '2'){
-                        if ($('#bulan_filter1').val() == '' && $('#bulan_filter2').val() == ''){
+                        if ($('#bulan_filter1').val() === '' || $('#bulan_filter2').val() === ''){
                             cek = false
                         }
                     }
@@ -744,26 +757,6 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    {{--{--}}
-                    {{--    extend: 'collection',--}}
-                    {{--    className: 'mb-5',--}}
-                    {{--    text:'Mata Uang',--}}
-                    {{--    buttons:[--}}
-                    {{--        {--}}
-                    {{--            text:'Rupiah',--}}
-                    {{--            action: function () {--}}
-                    {{--                $('#dt_salr').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();--}}
-                    {{--            }--}}
-                    {{--        },--}}
-                    {{--        {--}}
-                    {{--            text:'Dollar',--}}
-                    {{--            action: function () {--}}
-                    {{--                $('#dt_salr').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();--}}
-                    {{--            }--}}
-                    {{--        }--}}
-                    {{--    ]--}}
-
-                    {{--},--}}
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3,4]
                     }, title: 'SALR'  }
@@ -834,26 +827,6 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            {
-                                extend: 'collection',
-                                className: 'mb-5',
-                                text:'Mata Uang',
-                                buttons:[
-                                    {
-                                        text:'Rupiah',
-                                        action: function () {
-                                            $('#h_dt_salr').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();
-                                        }
-                                    },
-                                    {
-                                        text:'Dollar',
-                                        action: function () {
-                                            $('#h_dt_salr').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();
-                                        }
-                                    }
-                                ]
-
-                            },
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
@@ -887,7 +860,7 @@
         function list_inflasi() {
             var periode = $('#bulan_satuan_filter1').val();
             if (periode !== ''){
-                $('#versi_format').select2({
+                $('#versi_format').append('<option selected disabled value="">Pilih Inflasi</option>').select2({
                     placeholder: 'Pilih Inflasi',
                     width: '100%',
                     allowClear: false,

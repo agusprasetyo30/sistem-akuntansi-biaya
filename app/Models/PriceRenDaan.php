@@ -18,6 +18,7 @@ class PriceRenDaan extends Model
         'version_id',
         'asumsi_umum_id',
         'price_rendaan_value',
+        'type_currency',
         'created_by',
         'created_at',
         'updated_at',

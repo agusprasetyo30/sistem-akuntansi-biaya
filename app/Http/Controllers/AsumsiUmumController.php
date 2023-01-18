@@ -23,11 +23,18 @@ class AsumsiUmumController extends Controller
     public function create(Request $request)
     {
         try {
+            $validasi = $request->all();
+
+            foreach ($validasi['asumsi'] as $key => $items){
+                $validasi['asumsi'][$key]['kurs'] = str_replace(',00', '', str_replace('.', '', str_replace('Rp ', '', $items['kurs'])));
+            }
+
             $validator = Validator::make($request->all(), [
                 "versi" => 'required',
                 "jumlah_bulan" => 'required',
                 "start_date" => 'required',
                 "asumsi" => 'required',
+                "asumsi.*.kurs" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -84,18 +91,23 @@ class AsumsiUmumController extends Controller
     public function update(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $validasi = $request->all();
+
+            foreach ($validasi['answer'] as $key => $items){
+                $validasi['answer'][$key]['kurs'] = str_replace(',00', '', str_replace('.', '', str_replace('Rp ', '', $items['kurs'])));
+            }
+
+            $validator = Validator::make($validasi, [
                 "id" => 'required',
                 "nama_version" => 'required',
                 "jumlah_bulan" => 'required',
                 "tanggal" => 'required',
                 "answer" => 'required',
+                "answer.*.kurs" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
-
-//            dd($request);
 
             DB::transaction(function () use ($request){
                 $lenght_data = count($request->answer);

@@ -355,6 +355,18 @@ if (!function_exists('login_method')) {
     }
 }
 
+if (!function_exists('mata_uang')) {
+    function mata_uang()
+    {
+        $mata_uang = array(
+            'IDR' => 'Rupiah',
+            'USD' => 'Dollar',
+        );
+
+        return $mata_uang;
+    }
+}
+
 if (!function_exists('rupiah')) {
     function rupiah($angka)
     {

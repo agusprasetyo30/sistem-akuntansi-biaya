@@ -51,11 +51,14 @@ class PriceRenDaanController extends Controller
                 "bulan" => 'required',
                 "material_id" => 'required',
                 "region_id" => 'required',
+                "mata_uang" => 'required',
                 "price_rendaan_value" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
+
+
 
             $check_data = PriceRenDaan::where([
                 'company_code' => auth()->user()->company_code,
@@ -66,12 +69,21 @@ class PriceRenDaanController extends Controller
             ])->first();
 
 
+            if ($request->mata_uang != 'IDR'){
+                $check_kurs = Asumsi_Umum::where('id', $request->bulan)->first();
+                $temp = (double) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
+                $result = (double) $temp * (double) $check_kurs->usd_rate;
+                $input['price_rendaan_value'] = $result;
+            }else {
+                $input['price_rendaan_value'] = (double) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
+            }
+
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
-            $input['company_code'] = 'B000';
+            $input['type_currency'] = $request->mata_uang;
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
@@ -112,8 +124,8 @@ class PriceRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->price_rendaan_value));
-            $input['company_code'] = 'B000';
+            $input['price_rendaan_value'] = (double) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
@@ -161,6 +173,7 @@ class PriceRenDaanController extends Controller
             $validator = Validator::make($request->all(), [
                 "file" => 'required',
                 "version" => 'required',
+                "mata_uang" => 'required',
             ], validatorMsg());
 
             if ($validator->fails()){
@@ -168,12 +181,13 @@ class PriceRenDaanController extends Controller
             }
 
             $transaction = DB::transaction(function () use ($request){
-                $empty_excel = Excel::toArray(new PriceRenDaanImport($request->version), $request->file('file'));
+                $data_kurs = Asumsi_Umum::where('version_id', $request->version)->get('usd_rate')->toArray();
+                $empty_excel = Excel::toArray(new PriceRenDaanImport($request->version, $request->mata_uang, $data_kurs), $request->file('file'));
                 if ($empty_excel[0]){
                     $file = $request->file('file')->store('import');
 
                     PriceRenDaan::where('version_id', $request->version)->delete();
-                    $import = new PriceRenDaanImport($request->version);
+                    $import = new PriceRenDaanImport($request->version, $request->mata_uang, $data_kurs);
                     $import->import($file);
 
                     $data_fail = $import->failures();
