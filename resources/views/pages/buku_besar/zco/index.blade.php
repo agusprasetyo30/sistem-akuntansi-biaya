@@ -50,9 +50,19 @@
                                     <div class="form-group">
                                         <label class="form-label">PRODUK</label>
                                         <select id="filter_material" class="form-control custom-select select2">
+                                            <option value="all" selected>Semua</option>
                                         </select>
                                     </div>
-
+                                    <div class="form-group" id="format_plant">
+                                        <label class="form-label">PLANT</label>
+                                        <select id="filter_plant" class="form-control custom-select select2">
+                                            {{-- <option value="all" selected>Semua</option> --}}
+                                            <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="btn-list mb-5">
+                                    <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
@@ -86,8 +96,29 @@
             table()
 
             $('#tabs_vertical').on('click', function () {
-                table()
+                // table()
+                $('#dt_zco').DataTable().ajax.reload();
             })
+
+            $('#tabs_horizontal').on('click', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
+
+            $('#btn_tampilkan').on('click', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
+
+            $('#filter_material').change(function(){
+                if($(this).val() != 'all'){
+                    $('#format_plant').slideDown('slow')
+                } else {
+                    $('#format_plant').slideUp('slow')
+                }
+            })
+
+            $('#format_plant').hide()
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -177,12 +208,53 @@
                 }
             })
 
+            // $('#filter_material').select2({
+            //     // placeholder: 'Pilih Produk',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('zco_product_dt') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
+
+            // $('#filter_plant').select2({
+            //     // placeholder: 'Pilih Produk',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('zco_plant_dt') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term,
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
+
             $('#filter_material').select2({
-                placeholder: 'Pilih Produk',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('material_dt') }}",
+                    url: "{{ route('zco_product_dt') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -197,8 +269,28 @@
                     }
                 }
             }).on('change', function () {
-                $("#dinamic_table").empty();
-                get_data_horiz()
+                var data_product = $('#filter_material').val();
+
+                $('#filter_plant').append('<option selected value="all">Semua</option>').select2({
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('zco_plant_dt') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                product:data_product
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
             })
 
             // $('#data_main_version').select2({
@@ -526,10 +618,11 @@
                 </thead>
             </table>`
             // var kolom = '<th class="text-center">BIAYA </th>'
-            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th>'
+            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th><th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">MATERIAL</th>'
             var kolom = ''
             var column = [
                 { data: 'material_code', orderable:false},
+                { data: 'material_name', orderable:false},
             ]
             $("#dinamic_table").append(table);
             $.ajax({
@@ -537,11 +630,12 @@
                 url : '{{route("zco")}}',
                 data: {
                     data:'material',
-                    material:$('#filter_material').val()
+                    material:$('#filter_material').val(),
+                    plant:$('#filter_plant').val(),
                 },
                 success:function (response) {
                     for (let i = 0; i < response.material.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].material_code+' '+ response.material[i].material_name+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+' '+ response.material[i].material_name+' '+ response.material[i].plant_code+'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
@@ -570,7 +664,8 @@
                             url : '{{route("zco")}}',
                             data: {
                                 data:'horizontal',
-                                material:$('#filter_material').val()
+                                material:$('#filter_material').val(),
+                                plant:$('#filter_plant').val(),
                             }
                         },
                         columns: column,
