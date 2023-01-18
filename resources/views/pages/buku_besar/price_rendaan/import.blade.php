@@ -21,6 +21,14 @@
                                     </ol>
                                 </div>
                                 <div class="form-group">
+                                    <label class="form-label">Format Mata Uang <span class="text-red">*</span></label>
+                                    <select name="mata_uang" id="mata_uang" class="form-control custom-select select2">
+                                        <option selected disabled value="">Pilih Format</option>
+                                        <option value="0">Rupiah</option>
+                                        <option value="1">Dollar</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label class="form-label">Versi Asumsi</label>
                                     <select name="version" id="version" class="form-control custom-select select2">
                                         <option value="" disabled selected>Pilih Versi</option>

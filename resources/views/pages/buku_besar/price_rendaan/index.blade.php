@@ -171,6 +171,13 @@
                 $("#template").css("display", "block");
             })
 
+            $('#mata_uang').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Format Mata Uang',
+                width: '100%',
+                allowClear: false,
+            })
+
             $("#template").on('click', function () {
                 $.ajax({
                     type: "POST",
@@ -250,11 +257,33 @@
                 }
             })
 
+            $('#data_main_mata_uang').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Format Mata Uang',
+                width: '100%',
+                allowClear: false,
+            }).on('change', function () {
+                $('#value_pick').css('display', 'block')
+                $('#price_rendaan_value').val('').attr("placeholder", "Masukkan Nilai");
+                console.log($('#data_main_mata_uang').val())
+                if ($('#data_main_mata_uang').val() === 'IDR'){
+                    $('#price_rendaan_value').on('keyup', function(){
+                        let rupiah = formatRupiah($(this).val(), "Rp ")
+                        $(this).val(rupiah)
+                    });
+                }else if ($('#data_main_mata_uang').val() === 'USD'){
+                    $('#price_rendaan_value').on('keyup', function(){
+                        let dollar = formatDollar($(this).val(), "$ ")
+                        $(this).val(dollar)
+                    });
+                }
+            })
+
             $('#submit_import').on('click', function () {
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
                 $("#back_import").attr("disabled", true);
 
-                if ($('#version').val() !== null && $('#file').val() !== ''){
+                if ($('#version').val() !== null && $('#file').val() !== '' && $('#mata_uang').val() !== null){
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -368,11 +397,6 @@
                     }
                 })
             }
-
-            $('#price_rendaan_value').on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp ")
-                $(this).val(rupiah)
-            });
 
             $('#filter_version').select2({
                 placeholder: 'Pilih Versi',
@@ -671,6 +695,7 @@
                     bulan:$('#data_detal_version').val(),
                     material_id: $('#data_main_material').val(),
                     region_id: $('#data_main_region').val(),
+                    mata_uang: $('#data_main_mata_uang').val(),
                     price_rendaan_value: $('#price_rendaan_value').val(),
                 },
                 success:function (response) {

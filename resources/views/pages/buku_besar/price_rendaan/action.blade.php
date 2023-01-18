@@ -36,7 +36,7 @@
                             <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                       placeholder="Nilai Satuan" value="{{$model->price_rendaan_value}}" name="detail_price_rendaan_value"
+                                       placeholder="Nilai Satuan" value="{{rupiah($model->price_rendaan_value)}}" name="detail_price_rendaan_value"
                                        id="detail_price_rendaan_value" autocomplete="off">
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value </label>
-                                <input class="form-control" type="number" value="{{$model->price_rendaan_value}}" placeholder="0" required name="edit_price_rendaan_value{{$model->id}}" id="edit_price_rendaan_value{{$model->id}}" min="0" step="0.01" title="consrate" pattern="^\d+(?:\.\d{1,2})?$" autocomplete="off">
+                                <input class="form-control" type="text" value="{{rupiah($model->price_rendaan_value)}}" placeholder="0" required name="edit_price_rendaan_value{{$model->id}}" id="edit_price_rendaan_value{{$model->id}}" min="0" step="0.01" title="consrate" pattern="^\d+(?:\.\d{1,2})?$" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -221,4 +221,9 @@
             }
         }
     })
+
+    $('#edit_price_rendaan_value'+{{$model->id}}).on('keyup', function(){
+        let rupiah = formatRupiah($(this).val(), "Rp ")
+        $(this).val(rupiah)
+    });
 </script>

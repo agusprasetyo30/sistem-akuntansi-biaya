@@ -21,7 +21,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Kurs <span class="text-red">*</span></label>
-                                <input class="form-control" type="text" placeholder="0" required name="currency" id="currency" autocomplete="off">
+                                <input class="form-control" type="text" placeholder="0.1" required name="currency" id="currency" autocomplete="off">
                                 <div class="valid-feedback">
                                     Terlihat Bagus!
                                 </div>

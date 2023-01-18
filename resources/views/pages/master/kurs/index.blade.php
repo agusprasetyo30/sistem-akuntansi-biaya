@@ -220,12 +220,38 @@
                     })
                 },
                 error:function (response) {
-                    handleError(response)
-                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    if (response.status === 400){
+                        $("#tanggal").attr("disabled", true);
+                        Swal.fire({
+                            title: response.responseJSON.title,
+                            html: response.responseJSON.msg,
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#019267',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result) => {
+                            if(result.value){
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#tanggal").attr("disabled", false);
+                            }
+                        })
+                    }else {
+                        $("#tanggal").attr("disabled", true);
+                        $('#modal_add').modal('hide');
+                        $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                        handleError(response)
+                        $("#tanggal").attr("disabled", false);
+                    }
+
+
+                    // handleError(response)
+
                     // $('#dt_kurs').DataTable().ajax.reload();
                 }
             })
         })
+
+
 
         function update_kurs(id) {
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);

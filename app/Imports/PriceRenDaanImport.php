@@ -23,10 +23,14 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
     use Importable, SkipsErrors, SkipsFailures;
 
     protected $version;
+    protected $currency;
+    protected $kurs;
 
-    public function __construct($version)
+    public function __construct($version, $currency, $kurs)
     {
         $this->version = $version;
+        $this->currency = $currency;
+        $this->kurs = $kurs;
     }
     /**
     * @param Collection $collection
@@ -60,7 +64,12 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
                 $input[$arrHeader[$i]] = $arr[$i];
             }
         }
-        collect($list)->each(function ($result){PriceRenDaan::create($result);});
+        collect($list)->each(function ($result, $key){
+            if ($this->currency != '0'){
+                $result['price_rendaan_value'] = $result['price_rendaan_value'] * $this->kurs[$key]['usd_rate'];
+            }
+            PriceRenDaan::create($result);
+        });
     }
 
     public function batchSize(): int
