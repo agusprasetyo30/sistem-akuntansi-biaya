@@ -172,8 +172,6 @@
                 });
             });
 
-
-
             $('#bulan_satuan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
                 viewMode: "months",

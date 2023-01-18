@@ -41,7 +41,7 @@ class QtyRenDaanController extends Controller
                 "bulan" => 'required',
                 "material_id" => 'required',
                 "region_id" => 'required',
-                "qty_rendaan_value" => 'required',
+                "qty_rendaan_value" => 'required|numeric',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -55,11 +55,12 @@ class QtyRenDaanController extends Controller
                 'material_code' => $request->material_id
             ])->first();
 
+//            dd($request);
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['qty_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_rendaan_value));
+            $input['qty_rendaan_value'] = (double) $request->qty_rendaan_value;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -100,8 +101,8 @@ class QtyRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['qty_rendaan_value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_rendaan_value));
-            $input['company_code'] = 'B000';
+            $input['qty_rendaan_value'] = (double) $request->qty_rendaan_value;
+            $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 

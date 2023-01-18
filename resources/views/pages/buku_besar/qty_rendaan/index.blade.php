@@ -370,11 +370,6 @@
                 })
             }
 
-            $('#qty_rendaan_value').on('keyup', function(){
-                let rupiah = formatRupiah($(this).val(), "Rp ")
-                $(this).val(rupiah)
-            });
-
             $('#filter_version').select2({
                 placeholder: 'Pilih Versi',
                 width: '100%',
