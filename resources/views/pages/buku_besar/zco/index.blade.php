@@ -60,6 +60,27 @@
                                             <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label class="form-label">PERIODE </label>
+                                        <select id="filter_format" class="form-control custom-select select2">
+                                            <option selected disabled value="">Pilih Format</option>
+                                            @foreach (format_zco() as $key => $value)
+                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="month_pick_range" style="display:none;">
+                                        <label class="form-label">BULAN </label>
+                                        <div class="input-group input-daterange">
+                                            <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="month_pick" style="display:none;">
+                                        <label class="form-label">BULAN </label>
+                                        <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
+                                    </div>
                                 </div>
                                 <div class="btn-list mb-5">
                                     <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
@@ -70,11 +91,48 @@
                                 </div>
                             </div>
                             <div class="tab-pane " id="group_account">
-                                {{-- <div class="">
-                                    <div class="table-responsive" id="table-wrapper">
-                                        
+                                <div class="mb-2 row">
+                                    <div class="form-group">
+                                        <label class="form-label">PRODUK</label>
+                                        <select id="filter_material_group_account" class="form-control custom-select select2">
+                                            <option value="all" selected>Semua</option>
+                                        </select>
                                     </div>
-                                </div> --}}
+                                    <div class="form-group" id="format_plant_group_account">
+                                        <label class="form-label">PLANT</label>
+                                        <select id="filter_plant_group_account" class="form-control custom-select select2">
+                                            <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">PERIODE </label>
+                                        <select id="filter_format_group_account" class="form-control custom-select select2">
+                                            <option selected disabled value="">Pilih Format</option>
+                                            @foreach (format_zco() as $key => $value)
+                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group" id="month_pick_range_group_account" style="display:none;">
+                                        <label class="form-label">BULAN </label>
+                                        <div class="input-group input-daterange">
+                                            <input type="text" id="bulan_filter1_group_account" class="form-control" placeholder="Month" autocomplete="off">
+                                            <div class="input-group-addon">to</div>
+                                            <input type="text" id="bulan_filter2_group_account" class="form-control" placeholder="Month" autocomplete="off">
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="month_pick_group_account" style="display:none;">
+                                        <label class="form-label">BULAN </label>
+                                        <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1_group_account" id="bulan_satuan_filter1_group_account" placeholder="Month" autocomplete="off" required>
+                                    </div>
+                                </div>
+                                <div class="btn-list mb-5">
+                                    <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan_group_account"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                </div>
+                                <div class="mt-auto">
+                                    <div class="table-responsive" id="dinamic_group_account_table">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -105,9 +163,19 @@
                 get_data_horiz()
             })
 
+            $('#tabs_group_account').on('click', function () {
+                $("#dinamic_group_account_table").empty();
+                get_data_group_account_horiz()
+            })
+
             $('#btn_tampilkan').on('click', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
+            })
+
+            $('#btn_tampilkan_group_account').on('click', function () {
+                $("#dinamic_group_account_table").empty();
+                get_data_group_account_horiz()
             })
 
             $('#filter_material').change(function(){
@@ -118,7 +186,32 @@
                 }
             })
 
+            $('#filter_material_group_account').change(function(){
+                if($(this).val() != 'all'){
+                    $('#format_plant_group_account').slideDown('slow')
+                } else {
+                    $('#format_plant_group_account').slideUp('slow')
+                }
+            })
+
             $('#format_plant').hide()
+            $('#format_plant_group_account').hide()
+
+            $('#periode').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#periode_import').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            }).on('change', function () {
+                $("#submit-export").css("display", "block");
+            });
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -208,48 +301,6 @@
                 }
             })
 
-            // $('#filter_material').select2({
-            //     // placeholder: 'Pilih Produk',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('zco_product_dt') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // })
-
-            // $('#filter_plant').select2({
-            //     // placeholder: 'Pilih Produk',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('zco_plant_dt') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term,
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // })
-
             $('#filter_material').select2({
                 width: '100%',
                 allowClear: false,
@@ -293,106 +344,118 @@
                 });
             })
 
-            // $('#data_main_version').select2({
-            //     dropdownParent: $('#modal_add'),
-            //     placeholder: 'Pilih Versi',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('version_select') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // }).on('change', function () {
-            //     var data_version = $('#data_main_version').val();
-            //     $('#data_detail_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
-            //         dropdownParent: $('#modal_add'),
-            //         placeholder: 'Pilih Bulan',
-            //         width: '100%',
-            //         allowClear: false,
-            //         ajax: {
-            //             url: "{{ route('version_detail_select') }}",
-            //             dataType: 'json',
-            //             delay: 250,
-            //             data: function (params) {
-            //                 return {
-            //                     search: params.term,
-            //                     version:data_version
+            $('#filter_material_group_account').select2({
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('zco_product_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var data_product = $('#filter_material_group_account').val();
 
-            //                 };
-            //             },
-            //             processResults: function(response) {
-            //                 return {
-            //                     results: response
-            //                 };
-            //             }
-            //         }
-            //     });
-            // })
+                $('#filter_plant_group_account').append('<option selected value="all">Semua</option>').select2({
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('zco_plant_dt') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                product:data_product
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
 
-            // $('#version').select2({
-            //     dropdownParent: $('#modal_import'),
-            //     placeholder: 'Pilih Versi',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('version_select') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // }).on('change', function () {
-            //     $("#submit-export").css("display", "block");
-            // })
+            $('#filter_format').select2({
+                placeholder: 'Pilih Format',
+                width: '100%',
+                allowClear: false,
+            }).on('change', function () {
+                if ($('#filter_format').val() == 0) {
+                    $('#month_pick_range').css('display','none')
+                    $('#month_pick').css('display','block')
+                } else {
+                    $('#month_pick_range').css('display','block')
+                    $('#month_pick').css('display','none')
+                }
+            })
 
-            // $('#qty_renprod_value').on('keyup', function(){
-            //     let rupiah = formatRupiah($(this).val(), "Rp ")
-            //     $(this).val(rupiah)
-            // });
+            $('#bulan_filter1').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
 
-            // $('#filter_version').select2({
-            //     placeholder: 'Pilih Versi',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('version_select') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // }).on('change', function () {
-            //     $("#dinamic_table").empty();
-            //     get_data_horiz()
-            // })
+            $('#bulan_filter2').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
 
+            $('#bulan_satuan_filter1').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#filter_format_group_account').select2({
+                placeholder: 'Pilih Format',
+                width: '100%',
+                allowClear: false,
+            }).on('change', function () {
+                if ($('#filter_format_group_account').val() == 0) {
+                    $('#month_pick_range_group_account').css('display','none')
+                    $('#month_pick_group_account').css('display','block')
+                } else {
+                    $('#month_pick_range_group_account').css('display','block')
+                    $('#month_pick_group_account').css('display','none')
+                }
+            })
+
+            $('#bulan_filter1_group_account').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#bulan_filter2_group_account').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
+
+            $('#bulan_satuan_filter1_group_account').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            });
         })
 
         function table (){
@@ -666,6 +729,82 @@
                                 data:'horizontal',
                                 material:$('#filter_material').val(),
                                 plant:$('#filter_plant').val(),
+                                format_data:$('#filter_format').val(),
+                                start_month:$('#bulan_filter1').val(),
+                                end_month:$('#bulan_filter2').val(),
+                                moth:$('#bulan_satuan_filter1').val(),
+                            }
+                        },
+                        columns: column,
+
+                    })
+                }
+            })
+        }
+
+        function get_data_group_account_horiz(){
+            var table = `
+            <table id="h_dt_zco_group_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                    <tr id="dinamic_group_account_tr_top">
+                    </tr>
+                    <tr id="dinamic_group_account_tr">
+                    </tr>
+                </thead>
+            </table>`
+            // var kolom = '<th class="text-center">BIAYA </th>'
+            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th><th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">GROUP ACCOUNT</th>'
+            var kolom = ''
+            var column = [
+                { data: 'group_account_code', orderable:false},
+                { data: 'group_account_desc', orderable:false},
+            ]
+            $("#dinamic_group_account_table").append(table);
+            $.ajax({
+                type: "GET",
+                url : '{{route("zco")}}',
+                data: {
+                    data:'group_account',
+                    material:$('#filter_material_group_account').val(),
+                    plant:$('#filter_plant_group_account').val(),
+                },
+                success:function (response) {
+                    for (let i = 0; i < response.group_account.length;i++){
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+' '+ response.group_account[i].material_name+' '+ response.group_account[i].plant_code+'</th>';
+                        kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
+                    }
+
+                    for (let j = 0; j < response.group_account.length * 4 ; j++) {
+                        column.push({ data: j.toString(), orderable:false})
+                    }
+
+                    $("#dinamic_group_account_tr_top").append(kolom_top);
+                    $("#dinamic_group_account_tr").append(kolom);
+                    $('#h_dt_zco_group_account').DataTable().clear().destroy();
+                    $("#h_dt_zco_group_account").DataTable({
+                        scrollX: true,
+                        dom: 'Bfrtip',
+                        orderCellsTop: true,
+                        processing: true,
+                        serverSide: true,
+                        fixedHeader: {
+                            header: true,
+                            headerOffset: $('#main_header').height()
+                        },
+                        buttons: [
+                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'excel', className: 'mb-5' }
+                        ],
+                        ajax: {
+                            url : '{{route("zco")}}',
+                            data: {
+                                data:'horizontal_group_account',
+                                material:$('#filter_material_group_account').val(),
+                                plant:$('#filter_plant_group_account').val(),
+                                format_data:$('#filter_format_group_account').val(),
+                                start_month:$('#bulan_filter1_group_account').val(),
+                                end_month:$('#bulan_filter2_group_account').val(),
+                                moth:$('#bulan_satuan_filter1_group_account').val(),
                             }
                         },
                         columns: column,
@@ -679,6 +818,13 @@
             if ($('#filter_material').val() != null){
                 $("#dinamic_table").empty();
                 get_data_horiz()
+            }
+        }
+
+        function update_dt_group_account_horizontal() {
+            if ($('#filter_material_group_account').val() != null){
+                $("#dinamic_group_account_table").empty();
+                get_data_group_account_horiz()
             }
         }
 
@@ -717,6 +863,7 @@
                             $("#modal_add input").val("")
 
                             update_dt_horizontal()
+                            update_dt_group_account_horizontal()
                             // table()
                             $('#dt_zco').DataTable().ajax.reload();
                         }
@@ -759,6 +906,7 @@
                             $("#modal_import input").val("")
                             // table()
                             update_dt_horizontal()
+                            update_dt_group_account_horizontal()
                             $('#dt_zco').DataTable().ajax.reload();
                         }
                     })
@@ -849,6 +997,7 @@
                             $('.modal-backdrop').remove();
                             
                             update_dt_horizontal()
+                            update_dt_group_account_horizontal()
                             // table()
                             $('#dt_zco').DataTable().ajax.reload();
                         }
@@ -896,6 +1045,7 @@
                             .then((result) => {
                                 if (result.value) {
                                     update_dt_horizontal()
+                                    update_dt_group_account_horizontal()
                                     // table()
                                     $('#dt_zco').DataTable().ajax.reload();
                                 }

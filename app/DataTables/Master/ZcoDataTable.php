@@ -39,6 +39,9 @@ class ZcoDataTable extends DataTable
             ->addColumn('material', function ($query) {
                 return $query->material_code . ' - ' . $query->material_name;
             })
+            ->addColumn('periode', function ($query) {
+                return format_month($query->periode, 'bi');
+            })
             ->filterColumn('filter_plant', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('zco.plant_code', 'ilike', '%' . $keyword . '%');

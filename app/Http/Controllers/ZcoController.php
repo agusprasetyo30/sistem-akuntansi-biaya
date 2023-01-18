@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\H_ZcoDataTable;
+use App\DataTables\Master\H_ZcoGroupAccountDataTable;
 use App\DataTables\Master\ZcoDataTable;
 use App\Exports\MultipleSheet\MS_ZcoExport;
 use App\Imports\ZcoImport;
@@ -15,7 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ZcoController extends Controller
 {
-    public function index(Request $request, ZcoDataTable $zcoDataTable, H_ZcoDataTable $h_zcoDataTable)
+    public function index(Request $request, ZcoDataTable $zcoDataTable, H_ZcoDataTable $h_zcoDataTable, H_ZcoGroupAccountDataTable $h_zcogroupaccountDataTable)
     {
         if ($request->data == 'index') {
             return $zcoDataTable->render('pages.buku_besar.zco.index');
@@ -23,8 +24,21 @@ class ZcoController extends Controller
             return $h_zcoDataTable->with([
                 'material' => $request->material,
                 'plant' => $request->plant,
+                'format' => $request->format_data,
+                'start_month' => $request->start_month,
+                'end_month' => $request->end_month,
+                'moth' => $request->moth,
             ])->render('pages.buku_besar.zco.index');
-        } elseif ($request->data == 'material') {
+        } else if ($request->data == 'horizontal_group_account') {
+            return $h_zcogroupaccountDataTable->with([
+                'material' => $request->material,
+                'plant' => $request->plant,
+                'format' => $request->format_data,
+                'start_month' => $request->start_month,
+                'end_month' => $request->end_month,
+                'moth' => $request->moth,
+            ])->render('pages.buku_besar.zco.index');
+        } else if ($request->data == 'material') {
             $material = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name')
                 ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
                 ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name');
@@ -38,8 +52,23 @@ class ZcoController extends Controller
             }
             // dd($request->material, $request->plant);
             $material = $material->get();
-            // dd($material);
+
             return response()->json(['code' => 200, 'material' => $material]);
+        } else if ($request->data == 'group_account') {
+            $group_account = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name')
+                ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+                ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name');
+
+            if ($request->material != 'all') {
+                $group_account->where('zco.product_code', $request->material);
+            }
+
+            if ($request->plant != 'all') {
+                $group_account->where('zco.plant_code', $request->plant);
+            }
+            // dd($request->material, $request->plant);
+            $group_account = $group_account->get();
+            return response()->json(['code' => 200, 'group_account' => $group_account]);
         }
 
         return view('pages.buku_besar.zco.index');
@@ -58,9 +87,11 @@ class ZcoController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $periode = explode('-', $request->periode);
+
             $input['company_code'] = auth()->user()->company_code;
             $input['plant_code'] = $request->plant_code;
-            $input['periode'] = $request->periode;
+            $input['periode'] = $periode[1] . '-' . $periode[0] . '-01';
             $input['product_code'] = $request->product_code;
             $input['product_qty'] = $request->product_qty;
             $input['cost_element'] = $request->cost_element;
@@ -100,9 +131,11 @@ class ZcoController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $periode = explode('-', $request->periode);
+
             $input['company_code'] = auth()->user()->company_code;
             $input['plant_code'] = $request->plant_code;
-            $input['periode'] = $request->periode;
+            $input['periode'] = $periode[1] . '-' . $periode[0] . '-01';
             $input['product_code'] = $request->product_code;
             $input['product_qty'] = $request->product_qty;
             $input['cost_element'] = $request->cost_element;
@@ -149,6 +182,7 @@ class ZcoController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "file" => 'required',
+            "periode_import" => 'required',
         ], validatorMsg());
 
         if ($validator->fails())
@@ -156,8 +190,11 @@ class ZcoController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
+                $per = explode('-', $request->periode_import);
+                $periode = $per[1] . '-' . $per[0] . '-01';
                 $file = $request->file('file')->store('import');
-                $import = new ZcoImport();
+
+                $import = new ZcoImport($periode);
                 $import->import($file);
 
                 $data_fail = $import->failures();

@@ -343,6 +343,18 @@ if (!function_exists('format_salr')) {
     }
 }
 
+
+if (!function_exists('format_zco')) {
+    function format_zco()
+    {
+        $status = array(
+            '0' => '1 Bulan',
+            '1' => 'Custom',
+        );
+        return $status;
+    }
+}
+
 if (!function_exists('login_method')) {
     function login_method()
     {
