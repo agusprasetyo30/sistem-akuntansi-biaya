@@ -22,11 +22,18 @@ class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation
 {
     use Importable, SkipsErrors, SkipsFailures;
 
+    protected $periode;
+
+    public function __construct($periode)
+    {
+        $this->periode = $periode;
+    }
+
     public function model(array $row)
     {
         return new Zco([
             'plant_code' => $row['plant_code'],
-            'periode' => $row['periode'],
+            'periode' => $this->periode,
             'product_code' => $row['product_code'],
             'product_qty' => $row['product_qty'],
             'cost_element' => $row['cost_element'],

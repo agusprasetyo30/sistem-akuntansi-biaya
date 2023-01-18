@@ -17,7 +17,7 @@ class CreateZcoTable extends Migration
             $table->id();
             $table->string('company_code');
             $table->string('plant_code')->nullable();
-            $table->integer('periode')->nullable();
+            $table->timestamp('periode')->nullable();
             $table->string('product_code')->nullable();
             $table->double('product_qty', 8, 2)->default(0)->nullable();
             $table->string('cost_element')->nullable();

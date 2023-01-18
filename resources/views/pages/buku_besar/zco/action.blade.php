@@ -110,7 +110,7 @@
                             <div class="form-group">
                                 <label>Periode </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->periode}}" name="edit_periode"
+                                    value="{{format_month($model->periode, 'se')}}" name="edit_periode"
                                     id="edit_periode{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">

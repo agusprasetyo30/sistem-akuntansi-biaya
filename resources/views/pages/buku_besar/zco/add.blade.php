@@ -20,8 +20,9 @@
                             </div>
                             <div class="form-group">
                                 <label>Periode </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="periode"
-                                    id="periode" autocomplete="off">
+                                {{-- <input type="text" class="form-control form-control-sm" placeholder="Value" name="periode"
+                                    id="periode" autocomplete="off"> --}}
+                                <input type="text" class="form-control" id="periode" placeholder="Periode" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Produk</label>
