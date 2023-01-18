@@ -18,6 +18,7 @@ use App\Models\Role;
 use App\Models\Salr;
 use App\Models\User;
 use App\Models\Version_Asumsi;
+use App\Models\Zco;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -170,7 +171,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $group_account = GLAccountFC::where('group_account_fc', '=', $request->group_account)
-                ->where(function ($query) use ($search, $request){
+                ->where(function ($query) use ($search, $request) {
                     $query->where('gl_account_fc', 'ilike', '%' . $search . '%')
                         ->orWhere('gl_account_fc_desc', 'ilike', '%' . $search . '%');
                 })
@@ -374,14 +375,14 @@ class SelectController extends Controller
         $timestamp = explode('-', $request->periode);
         if ($search == '') {
             $asumsi = Asumsi_Umum::select('asumsi_umum.*', 'version_asumsi.version')
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$timestamp[1].'-'.$timestamp[0].'-01'.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $timestamp[1] . '-' . $timestamp[0] . '-01' . '%')
                 ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id')
                 ->limit(10)
                 ->get();
         } else {
             $asumsi = Asumsi_Umum::select('asumsi_umum.*', 'version_asumsi.version')
                 ->where('version_asumsi.version', 'ilike', '%' . $search . '%')
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$timestamp[1].'-'.$timestamp[0].'-01'.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $timestamp[1] . '-' . $timestamp[0] . '-01' . '%')
                 ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'asumsi_umum.version_id')
                 ->limit(10)
                 ->get();
@@ -391,7 +392,7 @@ class SelectController extends Controller
         foreach ($asumsi as $items) {
             $response[] = array(
                 "id" => $items->id,
-                "text" => $items->version.' - '.$items->inflasi
+                "text" => $items->version . ' - ' . $items->inflasi
             );
         }
 
@@ -824,6 +825,81 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->gl_account,
                 "text" => $items->gl_account . ' - ' . $items->gl_account_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function zco_product_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $zco_product = Zco::select('zco.product_code', 'material.material_name')
+                ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+                ->whereNull('zco.deleted_at')
+                ->groupBy('zco.product_code', 'material.material_name')
+                ->limit(10)
+                ->get();
+        } else {
+            $zco_product = Salr::select('zco.product_code', 'material.material_name')
+                ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+                ->where('zco.product_code', 'ilike', '%' . $search . '%')
+                ->orWhere('material.material_name', 'ilike', '%' . $search . '%')
+                ->whereNull('zco.deleted_at')
+                ->groupBy('zco.product_code', 'material.material_name')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($zco_product as $items) {
+            $response[] = array(
+                "id" => $items->product_code,
+                "text" => $items->product_code . ' - ' . $items->material_name,
+            );
+        }
+
+        return response()->json($response);
+    }
+
+
+    public function zco_plant_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $zco_product = Zco::select('zco.plant_code', 'plant.plant_desc')
+                ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
+                ->where('product_code', $request->product)
+                ->whereNull('zco.deleted_at')
+                ->groupBy('zco.plant_code', 'plant.plant_desc')
+                ->limit(10)
+                ->get();
+        } else {
+            $zco_product = Salr::select('zco.plant_code', 'plant.plant_desc')
+                ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
+                ->where('product_code', $request->product)
+                ->where('zco.plant_code', 'ilike', '%' . $search . '%')
+                ->orWhere('plant.plant_desc', 'ilike', '%' . $search . '%')
+                ->whereNull('zco.deleted_at')
+                ->groupBy('zco.plant_code', 'plant.plant_desc')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($zco_product as $items) {
+            $response[] = array(
+                "id" => $items->plant_code,
+                "text" => $items->plant_code . ' - ' . $items->plant_desc,
             );
         }
 

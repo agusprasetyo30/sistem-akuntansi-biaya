@@ -2,6 +2,8 @@
 
 namespace App\DataTables\Master;
 
+use App\Models\Material;
+use App\Models\Zco;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -21,53 +23,49 @@ class H_ZcoDataTable extends DataTable
     {
         $cc = auth()->user()->company_code;
 
-        $query = DB::table('zco')
-            ->select('zco.material_code', 'material.material_name')
-            ->leftjoin('material', 'material.material_code', '=', 'zco.material_code')
-            ->whereNull('zco.deleted_at')
-            ->where('zco.company_code', $cc)
-            ->groupBy('zco.material_code', 'material.material_name');
+        $query = Material::select('material_code', 'material_name', 'group_account_code')
+            ->where('company_code', $cc);
 
         $datatable = datatables()
-            ->query($query)
-            ->addColumn('material_code', function ($query) {
-                return $query->material_code . ' ' . $query->material_name;
-            });
+            ->eloquent($query);
+
+        $product = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name')
+            ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+            ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name');
 
         if ($this->material != 'all') {
-            $mat = DB::table('material')
-                ->where('material_code', $this->material)
-                ->get();
-        } else {
-            $mat = DB::table('material')
-                ->get();
+            $product->where('zco.product_code', $this->material);
         }
 
+        if ($this->plant != 'all') {
+            $product->where('zco.plant_code', $this->plant);
+        }
+
+        $product = $product->get();
         $zcoValues = DB::table('zco')
-            ->select('zco.*', 'material.group_account_code as ga_zco')
-            ->leftjoin('material', 'material.material_code', '=', 'zco.material_code')
-            ->whereIn('product_code', $mat->pluck('material_code')->all())
+            ->select('zco.*', 'gl_account.group_account_code')
+            ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
+            ->whereIn('product_code', $product->pluck('product_code')->all())
+            ->whereIn('plant_code', $product->pluck('plant_code')->all())
             ->get();
 
-        foreach ($mat as $key => $a) {
-            $datatable->addColumn($key, function ($query) use ($zcoValues, $a) {
+        foreach ($product as $key => $item) {
+            $datatable->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_qty = $zcoValues
-                    // ->where('ga_zco', $a->group_account_code)
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->where('material_code', $query->material_code)
                     ->sum('total_qty');
 
                 $total_biaya = $zcoValues
-                    // ->where('ga_zco', $a->group_account_code)
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->where('material_code', $query->material_code)
                     ->sum('total_amount');
 
                 $kuantum_produksi = $zcoValues
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->sum('product_qty');
 
                 $biaya_perton = 0;
@@ -85,17 +83,16 @@ class H_ZcoDataTable extends DataTable
                     $harga_satuan = $biaya_perton / $cr;
                 }
                 return $harga_satuan ? round($harga_satuan, 2)  : '-';
-            })->addColumn($key, function ($query) use ($zcoValues, $a) {
+            })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_qty = $zcoValues
-                    // ->where('ga_zco', $a->group_account_code)
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->where('material_code', $query->material_code)
                     ->sum('total_qty');
 
                 $kuantum_produksi = $zcoValues
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->sum('product_qty');
 
                 $cr = 0;
@@ -104,17 +101,16 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 return $cr ? round($cr, 2) : '-';
-            })->addColumn($key, function ($query) use ($zcoValues, $a) {
+            })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_biaya = $zcoValues
-                    // ->where('ga_zco', $a->group_account_code)
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->where('material_code', $query->material_code)
                     ->sum('total_amount');
 
                 $kuantum_produksi = $zcoValues
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->sum('product_qty');
 
                 $biaya_perton = 0;
@@ -124,11 +120,10 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 return $biaya_perton ? round($biaya_perton, 2) : '-';
-            })->addColumn($key, function ($query) use ($zcoValues, $a) {
+            })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_biaya = $zcoValues
-                    // ->where('ga_zco', $a->group_account_code)
-                    // ->where('plant_code', 'B001')
-                    ->where('product_code', $a->material_code)
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
                     ->where('material_code', $query->material_code)
                     ->sum('total_amount');
 

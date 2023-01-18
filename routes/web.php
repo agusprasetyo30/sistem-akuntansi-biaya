@@ -252,6 +252,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/gl_account_fc_dt', [SelectController::class, 'gl_account_fc_dt'])->name('gl_account_fc_dt');
             Route::get('/cost_center_dt', [SelectController::class, 'cost_center_dt'])->name('cost_center_dt');
             Route::get('/cost_element_dt', [SelectController::class, 'cost_element_dt'])->name('cost_element_dt');
+            Route::get('/zco_product_dt', [SelectController::class, 'zco_product_dt'])->name('zco_product_dt');
+            Route::get('/zco_plant_dt', [SelectController::class, 'zco_plant_dt'])->name('zco_plant_dt');
         });
     });
 
