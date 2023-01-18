@@ -367,6 +367,7 @@
                                             $('#data_main_plant').val('').trigger("change");
                                             $('#is_active').val('').trigger("change");
                                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                            $("#section_asumsi").empty();
                                             // $("#table_main").empty();
                                             // get_data()
                                             $('#dt_version').DataTable().ajax.reload();

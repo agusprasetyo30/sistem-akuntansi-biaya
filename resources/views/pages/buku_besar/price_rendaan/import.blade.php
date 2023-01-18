@@ -24,8 +24,9 @@
                                     <label class="form-label">Format Mata Uang <span class="text-red">*</span></label>
                                     <select name="mata_uang" id="mata_uang" class="form-control custom-select select2">
                                         <option selected disabled value="">Pilih Format</option>
-                                        <option value="0">Rupiah</option>
-                                        <option value="1">Dollar</option>
+                                        @foreach (mata_uang() as $key => $value)
+                                            options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                        @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">

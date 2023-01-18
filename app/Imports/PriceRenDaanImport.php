@@ -54,7 +54,7 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
 
                 $input['price_rendaan_value'] = $arr[$i] != null ?(double) str_replace('.', '', str_replace('Rp ', '', $arr[$i])) :0;
                 $input['asumsi_umum_id'] = $versi->id;
-
+                $input['type_currency'] = $this->currency;
                 $input['version_id'] = $this->version;
                 $input['company_code'] = auth()->user()->company_code;
                 $input['created_by'] = auth()->user()->id;
@@ -65,7 +65,7 @@ class PriceRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
             }
         }
         collect($list)->each(function ($result, $key){
-            if ($this->currency != '0'){
+            if ($this->currency != 'IDR'){
                 $result['price_rendaan_value'] = $result['price_rendaan_value'] * $this->kurs[$key]['usd_rate'];
             }
             PriceRenDaan::create($result);
