@@ -32,6 +32,7 @@
                             <ul class="nav panel-tabs">
                                 <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
                                 <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
+                                <li id="tabs_group_account"> <a href="#group_account" data-bs-toggle="tab">Group Account</a> </li>
                             </ul>
                         </div>
                     </div>
@@ -47,16 +48,33 @@
                             <div class="tab-pane " id="horizontal">
                                 <div class="mb-2 row">
                                     <div class="form-group">
-                                        <label class="form-label">MATERIAL</label>
+                                        <label class="form-label">PRODUK</label>
                                         <select id="filter_material" class="form-control custom-select select2">
+                                            <option value="all" selected>Semua</option>
                                         </select>
                                     </div>
-
+                                    <div class="form-group" id="format_plant">
+                                        <label class="form-label">PLANT</label>
+                                        <select id="filter_plant" class="form-control custom-select select2">
+                                            {{-- <option value="all" selected>Semua</option> --}}
+                                            <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="btn-list mb-5">
+                                    <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="tab-pane " id="group_account">
+                                {{-- <div class="">
+                                    <div class="table-responsive" id="table-wrapper">
+                                        
+                                    </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -78,8 +96,29 @@
             table()
 
             $('#tabs_vertical').on('click', function () {
-                table()
+                // table()
+                $('#dt_zco').DataTable().ajax.reload();
             })
+
+            $('#tabs_horizontal').on('click', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
+
+            $('#btn_tampilkan').on('click', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
+
+            $('#filter_material').change(function(){
+                if($(this).val() != 'all'){
+                    $('#format_plant').slideDown('slow')
+                } else {
+                    $('#format_plant').slideUp('slow')
+                }
+            })
+
+            $('#format_plant').hide()
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -169,12 +208,53 @@
                 }
             })
 
+            // $('#filter_material').select2({
+            //     // placeholder: 'Pilih Produk',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('zco_product_dt') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
+
+            // $('#filter_plant').select2({
+            //     // placeholder: 'Pilih Produk',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('zco_plant_dt') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term,
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
+
             $('#filter_material').select2({
-                placeholder: 'Pilih Material',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('material_select') }}",
+                    url: "{{ route('zco_product_dt') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -189,8 +269,28 @@
                     }
                 }
             }).on('change', function () {
-                $("#dinamic_table").empty();
-                get_data_horiz()
+                var data_product = $('#filter_material').val();
+
+                $('#filter_plant').append('<option selected value="all">Semua</option>').select2({
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('zco_plant_dt') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                product:data_product
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
             })
 
             // $('#data_main_version').select2({
@@ -508,10 +608,21 @@
         }
 
         function get_data_horiz(){
-            var table = '<table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">COST ELEMENT</th>'
+            var table = `
+            <table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+                <thead>
+                    <tr id="dinamic_tr_top">
+                    </tr>
+                    <tr id="dinamic_tr">
+                    </tr>
+                </thead>
+            </table>`
+            // var kolom = '<th class="text-center">BIAYA </th>'
+            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th><th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">MATERIAL</th>'
+            var kolom = ''
             var column = [
-                { data: 'cost_element', orderable:false},
+                { data: 'material_code', orderable:false},
+                { data: 'material_name', orderable:false},
             ]
             $("#dinamic_table").append(table);
             $.ajax({
@@ -519,19 +630,20 @@
                 url : '{{route("zco")}}',
                 data: {
                     data:'material',
-                    // version:$('#filter_version').val()
+                    material:$('#filter_material').val(),
+                    plant:$('#filter_plant').val(),
                 },
                 success:function (response) {
                     for (let i = 0; i < response.material.length;i++){
-                        column.push({ data: i.toString(), orderable:false})
-                        kolom += '<th class="text-center">'+ response.material[i].material_code+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+' '+ response.material[i].material_name+' '+ response.material[i].plant_code+'</th>';
+                        kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
-                    // for (let i = 0; i < 5;i++){
-                    //     column.push({ data: i.toString(), orderable:false})
-                    //     kolom += '<th class="text-center">cek</th>';
-                    // }
+                    for (let j = 0; j < response.material.length * 4 ; j++) {
+                        column.push({ data: j.toString(), orderable:false})
+                    }
 
+                    $("#dinamic_tr_top").append(kolom_top);
                     $("#dinamic_tr").append(kolom);
                     $('#h_dt_zco').DataTable().clear().destroy();
                     $("#h_dt_zco").DataTable({
@@ -552,7 +664,8 @@
                             url : '{{route("zco")}}',
                             data: {
                                 data:'horizontal',
-                                // version:$('#filter_version').val()
+                                material:$('#filter_material').val(),
+                                plant:$('#filter_plant').val(),
                             }
                         },
                         columns: column,

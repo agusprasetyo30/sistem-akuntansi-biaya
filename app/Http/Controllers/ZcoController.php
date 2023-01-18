@@ -20,10 +20,25 @@ class ZcoController extends Controller
         if ($request->data == 'index') {
             return $zcoDataTable->render('pages.buku_besar.zco.index');
         } else if ($request->data == 'horizontal') {
-            return $h_zcoDataTable->render('pages.buku_besar.zco.index');
+            return $h_zcoDataTable->with([
+                'material' => $request->material,
+                'plant' => $request->plant,
+            ])->render('pages.buku_besar.zco.index');
         } elseif ($request->data == 'material') {
-            $material = DB::table('material')
-                ->get();
+            $material = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name')
+                ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+                ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name');
+
+            if ($request->material != 'all') {
+                $material->where('zco.product_code', $request->material);
+            }
+
+            if ($request->plant != 'all') {
+                $material->where('zco.plant_code', $request->plant);
+            }
+            // dd($request->material, $request->plant);
+            $material = $material->get();
+            // dd($material);
             return response()->json(['code' => 200, 'material' => $material]);
         }
 

@@ -2,6 +2,8 @@
 
 namespace App\DataTables\Master;
 
+use App\Models\Material;
+use App\Models\Zco;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -21,36 +23,115 @@ class H_ZcoDataTable extends DataTable
     {
         $cc = auth()->user()->company_code;
 
-        $query = DB::table('zco')
-            ->select('zco.cost_element', 'gl_account.gl_account_desc')
-            ->leftjoin('gl_account', 'gl_account.gl_account', '=', 'zco.cost_element')
-            ->whereNull('zco.deleted_at')
-            ->where('zco.company_code', $cc)
-            ->groupBy('zco.cost_element', 'gl_account.gl_account_desc');
+        $query = Material::select('material_code', 'material_name', 'group_account_code')
+            ->where('company_code', $cc);
 
         $datatable = datatables()
-            ->query($query)
-            ->addColumn('cost_element', function ($query) {
-                return $query->cost_element . ' ' . $query->gl_account_desc;
-            });
+            ->eloquent($query);
 
-        $asumsi = DB::table('material')
-            // ->where('version_id', $this->version)
+        $product = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name')
+            ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+            ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name');
+
+        if ($this->material != 'all') {
+            $product->where('zco.product_code', $this->material);
+        }
+
+        if ($this->plant != 'all') {
+            $product->where('zco.plant_code', $this->plant);
+        }
+
+        $product = $product->get();
+        $zcoValues = DB::table('zco')
+            ->select('zco.*', 'gl_account.group_account_code')
+            ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
+            ->whereIn('product_code', $product->pluck('product_code')->all())
+            ->whereIn('plant_code', $product->pluck('plant_code')->all())
             ->get();
 
-        $renprodValues = DB::table('zco')
-            ->whereIn('product_code', $asumsi->pluck('material_code')->all())
-            ->get();
+        foreach ($product as $key => $item) {
+            $datatable->addColumn($key, function ($query) use ($zcoValues, $item) {
+                $total_qty = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->sum('total_qty');
 
-        foreach ($asumsi as $key => $a) {
-            $datatable->addColumn($key, function ($query) use ($renprodValues, $a) {
-                $renprodAsumsi = $renprodValues
-                    ->where('product_code', $a->material_code)
-                    ->first();
+                $total_biaya = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->sum('total_amount');
 
-                return $renprodAsumsi ? $renprodAsumsi->total_qty : '-';
+                $kuantum_produksi = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->sum('product_qty');
+
+                $biaya_perton = 0;
+                if ($total_biaya > 0 && $kuantum_produksi > 0) {
+                    $biaya_perton = $total_biaya / $kuantum_produksi;
+                }
+
+                $cr = 0;
+                if ($total_qty > 0 && $kuantum_produksi > 0) {
+                    $cr = $total_qty / $kuantum_produksi;
+                }
+
+                $harga_satuan = 0;
+                if ($biaya_perton > 0 && $cr > 0) {
+                    $harga_satuan = $biaya_perton / $cr;
+                }
+                return $harga_satuan ? round($harga_satuan, 2)  : '-';
+            })->addColumn($key, function ($query) use ($zcoValues, $item) {
+                $total_qty = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->sum('total_qty');
+
+                $kuantum_produksi = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->sum('product_qty');
+
+                $cr = 0;
+                if ($total_qty > 0 && $kuantum_produksi > 0) {
+                    $cr = $total_qty / $kuantum_produksi;
+                }
+
+                return $cr ? round($cr, 2) : '-';
+            })->addColumn($key, function ($query) use ($zcoValues, $item) {
+                $total_biaya = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->sum('total_amount');
+
+                $kuantum_produksi = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->sum('product_qty');
+
+                $biaya_perton = 0;
+
+                if ($total_biaya > 0 && $kuantum_produksi > 0) {
+                    $biaya_perton = $total_biaya / $kuantum_produksi;
+                }
+
+                return $biaya_perton ? round($biaya_perton, 2) : '-';
+            })->addColumn($key, function ($query) use ($zcoValues, $item) {
+                $total_biaya = $zcoValues
+                    ->where('product_code', $item->product_code)
+                    ->where('plant_code', $item->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->sum('total_amount');
+
+                return $total_biaya ? round($total_biaya, 2) : '-';
             });
         }
+
+        // dd($datatable->toArray());
 
         return $datatable;
     }
