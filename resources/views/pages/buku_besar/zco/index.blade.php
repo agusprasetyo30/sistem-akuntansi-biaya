@@ -208,10 +208,14 @@
                 format: "mm-yyyy",
                 viewMode: "months",
                 minViewMode: "months",
-                autoclose:true
+                showOnFocus: false,
             }).on('change', function () {
                 $("#submit-export").css("display", "block");
             });
+
+            $('#periode_import').on("click", function() {
+                $('#periode_import').bootstrapdatepicker("show");
+            })
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
