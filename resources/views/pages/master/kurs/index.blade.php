@@ -61,7 +61,10 @@
                 format: "mm-yyyy",
                 viewMode: "months",
                 minViewMode: "months",
-                autoclose:true
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#tanggal').bootstrapdatepicker("show");
             });
 
             $('#currency').on('keyup', function(){
@@ -195,7 +198,7 @@
                     kurs: $('#currency').val(),
                 },
                 success:function (response) {
-                    $("#tanggal").attr("disabled", true);
+                    // $("#tanggal").attr("disabled", true);
                     Swal.fire({
                         title: response.title,
                         text: response.msg,
@@ -212,7 +215,7 @@
                             $('#tanggal').removeClass('is-invalid');
                             $('#tanggal').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            $("#tanggal").attr("disabled", false);
+                            // $("#tanggal").attr("disabled", false);
                             // $("#table_main").empty();
                             // get_data()
                             $('#dt_kurs').DataTable().ajax.reload();
@@ -220,33 +223,9 @@
                     })
                 },
                 error:function (response) {
-                    $("#tanggal").attr("disabled", true);
-                    if (response.status === 400){
-                        Swal.fire({
-                            title: response.responseJSON.title,
-                            html: response.responseJSON.msg,
-                            icon: 'warning',
-                            allowOutsideClick: false,
-                            confirmButtonColor: '#019267',
-                            confirmButtonText: 'Konfirmasi',
-                        }).then((result) => {
-                            if(result.value){
-                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                $("#tanggal").attr("disabled", false);
-                            }
-                        })
-                    }else {
-                        $("#tanggal").attr("disabled", true);
-                        $('#modal_add').modal('hide');
-                        $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                        handleError(response)
-                        $("#tanggal").attr("disabled", false);
-                    }
-
-
-                    // handleError(response)
-
-                    // $('#dt_kurs').DataTable().ajax.reload();
+                    console.log(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    handleError(response)
                 }
             })
         })
@@ -269,7 +248,6 @@
                     kurs: $('#edit_currency'+id).val(),
                 },
                 success: function (response) {
-                    $("#edit_tanggal"+id).attr("disabled", true);
                     Swal.fire({
                         title: response.title,
                         text: response.msg,
@@ -285,38 +263,14 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
-                                $("#edit_tanggal"+id).attr("disabled", false);
-                                // $("#table_main").empty();
-                                // get_data()
                                 $('#dt_kurs').DataTable().ajax.reload();
                             }
                         })
                 },
                 error: function (response) {
-                    $("#edit_tanggal"+id).attr("disabled", true);
-                    if (response.status === 400){
-                        $("#tanggal").attr("disabled", true);
-                        Swal.fire({
-                            title: response.responseJSON.title,
-                            html: response.responseJSON.msg,
-                            icon: 'warning',
-                            allowOutsideClick: false,
-                            confirmButtonColor: '#019267',
-                            confirmButtonText: 'Konfirmasi',
-                        }).then((result) => {
-                            if(result.value){
-                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                                $("#back_edit"+id).attr("disabled", false);
-                                $("#edit_tanggal"+id).attr("disabled", false);
-                            }
-                        })
-                    }else {
-                        $('#modal_edit'+id).modal('hide');
-                        $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                        $("#back_edit"+id).attr("disabled", false);
-                        handleError(response)
-                        $("#edit_tanggal"+id).attr("disabled", false);
-                    }
+                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit"+id).attr("disabled", false);
+                    handleError(response)
                 }
             })
         }

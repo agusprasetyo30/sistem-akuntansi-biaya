@@ -29,13 +29,16 @@ class AsumsiUmumController extends Controller
                 $validasi['asumsi'][$key]['kurs'] = str_replace(',00', '', str_replace('.', '', str_replace('Rp ', '', $items['kurs'])));
             }
 
-            $validator = Validator::make($request->all(), [
+            $validator = Validator::make($validasi, [
                 "versi" => 'required',
                 "jumlah_bulan" => 'required',
                 "start_date" => 'required',
                 "asumsi" => 'required',
                 "asumsi.*.kurs" => 'required|min:0|not_in:0',
-            ], validatorMsg());
+            ], validatorMsg())
+                ->setAttributeNames(
+                    ['asumsi.*.kurs' => 'kurs']
+                );
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);

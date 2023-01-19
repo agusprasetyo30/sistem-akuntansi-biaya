@@ -99,7 +99,10 @@
         format: "mm-yyyy",
         viewMode: "months",
         minViewMode: "months",
-        autoclose:true
+        autoclose:true,
+        showOnFocus: false,
+    }).on('click', function () {
+        $('#edit_tanggal'+{{$model->id}}).bootstrapdatepicker("show");
     });
 
     $('#edit_currency'+{{$model->id}}).on('keyup', function(){

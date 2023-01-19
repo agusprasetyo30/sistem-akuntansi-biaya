@@ -6,7 +6,8 @@ function validatorMsg()
 		'required' => 'Field <b style="text-transform: uppercase;">:attribute</b> tidak boleh kosong',
 		'min' => 'Field <b style="text-transform: uppercase;">:attribute</b> minimal <b style="text-transform: uppercase;">:min</b>',
 		'unique' => 'Field <b style="text-transform: uppercase;">:attribute</b> sudah ada',
-		'numeric' => 'Field <b style="text-transform: uppercase;">:attribute</b> harus berupa angka'
+		'numeric' => 'Field <b style="text-transform: uppercase;">:attribute</b> harus berupa angka',
+        'not_in' => 'Field <b style="text-transform: uppercase;">:attribute</b> tidak boleh kosong / 0 ',
 	];
 
 	return $messages;

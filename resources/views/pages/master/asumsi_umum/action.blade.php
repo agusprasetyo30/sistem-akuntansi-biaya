@@ -177,7 +177,7 @@
                             '<input disabled class="form-control" type="text" name="detail_currency" id="detail_currency'+i+''+{{$model->id}}+'" autocomplete="off" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" data-type="currency" placeholder="1.000.000.00"></div>' +
                             '</div><div class="col-sm-4 col-md-4">' +
                             '<div class="form-group">' +
-                            '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
+                            '<label class="form-label">Adjustment (%) <span class="text-red">*</span></label>' +
                             '<input disabled class="form-control" type="number" placeholder="0" required name="detail_adjustment" id="detail_adjustment'+i+''+{{$model->id}}+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div></div>' +
                             '<div class="col-sm-4 col-md-4">' +
                             '<div class="form-group">' +
@@ -354,7 +354,7 @@
                         '</div>' +
                         '<div class="col-sm-4 col-md-4">' +
                         '<div class="form-group">' +
-                        '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
+                        '<label class="form-label">Adjustment (%) <span class="text-red">*</span></label>' +
                         '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment" id="edit_adjustment'+id+''+data_id+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div>' +
                         '</div>' +
                         '<div class="col-sm-4 col-md-4">' +
@@ -374,7 +374,7 @@
                         '</div>' +
                         '<div class="col-sm-4 col-md-4">' +
                         '<div class="form-group">' +
-                        '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
+                        '<label class="form-label">Adjustment (%) <span class="text-red">*</span></label>' +
                         '<input class="form-control" type="number" placeholder="0" required name="edit_adjustment" id="edit_adjustment'+id+''+data_id+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$"></div>' +
                         '</div>' +
                         '<div class="col-sm-4 col-md-4">' +
