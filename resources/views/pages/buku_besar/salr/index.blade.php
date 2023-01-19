@@ -45,18 +45,18 @@
                             </div>
                             <div class="tab-pane " id="horizontal">
                                 <div class="mb-3 row">
+                                    <div class="form-group" id="cost_center_pick">
+                                        <label class="form-label">COST CENTER <span class="text-red">*</span></label>
+                                        <select id="cost_center_format" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
                                     <div class="form-group">
-                                        <label class="form-label">FORMAT TAMPILAN <span class="text-red">*</span></label>
+                                        <label class="form-label">PERIODE <span class="text-red">*</span></label>
                                         <select id="filter_format" class="form-control custom-select select2">
                                             <option selected disabled value="">Pilih Format</option>
                                             @foreach (format_salr() as $key => $value)
                                                 options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                             @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="cost_center_pick">
-                                        <label class="form-label">COST CENTER <span class="text-red">*</span></label>
-                                        <select id="cost_center_format" class="form-control custom-select select2">
                                         </select>
                                     </div>
                                     <div class="form-group" id="year_pick" style="display:none;">
@@ -361,7 +361,6 @@
                             periode:$('#tanggal_import').val()
                         },
                         success:function (response) {
-                            $("#tanggal_import").attr("disabled", true);
                             if (response.code === 200){
                                 Swal.fire({
                                     title: 'Apakah anda yakin?',
@@ -378,7 +377,6 @@
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                                         $("#back_import").attr("disabled", true);
-                                        $("#tanggal_import").attr("disabled", false);
                                     }
                                 })
                             }else if (response.code === 201){
@@ -397,35 +395,21 @@
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                                         $("#back_import").attr("disabled", false);
-                                        $("#tanggal_import").attr("disabled", false);
                                     }
                                 })
                             }
                         },
                         error: function (response) {
-                            $("#tanggal_import").attr("disabled", true);
-                            Swal.fire({
-                                title: response.responseJSON.title,
-                                html: response.responseJSON.msg,
-                                icon: 'warning',
-                                allowOutsideClick: false,
-                                confirmButtonColor: "#019267",
-                                confirmButtonText: 'Konfirmasi',
-                            }).then((result) =>{
-                                if (result.value){
-                                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                                    $("#back_import").attr("disabled", false);
-                                    $("#tanggal_import").attr("disabled", false);
-                                }
-                            })
-
+                            $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                            $("#back_import").attr("disabled", false);
+                            handleError(response)
                         }
                     })
                 }else {
-                    $("#tanggal_import").attr("disabled", true);
+
                     Swal.fire({
                         title: 'PERINGATAN',
-                        text: "Silakan Isi Data Tersebut",
+                        text: "Terdapat Data Bulan dan file yang kosong. Silakan Isi data tersebut",
                         icon: 'warning',
                         confirmButtonColor: '#019267',
                         cancelButtonColor: '#EF4B4B',
@@ -434,7 +418,6 @@
                         if (result.value){
                             $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                             $("#back_import").attr("disabled", false);
-                            $("#tanggal_import").attr("disabled", false);
                         }
                     })
                 }
@@ -473,20 +456,9 @@
                             })
                     },
                     error: function (response) {
-                        Swal.fire({
-                            title: 'Oopss...',
-                            text: 'Internal Server Error',
-                            icon: 'error',
-                            allowOutsideClick: false,
-                            confirmButtonColor: '#019267',
-                            confirmButtonText: 'Konfirmasi',
-                        }).then((result) =>{
-                            if (result.value){
-                                $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                                $("#back_import").attr("disabled", false);
-                                $("#tanggal_import").attr("disabled", false);
-                            }
-                        })
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
+                        handleError(response)
                     }
                 })
             }
