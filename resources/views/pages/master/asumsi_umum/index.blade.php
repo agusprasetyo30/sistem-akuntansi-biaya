@@ -259,7 +259,7 @@
                         '</div>' +
                         '<div class="col-sm-4 col-md-4">' +
                         '<div class="form-group">' +
-                        '<label class="form-label">Ajustment (%) <span class="text-red">*</span></label>' +
+                        '<label class="form-label">Adjustment (%) <span class="text-red">*</span></label>' +
                         '<input class="form-control" type="number" placeholder="0" required name="adjustment" id="adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$">' +
                         '</div>' +
                         '</div>' +
@@ -383,7 +383,7 @@
                         }else {
                             Swal.fire({
                                 title: 'PERINGATAN',
-                                text: "Silakan Isi Data Tersebut",
+                                text: "Terdapat Data Kurs, Adjustment, dan Inflasi yang kosong.\n Silakan Isi Data Tersebut",
                                 icon: 'warning',
                                 confirmButtonColor: '#019267',
                                 cancelButtonColor: '#EF4B4B',
@@ -598,7 +598,7 @@
                     }else {
                         Swal.fire({
                             title: 'PERINGATAN',
-                            text: "Silakan Isi Data Tersebut",
+                            text: "Terdapat Data Kurs, Adjustment, dan Inflasi \n Silakan Isi Data Tersebut",
                             icon: 'warning',
                             confirmButtonColor: '#019267',
                             cancelButtonColor: '#EF4B4B',

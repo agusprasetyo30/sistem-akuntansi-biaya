@@ -136,16 +136,22 @@
                 format: "mm-yyyy",
                 viewMode: "months",
                 minViewMode: "months",
-                autoclose:true
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#tanggal').bootstrapdatepicker("show");
             });
 
             $('#tanggal_import').bootstrapdatepicker({
                 format: "mm-yyyy",
                 viewMode: "months",
                 minViewMode: "months",
-                autoclose:true
+                autoclose:true,
+                showOnFocus: false,
             }).on('change', function () {
                 $("#template").css("display", "block");
+            }).on('click', function () {
+                $('#tanggal_import').bootstrapdatepicker("show");
             });
 
             $('#tahun_satuan_filter1').bootstrapdatepicker({
@@ -1013,7 +1019,6 @@
                 cancelButtonText: 'Kembali'
             }).then((result) =>{
                 if (result.value){
-
                     $.ajax({
                         type: "POST",
                         headers: {
@@ -1035,9 +1040,6 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        // update_dt_horizontal()
-                                        // $("#table_main").empty();
-                                        // get_data()
                                         $('#dt_salr').DataTable().ajax.reload();
                                     }
                                 })

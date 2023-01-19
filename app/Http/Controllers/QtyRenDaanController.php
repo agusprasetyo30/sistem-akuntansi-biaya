@@ -55,7 +55,7 @@ class QtyRenDaanController extends Controller
                 'material_code' => $request->material_id
             ])->first();
 
-//            dd($request);
+
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
