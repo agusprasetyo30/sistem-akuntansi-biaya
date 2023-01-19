@@ -38,7 +38,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="qty_renprod_value"
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="qty_renprod_value"
                                     id="qty_renprod_value" autocomplete="off">
                             </div>
                         </div>

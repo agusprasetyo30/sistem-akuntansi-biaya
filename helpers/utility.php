@@ -348,6 +348,7 @@ if (!function_exists('format_zco')) {
     function format_zco()
     {
         $status = array(
+            'all' => 'Semua',
             '0' => '1 Bulan',
             '1' => 'Custom',
         );

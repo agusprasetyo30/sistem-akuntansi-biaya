@@ -320,6 +320,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [ZcoController::class, 'delete'])->name('delete_zco');
             Route::get('export', [ZcoController::class, 'export'])->name('export_zco');
             Route::post('import', [ZcoController::class, 'import'])->name('import_zco');
+            Route::post('check', [ZcoController::class, 'check'])->name('check_zco');
         });
 
         Route::group(['prefix' => 'salr'], function () {

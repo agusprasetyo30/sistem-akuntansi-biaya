@@ -63,27 +63,28 @@
                                     <div class="form-group">
                                         <label class="form-label">PERIODE </label>
                                         <select id="filter_format" class="form-control custom-select select2">
-                                            <option selected disabled value="">Pilih Format</option>
+                                            {{-- <option selected disabled value="">Pilih Format</option> --}}
                                             @foreach (format_zco() as $key => $value)
                                                 options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group" id="month_pick_range" style="display:none;">
+                                    <div class="form-group" id="month_pick_range">
                                         <label class="form-label">BULAN </label>
                                         <div class="input-group input-daterange">
                                             <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
                                             <div class="input-group-addon">to</div>
-                                            <input type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                            <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group" id="month_pick" style="display:none;">
+                                    <div class="form-group" id="month_pick">
                                         <label class="form-label">BULAN </label>
                                         <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
                                     </div>
                                 </div>
                                 <div class="btn-list mb-5">
                                     <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                    {{-- <button type="button" class="btn btn-danger btn-pill" id="btn_reset"><i class="fa fa-trash me-2 fs-14"></i> Reset Filter</button> --}}
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
@@ -107,13 +108,13 @@
                                     <div class="form-group">
                                         <label class="form-label">PERIODE </label>
                                         <select id="filter_format_group_account" class="form-control custom-select select2">
-                                            <option selected disabled value="">Pilih Format</option>
+                                            {{-- <option selected disabled value="">Pilih Format</option> --}}
                                             @foreach (format_zco() as $key => $value)
                                                 options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group" id="month_pick_range_group_account" style="display:none;">
+                                    <div class="form-group" id="month_pick_range_group_account">
                                         <label class="form-label">BULAN </label>
                                         <div class="input-group input-daterange">
                                             <input type="text" id="bulan_filter1_group_account" class="form-control" placeholder="Month" autocomplete="off">
@@ -121,13 +122,14 @@
                                             <input type="text" id="bulan_filter2_group_account" class="form-control" placeholder="Month" autocomplete="off">
                                         </div>
                                     </div>
-                                    <div class="form-group" id="month_pick_group_account" style="display:none;">
+                                    <div class="form-group" id="month_pick_group_account">
                                         <label class="form-label">BULAN </label>
                                         <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1_group_account" id="bulan_satuan_filter1_group_account" placeholder="Month" autocomplete="off" required>
                                     </div>
                                 </div>
                                 <div class="btn-list mb-5">
                                     <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan_group_account"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                    {{-- <button type="button" class="btn btn-danger btn-pill" id="btn_reset_group_account"><i class="fa fa-trash me-2 fs-14"></i> Reset Filter</button> --}}
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_group_account_table">
@@ -153,24 +155,38 @@
         $(document).ready(function () {
             table()
 
+            $("#dinamic_table").empty();
+            get_data_horiz()
+
+            $("#dinamic_group_account_table").empty();
+            get_data_group_account_horiz()
+
             $('#tabs_vertical').on('click', function () {
                 // table()
-                $('#dt_zco').DataTable().ajax.reload();
+                // $('#dt_zco').DataTable().ajax.reload();
             })
 
             $('#tabs_horizontal').on('click', function () {
-                $("#dinamic_table").empty();
-                get_data_horiz()
+                // $("#dinamic_table").empty();
+                // get_data_horiz()
             })
 
             $('#tabs_group_account').on('click', function () {
-                $("#dinamic_group_account_table").empty();
-                get_data_group_account_horiz()
+                // $("#dinamic_group_account_table").empty();
+                // get_data_group_account_horiz()
             })
 
             $('#btn_tampilkan').on('click', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
+            })
+
+            $('#btn_reset').on('click', function () {
+                reset_form()
+            })
+
+            $('#btn_reset_group_account').on('click', function () {
+                reset_form_group_account()
             })
 
             $('#btn_tampilkan_group_account').on('click', function () {
@@ -194,8 +210,38 @@
                 }
             })
 
+            $('#filter_format').change(function(){
+                if($(this).val() == 'all'){
+                    $('#month_pick').slideUp('slow')
+                    $('#month_pick_range').slideUp('slow')
+                } else if ($(this).val() == '0') {
+                    $('#month_pick').slideDown('slow')
+                    $('#month_pick_range').slideUp('slow')
+                } else if ($(this).val() == '1'){
+                    $('#month_pick').slideUp('slow')
+                    $('#month_pick_range').slideDown('slow')
+                }
+            })
+
+            $('#filter_format_group_account').change(function(){
+                if($(this).val() == 'all'){
+                    $('#month_pick_group_account').slideUp('slow')
+                    $('#month_pick_range_group_account').slideUp('slow')
+                } else if ($(this).val() == '0') {
+                    $('#month_pick_group_account').slideDown('slow')
+                    $('#month_pick_range_group_account').slideUp('slow')
+                } else if ($(this).val() == '1'){
+                    $('#month_pick_group_account').slideUp('slow')
+                    $('#month_pick_range_group_account').slideDown('slow')
+                }
+            })
+
             $('#format_plant').hide()
             $('#format_plant_group_account').hide()
+            $('#month_pick').hide()
+            $('#month_pick_range').hide()
+            $('#month_pick_group_account').hide()
+            $('#month_pick_range_group_account').hide()
 
             $('#periode').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -209,6 +255,7 @@
                 viewMode: "months",
                 minViewMode: "months",
                 showOnFocus: false,
+                autoclose:true,
             }).on('change', function () {
                 $("#submit-export").css("display", "block");
             });
@@ -391,19 +438,25 @@
                 });
             })
 
-            $('#filter_format').select2({
-                placeholder: 'Pilih Format',
-                width: '100%',
-                allowClear: false,
-            }).on('change', function () {
-                if ($('#filter_format').val() == 0) {
-                    $('#month_pick_range').css('display','none')
-                    $('#month_pick').css('display','block')
-                } else {
-                    $('#month_pick_range').css('display','block')
-                    $('#month_pick').css('display','none')
-                }
-            })
+            // $('#filter_format').select2({
+            //     placeholder: 'Pilih Format',
+            //     width: '100%',
+            //     allowClear: false,
+            // }).on('change', function () {
+            //     if ($('#filter_format').val() == 0) {
+            //         // $('#month_pick_range').css('display','none')
+            //         // $('#month_pick').css('display','block')
+
+            //         $('#month_pick_range_group_account').slideUp('slow')
+            //         $('#month_pick_group_account').slideDown('slow')
+            //     } else if ($('#filter_format').val() == 1) {
+            //         // $('#month_pick_range').css('display','block')
+            //         // $('#month_pick').css('display','none')
+
+            //         $('#month_pick_range_group_account').slideDown('slow')
+            //         $('#month_pick_group_account').slideUp('slow')
+            //     }
+            // })
 
             $('#bulan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -419,6 +472,23 @@
                 autoclose:true
             });
 
+            $('#bulan_filter1').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            }).on('change', function () {
+                var periode = moment($('#bulan_filter1').val(), "MM-YYYY").add(1, 'months').format('MM-YYYY');
+                $('#bulan_filter2').attr('disabled', false)
+                    .bootstrapdatepicker({
+                    format: "mm-yyyy",
+                    viewMode: "months",
+                    minViewMode: "months",
+                    autoclose:true,
+                    minDate: periode
+                });
+            });
+
             $('#bulan_satuan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
                 viewMode: "months",
@@ -426,19 +496,29 @@
                 autoclose:true
             });
 
-            $('#filter_format_group_account').select2({
-                placeholder: 'Pilih Format',
-                width: '100%',
-                allowClear: false,
-            }).on('change', function () {
-                if ($('#filter_format_group_account').val() == 0) {
-                    $('#month_pick_range_group_account').css('display','none')
-                    $('#month_pick_group_account').css('display','block')
-                } else {
-                    $('#month_pick_range_group_account').css('display','block')
-                    $('#month_pick_group_account').css('display','none')
-                }
-            })
+            // $('#filter_format_group_account').select2({
+            //     placeholder: 'Pilih Format',
+            //     width: '100%',
+            //     allowClear: false,
+            // }).on('change', function () {
+            //     if ($('#filter_format_group_account').val() == 0) {
+            //         // $('#month_pick_range_group_account').css('display','none')
+            //         // $('#month_pick_group_account').css('display','block')
+            //         $('#month_pick_range_group_account').slideUp('slow')
+            //         $('#month_pick_group_account').slideDown('slow')
+            //         // if($(this).val() != 'all'){
+            //         // $('#format_plant').slideDown('slow')
+            //         // } else {
+            //         //     $('#format_plant').slideUp('slow')
+            //         // }
+            //     } else {
+            //         // $('#month_pick_range_group_account').css('display','block')
+            //         // $('#month_pick_group_account').css('display','none')
+
+            //         $('#month_pick_range_group_account').slideDown('slow')
+            //         $('#month_pick_group_account').slideUp('slow')
+            //     }
+            // })
 
             $('#bulan_filter1_group_account').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -452,6 +532,23 @@
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose:true
+            });
+
+            $('#bulan_filter1_group_account').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true
+            }).on('change', function () {
+                var periode_group_account = moment($('#bulan_filter1_group_account').val(), "MM-YYYY").add(1, 'months').format('MM-YYYY');
+                $('#bulan_filter2_group_account').attr('disabled', false)
+                    .bootstrapdatepicker({
+                    format: "mm-yyyy",
+                    viewMode: "months",
+                    minViewMode: "months",
+                    autoclose:true,
+                    minDate: periode_group_account
+                });
             });
 
             $('#bulan_satuan_filter1_group_account').bootstrapdatepicker({
@@ -699,10 +796,25 @@
                     data:'material',
                     material:$('#filter_material').val(),
                     plant:$('#filter_plant').val(),
+                    format_data:$('#filter_format').val(),
+                    start_month:$('#bulan_filter1').val(),
+                    end_month:$('#bulan_filter2').val(),
+                    moth:$('#bulan_satuan_filter1').val(),
                 },
                 success:function (response) {
+                    if (response.material.length == 0) {
+                        Swal.fire({
+                            title: 'Oopss...',
+                            html: 'Data yang anda cari tidak dapat ditemukan',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                    }
+
                     for (let i = 0; i < response.material.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+' '+ response.material[i].material_name+' '+ response.material[i].plant_code+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+'  '+ response.material[i].material_name+' | '+ response.material[i].plant_code+' | '+ helpDateFormat(response.material[i].periode, 'bi')+'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
@@ -771,10 +883,25 @@
                     data:'group_account',
                     material:$('#filter_material_group_account').val(),
                     plant:$('#filter_plant_group_account').val(),
+                    format_data:$('#filter_format_group_account').val(),
+                    start_month:$('#bulan_filter1_group_account').val(),
+                    end_month:$('#bulan_filter2_group_account').val(),
+                    moth:$('#bulan_satuan_filter1_group_account').val(),
                 },
                 success:function (response) {
+                    if (response.group_account.length == 0) {
+                        Swal.fire({
+                            title: 'Oopss...',
+                            html: 'Data yang anda cari tidak dapat ditemukan',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                    }
+
                     for (let i = 0; i < response.group_account.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+' '+ response.group_account[i].material_name+' '+ response.group_account[i].plant_code+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+'  '+ response.group_account[i].material_name+' | '+ response.group_account[i].plant_code+' | '+ helpDateFormat(response.group_account[i].periode, 'bi')+'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
@@ -883,6 +1010,51 @@
         $('#submit-import').on('click', function () {
             $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back-import").attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('check_zco')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    periode:$('#periode_import').val()
+                },
+                success: function (response) {
+                    if (response.code == 201) 
+                    {
+                        Swal.fire({
+                            title: response.title,
+                            text: response.message,
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            showDenyButton: true,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                            denyButtonText: 'Kembali',
+                        })
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                importStore()
+                            } else {
+                                $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back-import").attr("disabled", false);
+                            }
+                        })
+                    } else {
+                        importStore()
+                        // $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    }
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
+                }
+            })
+        })
+
+        function importStore() {
             let file = new FormData($("#form-input")[0]);
             $.ajax({
                 type: "POST",
@@ -921,8 +1093,7 @@
                     $("#back-import").attr("disabled", false);
                 }
             })
-
-        })
+        }
 
         $('#submit-export').on('click', function () {
             $.ajax({
@@ -1061,6 +1232,24 @@
                     })
                 }
             })
+        }
+        
+        function reset_form(){
+            $("#filter_material").val('all').trigger('change')
+            $('#filter_plant').val('all').trigger('change')
+            $('#filter_format').val('all').trigger('change')
+            $('#bulan_filter1').val("")
+            $('#bulan_filter2').val("")
+            $('#bulan_satuan_filter1').val("")
+        }
+
+        function reset_form_group_account(){
+            $("#filter_material_group_account").val('all').trigger('change')
+            $('#filter_plant_group_account').val('all').trigger('change')
+            $('#filter_format_group_account').val('all').trigger('change')
+            $('#bulan_filter1_group_account').val("")
+            $('#bulan_filter2_group_account').val("")
+            $('#bulan_satuan_filter1_group_account').val("")
         }
     </script>
 @endsection

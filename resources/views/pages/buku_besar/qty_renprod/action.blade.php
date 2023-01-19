@@ -87,7 +87,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value"
+                                <input type="number" class="form-control form-control-sm" placeholder="Value"
                                     value="{{$model->qty_renprod_value}}" name="edit_qty_renprod_value"
                                     id="edit_qty_renprod_value{{$model->id}}" autocomplete="off">
                             </div>
