@@ -119,7 +119,7 @@
                                         <div class="input-group input-daterange">
                                             <input type="text" id="bulan_filter1_group_account" class="form-control" placeholder="Month" autocomplete="off">
                                             <div class="input-group-addon">to</div>
-                                            <input type="text" id="bulan_filter2_group_account" class="form-control" placeholder="Month" autocomplete="off">
+                                            <input disabled type="text" id="bulan_filter2_group_account" class="form-control" placeholder="Month" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group" id="month_pick_group_account">
@@ -177,8 +177,38 @@
             })
 
             $('#btn_tampilkan').on('click', function () {
-                $("#dinamic_table").empty();
-                get_data_horiz()
+                if ($('#filter_format').val() == '0') {
+                    if ($('#bulan_satuan_filter1').val() == '') {
+                        Swal.fire({
+                            title: 'Oopss...',
+                            html: 'Data bulan tidak boleh kosong',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                    } else {
+                        $("#dinamic_table").empty();
+                        get_data_horiz()
+                    }
+                } else if ($('#filter_format').val() == '1') {
+                    if ($('#bulan_filter1').val() == '' && $('#bulan_filter2').val() == '') {
+                        Swal.fire({
+                            title: 'Oopss...',
+                            html: 'Data bulan tidak boleh kosong',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                    } else {
+                        $("#dinamic_table").empty();
+                        get_data_horiz()
+                    }
+                } else {
+                    $("#dinamic_table").empty();
+                    get_data_horiz()
+                }
             })
 
             $('#btn_reset').on('click', function () {
@@ -190,8 +220,38 @@
             })
 
             $('#btn_tampilkan_group_account').on('click', function () {
-                $("#dinamic_group_account_table").empty();
-                get_data_group_account_horiz()
+                if ($('#filter_format_group_account').val() == '0') {
+                    if ($('#bulan_satuan_filter1_group_account').val() == '') {
+                        Swal.fire({
+                            title: 'Oopss...',
+                            html: 'Data bulan tidak boleh kosong',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                    } else {
+                        $("#dinamic_group_account_table").empty();
+                        get_data_group_account_horiz()
+                    }
+                } else if ($('#filter_format_group_account').val() == '1') {
+                    if ($('#bulan_filter1_group_account').val() == '' && $('#bulan_filter2_group_account').val() == '') {
+                        Swal.fire({
+                            title: 'Oopss...',
+                            html: 'Data bulan tidak boleh kosong',
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                        })
+                    } else {
+                        $("#dinamic_group_account_table").empty();
+                        get_data_group_account_horiz()
+                    }
+                } else {
+                    $("#dinamic_group_account_table").empty();
+                    get_data_group_account_horiz()
+                }
             })
 
             $('#filter_material').change(function(){
@@ -458,19 +518,19 @@
             //     }
             // })
 
-            $('#bulan_filter1').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
-            });
+            // $('#bulan_filter1').bootstrapdatepicker({
+            //     format: "mm-yyyy",
+            //     viewMode: "months",
+            //     minViewMode: "months",
+            //     autoclose:true
+            // });
 
-            $('#bulan_filter2').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
-            });
+            // $('#bulan_filter2').bootstrapdatepicker({
+            //     format: "mm-yyyy",
+            //     viewMode: "months",
+            //     minViewMode: "months",
+            //     autoclose:true
+            // });
 
             $('#bulan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -485,7 +545,7 @@
                     viewMode: "months",
                     minViewMode: "months",
                     autoclose:true,
-                    minDate: periode
+                    startDate: periode
                 });
             });
 
@@ -520,19 +580,19 @@
             //     }
             // })
 
-            $('#bulan_filter1_group_account').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
-            });
+            // $('#bulan_filter1_group_account').bootstrapdatepicker({
+            //     format: "mm-yyyy",
+            //     viewMode: "months",
+            //     minViewMode: "months",
+            //     autoclose:true
+            // });
 
-            $('#bulan_filter2_group_account').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
-            });
+            // $('#bulan_filter2_group_account').bootstrapdatepicker({
+            //     format: "mm-yyyy",
+            //     viewMode: "months",
+            //     minViewMode: "months",
+            //     autoclose:true
+            // });
 
             $('#bulan_filter1_group_account').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -547,7 +607,7 @@
                     viewMode: "months",
                     minViewMode: "months",
                     autoclose:true,
-                    minDate: periode_group_account
+                    startDate: periode_group_account
                 });
             });
 
