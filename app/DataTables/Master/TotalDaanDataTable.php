@@ -66,7 +66,12 @@ class TotalDaanDataTable extends DataTable
                     return '-';
                 } else {
                     $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
-                    return rupiah($result);
+
+                    if ($this->currency == 'Rupiah') {
+                        return rupiah($result);
+                    } elseif ($this->currency == 'Dollar') {
+                        return helpDollar($result, $query->usd_rate);
+                    }
                 }
             })
             ->filterColumn('filter_version', function ($query, $keyword) {

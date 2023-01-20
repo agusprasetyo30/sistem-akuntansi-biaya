@@ -259,6 +259,26 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
+                    {
+                        extend: 'collection',
+                        className: 'mb-5',
+                        text:'Mata Uang',
+                        buttons:[
+                            {
+                                text:'Rupiah',
+                                action: function () {
+                                    $('#dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Rupiah'])}}').load();
+                                }
+                            },
+                            {
+                                text:'Dollar',
+                                action: function () {
+                                    $('#dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Dollar'])}}').load();
+                                }
+                            }
+                        ]
+
+                    },
                     { extend: 'excel', className: 'mb-5' }
                 ],
                 ajax: {
@@ -314,6 +334,26 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
+                            {
+                                extend: 'collection',
+                                className: 'mb-5',
+                                text:'Mata Uang',
+                                buttons:[
+                                    {
+                                        text:'Rupiah',
+                                        action: function () {
+                                            $('#h_dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Rupiah'])}}').load();
+                                        }
+                                    },
+                                    {
+                                        text:'Dollar',
+                                        action: function () {
+                                            $('#h_dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Dollar'])}}').load();
+                                        }
+                                    }
+                                ]
+
+                            },
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
