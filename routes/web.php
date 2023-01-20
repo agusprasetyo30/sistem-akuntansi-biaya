@@ -30,6 +30,9 @@ use App\Http\Controllers\ZcoController;
 use App\Http\Controllers\GroupAccountFixedCostController;
 use App\Http\Controllers\GLAccountController;
 use App\Http\Controllers\GLAccountFixedCostController;
+use App\Http\Controllers\LabaRugiController;
+use App\Http\Controllers\PKPemakaianController;
+use App\Http\Controllers\PKPenjualanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -331,6 +334,38 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('export', [SalrController::class, 'export'])->name('export_salr');
             Route::post('import', [SalrController::class, 'import'])->name('import_salr');
             Route::post('check', [SalrController::class, 'check'])->name('check_salr');
+        });
+
+        Route::group(['prefix' => 'laba-rugi'], function () {
+            Route::get('/', [LabaRugiController::class, 'index'])->name('laba_rugi');
+            Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
+            Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
+            Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
+            Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
+            Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
+        });
+
+        Route::group(['prefix' => 'pakai-jual'], function () {
+
+            Route::group(['prefix' => 'pemakaian'], function () {
+                Route::get('/', [PKPemakaianController::class, 'index'])->name('pemakaian');
+                Route::post('insert', [PKPemakaianController::class, 'create'])->name('insert_pemakaian');
+                Route::post('update', [PKPemakaianController::class, 'update'])->name('update_pemakaian');
+                Route::post('delete', [PKPemakaianController::class, 'delete'])->name('delete_pemakaian');
+                Route::get('export', [PKPemakaianController::class, 'export'])->name('export_pemakaian');
+                Route::post('import', [PKPemakaianController::class, 'import'])->name('import_pemakaian');
+                Route::post('check', [PKPemakaianController::class, 'check'])->name('check_pemakaian');
+            });
+
+            Route::group(['prefix' => 'penjualan'], function () {
+                Route::get('/', [PKPenjualanController::class, 'index'])->name('penjualan');
+                Route::post('insert', [PKPenjualanController::class, 'create'])->name('insert_penjualan');
+                Route::post('update', [PKPenjualanController::class, 'update'])->name('update_penjualan');
+                Route::post('delete', [PKPenjualanController::class, 'delete'])->name('delete_penjualan');
+                Route::get('export', [PKPenjualanController::class, 'export'])->name('export_penjualan');
+                Route::post('import', [PKPenjualanController::class, 'import'])->name('import_penjualan');
+                Route::post('check', [PKPenjualanController::class, 'check'])->name('check_penjualan');
+            });
         });
     });
 

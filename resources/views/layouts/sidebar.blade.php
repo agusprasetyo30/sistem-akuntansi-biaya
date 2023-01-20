@@ -52,8 +52,14 @@
 				<li><a href="{{url('buku-besar/total-daan')}}" class="slide-item"> Total Pengadaan</a></li>
 				<li><a href="{{url('buku-besar/zco')}}" class="slide-item"> ZCO</a></li>
 				<li><a href="{{url('buku-besar/salr')}}" class="slide-item"> SALR</a></li>
-				<li><a href="#" class="slide-item"> Laba Rugi</a></li>
-				<li><a href="#" class="slide-item"> Pakai Jual</a></li>
+				<li><a href="{{route('laba_rugi')}}" class="slide-item"> Laba Rugi</a></li>
+				<li class="sub-slide">
+					<a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="javascript:void(0);"><span class="sub-side-menu__label">Pakai Jual</span><i class="sub-angle fe fe-chevron-right"></i></a>
+					<ul class="sub-slide-menu">
+						<li><a class="sub-slide-item" href="{{url('buku-besar/pakai-jual/pemakaian')}}">Pemakaian</a></li>
+						<li><a class="sub-slide-item" href="{{url('buku-besar/pakai-jual/penjualan')}}">Penjualan</a></li>
+					</ul>
+				</li>
 				<li><a href="#" class="slide-item"> Balans</a></li>
 			</ul>
 		</li>
