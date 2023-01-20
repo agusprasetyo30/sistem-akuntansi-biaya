@@ -802,16 +802,16 @@
                     moth:$('#bulan_satuan_filter1').val(),
                 },
                 success:function (response) {
-                    if (response.material.length == 0) {
-                        Swal.fire({
-                            title: 'Oopss...',
-                            html: 'Data yang anda cari tidak dapat ditemukan',
-                            icon: 'warning',
-                            allowOutsideClick: false,
-                            confirmButtonColor: "#019267",
-                            confirmButtonText: 'Konfirmasi',
-                        })
-                    }
+                    // if (response.material.length == 0) {
+                    //     Swal.fire({
+                    //         title: 'Oopss...',
+                    //         html: 'Data yang anda cari tidak dapat ditemukan',
+                    //         icon: 'warning',
+                    //         allowOutsideClick: false,
+                    //         confirmButtonColor: "#019267",
+                    //         confirmButtonText: 'Konfirmasi',
+                    //     })
+                    // }
 
                     for (let i = 0; i < response.material.length;i++){
                         kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+'  '+ response.material[i].material_name+' | '+ response.material[i].plant_code+' | '+ helpDateFormat(response.material[i].periode, 'bi')+'</th>';
@@ -889,16 +889,16 @@
                     moth:$('#bulan_satuan_filter1_group_account').val(),
                 },
                 success:function (response) {
-                    if (response.group_account.length == 0) {
-                        Swal.fire({
-                            title: 'Oopss...',
-                            html: 'Data yang anda cari tidak dapat ditemukan',
-                            icon: 'warning',
-                            allowOutsideClick: false,
-                            confirmButtonColor: "#019267",
-                            confirmButtonText: 'Konfirmasi',
-                        })
-                    }
+                    // if (response.group_account.length == 0) {
+                    //     Swal.fire({
+                    //         title: 'Oopss...',
+                    //         html: 'Data yang anda cari tidak dapat ditemukan',
+                    //         icon: 'warning',
+                    //         allowOutsideClick: false,
+                    //         confirmButtonColor: "#019267",
+                    //         confirmButtonText: 'Konfirmasi',
+                    //     })
+                    // }
 
                     for (let i = 0; i < response.group_account.length;i++){
                         kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+'  '+ response.group_account[i].material_name+' | '+ response.group_account[i].plant_code+' | '+ helpDateFormat(response.group_account[i].periode, 'bi')+'</th>';
