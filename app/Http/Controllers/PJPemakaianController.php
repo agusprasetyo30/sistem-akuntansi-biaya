@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class PKPemakaianController extends Controller
+class PJPemakaianController extends Controller
 {
     //
 }
