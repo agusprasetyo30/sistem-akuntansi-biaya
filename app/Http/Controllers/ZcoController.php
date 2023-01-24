@@ -39,9 +39,10 @@ class ZcoController extends Controller
                 'moth' => $request->moth,
             ])->render('pages.buku_besar.zco.index');
         } else if ($request->data == 'material') {
-            $material = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name', 'zco.periode')
+            $material = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode')
                 ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
-                ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name', 'zco.periode');
+                ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
+                ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode');
 
             if ($request->material != 'all') {
                 $material->where('zco.product_code', $request->material);
@@ -69,9 +70,10 @@ class ZcoController extends Controller
             // dd($material);
             return response()->json(['code' => 200, 'material' => $material]);
         } else if ($request->data == 'group_account') {
-            $group_account = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name', 'zco.periode')
+            $group_account = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode')
                 ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
-                ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name', 'zco.periode');
+                ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
+                ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode');
 
             if ($request->material != 'all') {
                 $group_account->where('zco.product_code', $request->material);

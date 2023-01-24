@@ -47,7 +47,7 @@ class SelectController extends Controller
         foreach ($plant as $items) {
             $response[] = array(
                 "id" => $items->plant_code,
-                "text" => $items->plant_code
+                "text" => $items->plant_code . ' ' . $items->plant_desc
             );
         }
 
@@ -640,7 +640,7 @@ class SelectController extends Controller
         foreach ($plant as $items) {
             $response[] = array(
                 "id" => $items->plant_code,
-                "text" => $items->plant_code
+                "text" => $items->plant_code . ' ' . $items->plant_desc
             );
         }
 

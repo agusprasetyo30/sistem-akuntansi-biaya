@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Kuantiti Rencana Produksi</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Pemakaian/h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -31,9 +31,9 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Cost Center</label>
-                                <select name="main_cost_center" id="data_main_cost_center" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Cost Center</option>
+                                <label class="form-label">Material</label>
+                                <select name="main_material" id="data_main_material" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Material</option>
                                 </select>
                             </div>
                             <div class="form-group">

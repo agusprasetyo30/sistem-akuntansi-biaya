@@ -163,17 +163,19 @@
 
             $('#tabs_vertical').on('click', function () {
                 // table()
-                // $('#dt_zco').DataTable().ajax.reload();
+                $('#dt_zco').DataTable().ajax.reload();
             })
 
             $('#tabs_horizontal').on('click', function () {
                 // $("#dinamic_table").empty();
                 // get_data_horiz()
+                $('#h_dt_zco').DataTable().ajax.reload();
             })
 
             $('#tabs_group_account').on('click', function () {
                 // $("#dinamic_group_account_table").empty();
                 // get_data_group_account_horiz()
+                $('#h_dt_zco_group_account').DataTable().ajax.reload();
             })
 
             $('#btn_tampilkan').on('click', function () {
@@ -874,7 +876,7 @@
                     // }
 
                     for (let i = 0; i < response.material.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+'  '+ response.material[i].material_name+' | '+ response.material[i].plant_code+' | '+ helpDateFormat(response.material[i].periode, 'bi')+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+'  '+ response.material[i].material_name+'<br>'+ response.material[i].plant_code +' '+ response.material[i].plant_desc +'<br>'+ helpDateFormat(response.material[i].periode, 'bi')+'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
@@ -959,9 +961,9 @@
                     //         confirmButtonText: 'Konfirmasi',
                     //     })
                     // }
-
+                    
                     for (let i = 0; i < response.group_account.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+'  '+ response.group_account[i].material_name+' | '+ response.group_account[i].plant_code+' | '+ helpDateFormat(response.group_account[i].periode, 'bi')+'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+'  '+ response.group_account[i].material_name+'<br>'+ response.group_account[i].plant_code + ' ' + response.group_account[i].plant_desc +'<br>'+ helpDateFormat(response.group_account[i].periode, 'bi')+'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 

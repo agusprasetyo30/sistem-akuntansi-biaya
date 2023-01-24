@@ -22,7 +22,7 @@ class ZcoDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('zco')
-            ->select('zco.*', 'produk.material_name as product_name', 'material.material_name', 'material.material_uom', 'gl_account.gl_account_desc')
+            ->select('zco.*', 'produk.material_name as product_name', 'material.material_name', 'material.material_uom', 'gl_account.gl_account_desc', 'plant.plant_desc')
             ->leftJoin('material as produk', 'produk.material_code', '=', 'zco.product_code')
             ->leftJoin('material as material', 'material.material_code', '=', 'zco.material_code')
             ->leftjoin('plant', 'plant.plant_code', '=', 'zco.plant_code')
@@ -38,6 +38,9 @@ class ZcoDataTable extends DataTable
             })
             ->addColumn('material', function ($query) {
                 return $query->material_code . ' - ' . $query->material_name;
+            })
+            ->addColumn('plant_code', function ($query) {
+                return $query->plant_code . ' ' . $query->plant_desc;
             })
             ->addColumn('periode', function ($query) {
                 return format_month($query->periode, 'bi');
