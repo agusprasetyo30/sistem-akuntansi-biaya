@@ -270,6 +270,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [ConsRateController::class, 'import'])->name('import_consrate');
             Route::post('export', [ConsRateController::class, 'export'])->name('export_consrate');
             Route::post('check', [ConsRateController::class, 'check'])->name('check_consrate');
+            Route::post('check_duplicated', [ConsRateController::class, 'check_duplicated'])->name('check_consrate_dublicate');
         });
 
         Route::group(['prefix' => 'saldo-awal'], function () {

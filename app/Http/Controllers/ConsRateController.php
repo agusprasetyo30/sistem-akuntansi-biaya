@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use function PHPUnit\Framework\isEmpty;
 
 class ConsRateController extends Controller
 {
@@ -127,8 +128,23 @@ class ConsRateController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            ConsRate::where('id', $request->id)
-                ->update($input);
+            $data_cek = ConsRate::where([
+                'plant_code' => $request->id_plant,
+                'version_id' => (int) $request->version,
+                'product_code' => $request->produk,
+                'month_year' => $data_asumsi->month_year,
+                'company_code' => 'B000'
+            ])->get();
+
+            DB::transaction(function () use ($data_cek, $request, $input){
+                if ($data_cek->isEmpty()) {
+                    ConsRate::where('id', $request->id)->update($input);
+                } else {
+                    $temp = $data_cek->where('id', '!=', $request->id)->pluck('id')->all();
+                    ConsRate::whereIn('id', $temp)->delete();
+                    ConsRate::where('id', $request->id)->update($input);
+                }
+            });
 
             return setResponse([
                 'code' => 200,
@@ -211,6 +227,52 @@ class ConsRateController extends Controller
             }
         }catch (\Exception $exception){
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function check_duplicated(Request $request){
+        try {
+
+            $validator = Validator::make($request->all(), [
+                "id_plant" => 'required',
+                "version" => 'required',
+                "id_asumsi" => 'required',
+                "produk" => 'required',
+                "material" => 'required',
+                "consrate" => 'required',
+                "is_active" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            if (strpos($request->id_asumsi, '-') == true) {
+                $data_asumsi = Asumsi_Umum::where([
+                    'month_year' => $request->id_asumsi,
+                    'version_id' => (int) $request->version
+                ])
+                    ->first();
+            } else {
+                $data_asumsi = Asumsi_Umum::where('id', $request->id_asumsi)
+                    ->first();
+            }
+
+            $data_cek = ConsRate::where([
+                'plant_code' => $request->id_plant,
+                'version_id' => (int) $request->version,
+                'product_code' => $request->produk,
+                'month_year' => $data_asumsi->month_year,
+                'company_code' => 'B000'
+            ])->first();
+
+            if ($data_cek == null){
+                return response()->json(['code' => 200, 'msg' => 'Data ']);
+            }else{
+                return response()->json(['code' => 201, 'msg' => 'Data Berasil Disimpan']);
+            }
+        }catch (\Exception $exception){
+            dd($exception);
+            return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 }
