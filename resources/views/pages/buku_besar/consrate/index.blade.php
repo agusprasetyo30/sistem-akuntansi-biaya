@@ -333,7 +333,6 @@
                     }
                 }
             }).on('change', function () {
-                var data_produk = $('#data_main_produk').val();
                 $('#data_main_material').append('<option selected disabled value="">Pilih Material</option>').select2({
                     dropdownParent: $('#modal_add'),
                     placeholder: 'Pilih Material',
@@ -345,8 +344,7 @@
                         delay: 250,
                         data: function (params) {
                             return {
-                                search: params.term,
-                                produk:data_produk
+                                search: params.term
 
                             };
                         },
@@ -578,7 +576,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_consrate')}}',
+                url: '{{route('check_consrate_dublicate')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id_plant: $('#data_main_plant').val(),
@@ -589,36 +587,135 @@
                     consrate: $('#consrate').val(),
                     is_active: $('#is_active').val(),
                 },
-                success:function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result) => {
-                        if (result.value) {
-                            $('#modal_add').modal('hide');
-                            $("#modal_add input").val("")
-                            $('#data_main_plant').val('').trigger("change");
-                            $('#data_main_version').val('').trigger("change");
-                            $('#data_detal_version').val('').trigger("change");
-                            $('#data_main_produk').val('').trigger("change");
-                            $('#data_main_material').val('').trigger("change");
-                            $('#is_active').val('').trigger("change");
-                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            // $("#table_main").empty();
-                            // get_data()
-                            $('#dt_consrate').DataTable().ajax.reload();
-                        }
-                    })
-                },
-                error:function (response) {
+                success: function (response) {
+                    if (response.code === 200){
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: "Data akan segera dikirim",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Kembali'
+                        }).then((result) =>{
+                            if (result.value){
+                                $.ajax({
+                                    type: "POST",
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    url: '{{route('insert_consrate')}}',
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                        id_plant: $('#data_main_plant').val(),
+                                        version: $('#data_main_version').val(),
+                                        id_asumsi: $('#data_detal_version').val(),
+                                        produk: $('#data_main_produk').val(),
+                                        material: $('#data_main_material').val(),
+                                        consrate: $('#consrate').val(),
+                                        is_active: $('#is_active').val(),
+                                    },
+                                    success:function (response) {
+                                        Swal.fire({
+                                            title: response.title,
+                                            text: response.msg,
+                                            icon: response.type,
+                                            allowOutsideClick: false,
+                                            confirmButtonColor: '#019267',
+                                            confirmButtonText: 'Konfirmasi',
+                                        }).then((result) => {
+                                            if (result.value) {
+                                                $('#modal_add').modal('hide');
+                                                $("#modal_add input").val("")
+                                                $('#data_main_plant').val('').trigger("change");
+                                                $('#data_main_version').val('').trigger("change");
+                                                $('#data_detal_version').val('').trigger("change");
+                                                $('#data_main_produk').val('').trigger("change");
+                                                $('#data_main_material').val('').trigger("change");
+                                                $('#is_active').val('').trigger("change");
+                                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                                // $("#table_main").empty();
+                                                // get_data()
+                                                $('#dt_consrate').DataTable().ajax.reload();
+                                            }
+                                        })
+                                    },
+                                    error:function (response) {
+                                        handleError(response)
+                                        $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                    }
+                                })
+                            }
+                        })
+
+                    }else if (response.code === 201){
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Kembali'
+                        }).then((result) =>{
+                            if (result.value){
+                                $.ajax({
+                                    type: "POST",
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    url: '{{route('insert_consrate')}}',
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                        id_plant: $('#data_main_plant').val(),
+                                        version: $('#data_main_version').val(),
+                                        id_asumsi: $('#data_detal_version').val(),
+                                        produk: $('#data_main_produk').val(),
+                                        material: $('#data_main_material').val(),
+                                        consrate: $('#consrate').val(),
+                                        is_active: $('#is_active').val(),
+                                    },
+                                    success:function (response) {
+                                        Swal.fire({
+                                            title: response.title,
+                                            text: response.msg,
+                                            icon: response.type,
+                                            allowOutsideClick: false,
+                                            confirmButtonColor: '#019267',
+                                            confirmButtonText: 'Konfirmasi',
+                                        }).then((result) => {
+                                            if (result.value) {
+                                                $('#modal_add').modal('hide');
+                                                $("#modal_add input").val("")
+                                                $('#data_main_plant').val('').trigger("change");
+                                                $('#data_main_version').val('').trigger("change");
+                                                $('#data_detal_version').val('').trigger("change");
+                                                $('#data_main_produk').val('').trigger("change");
+                                                $('#data_main_material').val('').trigger("change");
+                                                $('#is_active').val('').trigger("change");
+                                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                                // $("#table_main").empty();
+                                                // get_data()
+                                                $('#dt_consrate').DataTable().ajax.reload();
+                                            }
+                                        })
+                                    },
+                                    error:function (response) {
+                                        handleError(response)
+                                        $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                    }
+                                })
+                            }
+                        })
+                    }
+                }, error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                 }
             })
+
         })
 
         function update_consrate(id) {
@@ -629,10 +726,9 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_consrate')}}',
+                url: '{{route('check_consrate_dublicate')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    id: id,
                     id_plant: $('#edit_data_main_plant'+id).val(),
                     version: $('#edit_data_main_version'+id).val(),
                     id_asumsi: $('#edit_data_detal_version'+id).val(),
@@ -641,34 +737,136 @@
                     consrate: $('#edit_consrate'+id).val(),
                     is_active: $('#edit_is_active'+id).val(),
                 },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    })
-                        .then((result) => {
-                            if (result.value) {
-                                $('#modal_edit'+id).modal('hide')
-                                $('body').removeClass('modal-open');
-                                $('.modal-backdrop').remove();
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                // $("#table_main").empty();
-                                // get_data()
-                                $('#dt_consrate').DataTable().ajax.reload();
+                success:function (response) {
+                    console.log(response)
+                    if (response.code === 200){
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: "Data akan segera dikirim",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Kembali'
+                        }).then((result) =>{
+                            if (result.value){
+                                $.ajax({
+                                    type: "POST",
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    url: '{{route('update_consrate')}}',
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                        id: id,
+                                        id_plant: $('#edit_data_main_plant'+id).val(),
+                                        version: $('#edit_data_main_version'+id).val(),
+                                        id_asumsi: $('#edit_data_detal_version'+id).val(),
+                                        produk: $('#edit_data_main_produk'+id).val(),
+                                        material: $('#edit_data_main_material'+id).val(),
+                                        consrate: $('#edit_consrate'+id).val(),
+                                        is_active: $('#edit_is_active'+id).val(),
+                                    },
+                                    success: function (response) {
+                                        Swal.fire({
+                                            title: response.title,
+                                            text: response.msg,
+                                            icon: response.type,
+                                            allowOutsideClick: false,
+                                            confirmButtonColor: '#019267',
+                                            confirmButtonText: 'Konfirmasi',
+                                        })
+                                            .then((result) => {
+                                                if (result.value) {
+                                                    $('#modal_edit'+id).modal('hide')
+                                                    $('body').removeClass('modal-open');
+                                                    $('.modal-backdrop').remove();
+                                                    $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                                    // $("#table_main").empty();
+                                                    // get_data()
+                                                    $('#dt_consrate').DataTable().ajax.reload();
+                                                }
+                                            })
+                                    },
+                                    error: function (response) {
+                                        handleError(response)
+                                        $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                        $("#back_edit"+id).attr("disabled", false);
+                                        // $('#dt_consrate').DataTable().ajax.reload();
+                                    }
+                                })
                             }
                         })
+
+                    }else if (response.code === 201){
+                        Swal.fire({
+                            title: 'Apakah anda yakin?',
+                            text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                            cancelButtonText: 'Kembali'
+                        }).then((result) =>{
+                            if (result.value){
+                                $.ajax({
+                                    type: "POST",
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    url: '{{route('update_consrate')}}',
+                                    data: {
+                                        _token: "{{ csrf_token() }}",
+                                        id: id,
+                                        id_plant: $('#edit_data_main_plant'+id).val(),
+                                        version: $('#edit_data_main_version'+id).val(),
+                                        id_asumsi: $('#edit_data_detal_version'+id).val(),
+                                        produk: $('#edit_data_main_produk'+id).val(),
+                                        material: $('#edit_data_main_material'+id).val(),
+                                        consrate: $('#edit_consrate'+id).val(),
+                                        is_active: $('#edit_is_active'+id).val(),
+                                    },
+                                    success: function (response) {
+                                        Swal.fire({
+                                            title: response.title,
+                                            text: response.msg,
+                                            icon: response.type,
+                                            allowOutsideClick: false,
+                                            confirmButtonColor: '#019267',
+                                            confirmButtonText: 'Konfirmasi',
+                                        })
+                                            .then((result) => {
+                                                if (result.value) {
+                                                    $('#modal_edit'+id).modal('hide')
+                                                    $('body').removeClass('modal-open');
+                                                    $('.modal-backdrop').remove();
+                                                    $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                                    // $("#table_main").empty();
+                                                    // get_data()
+                                                    $('#dt_consrate').DataTable().ajax.reload();
+                                                }
+                                            })
+                                    },
+                                    error: function (response) {
+                                        handleError(response)
+                                        $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                        $("#back_edit"+id).attr("disabled", false);
+                                    }
+                                })
+                            }
+                        })
+
+                    }
                 },
-                error: function (response) {
+                error:function (response) {
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
-                    // $('#dt_consrate').DataTable().ajax.reload();
                 }
             })
+
         }
 
         function delete_consrate(id) {

@@ -261,8 +261,7 @@
                 delay: 250,
                 data: function (params) {
                     return {
-                        search: params.term,
-                        produk:data_produk
+                        search: params.term
 
                     };
                 },

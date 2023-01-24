@@ -37,6 +37,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $plant = Plant::where('plant_code', 'ilike', '%' . $search . '%')
+                ->orWhere('plant_desc', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
                 ->whereNull('deleted_at')
@@ -47,7 +48,7 @@ class SelectController extends Controller
         foreach ($plant as $items) {
             $response[] = array(
                 "id" => $items->plant_code,
-                "text" => $items->plant_code . ' ' . $items->plant_desc
+                "text" => $items->plant_code . ' - ' . $items->plant_desc
             );
         }
 
@@ -221,12 +222,10 @@ class SelectController extends Controller
         $search = $request->search;
         if ($search == '') {
             $material = Material::limit(10)
-                ->where('material_code', '!=', $request->produk)
                 ->where('is_active', 't')
                 ->get();
         } else {
-            $material = Material::where('material_code', '!=', $request->produk)
-                ->where(function ($query) use ($search) {
+            $material = Material::where(function ($query) use ($search) {
                     $query->where('material_code', 'ilike', '%' . $search . '%')
                         ->orWhere('material_name', 'ilike', '%' . $search . '%');
                 })
