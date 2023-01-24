@@ -30,9 +30,10 @@ class H_ZcoGroupAccountDataTable extends DataTable
         $datatable = datatables()
             ->eloquent($query);
 
-        $product = Zco::select('zco.product_code', 'zco.plant_code', 'material.material_name', 'zco.periode')
+        $product = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode')
             ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
-            ->groupBy('zco.product_code', 'zco.plant_code', 'material.material_name', 'zco.periode');
+            ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
+            ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode');
 
         if ($this->material != 'all') {
             $product->where('zco.product_code', $this->material);
