@@ -15,9 +15,17 @@ class TotalDaanController extends Controller
     public function index(Request $request, TotalDaanDataTable $totaldaanDataTable, H_TotalDaanDataTable $h_TotalDaanDataTable)
     {
         if ($request->data == 'index') {
-            return $totaldaanDataTable->render('pages.buku_besar.total_daan.index');
+            if ($request->currency) {
+                return $totaldaanDataTable->with(['currency' => $request->currency])->render('pages.buku_besar.total_daan.index');
+            } else {
+                return $totaldaanDataTable->with(['currency' => 'Rupiah'])->render('pages.buku_besar.total_daan.index');
+            }
         } elseif ($request->data == 'horizontal') {
-            return $h_TotalDaanDataTable->with(['version' => $request->version, 'val' => $request->val])->render('pages.buku_besar.total_daan.index');
+            if ($request->currency) {
+                return $h_TotalDaanDataTable->with(['version' => $request->version, 'val' => $request->val, 'currency' => $request->currency])->render('pages.buku_besar.total_daan.index');
+            } else {
+                return $h_TotalDaanDataTable->with(['version' => $request->version, 'val' => $request->val, 'currency' => 'Rupiah'])->render('pages.buku_besar.total_daan.index');
+            }
         } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $request->version)

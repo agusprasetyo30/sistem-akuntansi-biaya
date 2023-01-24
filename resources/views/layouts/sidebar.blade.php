@@ -23,8 +23,8 @@
 			<ul class="slide-menu">
 				<li><a href="{{url('master/company')}}" class="slide-item"> Master Company</a></li>
 				<li><a href="{{url('master/kategori-material')}}" class="slide-item"> Kategori Material</a></li>
-				<li><a href="{{url('master/group-account')}}" class="slide-item"> Group Account</a></li>
-				<li><a href="{{url('master/gl-account')}}" class="slide-item"> General Ledger</a></li>
+				<li><a href="{{url('master/group-account')}}" class="slide-item"> Group Account VC</a></li>
+				<li><a href="{{url('master/gl-account')}}" class="slide-item"> General Ledger VC</a></li>
 				<li><a href="{{route('group_account_fc')}}" class="slide-item"> Group Account FC</a></li>
 				<li><a href="{{route('gl_account_fc')}}" class="slide-item"> General Ledger FC</a></li>
 				<li><a href="{{route('cost_center')}}" class="slide-item"> Cost Center</a></li>
@@ -52,8 +52,14 @@
 				<li><a href="{{url('buku-besar/total-daan')}}" class="slide-item"> Total Pengadaan</a></li>
 				<li><a href="{{url('buku-besar/zco')}}" class="slide-item"> ZCO</a></li>
 				<li><a href="{{url('buku-besar/salr')}}" class="slide-item"> SALR</a></li>
-				<li><a href="#" class="slide-item"> Laba Rugi</a></li>
-				<li><a href="#" class="slide-item"> Pakai Jual</a></li>
+				<li><a href="{{route('laba_rugi')}}" class="slide-item"> Laba Rugi</a></li>
+				<li class="sub-slide">
+					<a class="sub-side-menu__item" data-bs-toggle="sub-slide" href="javascript:void(0);"><span class="sub-side-menu__label">Pakai Jual</span><i class="sub-angle fe fe-chevron-right"></i></a>
+					<ul class="sub-slide-menu">
+						<li><a class="sub-slide-item" href="{{url('buku-besar/pakai-jual/pemakaian')}}">Pemakaian</a></li>
+						<li><a class="sub-slide-item" href="{{url('buku-besar/pakai-jual/penjualan')}}">Penjualan</a></li>
+					</ul>
+				</li>
 				<li><a href="#" class="slide-item"> Balans</a></li>
 			</ul>
 		</li>

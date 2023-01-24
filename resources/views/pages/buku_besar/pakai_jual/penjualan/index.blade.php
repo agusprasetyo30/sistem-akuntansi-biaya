@@ -78,8 +78,7 @@
             table()
 
             $('#tabs_vertical').on('click', function () {
-                // table()
-                $('#dt_qty_renprod').DataTable().ajax.reload();
+                table()
             })
 
             $('#data_main_cost_center').select2({

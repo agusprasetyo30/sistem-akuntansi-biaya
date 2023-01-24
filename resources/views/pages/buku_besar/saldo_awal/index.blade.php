@@ -113,6 +113,28 @@
                 }
             })
 
+            $('#data_main_gl_account').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih G/L Account',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('cost_element_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
             $('#total_value').on('keyup', function(){
                 let rupiah = formatRupiah($(this).val(), "Rp ")
                 $(this).val(rupiah)
@@ -162,7 +184,7 @@
                 <tr>
                     <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
-                    <th data-type='text' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
+                    <th data-type='select' data-name='gl_account' class="text-center">G/L ACCOUNT</th>
                     <th data-type='text' data-name='valuation_class' class="text-center">VALUATION CLASS</th>
                     <th data-type='text' data-name='price_control' class="text-center">PRICE CONTROL</th>
                     <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
@@ -245,6 +267,9 @@
                                 } else if(iName == 'version'){
                                     input.className = "version_search form-control custom-select select2";
 
+                                } else if(iName == 'gl_account'){
+                                    input.className = "gl_account_search form-control custom-select select2";
+
                                 }
 
                                 input.innerHTML = options
@@ -317,6 +342,26 @@
                             }
                         })
 
+                        $('.gl_account_search').select2({
+                            placeholder: 'Pilih G/L Account',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('cost_element_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
                     });
                 },
                 buttons: [
@@ -333,7 +378,7 @@
                     // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'month_year', orderable:true},
-                    { data: 'gl_account', name: 'gl_account', orderable:true},
+                    { data: 'gl_account', name: 'filter_gl_account', orderable:true},
                     { data: 'valuation_class', name: 'valuation_class', orderable:true},
                     { data: 'price_control', name: 'price_control', orderable:true},
                     { data: 'material_name', name: 'filter_material', orderable:true},

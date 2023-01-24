@@ -21,10 +21,11 @@ class SaldoAwalDataTable extends DataTable
     {
         $cc = auth()->user()->company_code;
 
-        $query = DB::table('saldo_awal')->select('saldo_awal.*', 'material.material_code', 'material.material_name', 'plant.plant_code', 'plant.plant_desc', 'version_asumsi.version')
+        $query = DB::table('saldo_awal')->select('saldo_awal.*', 'material.material_code', 'material.material_name', 'plant.plant_code', 'plant.plant_desc', 'version_asumsi.version', 'gl_account.gl_account_desc')
             ->leftjoin('material', 'material.material_code', '=', 'saldo_awal.material_code')
             ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'saldo_awal.version_id')
+            ->leftjoin('gl_account', 'gl_account.gl_account', '=', 'saldo_awal.gl_account')
             ->where('saldo_awal.company_code', $cc)
             ->whereNull('saldo_awal.deleted_at');
 
@@ -43,6 +44,12 @@ class SaldoAwalDataTable extends DataTable
             ->editColumn('nilai_satuan', function ($query) {
                 return rupiah($query->nilai_satuan);
             })
+            ->editColumn('plant_code', function ($query) {
+                return $query->plant_code . ' ' . $query->plant_desc;
+            })
+            ->editColumn('gl_account', function ($query) {
+                return $query->gl_account . ' ' . $query->gl_account_desc;
+            })
             ->orderColumn('filter_material', function ($query, $order) {
                 $query->orderBy('material.material_code', $order);
             })
@@ -50,6 +57,9 @@ class SaldoAwalDataTable extends DataTable
                 $query->orderBy('plant.plant_code', $order);
             })
             ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.id', $order);
+            })
+            ->orderColumn('filter_gl_account', function ($query, $order) {
                 $query->orderBy('version_asumsi.id', $order);
             })
             ->filterColumn('filter_material', function ($query, $keyword) {
@@ -67,6 +77,11 @@ class SaldoAwalDataTable extends DataTable
                 if ($keyword != 'all') {
                     $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%')
                         ->orWhere('version_asumsi.version', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_gl_account', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('saldo_awal.gl_account', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->addColumn('action', 'pages.buku_besar.saldo_awal.action')

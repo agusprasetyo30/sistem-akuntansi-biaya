@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Kuantiti Rencana Produksi</h4>
+        <h4 class="page-title mb-0 text-primary">Pemakaian</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -63,8 +63,8 @@
                 </div>
 
             </div>
-            @include('pages.buku_besar.qty_renprod.add')
-            @include('pages.buku_besar.qty_renprod.import')
+            @include('pages.buku_besar.pakaijual.pemakaian.add')
+            @include('pages.buku_besar.pakaijual.pemakaian.import')
         </div>
     </div>
 </div>
@@ -79,16 +79,16 @@
 
             $('#tabs_vertical').on('click', function () {
                 // table()
-                $('#dt_qty_renprod').DataTable().ajax.reload();
+                $('#dt_qty_rendaan').DataTable().ajax.reload();
             })
 
-            $('#data_main_cost_center').select2({
+            $('#data_main_material').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Cost Center',
+                placeholder: 'Pilih Material',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('cost_center_select') }}",
+                    url: "{{ route('material_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {

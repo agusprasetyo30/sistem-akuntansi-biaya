@@ -103,9 +103,13 @@ class H_TotalDaanDataTable extends DataTable
                         return '-';
                     } else {
                         $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
-                        return rupiah($result);
+                        if ($this->currency == 'Rupiah') {
+                            return rupiah($result);
+                        } elseif ($this->currency == 'Dollar') {
+                            return helpDollar($result, $rendaanAsumsi->usd_rate);
+                        }
                     }
-                } elseif ($this->val == '1') {
+                } else if ($this->val == '1') {
                     $rendaanAsumsi = $rendaanValues
                         ->where('asumsi_umum_id', $a->id)
                         ->where('region_name', $query->region_name)
@@ -134,7 +138,11 @@ class H_TotalDaanDataTable extends DataTable
                         return '';
                     } else {
                         $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
-                        return rupiah($result);
+                        if ($this->currency == 'Rupiah') {
+                            return rupiah($result);
+                        } elseif ($this->currency == 'Dollar') {
+                            return helpDollar($result, $rendaanAsumsi->usd_rate);
+                        }
                     }
                 } else {
                     $rendaanAsumsi = $rendaanValues
