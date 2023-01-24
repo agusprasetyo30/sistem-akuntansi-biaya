@@ -757,7 +757,7 @@
         }
 
         function get_data_horiz(){
-            var table = '<table id="h_dt_salr" class="table table-bordered text-wrap wrap key-buttons text-center" style="width: auto;">' +
+            var table = '<table id="h_dt_salr" class="table table-bordered text-nowrap key-buttons text-center" style="width: auto;">' +
                 '<thead>' +
                 '<tr id="primary">' +
                 '<th class="align-middle" rowspan="2">Group Account</th>' +
@@ -770,8 +770,8 @@
             var kolom;
             var kolom1;
             var column = [
-                { width: '5%', data: 'group_account_fc', orderable:false},
-                { width: '20%',data: 'group_account_fc_desc', orderable:false}
+                {data: 'group_account_fc', orderable:false},
+                {data: 'group_account_fc_desc', orderable:false}
             ]
             $("#dinamic_table").append(table);
             $.ajax({
@@ -797,12 +797,13 @@
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
+                        paging: false,
                         fixedHeader: {
                             header: true,
                             headerOffset: $('#main_header').height()
                         },
                         buttons: [
-                            { extend: 'pageLength', className: 'mb-5' },
+                            // { extend: 'pageLength', className: 'mb-5' },
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
