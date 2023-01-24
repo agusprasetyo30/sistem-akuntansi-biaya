@@ -19,11 +19,17 @@
                                     <option value="" disabled selected>Pilih Versi</option>
                                 </select>
                             </div>  
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>G/L Account </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="GL Account" name="gl_account"
                                     id="gl_account" autocomplete="off">
-                            </div>
+                            </div> --}}
+                            <div class="form-group">
+                                <label class="form-label">G/L Account</label>
+                                <select name="main_gl_account" id="data_main_gl_account" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih G/L Account</option>
+                                </select>
+                            </div>     
                             <div class="form-group">
                                 <label>Valuation Class </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Valuation Class" name="valuation_class"

@@ -18,7 +18,8 @@ class CreateSaldoAwalTable extends Migration
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
             $table->timestamp('month_year')->nullable();
-            $table->string('gl_account')->nullable();
+            $table->string('gl_account')->unsigned();
+            $table->foreign('gl_account')->references('gl_account')->on('gl_account');
             $table->string('valuation_class')->nullable();
             $table->string('price_control')->nullable();
             $table->string('material_code')->unsigned();

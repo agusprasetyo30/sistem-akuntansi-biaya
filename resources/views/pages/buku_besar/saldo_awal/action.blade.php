@@ -26,7 +26,7 @@
                             <div class="form-group">
                                 <label>G/L Account </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="GL Account " value="{{$model->gl_account}}" name="detail_gl_account"
+                                    placeholder="GL Account " value="{{$model->gl_account}} {{$model->gl_account_desc}}" name="detail_gl_account"
                                     id="detail_gl_account" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -104,11 +104,17 @@
                                     <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>GL Account </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="GL Account"
                                     value="{{$model->gl_account}}" name="edit_gl_account"
                                     id="edit_gl_account{{$model->id}}" autocomplete="off">
+                            </div> --}}
+                            <div class="form-group">
+                                <label class="form-label">GL Account </label>
+                                <select name="main_gl_account" id="edit_data_main_gl_account{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->gl_account}}" selected>{{$model->gl_account}} {{$model->gl_account_desc}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label>Valuation Class </label>
@@ -219,6 +225,28 @@
             allowClear: false,
             ajax: {
                 url: "{{ route('version_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
+
+        $('#edit_data_main_gl_account'+{{$model->id}}).select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih G/L Account',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('cost_element_select') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
