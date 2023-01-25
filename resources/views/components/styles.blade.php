@@ -15,6 +15,9 @@
 <!--Sidemenu css -->
 <link href="{{asset('assets/css/sidemenu.css')}}" rel="stylesheet">
 
+<!--Fixed Coloumn css -->
+<link href="{{asset('assets/css/fixedColumns.dataTables.min.css')}}" rel="stylesheet">
+
 <!-- P-scroll bar css-->
 <link href="{{asset('assets/plugins/p-scrollbar/p-scrollbar.css')}}" rel="stylesheet" />
 

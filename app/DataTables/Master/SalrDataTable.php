@@ -19,10 +19,10 @@ class SalrDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = Salr::select('salrs.*', 'cost_center.cost_center_desc', 'group_account_fc.group_account_fc_desc', 'gl_account_fc.gl_account_fc_desc')
+        $query = Salr::select('salrs.*', 'cost_center.cost_center_desc', 'group_account_fc.group_account_fc', 'group_account_fc.group_account_fc_desc', 'gl_account_fc.gl_account_fc_desc')
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'salrs.cost_center')
-            ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'salrs.group_account_fc')
-            ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc');
+            ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+            ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc');
         return datatables()
             ->eloquent($query)
             ->addColumn('group_account', function ($query){
@@ -42,7 +42,7 @@ class SalrDataTable extends DataTable
             })
             ->filterColumn('filter_group_account', function ($query, $keyword){
                 if ($keyword != 'all'){
-                    $query->where('salrs.group_account_fc', 'ilike', '%'.$keyword.'%');
+                    $query->where('group_account_fc.group_account_fc', 'ilike', '%'.$keyword.'%');
                 }
             })
             ->filterColumn('filter_gl_account', function ($query, $keyword){
@@ -65,7 +65,7 @@ class SalrDataTable extends DataTable
                 }
             })
             ->orderColumn('filter_group_account', function ($query, $order) {
-                $query->orderBy('salrs.group_account_fc', $order);
+                $query->orderBy('group_account_fc.group_account_fc', $order);
             })
             ->orderColumn('filter_gl_account', function ($query, $order) {
                 $query->orderBy('salrs.gl_account_fc', $order);

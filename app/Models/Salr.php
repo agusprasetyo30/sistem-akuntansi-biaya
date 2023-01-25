@@ -13,7 +13,6 @@ class Salr extends Model
 
     protected $fillable = [
         'cost_center',
-        'group_account_fc',
         'gl_account_fc',
         'periode',
         'company_code',

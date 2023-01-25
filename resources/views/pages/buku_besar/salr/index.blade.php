@@ -603,7 +603,6 @@
                 autoWidth: true,
                 processing: true,
                 serverSide: true,
-                order:[[0, 'desc']],
                 deferRender:true,
                 fixedHeader: {
                     header: true,
@@ -756,19 +755,27 @@
             }).columns.adjust().draw();
         }
 
+
         function get_data_horiz(){
             var table = '<table id="h_dt_salr" class="table table-bordered text-nowrap key-buttons text-center" style="width: auto;">' +
                 '<thead>' +
                 '<tr id="primary">' +
-                '<th class="align-middle" rowspan="2">Group Account</th>' +
-                '<th class="align-middle" rowspan="2">Group Account Desc</th>' +
+                '<th class="align-middle" style="width: 5%;" rowspan="2">Group Account</th>' +
+                '<th class="align-middle" style="width: 20%;"  rowspan="2">Group Account Desc</th>' +
                 '</tr>' +
                 '<tr id="secondary">' +
                 '</tr>' +
                 '</thead>' +
+                '<tfoot>' +
+                '<tr id="total_foot">' +
+                '<th> Total </th>' +
+                '<th> Perhitungan </th>' +
+                '</tr>' +
+                '</tfoot>' +
                 '</table>'
             var kolom;
             var kolom1;
+            var kolom_tfoot;
             var column = [
                 {data: 'group_account_fc', orderable:false},
                 {data: 'group_account_fc_desc', orderable:false}
@@ -779,17 +786,25 @@
                 url : '{{route("salr")}}',
                 data: {
                     data:'dynamic',
+                    format_data:$('#filter_format').val(),
                     cost_center:$('#cost_center_format').val(),
+                    start_month:$('#bulan_filter1').val(),
+                    end_month:$('#bulan_filter2').val(),
+                    moth:$('#bulan_satuan_filter1').val(),
+                    year:$('#tahun_satuan_filter1').val(),
+                    inflasi:$('#filter_inflasi').val(),
+                    inflasi_asumsi:$('#versi_format').val(),
                 },
                 success:function (response) {
-                    console.log(response.cost_center)
                     for (let i = 0; i < response.cost_center.length;i++){
                         column.push({ data: i.toString(), orderable:false})
                         kolom += '<th class="text-center">'+response.cost_center[i].cost_center+'</th>';
                         kolom1 += '<th class="text-center">'+response.cost_center[i].cost_center_desc+'</th>';
+                        kolom_tfoot += '<th class="text-center"></th>';
                     }
                     $("#primary").append(kolom);
                     $("#secondary").append(kolom1);
+                    $("#total_foot").append(kolom_tfoot);
                     $('#h_dt_salr').DataTable().clear().destroy();
                     $("#h_dt_salr").DataTable({
                         scrollX: true,
@@ -798,9 +813,14 @@
                         processing: true,
                         serverSide: true,
                         paging: false,
+                        scrollCollapse: true,
+                        order:false,
                         fixedHeader: {
                             header: true,
                             headerOffset: $('#main_header').height()
+                        },
+                        fixedColumns:   {
+                            left: 2
                         },
                         buttons: [
                             // { extend: 'pageLength', className: 'mb-5' },
@@ -821,6 +841,20 @@
                             }
                         },
                         columns: column,
+                        columnDefs: [
+                            { targets: [0, 1], className: 'fs-1'}
+                        ],
+                        footerCallback: function () {
+                            var response = this.api().ajax.json();
+                            this.api().eq(0).columns().every(function (index) {
+                                var api = this
+                                if (index > 1){
+                                    var count = parseInt(index) - 2
+                                    var variable = 'total'+ count;
+                                    $( api.column(index).footer() ).html(response[variable]);
+                                }
+                            })
+                        }
 
                     })
                 }
