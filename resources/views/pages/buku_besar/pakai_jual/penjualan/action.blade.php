@@ -1,6 +1,6 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a class="btn bg-danger-transparent" onclick="delete_qty_renprod({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+<a class="btn bg-danger-transparent" onclick="delete_pj_penjualan({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 
 <!-- Modal Detail-->
@@ -9,10 +9,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Kuantiti Rencana Produksi</h5>
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button> --}}
+                <h5 class="modal-title" id="largemodal1">Detail Penjualan</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -29,16 +26,16 @@
                                 <input disabled type="text" class="form-control form-control-sm" placeholder="bulan" value="{{format_month($model->month_year,'bi')}}" name="detail_bulan" id="detail_bulan" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Cost Center </label>
+                                <label>Material </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->cost_center}} {{$model->cost_center_desc}}" name="detail_cost_center"
-                                    id="detail_cost_center" autocomplete="off">
+                                    placeholder="Nama Kategori" value="{{$model->material_code}} - {{$model->material_name}}" name="detail_material_name"
+                                    id="detail_material_name" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->qty_renprod_value}}" name="detail_qty_renprod_value"
-                                    id="detail_qty_renprod_value" autocomplete="off">
+                                    placeholder="Nilai Satuan" value="{{$model->pj_penjualan_value}}" name="detail_pj_penjualan_value"
+                                    id="detail_pj_penjualan_value" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -58,10 +55,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Kuantiti Rencana Produksi</h5>
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button> --}}
+                <h5 class="modal-title" id="largemodal1">Edit Penjualan</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -80,23 +74,23 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Cost Center</label>
-                                <select name="main_cost_center" id="edit_data_main_cost_center{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->cost_center}}" selected>{{$model->cost_center}} {{$model->cost_center_desc}}</option>
+                                <label class="form-label">Material</label>
+                                <select name="edit_main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} - {{$model->material_name}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
                                 <input type="number" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->qty_renprod_value}}" name="edit_qty_renprod_value"
-                                    id="edit_qty_renprod_value{{$model->id}}" autocomplete="off">
+                                    value="{{$model->pj_penjualan_value}}" name="edit_pj_penjualan_value"
+                                    id="edit_pj_penjualan_value{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit" onclick="update_qty_renprod({{$model->id}})"
+                <button type="button" id="submit_edit" onclick="update_pj_penjualan({{$model->id}})"
                     class="btn btn-primary">Simpan</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
@@ -111,13 +105,13 @@
     //     $(this).val(rupiah)
     // });
 
-    $('#edit_data_main_cost_center'+{{$model->id}}).select2({
+    $('#edit_data_main_material'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Cost Center',
+        placeholder: 'Pilih Material',
         width: '100%',
         allowClear: false,
         ajax: {
-            url: "{{ route('cost_center_select') }}",
+            url: "{{ route('material_select') }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {

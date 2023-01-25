@@ -396,16 +396,18 @@
         }
 
         $('#submit').on('click', function () {
+            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back").attr("disabled", true);
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_saldo_awal')}}',
+                url: '{{route('check_input_saldo_awal')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     version_id: $('#data_main_version').val(),
-                    gl_account: $('#gl_account').val(),
+                    gl_account: $('#data_main_gl_account').val(),
                     valuation_class: $('#valuation_class').val(),
                     price_control: $('#price_control').val(),
                     material_code: $('#data_main_material').val(),
@@ -415,9 +417,64 @@
                     nilai_satuan: $('#nilai_satuan').val(),
                 },
                 success: function (response) {
+                    if (response.code == 201) 
+                    {
+                        Swal.fire({
+                            title: response.title,
+                            text: response.message,
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            showDenyButton: true,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                            denyButtonText: 'Kembali',
+                        })
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                store()
+                            } else {
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back").attr("disabled", false);
+                            }
+                        })
+                    } else {
+                        store()
+                        // $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    }
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back").attr("disabled", false);
+                }
+            })
+        })
+
+        function store() {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('insert_saldo_awal')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    version_id: $('#data_main_version').val(),
+                    gl_account: $('#data_main_gl_account').val(),
+                    valuation_class: $('#valuation_class').val(),
+                    price_control: $('#price_control').val(),
+                    material_code: $('#data_main_material').val(),
+                    plant_code: $('#data_main_plant').val(),
+                    total_stock: $('#total_stock').val(),
+                    total_value: $('#total_value').val(),
+                    nilai_satuan: $('#nilai_satuan').val(),
+                },
+                success:function (response) {
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back").attr("disabled", false);
                     Swal.fire({
                         title: response.title,
-                        text: response.msg,
+                        text: response.message,
                         icon: response.type,
                         allowOutsideClick: false,
                         confirmButtonColor: "#019267",
@@ -434,9 +491,11 @@
                 },
                 error: function (response) {
                     handleError(response)
+                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back").attr("disabled", false);
                 }
             })
-        })
+        }
 
         $('#submit-import').on('click', function () {
             $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
@@ -574,7 +633,7 @@
                     _token: "{{ csrf_token() }}",
                     id: id,
                     version_id: $('#edit_data_main_version'+id).val(),
-                    gl_account: $('#edit_gl_account'+id).val(),
+                    gl_account: $('#edit_data_main_gl_account'+id).val(),
                     valuation_class: $('#edit_valuation_class'+id).val(),
                     price_control: $('#edit_price_control'+id).val(),
                     material_code: $('#edit_data_main_material'+id).val(),

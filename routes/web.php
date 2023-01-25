@@ -281,6 +281,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [SaldoAwalController::class, 'import'])->name('import_saldo_awal');
             Route::get('export', [SaldoAwalController::class, 'export'])->name('export_saldo_awal');
             Route::post('check', [SaldoAwalController::class, 'check'])->name('check_saldo_awal');
+            Route::post('check_input', [SaldoAwalController::class, 'check_input'])->name('check_input_saldo_awal');
         });
 
         Route::group(['prefix' => 'qty-renprod'], function () {

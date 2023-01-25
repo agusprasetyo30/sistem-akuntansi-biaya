@@ -2,7 +2,7 @@
 
 namespace App\Exports\MultipleSheet;
 
-use App\Exports\Master\M_GLAccountExport;
+use App\Exports\Master\M_CostElementExport;
 use App\Exports\Master\M_MaterialExport;
 use App\Exports\Master\M_PlantExport;
 use App\Exports\Master\M_ProdukExport;
@@ -21,7 +21,7 @@ class MS_ZcoExport implements WithMultipleSheets
         $sheets[] = new M_PlantExport();
         $sheets[] = new M_MaterialExport();
         $sheets[] = new M_ProdukExport();
-        $sheets[] = new M_GLAccountExport();
+        $sheets[] = new M_CostElementExport();
         return $sheets;
     }
 }

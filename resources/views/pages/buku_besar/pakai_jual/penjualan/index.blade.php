@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Kuantiti Rencana Produksi</h4>
+        <h4 class="page-title mb-0 text-primary">Penjualan</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -63,8 +63,8 @@
                 </div>
 
             </div>
-            @include('pages.buku_besar.qty_renprod.add')
-            @include('pages.buku_besar.qty_renprod.import')
+            @include('pages.buku_besar.pakai_jual.penjualan.add')
+            @include('pages.buku_besar.pakai_jual.penjualan.import')
         </div>
     </div>
 </div>
@@ -78,16 +78,17 @@
             table()
 
             $('#tabs_vertical').on('click', function () {
-                table()
+                // table()
+                $('#dt_pj_penjualan').DataTable().ajax.reload();
             })
 
-            $('#data_main_cost_center').select2({
+            $('#data_main_material').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Cost Center',
+                placeholder: 'Pilih Material',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('cost_center_select') }}",
+                    url: "{{ route('material_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -207,13 +208,13 @@
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+            <table id="dt_pj_penjualan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
                     <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='month_year' class="text-center">PERIODE</th>
-                    <th data-type='select' data-name='cost_center' class="text-center">COST CENTER</th>
-                    <th data-type='text' data-name='qty_renprod_value' class="text-center">VALUE</th>
+                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                    <th data-type='text' data-name='pj_penjualan_value' class="text-center">VALUE</th>
                     <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                 </tr>
                 </thead>
@@ -226,13 +227,13 @@
         }
 
         function get_data(){
-            $('#dt_qty_renprod thead tr')
+            $('#dt_pj_penjualan thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_qty_renprod thead');
+                .appendTo('#dt_pj_penjualan thead');
 
-            $('#dt_qty_renprod').DataTable().clear().destroy();
-            $("#dt_qty_renprod").DataTable({
+            $('#dt_pj_penjualan').DataTable().clear().destroy();
+            $("#dt_pj_penjualan").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -280,8 +281,8 @@
                             } else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
-                                if (iName == 'cost_center'){
-                                    input.className = "cost_center_search form-control custom-select select2";
+                                if (iName == 'material'){
+                                    input.className = "material_search form-control custom-select select2";
 
                                 } else if(iName == 'version'){
                                     input.className = "version_search form-control custom-select select2";
@@ -298,11 +299,11 @@
                             cell.empty()
                         }
 
-                        $('.cost_center_search').select2({
-                            placeholder: 'Pilih Cost Center',
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
                             allowClear: false,
                             ajax: {
-                                url: "{{ route('cost_center_dt') }}",
+                                url: "{{ route('material_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -344,18 +345,18 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3,4]
-                    }, title: 'Kuantiti Rencana Produksi' }
+                    }, title: 'Penjualan' }
                 ],
                 ajax: {
-                    url : '{{route("qty_renprod")}}',
+                    url : '{{route("penjualan")}}',
                     data: {data:'index'}
                 },
                 columns: [
                     // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
                     { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'month_year', name: 'filter_month_year', orderable:true},
-                    { data: 'cost_center', name: 'filter_cost_center', orderable:true},
-                    { data: 'qty_renprod_value', name: 'filter_qty_renprod_value', orderable:true},
+                    { data: 'material', name: 'filter_material', orderable:true},
+                    { data: 'pj_penjualan_value', name: 'pj_penjualan_value', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
@@ -366,15 +367,16 @@
         }
 
         function get_data_horiz(){
-            var table = '<table id="h_dt_qty_renprod" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">COST CENTER</th>'
+            var table = '<table id="h_dt_pj_penjualan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
+            var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">UOM</th>'
             var column = [
-                { data: 'cost_center', orderable:false},
+                { data: 'material_code', orderable:false},
+                { data: 'uom', orderable:false},
             ]
             $("#dinamic_table").append(table);
             $.ajax({
                 type: "GET",
-                url : '{{route("qty_renprod")}}',
+                url : '{{route("penjualan")}}',
                 data: {
                     data:'version',
                     version:$('#filter_version').val()
@@ -385,8 +387,8 @@
                         kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
                     }
                     $("#dinamic_tr").append(kolom);
-                    $('#h_dt_qty_renprod').DataTable().clear().destroy();
-                    $("#h_dt_qty_renprod").DataTable({
+                    $('#h_dt_pj_penjualan').DataTable().clear().destroy();
+                    $("#h_dt_pj_penjualan").DataTable({
                         scrollX: true,
                         dom: 'Bfrtip',
                         orderCellsTop: true,
@@ -401,7 +403,7 @@
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
-                            url : '{{route("qty_renprod")}}',
+                            url : '{{route("penjualan")}}',
                             data: {
                                 data:'horizontal',
                                 version:$('#filter_version').val()
@@ -427,11 +429,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_qty_renprod')}}',
+                url: '{{route('insert_penjualan')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    cost_center: $('#data_main_cost_center').val(),
-                    qty_renprod_value: $('#qty_renprod_value').val(),
+                    material_code: $('#data_main_material').val(),
+                    pj_penjualan_value: $('#pj_penjualan_value').val(),
                     version_id: $('#data_main_version').val(),
                     month_year: $('#data_detail_version').val(),
                 },
@@ -451,7 +453,7 @@
 
                             update_dt_horizontal()
                             // table()
-                            $('#dt_qty_renprod').DataTable().ajax.reload();
+                            $('#dt_pj_penjualan').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -470,7 +472,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('check_qty_renprod')}}',
+                url: '{{route('check_penjualan')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     version:$('#version').val()
@@ -518,7 +520,7 @@
                 },
                 processData: false,
                 contentType: false,
-                url: '{{route('import_qty_renprod')}}',
+                url: '{{route('import_penjualan')}}',
                 data: file,
                 success:function (response) {
                     $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -538,7 +540,7 @@
 
                             update_dt_horizontal()
                             // table()
-                            $('#dt_qty_renprod').DataTable().ajax.reload();
+                            $('#dt_pj_penjualan').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -559,14 +561,14 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('export_qty_renprod')}}',
+                url: '{{route('export_penjualan')}}',
                 data: {
                     version: $('#version').val(),
                 },
                 success:function (result, status, xhr) {
                     var disposition = xhr.getResponseHeader('content-disposition');
                     var matches = /"([^"]*)"/.exec(disposition);
-                    var filename = (matches != null && matches[1] ? matches[1] : 'qty_renprod.xlsx');
+                    var filename = (matches != null && matches[1] ? matches[1] : 'penjualan.xlsx');
 
                     // The actual download
                     var blob = new Blob([result], {
@@ -589,18 +591,18 @@
             })
         })
 
-        function update_qty_renprod(id) {
+        function update_pj_penjualan(id) {
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_qty_renprod')}}',
+                url: '{{route('update_penjualan')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    cost_center: $('#edit_data_main_cost_center'+id).val(),
-                    qty_renprod_value: $('#edit_qty_renprod_value'+id).val(),
+                    material_code: $('#edit_data_main_material'+id).val(),
+                    pj_penjualan_value: $('#edit_pj_penjualan_value'+id).val(),
                     version_id: $('#edit_data_main_version'+id).val(),
                     month_year:$('#edit_data_detail_version'+id).val(),
                 },
@@ -614,7 +616,6 @@
                         confirmButtonText: 'Konfirmasi',
                     })
                     .then((result) => {
-                        console.log(result)
                         if (result.value) {
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
@@ -622,7 +623,7 @@
                             
                             update_dt_horizontal()
                             // table()
-                            $('#dt_qty_renprod').DataTable().ajax.reload();
+                            $('#dt_pj_penjualan').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -633,7 +634,7 @@
 
         }
 
-        function delete_qty_renprod(id) {
+        function delete_pj_penjualan(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -651,7 +652,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_qty_renprod')}}',
+                        url: '{{route('delete_penjualan')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -669,7 +670,7 @@
                                 if (result.value) {
                                     update_dt_horizontal()
                                     // table()
-                                    $('#dt_qty_renprod').DataTable().ajax.reload();
+                                    $('#dt_pj_penjualan').DataTable().ajax.reload();
                                 }
                             })
                         },
