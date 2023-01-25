@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Pemakaian/h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Pemakaian</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -38,8 +38,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Value </label>
-                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="qty_renprod_value"
-                                    id="qty_renprod_value" autocomplete="off">
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="pj_pemakaian_value"
+                                    id="pj_pemakaian_value" autocomplete="off">
                             </div>
                         </div>
                     </div>
