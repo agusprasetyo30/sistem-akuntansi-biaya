@@ -271,7 +271,6 @@ class ConsRateController extends Controller
                 return response()->json(['code' => 201, 'msg' => 'Data Berasil Disimpan']);
             }
         }catch (\Exception $exception){
-            dd($exception);
             return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
