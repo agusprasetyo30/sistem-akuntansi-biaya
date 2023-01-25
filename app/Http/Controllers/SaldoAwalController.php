@@ -66,6 +66,7 @@ class SaldoAwalController extends Controller
                 'plant_code' => $request->plant_code,
                 'version_id' => (int) $request->version_id,
                 'material_code' => $request->material_code,
+                'gl_account' => $request->gl_account,
             ])->first();
 
             if (!$data_saldo_awal) {
@@ -241,6 +242,49 @@ class SaldoAwalController extends Controller
                 ]);
             }
         } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function check_input(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "gl_account" => 'required',
+                "valuation_class" => 'required',
+                "price_control" => 'required',
+                "material_code" => 'required',
+                "plant_code" => 'required',
+                "total_stock" => 'required',
+                "total_value" => 'required',
+                "version_id" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $check = Saldo_Awal::where([
+                'company_code' => auth()->user()->company_code,
+                'plant_code' => $request->plant_code,
+                'version_id' => (int) $request->version_id,
+                'material_code' => $request->material_code,
+                'gl_account' => $request->gl_account,
+            ])->first();
+
+            if ($check == null) {
+                return setResponse([
+                    'code' => 200,
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 201,
+                    'title' => 'Apakah anda yakin?',
+                    'message' => 'Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?'
+                ]);
+            }
+        } catch (\Throwable $th) {
             return setResponse([
                 'code' => 400,
             ]);
