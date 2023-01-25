@@ -10,9 +10,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Detail Pemakaian</h5>
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button> --}}
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -37,8 +34,8 @@
                             <div class="form-group">
                                 <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->qty_renprod_value}}" name="detail_qty_renprod_value"
-                                    id="detail_qty_renprod_value" autocomplete="off">
+                                    placeholder="Nilai Satuan" value="{{$model->pj_pemakaian_value}}" name="detail_pj_pemakaian_value"
+                                    id="detail_pj_pemakaian_value" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -59,9 +56,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="largemodal1">Edit Pemakaian</h5>
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button> --}}
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -88,8 +82,8 @@
                             <div class="form-group">
                                 <label>Value </label>
                                 <input type="number" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->qty_renprod_value}}" name="edit_qty_renprod_value"
-                                    id="edit_qty_renprod_value{{$model->id}}" autocomplete="off">
+                                    value="{{$model->pj_pemakaian_value}}" name="edit_pj_pemakaian_value"
+                                    id="edit_pj_pemakaian_value{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
