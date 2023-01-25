@@ -17,8 +17,6 @@ class CreateSalrsTable extends Migration
             $table->id();
             $table->string('cost_center')->unsigned();
             $table->foreign('cost_center')->references('cost_center')->on('cost_center');
-            $table->string('group_account_fc')->unsigned();
-            $table->foreign('group_account_fc')->references('group_account_fc')->on('group_account_fc');
             $table->string('gl_account_fc')->unsigned();
             $table->foreign('gl_account_fc')->references('gl_account_fc')->on('gl_account_fc');
             $table->string('company_code')->unsigned();

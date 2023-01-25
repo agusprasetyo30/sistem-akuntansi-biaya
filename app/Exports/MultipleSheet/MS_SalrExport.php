@@ -16,7 +16,6 @@ class MS_SalrExport implements WithMultipleSheets
     {
         $sheets = [];
         $sheets[] = new T_SalrExport();
-        $sheets[] = new M_GroupAccountFCExport();
         $sheets[] = new M_GLAccountFCExport();
         $sheets[] = new M_CostCenterExport();
         $sheets[] = new M_MaterialExport();

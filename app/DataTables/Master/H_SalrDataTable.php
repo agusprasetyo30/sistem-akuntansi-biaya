@@ -32,6 +32,23 @@ class H_SalrDataTable extends DataTable
             ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
             ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
 
+        // Periode
+        if ($this->format == '0'){
+            $cost_center->where('salrs.periode', 'ilike', '%'.$this->year.'%');
+        }elseif ($this->format == '1'){
+            $temp = explode('-', $this->moth);
+            $timemonth = $temp[1].'-'.$temp[0];
+
+            $cost_center->where('salrs.periode', 'ilike', '%'.$timemonth.'%');
+        }elseif ($this->format == '2'){
+            $start_temp = explode('-', $this->start_month);
+            $end_temp = explode('-', $this->end_month);
+            $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
+            $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
+
+            $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+        }
+
 
         $data_inflasi = Asumsi_Umum::where('id', $this->inflasi_asumsi)
             ->first();
@@ -45,26 +62,28 @@ class H_SalrDataTable extends DataTable
         foreach ($cost_center as $key => $item){
             $datatable->addColumn($key, function ($query) use ($item, $data_inflasi){
                 $value_salr = Salr::select(DB::raw('SUM(value) as value'))
+                    ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+                    ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
                     ->where([
-                        'cost_center' => $item->cost_center,
-                        'group_account_fc' => $query-> group_account_fc
+                        'salrs.cost_center' => $item->cost_center,
+                        'group_account_fc.group_account_fc' => $query-> group_account_fc
                     ]);
 
                 // Periode
                 if ($this->format == '0'){
-                    $value_salr->where('periode', 'ilike', '%'.$this->year.'%');
+                    $value_salr->where('salrs.periode', 'ilike', '%'.$this->year.'%');
                 }elseif ($this->format == '1'){
                     $temp = explode('-', $this->moth);
                     $timemonth = $temp[1].'-'.$temp[0];
 
-                    $value_salr->where('periode', 'ilike', '%'.$timemonth.'%');
+                    $value_salr->where('salrs.periode', 'ilike', '%'.$timemonth.'%');
                 }elseif ($this->format == '2'){
                     $start_temp = explode('-', $this->start_month);
                     $end_temp = explode('-', $this->end_month);
                     $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
                     $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
 
-                    $value_salr->whereBetween('periode', [$start_date, $end_date]);
+                    $value_salr->whereBetween('salrs.periode', [$start_date, $end_date]);
                 }
 
                 $value_salr = $value_salr->first();
@@ -77,8 +96,43 @@ class H_SalrDataTable extends DataTable
                 }
 
                 return $value_salr->value != null ? rupiah($result):'-';
+            })->with('total'.$key , function () use ($item, $data_inflasi){
+                $total = Salr::select(DB::raw('SUM(value) as value'))
+                    ->where('cost_center', $item->cost_center);
+
+                // Periode
+                if ($this->format == '0'){
+                    $total->where('periode', 'ilike', '%'.$this->year.'%');
+                }elseif ($this->format == '1'){
+                    $temp = explode('-', $this->moth);
+                    $timemonth = $temp[1].'-'.$temp[0];
+
+                    $total->where('periode', 'ilike', '%'.$timemonth.'%');
+                }elseif ($this->format == '2'){
+                    $start_temp = explode('-', $this->start_month);
+                    $end_temp = explode('-', $this->end_month);
+                    $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
+                    $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
+
+                    $total->whereBetween('periode', [$start_date, $end_date]);
+                }
+
+                $total = $total->first();
+
+
+                // Inflasi
+                if ($this->inflasi == '1'){
+                    $result = $total->value * $data_inflasi->inflasi / 100;
+                }else{
+                    $result = $total->value;
+                }
+
+                return $total->value != null ? rupiah($result):'-';
             });
         }
+
+
+//        dd($datatable->toArray());
 
         return $datatable;
     }
@@ -90,7 +144,6 @@ class H_SalrDataTable extends DataTable
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
-            ->orderBy(1)
             ->buttons(
                 Button::make('create'),
                 Button::make('export'),

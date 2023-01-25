@@ -3,8 +3,10 @@
 namespace App\Imports;
 
 use App\Models\Salr;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -32,9 +34,7 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
 
     public function model(array $row)
     {
-//        dd($row);
-        Salr::create([
-            'group_account_fc' => $row['group_account_fc'],
+        DB::table('salrs')->insert([
             'gl_account_fc' => $row['gl_account_fc'],
             'cost_center' => $row['cost_center'],
             'periode' => $this->periode,
@@ -48,6 +48,8 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
             'purchase_order' => $row['purchase_order'],
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
+            'created_at' => Carbon::now()->format('Y-m-d'),
+            'updated_at' => Carbon::now()->format('Y-m-d'),
         ]);
 
     }
@@ -65,7 +67,6 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
     public function rules(): array
     {
         return [
-            'group_account_fc' => 'required',
             'gl_account_fc' => 'required',
             'cost_center' => 'required',
             'value' => 'required',

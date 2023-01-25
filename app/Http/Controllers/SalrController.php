@@ -35,6 +35,23 @@ class SalrController extends Controller
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
 
+            // Periode
+            if ($request->format_data == '0'){
+                $cost_center->where('salrs.periode', 'ilike', '%'.$request->year.'%');
+            }elseif ($request->format_data == '1'){
+                $temp = explode('-', $request->moth);
+                $timemonth = $temp[1].'-'.$temp[0];
+
+                $cost_center->where('salrs.periode', 'ilike', '%'.$timemonth.'%');
+            }elseif ($request->format_data == '2'){
+                $start_temp = explode('-', $request->start_month);
+                $end_temp = explode('-', $request->end_month);
+                $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
+                $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
+
+                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+            }
+
             if ($request->cost_center != 'all'){
                 $cost_center->where('salrs.cost_center', $request->cost_center);
             }
@@ -62,7 +79,6 @@ class SalrController extends Controller
 
             $timestamps = explode('-', $request->tanggal);
 
-            $input['group_account_fc'] = $request->ga_account;
             $input['gl_account_fc'] = $request->gl_account;
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
@@ -108,7 +124,6 @@ class SalrController extends Controller
 
             $timestamps = explode('-', $request->tanggal);
 
-            $input['group_account_fc'] = $request->ga_account;
             $input['gl_account_fc'] = $request->gl_account;
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
@@ -205,7 +220,6 @@ class SalrController extends Controller
                 ]);
             }
         }catch (\Exception $exception){
-//            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
