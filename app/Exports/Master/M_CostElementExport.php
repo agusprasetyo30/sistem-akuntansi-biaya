@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 
-class M_GLAccountExport implements FromQuery, WithTitle, WithHeadings
+class M_CostElementExport implements FromQuery, WithTitle, WithHeadings
 {
     public function query()
     {
@@ -18,7 +18,7 @@ class M_GLAccountExport implements FromQuery, WithTitle, WithHeadings
 
     public function title(): string
     {
-        return 'Master General Ledger';
+        return 'Master Cost Element';
     }
 
     public function headings(): array

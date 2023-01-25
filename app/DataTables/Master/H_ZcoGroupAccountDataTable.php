@@ -30,10 +30,10 @@ class H_ZcoGroupAccountDataTable extends DataTable
         $datatable = datatables()
             ->eloquent($query);
 
-        $product = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode')
+        $product = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name')
             ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
             ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
-            ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'zco.periode');
+            ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name');
 
         if ($this->material != 'all') {
             $product->where('zco.product_code', $this->material);
@@ -73,99 +73,106 @@ class H_ZcoGroupAccountDataTable extends DataTable
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 return '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
-                $total_biaya = $zcoValues
-                    ->where('product_code', $item->product_code)
-                    ->where('plant_code', $item->plant_code)
-                    ->where('periode', $item->periode)
-                    ->where('group_account_code', $query->group_account_code)
-                    ->sum('total_amount');
+                // $total_biaya = $zcoValues
+                //     ->where('product_code', $item->product_code)
+                //     ->where('plant_code', $item->plant_code)
+                //     ->where('periode', $item->periode)
+                //     ->where('group_account_code', $query->group_account_code)
+                //     ->sum('total_amount');
 
-                $kuantum_produksi = $zcoValues
-                    ->where('product_code', $item->product_code)
-                    ->where('plant_code', $item->plant_code)
-                    ->sum('product_qty');
-
-                $biaya_perton = 0;
-
-                if ($total_biaya > 0 && $kuantum_produksi > 0) {
-                    $biaya_perton = $total_biaya / $kuantum_produksi;
-                }
-
-                return $biaya_perton ? round($biaya_perton, 2) : '-';
-
-                // $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
-                //     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
-                //     ->where([
-                //         'product_code' => $item->product_code,
-                //         'plant_code' => $item->plant_code,
-                //         'group_account_code' => $query->group_account_code,
-                //     ]);
-                // $kuantum_produksi = Zco::select(DB::raw('SUM(product_qty) as product_qty'))
-                //     ->where([
-                //         'product_code' => $item->product_code,
-                //         'plant_code' => $item->plant_code,
-                //     ]);
-
-                // if ($this->format == '0') {
-                //     $temp = explode('-', $this->moth);
-                //     $timemonth = $temp[1] . '-' . $temp[0];
-
-                //     $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
-                //     $kuantum_produksi->where('periode', 'ilike', '%' . $timemonth . '%');
-                // } else if ($this->format == '1') {
-                //     $start_temp = explode('-', $this->start_month);
-                //     $end_temp = explode('-', $this->end_month);
-                //     $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                //     $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
-
-                //     $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-                //     $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
-                // }
-
-                // $total_biaya = $total_biaya->first();
-                // $kuantum_produksi = $kuantum_produksi->first();
+                // $kuantum_produksi = $zcoValues
+                //     ->where('product_code', $item->product_code)
+                //     ->where('plant_code', $item->plant_code)
+                //     ->sum('product_qty');
 
                 // $biaya_perton = 0;
-                // if ($total_biaya->total_amount > 0 && $kuantum_produksi->product_qty > 0) {
-                //     $biaya_perton = $total_biaya->total_amount / $kuantum_produksi->product_qty;
+
+                // if ($total_biaya > 0 && $kuantum_produksi > 0) {
+                //     $biaya_perton = $total_biaya / $kuantum_produksi;
                 // }
 
                 // return $biaya_perton ? round($biaya_perton, 2) : '-';
+
+                $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
+                    ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
+                    ->where([
+                        'product_code' => $item->product_code,
+                        'plant_code' => $item->plant_code,
+                        'group_account_code' => $query->group_account_code,
+                    ]);
+
+                $kuantum_produksi = Zco::select(DB::raw('product_qty', 'periode'))
+                    ->where([
+                        'product_code' => $item->product_code,
+                        'plant_code' => $item->plant_code,
+                    ])->groupBy('product_qty', 'periode');
+
+                if ($this->format == '0') {
+                    $temp = explode('-', $this->moth);
+                    $timemonth = $temp[1] . '-' . $temp[0];
+
+                    $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
+                    $kuantum_produksi->where('periode', 'ilike', '%' . $timemonth . '%');
+                } else if ($this->format == '1') {
+                    $start_temp = explode('-', $this->start_month);
+                    $end_temp = explode('-', $this->end_month);
+                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+
+                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+                    $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                }
+
+                $total_biaya = $total_biaya->first();
+                $kuantum_produksi = $kuantum_produksi->get()->toArray();
+
+                $tot_kuanprod = 0;
+
+                for ($i = 0; $i < count($kuantum_produksi); $i++) {
+                    $tot_kuanprod = $tot_kuanprod + $kuantum_produksi[$i]['product_qty'];
+                }
+
+                $biaya_perton = 0;
+                if ($total_biaya->total_amount > 0 && $tot_kuanprod > 0) {
+                    $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
+                }
+
+                return $biaya_perton ? helpRupiah($biaya_perton) : '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
-                $total_biaya = $zcoValues
-                    ->where('product_code', $item->product_code)
-                    ->where('plant_code', $item->plant_code)
-                    ->where('periode', $item->periode)
-                    ->where('group_account_code', $query->group_account_code)
-                    ->sum('total_amount');
+                // $total_biaya = $zcoValues
+                //     ->where('product_code', $item->product_code)
+                //     ->where('plant_code', $item->plant_code)
+                //     ->where('periode', $item->periode)
+                //     ->where('group_account_code', $query->group_account_code)
+                //     ->sum('total_amount');
 
-                return $total_biaya ? round($total_biaya, 2) : '-';
+                // return $total_biaya ? round($total_biaya, 2) : '-';
 
-                // $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
-                //     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
-                //     ->where([
-                //         'product_code' => $item->product_code,
-                //         'plant_code' => $item->plant_code,
-                //         'group_account_code' => $query->group_account_code,
-                //     ]);
+                $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
+                    ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
+                    ->where([
+                        'product_code' => $item->product_code,
+                        'plant_code' => $item->plant_code,
+                        'group_account_code' => $query->group_account_code,
+                    ]);
 
-                // if ($this->format == '0') {
-                //     $temp = explode('-', $this->moth);
-                //     $timemonth = $temp[1] . '-' . $temp[0];
+                if ($this->format == '0') {
+                    $temp = explode('-', $this->moth);
+                    $timemonth = $temp[1] . '-' . $temp[0];
 
-                //     $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
-                // } else if ($this->format == '1') {
-                //     $start_temp = explode('-', $this->start_month);
-                //     $end_temp = explode('-', $this->end_month);
-                //     $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                //     $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
+                } else if ($this->format == '1') {
+                    $start_temp = explode('-', $this->start_month);
+                    $end_temp = explode('-', $this->end_month);
+                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
 
-                //     $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-                // }
+                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+                }
 
-                // $total_biaya = $total_biaya->first();
+                $total_biaya = $total_biaya->first();
 
-                // return $total_biaya->total_amount ? round($total_biaya->total_amount, 2) : '-';
+                return $total_biaya->total_amount ? helpRupiah($total_biaya->total_amount) : '-';
             });
         }
 

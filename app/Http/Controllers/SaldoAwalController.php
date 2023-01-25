@@ -156,7 +156,7 @@ class SaldoAwalController extends Controller
     {
         $validator = Validator::make($request->all(), [
             "file" => 'required',
-            "version" => 'required',
+            // "version" => 'required',
         ], validatorMsg());
 
         if ($validator->fails())
@@ -219,6 +219,13 @@ class SaldoAwalController extends Controller
 
     public function check(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            // "file" => 'required',
+            "version" => 'required',
+        ], validatorMsg());
+
+        if ($validator->fails())
+            return $this->makeValidMsg($validator);
         try {
             $check = Saldo_Awal::where('version_id', $request->version)
                 ->first();
