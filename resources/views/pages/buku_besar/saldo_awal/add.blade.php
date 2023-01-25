@@ -73,7 +73,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" id="submit" class="btn btn-primary">Simpan</button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                <button type="button" id="back" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
         </div>
     </div>
