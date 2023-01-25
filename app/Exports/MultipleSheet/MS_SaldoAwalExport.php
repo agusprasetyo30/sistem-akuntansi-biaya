@@ -2,6 +2,7 @@
 
 namespace App\Exports\MultipleSheet;
 
+use App\Exports\Master\M_GLAccountExport;
 use App\Exports\Master\M_MaterialExport;
 use App\Exports\Master\M_PlantExport;
 use App\Exports\Template\T_SaldoAwalExport;
@@ -15,16 +16,17 @@ class MS_SaldoAwalExport implements WithMultipleSheets
     {
         $this->version = $version;
     }
-    
+
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function sheets(): array
     {
         $sheets = [];
         $sheets[] = new T_SaldoAwalExport($this->version);
         $sheets[] = new M_PlantExport();
         $sheets[] = new M_MaterialExport();
+        $sheets[] = new M_GLAccountExport();
         return $sheets;
     }
 }
