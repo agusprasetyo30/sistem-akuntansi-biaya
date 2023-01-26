@@ -486,7 +486,6 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
-
     public function cost_element(Request $request)
     {
         $search = $request->search;
@@ -857,7 +856,6 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
-
     public function cost_element_dt(Request $request)
     {
         $search = $request->search;
@@ -923,7 +921,6 @@ class SelectController extends Controller
 
         return response()->json($response);
     }
-
 
     public function zco_plant_dt(Request $request)
     {
