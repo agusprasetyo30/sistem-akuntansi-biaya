@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Price Rencana Pengadaan</h5>
+                <h5 class="modal-title" id="largemodal1">Import Laba Rugi</h5>
             </div>
             <div class="modal-body">
                 <form method="POST" id="form_input_price_daan" enctype="multipart/form-data">
@@ -15,25 +15,13 @@
                                     <b>Ketentuan :</b>
                                     <ol>
                                         <li>Format harus sesuai template</li>
-                                        <li>Template akan tersedia setelah memilih versi</li>
                                         <li>Jika data value "kosong" maka data akan terisi '0'</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Format Mata Uang <span class="text-red">*</span></label>
-                                    <select name="mata_uang" id="mata_uang" class="form-control custom-select select2">
-                                        <option selected disabled value="">Pilih Format</option>
-                                        @foreach (mata_uang() as $key => $value)
-                                            options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Versi Asumsi</label>
-                                    <select name="version" id="version" class="form-control custom-select select2">
-                                        <option value="" disabled selected>Pilih Versi</option>
-                                    </select>
+                                    <label >Tahun <span class="text-red">*</span></label>
+                                    <input type="text" class="form-control" id="tanggal_import" name="tanggal_import" placeholder="Masukkan Tahun" autocomplete="off" required>
                                     <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>
                                 <div class="input-group file-browser mb-5">

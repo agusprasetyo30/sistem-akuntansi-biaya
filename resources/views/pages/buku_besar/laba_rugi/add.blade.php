@@ -3,48 +3,33 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Price Pengadaan</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Laba Rugi</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
-                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Versi</option>
+                                <label for="tanggal_awal">Tahun <span class="text-red">*</span></label>
+                                <input type="text" class="form-control" id="tanggal" placeholder="Masukkan Tahun" autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Kategori Produk</label>
+                                <select name="data_main_kategori_produk" id="data_main_kategori_produk" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Kategori Produk</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                <select name="detail_version" id="data_detal_version" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
-                                </select>
+                                <label class="form-label">Biaya Penjualan <span class="text-red">*</span></label>
+                                <input class="form-control" type="text" placeholder="Masukkan Biaya Penjualan" required name="biaya_penjualan" id="biaya_penjualan" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="main_material" id="data_main_material" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Material</option>
-                                </select>
+                                <label class="form-label">Biaya Administrasi Umum <span class="text-red">*</span></label>
+                                <input class="form-control" type="text" placeholder="Masukkan Biaya Administrasi Umum" required name="biaya_administrasi_umum" id="biaya_administrasi_umum" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Region</label>
-                                <select name="main_region" id="data_main_region" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Region</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Format Mata Uang <span class="text-red">*</span></label>
-                                <select name="data_main_mata_uang" id="data_main_mata_uang" class="form-control custom-select select2">
-                                    <option selected disabled value="">Pilih Format Mata Uang</option>
-                                    @foreach (mata_uang() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group" id="value_pick" style="display: none;">
-                                <label class="form-label">Value <span class="text-red">*</span></label>
-                                <input class="form-control" type="text" placeholder="0" required name="price_rendaan_value" id="price_rendaan_value" autocomplete="off">
+                                <label class="form-label">Biaya Bunga <span class="text-red">*</span></label>
+                                <input class="form-control" type="text" placeholder="Masukkan Biaya Bunga" required name="biaya_bunga" id="biaya_bunga" autocomplete="off">
                             </div>
                         </div>
                     </div>

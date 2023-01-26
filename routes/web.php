@@ -356,6 +356,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
             Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
             Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
+            Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
         });
 
         Route::group(['prefix' => 'pakai-jual'], function () {

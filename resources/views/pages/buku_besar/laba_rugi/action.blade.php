@@ -1,6 +1,6 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a class="btn bg-danger-transparent" onclick="delete_price_rendaan({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+<a class="btn bg-danger-transparent" onclick="delete_laba_rugi({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 
 <!-- Modal Detail-->
@@ -9,35 +9,31 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Price Rencana Pengadaan</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Laba Rugi</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Version </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                       placeholder="Nama version" value="{{$model->version}} - {{format_month($model->month_year, 'bi')}}" name="detail_version"
-                                       id="detail_version" autocomplete="off">
+                                <label >Tahun <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{format_year($model->periode)}}" id="detail_tanggal{{$model->id}}" placeholder="Masukkan Tahun" autocomplete="off" required>
                             </div>
                             <div class="form-group">
-                                <label>Material </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                       placeholder="Nama Kategori" value="{{$model->material_code}} - {{$model->material_name}}" name="detail_material_name"
-                                       id="detail_material_name" autocomplete="off">
+                                <label >Kategori Produk <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{$model->kategori_produk_name}} - {{$model->kategori_produk_desc}}" id="detail_data_main_kategori_produk{{$model->id}}" autocomplete="off" required>
                             </div>
                             <div class="form-group">
-                                <label>Region </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                       placeholder="Total Stock" value="{{$model->region_desc}}" name="detail_region_name"
-                                       id="detail_region_name" autocomplete="off">
+                                <label >Biaya Penjualan <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{rupiah($model->value_bp)}}" id="detail_biaya_penjualan{{$model->id}}" autocomplete="off" required>
                             </div>
                             <div class="form-group">
-                                <label>Value </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                       placeholder="Nilai Satuan" value="{{rupiah($model->price_rendaan_value)}}" name="detail_price_rendaan_value"
-                                       id="detail_price_rendaan_value" autocomplete="off">
+                                <label >Biaya Administrasi Umum <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{rupiah($model->value_bau)}}" id="detail_biaya_administrasi_umum{{$model->id}}" autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
+                                <label >Biaya Bunga <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{rupiah($model->value_bb)}}" id="detail_biaya_bunga{{$model->id}}" autocomplete="off" required>
                             </div>
                         </div>
                     </div>
@@ -57,39 +53,33 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Price Rencana Pengadaan</h5>
+                <h5 class="modal-title" id="largemodal1">Edit Laba Rugi</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
-                                <select name="edit_data_main_version{{$model->id}}" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
+                                <label for="tanggal_awal">Tahun <span class="text-red">*</span></label>
+                                <input value="{{format_year($model->periode)}}" type="text" class="form-control" id="edit_tanggal{{$model->id}}" placeholder="Masukkan Tahun" autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Kategori Produk</label>
+                                <select name="edit_data_main_kategori_produk{{$model->id}}" id="edit_data_main_kategori_produk{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->kategori_produk_id}}" selected>{{$model->kategori_produk_name}} - {{$model->kategori_produk_desc}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                <select name="edit_data_detal_version{{$model->id}}" id="edit_data_detal_version{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->asumsi_umum_id}}" selected>{{format_month($model->month_year, 'se')}}</option>
-                                </select>
+                                <label class="form-label">Biaya Penjualan <span class="text-red">*</span></label>
+                                <input value="{{rupiah($model->value_bp)}}" class="form-control" type="text" placeholder="Masukkan Biaya Penjualan" required name="edit_biaya_penjualan{{$model->id}}" id="edit_biaya_penjualan{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="edit_main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} - {{$model->material_name}}</option>
-                                </select>
+                                <label class="form-label">Biaya Administrasi Umum <span class="text-red">*</span></label>
+                                <input value="{{rupiah($model->value_bau)}}" class="form-control" type="text" placeholder="Masukkan Biaya Administrasi Umum" required name="edit_biaya_administrasi_umum{{$model->id}}" id="edit_biaya_administrasi_umum{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Region</label>
-                                <select name="edit_data_main_region{{$model->id}}" id="edit_data_main_region{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->region_name}}" selected>{{$model->region_desc}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Value </label>
-                                <input class="form-control" type="text" value="{{rupiah($model->price_rendaan_value)}}" placeholder="0" required name="edit_price_rendaan_value{{$model->id}}" id="edit_price_rendaan_value{{$model->id}}" min="0" step="0.01" title="consrate" pattern="^\d+(?:\.\d{1,2})?$" autocomplete="off">
+                                <label class="form-label">Biaya Bunga <span class="text-red">*</span></label>
+                                <input value="{{rupiah($model->value_bb)}}" class="form-control" type="text" placeholder="Masukkan Biaya Bunga" required name="edit_biaya_bunga{{$model->id}}" id="edit_biaya_bunga{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -97,7 +87,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-list btn-animation">
-                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_price_rendaan({{$model->id}})" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_laba_rugi({{$model->id}})" class="btn btn-primary">Simpan</button>
                     <button type="button" id="back_edit{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
                 </div>
             </div>
@@ -107,84 +97,24 @@
 <!--/div-->
 
 <script>
-    $('#edit_data_main_version'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Versi',
-        width: '100%',
-        allowClear: false,
-        ajax: {
-            url: "{{ route('version_select') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term
-                };
-            },
-            processResults: function(response) {
-                return {
-                    results: response
-                };
-            }
-        }
-    }).on('change', function () {
-        var data_version = $('#edit_data_main_version'+{{$model->id}}).val();
-        $('#edit_data_detal_version'+{{$model->id}}).append('<option selected disabled value="">Pilih Bulan</option>').select2({
-            dropdownParent: $('#modal_edit'+{{$model->id}}),
-            placeholder: 'Pilih Bulan',
-            width: '100%',
-            allowClear: false,
-            ajax: {
-                url: "{{ route('version_detail_select') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term,
-                        version:data_version
-
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                }
-            }
-        });
-    })
-
-    $('#edit_data_detal_version'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Bulan',
-        width: '100%',
-        allowClear: false,
-        ajax: {
-            url: "{{ route('version_detail_select') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term,
-                    version:$('#edit_data_main_version'+{{$model->id}}).val()
-
-                };
-            },
-            processResults: function(response) {
-                return {
-                    results: response
-                };
-            }
-        }
+    $('#edit_tanggal'+{{$model->id}}).bootstrapdatepicker({
+        dropdownParent:$('#modal_edit'+{{$model->id}}),
+        format: "yyyy",
+        viewMode: "years",
+        minViewMode: "years",
+        autoclose:true,
+        showOnFocus: false,
+    }).on('click', function () {
+        $('#edit_tanggal'+{{$model->id}}).bootstrapdatepicker("show");
     });
 
-    $('#edit_data_main_material'+{{$model->id}}).select2({
+    $('#edit_data_main_kategori_produk'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Material',
+        placeholder: 'Pilih Kategori Produk',
         width: '100%',
         allowClear: false,
         ajax: {
-            url: "{{ route('material_select') }}",
+            url: "{{ route('kategori_produk_select') }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {
@@ -200,29 +130,17 @@
         }
     })
 
-    $('#edit_data_main_region'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih region',
-        width: '100%',
-        allowClear: false,
-        ajax: {
-            url: "{{ route('region_select') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term
-                };
-            },
-            processResults: function(response) {
-                return {
-                    results: response
-                };
-            }
-        }
-    })
+    $('#edit_biaya_penjualan'+{{$model->id}}).on('keyup', function(){
+        let rupiah = formatRupiah($(this).val(), "Rp ")
+        $(this).val(rupiah)
+    });
 
-    $('#edit_price_rendaan_value'+{{$model->id}}).on('keyup', function(){
+    $('#edit_biaya_administrasi_umum'+{{$model->id}}).on('keyup', function(){
+        let rupiah = formatRupiah($(this).val(), "Rp ")
+        $(this).val(rupiah)
+    });
+
+    $('#edit_biaya_bunga'+{{$model->id}}).on('keyup', function(){
         let rupiah = formatRupiah($(this).val(), "Rp ")
         $(this).val(rupiah)
     });

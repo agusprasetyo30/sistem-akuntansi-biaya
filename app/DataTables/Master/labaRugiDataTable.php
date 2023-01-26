@@ -67,7 +67,7 @@ class labaRugiDataTable extends DataTable
             ->orderColumn('filter_biaya_bunga', function ($query, $order) {
                 $query->orderBy('laba_rugi.value_bb', $order);
             })
-//            ->addColumn('action', 'pages.buku_besar.laba_rugi.action')
+            ->addColumn('action', 'pages.buku_besar.laba_rugi.action')
             ->escapeColumns([]);
     }
 

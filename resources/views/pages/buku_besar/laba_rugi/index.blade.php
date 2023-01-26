@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Price Rencana Pengadaan</h4>
+        <h4 class="page-title mb-0 text-primary">Laba Rugi</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -99,83 +99,43 @@
                 $('#dt_price_rendaan').DataTable().ajax.reload();
             })
 
-            $('#data_main_version').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Versi',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('version_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
-            }).on('change', function () {
-                var data_version = $('#data_main_version').val();
-                $('#data_detal_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
-                    dropdownParent: $('#modal_add'),
-                    placeholder: 'Pilih Bulan',
-                    width: '100%',
-                    allowClear: false,
-                    ajax: {
-                        url: "{{ route('version_detail_select') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                version:data_version
+            $('#tanggal').bootstrapdatepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#tanggal').bootstrapdatepicker("show");
+            });
 
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        }
-                    }
-                });
-            })
-
-            $('#version').select2({
-                dropdownParent: $('#modal_import'),
-                placeholder: 'Pilih Versi',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('version_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
+            $('#tanggal_import').bootstrapdatepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#tanggal_import').bootstrapdatepicker("show");
             }).on('change', function () {
                 $("#template").css("display", "block");
-            })
+            });
 
-            $('#mata_uang').select2({
-                dropdownParent: $('#modal_import'),
-                placeholder: 'Pilih Format Mata Uang',
-                width: '100%',
-                allowClear: false,
-            })
+
+            $('#biaya_penjualan').on('keyup', function(){
+                let rupiah = formatRupiah($(this).val(), "Rp ")
+                $(this).val(rupiah)
+            });
+
+            $('#biaya_administrasi_umum').on('keyup', function(){
+                let rupiah = formatRupiah($(this).val(), "Rp ")
+                $(this).val(rupiah)
+            });
+
+            $('#biaya_bunga').on('keyup', function(){
+                let rupiah = formatRupiah($(this).val(), "Rp ")
+                $(this).val(rupiah)
+            });
 
             $("#template").on('click', function () {
                 $.ajax({
@@ -186,10 +146,7 @@
                     xhrFields:{
                         responseType: 'blob'
                     },
-                    url: '{{route('export_price_rendaan')}}',
-                    data: {
-                        temp:$('#version').val()
-                    },
+                    url: '{{route('export_laba_rugi')}}',
                     success: function(result, status, xhr) {
 
                         var disposition = xhr.getResponseHeader('content-disposition');
@@ -212,13 +169,13 @@
                 })
             })
 
-            $('#data_main_material').select2({
+            $('#data_main_kategori_produk').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Material',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('material_select') }}",
+                    url: "{{ route('kategori_produk_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -231,50 +188,6 @@
                             results: response
                         };
                     }
-                }
-            })
-
-            $('#data_main_region').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih region',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('region_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
-            })
-
-            $('#data_main_mata_uang').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Format Mata Uang',
-                width: '100%',
-                allowClear: false,
-            }).on('change', function () {
-                $('#value_pick').css('display', 'block')
-                $('#price_rendaan_value').val('').attr("placeholder", "Masukkan Nilai");
-                console.log($('#data_main_mata_uang').val())
-                if ($('#data_main_mata_uang').val() === 'IDR'){
-                    $('#price_rendaan_value').on('keyup', function(){
-                        let rupiah = formatRupiah($(this).val(), "Rp ")
-                        $(this).val(rupiah)
-                    });
-                }else if ($('#data_main_mata_uang').val() === 'USD'){
-                    $('#price_rendaan_value').on('keyup', function(){
-                        let dollar = formatDollar($(this).val(), "$ ")
-                        $(this).val(dollar)
-                    });
                 }
             })
 
@@ -288,10 +201,10 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('check_price_rendaan')}}',
+                        url: '{{route('check_laba_rugi')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            version:$('#version').val()
+                            periode:$('#tanggal_import').val()
                         },
                         success:function (response) {
                             if (response.code === 200){
@@ -365,7 +278,7 @@
                     },
                     processData: false,
                     contentType: false,
-                    url: '{{route('import_price_rendaan')}}',
+                    url: '{{route('import_laba_rugi')}}',
                     data: file,
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -381,10 +294,10 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
-                                    update_dt_horizontal()
+                                    // update_dt_horizontal()
                                     // $("#table_main").empty();
                                     // get_data()
-                                    $('#dt_price_rendaan').DataTable().ajax.reload();
+                                    $('#dt_laba_rugi').DataTable().ajax.reload();
                                 }
                             })
                     },
@@ -559,44 +472,23 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    {
-                        extend: 'collection',
-                        className: 'mb-5',
-                        text:'Mata Uang',
-                        buttons:[
-                            {
-                                text:'Rupiah',
-                                action: function () {
-                                    $('#dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();
-                                }
-                            },
-                            {
-                                text:'Dollar',
-                                action: function () {
-                                    $('#dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();
-                                }
-                            }
-                        ]
-
-                    },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
-                        columns:[0,1,2,3,4]
-                    }, title: 'Price Rencana Pengadaan'  }
+                    }, title: 'Laba Rugi'  }
                 ],
                 ajax: {
-                    url : '{{route("price_rendaan")}}',
+                    url : '{{route("laba_rugi")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    { width: "10%", data: 'periode', name: 'filter_periode', orderable:true},
-                    { width: "30%", data: 'kategori_produk', name: 'filter_kategori_produk', orderable:true},
-                    { width: "20%", data: 'biaya_penjualan', name: 'filter_biaya_penjualan', orderable:true},
-                    { width: "20%", data: 'biaya_adm_umum', name: 'filter_biaya_adm_umum', orderable:true},
-                    { width: "20%", data: 'biaya_bunga', name: 'filter_biaya_bunga', orderable:true, searchable: false},
-                    // { width: "20%", data: 'action', name: 'action', orderable:false, searchable: false},
+                    { data: 'periode', name: 'filter_periode', orderable:true},
+                    { data: 'kategori_produk', name: 'filter_kategori_produk', orderable:true},
+                    { data: 'biaya_penjualan', name: 'filter_biaya_penjualan', orderable:true},
+                    { data: 'biaya_adm_umum', name: 'filter_biaya_adm_umum', orderable:true},
+                    { data: 'biaya_bunga', name: 'filter_biaya_bunga', orderable:true, searchable: false},
+                    { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3,4,5]}
+                    {className: 'text-center', targets: [0,1,2,3,4]}
                 ]
 
             }).columns.adjust().draw();
@@ -687,15 +579,14 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_price_rendaan')}}',
+                url: '{{route('insert_laba_rugi')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    version_asumsi:$('#data_main_version').val(),
-                    bulan:$('#data_detal_version').val(),
-                    material_id: $('#data_main_material').val(),
-                    region_id: $('#data_main_region').val(),
-                    mata_uang: $('#data_main_mata_uang').val(),
-                    price_rendaan_value: $('#price_rendaan_value').val(),
+                    tanggal:$('#tanggal').val(),
+                    kategori_produk:$('#data_main_kategori_produk').val(),
+                    biaya_penjualan: $('#biaya_penjualan').val(),
+                    biaya_administrasi_umum: $('#biaya_administrasi_umum').val(),
+                    biaya_bunga: $('#biaya_bunga').val(),
                 },
                 success:function (response) {
                     Swal.fire({
@@ -709,17 +600,12 @@
                         if (result.value) {
                             $('#modal_add').modal('hide');
                             $("#modal_add input").val("")
-                            $('#data_main_plant').val('').trigger("change");
-                            $('#data_main_version').val('').trigger("change");
-                            $('#data_detal_version').val('').trigger("change");
-                            $('#data_main_produk').val('').trigger("change");
-                            $('#data_main_material').val('').trigger("change");
-                            $('#is_active').val('').trigger("change");
+                            $('#data_main_kategori_produk').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            update_dt_horizontal()
+                            // update_dt_horizontal()
                             // $("#table_main").empty();
                             // get_data()
-                            $('#dt_price_rendaan').DataTable().ajax.reload();
+                            $('#dt_laba_rugi').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -731,7 +617,7 @@
             })
         })
 
-        function update_price_rendaan(id) {
+        function update_laba_rugi(id) {
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back_edit"+id).attr("disabled", true);
             $.ajax({
@@ -739,15 +625,15 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_price_rendaan')}}',
+                url: '{{route('update_laba_rugi')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    version_asumsi:$('#edit_data_main_version'+id).val(),
-                    bulan:$('#edit_data_detal_version'+id).val(),
-                    material_id: $('#edit_data_main_material'+id).val(),
-                    region_id: $('#edit_data_main_region'+id).val(),
-                    price_rendaan_value: $('#edit_price_rendaan_value'+id).val(),
+                    tanggal:$('#edit_tanggal'+id).val(),
+                    kategori_produk:$('#edit_data_main_kategori_produk'+id).val(),
+                    biaya_penjualan: $('#edit_biaya_penjualan'+id).val(),
+                    biaya_administrasi_umum: $('#edit_biaya_administrasi_umum'+id).val(),
+                    biaya_bunga: $('#edit_biaya_bunga'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -763,11 +649,11 @@
                                 $('#modal_edit'+id).modal('hide')
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
-                                $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
-                                update_dt_horizontal()
+                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                // update_dt_horizontal()
                                 // $("#table_main").empty();
                                 // get_data()
-                                $('#dt_price_rendaan').DataTable().ajax.reload();
+                                $('#dt_laba_rugi').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -780,7 +666,7 @@
             })
         }
 
-        function delete_price_rendaan(id) {
+        function delete_laba_rugi(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -798,7 +684,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_price_rendaan')}}',
+                        url: '{{route('delete_laba_rugi')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -817,7 +703,7 @@
                                         update_dt_horizontal()
                                         // $("#table_main").empty();
                                         // get_data()
-                                        $('#dt_price_rendaan').DataTable().ajax.reload();
+                                        $('#dt_laba_rugi').DataTable().ajax.reload();
                                     }
                                 })
                         },
