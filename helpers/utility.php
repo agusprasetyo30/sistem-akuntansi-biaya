@@ -439,6 +439,21 @@ if (!function_exists('format_month')) {
     }
 }
 
+if (!function_exists('format_year')) {
+    function format_year($date, $method = 'def')
+    {
+        switch ($method) {
+            case 'def':
+                $data = Carbon::parse($date)->format('Y');
+                return $data;
+                break;
+            default:
+                return 'Undefined';
+                break;
+        }
+    }
+}
+
 
 if (!function_exists('helpRupiah')) {
     function helpRupiah($angka)
