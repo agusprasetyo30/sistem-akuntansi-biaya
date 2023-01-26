@@ -31,6 +31,7 @@ class MaterialController extends Controller
                 "material_desc" => 'required',
                 "group_account_code" => 'required',
                 "kategori_material_id" => 'required',
+                "kategori_produk_id" => 'required',
                 "material_uom" => 'required',
                 "is_dummy" => 'required',
                 "is_active" => 'required',
@@ -47,6 +48,7 @@ class MaterialController extends Controller
             $input['material_desc'] = $request->material_desc;
             $input['group_account_code'] = $request->group_account_code;
             $input['kategori_material_id'] = $request->kategori_material_id;
+            $input['kategori_produk_id'] = $request->kategori_produk_id;
             $input['material_uom'] = $request->material_uom;
             $input['is_dummy'] = $request->is_dummy;
             $input['is_active'] = $request->is_active;
@@ -84,6 +86,7 @@ class MaterialController extends Controller
             $required['material_desc'] = 'required';
             $required['group_account_code'] = 'required';
             $required['kategori_material_id'] = 'required';
+            $required['kategori_produk_id'] = 'required';
             $required['material_uom'] = 'required';
             $required['is_dummy'] = 'required';
             $required['is_active'] = 'required';
@@ -104,6 +107,7 @@ class MaterialController extends Controller
             $input['material_desc'] = $request->material_desc;
             $input['group_account_code'] = $request->group_account_code;
             $input['kategori_material_id'] = $request->kategori_material_id;
+            $input['kategori_produk_id'] = $request->kategori_produk_id;
             $input['material_uom'] = $request->material_uom;
             $input['is_dummy'] = $request->is_dummy;
             $input['is_active'] = $request->is_active;

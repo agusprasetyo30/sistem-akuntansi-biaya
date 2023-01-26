@@ -58,9 +58,9 @@
         $(document).ready(function () {
             get_data()
 
-        $('#code_cost_center').keyup(function(){
-            this.value = this.value.toUpperCase();
-        });
+            $('#code_cost_center').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
         })
 
 

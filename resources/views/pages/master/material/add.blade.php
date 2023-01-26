@@ -37,6 +37,12 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label class="form-label">Kategori Produk</label>
+                                <select name="kategori_produk_id" id="kategori_produk_id" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Kategori Produk</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>Uom </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="UOM" name="material_uom" id="material_uom" autocomplete="off">
                             </div>
