@@ -893,9 +893,13 @@
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
+                        pageLength: -1,
                         fixedHeader: {
                             header: true,
                             headerOffset: $('#main_header').height()
+                        },
+                        fixedColumns:   {
+                            left: 2
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
@@ -980,9 +984,13 @@
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
+                        pageLength: -1,
                         fixedHeader: {
                             header: true,
                             headerOffset: $('#main_header').height()
+                        },
+                        fixedColumns:   {
+                            left: 2
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
