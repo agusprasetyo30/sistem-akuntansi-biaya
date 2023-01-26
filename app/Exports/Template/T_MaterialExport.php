@@ -12,7 +12,7 @@ class T_MaterialExport implements WithHeadings, WithTitle
      */
     public function headings(): array
     {
-        return ["material_code", "material_name", "material_desc", "group_account_code", "kategori_material_id", "material_uom", "is_active", "is_dummy"];
+        return ["material_code", "material_name", "material_desc", "group_account_code", "kategori_material_id", "kategori_produk_id", "material_uom", "is_active", "is_dummy"];
     }
 
     public function title(): string

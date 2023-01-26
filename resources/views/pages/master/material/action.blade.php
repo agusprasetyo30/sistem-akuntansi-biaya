@@ -49,6 +49,12 @@
                                     name="detail_kategori_material_id" id="detail_kategori_material_id" autocomplete="off">
                             </div>
                             <div class="form-group">
+                                <label>Kategori Produk</label>
+                                <input disabled type="text" class="form-control form-control-sm"
+                                       placeholder="Kategori Produk" value="{{$model->kategori_produk_name}}"
+                                       name="detail_kategori_material_id" id="detail_kategori_material_id" autocomplete="off">
+                            </div>
+                            <div class="form-group">
                                 <label>UOM </label>
                                 <input disabled type="text" class="form-control form-control-sm"
                                     placeholder="UOM" value="{{$model->material_uom}}"
@@ -134,6 +140,12 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label class="form-label">Kategori Produk</label>
+                                <select name="edit_kategori_produk_id" id="edit_kategori_produk_id{{$model->material_code}}" class="form-control custom-select select2">
+                                    <option value="{{$model->kategori_produk_id}}" selected>{{$model->kategori_produk_name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label>UOM </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Kategori"
                                     value="{{$model->material_uom}}" name="edit_material_uom"
@@ -198,6 +210,28 @@
             allowClear: false,
             ajax: {
                 url: "{{ route('kategori_material_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
+
+        $('#edit_kategori_produk_id'+'{{$model->material_code}}').select2({
+            dropdownParent: $('#modal_edit'+'{{$model->material_code}}'),
+            placeholder: 'Pilih Kategori Produk',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('kategori_produk_select') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

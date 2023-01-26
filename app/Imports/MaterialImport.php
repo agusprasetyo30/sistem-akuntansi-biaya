@@ -32,6 +32,7 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
             'material_desc' => $row['material_desc'],
             'group_account_code' => $row['group_account_code'],
             'kategori_material_id' => $row['kategori_material_id'],
+            'kategori_produk_id' => $row['kategori_produk_id'],
             'material_uom' => $row['material_uom'],
             'company_code' => auth()->user()->company_code,
             'is_dummy' => $row['is_dummy'],
@@ -44,12 +45,12 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
     {
         return 50;
     }
-    
+
     public function chunkSize(): int
     {
         return 50;
     }
-    
+
     public function rules(): array
     {
         return [

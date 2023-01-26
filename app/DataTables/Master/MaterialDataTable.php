@@ -13,7 +13,7 @@ use Yajra\DataTables\Services\DataTable;
 class MaterialDataTable extends DataTable
 {
     /**
-     * Build DataTable class. 
+     * Build DataTable class.
      *
      * @param mixed $query Results from query() method.
      * @return \Yajra\DataTables\DataTableAbstract
@@ -23,8 +23,9 @@ class MaterialDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('material')
-            ->select('material.*', 'kategori_material.kategori_material_name', 'group_account.group_account_code', 'group_account.group_account_desc')
+            ->select('material.*', 'kategori_produk.id', 'kategori_produk.kategori_produk_name', 'kategori_material.id', 'kategori_material.kategori_material_name', 'group_account.group_account_code', 'group_account.group_account_desc')
             ->leftJoin('kategori_material', 'kategori_material.id', '=', 'material.kategori_material_id')
+            ->leftJoin('kategori_produk', 'kategori_produk.id', '=', 'material.kategori_produk_id')
             ->leftJoin('group_account', 'group_account.group_account_code', '=', 'material.group_account_code')
             ->where('material.company_code', $cc)
             ->whereNull('material.deleted_at');
@@ -56,6 +57,9 @@ class MaterialDataTable extends DataTable
             ->orderColumn('filter_kategori_material', function ($query, $order) {
                 $query->orderBy('kategori_material.kategori_material_name', $order);
             })
+            ->orderColumn('filter_kategori_produk', function ($query, $order) {
+                $query->orderBy('kategori_material.kategori_produk_name', $order);
+            })
             ->orderColumn('filter_group_account', function ($query, $order) {
                 $query->orderBy('group_account.group_account_code', $order);
             })
@@ -81,6 +85,12 @@ class MaterialDataTable extends DataTable
                 if ($keyword != 'all') {
                     $query->where('kategori_material.kategori_material_name', 'ilike', '%' . $keyword . '%')
                         ->orWhere('kategori_material.id', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_kategori_produk', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('kategori_produk.kategori_produk_name', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('kategori_produk.kategori_produk_desc', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->filterColumn('filter_group_account', function ($query, $keyword) {

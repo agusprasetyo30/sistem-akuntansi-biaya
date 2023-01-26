@@ -80,6 +80,32 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function kategori_produk(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $kategori_produk = KategoriProduk::limit(10)
+                ->where('is_active', 't')
+                ->get();
+        } else {
+            $kategori_produk = KategoriProduk::where('kategori_produk_name', 'ilike', '%' . $search . '%')
+                ->orWhere('kategori_produk_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($kategori_produk as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->kategori_produk_name. ' - '. $items->kategori_produk_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function group_account(Request $request)
     {
         $search = $request->search;
@@ -671,6 +697,38 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->kategori_material_name,
                 "text" => $items->kategori_material_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function kategori_produk_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $kat_produk = KategoriProduk::limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $kat_produk = KategoriProduk::where('kategori_produk_name', 'ilike', '%' . $search . '%')
+                ->orWhere('kategori_produk_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($kat_produk as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->kategori_produk_name.' - '.$items->kategori_produk_desc
             );
         }
 

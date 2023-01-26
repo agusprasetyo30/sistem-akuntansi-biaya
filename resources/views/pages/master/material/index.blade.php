@@ -24,19 +24,16 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            {{-- <div class="card-header">
-                <div class="card-title">Basic DataTable</div>
-            </div> --}}
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        
+
                     </div>
                 </div>
             </div>
             @include('pages.master.material.add')
             @include('pages.master.material.import')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -67,6 +64,28 @@
                 allowClear: false,
                 ajax: {
                     url: "{{ route('kategori_material_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#kategori_produk_id').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Kategori Produk',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('kategori_produk_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -119,6 +138,7 @@
                     <th data-type='text' data-name='deskripsi' class="text-center">DESKRIPSI</th>
                     <th data-type='select' data-name='group_account' class="text-center">GROUP ACCOUNT</th>
                     <th data-type='select' data-name='kategori_material' class="text-center">KATEGORI</th>
+                    <th data-type='select' data-name='kategori_produk' class="text-center">KATEGORI PRODUK</th>
                     <th data-type='text' data-name='uom' class="text-center">UOM</th>
                     <th data-type='select' data-name='status' class="text-center">STATUS</th>
                     <th data-type='select' data-name='dummy' class="text-center">DUMMY</th>
@@ -204,8 +224,10 @@
 
                                 } else if(iName == 'kategori_material'){
                                     input.className = "kategori_material_search form-control custom-select select2";
-
+                                }else if(iName == 'kategori_produk'){
+                                    input.className = "kategori_produk_search form-control custom-select select2";
                                 }
+
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
@@ -269,6 +291,26 @@
                             }
                         })
 
+                        $('.kategori_produk_search').select2({
+                            placeholder: 'Pilih Kategori Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('kategori_produk_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
                     });
                 },
                 buttons: [
@@ -288,6 +330,7 @@
                     { data: 'material_desc', name: 'material_desc', orderable:true},
                     { data: 'group_account_desc', name: 'filter_group_account', orderable:true},
                     { data: 'kategori_material_name', name: 'filter_kategori_material', orderable:true},
+                    { data: 'kategori_produk_name', name: 'filter_kategori_produk', orderable:true},
                     { data: 'material_uom', name: 'material_uom', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'dummy', name: 'filter_dummy', orderable:false},
@@ -315,6 +358,7 @@
                     material_desc: $('#material_desc').val(),
                     group_account_code: $('#group_account_code').val(),
                     kategori_material_id: $('#kategori_material_id').val(),
+                    kategori_produk_id: $('#kategori_produk_id').val(),
                     material_uom: $('#material_uom').val(),
                     is_active: $('#is_active').val(),
                     is_dummy: $('#is_dummy').val(),
@@ -399,6 +443,7 @@
                     material_desc: $('#edit_material_desc'+id).val(),
                     group_account_code: $('#edit_group_account_code'+id).val(),
                     kategori_material_id: $('#edit_kategori_material_id'+id).val(),
+                    kategori_produk_id: $('#edit_kategori_produk_id'+id).val(),
                     material_uom: $('#edit_material_uom'+id).val(),
                     is_active: $('#edit_is_active'+id).val(),
                     is_dummy: $('#edit_is_dummy'+id).val(),

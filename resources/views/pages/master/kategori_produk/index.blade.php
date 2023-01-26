@@ -78,6 +78,10 @@
                 .addClass('filters')
                 .appendTo('#dt_kategori_produk thead');
 
+            $('#kategori_produk_name').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
+
             $('#dt_kategori_produk').DataTable().clear().destroy();
             $("#dt_kategori_produk").DataTable({
                 scrollX: true,
@@ -159,19 +163,18 @@
                     }
                 ],
                 ajax: {
-                    url : '{{route("kategori_material")}}',
+                    url : '{{route("kategori_produk")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
-                    { data: 'kategori_material_name', name: 'kategori_material_name', orderable:true},
-                    { data: 'kategori_material_desc', name: 'kategori_material_desc', orderable:true},
+                    { data: 'kategori_produk_name', name: 'kategori_produk_name', orderable:true},
+                    { data: 'kategori_produk_desc', name: 'kategori_produk_desc', orderable:true},
                     { data: 'status', name: 'filter_status', orderable:false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,2,3]}
+                    {className: 'text-center', targets: [0,1,2,3]}
                 ],
 
             })
@@ -183,11 +186,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_kategori_material')}}',
+                url: '{{route('insert_kategori_produk')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    nama: $('#kategori_material_name').val(),
-                    deskripsi: $('#kategori_material_desc').val(),
+                    nama: $('#kategori_produk_name').val(),
+                    deskripsi: $('#kategori_produk_desc').val(),
                     is_active: $('#is_active').val(),
                 },
                 success: function (response) {
@@ -204,7 +207,7 @@
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
                             // table()
-                            $('#dt_kategori_material').DataTable().ajax.reload();
+                            $('#dt_kategori_produk').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -226,7 +229,7 @@
                 },
                 processData: false,
                 contentType: false,
-                url: '{{route('import_kategori_material')}}',
+                url: '{{route('import_kategori_produk')}}',
                 data: file,
                 success:function (response) {
                     $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -244,7 +247,7 @@
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                             // table()
-                            $('#dt_kategori_material').DataTable().ajax.reload();
+                            $('#dt_kategori_produk').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -263,12 +266,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_kategori_material')}}',
+                url: '{{route('update_kategori_produk')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    nama: $('#edit_kategori_material_name'+id).val(),
-                    deskripsi: $('#edit_kategori_material_desc'+id).val(),
+                    nama: $('#edit_kategori_produk_name'+id).val(),
+                    deskripsi: $('#edit_kategori_produk_desc'+id).val(),
                     is_active: $('#edit_is_active'+id).val(),
                 },
                 success: function (response) {
@@ -286,7 +289,7 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             // table()
-                            $('#dt_kategori_material').DataTable().ajax.reload();
+                            $('#dt_kategori_produk').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -314,7 +317,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_kategori_material')}}',
+                        url: '{{route('delete_kategori_produk')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -331,7 +334,7 @@
                             .then((result) => {
                                 if (result.value) {
                                     // table()
-                                    $('#dt_kategori_material').DataTable().ajax.reload();
+                                    $('#dt_kategori_produk').DataTable().ajax.reload();
                                 }
                             })
                         },

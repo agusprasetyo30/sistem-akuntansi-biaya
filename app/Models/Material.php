@@ -20,6 +20,7 @@ class Material extends Model
         'material_name',
         'material_desc',
         'kategori_material_id',
+        'kategori_produk_id',
         'group_account_code',
         'material_uom',
         'is_active',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoriMaterialController;
+use App\Http\Controllers\KategoriProdukController;
 use App\Http\Controllers\MaterialController;
 use App\Http\Controllers\ModalController;
 use App\Http\Controllers\PlantController;
@@ -120,6 +121,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [KategoriMaterialController::class, 'delete'])->name('delete_kategori_material');
             Route::post('import', [KategoriMaterialController::class, 'import'])->name('import_kategori_material');
             Route::get('export', [KategoriMaterialController::class, 'export'])->name('export_kategori_material');
+        });
+
+        Route::group(['prefix' => 'kategori-produk'], function () {
+            Route::get('/', [KategoriProdukController::class, 'index'])->name('kategori_produk');
+            Route::post('insert', [KategoriProdukController::class, 'create'])->name('insert_kategori_produk');
+            Route::post('update', [KategoriProdukController::class, 'update'])->name('update_kategori_produk');
+            Route::post('delete', [KategoriProdukController::class, 'delete'])->name('delete_kategori_produk');
+            Route::post('import', [KategoriProdukController::class, 'import'])->name('import_kategori_produk');
+            Route::get('export', [KategoriProdukController::class, 'export'])->name('export_kategori_produk');
         });
 
         Route::group(['prefix' => 'regions'], function () {
@@ -250,6 +260,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/material_dt', [SelectController::class, 'material_dt'])->name('material_dt');
             Route::get('/plant_dt', [SelectController::class, 'plant_dt'])->name('plant_dt');
             Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
+            Route::get('/kategori_produk_dt', [SelectController::class, 'kategori_produk_dt'])->name('kategori_produk_dt');
             Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
             Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
             Route::get('/gl_account_fc_dt', [SelectController::class, 'gl_account_fc_dt'])->name('gl_account_fc_dt');

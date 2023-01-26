@@ -9,7 +9,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Kategori Material</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Kategori Produk</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -21,14 +21,14 @@
                             <div class="form-group">
                                 <label>Nama </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->kategori_material_name}}" name="detail_kategori_material_name"
-                                    id="detail_kategori_material_name" autocomplete="off">
+                                    placeholder="Nama Kategori" value="{{$model->kategori_produk_name}}" name="detail_kategori_produk_name"
+                                    id="detail_kategori_produk_name" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Deskripsi </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Deskripsi Kategori Material" value="{{$model->kategori_material_desc}}"
-                                    name="detail_kategori_material_desc" id="detail_kategori_material_desc" autocomplete="off">
+                                    placeholder="Deskripsi Kategori Material" value="{{$model->kategori_produk_desc}}"
+                                    name="detail_kategori_produk_desc" id="detail_kategori_produk_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>
@@ -59,10 +59,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Kategori Material</h5>
-                {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button> --}}
+                <h5 class="modal-title" id="largemodal1">Edit Kategori Produk</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -71,14 +68,14 @@
                             <div class="form-group">
                                 <label>Nama </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Nama Kategori"
-                                    value="{{$model->kategori_material_name}}" name="edit_kategori_material_name"
-                                    id="edit_kategori_material_name{{$model->id}}" autocomplete="off">
+                                    value="{{$model->kategori_produk_name}}" name="edit_kategori_produk_name"
+                                    id="edit_kategori_produk_name{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Deskripsi </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Kategori"
-                                    value="{{$model->kategori_material_desc}}" name="edit_kategori_material_desc"
-                                    id="edit_kategori_material_desc{{$model->id}}" autocomplete="off">
+                                    value="{{$model->kategori_produk_desc}}" name="edit_kategori_produk_desc"
+                                    id="edit_kategori_produk_desc{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>

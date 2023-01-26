@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class KategoriProduk extends Model
 {
@@ -22,4 +23,13 @@ class KategoriProduk extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function get_kategori($id)
+    {
+        $result = KategoriProduk::leftjoin('material', 'kategori_produk.id', '=', 'material.kategori_produk_id')
+            ->where('material.kategori_produk_id', $id)
+            ->whereNull('material.deleted_at')->first();
+
+        return $result;
+    }
 }

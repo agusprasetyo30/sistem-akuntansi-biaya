@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Kategori Material</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Kategori Produk</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -14,11 +14,11 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Nama </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Nama Kategori" name="kategori_material_name" id="kategori_material_name" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Nama Kategori" name="kategori_produk_name" id="kategori_produk_name" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Deskripsi </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Kategori" name="kategori_material_desc" id="kategori_material_desc" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Deskripsi Kategori" name="kategori_produk_desc" id="kategori_produk_desc" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>

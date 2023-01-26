@@ -18,6 +18,7 @@ class CreateMaterialTable extends Migration
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company');
             $table->foreignId('kategori_material_id')->references('id')->on('kategori_material')->onUpdate('cascade')->onDelete('cascade');
+            $table->integer('kategori_produk_id')->nullable();
             $table->string('group_account_code')->unsigned();
             $table->foreign('group_account_code')->references('group_account_code')->on('group_account');
             $table->string('material_name')->nullable();
