@@ -31,6 +31,7 @@ use App\Http\Controllers\ZcoController;
 use App\Http\Controllers\GroupAccountFixedCostController;
 use App\Http\Controllers\GLAccountController;
 use App\Http\Controllers\GLAccountFixedCostController;
+use App\Http\Controllers\GlosCCController;
 use App\Http\Controllers\LabaRugiController;
 use App\Http\Controllers\PJPemakaianController;
 use App\Http\Controllers\PJPenjualanController;
@@ -148,6 +149,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [CostCenterController::class, 'delete'])->name('delete_cost_center');
             Route::post('import', [CostCenterController::class, 'import'])->name('import_cost_center');
             Route::get('export', [CostCenterController::class, 'export'])->name('export_cost_center');
+        });
+
+        Route::group(['prefix' => 'glos-cc'], function () {
+            Route::get('/', [GlosCCController::class, 'index'])->name('glos_cc');
+            Route::post('insert', [GlosCCController::class, 'create'])->name('insert_glos_cc');
+            Route::post('update', [GlosCCController::class, 'update'])->name('update_glos_cc');
+            Route::post('delete', [GlosCCController::class, 'delete'])->name('delete_glos_cc');
+            Route::post('import', [GlosCCController::class, 'import'])->name('import_glos_cc');
+            Route::get('export', [GlosCCController::class, 'export'])->name('export_glos_cc');
         });
 
         Route::group(['prefix' => 'role'], function () {
