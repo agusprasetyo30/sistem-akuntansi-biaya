@@ -37,6 +37,7 @@ class H_PriceRenDaanDataTable extends DataTable
         $asumsi = DB::table('asumsi_umum')
             ->where('version_id', $this->version)
             ->get();
+
         $pricerendaanValues = DB::table('price_rendaan')
             ->select('price_rendaan.*', 'asumsi_umum.usd_rate')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')

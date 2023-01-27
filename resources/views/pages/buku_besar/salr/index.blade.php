@@ -812,7 +812,7 @@
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
-                        paging: false,
+                        paging: true,
                         scrollCollapse: true,
                         order:false,
                         fixedHeader: {
@@ -823,7 +823,7 @@
                             left: 2
                         },
                         buttons: [
-                            // { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'pageLength', className: 'mb-5' },
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
@@ -842,7 +842,7 @@
                         },
                         columns: column,
                         columnDefs: [
-                            { targets: [0, 1], className: 'fs-1'}
+                            { targets: [0, 1], className: 'fs-6'}
                         ],
                         footerCallback: function () {
                             var response = this.api().ajax.json();
