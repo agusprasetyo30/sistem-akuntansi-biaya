@@ -37,8 +37,9 @@ class labaRugiDataTable extends DataTable
                 $query->where('laba_rugi.periode', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_kategori_produk', function ($query, $keyword){
-                $query->where('kategori_produk.kategori_produk_name', 'ilike', '%'.$keyword.'%')
-                    ->where('kategori_produk.kategori_produk_desc', 'ilike', '%'.$keyword.'%');
+                if ($keyword !='all'){
+                    $query->where('kategori_produk.id', 'ilike', '%'.$keyword.'%');
+                }
             })
             ->filterColumn('filter_biaya_penjualan', function ($query, $keyword){
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));

@@ -449,11 +449,6 @@
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-
-                                $('#qty_rendaan_value_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
                             }
                             else if (data_type == 'select'){
                                 var input = document.createElement("select");
