@@ -45,6 +45,21 @@ class ZcoDataTable extends DataTable
             ->addColumn('periode', function ($query) {
                 return format_month($query->periode, 'bi');
             })
+            ->addColumn('cost_element', function ($query) {
+                return $query->cost_element . ' ' . $query->gl_account_desc;
+            })
+            ->orderColumn('filter_plant', function ($query, $order) {
+                $query->orderBy('plant.plant_code', $order);
+            })
+            ->orderColumn('filter_product', function ($query, $order) {
+                $query->orderBy('material.material_code', $order);
+            })
+            ->orderColumn('filter_material', function ($query, $order) {
+                $query->orderBy('material.material_code', $order);
+            })
+            ->orderColumn('filter_cost_element', function ($query, $order) {
+                $query->orderBy('gl_account.gl_account', $order);
+            })
             ->filterColumn('filter_plant', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('zco.plant_code', 'ilike', '%' . $keyword . '%');
