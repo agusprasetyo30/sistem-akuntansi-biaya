@@ -89,8 +89,7 @@ class MaterialDataTable extends DataTable
             })
             ->filterColumn('filter_kategori_produk', function ($query, $keyword) {
                 if ($keyword != 'all') {
-                    $query->where('kategori_produk.kategori_produk_name', 'ilike', '%' . $keyword . '%')
-                        ->orWhere('kategori_produk.kategori_produk_desc', 'ilike', '%' . $keyword . '%');
+                    $query->where('kategori_produk.id', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->filterColumn('filter_group_account', function ($query, $keyword) {

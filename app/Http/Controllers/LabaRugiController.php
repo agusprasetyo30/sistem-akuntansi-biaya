@@ -39,7 +39,6 @@ class LabaRugiController extends Controller
                 return $this->makeValidMsg($validator);
 
 
-
             $check_data = LabaRugi::where('kategori_produk_id', $request->kategori_produk)
                 ->where('periode', 'ilike', '%'.$request->tanggal.'%')
                 ->first();
@@ -159,7 +158,6 @@ class LabaRugiController extends Controller
                 return $data_fail;
             });
 
-//            dd($transaction);
             if ($transaction->isNotEmpty()){
                 return setResponse([
                     'code' => 500,
@@ -172,6 +170,7 @@ class LabaRugiController extends Controller
                 ]);
             }
         }catch (\Exception $exception){
+//            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);

@@ -159,12 +159,11 @@
                 .addClass('filters')
                 .appendTo('#dt_material thead');
 
-            $('#dt_material').DataTable().clear().destroy();
-            $("#dt_material").DataTable({
+            // $('#dt_material').DataTable().clear().destroy();
+            var dt = $("#dt_material").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
-                autoWidth:true,
                 scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
@@ -340,8 +339,11 @@
                 columnDefs:[
                     {className: 'text-center', targets: [0,6,7,8]}
                 ],
-
             })
+
+            setTimeout(function(){
+                    dt.columns.adjust().draw()}
+            ,1000);
         }
 
         $('#submit').on('click', function () {

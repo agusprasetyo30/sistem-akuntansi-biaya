@@ -806,7 +806,7 @@
                     $("#secondary").append(kolom1);
                     $("#total_foot").append(kolom_tfoot);
                     $('#h_dt_salr').DataTable().clear().destroy();
-                    $("#h_dt_salr").DataTable({
+                    var dt = $("#h_dt_salr").DataTable({
                         scrollX: true,
                         dom: 'Bfrtip',
                         orderCellsTop: true,
@@ -857,6 +857,10 @@
                         }
 
                     })
+
+                    setTimeout(function(){
+                        dt.columns.adjust().draw()}
+                    ,1000);
                 }
             })
         }

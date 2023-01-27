@@ -6,6 +6,7 @@ use App\Models\LabaRugi;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -41,7 +42,7 @@ class LabaRugiNewImport implements ToModel, WithHeadingRow, SkipsOnError, WithVa
         $input['created_by'] = auth()->user()->id;
         $input['created_at'] = Carbon::now()->format('Y-m-d');
         $input['updated_at'] = Carbon::now()->format('Y-m-d');
-        dd($input);
+        DB::table('laba_rugi')->insert($input);
     }
 
     public function batchSize(): int
@@ -58,9 +59,9 @@ class LabaRugiNewImport implements ToModel, WithHeadingRow, SkipsOnError, WithVa
     {
         return [
             'kategori_produk_id' => 'required',
-            'value_bp' => 'required',
-            'value_bau' => 'required',
-            'value_bb' => 'required',
+            'biaya_penjualan' => 'required',
+            'biaya_adm_umum' => 'required',
+            'biaya_bunga' => 'required',
         ];
     }
 
