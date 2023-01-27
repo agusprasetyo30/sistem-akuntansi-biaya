@@ -24,43 +24,12 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            {{-- <div class="card-header">
-                <div class="card-title">Price Pengadaan</div>
-            </div> --}}
+            <div class="card-header">
+                <div class="card-title">LABA RUGI</div>
+            </div>
             <div class="card-body">
-                <div class="panel panel-primary">
-                    <div class=" tab-menu-heading p-0 bg-light">
-                        <div class="tabs-menu1 ">
-                            <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
-                                <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="panel-body tabs-menu-body">
-                        <div class="tab-content">
-                            <div class="tab-pane active " id="vertical">
-                                <div class="">
-                                    <div class="table-responsive" id="table_main">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane " id="horizontal">
-                                <div class="mb-2 row">
-                                    <div class="form-group">
-                                        <label class="form-label">VERSI</label>
-                                        <select id="filter_version" class="form-control custom-select select2">
-                                        </select>
-                                    </div>
-
-                                </div>
-                                <div class="mt-auto">
-                                    <div class="table-responsive" id="dinamic_table">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="">
+                    <div class="table-responsive" id="table_main">
                     </div>
                 </div>
             </div>
@@ -96,7 +65,7 @@
 
             $('#tabs_vertical').on('click', function () {
 
-                $('#dt_price_rendaan').DataTable().ajax.reload();
+                $('#dt_laba_rugi').DataTable().ajax.reload();
             })
 
             $('#tanggal').bootstrapdatepicker({
@@ -341,7 +310,7 @@
             $('#dt_laba_rugi thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_price_rendaan thead');
+                .appendTo('#dt_laba_rugi thead');
 
             // $('#dt_price_rendaan').DataTable().clear().destroy();
             $("#dt_laba_rugi").DataTable({

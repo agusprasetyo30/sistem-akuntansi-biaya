@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\labaRugiDataTable;
 use App\Exports\MultipleSheet\MS_LabaRugiExport;
 use App\Imports\LabaRugiImport;
+use App\Imports\LabaRugiNewImport;
 use App\Models\LabaRugi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,6 @@ class LabaRugiController extends Controller
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
-
 
 
             $check_data = LabaRugi::where('kategori_produk_id', $request->kategori_produk)
@@ -142,12 +142,12 @@ class LabaRugiController extends Controller
             }
 
             $transaction = DB::transaction(function () use ($request){
-                $empty_excel = Excel::toArray(new LabaRugiImport($request->tanggal_import), $request->file('file'));
+                $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
                 if ($empty_excel[0]){
                     $file = $request->file('file')->store('import');
 
                     LabaRugi::where('periode', 'ilike', '%'.$request->tanggal_import.'%')->delete();
-                    $import = new LabaRugiImport($request->tanggal_import);
+                    $import = new LabaRugiNewImport($request->tanggal_import);
                     $import->import($file);
 
                     $data_fail = $import->failures();
@@ -170,6 +170,7 @@ class LabaRugiController extends Controller
                 ]);
             }
         }catch (\Exception $exception){
+//            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);

@@ -806,13 +806,13 @@
                     $("#secondary").append(kolom1);
                     $("#total_foot").append(kolom_tfoot);
                     $('#h_dt_salr').DataTable().clear().destroy();
-                    $("#h_dt_salr").DataTable({
+                    var dt = $("#h_dt_salr").DataTable({
                         scrollX: true,
                         dom: 'Bfrtip',
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
-                        paging: false,
+                        paging: true,
                         scrollCollapse: true,
                         order:false,
                         fixedHeader: {
@@ -823,7 +823,7 @@
                             left: 2
                         },
                         buttons: [
-                            // { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'pageLength', className: 'mb-5' },
                             { extend: 'excel', className: 'mb-5' }
                         ],
                         ajax: {
@@ -842,7 +842,7 @@
                         },
                         columns: column,
                         columnDefs: [
-                            { targets: [0, 1], className: 'fs-1'}
+                            { targets: [0, 1], className: 'fs-6'}
                         ],
                         footerCallback: function () {
                             var response = this.api().ajax.json();
@@ -857,6 +857,10 @@
                         }
 
                     })
+
+                    setTimeout(function(){
+                        dt.columns.adjust().draw()}
+                    ,1000);
                 }
             })
         }
