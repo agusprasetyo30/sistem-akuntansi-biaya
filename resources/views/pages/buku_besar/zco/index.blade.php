@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('styles')
-
+<style>
+    .dt-buttons {
+        z-index: 10;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -558,44 +562,6 @@
                 autoclose:true
             });
 
-            // $('#filter_format_group_account').select2({
-            //     placeholder: 'Pilih Format',
-            //     width: '100%',
-            //     allowClear: false,
-            // }).on('change', function () {
-            //     if ($('#filter_format_group_account').val() == 0) {
-            //         // $('#month_pick_range_group_account').css('display','none')
-            //         // $('#month_pick_group_account').css('display','block')
-            //         $('#month_pick_range_group_account').slideUp('slow')
-            //         $('#month_pick_group_account').slideDown('slow')
-            //         // if($(this).val() != 'all'){
-            //         // $('#format_plant').slideDown('slow')
-            //         // } else {
-            //         //     $('#format_plant').slideUp('slow')
-            //         // }
-            //     } else {
-            //         // $('#month_pick_range_group_account').css('display','block')
-            //         // $('#month_pick_group_account').css('display','none')
-
-            //         $('#month_pick_range_group_account').slideDown('slow')
-            //         $('#month_pick_group_account').slideUp('slow')
-            //     }
-            // })
-
-            // $('#bulan_filter1_group_account').bootstrapdatepicker({
-            //     format: "mm-yyyy",
-            //     viewMode: "months",
-            //     minViewMode: "months",
-            //     autoclose:true
-            // });
-
-            // $('#bulan_filter2_group_account').bootstrapdatepicker({
-            //     format: "mm-yyyy",
-            //     viewMode: "months",
-            //     minViewMode: "months",
-            //     autoclose:true
-            // });
-
             $('#bulan_filter1_group_account').bootstrapdatepicker({
                 format: "mm-yyyy",
                 viewMode: "months",
@@ -623,7 +589,7 @@
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
+            <table id="dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 240%;">
                 <thead>
                 <tr>
                     <th data-type='select' data-name='plant' class="text-center">PLANT</th>
@@ -660,8 +626,6 @@
                 orderCellsTop: true,
                 autoWidth:true,
                 scrollCollapse: true,
-                // sortable: false,
-                // searching: false,
                 processing: true,
                 serverSide: true,
                 order:[[1, 'desc']],
@@ -802,6 +766,9 @@
                         })
 
                     });
+
+                    let api = this.api();
+                    api.columns.adjust().draw();
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -829,7 +796,6 @@
                 columnDefs:[
                     {className: 'text-center', targets: [0]}
                 ],
-
             })
         }
 
@@ -918,7 +884,10 @@
                             }
                         },
                         columns: column,
-
+                        initComplete: function( settings ) {
+                            let api = this.api();
+                            api.columns.adjust().draw();
+                        }
                     })
                 }
             })
@@ -1009,7 +978,10 @@
                             }
                         },
                         columns: column,
-
+                        initComplete: function( settings ) {
+                            let api = this.api();
+                            api.columns.adjust().draw();
+                        }
                     })
                 }
             })
