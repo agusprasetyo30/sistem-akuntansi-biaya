@@ -110,10 +110,7 @@ class PlantController extends Controller
     {
         try {
             Plant::where('plant_code', $request->id)
-                ->update([
-                    'deleted_at' => Carbon::now(),
-                    'deleted_by' => auth()->user()->id
-                ]);
+                ->delete();
             return setResponse([
                 'code' => 200,
                 'title' => 'Data berhasil dihapus'
