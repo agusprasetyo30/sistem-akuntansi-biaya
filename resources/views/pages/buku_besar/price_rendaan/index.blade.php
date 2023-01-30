@@ -554,6 +554,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -664,7 +665,9 @@
                             }
                         },
                         columns: column,
-
+                        initComplete:function () {
+                            this.api().columns.adjust().draw()
+                        },
                     })
                 }
             })

@@ -446,6 +446,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -469,10 +470,6 @@
                 ]
 
             });
-
-            setTimeout(function(){
-                dt.columns.adjust().draw()}
-            ,1000);
         }
 
         $('#submit').on('click', function () {

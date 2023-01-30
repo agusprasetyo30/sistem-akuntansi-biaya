@@ -377,8 +377,6 @@
                 scrollCollapse: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
-                // bSortCellsTop: true,
-                // searching: false,
                 sortable: false,
                 processing: true,
                 serverSide: true,
@@ -538,7 +536,7 @@
                         })
 
                     });
-
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },

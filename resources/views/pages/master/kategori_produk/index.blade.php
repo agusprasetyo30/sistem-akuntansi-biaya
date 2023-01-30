@@ -153,6 +153,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
 
                 buttons: [

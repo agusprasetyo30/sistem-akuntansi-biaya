@@ -523,6 +523,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -548,7 +549,7 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
                 ]
 
-            }).columns.adjust().draw();
+            });
 
         }
 
@@ -599,6 +600,9 @@
                             }
                         },
                         columns: column,
+                        initComplete:function () {
+                            this.api().columns.adjust().draw()
+                        },
 
                     })
                 }
