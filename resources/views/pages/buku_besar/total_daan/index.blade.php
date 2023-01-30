@@ -256,6 +256,9 @@
                             }
                         })
                     });
+
+                    let api = this.api();
+                    api.columns.adjust().draw();
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -388,6 +391,10 @@
                                 }
                             }
                         },
+                        initComplete: function( settings ) {
+                            let api = this.api();
+                            api.columns.adjust().draw();
+                        }
                     })
                 }
             })

@@ -154,6 +154,9 @@
                         })
 
                     });
+
+                    let api = this.api();
+                    api.columns.adjust().draw();
                 },
 
                 buttons: [
