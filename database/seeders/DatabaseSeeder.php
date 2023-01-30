@@ -30,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GroupAccountFCSeeder::class);
         $this->call(GeneralLedgerAccountFCSeeder::class);
         $this->call(GLAccountSeeder::class);
+        $this->call(KategoriBalansSeeder::class);
     }
 }

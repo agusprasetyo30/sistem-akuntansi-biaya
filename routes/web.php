@@ -35,6 +35,7 @@ use App\Http\Controllers\GlosCCController;
 use App\Http\Controllers\LabaRugiController;
 use App\Http\Controllers\PJPemakaianController;
 use App\Http\Controllers\PJPenjualanController;
+use App\Http\Controllers\KategoriBalansController;
 
 /*
 |--------------------------------------------------------------------------
@@ -235,6 +236,13 @@ Route::group(['middleware' => 'auth'], function () {
 
             Route::post('view_asumsi_umum', [AsumsiUmumController::class, 'view'])->name('view_asumsi_umum');
             Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
+        });
+
+        Route::group(['prefix' => 'kategori_balans'], function () {
+            Route::get('/', [KategoriBalansController::class, 'index'])->name('kategori_balans');
+            Route::post('insert', [KategoriBalansController::class, 'create'])->name('insert_kategori_balans');
+            Route::post('update', [KategoriBalansController::class, 'update'])->name('update_kategori_balans');
+            Route::post('delete', [KategoriBalansController::class, 'delete'])->name('delete_kategori_balans');
         });
 
         // Main Select2
