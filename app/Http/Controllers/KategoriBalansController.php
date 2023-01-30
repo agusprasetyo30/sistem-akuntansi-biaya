@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\KategoriBalansDataTable;
+use App\Models\KategoriBalans;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class KategoriBalansController extends Controller
 {
@@ -16,29 +20,30 @@ class KategoriBalansController extends Controller
 
     public function create(Request $request){
         try {
-            $validasi = $request->all();
-            $validasi['kurs'] =str_replace('.', '', str_replace('Rp ', '', $request->kurs));
 
-            $validator = Validator::make($validasi, [
-                "tanggal" => 'required',
-                "kurs" => 'required|min:0|not_in:0',
+            $validator = Validator::make($request->all(), [
+                "kategori_balans" => 'required',
+                "kategori_balans_desc" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $date = explode("-",$request->tanggal);
+            $input['kategori_balans'] = $request->kategori_balans;
+            $input['kategori_balans_desc'] = $request->kategori_balans_desc;
+            $input['company_code'] = auth()->user()->company_code;
+            $input['created_by'] = auth()->user()->id;
+            $input['updated_by'] = auth()->user()->id;
+            $input['created_at'] = Carbon::now();
+            $input['updated_at'] = Carbon::now();
 
-            $input['month_year'] = $date[1].'-'.$date[0].'-01';
-            $input['usd_rate'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->kurs));
-
-            $check_data = Kurs::where('month_year', 'ilike', '%'.$date[1].'-'.$date[0].'-01'.'%')->first();
+            $check_data = KategoriBalans::where('kategori_balans', $request->kategori_balans)->first();
 
             DB::transaction(function () use ($input, $check_data){
                 if ($check_data == null){
-                    Kurs::create($input);
+                    KategoriBalans::create($input);
                 }else{
-                    Kurs::where('id', $check_data->id)->update($input);
+                    KategoriBalans::where('id', $check_data->id)->update($input);
                 }
             });
 
@@ -47,7 +52,6 @@ class KategoriBalansController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-
             return setResponse([
                 'code' => 400,
             ]);
@@ -57,25 +61,22 @@ class KategoriBalansController extends Controller
     public function update(Request $request)
     {
         try {
-            $validasi = $request->all();
-            $validasi['kurs'] =str_replace('.', '', str_replace('Rp ', '', $request->kurs));
-
-            $validator = Validator::make($validasi, [
-                "tanggal" => 'required',
-                "kurs" => 'required|min:0|not_in:0',
+            $validator = Validator::make($request->all(), [
+                "kategori_balans" => 'required',
+                "kategori_balans_desc" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-//            dd($request);
-            $date = explode("-",$request->tanggal);
-
-            $input['month_year'] = $date[1].'-'.$date[0].'-01';
-            $input['usd_rate'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->kurs));
+            $input['kategori_balans'] = $request->kategori_balans;
+            $input['kategori_balans_desc'] = $request->kategori_balans_desc;
+            $input['company_code'] = auth()->user()->company_code;
+            $input['updated_by'] = auth()->user()->id;
+            $input['updated_at'] = Carbon::now();
 
             DB::transaction(function () use ($input, $request){
-                Kurs::where('id', $request->id)
+                KategoriBalans::where('id', $request->id)
                     ->update($input);
             });
             return setResponse([
@@ -83,7 +84,6 @@ class KategoriBalansController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-
             return setResponse([
                 'code' => 400,
             ]);
@@ -93,7 +93,7 @@ class KategoriBalansController extends Controller
     public function delete(Request $request)
     {
         try {
-            Kurs::where('id', $request->id)
+            KategoriBalans::where('id', $request->id)
                 ->delete();
             return setResponse([
                 'code' => 200,

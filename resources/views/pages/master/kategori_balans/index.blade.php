@@ -192,11 +192,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_kurs')}}',
+                url: '{{route('insert_kategori_balans')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    tanggal: $('#tanggal').val(),
-                    kurs: $('#currency').val(),
+                    kategori_balans: $('#kategori_balans').val(),
+                    kategori_balans_desc: $('#kategori_balans_desc').val(),
                 },
                 success:function (response) {
                     // $("#tanggal").attr("disabled", true);
@@ -211,10 +211,6 @@
                         if (result.value) {
                             $('#modal_add').modal('hide');
                             $("#modal_add input").val("")
-                            $('#currency').removeClass('is-invalid');
-                            $('#currency').removeClass('is-valid');
-                            $('#tanggal').removeClass('is-invalid');
-                            $('#tanggal').removeClass('is-valid');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                             // $("#tanggal").attr("disabled", false);
                             // $("#table_main").empty();
@@ -224,7 +220,6 @@
                     })
                 },
                 error:function (response) {
-                    console.log(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                     handleError(response)
                 }
@@ -241,12 +236,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_kurs')}}',
+                url: '{{route('update_kategori_balans')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    tanggal: $('#edit_tanggal'+id).val(),
-                    kurs: $('#edit_currency'+id).val(),
+                    kategori_balans: $('#edit_kategori_balans'+id).val(),
+                    kategori_balans_desc: $('#edit_deskripsi'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -294,7 +289,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_kurs')}}',
+                        url: '{{route('delete_kategori_balans')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,

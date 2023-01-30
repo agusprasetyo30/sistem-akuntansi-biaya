@@ -39,7 +39,7 @@ class KategoriBalansDataTable extends DataTable
             ->orderColumn('filter_kategori_balans_desc', function ($query, $order){
                 $query->orderBy('kategori_balans.kategori_balans_desc', $order);
             })
-            ->addColumn('action', 'pages.master.kurs.action')
+            ->addColumn('action', 'pages.master.kategori_balans.action')
             ->escapeColumns([]);
     }
 
