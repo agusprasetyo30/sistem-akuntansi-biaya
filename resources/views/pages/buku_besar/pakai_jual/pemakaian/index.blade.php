@@ -340,6 +340,9 @@
                         })
 
                     });
+
+                    let api = this.api();
+                    api.columns.adjust().draw();
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -410,7 +413,10 @@
                             }
                         },
                         columns: column,
-
+                        initComplete: function( settings ) {
+                            let api = this.api();
+                            api.columns.adjust().draw();
+                        }
                     })
                 }
             })

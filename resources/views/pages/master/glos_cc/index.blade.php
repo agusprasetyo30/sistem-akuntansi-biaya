@@ -159,8 +159,8 @@
                     headerOffset: $('#main_header').height()
                 },
                 initComplete: function () {
-                        $('.dataTables_scrollHead').css('overflow', 'auto');
-                        $('.dataTables_scrollHead').on('scroll', function () {
+                    $('.dataTables_scrollHead').css('overflow', 'auto');
+                    $('.dataTables_scrollHead').on('scroll', function () {
                         $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                     });
 
@@ -276,6 +276,9 @@
                         })
 
                     });
+
+                    let api = this.api();
+                    api.columns.adjust().draw();
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
