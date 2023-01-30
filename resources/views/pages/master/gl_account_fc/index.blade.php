@@ -30,13 +30,13 @@
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        
+
                     </div>
                 </div>
             </div>
             @include('pages.master.gl_account_fc.add')
             @include('pages.master.gl_account_fc.import')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -157,7 +157,7 @@
                                 } else if(iName == 'group_account_fc'){
                                     input.className = "group_account_fc_search form-control custom-select select2";
 
-                                } 
+                                }
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
@@ -190,6 +190,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },

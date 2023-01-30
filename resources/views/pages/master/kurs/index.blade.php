@@ -160,6 +160,7 @@
                         }
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },

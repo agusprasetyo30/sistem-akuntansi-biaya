@@ -24,9 +24,6 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            {{-- <div class="card-header">
-                <div class="card-title">Price Pengadaan</div>
-            </div> --}}
             <div class="card-body">
                 <div class="panel panel-primary">
                     <div class=" tab-menu-heading p-0 bg-light">
@@ -557,6 +554,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -667,7 +665,9 @@
                             }
                         },
                         columns: column,
-
+                        initComplete:function () {
+                            this.api().columns.adjust().draw()
+                        },
                     })
                 }
             })

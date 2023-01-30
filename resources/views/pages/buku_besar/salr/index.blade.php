@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('styles')
-
+    <style>
+        .dt-buttons {
+            z-index: 10;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -729,6 +733,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -752,7 +757,7 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
                 ]
 
-            }).columns.adjust().draw();
+            })
         }
 
 
@@ -806,13 +811,12 @@
                     $("#secondary").append(kolom1);
                     $("#total_foot").append(kolom_tfoot);
                     $('#h_dt_salr').DataTable().clear().destroy();
-                    var dt = $("#h_dt_salr").DataTable({
+                    $("#h_dt_salr").DataTable({
                         scrollX: true,
                         dom: 'Bfrtip',
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
-                        paging: true,
                         scrollCollapse: true,
                         order:false,
                         fixedHeader: {
@@ -844,6 +848,9 @@
                         columnDefs: [
                             { targets: [0, 1], className: 'fs-6'}
                         ],
+                        initComplete:function () {
+                            this.api().columns.adjust().draw()
+                        },
                         footerCallback: function () {
                             var response = this.api().ajax.json();
                             this.api().eq(0).columns().every(function (index) {
@@ -857,10 +864,6 @@
                         }
 
                     })
-
-                    setTimeout(function(){
-                        dt.columns.adjust().draw()}
-                    ,1000);
                 }
             })
         }

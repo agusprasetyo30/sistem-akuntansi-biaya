@@ -144,6 +144,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     'pageLength', 'csv', 'pdf', 'excel', 'print'

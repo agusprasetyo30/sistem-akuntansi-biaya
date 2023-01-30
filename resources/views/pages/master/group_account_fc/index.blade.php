@@ -30,13 +30,13 @@
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
-                        
+
                     </div>
                 </div>
             </div>
             @include('pages.master.group_account_fc.add')
             @include('pages.master.group_account_fc.import')
-        </div> 
+        </div>
     </div>
 </div>
 <!-- /Row -->
@@ -157,6 +157,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },

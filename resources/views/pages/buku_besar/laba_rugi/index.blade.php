@@ -48,10 +48,10 @@
             '<thead>' +
             '<tr>' +
             '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
-            '<th data-type="select" data-name="material" class="text-center">KATEGORI PRODUK</th>' +
-            '<th data-type="text" data-name="region" class="text-center">BIAYA PENJUALAN</th>' +
-            '<th data-type="text" data-name="price_rendaan_value" class="text-center">BIAYA ADM UMUM</th>' +
-            '<th data-type="text" data-name="price_rendaan_value" class="text-center">BIAYA BUNGA</th>' +
+            '<th data-type="select" data-name="kategori_produk" class="text-center">KATEGORI PRODUK</th>' +
+            '<th data-type="text" data-name="bp" class="text-center">BIAYA PENJUALAN</th>' +
+            '<th data-type="text" data-name="bau" class="text-center">BIAYA ADM UMUM</th>' +
+            '<th data-type="text" data-name="bb" class="text-center">BIAYA BUNGA</th>' +
             '<th data-type="text" data-name="aksi" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -313,7 +313,7 @@
                 .appendTo('#dt_laba_rugi thead');
 
             // $('#dt_price_rendaan').DataTable().clear().destroy();
-            $("#dt_laba_rugi").DataTable({
+            var dt = $("#dt_laba_rugi").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -350,8 +350,12 @@
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
 
-                                if(iName == 'price_rendaan_value'){
-                                    input.id = 'price_rendaan_value_search'
+                                if(iName == 'bp'){
+                                    input.id = 'bp_value_search'
+                                }else if (iName == 'bau'){
+                                    input.id = 'bau_value_search'
+                                }else if (iName == 'bb'){
+                                    input.id = 'bb_value_search'
                                 }
 
                                 $(input).
@@ -360,7 +364,17 @@
                                     column.search($(this).val(), false, false, true).draw();
                                 });
 
-                                $('#price_rendaan_value_search').on('keyup', function(){
+                                $('#bp_value_search').on('keyup', function(){
+                                    let rupiah = formatRupiah($(this).val(), "Rp ")
+                                    $(this).val(rupiah)
+                                });
+
+                                $('#bau_value_search').on('keyup', function(){
+                                    let rupiah = formatRupiah($(this).val(), "Rp ")
+                                    $(this).val(rupiah)
+                                });
+
+                                $('#bb_value_search').on('keyup', function(){
                                     let rupiah = formatRupiah($(this).val(), "Rp ")
                                     $(this).val(rupiah)
                                 });
@@ -373,8 +387,8 @@
                                     @foreach (status_dt() as $key => $value)
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
-                                }else if (iName == 'material'){
-                                    input.className = "material_search form-control custom-select select2";
+                                }else if (iName == 'kategori_produk'){
+                                    input.className = "kategori_produk_search form-control custom-select select2";
 
                                 }else if (iName == 'version'){
                                     input.className = "version_search form-control custom-select select2";
@@ -390,12 +404,6 @@
                         }else {
                             cell.empty()
                         }
-
-                        $('.status_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
 
                         $('.version_search').select2({
                             placeholder: 'Pilih Versi',
@@ -417,11 +425,11 @@
                             }
                         })
 
-                        $('.material_search').select2({
-                            placeholder: 'Pilih Material',
+                        $('.kategori_produk_search').select2({
+                            placeholder: 'Pilih Material Kategori',
                             allowClear: false,
                             ajax: {
-                                url: "{{ route('material_dt') }}",
+                                url: "{{ route('kategori_produk_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -438,6 +446,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -460,86 +469,8 @@
                     {className: 'text-center', targets: [0,1,2,3,4]}
                 ]
 
-            }).columns.adjust().draw();
+            });
         }
-
-        function get_data_horiz(){
-            var table = '<table id="h_dt_price_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
-            var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
-            var column = [
-                { data: 'material', orderable:false},
-                { data: 'region_desc', orderable:false}
-            ]
-            $("#dinamic_table").append(table);
-            $.ajax({
-                type: "GET",
-                url : '{{route("qty_rendaan")}}',
-                data: {
-                    data:'version',
-                    version:$('#filter_version').val()
-                },
-                success:function (response) {
-                    for (let i = 0; i < response.asumsi.length;i++){
-                        column.push({ data: i.toString(), orderable:false})
-                        kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
-                    }
-                    $("#dinamic_tr").append(kolom);
-                    $('#h_dt_price_rendaan').DataTable().clear().destroy();
-                    $("#h_dt_price_rendaan").DataTable({
-                        scrollX: true,
-                        dom: 'Bfrtip',
-                        orderCellsTop: true,
-                        processing: true,
-                        serverSide: true,
-                        fixedHeader: {
-                            header: true,
-                            headerOffset: $('#main_header').height()
-                        },
-                        buttons: [
-                            { extend: 'pageLength', className: 'mb-5' },
-                            {
-                                extend: 'collection',
-                                className: 'mb-5',
-                                text:'Mata Uang',
-                                buttons:[
-                                    {
-                                        text:'Rupiah',
-                                        action: function () {
-                                            $('#h_dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();
-                                        }
-                                    },
-                                    {
-                                        text:'Dollar',
-                                        action: function () {
-                                            $('#h_dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();
-                                        }
-                                    }
-                                ]
-
-                            },
-                            { extend: 'excel', className: 'mb-5' }
-                        ],
-                        ajax: {
-                            url : '{{route("price_rendaan")}}',
-                            data: {
-                                data:'horizontal',
-                                version:$('#filter_version').val()
-                            }
-                        },
-                        columns: column,
-
-                    })
-                }
-            })
-        }
-
-        function update_dt_horizontal() {
-            if ($('#filter_version').val() != null){
-                $("#dinamic_table").empty();
-                get_data_horiz()
-            }
-        }
-
 
         $('#submit').on('click', function () {
             $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);

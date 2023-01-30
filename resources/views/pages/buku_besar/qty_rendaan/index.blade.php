@@ -449,11 +449,6 @@
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-
-                                $('#qty_rendaan_value_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
                             }
                             else if (data_type == 'select'){
                                 var input = document.createElement("select");
@@ -528,6 +523,7 @@
                         })
 
                     });
+                    this.api().columns.adjust().draw()
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
@@ -553,7 +549,7 @@
                     {className: 'text-center', targets: [0,1,2,3,4,5]}
                 ]
 
-            }).columns.adjust().draw();
+            });
 
         }
 
@@ -604,6 +600,9 @@
                             }
                         },
                         columns: column,
+                        initComplete:function () {
+                            this.api().columns.adjust().draw()
+                        },
 
                     })
                 }
