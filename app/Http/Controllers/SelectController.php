@@ -8,6 +8,7 @@ use App\Models\GLAccountFC;
 use App\Models\GLAccount;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
+use App\Models\KategoriBalans;
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
 use App\Models\Kurs;
@@ -100,6 +101,32 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->id,
                 "text" => $items->kategori_produk_name. ' - '. $items->kategori_produk_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function kategori_balans(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $kategori_balans = KategoriBalans::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $kategori_balans = KategoriBalans::where('kategori_balans', 'ilike', '%' . $search . '%')
+                ->orWhere('kategori_balans_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($kategori_balans as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->kategori_balans. ' - '. $items->kategori_balans_desc
             );
         }
 
@@ -229,6 +256,37 @@ class SelectController extends Controller
             $material = Material::where('material_code', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($material as $items) {
+            $response[] = array(
+                "id" => $items->material_code,
+                "text" => $items->material_code . ' - ' . $items->material_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function material_balans(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $material = Material::limit(10)
+                ->where([
+                    'is_active' => 't',
+                    'kategori_material_id' => 1
+                ])
+                ->get();
+        } else {
+            $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->where([
+                    'is_active' => 't',
+                    'kategori_material_id' => 1
+                ])
+                ->limit(10)
                 ->get();
         }
 

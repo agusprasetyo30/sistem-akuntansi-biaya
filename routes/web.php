@@ -36,6 +36,7 @@ use App\Http\Controllers\LabaRugiController;
 use App\Http\Controllers\PJPemakaianController;
 use App\Http\Controllers\PJPenjualanController;
 use App\Http\Controllers\KategoriBalansController;
+use App\Http\Controllers\MapKetegoriBalansController;
 
 /*
 |--------------------------------------------------------------------------
@@ -245,13 +246,22 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [KategoriBalansController::class, 'delete'])->name('delete_kategori_balans');
         });
 
+        Route::group(['prefix' => 'map_kategori_balans'], function () {
+            Route::get('/', [MapKetegoriBalansController::class, 'index'])->name('map_kategori_balans');
+            Route::post('insert', [MapKetegoriBalansController::class, 'create'])->name('insert_map_kategori_balans');
+            Route::post('update', [MapKetegoriBalansController::class, 'update'])->name('update_map_kategori_balans');
+            Route::post('delete', [MapKetegoriBalansController::class, 'delete'])->name('delete_map_kategori_balans');
+        });
+
         // Main Select2
         Route::group(['prefix' => 'main_data'], function () {
             Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
             Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');
             Route::get('/kategori_material', [SelectController::class, 'kategori_material'])->name('kategori_material_select');
             Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
+            Route::get('/kategori_balans_select', [SelectController::class, 'kategori_balans'])->name('kategori_balans_select');
             Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
+            Route::get('/material_balans_select', [SelectController::class, 'material_balans'])->name('material_balans_select');
             Route::get('/material_keyword_select', [SelectController::class, 'material_keyword'])->name('material_keyword_select');
             Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
             Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
