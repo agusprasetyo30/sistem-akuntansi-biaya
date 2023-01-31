@@ -45,8 +45,8 @@
         var table_main_dt = '<table id="dt_map_kategori_balans" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="kategori_produk" class="text-center">MATERIAL</th>' +
-            '<th data-type="text" data-name="deskripsi" class="text-center">KATEGORI BALANS</th>' +
+            '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
+            '<th data-type="select" data-name="kategori_balans" class="text-center">KATEGORI BALANS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -145,46 +145,64 @@
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
-                            if (data_type == 'text'){
-                                var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
-                                input.styleName = "width: 100%;";
-
-                                if(iName == 'usd'){
-                                    input.id = 'usd_search'
-                                }
-
-                                $(input).
-                                appendTo(cell.empty()).
-                                on('change clear', function () {
-                                    column.search($(this).val(), false, false, true).draw();
-                                });
-
-                                $('#usd_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
-
-                            }else if (data_type == 'select'){
+                            if (data_type === 'select'){
                                 var input = document.createElement("select");
                                 input.className = "form-control custom-select select2";
                                 var options = "";
-                                if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
+                                if (iName === 'material'){
+                                    input.className = "material_search form-control custom-select select2";
+                                } else if (iName === 'kategori_balans'){
+                                    input.className = "kategori_balans_search form-control custom-select select2";
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
-
                             }
                         }else {
                             cell.empty()
                         }
+
+                        $('.kategori_balans_search').select2({
+                            placeholder: 'Pilih Kategori Balans',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('kategori_balans_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_balans_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
 
                     });
                     this.api().columns.adjust().draw()

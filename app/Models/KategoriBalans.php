@@ -13,7 +13,6 @@ class KategoriBalans extends Model
 
     protected $fillable = [
         'company_code',
-        'periode',
         'kategori_balans',
         'kategori_balans_desc',
         'created_at',

@@ -698,6 +698,41 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function material_balans_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $material = Material::limit(10)
+                ->where([
+                    'is_active' => 't',
+                    'kategori_material_id' => 1
+                ])
+                ->get();
+        } else {
+            $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->where([
+                    'is_active' => 't',
+                    'kategori_material_id' => 1
+                ])
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($material as $items) {
+            $response[] = array(
+                "id" => $items->material_code,
+                "text" => $items->material_code . ' - ' . $items->material_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function plant_dt(Request $request)
     {
         $search = $request->search;
@@ -786,6 +821,36 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->id,
                 "text" => $items->kategori_produk_name.' - '.$items->kategori_produk_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function kategori_balans_dt(Request $request)
+    {
+        $search = $request->search;
+        if ($search == 'all') {
+            $kat_balans = KategoriBalans::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $kat_balans = KategoriBalans::where('kategori_balans', 'ilike', '%' . $search . '%')
+                ->orWhere('kategori_balans_desc', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua'
+        );
+        foreach ($kat_balans as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->kategori_balans.' - '.$items->kategori_balans_desc
             );
         }
 

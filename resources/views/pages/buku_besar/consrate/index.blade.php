@@ -425,7 +425,6 @@
                                         options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
                                     @endforeach
 
-
                                 }else if (iName == 'version'){
                                     input.className = "version_search form-control custom-select select2";
 

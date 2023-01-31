@@ -27,10 +27,14 @@ class MapKategoriBalansDataTable extends DataTable
                 return $query->kategori_balans.' - '.$query->kategori_balans_desc;
             })
             ->filterColumn('filter_material', function ($query, $keyword){
-                $query->where('map_kategori_balans.material_code', 'ilike', '%'.$keyword.'%');
+                if ($keyword != 'all'){
+                    $query->where('map_kategori_balans.material_code', 'ilike', '%'.$keyword.'%');
+                }
             })
             ->filterColumn('filter_kategori_balans', function ($query, $keyword){
-                $query->where('kategori_balans.kategori_balans', 'ilike', '%'.$keyword.'%');
+                if ($keyword != 'all'){
+                    $query->where('kategori_balans.id', $keyword);
+                }
             })
             ->orderColumn('filter_material', function ($query, $order){
                 $query->orderBy('map_kategori_balans.material_code', $order);
