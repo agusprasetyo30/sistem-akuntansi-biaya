@@ -3,7 +3,6 @@
 namespace App\DataTables\Master;
 
 use App\Models\KategoriBalans;
-use App\Models\Master\KategoriBalan;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;

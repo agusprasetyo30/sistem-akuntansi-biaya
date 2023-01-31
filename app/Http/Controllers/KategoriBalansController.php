@@ -37,7 +37,10 @@ class KategoriBalansController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            $check_data = KategoriBalans::where('kategori_balans', $request->kategori_balans)->first();
+            $check_data = KategoriBalans::where([
+                'kategori_balans' => $request->kategori_balans,
+                'company_code' => auth()->user()->company_code
+            ])->first();
 
             DB::transaction(function () use ($input, $check_data){
                 if ($check_data == null){

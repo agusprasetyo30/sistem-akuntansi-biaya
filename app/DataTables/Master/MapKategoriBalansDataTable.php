@@ -2,6 +2,7 @@
 
 namespace App\DataTables\Master;
 
+use App\Models\MapKategoriBalans;
 use App\Models\Master\MapKategoriBalan;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -11,50 +12,52 @@ use Yajra\DataTables\Services\DataTable;
 
 class MapKategoriBalansDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
+
     public function dataTable($query)
     {
+        $query = MapKategoriBalans::select('map_kategori_balans.*', 'kategori_balans.kategori_balans', 'kategori_balans.kategori_balans_desc', 'material.material_name')
+            ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
+            ->leftjoin('material', 'material.material_code', '=', 'map_kategori_balans.material_code')
+            ->leftjoin('company', 'company.company_code', '=', 'map_kategori_balans.company_code');
         return datatables()
             ->eloquent($query)
-            ->addColumn('action', 'master\mapkategoribalans.action');
+            ->addColumn('material', function ($query){
+                return $query->material_code.' - '.$query->material_name;
+            })
+            ->addColumn('kategori_balans', function ($query){
+                return $query->kategori_balans;
+            })
+            ->filterColumn('filter_material', function ($query, $keyword){
+                $query->where('map_kategori_balans.material_code', 'ilike', '%'.$keyword.'%');
+            })
+            ->filterColumn('filter_kategori_balans', function ($query, $keyword){
+                $query->where('kategori_balans.kategori_balans', 'ilike', '%'.$keyword.'%');
+            })
+            ->orderColumn('filter_material', function ($query, $order){
+                $query->orderBy('map_kategori_balans.material_code', $order);
+            })
+            ->orderColumn('filter_kategori_balans', function ($query, $order){
+                $query->orderBy('kategori_balans.kategori_balans', $order);
+            })
+            ->addColumn('action', 'pages.master.mapping_balans.action')
+            ->escapeColumns([]);
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Master\MapKategoriBalan $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(MapKategoriBalan $model)
-    {
-        return $model->newQuery();
-    }
-
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
     public function html()
     {
         return $this->builder()
-                    ->setTableId('master\mapkategoribalans-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('dt_map_kategori_balans')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**

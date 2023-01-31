@@ -25,6 +25,7 @@
 				<li><a href="{{url('master/kategori-material')}}" class="slide-item"> Kategori Material</a></li>
 				<li><a href="{{route('kategori_produk')}}" class="slide-item"> Kategori Produk</a></li>
 				<li><a href="{{route('kategori_balans')}}" class="slide-item"> Kategori Balans</a></li>
+				<li><a href="{{route('map_kategori_balans')}}" class="slide-item"> Mapping Kategori Balans</a></li>
 				<li><a href="{{url('master/group-account')}}" class="slide-item"> Group Account VC</a></li>
 				<li><a href="{{url('master/gl-account')}}" class="slide-item"> General Ledger VC</a></li>
 				<li><a href="{{route('group_account_fc')}}" class="slide-item"> Group Account FC</a></li>

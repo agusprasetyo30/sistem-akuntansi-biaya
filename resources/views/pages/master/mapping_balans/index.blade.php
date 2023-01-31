@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Kategori Balans</h4>
+            <h4 class="page-title mb-0 text-primary">Mapping Kategori Balans</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Kategori Balans</div>
+                    <div class="card-title">Mapping Kategori Balans</div>
                 </div>
                 <div class="card-body">
                     <div class="">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.kategori_balans.add')
+            @include('pages.master.mapping_balans.add')
         </div>
     </div>
     <!-- /Row -->
@@ -42,11 +42,11 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_kategori_balans" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+        var table_main_dt = '<table id="dt_map_kategori_balans" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="kategori_produk" class="text-center">KATEGORI BALANS</th>' +
-            '<th data-type="text" data-name="deskripsi" class="text-center">DESKRIPSI</th>' +
+            '<th data-type="text" data-name="kategori_produk" class="text-center">PRODUK</th>' +
+            '<th data-type="text" data-name="deskripsi" class="text-center">KATEGORI BALANS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -56,19 +56,40 @@
 
         $(document).ready(function () {
             get_data()
+
+            $('#data_main_material_balans').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Kategori Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_balans_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
         })
 
         function get_data(){
 
             $('#table_main').html(table_main_dt)
 
-            $('#dt_kategori_balans thead tr')
+            $('#dt_map_kategori_balans thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_kategori_balans thead');
+                .appendTo('#dt_map_kategori_balans thead');
 
-            // $('#dt_kategori_balans').DataTable().clear().destroy();
-            $("#dt_kategori_balans").DataTable({
+            $("#dt_map_kategori_balans").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -150,10 +171,10 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1]
-                        }, title: 'Kategori Balans'}
+                        }, title: 'Mapping Kategori Balans'}
                 ],
                 ajax: {
-                    url : '{{route("kategori_balans")}}',
+                    url : '{{route("map_kategori_balans")}}',
                     data: {data:'index'}
                 },
                 columns: [
@@ -199,7 +220,7 @@
                             // $("#tanggal").attr("disabled", false);
                             // $("#table_main").empty();
                             // get_data()
-                            $('#dt_kategori_balans').DataTable().ajax.reload();
+                            $('#dt_map_kategori_balans').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -243,7 +264,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                 $("#back_edit"+id).attr("disabled", false);
-                                $('#dt_kategori_balans').DataTable().ajax.reload();
+                                $('#dt_map_kategori_balans').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -291,13 +312,13 @@
                                     if (result.value) {
                                         // $("#table_main").empty();
                                         // get_data()
-                                        $('#dt_kategori_balans').DataTable().ajax.reload();
+                                        $('#dt_map_kategori_balans').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
-                            // $('#dt_kategori_balans').DataTable().ajax.reload();
+                            // $('#dt_map_kategori_balans').DataTable().ajax.reload();
                         }
                     })
 
