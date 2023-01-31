@@ -31,5 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GeneralLedgerAccountFCSeeder::class);
         $this->call(GLAccountSeeder::class);
         $this->call(KategoriBalansSeeder::class);
+        $this->call(MappingMaterialBallansSeeder::class);
     }
 }

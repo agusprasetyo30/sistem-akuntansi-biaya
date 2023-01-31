@@ -4,6 +4,8 @@ namespace App\Imports;
 
 use App\Models\GroupAccount;
 use App\Models\Material;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -24,9 +26,58 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
+
     public function model(array $row)
     {
-        return new Material([
+        $mapping = [
+            [
+                'material_code' => $row['material_code'],
+                'kategori_balans_id' => 1,
+                'company_code' => auth()->user()->company_code,
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'material_code' => $row['material_code'],
+                'kategori_balans_id' => 2,
+                'company_code' => auth()->user()->company_code,
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'material_code' => $row['material_code'],
+                'kategori_balans_id' => 3,
+                'company_code' => auth()->user()->company_code,
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'material_code' => $row['material_code'],
+                'kategori_balans_id' => 4,
+                'company_code' => auth()->user()->company_code,
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'material_code' => $row['material_code'],
+                'kategori_balans_id' => 5,
+                'company_code' => auth()->user()->company_code,
+                'created_by' => auth()->user()->id,
+                'updated_by' => auth()->user()->id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+        ];
+
+        $material = [
             'material_code' => $row['material_code'],
             'material_name' => $row['material_name'],
             'material_desc' => $row['material_desc'],
@@ -38,7 +89,10 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
             'is_dummy' => $row['is_dummy'],
             'is_active' => $row['is_active'],
             'created_by' => auth()->user()->id,
-        ]);
+        ];
+
+        Material::create($material);
+        DB::table('map_kategori_balans')->insert($mapping);
     }
 
     public function batchSize(): int
