@@ -3,7 +3,6 @@
 namespace App\DataTables\Master;
 
 use App\Models\MapKategoriBalans;
-use App\Models\Master\MapKategoriBalan;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -25,7 +24,7 @@ class MapKategoriBalansDataTable extends DataTable
                 return $query->material_code.' - '.$query->material_name;
             })
             ->addColumn('kategori_balans', function ($query){
-                return $query->kategori_balans;
+                return $query->kategori_balans.' - '.$query->kategori_balans_desc;
             })
             ->filterColumn('filter_material', function ($query, $keyword){
                 $query->where('map_kategori_balans.material_code', 'ilike', '%'.$keyword.'%');

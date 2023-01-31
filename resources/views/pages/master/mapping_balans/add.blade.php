@@ -10,9 +10,9 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-label">Kategori Material <span class="text-red">*</span></label>
+                                <label class="form-label">Material <span class="text-red">*</span></label>
                                 <select name="data_main_material_balans" id="data_main_material_balans" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Kategori Material</option>
+                                    <option value="" disabled selected>Pilih Material</option>
                                 </select>
                             </div>
                             <div class="form-group">
