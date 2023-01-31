@@ -45,8 +45,8 @@
         var table_main_dt = '<table id="dt_map_kategori_balans" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="kategori_produk" class="text-center">PRODUK</th>' +
-            '<th data-type="text" data-name="deskripsi" class="text-center">KATEGORI BALANS</th>' +
+            '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
+            '<th data-type="select" data-name="kategori_balans" class="text-center">KATEGORI BALANS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -59,11 +59,33 @@
 
             $('#data_main_material_balans').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Kategori Material',
+                placeholder: 'Pilih Material',
                 width: '100%',
                 allowClear: false,
                 ajax: {
                     url: "{{ route('material_balans_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_kategori_balans').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Kategori Material',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('kategori_balans_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -123,46 +145,64 @@
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
-                            if (data_type == 'text'){
-                                var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
-                                input.styleName = "width: 100%;";
-
-                                if(iName == 'usd'){
-                                    input.id = 'usd_search'
-                                }
-
-                                $(input).
-                                appendTo(cell.empty()).
-                                on('change clear', function () {
-                                    column.search($(this).val(), false, false, true).draw();
-                                });
-
-                                $('#usd_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
-
-                            }else if (data_type == 'select'){
+                            if (data_type === 'select'){
                                 var input = document.createElement("select");
                                 input.className = "form-control custom-select select2";
                                 var options = "";
-                                if (iName == 'status'){
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_is_active() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
+                                if (iName === 'material'){
+                                    input.className = "material_search form-control custom-select select2";
+                                } else if (iName === 'kategori_balans'){
+                                    input.className = "kategori_balans_search form-control custom-select select2";
                                 }
                                 input.innerHTML = options
-                                $(input).appendTo($(column.header()).empty())
+                                $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
-
                             }
                         }else {
                             cell.empty()
                         }
+
+                        $('.kategori_balans_search').select2({
+                            placeholder: 'Pilih Kategori Balans',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('kategori_balans_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.material_search').select2({
+                            placeholder: 'Pilih Material',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('material_balans_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
 
                     });
                     this.api().columns.adjust().draw()
@@ -178,8 +218,8 @@
                     data: {data:'index'}
                 },
                 columns: [
+                    { data: 'material', name: 'filter_material', orderable:true},
                     { data: 'kategori_balans', name: 'filter_kategori_balans', orderable:true},
-                    { data: 'kategori_balans_desc', name: 'filter_kategori_balans_desc', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
@@ -197,11 +237,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_kategori_balans')}}',
+                url: '{{route('insert_map_kategori_balans')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    kategori_balans: $('#kategori_balans').val(),
-                    kategori_balans_desc: $('#kategori_balans_desc').val(),
+                    material_balans: $('#data_main_material_balans').val(),
+                    kategori_balans: $('#data_main_kategori_balans').val(),
                 },
                 success:function (response) {
                     // $("#tanggal").attr("disabled", true);
@@ -215,7 +255,8 @@
                     }).then((result) => {
                         if (result.value) {
                             $('#modal_add').modal('hide');
-                            $("#modal_add input").val("")
+                            $("#data_main_material_balans").val('Pilih Material').trigger('change');
+                            $("#data_main_kategori_balans").val('Pilih Kategori Balans').trigger('change');
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                             // $("#tanggal").attr("disabled", false);
                             // $("#table_main").empty();
@@ -231,9 +272,7 @@
             })
         })
 
-
-
-        function update_kategori_balans(id) {
+        function update_map_balans(id) {
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back_edit"+id).attr("disabled", true);
             $.ajax({
@@ -241,12 +280,12 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_kategori_balans')}}',
+                url: '{{route('update_map_kategori_balans')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
+                    material_balans: $('#edit_material'+id).val(),
                     kategori_balans: $('#edit_kategori_balans'+id).val(),
-                    kategori_balans_desc: $('#edit_deskripsi'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -276,7 +315,7 @@
             })
         }
 
-        function delete_kategori_balans(id) {
+        function delete_mapping_balans(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -294,7 +333,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_kategori_balans')}}',
+                        url: '{{route('delete_map_kategori_balans')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,

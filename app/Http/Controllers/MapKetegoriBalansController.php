@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\MapKategoriBalansDataTable;
+use App\Models\MapKategoriBalans;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class MapKetegoriBalansController extends Controller
 {
@@ -18,31 +22,32 @@ class MapKetegoriBalansController extends Controller
         try {
 
             $validator = Validator::make($request->all(), [
-                "kategori_balans" => 'required',
-                "kategori_balans_desc" => 'required|min:0|not_in:0',
+                "material_balans" => 'required',
+                "kategori_balans" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['kategori_balans'] = $request->kategori_balans;
-            $input['kategori_balans_desc'] = $request->kategori_balans_desc;
+            $input['material_code'] = $request->material_balans;
+            $input['kategori_balans_id'] = $request->kategori_balans;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            $check_data = KategoriBalans::where([
-                'kategori_balans' => $request->kategori_balans,
-                'company_code' => auth()->user()->company_code
+            $check_data = MapKategoriBalans::where([
+                'kategori_balans_id' => $request->kategori_balans,
+                'company_code' => auth()->user()->company_code,
+                'material_code' => $request->material_balans
             ])->first();
 
             DB::transaction(function () use ($input, $check_data){
                 if ($check_data == null){
-                    KategoriBalans::create($input);
+                    MapKategoriBalans::create($input);
                 }else{
-                    KategoriBalans::where('id', $check_data->id)->update($input);
+                    MapKategoriBalans::where('id', $check_data->id)->update($input);
                 }
             });
 
@@ -61,21 +66,23 @@ class MapKetegoriBalansController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "kategori_balans" => 'required',
-                "kategori_balans_desc" => 'required|min:0|not_in:0',
+                "material_balans" => 'required',
+                "kategori_balans" => 'required|min:0|not_in:0',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['kategori_balans'] = $request->kategori_balans;
-            $input['kategori_balans_desc'] = $request->kategori_balans_desc;
+            $input['material_code'] = $request->material_balans;
+            $input['kategori_balans_id'] = $request->kategori_balans;
             $input['company_code'] = auth()->user()->company_code;
+            $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
+            $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
             DB::transaction(function () use ($input, $request){
-                KategoriBalans::where('id', $request->id)
+                MapKategoriBalans::where('id', $request->id)
                     ->update($input);
             });
             return setResponse([
@@ -92,7 +99,7 @@ class MapKetegoriBalansController extends Controller
     public function delete(Request $request)
     {
         try {
-            KategoriBalans::where('id', $request->id)
+            MapKategoriBalans::where('id', $request->id)
                 ->delete();
             return setResponse([
                 'code' => 200,
