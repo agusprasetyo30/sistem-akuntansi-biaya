@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\KategoriProdukDataTable;
 use App\Exports\Template\T_KategoriProduk;
+use App\Imports\KategoriProdukImport;
 use App\Models\KategoriProduk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -123,7 +124,7 @@ class KategoriProdukController extends Controller
                 return $this->makeValidMsg($validator);
 
             $file = $request->file('file')->store('import');
-            $import = new KategoriMaterialImport;
+            $import = new KategoriProdukImport();
             $import->import($file);
             $data_fail = $import->failures();
 
