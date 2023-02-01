@@ -599,7 +599,6 @@
                 .addClass('filters')
                 .appendTo('#dt_salr thead');
 
-            // $('#dt_salr').DataTable().clear().destroy();
             $("#dt_salr").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',

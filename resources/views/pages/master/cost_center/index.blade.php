@@ -13,7 +13,7 @@
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
-                <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button>
                 <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"
                         class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add
                 </button>
@@ -38,6 +38,7 @@
                 </div>
             </div>
             @include('pages.master.cost_center.add')
+            @include('pages.master.cost_center.import')
         </div>
     </div>
     <!-- /Row -->
@@ -90,7 +91,6 @@
 
                     $('.dataTables_scrollHead').css('overflow', 'auto');
                     $('.dataTables_scrollHead').on('scroll', function () {
-                        // console.log('data')
                         $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                     });
 
@@ -199,9 +199,9 @@
             })
         })
 
-        $('#submit_import').on('click', function () {
-            $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            $("#back_import").attr("disabled", true);
+        $('#submit-import').on('click', function () {
+            $("#submit-import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back-import").attr("disabled", true);
             if ($('#file').val() !== ''){
                 Swal.fire({
                     title: 'Apakah anda yakin?',
@@ -221,15 +221,15 @@
             }else {
                 Swal.fire({
                     title: 'PERINGATAN',
-                    text: "Silakan Isi Data Tersebut",
+                    text: "Data file tidak boleh kosong",
                     icon: 'warning',
                     cancelButtonColor: '#EF4B4B',
                     confirmButtonColor: '#019267',
                     confirmButtonText: 'Konfirmasi',
                 }).then((result)=>{
                     if (result.value){
-                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                        $("#back_import").attr("disabled", false);
+                        $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back-import").attr("disabled", false);
                     }
                 })
             }
@@ -248,7 +248,7 @@
                 url: '{{route('import_cost_center')}}',
                 data: file,
                 success:function (response) {
-                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
                     Swal.fire({
                         title: response.title,
                         text: response.message,
@@ -267,8 +267,8 @@
                 },
                 error: function (response) {
                     handleError(response)
-                    $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                    $("#back_import").attr("disabled", false);
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
                     // $('#dt_cost_center').DataTable().ajax.reload();
                 }
             })

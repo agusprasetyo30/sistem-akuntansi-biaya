@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\CostCenterDataTable;
+use App\Exports\Template\T_CostCenterExport;
+use App\Exports\Template\T_PlantExport;
+use App\Imports\CostCenterImport;
 use App\Models\CostCenter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CostCenterController extends Controller
 {
@@ -99,5 +103,53 @@ class CostCenterController extends Controller
                 'code' => 400,
             ]);
         }
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $file = $request->file('file')->store('import');
+            $import = new CostCenterImport();
+            $import->import($file);
+
+            $data_fail = $import->failures();
+
+            if ($import->failures()->isNotEmpty()) {
+                $err = [];
+
+                foreach ($data_fail as $rows) {
+                    $er = implode(' ', array_values($rows->errors()));
+                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                    array_push($err, $hasil);
+                }
+                // dd(implode(' ', $err));
+                return setResponse([
+                    'code' => 500,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $err
+                ]);
+            }
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new T_CostCenterExport(), 'cost center.xlsx');
     }
 }
