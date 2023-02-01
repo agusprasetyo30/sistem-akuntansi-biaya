@@ -3,8 +3,10 @@
 namespace App\Imports;
 
 use App\Models\Zco;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsFailures;
@@ -20,6 +22,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 
 class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation, SkipsOnFailure, WithBatchInserts, WithChunkReading, WithMultipleSheets, ToCollection, ShouldQueue
 {
+
     use Importable, SkipsErrors, SkipsFailures;
 
     protected $periode;
@@ -31,7 +34,7 @@ class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation
 
     public function model(array $row)
     {
-        return new Zco([
+        DB::table('zco')->insert([
             'plant_code' => $row['plant_code'],
             'periode' => $this->periode,
             'product_code' => $row['product_code'],
@@ -44,32 +47,33 @@ class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation
             'unit_price_product' => $row['unit_price_product'],
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
+            'created_at' => Carbon::now()->format('Y-m-d'),
+            'updated_at' => Carbon::now()->format('Y-m-d'),
         ]);
     }
 
     public function batchSize(): int
     {
-        return 50;
+        return 5000;
     }
 
     public function chunkSize(): int
     {
-        return 50;
+        return 5000;
     }
 
     public function rules(): array
     {
         return [
-            'plant_code' => [''],
-            'periode' => [''],
-            'product_code' => [''],
-            'product_qty' => [''],
-            'cost_element' => [''],
-            'material_code' => [''],
-            'total_qty' => [''],
-            'currency' => [''],
-            'total_amount' => [''],
-            'unit_price_product' => [''],
+            'plant_code' => 'required',
+            'product_code' => 'required',
+            'material_code' => 'required',
+            'cost_element' => 'required',
+            'product_qty' => 'required',
+            'total_qty' => 'required',
+            'currency' => 'required',
+            'total_amount' => 'required',
+            'unit_price_product' => 'required',
         ];
     }
 
