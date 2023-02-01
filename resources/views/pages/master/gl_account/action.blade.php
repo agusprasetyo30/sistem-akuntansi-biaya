@@ -9,7 +9,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail General Ledger Account</h5>
+                <h5 class="modal-title" id="largemodal1">Detail General Ledger Account Variable Cost</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -65,7 +65,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit General Ledger Account</h5>
+                <h5 class="modal-title" id="largemodal1">Edit General Ledger Account Variable Cost</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}

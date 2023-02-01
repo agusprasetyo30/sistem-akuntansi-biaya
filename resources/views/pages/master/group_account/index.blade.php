@@ -9,7 +9,7 @@
 <!--Page header-->
 <div class="page-header">
     <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Group Account</h4>
+        <h4 class="page-title mb-0 text-primary">Group Account Variable Cost</h4>
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
@@ -61,7 +61,7 @@
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_group_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+            <table id="dt_group_account" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
                 <thead>
                 <tr>
                     <th data-type='text' data-name='code' class="text-center">CODE</th>
