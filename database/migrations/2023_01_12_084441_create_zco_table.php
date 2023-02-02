@@ -25,8 +25,7 @@ class CreateZcoTable extends Migration
             $table->double('product_qty', 8, 2)->default(0)->nullable();
             $table->string('cost_element')->unsigned();
             $table->foreign('cost_element')->references('gl_account')->on('gl_account');
-            $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->string('material_code')->nullable();
             $table->double('total_qty', 8, 2)->default(0)->nullable();
             $table->string('currency')->nullable();
             $table->double('total_amount', 8, 2)->default(0)->nullable();
