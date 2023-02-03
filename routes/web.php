@@ -410,6 +410,16 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::post('import', [PJPenjualanController::class, 'import'])->name('import_penjualan');
                 Route::post('check', [PJPenjualanController::class, 'check'])->name('check_penjualan');
             });
+
+            Route::group(['prefix' => 'balans'], function () {
+                Route::get('/', [LabaRugiController::class, 'index'])->name('balans');
+//                Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
+//                Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
+//                Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
+//                Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
+//                Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
+//                Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
+            });
         });
     });
 

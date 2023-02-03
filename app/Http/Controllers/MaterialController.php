@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class MaterialController extends Controller
 {
@@ -235,7 +235,7 @@ class MaterialController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);
