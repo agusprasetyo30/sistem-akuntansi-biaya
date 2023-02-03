@@ -16,14 +16,14 @@ class CreateConsRateTable extends Migration
         Schema::create('cons_rate', function (Blueprint $table) {
             $table->id();
             $table->string('plant_code')->unsigned();
-            $table->foreign('plant_code')->references('plant_code')->on('plant');
-            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade');
+            $table->foreign('plant_code')->references('plant_code')->on('plant')->onDelete("cascade")->onUpdate("cascade");
+            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onDelete("cascade")->onUpdate("cascade");
             $table->string('product_code')->unsigned();
-            $table->foreign('product_code')->references('material_code')->on('material');
+            $table->foreign('product_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
             $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->foreign('material_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->double('cons_rate', 8, 2);
             $table->boolean('is_active')->default(true);
             $table->timestamp('month_year')->nullable();

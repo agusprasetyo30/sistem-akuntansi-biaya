@@ -16,7 +16,7 @@ class CreateKategoriProdukTable extends Migration
         Schema::create('kategori_produk', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('kategori_produk_name')->unique();
             $table->string('kategori_produk_desc');
             $table->boolean('is_active')->default(true);

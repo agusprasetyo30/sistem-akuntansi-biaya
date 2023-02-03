@@ -16,7 +16,7 @@ class CreatePlantTable extends Migration
         Schema::create('plant', function (Blueprint $table) {
             $table->string('plant_code')->primary();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('plant_desc')->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_at');

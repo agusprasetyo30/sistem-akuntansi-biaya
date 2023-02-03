@@ -16,13 +16,13 @@ class CreateGlosCcTable extends Migration
         Schema::create('glos_cc', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('plant_code')->unsigned();
-            $table->foreign('plant_code')->references('plant_code')->on('plant');
+            $table->foreign('plant_code')->references('plant_code')->on('plant')->onDelete("cascade")->onUpdate("cascade");
             $table->string('cost_center')->unsigned();
-            $table->foreign('cost_center')->references('cost_center')->on('cost_center');
+            $table->foreign('cost_center')->references('cost_center')->on('cost_center')->onDelete("cascade")->onUpdate("cascade");
             $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->foreign('material_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

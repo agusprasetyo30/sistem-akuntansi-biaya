@@ -16,16 +16,16 @@ class CreateSaldoAwalTable extends Migration
         Schema::create('saldo_awal', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->timestamp('month_year')->nullable();
             $table->string('gl_account')->unsigned();
-            $table->foreign('gl_account')->references('gl_account')->on('gl_account');
+            $table->foreign('gl_account')->references('gl_account')->on('gl_account')->onDelete("cascade")->onUpdate("cascade");
             $table->string('valuation_class')->nullable();
             $table->string('price_control')->nullable();
             $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->foreign('material_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
             $table->string('plant_code')->unsigned();
-            $table->foreign('plant_code')->references('plant_code')->on('plant');
+            $table->foreign('plant_code')->references('plant_code')->on('plant')->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
             $table->double('total_stock', 8, 2)->nullable();
             $table->double('total_value', 8, 2)->nullable();

@@ -16,7 +16,7 @@ class CreateKategoriBalansTable extends Migration
         Schema::create('kategori_balans', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('kategori_balans')->unique();
             $table->string('kategori_balans_desc');
             $table->timestamp('deleted_at')->nullable();
