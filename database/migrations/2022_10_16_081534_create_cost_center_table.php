@@ -17,7 +17,7 @@ class CreateCostCenterTable extends Migration
             $table->string('cost_center')->primary();
             $table->string('cost_center_desc');
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');

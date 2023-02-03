@@ -16,7 +16,7 @@ class CreateLabaRugiTable extends Migration
         Schema::create('laba_rugi', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->timestamp('periode');
             $table->foreignId('kategori_produk_id')->references('id')->on('kategori_produk')->onUpdate('cascade')->onDelete('cascade');
             $table->double('value_bp', 8, 2)->default(0.0);

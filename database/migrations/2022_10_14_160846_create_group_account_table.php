@@ -16,7 +16,7 @@ class CreateGroupAccountTable extends Migration
         Schema::create('group_account', function (Blueprint $table) {
             $table->string('group_account_code')->primary();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('group_account_desc');
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_at');

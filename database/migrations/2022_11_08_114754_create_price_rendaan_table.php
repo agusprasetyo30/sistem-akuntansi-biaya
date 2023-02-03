@@ -16,13 +16,13 @@ class CreatePriceRendaanTable extends Migration
         Schema::create('price_rendaan', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material');
+            $table->foreign('material_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
             $table->string('region_name')->unsigned();
             $table->foreign('region_name')->references('region_name')->on('regions')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade');
-            $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onUpdate('cascade');
+            $table->foreignId('version_id')->references('id')->on('version_asumsi')->onDelete("cascade")->onUpdate("cascade");
+            $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->double('price_rendaan_value', 8, 2)->default(0);
             $table->string('type_currency');
             $table->dateTime('created_at');

@@ -15,12 +15,12 @@ class CreateManagementRoleTable extends Migration
     {
         Schema::create('management_role', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onUpdate('cascade');
-            $table->foreignId('role_id')->references('id')->on('role')->onUpdate('cascade');
+            $table->foreignId('user_id')->references('id')->on('users')->onDelete("cascade")->onUpdate("cascade");
+            $table->foreignId('role_id')->references('id')->on('role')->onDelete("cascade")->onUpdate("cascade");
             $table->string('username');
             $table->string('login_method')->default('DB');
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
         });
     }

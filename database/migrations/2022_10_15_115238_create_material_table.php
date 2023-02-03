@@ -16,11 +16,11 @@ class CreateMaterialTable extends Migration
         Schema::create('material', function (Blueprint $table) {
             $table->string('material_code')->primary();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId('kategori_material_id')->references('id')->on('kategori_material')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('kategori_produk_id')->nullable();
             $table->string('group_account_code')->unsigned();
-            $table->foreign('group_account_code')->references('group_account_code')->on('group_account');
+            $table->foreign('group_account_code')->references('group_account_code')->on('group_account')->onDelete("cascade")->onUpdate("cascade");
             $table->string('material_name')->nullable();
             $table->text('material_desc')->nullable();
             $table->string('material_uom')->nullable();

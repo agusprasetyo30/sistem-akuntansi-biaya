@@ -21,7 +21,7 @@ class CreateVersionAsumsiTable extends Migration
             $table->timestamp('akhir_periode');
             $table->timestamp('saldo_awal');
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
         });
     }

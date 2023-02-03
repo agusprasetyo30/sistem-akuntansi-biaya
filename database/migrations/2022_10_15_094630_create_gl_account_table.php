@@ -17,9 +17,9 @@ class CreateGlAccountTable extends Migration
             $table->string('gl_account')->primary();
             $table->string('gl_account_desc');
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('group_account_code')->unsigned();
-            $table->foreign('group_account_code')->references('group_account_code')->on('group_account');
+            $table->foreign('group_account_code')->references('group_account_code')->on('group_account')->onDelete("cascade")->onUpdate("cascade");
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');

@@ -16,11 +16,11 @@ class CreateQtyRenProdTable extends Migration
         Schema::create('qty_renprod', function (Blueprint $table) {
             $table->id();
             $table->string('company_code')->unsigned();
-            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('cost_center')->unsigned();
-            $table->foreign('cost_center')->references('cost_center')->on('cost_center');
+            $table->foreign('cost_center')->references('cost_center')->on('cost_center')->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
-            $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onUpdate('cascade');
+            $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->float('qty_renprod_value');
             $table->dateTime('created_at');
             $table->integer('created_by');
