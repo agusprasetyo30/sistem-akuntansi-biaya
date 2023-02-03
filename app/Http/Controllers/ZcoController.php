@@ -7,6 +7,9 @@ use App\DataTables\Master\H_ZcoGroupAccountDataTable;
 use App\DataTables\Master\ZcoDataTable;
 use App\Exports\MultipleSheet\MS_ZcoExport;
 use App\Imports\ZcoImport;
+use App\Models\GLAccount;
+use App\Models\Material;
+use App\Models\Plant;
 use App\Models\Zco;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -213,50 +216,107 @@ class ZcoController extends Controller
 
     public function import(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "file" => 'required',
-        ], validatorMsg());
-
-        if ($validator->fails())
-            return $this->makeValidMsg($validator);
-
         try {
-            DB::transaction(function () use ($request) {
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails()) {
+                return $this->makeValidMsg($validator);
+            }
+
+            $transaction = DB::transaction(function () use ($request) {
                 $per = explode('-', $request->periode_import);
                 $periode = $per[1] . '-' . $per[0] . '-01';
+                $empty_excel = Excel::toArray(new ZcoImport($periode), $request->file('file'));
+                if ($empty_excel[0]) {
+                    $file = $request->file('file')->store('import');
 
-                Zco::where('periode', $periode)->delete();
+                    Zco::where('periode', 'ilike', '%' . $periode . '%')->delete();
+                    $import = new ZcoImport($periode);
+                    $import->import($file);
 
-                $file = $request->file('file')->store('import');
-                $import = new ZcoImport($periode);
-                $import->import($file);
-
-                $data_fail = $import->failures();
-
-                if ($import->failures()->isNotEmpty()) {
-                    $err = [];
-
-                    foreach ($data_fail as $rows) {
-                        $er = implode(' ', array_values($rows->errors()));
-                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                        array_push($err, $hasil);
-                    }
-                    // dd(implode(' ', $err));
-                    return setResponse([
-                        'code' => 500,
-                        'title' => 'Gagal meng-import data',
-                    ]);
+                    $data_fail = $import->failures();
+                } else {
+                    $data_fail = [];
                 }
+                return $data_fail;
             });
 
-            return setResponse([
-                'code' => 200,
-                'title' => 'Berhasil meng-import data'
-            ]);
-        } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            if ($transaction->isNotEmpty()) {
+                return setResponse([
+                    'code' => 500,
+                    'title' => 'Gagal meng-import data',
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Berhasil meng-import data'
+                ]);
+            }
+        } catch (\Exception $exception) {
+            $per = explode('-', $request->periode_import);
+            $periode = $per[1] . '-' . $per[0] . '-01';
+            $empty_excel = Excel::toArray(new ZcoImport($periode), $request->file('file'));
+
+            $plant = [];
+            $plant_ = [];
+            $product = [];
+            $product_ = [];
+            $cost_element = [];
+            $cost_element_ = [];
+            $material = [];
+            $material_ = [];
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($plant, 'plant ' . $value['plant_code'] . ' tidak ada pada master');
+                $d_plant = Plant::whereIn('plant_code', [$value['plant_code']])->first();
+                if ($d_plant) {
+                    array_push($plant_, 'plant ' . $d_plant->plant_code . ' tidak ada pada master');
+                }
+
+                array_push($product, 'produk ' . $value['product_code'] . ' tidak ada pada master');
+                $d_product = Material::whereIn('material_code', [$value['product_code']])->first();
+                if ($d_product) {
+                    array_push($product_, 'produk ' . $d_product->material_code . ' tidak ada pada master');
+                }
+
+                array_push($cost_element, 'cost element ' . $value['cost_element'] . ' tidak ada pada master');
+                $d_cost_element = GLAccount::whereIn('gl_account', [$value['cost_element']])->first();
+                if ($d_cost_element) {
+                    array_push($cost_element_, 'cost element ' . $d_cost_element->gl_account . ' tidak ada pada master');
+                }
+
+                array_push($material, 'material ' . $value['material_code'] . ' tidak ada pada master');
+                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
+                if ($d_material) {
+                    array_push($material_, 'material ' . $d_material->material_code . ' tidak ada pada master');
+                }
+            }
+
+            $result_plant = array_diff($plant, $plant_);
+            $result_product = array_diff($product, $product_);
+            $result_cost_element = array_diff($cost_element, $cost_element_);
+            $result_material = array_diff($material, $material_);
+            $result = array_merge($result_plant, $result_product, $result_cost_element, $result_material);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 

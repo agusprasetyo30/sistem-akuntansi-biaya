@@ -36,7 +36,9 @@ use App\Http\Controllers\LabaRugiController;
 use App\Http\Controllers\PJPemakaianController;
 use App\Http\Controllers\PJPenjualanController;
 use App\Http\Controllers\KategoriBalansController;
+use App\Http\Controllers\KontrolProyeksiController;
 use App\Http\Controllers\MapKetegoriBalansController;
+use App\Http\Controllers\SimulasiProyeksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -422,6 +424,10 @@ Route::group(['middleware' => 'auth'], function () {
             });
         });
     });
+
+    Route::get('/simulasi-proyeksi', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
+
+    Route::get('/kontrol-proyeksi', [KontrolProyeksiController::class, 'index'])->name('kontrol_proyeksi');
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);
 

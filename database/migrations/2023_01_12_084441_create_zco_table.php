@@ -15,12 +15,16 @@ class CreateZcoTable extends Migration
     {
         Schema::create('zco', function (Blueprint $table) {
             $table->id();
-            $table->string('company_code');
-            $table->string('plant_code')->nullable();
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company');
+            $table->string('plant_code')->unsigned();
+            $table->foreign('plant_code')->references('plant_code')->on('plant');
             $table->timestamp('periode')->nullable();
-            $table->string('product_code')->nullable();
+            $table->string('product_code')->unsigned();
+            $table->foreign('product_code')->references('material_code')->on('material');
             $table->double('product_qty', 8, 2)->default(0)->nullable();
-            $table->string('cost_element')->nullable();
+            $table->string('cost_element')->unsigned();
+            $table->foreign('cost_element')->references('gl_account')->on('gl_account');
             $table->string('material_code')->nullable();
             $table->double('total_qty', 8, 2)->default(0)->nullable();
             $table->string('currency')->nullable();
