@@ -110,4 +110,8 @@
         placeholder: 'Pilih Status',
         width: '100%'
     })
+
+    $('#edit_nama_region'+{{$model->id}}).keyup(function(){
+        this.value = this.value.toUpperCase();
+    });
 </script>

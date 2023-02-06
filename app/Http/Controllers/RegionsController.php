@@ -27,7 +27,7 @@ class RegionsController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "nama" => 'required',
+                "nama" => 'required|unique:regions,region_name',
                 "deskripsi" => 'required',
                 "latitude" => 'required',
                 "longtitude" => 'required',
@@ -38,7 +38,7 @@ class RegionsController extends Controller
                 return $this->makeValidMsg($validator);
 
 
-            $input['region_name'] = $request->nama;
+            $input['region_name'] = strtoupper($request->nama);
             $input['region_desc'] = $request->deskripsi;
             $input['latitude'] = $request->latitude;
             $input['longtitude'] = $request->longtitude;
@@ -63,19 +63,31 @@ class RegionsController extends Controller
 
     public function update(Request $request)
     {
+        $data = Regions::where('id', $request->id)->first();
+
+        if (!$data)
+            return setResponse([
+                'code' => 400,
+                'title' => 'Data Tidak Ditemukan!'
+            ]);
+
+        if ($data->region_name != $request->nama){
+            $required['nama'] = 'required|unique:regions,region_name';
+        }else{
+            $required['nama'] = 'required';
+        }
+
+        $required['deskripsi'] = 'required';
+        $required['latitude'] = 'required';
+        $required['longtitude'] = 'required';
+        $required['is_active'] = 'required';
         try {
-            $validator = Validator::make($request->all(), [
-                "nama" => 'required',
-                "deskripsi" => 'required',
-                "latitude" => 'required',
-                "longtitude" => 'required',
-                "is_active" => 'required',
-            ], validatorMsg());
+            $validator = Validator::make($request->all(), $required, validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['region_name'] = $request->nama;
+            $input['region_name'] = strtoupper($request->nama);
             $input['region_desc'] = $request->deskripsi;
             $input['latitude'] = $request->latitude;
             $input['longtitude'] = $request->longtitude;

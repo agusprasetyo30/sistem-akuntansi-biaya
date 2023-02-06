@@ -64,7 +64,7 @@
 						<li><a class="sub-slide-item" href="{{url('buku-besar/pakai-jual/penjualan')}}">Penjualan</a></li>
 					</ul>
 				</li>
-				<li><a href="#" class="slide-item"> Balans</a></li>
+				<li><a href="{{route('balans')}}" class="slide-item"> Balans</a></li>
 			</ul>
 		</li>
 		<li class="slide">

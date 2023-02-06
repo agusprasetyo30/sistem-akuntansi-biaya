@@ -48,7 +48,7 @@ class RegionsImport implements ToModel, WithHeadingRow, SkipsOnError, WithValida
 
     public function rules(): array{
         return[
-            'region_name' => ['required'],
+            'region_name' => ['required', 'unique:regions,region_name'],
             'region_desc' => ['required'],
             'latitude' => ['required'],
             'longtitude' => ['required'],

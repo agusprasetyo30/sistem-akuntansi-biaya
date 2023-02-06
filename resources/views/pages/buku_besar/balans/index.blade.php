@@ -44,15 +44,12 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_laba_rugi" class="table table-bordered text-wrap wrap key-buttons" style="width: 100%;">' +
+        var table_main_dt = '<table id="dt_balans" class="table table-bordered text-wrap wrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
-            '<th data-type="select" data-name="kategori_produk" class="text-center">KATEGORI PRODUK</th>' +
-            '<th data-type="text" data-name="bp" class="text-center">BIAYA PENJUALAN</th>' +
-            '<th data-type="text" data-name="bau" class="text-center">BIAYA ADM UMUM</th>' +
-            '<th data-type="text" data-name="bb" class="text-center">BIAYA BUNGA</th>' +
-            '<th data-type="text" data-name="aksi" class="text-center">ACTION</th>' +
+            '<th data-type="text" data-name="material" class="text-center">MATERIAL</th>' +
+            '<th data-type="select" data-name="kategori_produk" class="text-center">PLANT/CC</th>' +
+            '<th data-type="text" data-name="bp" class="text-center">KETERANGAN</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -65,7 +62,7 @@
 
             $('#tabs_vertical').on('click', function () {
 
-                $('#dt_laba_rugi').DataTable().ajax.reload();
+                $('#dt_balans').DataTable().ajax.reload();
             })
 
             $('#tanggal').bootstrapdatepicker({
@@ -266,7 +263,7 @@
                                     // update_dt_horizontal()
                                     // $("#table_main").empty();
                                     // get_data()
-                                    $('#dt_laba_rugi').DataTable().ajax.reload();
+                                    $('#dt_balans').DataTable().ajax.reload();
                                 }
                             })
                     },
@@ -307,13 +304,13 @@
         function get_data(){
             $('#table_main').html(table_main_dt)
 
-            $('#dt_laba_rugi thead tr')
+            $('#dt_balans thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_laba_rugi thead');
+                .appendTo('#dt_balans thead');
 
             // $('#dt_price_rendaan').DataTable().clear().destroy();
-            var dt = $("#dt_laba_rugi").DataTable({
+            var dt = $("#dt_balans").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -505,7 +502,7 @@
                             // update_dt_horizontal()
                             // $("#table_main").empty();
                             // get_data()
-                            $('#dt_laba_rugi').DataTable().ajax.reload();
+                            $('#dt_balans').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -553,7 +550,7 @@
                                 // update_dt_horizontal()
                                 // $("#table_main").empty();
                                 // get_data()
-                                $('#dt_laba_rugi').DataTable().ajax.reload();
+                                $('#dt_balans').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -603,7 +600,7 @@
                                         update_dt_horizontal()
                                         // $("#table_main").empty();
                                         // get_data()
-                                        $('#dt_laba_rugi').DataTable().ajax.reload();
+                                        $('#dt_balans').DataTable().ajax.reload();
                                     }
                                 })
                         },

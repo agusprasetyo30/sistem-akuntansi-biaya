@@ -66,6 +66,7 @@ class ConsRateController extends Controller
                 'plant_code' => $request->id_plant,
                 'version_id' => (int) $request->version,
                 'product_code' => $request->produk,
+                'material_code' => $request->material,
                 'month_year' => $data_asumsi->month_year,
                 'company_code' => 'B000'
             ])->first();
@@ -132,12 +133,13 @@ class ConsRateController extends Controller
                 'plant_code' => $request->id_plant,
                 'version_id' => (int) $request->version,
                 'product_code' => $request->produk,
+                'material_code' => $request->material,
                 'month_year' => $data_asumsi->month_year,
                 'company_code' => 'B000'
-            ])->get();
+            ])->where('id', '!=', $request->id)->first();
 
             DB::transaction(function () use ($data_cek, $request, $input){
-                if ($data_cek->isEmpty()) {
+                if ($data_cek == null) {
                     ConsRate::where('id', $request->id)->update($input);
                 } else {
                     $temp = $data_cek->where('id', '!=', $request->id)->pluck('id')->all();
@@ -261,9 +263,11 @@ class ConsRateController extends Controller
                 'plant_code' => $request->id_plant,
                 'version_id' => (int) $request->version,
                 'product_code' => $request->produk,
+                'material_code' => $request->material,
                 'month_year' => $data_asumsi->month_year,
                 'company_code' => 'B000'
-            ])->first();
+            ])->where('id', '!=', $request->id)
+                ->first();
 
             if ($data_cek == null){
                 return response()->json(['code' => 200, 'msg' => 'Data ']);

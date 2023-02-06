@@ -260,13 +260,13 @@
                         '<div class="col-sm-4 col-md-4">' +
                         '<div class="form-group">' +
                         '<label class="form-label">Adjustment (%) <span class="text-red">*</span></label>' +
-                        '<input class="form-control" type="number" placeholder="0" required name="adjustment" id="adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$">' +
+                        '<input class="form-control" type="number" value="0" placeholder="0" required name="adjustment" id="adjustment'+i+'" min="0" step="0.01" title="adjustment" pattern="^\d+(?:\.\d{1,2})?$">' +
                         '</div>' +
                         '</div>' +
                         '<div class="col-sm-4 col-md-4">' +
                         '<div class="form-group">' +
                         '<label class="form-label">Inflasi (%) <span class="text-red">*</span></label>' +
-                        '<input class="form-control" type="number" placeholder="0" required name="inflasi" id="inflasi'+i+'" min="0" step="0.01" title="inflasi" pattern="^\d+(?:\.\d{1,2})?$">' +
+                        '<input class="form-control" type="number" value="0" placeholder="0" required name="inflasi" id="inflasi'+i+'" min="0" step="0.01" title="inflasi" pattern="^\d+(?:\.\d{1,2})?$">' +
                         '</div>' +
                         '</div>';
 
