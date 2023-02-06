@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\H_PJPenjualanDataTable;
 use App\DataTables\Master\PJPenjualanDataTable;
-use App\Exports\MultiSheet\MS_PJPenjualanExport;
+use App\Exports\MultipleSheet\MS_PJPenjualanExport;
 use App\Imports\PJPenjualanImport;
 use App\Models\PJ_Penjualan;
 use Carbon\Carbon;
@@ -194,7 +194,7 @@ class PJPenjualanController extends Controller
         }
         $version = $request->version;
 
-        return Excel::download(new MS_PJPenjualanExport($version), 'qty_renprod.xlsx');
+        return Excel::download(new MS_PJPenjualanExport($version), 'penjualan.xlsx');
     }
 
     public function check(Request $request)

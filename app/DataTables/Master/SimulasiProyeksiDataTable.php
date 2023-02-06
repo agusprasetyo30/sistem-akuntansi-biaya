@@ -14,42 +14,86 @@ class SimulasiProyeksiDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        //UNION
+        $cr = DB::table("cons_rate")
+            ->select(
+                DB::raw("(
+                    CASE
+                        WHEN material.kategori_material_id = 1 THEN 1
+                        WHEN material.kategori_material_id = 2 THEN 3
+                        WHEN material.kategori_material_id = 3 THEN 2
+                        WHEN material.kategori_material_id = 4 THEN 4
+                        ELSE 0 END)
+                    AS no"),
+                "material.kategori_material_id as kategori",
+                "material.material_name as name",
+                "cons_rate.material_code as code",
+            )
+            ->leftJoin('material', 'material.material_code', '=', 'cons_rate.material_code');
 
-        // $cr = DB::table("cons_rate")
-        //     ->select(
-        //         "cons_rate.product_code as code",
-        //         "material.material_name as name",
-        //         DB::raw('(CASE WHEN material.group_account_code IS NOT NULL THEN 1 ELSE 0 END) AS keterangan')
-        //     )
-        //     ->leftJoin('material', 'material.material_code', '=', 'cons_rate.material_code');
-
-        // $query = DB::table("salrs")
-        //     ->select(
-        //         "group_account_fc.group_account_fc as code",
-        //         "group_account_fc.group_account_fc_desc as name",
-        //         DB::raw('(CASE WHEN group_account_fc.group_account_fc IS NOT NULL THEN 2 ELSE 1 END) AS keterangan')
-        //     )
-        //     ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
-        //     ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
-        //     ->union($cr)
-        //     ->orderBy('keterangan', 'asc')
-        //     ->orderBy('code', 'asc');
+        $salr = DB::table("salrs")
+            ->select(
+                DB::raw("(
+                    CASE
+                        WHEN group_account_fc.group_account_fc = '1200' OR
+                        group_account_fc.group_account_fc = '1500' OR
+                        group_account_fc.group_account_fc = '1100' OR
+                        group_account_fc.group_account_fc = '1300' OR
+                        group_account_fc.group_account_fc = '1600' OR
+                        group_account_fc.group_account_fc = '1000' OR
+                        group_account_fc.group_account_fc = '1400' THEN 8
+                        ELSE 6 END)
+                    AS no"),
+                DB::raw("(
+                    CASE
+                        WHEN group_account_fc.group_account_fc IS NOT NULL THEN 1
+                        ELSE 0 END)
+                    AS kategori"),
+                "group_account_fc.group_account_fc_desc as name",
+                "group_account_fc.group_account_fc as code",
+            )
+            ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+            ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+            ->union($cr);
 
         $query = DB::table("temp_proyeksi")
             ->select(
-                "temp_proyeksi.proyeksi_no as code",
+                "temp_proyeksi.id as no",
+                DB::raw("(
+                    CASE
+                        WHEN temp_proyeksi.proyeksi_name  = 'Bahan Baku, Penolong & Utilitas - Dasar Balans' THEN 1
+                        WHEN temp_proyeksi.proyeksi_name  = 'Bahan Baku, Penolong & Utilitas - Dasar ZCOHPPDET' THEN 2
+                        WHEN temp_proyeksi.proyeksi_name  = 'Bahan Baku, Penolong & Utilitas - Dasar Stock' THEN 3
+                        WHEN temp_proyeksi.proyeksi_name  = 'Bahan Baku, Penolong & Utilitas - Dasar Saldo Awal & CR Sesuai Perhitungan' THEN 4
+                        ELSE 0 END)
+                    AS kategori"),
                 "temp_proyeksi.proyeksi_name as name",
-            );
+                "temp_proyeksi.proyeksi_name as code",
+            )
+            ->union($salr)
+            ->orderBy('no', 'asc')
+            ->orderBy('kategori', 'asc');
 
         $datatable = datatables()
             ->query($query)
-            ->addColumn('code', function ($query) {
-                return $query->code;
-            })
             ->addColumn('name', function ($query) {
                 return $query->name;
             });
+
+        $asumsi = DB::table('asumsi_umum')
+            ->where('version_id', $this->version)
+            ->get();
+
+        foreach ($asumsi as $key => $a) {
+            $datatable->addColumn($key, function ($query) use ($a) {
+                return '-';
+            })->addColumn($key, function ($query) use ($a) {
+                return '-';
+            })->addColumn($key, function ($query) use ($a) {
+                return '-';
+            })->addColumn($key, function ($query) use ($a) {
+                return '-';
+            });
+        }
 
         return $datatable;
     }

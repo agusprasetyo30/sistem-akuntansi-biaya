@@ -194,7 +194,7 @@ class PJPemakaianController extends Controller
         }
         $version = $request->version;
 
-        return Excel::download(new MS_PJPemakaianExport($version), 'qty_renprod.xlsx');
+        return Excel::download(new MS_PJPemakaianExport($version), 'pemakaian.xlsx');
     }
 
     public function check(Request $request)
