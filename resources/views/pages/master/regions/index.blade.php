@@ -66,6 +66,10 @@
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
+
+            $('#nama_region').keyup(function(){
+                this.value = this.value.toUpperCase();
+            });
         })
 
         function get_data(){

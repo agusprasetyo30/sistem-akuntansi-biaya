@@ -600,7 +600,7 @@
                             })
                                 .then((result) => {
                                     if (result.value) {
-                                        update_dt_horizontal()
+                                        // update_dt_horizontal()
                                         // $("#table_main").empty();
                                         // get_data()
                                         $('#dt_laba_rugi').DataTable().ajax.reload();

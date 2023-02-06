@@ -72,7 +72,7 @@ class CostCenterController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            CostCenter::where('cost_center', $request->code)
+            CostCenter::where('cost_center', $request->id)
                 ->update($input);
 
             return setResponse([
@@ -80,6 +80,7 @@ class CostCenterController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         }catch (\Exception $exception){
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);

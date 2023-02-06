@@ -45,7 +45,7 @@
 @section('scripts')
     <script>
 
-        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-wrap warp key-buttons" style="width: 200%;">' +
+        var table_main_dt = '<table id="dt_consrate" class="table table-bordered text-nowrap key-buttons">' +
             '<thead>' +
             '<tr>' +
             '<th data-type="select" data-name="version" class="text-center">VERSI</th>' +
@@ -371,10 +371,8 @@
                 .clone(true)
                 .addClass('filters')
                 .appendTo('#dt_consrate thead');
-            // $('#dt_consrate').DataTable().clear().destroy();
+
             $("#dt_consrate").DataTable({
-                autoWidth: true,
-                scrollCollapse: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
                 sortable: false,
@@ -726,6 +724,7 @@
                 url: '{{route('check_consrate_dublicate')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
+                    id: id,
                     id_plant: $('#edit_data_main_plant'+id).val(),
                     version: $('#edit_data_main_version'+id).val(),
                     id_asumsi: $('#edit_data_detal_version'+id).val(),
@@ -735,7 +734,6 @@
                     is_active: $('#edit_is_active'+id).val(),
                 },
                 success:function (response) {
-                    console.log(response)
                     if (response.code === 200){
                         Swal.fire({
                             title: 'Apakah anda yakin?',
@@ -790,7 +788,6 @@
                                         handleError(response)
                                         $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                                         $("#back_edit"+id).attr("disabled", false);
-                                        // $('#dt_consrate').DataTable().ajax.reload();
                                     }
                                 })
                             }
@@ -906,7 +903,6 @@
                         },
                         error: function (response) {
                             handleError(response)
-                            // $('#dt_consrate').DataTable().ajax.reload();
                         }
                     })
 
@@ -915,5 +911,4 @@
             })
         }
     </script>
-    {{--    <script src="{{asset('assets/js/pages/regions.js')}}"></script>--}}
 @endsection

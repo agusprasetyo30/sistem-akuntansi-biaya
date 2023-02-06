@@ -16,6 +16,8 @@ class LabaRugiController extends Controller
 {
     public function index(Request $request, labaRugiDataTable $labaRugiDataTable)
     {
+
+
         if ($request->data == 'index') {
             return $labaRugiDataTable->render('pages.buku_besar.laba_rugi.index');
         }elseif ($request->data == 'horizontal'){

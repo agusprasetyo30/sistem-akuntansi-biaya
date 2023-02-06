@@ -285,6 +285,7 @@
                 url: '{{route('update_cost_center')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
+                    id: id,
                     code: $('#edit_code_cost_center' + id).val(),
                     deskripsi: $('#edit_cost_center_desc' + id).val(),
                 },

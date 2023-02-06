@@ -399,9 +399,30 @@
                     }
                 });
 
-                $('#edit_currency'+id+data_id).val(response.data['usd_rate']).trigger('keyup');
-                $('#edit_adjustment'+id+data_id).val(response.data['adjustment']).trigger('keyup');
-                $('#edit_inflasi'+id+data_id).val(response.data['inflasi']).trigger('keyup');
+                if (response.code !== 200){
+
+                    $.ajax({
+                        url: "{{ route('helper_kursv2') }}",
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data:{
+                            _token: "{{ csrf_token() }}",
+                            periode:d
+                        },
+                        success:function (response) {
+                            $('#edit_currency'+id+data_id).val(response.data_kurs).trigger('keyup');
+                        }
+                    })
+
+                    $('#edit_adjustment'+id+data_id).val(0).trigger('keyup');
+                    $('#edit_inflasi'+id+data_id).val(0).trigger('keyup');
+                }else {
+                    $('#edit_currency'+id+data_id).val(response.data['usd_rate']).trigger('keyup');
+                    $('#edit_adjustment'+id+data_id).val(response.data['adjustment']).trigger('keyup');
+                    $('#edit_inflasi'+id+data_id).val(response.data['inflasi']).trigger('keyup');
+                }
 
             }
         })

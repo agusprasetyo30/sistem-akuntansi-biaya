@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\ConsRate;
+use App\Models\Material;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
@@ -550,6 +552,46 @@ if (!function_exists('mapping_plant_insert')) {
             DB::table('map_kategori_balans')->insert($mapping);
 //            array_push($data_ready, $mapping);
         }
+    }
+}
+
+if (!function_exists('find_lower_material')) {
+    function find_lower_material($versi)
+    {
+        $material_consrate = ConsRate::select('cons_rate.material_code')
+            ->leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+            ->where([
+                'cons_rate.version_id' => $versi,
+                'material.kategori_material_id' => 1
+            ])
+            ->groupBy('cons_rate.material_code')
+            ->get();
+
+        $product_consrate = ConsRate::select('cons_rate.product_code')
+            ->leftjoin('material', 'material.material_code', '=', 'cons_rate.product_code')
+            ->where([
+                'cons_rate.version_id' => $versi,
+                'material.kategori_material_id' => 1
+            ])
+            ->groupBy('cons_rate.product_code')
+            ->get();
+
+        $result = array_diff($material_consrate->pluck('material_code')->all(), $product_consrate->pluck('product_code')->all());
+
+        return $result;
+    }
+}
+
+if (!function_exists('antrian_material_balans')) {
+    function antrian_material_balans($versi)
+    {
+        $material_balans = Material::where([
+            'kategori_material_id' => 1,
+            'deleted_at' => null,
+        ])->get();
+
+
+
     }
 }
 

@@ -699,6 +699,23 @@ class SelectController extends Controller
         }
     }
 
+    public function check_kursv2(Request $request)
+    {
+//        $data = explode('-', $request->periode);
+
+        $kurs = DB::table('kurs')
+            ->where('month_year', 'ilike', '%'.$request->periode.'%')
+            ->first();
+
+
+//        dd($kurs, $request->periode);
+        if ($kurs == null) {
+            return response()->json(['Code' => 200, 'data_kurs' => '']);
+        } else {
+            return response()->json(['Code' => 200, 'data_kurs' => $kurs->usd_rate]);
+        }
+    }
+
     //  Datatable
     public function version_dt(Request $request)
     {

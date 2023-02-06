@@ -39,6 +39,7 @@ use App\Http\Controllers\KategoriBalansController;
 use App\Http\Controllers\KontrolProyeksiController;
 use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
+use  App\Http\Controllers\BalansController;
 
 /*
 |--------------------------------------------------------------------------
@@ -285,6 +286,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
             Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
             Route::post('/check_kursv1', [SelectController::class, 'check_kursv1'])->name('helper_kursv1');
+            Route::post('/check_kursv2', [SelectController::class, 'check_kursv2'])->name('helper_kursv2');
 
             //            Datatable
             Route::get('/version_dt', [SelectController::class, 'version_dt'])->name('version_dt');
@@ -392,6 +394,16 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
         });
 
+        Route::group(['prefix' => 'balans'], function () {
+            Route::get('/', [BalansController::class, 'index'])->name('balans');
+//                Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
+//                Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
+//                Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
+//                Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
+//                Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
+//                Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
+        });
+
         Route::group(['prefix' => 'pakai-jual'], function () {
 
             Route::group(['prefix' => 'pemakaian'], function () {
@@ -412,16 +424,6 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('export', [PJPenjualanController::class, 'export'])->name('export_penjualan');
                 Route::post('import', [PJPenjualanController::class, 'import'])->name('import_penjualan');
                 Route::post('check', [PJPenjualanController::class, 'check'])->name('check_penjualan');
-            });
-
-            Route::group(['prefix' => 'balans'], function () {
-                Route::get('/', [LabaRugiController::class, 'index'])->name('balans');
-//                Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
-//                Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
-//                Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
-//                Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
-//                Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
-//                Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
             });
         });
     });
