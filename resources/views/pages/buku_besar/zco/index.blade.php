@@ -860,10 +860,10 @@
                         processing: true,
                         serverSide: true,
                         pageLength: -1,
-                        fixedHeader: {
-                            header: true,
-                            headerOffset: $('#main_header').height()
-                        },
+                        // fixedHeader: {
+                        //     header: true,
+                        //     headerOffset: $('#main_header').height()
+                        // },
                         fixedColumns:   {
                             left: 2
                         },
