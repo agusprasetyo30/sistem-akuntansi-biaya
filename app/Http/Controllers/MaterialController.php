@@ -57,59 +57,12 @@ class MaterialController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            $mapping = [
-                [
-                    'material_code' => $material_code,
-                    'kategori_balans_id' => 1,
-                    'company_code' => auth()->user()->company_code,
-                    'created_by' => auth()->user()->id,
-                    'updated_by' => auth()->user()->id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ],
-                [
-                    'material_code' => $material_code,
-                    'kategori_balans_id' => 2,
-                    'company_code' => auth()->user()->company_code,
-                    'created_by' => auth()->user()->id,
-                    'updated_by' => auth()->user()->id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ],
-                [
-                    'material_code' => $material_code,
-                    'kategori_balans_id' => 3,
-                    'company_code' => auth()->user()->company_code,
-                    'created_by' => auth()->user()->id,
-                    'updated_by' => auth()->user()->id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ],
-                [
-                    'material_code' => $material_code,
-                    'kategori_balans_id' => 4,
-                    'company_code' => auth()->user()->company_code,
-                    'created_by' => auth()->user()->id,
-                    'updated_by' => auth()->user()->id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ],
-                [
-                    'material_code' => $material_code,
-                    'kategori_balans_id' => 5,
-                    'company_code' => auth()->user()->company_code,
-                    'created_by' => auth()->user()->id,
-                    'updated_by' => auth()->user()->id,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ],
-            ];
-
-            DB::transaction(function () use ($input, $mapping){
+            DB::transaction(function () use ($input, $material_code, $request){
                 Material::create($input);
-                DB::table('map_kategori_balans')->insert($mapping);
+                if ($request->kategori_material_id == '1'){
+                    mapping_plant_insert($material_code);
+                }
             });
-
 
             return setResponse([
                 'code' => 200,

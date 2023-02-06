@@ -16,6 +16,7 @@ use App\Models\Material;
 use App\Models\Plant;
 use App\Models\Regions;
 use App\Models\Role;
+use App\Models\Saldo_Awal;
 use App\Models\Salr;
 use App\Models\User;
 use App\Models\Version_Asumsi;
@@ -49,6 +50,63 @@ class SelectController extends Controller
         foreach ($plant as $items) {
             $response[] = array(
                 "id" => $items->plant_code,
+                "text" => $items->plant_code . ' - ' . $items->plant_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function plant_balans(Request $request)
+    {
+        $search = $request->search;
+        $kategori = $request->kategori;
+        $material = $request->material;
+
+        if ($search == '') {
+            if ($kategori == '1'){
+                $plant = Saldo_Awal::select('saldo_awal.plant_code', 'plant.plant_desc')
+                    ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
+                    ->where('saldo_awal.material_code', $material)
+                    ->whereNull('saldo_awal.deleted_at')
+                    ->groupBy('saldo_awal.plant_code', 'plant.plant_desc')
+                    ->get();
+            }else{
+                $plant = Plant::limit(10)
+                    ->where('is_active', 't')
+                    ->whereNull('deleted_at')
+                    ->get();
+            }
+        } else {
+            if ($kategori == '1'){
+                $plant = Saldo_Awal::select('saldo_awal.plant_code', 'plant.plant_desc')
+                    ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
+                    ->where('saldo_awal.material_code', $material)
+                    ->whereNull('saldo_awal.deleted_at')
+                    ->where(function ($query) use ($search){
+                        $query->where('saldo_awal.plant_code', 'ilike', '%' . $search . '%')
+                            ->orWhere('plant.plant_desc', 'ilike', '%' . $search . '%');
+                    })
+                    ->groupBy('saldo_awal.plant_code', 'plant.plant_desc')
+                    ->get();
+
+                dd($plant);
+            }else{
+                $plant = Plant::limit(10)
+                    ->where('is_active', 't')
+                    ->whereNull('deleted_at')
+                    ->get();
+            }
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'All'
+        );
+        foreach ($plant as $items) {
+            $response[] = array(
+                "id" => $items->plant_code . ' - ' . $items->plant_desc,
                 "text" => $items->plant_code . ' - ' . $items->plant_desc
             );
         }

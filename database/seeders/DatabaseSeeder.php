@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(KategoriMaterialSeeder::class);
         $this->call(KategoriProdukSeeder::class);
         $this->call(GroupAccountSeeder::class);
-        $this->call(MaterialSeeder::class);
+//        $this->call(MaterialSeeder::class);
         $this->call(CostCenterSeeder::class);
         $this->call(PlantSeeder::class);
         $this->call(VersionAsumsiSeeder::class);
@@ -31,6 +31,6 @@ class DatabaseSeeder extends Seeder
         $this->call(GeneralLedgerAccountFCSeeder::class);
         $this->call(GLAccountSeeder::class);
         $this->call(KategoriBalansSeeder::class);
-        $this->call(MappingMaterialBallansSeeder::class);
+//        $this->call(MappingMaterialBallansSeeder::class);
     }
 }
