@@ -80,7 +80,6 @@ class CostCenterController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         }catch (\Exception $exception){
-            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -91,7 +90,6 @@ class CostCenterController extends Controller
         try {
 
             $input['deleted_at'] = Carbon::now();
-            $input['deleted_by'] = auth()->user()->id;
 
             CostCenter::where('cost_center', $request->id)
                 ->delete();
