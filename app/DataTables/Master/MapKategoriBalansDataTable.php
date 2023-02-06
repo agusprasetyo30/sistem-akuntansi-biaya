@@ -14,12 +14,16 @@ class MapKategoriBalansDataTable extends DataTable
 
     public function dataTable($query)
     {
-        $query = MapKategoriBalans::select('map_kategori_balans.*', 'kategori_balans.kategori_balans', 'kategori_balans.kategori_balans_desc', 'material.material_name')
+        $query = MapKategoriBalans::select('map_kategori_balans.*', 'kategori_balans.kategori_balans', 'kategori_balans.kategori_balans_desc', 'material.material_name', 'version_asumsi.version')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'map_kategori_balans.version_id')
             ->leftjoin('material', 'material.material_code', '=', 'map_kategori_balans.material_code')
             ->leftjoin('company', 'company.company_code', '=', 'map_kategori_balans.company_code');
         return datatables()
             ->eloquent($query)
+            ->addColumn('version', function ($query){
+                return $query->version;
+            })
             ->addColumn('material', function ($query){
                 return $query->material_code.' - '.$query->material_name;
             })
@@ -36,11 +40,17 @@ class MapKategoriBalansDataTable extends DataTable
                     $query->where('kategori_balans.id', $keyword);
                 }
             })
+            ->filterColumn('filter_version', function ($query, $keyword){
+                $query->where('version_asumsi.version', $keyword);
+            })
             ->orderColumn('filter_material', function ($query, $order){
                 $query->orderBy('map_kategori_balans.material_code', $order);
             })
             ->orderColumn('filter_kategori_balans', function ($query, $order){
                 $query->orderBy('kategori_balans.kategori_balans', $order);
+            })
+            ->orderColumn('filter_version', function ($query, $order){
+                $query->orderBy('version_asumsi.version', $order);
             })
             ->addColumn('action', 'pages.master.mapping_balans.action')
             ->escapeColumns([]);

@@ -14,7 +14,9 @@ class MapKategoriBalans extends Model
     protected $fillable = [
         'company_code',
         'kategori_balans_id',
+        'version_id',
         'material_code',
+        'plant_code',
         'created_at',
         'created_by',
         'updated_at',

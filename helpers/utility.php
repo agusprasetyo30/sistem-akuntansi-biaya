@@ -1,7 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
+use App\Models\Asumsi_Umum;
+use App\Models\Version_Asumsi;
 // use Image;
 
 function secureToken()
@@ -462,6 +465,94 @@ if (!function_exists('helpRupiah')) {
         return $hasil_rupiah;
     }
 }
+
+if (!function_exists('mapping_plant')) {
+    function mapping_plant($product)
+    {
+        $plant = 'all';
+
+        if ($product == '2000000'){
+            $plant = 'B018 - Plant Utilitas II';
+        }elseif ($product == '2000001'){
+            $plant = 'B018 - Plant Utilitas II';
+        }elseif ($product == '2000002'){
+            $plant = 'B031 - Plant Utilitas IIIA';
+        }
+
+        return $plant;
+    }
+}
+
+if (!function_exists('mapping_plant_insert')) {
+    function mapping_plant_insert($material_code)
+    {
+        $data_plant = mapping_plant($material_code);
+
+        $versi = Version_Asumsi::get();
+        foreach ($versi as $data){
+            $mapping = [
+                [
+                    'material_code' => $material_code,
+                    'kategori_balans_id' => 1,
+                    'version_id' => $data->id,
+                    'plant_code' => $data_plant,
+                    'company_code' => auth()->user()->company_code,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+                [
+                    'material_code' => $material_code,
+                    'kategori_balans_id' => 2,
+                    'version_id' => $data->id,
+                    'plant_code' => 'B601 - Pergudangan dan Pemeliharaan',
+                    'company_code' => auth()->user()->company_code,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+                [
+                    'material_code' => $material_code,
+                    'kategori_balans_id' => 3,
+                    'version_id' => $data->id,
+                    'plant_code' => $data_plant,
+                    'company_code' => auth()->user()->company_code,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+                [
+                    'material_code' => $material_code,
+                    'kategori_balans_id' => 4,
+                    'version_id' => $data->id,
+                    'plant_code' => $data_plant,
+                    'company_code' => auth()->user()->company_code,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+                [
+                    'material_code' => $material_code,
+                    'kategori_balans_id' => 5,
+                    'version_id' => $data->id,
+                    'plant_code' => $data_plant,
+                    'company_code' => auth()->user()->company_code,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+            ];
+            DB::table('map_kategori_balans')->insert($mapping);
+//            array_push($data_ready, $mapping);
+        }
+    }
+}
+
 
 function helpDollar($money, $dollar)
 {

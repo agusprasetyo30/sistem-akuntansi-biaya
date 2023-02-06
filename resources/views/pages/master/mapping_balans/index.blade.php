@@ -45,6 +45,7 @@
         var table_main_dt = '<table id="dt_map_kategori_balans" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
+            '<th data-type="text" data-name="versi" class="text-center">VERSI</th>' +
             '<th data-type="select" data-name="material" class="text-center">MATERIAL</th>' +
             '<th data-type="select" data-name="kategori_balans" class="text-center">KATEGORI BALANS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
@@ -81,11 +82,83 @@
 
             $('#data_main_kategori_balans').select2({
                 dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Kategori Material',
+                placeholder: 'Pilih Kategori Plant',
                 width: '100%',
                 allowClear: false,
                 ajax: {
                     url: "{{ route('kategori_balans_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $('#data_main_plant').val([]).change().select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Plant / Cost Center',
+                    width: '100%',
+                    multiple: true,
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('plant_balans_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                kategori: $('#data_main_kategori_balans').val(),
+                                material: $('#data_main_material_balans').val(),
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
+
+            $('#data_main_plant').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Plant / Cost Center',
+                width: '100%',
+                multiple: true,
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('plant_balans_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term,
+                            kategori: $('#data_main_kategori_balans').val(),
+                            material: $('#data_main_material_balans').val(),
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            });
+
+            $('#data_main_version').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -145,7 +218,16 @@
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
                         if (isSearchable){
-                            if (data_type === 'select'){
+                            if (data_type == 'text'){
+                                var input = document.createElement("input");
+                                input.className = "form-control form-control-sm";
+                                input.styleName = "width: 100%;";
+                                $(input).
+                                appendTo(cell.empty()).
+                                on('change clear', function () {
+                                    column.search($(this).val(), false, false, true).draw();
+                                });
+                            }else if (data_type === 'select'){
                                 var input = document.createElement("select");
                                 input.className = "form-control custom-select select2";
                                 var options = "";
@@ -218,13 +300,14 @@
                     data: {data:'index'}
                 },
                 columns: [
+                    { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'material', name: 'filter_material', orderable:true},
                     { data: 'kategori_balans', name: 'filter_kategori_balans', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2]}
+                    {className: 'text-center', targets: [0,1,2,3]}
                 ]
 
             })
@@ -240,8 +323,10 @@
                 url: '{{route('insert_map_kategori_balans')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
+                    versi: $('#data_main_version').val(),
                     material_balans: $('#data_main_material_balans').val(),
                     kategori_balans: $('#data_main_kategori_balans').val(),
+                    plant : $('#data_main_plant').val(),
                 },
                 success:function (response) {
                     // $("#tanggal").attr("disabled", true);

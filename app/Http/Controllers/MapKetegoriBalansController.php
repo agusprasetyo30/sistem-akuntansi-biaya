@@ -22,15 +22,25 @@ class MapKetegoriBalansController extends Controller
         try {
 
             $validator = Validator::make($request->all(), [
+                "versi" => 'required',
                 "material_balans" => 'required',
                 "kategori_balans" => 'required|min:0|not_in:0',
+                "plant" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $result = '';
+
+            foreach ($request->plant as $item){
+                $result .= $item.';';
+            }
+
+            $input['version_id'] = $request->versi;
             $input['material_code'] = $request->material_balans;
             $input['kategori_balans_id'] = $request->kategori_balans;
+            $input['plant_code'] = $result;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -38,6 +48,7 @@ class MapKetegoriBalansController extends Controller
             $input['updated_at'] = Carbon::now();
 
             $check_data = MapKategoriBalans::where([
+                'version_id' => $request->versi,
                 'kategori_balans_id' => $request->kategori_balans,
                 'company_code' => auth()->user()->company_code,
                 'material_code' => $request->material_balans
@@ -66,15 +77,25 @@ class MapKetegoriBalansController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                "versi" => 'required',
                 "material_balans" => 'required',
                 "kategori_balans" => 'required|min:0|not_in:0',
+                "plant" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $result = '';
+
+            foreach ($request->plant as $item){
+                $result .= $item.';';
+            }
+
+            $input['version_id'] = $request->versi;
             $input['material_code'] = $request->material_balans;
             $input['kategori_balans_id'] = $request->kategori_balans;
+            $input['plant_code'] = $result;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -82,8 +103,20 @@ class MapKetegoriBalansController extends Controller
             $input['updated_at'] = Carbon::now();
 
             DB::transaction(function () use ($input, $request){
-                MapKategoriBalans::where('id', $request->id)
-                    ->update($input);
+
+                $check_data = MapKategoriBalans::where([
+                    'version_id' => $request->versi,
+                    'kategori_balans_id' => $request->kategori_balans,
+                    'company_code' => auth()->user()->company_code,
+                    'material_code' => $request->material_balans
+                ])->first();
+
+                if ($check_data == null){
+                    MapKategoriBalans::where('id', $check_data->id)->update($input);
+                }else{
+                    MapKategoriBalans::where('id', $check_data->id)->delete();
+                    MapKategoriBalans::where('id', $check_data->id)->update($input);
+                }
             });
             return setResponse([
                 'code' => 200,

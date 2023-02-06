@@ -10,6 +10,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label">Material <span class="text-red">*</span></label>
                                 <select name="data_main_material_balans" id="data_main_material_balans" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Material</option>
@@ -19,6 +25,11 @@
                                 <label class="form-label">Kategori Balans <span class="text-red">*</span></label>
                                 <select name="data_main_kategori_balans" id="data_main_kategori_balans" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Kategori Balans</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Plant <span class="text-red">*</span></label>
+                                <select multiple="multiple" id="data_main_plant" class="form-control custom-select select2">
                                 </select>
                             </div>
                         </div>

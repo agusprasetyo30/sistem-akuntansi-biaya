@@ -15,13 +15,27 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
+                                <label for="versi">Versi <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{$model->version}}" id="detail_versi{{$model->id}}" placeholder="Kategori Versi" autocomplete="off" required>
+                            </div>
+                            <div class="form-group">
                                 <label for="tanggal_awal">Kategori Produk <span class="text-red">*</span></label>
                                 <input disabled type="text" class="form-control" value="{{$model->material_code}} - {{$model->material_name}}" id="detail_kategori_produk{{$model->id}}" placeholder="Kategori Produk" autocomplete="off" required>
                             </div>
-
                             <div class="form-group">
                                 <label class="form-label">Kategori Balans <span class="text-red">*</span></label>
                                 <input disabled class="form-control" type="text" name="detail_kategori_balans{{$model->id}}" id="detail_kategori_balans{{$model->id}}" autocomplete="off" value="{{$model->kategori_balans}} - {{$model->kategori_balans_desc}}" placeholder="Kategori Produk">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Plant <span class="text-red">*</span></label>
+                                <select disabled multiple="multiple" name="data_main_plant{{$model->id}}" id="data_main_plant{{$model->id}}" class="form-control custom-select select2">
+                                    @php
+                                        $data_plant = explode(';', $model->plant_code)
+                                    @endphp
+                                    @foreach($data_plant as $items)
+                                        <option value="{{$items}}">{{$items}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -47,6 +61,12 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="edit_data_main_version{{$model->id}}" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label" for="edit_tanggal{{$model->id}}">Material <span class="text-red">*</span></label>
                                 <select name="edit_material{{$model->id}}" id="edit_material{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->material_code}}" selected>{{$model->material_code}} - {{$model->material_name}}</option>
@@ -56,6 +76,17 @@
                                 <label class="form-label">Kategori Balans <span class="text-red">*</span></label>
                                 <select name="edit_kategori_balans{{$model->id}}" id="edit_kategori_balans{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->kategori_balans_id}}" selected>{{$model->kategori_balans}} - {{$model->kategori_balans_desc}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Plant <span class="text-red">*</span></label>
+                                <select multiple="multiple" name="edit_data_main_plant{{$model->id}}" id="edit_data_main_plant{{$model->id}}" class="form-control custom-select select2">
+                                    @php
+                                        $data_plant = explode(';', $model->plant_code)
+                                    @endphp
+                                    @foreach($data_plant as $items)
+                                        <option selected value="{{$items}}">{{$items}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -74,6 +105,32 @@
 <!--/div-->
 
 <script>
+
+    var get_data_object = {!! json_encode($data_plant) !!};
+    var data_plant = get_data_object[0].split(';');
+
+    $('#edit_data_main_version'+{{$model->id}}).select2({
+        dropdownParent: $('#modal_edit'+{{$model->id}}),
+        placeholder: 'Pilih Versi',
+        width: '100%',
+        allowClear: false,
+        ajax: {
+            url: "{{ route('version_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
+    })
+
     $('#edit_material'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Material',
@@ -98,7 +155,7 @@
 
     $('#edit_kategori_balans'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Kategori Material',
+        placeholder: 'Pilih Kategori Balans',
         width: '100%',
         allowClear: false,
         ajax: {
@@ -116,6 +173,57 @@
                 };
             }
         }
+    }).on('change', function () {
+        $('#edit_data_main_plant'+{{$model->id}}).val([]).change().select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih Plant / Cost Center',
+            width: '100%',
+            multiple: true,
+            allowClear: false,
+            ajax: {
+                url: "{{ route('plant_balans_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                        kategori: $('#edit_kategori_balans'+{{$model->id}}).val(),
+                        material: $('#edit_material'+{{$model->id}}).val(),
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
     })
+
+    $('#edit_data_main_plant'+{{$model->id}}).select2({
+        dropdownParent: $('#modal_edit'+{{$model->id}}),
+        placeholder: 'Pilih Plant / Cost Center',
+        width: '100%',
+        multiple: true,
+        allowClear: false,
+        ajax: {
+            url: "{{ route('plant_balans_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term,
+                    kategori: $('#edit_kategori_balans'+{{$model->id}}).val(),
+                    material: $('#edit_material'+{{$model->id}}).val(),
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
+    })
+
 </script>
 
