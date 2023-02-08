@@ -48,8 +48,6 @@ class H_PriceRenDaanDataTable extends DataTable
 
         foreach ($asumsi as $key => $a) {
             $datatable->addColumn($key, function ($query) use ($pricerendaanValues, $a, $currency) {
-
-
                 $pricerendaanAsumsi = $pricerendaanValues
                     ->where('asumsi_umum_id', $a->id)
                     ->where('region_name', $query->region_name)

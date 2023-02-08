@@ -582,16 +582,212 @@ if (!function_exists('find_lower_material')) {
     }
 }
 
+//if (!function_exists('antrian_material_balans')) {
+//    function antrian_material_balans($versi)
+//    {
+//        $resulty = [];
+//        $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+//            ->where([
+//                'material.kategori_material_id' => 1,
+//                'cons_rate.deleted_at' => null,
+//            ])
+//            ->get();
+//
+//        $data = find_lower_material($versi);
+//
+//        foreach ($data as $items){
+//            $check = true;
+//            $temp = [];
+//            $i = 0;
+//            while ($check){
+//                if ($i == 0){
+//                    $material = $items;
+//                    array_push($temp, $material);
+//                }
+//                $produk = $material_balans->where('material_code',$material)->pluck('product_code')->all();
+//
+//                $count = count($produk);
+//                if ($count == 1){
+//                    $material = $produk[0];
+//                    array_push($temp, $material);
+//                }elseif ($count > 1){
+//                    foreach ($produk as $items1){
+//                        $temp_data = temp_material_produk($items1, $material_balans);
+//                        $check_temp = count($temp_data);
+//
+//                        if ($check_temp == 1){
+//                            if ($temp_data['status'] != 'end'){
+//                                array_push($temp, $items1);
+//                                array_push($temp, $temp_data['material']);
+//                            }else{
+//                                array_push($temp, $temp_data['material']);
+//                            }
+//                        }elseif ($check_temp > 1){
+//                            foreach ($temp_data as $items2){
+//                                if ($temp_data['status'] != 'end'){
+//                                    array_push($temp, $items1);
+//                                    array_push($temp, $temp_data['material']);
+//                                }else{
+//                                    array_push($temp, $temp_data['material']);
+//                                }
+//                            }
+//                        }
+//                    }
+//                    $check = false;
+//                }elseif ($count == 0){
+//                    $check = false;
+//                }
+//                $i++;
+//                var_dump($i);
+//            }
+////            dd($temp);
+//            array_push($resulty, $temp);
+//        }
+//
+//        return $resulty;
+//    }
+//}
+//
+//if (!function_exists('temp_material_produk')) {
+//    function temp_material_produk($items1, $material_balans)
+//    {
+//        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
+//
+//        $r = [];
+//        $count = count($produk);
+//        if ($count == 1){
+//            $result['material'] = $produk[0];
+//            $result['status'] = 'low';
+//        }elseif ($count > 1){
+//            foreach ($produk as $items2){
+//                $temp_data = temp_material_produk($items2, $material_balans);
+//                $result['material'] = $temp_data['material'];
+//                $result['status'] = 'mid';
+//                array_push($r, $result);
+//            }
+//        }else{
+//            $result['material'] = $items1;
+//            $result['status'] = 'end';
+//        }
+//
+////        if ($items1 =='MATERIAL 6'){
+////            dd($r);
+////        }
+//
+//        return $result;
+//
+//    }
+//}
+
+//// Cara 1
+//if (!function_exists('antrian_material_balans')) {
+//    function antrian_material_balans($versi)
+//    {
+//        $resulty = [];
+//        $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+//            ->where([
+//                'material.kategori_material_id' => 1,
+//                'cons_rate.deleted_at' => null,
+//            ])
+//            ->get();
+//        $data = find_lower_material($versi);
+//
+//        foreach ($data as $items){
+//            $temp = [$items];
+//            $temp_resulty = '';
+//            $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
+//
+//            var_dump($product);
+//            array_push($resulty, $product);
+//
+//        }
+//
+//        return $resulty;
+//    }
+//}
+//
+//if (!function_exists('temp_material_produk')) {
+//    function temp_material_produk($items1, $material_balans, $temp, $temp_resulty)
+//    {
+//        $temp_hasil = $temp;
+//        $temp_resulty1 = $items1.'->';
+//
+//
+//        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
+//
+//        $count_produk = count($produk);
+//
+//        if ($count_produk == 1){
+//            $data_produk = $produk[0];
+//            $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//
+//            $temp_resulty1 .= $hasil;
+//        }else if ($count_produk > 1){
+//            foreach ($produk as $items){
+//                $data_produk = $items;
+//                $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//                $temp_resulty1 .= $hasil;
+//            }
+//        }
+//
+//        return $temp_resulty1;
+//
+//    }
+//}
+
+// Cara 2
 if (!function_exists('antrian_material_balans')) {
     function antrian_material_balans($versi)
     {
-        $material_balans = Material::where([
-            'kategori_material_id' => 1,
-            'deleted_at' => null,
-        ])->get();
+        $resulty = [];
+        $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+            ->where([
+                'material.kategori_material_id' => 1,
+                'cons_rate.deleted_at' => null,
+            ])
+            ->get();
+        $data = find_lower_material($versi);
+
+        foreach ($data as $items){
+            $temp = [$items];
+            $temp_resulty = [];
+            $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
+
+            array_push($resulty, $product);
+        }
+
+        return $resulty;
+    }
+}
+
+if (!function_exists('temp_material_produk')) {
+    function temp_material_produk($items1, $material_balans, $temp, $temp_resulty)
+    {
+        $temp_hasil = $temp;
+        $temp_resulty1 = $temp_resulty;
+        array_push($temp_resulty1, $items1);
 
 
+        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
 
+        $count_produk = count($produk);
+
+        if ($count_produk == 1){
+            $data_produk = $produk[0];
+            $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//            dd($hasil);
+//            array_push($temp_resulty1, $hasil);
+            $temp_resulty1 = $hasil;
+        }else if ($count_produk > 1){
+            foreach ($produk as $items){
+                $data_produk = $items;
+                $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//                array_push($temp_resulty1, $hasil);
+                $temp_resulty1 = $hasil;
+            }
+        }
+
+        return $temp_resulty1;
     }
 }
 

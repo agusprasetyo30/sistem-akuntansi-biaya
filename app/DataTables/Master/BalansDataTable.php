@@ -2,7 +2,8 @@
 
 namespace App\DataTables\Master;
 
-use App\Models\Master\Balan;
+use App\Models\MapKategoriBalans;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -11,50 +12,65 @@ use Yajra\DataTables\Services\DataTable;
 
 class BalansDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
     public function dataTable($query)
     {
-        return datatables()
+//        dd($this->antrian);
+        $query = MapKategoriBalans::select('map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'kategori_balans.kategori_balans')
+            ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
+            ->whereIn('map_kategori_balans.material_code', array_unique($this->antrian))
+            ->where('map_kategori_balans.version_id', $this->version)
+            ->orderBy('map_kategori_balans.material_code', 'ASC')
+//            ->orderByRaw('FIELD(kategori_balans.id, [6, 1, 2, 3, 4, 5])');
+            ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC');
+
+        $datatable = datatables()
             ->eloquent($query)
-            ->addColumn('action', 'master\balans.action');
+            ->addColumn('material', function ($query){
+                return $query->material_code;
+            })
+            ->addColumn('keterangan', function ($query){
+                return $query->kategori_balans;
+            })
+            ->addColumn('plant', function ($query){
+                return $query->plant_code;
+            });
+
+        $asumsi = DB::table('asumsi_umum')
+            ->where('version_id', $this->version)
+            ->get();
+
+        $data = 0;
+
+        foreach ($asumsi as $key=> $items){
+            $data = $data + 10;
+            $datatable->addColumn('q'.$key, function ($query) use ($data){
+                return $data;
+            })->addColumn('p'.$key, function ($query) use ($data){
+                return $data;
+            })->addColumn('nilai'.$key, function ($query) use ($data){
+                return $data;
+            });
+        }
+
+        dd($datatable->toArray());
+
+        return $datatable;
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Master\Balan $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(Balan $model)
-    {
-        return $model->newQuery();
-    }
-
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
     public function html()
     {
         return $this->builder()
-                    ->setTableId('master\balans-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('dt_balans')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
