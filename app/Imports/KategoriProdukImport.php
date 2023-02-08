@@ -26,8 +26,8 @@ class KategoriProdukImport implements ToModel, WithHeadingRow, SkipsOnError, Wit
      */
     public function model(array $row)
     {
-        return new KategoriProduk([
-            'kategori_produk_name' => $row['kategori_produk_name'],
+        KategoriProduk::create([
+            'kategori_produk_name' => strtoupper($row['kategori_produk_name']),
             'kategori_produk_desc' => $row['kategori_produk_desc'],
             'company_code' => auth()->user()->company_code,
             'is_active' => $row['is_active'],
@@ -48,7 +48,7 @@ class KategoriProdukImport implements ToModel, WithHeadingRow, SkipsOnError, Wit
     public function rules(): array
     {
         return [
-            'kategori_produk_name' => ['required']
+            'kategori_produk_name' => ['required', 'unique:kategori_produk_name,kategori_produk_name']
         ];
     }
 }

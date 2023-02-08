@@ -24,7 +24,7 @@ class CostCenterImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
     public function model(array $row)
     {
         CostCenter::create([
-            'cost_center' => $row['cost_center'],
+            'cost_center' => strtoupper($row['cost_center']),
             'cost_center_desc' => $row['cost_center_desc'],
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
@@ -46,7 +46,7 @@ class CostCenterImport implements ToModel, WithHeadingRow, SkipsOnError, WithVal
     public function rules(): array
     {
         return [
-            'cost_center' => ['unique:cost_center,cost_center']
+            'cost_center' => ['required','unique:cost_center,cost_center']
         ];
     }
 }

@@ -15,12 +15,12 @@ class BalansDataTable extends DataTable
     public function dataTable($query)
     {
 //        dd($this->antrian);
-        $query = MapKategoriBalans::select('map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'kategori_balans.kategori_balans')
+        $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'kategori_balans.kategori_balans')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
             ->whereIn('map_kategori_balans.material_code', array_unique($this->antrian))
             ->where('map_kategori_balans.version_id', $this->version)
+//            ->where('map_kategori_balans.kategori_balans_id', 2)
             ->orderBy('map_kategori_balans.material_code', 'ASC')
-//            ->orderByRaw('FIELD(kategori_balans.id, [6, 1, 2, 3, 4, 5])');
             ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC');
 
         $datatable = datatables()
@@ -36,25 +36,59 @@ class BalansDataTable extends DataTable
             });
 
         $asumsi = DB::table('asumsi_umum')
+            ->select('asumsi_umum.month_year')
             ->where('version_id', $this->version)
-            ->get();
+            ->pluck('asumsi_umum.month_year')->all();
 
-        $data = 0;
+        $asumsi_balans = $asumsi;
 
-        foreach ($asumsi as $key=> $items){
-            $data = $data + 10;
-            $datatable->addColumn('q'.$key, function ($query) use ($data){
-                return $data;
-            })->addColumn('p'.$key, function ($query) use ($data){
-                return $data;
-            })->addColumn('nilai'.$key, function ($query) use ($data){
-                return $data;
+        $saldo_awal = '2021-12-01 00:00:00';
+        array_unshift($asumsi, $saldo_awal);
+
+
+        foreach ($asumsi_balans as $key=> $items){
+            $datatable->addColumn('q'.$key, function ($query) use ($items){
+                if ($query->kategori_balans_id == 1){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items);
+                    return $result['total_stock'];
+                }elseif ($query->kategori_balans_id == 2){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                    return $result['qty_rendaan_value'];
+                }else{
+                    return 0;
+                }
+            })->addColumn('p'.$key, function ($query) use ($items){
+                if ($query->kategori_balans_id == 1){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items);
+                    if ($result['total_stock'] != 0){
+                        return $result['total_value']/$result['total_stock'];
+                    }else{
+                        return 0;
+                    }
+                }elseif ($query->kategori_balans_id == 2 || $query->kategori_balans_id == 3){
+                    $quantiti = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                    $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    return rupiah($total_daan / $quantiti['qty_rendaan_value']);
+                }else{
+                    return 0;
+                }
+            })->addColumn('nilai'.$key, function ($query) use ($items){
+                if ($query->kategori_balans_id == 1){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items);
+                    return $result['total_value'];
+                }elseif ($query->kategori_balans_id == 2){
+                    $result = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                    return rupiah($result);
+                }else{
+                    return 0;
+                }
             });
         }
 
         dd($datatable->toArray());
 
-        return $datatable;
+//        return $datatable;
     }
 
     public function html()
