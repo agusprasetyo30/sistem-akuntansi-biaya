@@ -381,6 +381,11 @@
                         if (result.value) {
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
+                            $('#group_account_code').val('').trigger("change");
+                            $('#kategori_material_id').val('').trigger("change");
+                            $('#kategori_produk_id').val('').trigger("change");
+                            $('#is_active').val('').trigger("change");
+                            $('#is_dummy').val('').trigger("change");
                             // table()
                             $('#dt_material').DataTable().ajax.reload();
                         }

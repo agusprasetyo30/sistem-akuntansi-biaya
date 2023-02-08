@@ -30,7 +30,7 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
     public function model(array $row)
     {
         $material = [
-            'material_code' => $row['material_code'],
+            'material_code' => strtoupper($row['material_code']),
             'material_name' => $row['material_name'],
             'material_desc' => $row['material_desc'],
             'group_account_code' => $row['group_account_code'],
@@ -44,7 +44,7 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
         ];
 
         Material::create($material);
-        if ($row['kategori_material_id'] == '1'){
+        if ($row['kategori_material_id'] == '1') {
             mapping_plant_insert($row['material_code']);
         }
     }
