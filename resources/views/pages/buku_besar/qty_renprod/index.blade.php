@@ -455,7 +455,9 @@
                         if (result.value) {
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
-
+                            $('#data_main_version').val('').trigger("change");
+                            $('#data_detail_version').val('').trigger("change");
+                            $('#data_main_cost_center').val('').trigger("change");
                             update_dt_horizontal()
                             // table()
                             $('#dt_qty_renprod').DataTable().ajax.reload();

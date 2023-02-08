@@ -245,6 +245,7 @@
                         if (result.value) {
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
+                            $('#group_account').val('').trigger("change");
                             // table()
                             $('#dt_gl_account').DataTable().ajax.reload();
                         }

@@ -25,19 +25,19 @@ class GroupAccountImport implements ToModel, WithHeadingRow, SkipsOnError, WithV
     public function model(array $row)
     {
         return new GroupAccount([
-            'group_account_code' => $row['group_account_code'],
+            'group_account_code' => strtoupper($row['group_account_code']),
             'group_account_desc' => $row['group_account_desc'],
             'company_code' => auth()->user()->company_code,
             'is_active' => $row['is_active'],
             'created_by' => auth()->user()->id,
         ]);
     }
-    
+
     public function batchSize(): int
     {
         return 50;
     }
-    
+
     public function chunkSize(): int
     {
         return 50;

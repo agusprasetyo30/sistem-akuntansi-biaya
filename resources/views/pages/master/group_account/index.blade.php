@@ -213,6 +213,7 @@
                         if (result.value) {
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
+                            $('#is_active').val('').trigger("change");
                             // table()
                             $('#dt_group_account').DataTable().ajax.reload();
                         }

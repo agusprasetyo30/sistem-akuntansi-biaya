@@ -45,7 +45,7 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
 
         Material::create($material);
         if ($row['kategori_material_id'] == '1'){
-            mapping_plant_insert(strtoupper($row['material_code']));
+            mapping_plant_insert($row['material_code']);
         }
     }
 

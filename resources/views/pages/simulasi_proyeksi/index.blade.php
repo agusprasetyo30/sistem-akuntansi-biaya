@@ -42,6 +42,12 @@
                                     {{-- <option value="all" selected>Semua</option> --}}
                                 </select>
                             </div>
+                            <div class="form-group" id="format_plant">
+                                <label class="form-label">COST CENTER</label>
+                                <select id="filter_cost_center" class="form-control custom-select select2">
+                                    {{-- <option value="all" selected>Semua</option> --}}
+                                </select>
+                            </div>
                             <div class="btn-list mb-5">
                                 <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                             </div>
@@ -126,6 +132,27 @@
                 }
             });
 
+            $('#filter_cost_center').select2({
+                placeholder: 'Pilih Cost Center',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('cost_center_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
             $('#btn_tampilkan').on('click', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
@@ -142,7 +169,7 @@
                     </tr>
                 </thead>
             </table>`
-            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th>'
+            var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">JENIS BIAYA</th>'
             var kolom = ''
             var column = [
                 { data: 'name', orderable:false},
@@ -156,6 +183,7 @@
                     version:$('#filter_version').val(),
                     produk:$('#filter_material').val(),
                     plant:$('#filter_plant').val(),
+                    cost_center:$('#filter_cost_center').val(),
                 },
                 success:function (response) {
                     // console.log(response);
@@ -197,12 +225,15 @@
                                 version:$('#filter_version').val(),
                                 produk:$('#filter_material').val(),
                                 plant:$('#filter_plant').val(),
+                                cost_center:$('#filter_cost_center').val(),
                             }
                         },
                         columns: column,
                         createdRow: function ( row, data, index ) {
                             if (data.kategori === 0) {
                                 $('td', row).eq(0).css('font-weight', 'bold');
+                            } else {
+                                $('td', row).eq(0).css('text-indent', '20px');
                             }
                         },
                         initComplete: function( settings ) {
