@@ -487,6 +487,10 @@
                         if (result.value) {
                             $('#modal_add').modal('hide')
                             $("#modal_add input").val("")
+                            $('#data_main_version').val('').trigger("change");
+                            $('#data_main_gl_account').val('').trigger("change");
+                            $('#data_main_material').val('').trigger("change");
+                            $('#data_main_plant').val('').trigger("change");
                             // table()
                             $('#dt_saldo_awal').DataTable().ajax.reload();
                         }
