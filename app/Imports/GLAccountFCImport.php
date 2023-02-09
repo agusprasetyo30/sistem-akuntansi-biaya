@@ -25,8 +25,8 @@ class GLAccountFCImport implements ToModel, WithHeadingRow, SkipsOnError, WithVa
      */
     public function model(array $row)
     {
-        return new GLAccountFC([
-            'gl_account_fc' => $row['gl_account_fc'],
+        GLAccountFC::create([
+            'gl_account_fc' => strtoupper($row['gl_account_fc']),
             'gl_account_fc_desc' => $row['gl_account_fc_desc'],
             'group_account_fc' => $row['group_account_fc'],
             'company_code' => auth()->user()->company_code,

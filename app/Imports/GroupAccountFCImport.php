@@ -24,8 +24,8 @@ class GroupAccountFCImport implements ToModel, WithHeadingRow, SkipsOnError, Wit
      */
     public function model(array $row)
     {
-        return new GroupAccountFC([
-            'group_account_fc' => $row['group_account_fc'],
+        GroupAccountFC::create([
+            'group_account_fc' => strtoupper($row['group_account_fc']),
             'group_account_fc_desc' => $row['group_account_fc_desc'],
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,

@@ -26,7 +26,7 @@ class RegionsImport implements ToModel, WithHeadingRow, SkipsOnError, WithValida
     {
 
         $data = [
-            'region_name' => $row['region_name'],
+            'region_name' => strtoupper($row['region_name']),
             'region_desc' => $row['region_desc'],
             'latitude' => $row['latitude'],
             'longtitude' => $row['longtitude'],

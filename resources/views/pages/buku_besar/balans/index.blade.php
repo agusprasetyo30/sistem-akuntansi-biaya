@@ -33,8 +33,8 @@
                     </div>
                 </div>
             </div>
-            @include('pages.buku_besar.laba_rugi.add')
-            @include('pages.buku_besar.laba_rugi.import')
+            @include('pages.buku_besar.balans.add')
+            @include('pages.buku_besar.balans.import')
         </div>
     </div>
 </div>
@@ -48,7 +48,7 @@
             '<thead>' +
             '<tr>' +
             '<th data-type="text" data-name="material" class="text-center">MATERIAL</th>' +
-            '<th data-type="select" data-name="kategori_produk" class="text-center">PLANT/CC</th>' +
+            '<th data-type="select" data-name="plant" class="text-center">PLANT/CC</th>' +
             '<th data-type="text" data-name="bp" class="text-center">KETERANGAN</th>' +
             '</tr>' +
             '</thead>' +
@@ -86,7 +86,6 @@
             }).on('change', function () {
                 $("#template").css("display", "block");
             });
-
 
             $('#biaya_penjualan').on('keyup', function(){
                 let rupiah = formatRupiah($(this).val(), "Rp ")
@@ -309,162 +308,157 @@
                 .addClass('filters')
                 .appendTo('#dt_balans thead');
 
-            // $('#dt_price_rendaan').DataTable().clear().destroy();
-            var dt = $("#dt_balans").DataTable({
+            $("#dt_balans").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
                 autoWidth: true,
                 processing: true,
                 serverSide: true,
-                order:[[0, 'desc']],
                 deferRender:true,
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
                 },
-                initComplete: function () {
-                        $('.dataTables_scrollHead').css('overflow', 'auto');
-                        $('.dataTables_scrollHead').on('scroll', function () {
-                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                    });
+                {{--initComplete: function () {--}}
+                {{--        $('.dataTables_scrollHead').css('overflow', 'auto');--}}
+                {{--        $('.dataTables_scrollHead').on('scroll', function () {--}}
+                {{--        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());--}}
+                {{--    });--}}
 
-                    $(document).on('scroll', function () {
-                        $('.dtfh-floatingparenthead').on('scroll', function () {
-                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                        });
-                    })
+                {{--    $(document).on('scroll', function () {--}}
+                {{--        $('.dtfh-floatingparenthead').on('scroll', function () {--}}
+                {{--            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());--}}
+                {{--        });--}}
+                {{--    })--}}
 
-                    this.api().eq(0).columns().every(function (index) {
-                        var column = this;
-                        var cell = $('.filters th').eq($(column.column(index).header()).index());
-                        var data_type = this.header().getAttribute('data-type');
-                        var iName = this.header().getAttribute('data-name');
-                        var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
-                        if (isSearchable){
-                            if (data_type == 'text'){
-                                var input = document.createElement("input");
-                                input.className = "form-control form-control-sm";
-                                input.styleName = "width: 100%;";
+                {{--    this.api().eq(0).columns().every(function (index) {--}}
+                {{--        var column = this;--}}
+                {{--        var cell = $('.filters th').eq($(column.column(index).header()).index());--}}
+                {{--        var data_type = this.header().getAttribute('data-type');--}}
+                {{--        var iName = this.header().getAttribute('data-name');--}}
+                {{--        var isSearchable = column.settings()[0].aoColumns[index].bSearchable;--}}
+                {{--        if (isSearchable){--}}
+                {{--            if (data_type == 'text'){--}}
+                {{--                var input = document.createElement("input");--}}
+                {{--                input.className = "form-control form-control-sm";--}}
+                {{--                input.styleName = "width: 100%;";--}}
 
-                                if(iName == 'bp'){
-                                    input.id = 'bp_value_search'
-                                }else if (iName == 'bau'){
-                                    input.id = 'bau_value_search'
-                                }else if (iName == 'bb'){
-                                    input.id = 'bb_value_search'
-                                }
+                {{--                if(iName == 'bp'){--}}
+                {{--                    input.id = 'bp_value_search'--}}
+                {{--                }else if (iName == 'bau'){--}}
+                {{--                    input.id = 'bau_value_search'--}}
+                {{--                }else if (iName == 'bb'){--}}
+                {{--                    input.id = 'bb_value_search'--}}
+                {{--                }--}}
 
-                                $(input).
-                                appendTo(cell.empty()).
-                                on('change clear', function () {
-                                    column.search($(this).val(), false, false, true).draw();
-                                });
+                {{--                $(input).--}}
+                {{--                appendTo(cell.empty()).--}}
+                {{--                on('change clear', function () {--}}
+                {{--                    column.search($(this).val(), false, false, true).draw();--}}
+                {{--                });--}}
 
-                                $('#bp_value_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
+                {{--                $('#bp_value_search').on('keyup', function(){--}}
+                {{--                    let rupiah = formatRupiah($(this).val(), "Rp ")--}}
+                {{--                    $(this).val(rupiah)--}}
+                {{--                });--}}
 
-                                $('#bau_value_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
+                {{--                $('#bau_value_search').on('keyup', function(){--}}
+                {{--                    let rupiah = formatRupiah($(this).val(), "Rp ")--}}
+                {{--                    $(this).val(rupiah)--}}
+                {{--                });--}}
 
-                                $('#bb_value_search').on('keyup', function(){
-                                    let rupiah = formatRupiah($(this).val(), "Rp ")
-                                    $(this).val(rupiah)
-                                });
-                            }
-                            else if (data_type == 'select'){
-                                var input = document.createElement("select");
-                                var options = "";
-                                if (iName == 'status'){
-                                    input.className = "status_search form-control custom-select select2";
-                                    @foreach (status_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }else if (iName == 'kategori_produk'){
-                                    input.className = "kategori_produk_search form-control custom-select select2";
+                {{--                $('#bb_value_search').on('keyup', function(){--}}
+                {{--                    let rupiah = formatRupiah($(this).val(), "Rp ")--}}
+                {{--                    $(this).val(rupiah)--}}
+                {{--                });--}}
+                {{--            }--}}
+                {{--            else if (data_type == 'select'){--}}
+                {{--                var input = document.createElement("select");--}}
+                {{--                var options = "";--}}
+                {{--                if (iName == 'status'){--}}
+                {{--                    input.className = "status_search form-control custom-select select2";--}}
+                {{--                    @foreach (status_dt() as $key => $value)--}}
+                {{--                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';--}}
+                {{--                    @endforeach--}}
+                {{--                }else if (iName == 'kategori_produk'){--}}
+                {{--                    input.className = "kategori_produk_search form-control custom-select select2";--}}
 
-                                }else if (iName == 'version'){
-                                    input.className = "version_search form-control custom-select select2";
+                {{--                }else if (iName == 'version'){--}}
+                {{--                    input.className = "version_search form-control custom-select select2";--}}
 
-                                }
+                {{--                }--}}
 
-                                input.innerHTML = options
-                                $(input).appendTo(cell.empty())
-                                    .on('change clear', function () {
-                                        column.search($(this).val(), false, false, true).draw();
-                                    });
-                            }
-                        }else {
-                            cell.empty()
-                        }
+                {{--                input.innerHTML = options--}}
+                {{--                $(input).appendTo(cell.empty())--}}
+                {{--                    .on('change clear', function () {--}}
+                {{--                        column.search($(this).val(), false, false, true).draw();--}}
+                {{--                    });--}}
+                {{--            }--}}
+                {{--        }else {--}}
+                {{--            cell.empty()--}}
+                {{--        }--}}
 
-                        $('.version_search').select2({
-                            placeholder: 'Pilih Versi',
-                            allowClear: false,
-                            ajax: {
-                                url: "{{ route('version_dt') }}",
-                                dataType: 'json',
-                                delay: 250,
-                                data: function (params) {
-                                    return {
-                                        search: params.term
-                                    };
-                                },
-                                processResults: function(response) {
-                                    return {
-                                        results: response
-                                    };
-                                }
-                            }
-                        })
+                {{--        $('.version_search').select2({--}}
+                {{--            placeholder: 'Pilih Versi',--}}
+                {{--            allowClear: false,--}}
+                {{--            ajax: {--}}
+                {{--                url: "{{ route('version_dt') }}",--}}
+                {{--                dataType: 'json',--}}
+                {{--                delay: 250,--}}
+                {{--                data: function (params) {--}}
+                {{--                    return {--}}
+                {{--                        search: params.term--}}
+                {{--                    };--}}
+                {{--                },--}}
+                {{--                processResults: function(response) {--}}
+                {{--                    return {--}}
+                {{--                        results: response--}}
+                {{--                    };--}}
+                {{--                }--}}
+                {{--            }--}}
+                {{--        })--}}
 
-                        $('.kategori_produk_search').select2({
-                            placeholder: 'Pilih Material Kategori',
-                            allowClear: false,
-                            ajax: {
-                                url: "{{ route('kategori_produk_dt') }}",
-                                dataType: 'json',
-                                delay: 250,
-                                data: function (params) {
-                                    return {
-                                        search: params.term
-                                    };
-                                },
-                                processResults: function(response) {
-                                    return {
-                                        results: response
-                                    };
-                                }
-                            }
-                        })
+                {{--        $('.kategori_produk_search').select2({--}}
+                {{--            placeholder: 'Pilih Material Kategori',--}}
+                {{--            allowClear: false,--}}
+                {{--            ajax: {--}}
+                {{--                url: "{{ route('kategori_produk_dt') }}",--}}
+                {{--                dataType: 'json',--}}
+                {{--                delay: 250,--}}
+                {{--                data: function (params) {--}}
+                {{--                    return {--}}
+                {{--                        search: params.term--}}
+                {{--                    };--}}
+                {{--                },--}}
+                {{--                processResults: function(response) {--}}
+                {{--                    return {--}}
+                {{--                        results: response--}}
+                {{--                    };--}}
+                {{--                }--}}
+                {{--            }--}}
+                {{--        })--}}
 
-                    });
-                    this.api().columns.adjust().draw()
-                },
+                {{--    });--}}
+                {{--    this.api().columns.adjust().draw()--}}
+                {{--},--}}
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
-                    }, title: 'Laba Rugi'  }
+                    }, title: 'Balans' }
                 ],
                 ajax: {
-                    url : '{{route("laba_rugi")}}',
+                    url : '{{route("dasar_balans")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'periode', name: 'filter_periode', orderable:true},
-                    { data: 'kategori_produk', name: 'filter_kategori_produk', orderable:true},
-                    { data: 'biaya_penjualan', name: 'filter_biaya_penjualan', orderable:true},
-                    { data: 'biaya_adm_umum', name: 'filter_biaya_adm_umum', orderable:true},
-                    { data: 'biaya_bunga', name: 'filter_biaya_bunga', orderable:true, searchable: false},
-                    { data: 'action', name: 'action', orderable:false, searchable: false},
+                    { data: 'material', name: 'material', orderable:false},
+                    { data: 'plant', name: 'plant', orderable:false},
+                    { data: 'keterangan', name: 'keterangan', orderable:false},
                 ],
-                columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3,4]}
-                ]
+                // columnDefs:[
+                //     {className: 'text-center', targets: [0,1,2,3,4]}
+                // ]
 
             });
         }

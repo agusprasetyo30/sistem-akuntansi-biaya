@@ -6,32 +6,31 @@ use App\DataTables\Master\BalansDataTable;
 use App\Models\ConsRate;
 use App\Models\Material;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BalansController extends Controller
 {
     public function index(Request $request, BalansDataTable $balansDataTable)
     {
 
-        $result = [];
-        $material_balans = Material::where([
-            'kategori_material_id' => 1,
-            'deleted_at' => null,
-        ])->get();
+        $antrian = antrian_material_balans(1);
+//        dd($antrian);
 
-        $cek = $material_balans->where('material_code', '3000001')->pluck('material_code');
-        $cek1 = $material_balans->where('material_code', '3000000')->pluck('material_code');
+        $query = DB::table('map_kategori_balans')
+            ->select('map_kategori_balans.*', 'kategori_balans.kategori_balans')
+            ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
+//            ->whereRaw("map_kategori_balans.material_code in ('MATERIAL 1', 'MATERIAL 2', 'MATERIAL 3', 'MATERIAL 4', 'MATERIAL 4')")
+            ->whereIn('map_kategori_balans.material_code', ['MATERIAL 1', 'MATERIAL 2', 'MATERIAL 3', 'MATERIAL 4'])
+            ->where('map_kategori_balans.version_id', 1)->get();
 
-        $da = antrian_material_balans(1);
+//        dd($query);
 
-        dd($material_balans, $cek, $cek1, $da);
-
-        dd($material_balans, $material_consrate, $product_consrate, $cek);
         if ($request->data == 'index') {
-            return $balansDataTable->render('pages.buku_besar.laba_rugi.index');
+            return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1])->render('pages.buku_besar.balans.index');
         }elseif ($request->data == 'horizontal'){
-            return $balansDataTable->render('pages.buku_besar.laba_rugi.index');
+            return $balansDataTable->render('pages.buku_besar.balans.index');
         }
-        return view('pages.buku_besar.laba_rugi.index');
+        return view('pages.buku_besar.balans.index');
     }
 
     public function create(Request $request)

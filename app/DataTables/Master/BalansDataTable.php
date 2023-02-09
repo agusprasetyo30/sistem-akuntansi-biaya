@@ -2,7 +2,8 @@
 
 namespace App\DataTables\Master;
 
-use App\Models\Master\Balan;
+use App\Models\MapKategoriBalans;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -11,50 +12,119 @@ use Yajra\DataTables\Services\DataTable;
 
 class BalansDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
     public function dataTable($query)
     {
-        return datatables()
+//        dd($this->antrian);
+        $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'kategori_balans.kategori_balans')
+            ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
+            ->whereIn('map_kategori_balans.material_code', array_unique($this->antrian))
+            ->where('map_kategori_balans.version_id', $this->version)
+//            ->where('map_kategori_balans.kategori_balans_id', 2)
+            ->orderBy('map_kategori_balans.material_code', 'ASC')
+            ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC');
+
+        $datatable = datatables()
             ->eloquent($query)
-            ->addColumn('action', 'master\balans.action');
+            ->addColumn('material', function ($query){
+                return $query->material_code;
+            })
+            ->addColumn('keterangan', function ($query){
+                return $query->kategori_balans;
+            })
+            ->addColumn('plant', function ($query){
+                return $query->plant_code;
+            });
+
+        $asumsi = DB::table('asumsi_umum')
+            ->select('asumsi_umum.month_year')
+            ->where('version_id', $this->version)
+            ->pluck('asumsi_umum.month_year')->all();
+
+        $asumsi_balans = $asumsi;
+
+        $saldo_awal = '2021-12-01 00:00:00';
+        array_unshift($asumsi, $saldo_awal);
+
+
+        foreach ($asumsi_balans as $key=> $items){
+            $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key){
+                if ($query->kategori_balans_id == 1){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    return $result['total_stock'];
+                }elseif ($query->kategori_balans_id == 2){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                    return $result['qty_rendaan_value'];
+                }elseif ($query->kategori_balans_id == 3){
+                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+
+                    return $nilai_saldo_awal['total_stock'] + $total_daan['qty_rendaan_value'];
+                }else{
+                    return 0;
+                }
+            })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key){
+                if ($query->kategori_balans_id == 1){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    if ($result['total_stock'] != 0){
+                        return $result['total_value']/$result['total_stock'];
+                    }else{
+                        return 0;
+                    }
+                }elseif ($query->kategori_balans_id == 2){
+                    $quantiti = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                    $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    return rupiah($total_daan / $quantiti['qty_rendaan_value']);
+                }elseif ($query->kategori_balans_id == 3){
+                    $p_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    $p_result = $p_saldo_awal['total_stock'] + $p_total_daan['qty_rendaan_value'];
+                    $nilai_result = $nilai_saldo_awal['total_value'] + $nilai_total_daan;
+
+                    return rupiah($nilai_result / $p_result);
+                }else{
+                    return 0;
+                }
+            })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key){
+                if ($query->kategori_balans_id == 1){
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    return $result['total_value'];
+                }elseif ($query->kategori_balans_id == 2){
+                    $result = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                    return rupiah($result);
+                }elseif ($query->kategori_balans_id == 3){
+                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    return rupiah($nilai_saldo_awal['total_value'] + $total_daan);
+                }else{
+                    return 0;
+                }
+            });
+        }
+
+        dd($datatable->toArray());
+
+//        return $datatable;
     }
 
-    /**
-     * Get query source of dataTable.
-     *
-     * @param \App\Models\Master\Balan $model
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function query(Balan $model)
-    {
-        return $model->newQuery();
-    }
-
-    /**
-     * Optional method if you want to use html builder.
-     *
-     * @return \Yajra\DataTables\Html\Builder
-     */
     public function html()
     {
         return $this->builder()
-                    ->setTableId('master\balans-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('dt_balans')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**

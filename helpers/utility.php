@@ -7,6 +7,8 @@ use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
 use App\Models\Asumsi_Umum;
 use App\Models\Version_Asumsi;
+use App\Models\Saldo_Awal;
+use App\Models\QtyRenDaan;
 // use Image;
 
 function secureToken()
@@ -494,7 +496,7 @@ if (!function_exists('mapping_plant_insert')) {
         foreach ($versi as $data){
             $mapping = [
                 [
-                    'material_code' => $material_code,
+                    'material_code' => strtoupper($material_code),
                     'kategori_balans_id' => 1,
                     'version_id' => $data->id,
                     'plant_code' => $data_plant,
@@ -505,7 +507,7 @@ if (!function_exists('mapping_plant_insert')) {
                     'updated_at' => Carbon::now(),
                 ],
                 [
-                    'material_code' => $material_code,
+                    'material_code' => strtoupper($material_code),
                     'kategori_balans_id' => 2,
                     'version_id' => $data->id,
                     'plant_code' => 'B601 - Pergudangan dan Pemeliharaan',
@@ -516,7 +518,7 @@ if (!function_exists('mapping_plant_insert')) {
                     'updated_at' => Carbon::now(),
                 ],
                 [
-                    'material_code' => $material_code,
+                    'material_code' => strtoupper($material_code),
                     'kategori_balans_id' => 3,
                     'version_id' => $data->id,
                     'plant_code' => $data_plant,
@@ -527,7 +529,7 @@ if (!function_exists('mapping_plant_insert')) {
                     'updated_at' => Carbon::now(),
                 ],
                 [
-                    'material_code' => $material_code,
+                    'material_code' => strtoupper($material_code),
                     'kategori_balans_id' => 4,
                     'version_id' => $data->id,
                     'plant_code' => $data_plant,
@@ -538,7 +540,7 @@ if (!function_exists('mapping_plant_insert')) {
                     'updated_at' => Carbon::now(),
                 ],
                 [
-                    'material_code' => $material_code,
+                    'material_code' => strtoupper($material_code),
                     'kategori_balans_id' => 5,
                     'version_id' => $data->id,
                     'plant_code' => $data_plant,
@@ -582,16 +584,272 @@ if (!function_exists('find_lower_material')) {
     }
 }
 
+//if (!function_exists('antrian_material_balans')) {
+//    function antrian_material_balans($versi)
+//    {
+//        $resulty = [];
+//        $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+//            ->where([
+//                'material.kategori_material_id' => 1,
+//                'cons_rate.deleted_at' => null,
+//            ])
+//            ->get();
+//
+//        $data = find_lower_material($versi);
+//
+//        foreach ($data as $items){
+//            $check = true;
+//            $temp = [];
+//            $i = 0;
+//            while ($check){
+//                if ($i == 0){
+//                    $material = $items;
+//                    array_push($temp, $material);
+//                }
+//                $produk = $material_balans->where('material_code',$material)->pluck('product_code')->all();
+//
+//                $count = count($produk);
+//                if ($count == 1){
+//                    $material = $produk[0];
+//                    array_push($temp, $material);
+//                }elseif ($count > 1){
+//                    foreach ($produk as $items1){
+//                        $temp_data = temp_material_produk($items1, $material_balans);
+//                        $check_temp = count($temp_data);
+//
+//                        if ($check_temp == 1){
+//                            if ($temp_data['status'] != 'end'){
+//                                array_push($temp, $items1);
+//                                array_push($temp, $temp_data['material']);
+//                            }else{
+//                                array_push($temp, $temp_data['material']);
+//                            }
+//                        }elseif ($check_temp > 1){
+//                            foreach ($temp_data as $items2){
+//                                if ($temp_data['status'] != 'end'){
+//                                    array_push($temp, $items1);
+//                                    array_push($temp, $temp_data['material']);
+//                                }else{
+//                                    array_push($temp, $temp_data['material']);
+//                                }
+//                            }
+//                        }
+//                    }
+//                    $check = false;
+//                }elseif ($count == 0){
+//                    $check = false;
+//                }
+//                $i++;
+//                var_dump($i);
+//            }
+////            dd($temp);
+//            array_push($resulty, $temp);
+//        }
+//
+//        return $resulty;
+//    }
+//}
+//
+//if (!function_exists('temp_material_produk')) {
+//    function temp_material_produk($items1, $material_balans)
+//    {
+//        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
+//
+//        $r = [];
+//        $count = count($produk);
+//        if ($count == 1){
+//            $result['material'] = $produk[0];
+//            $result['status'] = 'low';
+//        }elseif ($count > 1){
+//            foreach ($produk as $items2){
+//                $temp_data = temp_material_produk($items2, $material_balans);
+//                $result['material'] = $temp_data['material'];
+//                $result['status'] = 'mid';
+//                array_push($r, $result);
+//            }
+//        }else{
+//            $result['material'] = $items1;
+//            $result['status'] = 'end';
+//        }
+//
+////        if ($items1 =='MATERIAL 6'){
+////            dd($r);
+////        }
+//
+//        return $result;
+//
+//    }
+//}
+
+//// Cara 1
+//if (!function_exists('antrian_material_balans')) {
+//    function antrian_material_balans($versi)
+//    {
+//        $resulty = [];
+//        $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+//            ->where([
+//                'material.kategori_material_id' => 1,
+//                'cons_rate.deleted_at' => null,
+//            ])
+//            ->get();
+//        $data = find_lower_material($versi);
+//
+//        foreach ($data as $items){
+//            $temp = [$items];
+//            $temp_resulty = '';
+//            $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
+//
+//            var_dump($product);
+//            array_push($resulty, $product);
+//
+//        }
+//
+//        return $resulty;
+//    }
+//}
+//
+//if (!function_exists('temp_material_produk')) {
+//    function temp_material_produk($items1, $material_balans, $temp, $temp_resulty)
+//    {
+//        $temp_hasil = $temp;
+//        $temp_resulty1 = $items1.'->';
+//
+//
+//        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
+//
+//        $count_produk = count($produk);
+//
+//        if ($count_produk == 1){
+//            $data_produk = $produk[0];
+//            $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//
+//            $temp_resulty1 .= $hasil;
+//        }else if ($count_produk > 1){
+//            foreach ($produk as $items){
+//                $data_produk = $items;
+//                $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//                $temp_resulty1 .= $hasil;
+//            }
+//        }
+//
+//        return $temp_resulty1;
+//
+//    }
+//}
+
+// Cara 2
 if (!function_exists('antrian_material_balans')) {
     function antrian_material_balans($versi)
     {
-        $material_balans = Material::where([
-            'kategori_material_id' => 1,
-            'deleted_at' => null,
-        ])->get();
+        $resulty = [];
+        $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
+            ->where([
+                'material.kategori_material_id' => 1,
+                'cons_rate.deleted_at' => null,
+            ])
+            ->get();
+        $data = find_lower_material($versi);
+
+        foreach ($data as $items){
+            $temp = [$items];
+            $temp_resulty = [];
+            $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
+
+            array_push($resulty, $product);
+        }
+
+        return $resulty;
+    }
+}
+
+if (!function_exists('temp_material_produk')) {
+    function temp_material_produk($items1, $material_balans, $temp, $temp_resulty)
+    {
+        $temp_hasil = $temp;
+        $temp_resulty1 = $temp_resulty;
+        array_push($temp_resulty1, $items1);
 
 
+        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
 
+        $count_produk = count($produk);
+
+        if ($count_produk == 1){
+            $data_produk = $produk[0];
+            $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//            dd($hasil);
+//            array_push($temp_resulty1, $hasil);
+            $temp_resulty1 = $hasil;
+        }else if ($count_produk > 1){
+            foreach ($produk as $items){
+                $data_produk = $items;
+                $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
+//                array_push($temp_resulty1, $hasil);
+                $temp_resulty1 = $hasil;
+            }
+        }
+
+        return $temp_resulty1;
+    }
+}
+
+if (!function_exists('get_data_balans')) {
+    function get_data_balans($kategori, $plant, $material, $asumsi, $versi = null)
+    {
+        if ($kategori == 1){
+            $check_plant = explode(' - ', $plant);
+            $result = Saldo_Awal::select(DB::raw('SUM(total_stock) as total_stock'), DB::raw('SUM(total_value) as total_value'))
+                ->where('month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('material_code', $material);
+            if ($check_plant[0] != 'all'){
+                $result = $result->whereIn('plant_code', $check_plant);
+            }
+
+            $result = $result->first();
+        }elseif ($kategori == 2){
+            $result = QtyRenDaan::select(DB::raw('SUM(qty_rendaan.qty_rendaan_value) as qty_rendaan_value'))
+                ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('asumsi_umum.version_id', $versi)
+                ->where('qty_rendaan.material_code', $material);
+            $result = $result->first();
+        }elseif ($kategori == 'total_daan'){
+            $cc = auth()->user()->company_code;
+            $qty_rendaan = DB::table('qty_rendaan')
+//                ->select()
+                ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
+                ->where('qty_rendaan.company_code', $cc)
+                ->where('asumsi_umum.version_id', $versi)
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('qty_rendaan.material_code', $material)
+                ->whereNull('qty_rendaan.deleted_at')
+                ->first();
+
+            $price_rendaan = DB::table('price_rendaan')
+                ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')
+                ->where('price_rendaan.company_code', $cc)
+                ->where('asumsi_umum.version_id', $versi)
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('price_rendaan.material_code', $material)
+                ->whereNull('price_rendaan.deleted_at')
+                ->first();
+
+            $val_qty_rendaan =  $qty_rendaan ? $qty_rendaan->qty_rendaan_value : 0 ;
+            $val_price_daan = $price_rendaan ? $price_rendaan->price_rendaan_value : 0 ;
+            $val_adjustment = $qty_rendaan ? $qty_rendaan->adjustment : 0 ;
+            $val_kurs = $qty_rendaan ? $qty_rendaan->usd_rate : 0 ;
+
+
+            if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
+                $result = '-';
+            }else{
+                $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
+            }
+        }
+        else{
+            $result = 0;
+        }
+        return $result;
     }
 }
 
