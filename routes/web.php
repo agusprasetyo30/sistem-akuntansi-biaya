@@ -396,6 +396,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'dasar_balans'], function () {
             Route::get('/', [BalansController::class, 'index'])->name('dasar_balans');
+            Route::post('header', [BalansController::class, 'index_header'])->name('header_dasar_balans');
 //                Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
 //                Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
 //                Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');

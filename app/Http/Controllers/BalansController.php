@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\BalansDataTable;
+use App\Models\Asumsi_Umum;
 use App\Models\ConsRate;
 use App\Models\Material;
 use Illuminate\Http\Request;
@@ -14,23 +15,18 @@ class BalansController extends Controller
     {
 
         $antrian = antrian_material_balans(1);
-//        dd($antrian);
-
-        $query = DB::table('map_kategori_balans')
-            ->select('map_kategori_balans.*', 'kategori_balans.kategori_balans')
-            ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
-//            ->whereRaw("map_kategori_balans.material_code in ('MATERIAL 1', 'MATERIAL 2', 'MATERIAL 3', 'MATERIAL 4', 'MATERIAL 4')")
-            ->whereIn('map_kategori_balans.material_code', ['MATERIAL 1', 'MATERIAL 2', 'MATERIAL 3', 'MATERIAL 4'])
-            ->where('map_kategori_balans.version_id', 1)->get();
-
-//        dd($query);
-
         if ($request->data == 'index') {
             return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1])->render('pages.buku_besar.balans.index');
         }elseif ($request->data == 'horizontal'){
             return $balansDataTable->render('pages.buku_besar.balans.index');
         }
         return view('pages.buku_besar.balans.index');
+    }
+
+    public function index_header(Request $request){
+        $asumsi = Asumsi_Umum::where('version_id', $request->version)->get();
+
+        return response()->json(['code' => 200, 'asumsi' => $asumsi]);
     }
 
     public function create(Request $request)

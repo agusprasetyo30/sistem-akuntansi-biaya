@@ -796,13 +796,27 @@ if (!function_exists('temp_material_produk')) {
 if (!function_exists('get_data_balans')) {
     function get_data_balans($kategori, $plant, $material, $asumsi, $versi = null)
     {
+        $plant = explode(';', $plant);
+        $data_plant = [];
+
+        if (count($plant) > 1){
+            foreach ($plant as $items){
+                $temp = explode(' - ', $items);
+                array_push($data_plant, $temp[0]);
+            }
+        }else{
+            $temp = explode(' - ', $plant[0]);
+            array_push($data_plant, $temp[0]);
+        }
+
+
         if ($kategori == 1){
-            $check_plant = explode(' - ', $plant);
+
             $result = Saldo_Awal::select(DB::raw('SUM(total_stock) as total_stock'), DB::raw('SUM(total_value) as total_value'))
                 ->where('month_year', 'ilike', '%'.$asumsi.'%')
                 ->where('material_code', $material);
-            if ($check_plant[0] != 'all'){
-                $result = $result->whereIn('plant_code', $check_plant);
+            if ($data_plant[0] != 'all'){
+                $result = $result->whereIn('plant_code', $data_plant);
             }
 
             $result = $result->first();
@@ -813,6 +827,30 @@ if (!function_exists('get_data_balans')) {
                 ->where('asumsi_umum.version_id', $versi)
                 ->where('qty_rendaan.material_code', $material);
             $result = $result->first();
+        }elseif ($kategori == 4){
+            $cc = auth()->user()->company_code;
+            $pemakaian = DB::table('pj_pemakaian')
+                ->select('pj_pemakaian.pj_pemakaian_value')
+                ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_pemakaian.asumsi_umum_id')
+                ->where('pj_pemakaian.company_code', $cc)
+                ->where('pj_pemakaian.material_code', $material)
+                ->where('pj_pemakaian.version_id', $versi)
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->whereNull('pj_pemakaian.deleted_at')
+                ->first();
+
+            $penjualan = DB::table('pj_penjualan')
+                ->select('pj_penjualan.pj_penjualan_value')
+                ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_penjualan.asumsi_umum_id')
+                ->where('pj_penjualan.company_code', $cc)
+                ->where('pj_penjualan.material_code', $material)
+                ->where('pj_penjualan.version_id', $versi)
+                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->whereNull('pj_penjualan.deleted_at')
+                ->first();
+
+            return $pemakaian->pj_pemakaian_value + $penjualan->pj_penjualan_value;
+
         }elseif ($kategori == 'total_daan'){
             $cc = auth()->user()->company_code;
             $qty_rendaan = DB::table('qty_rendaan')
