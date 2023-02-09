@@ -33,8 +33,12 @@ class MapKetegoriBalansController extends Controller
 
             $result = '';
 
-            foreach ($request->plant as $item){
-                $result .= $item.';';
+            foreach ($request->plant as $key => $item){
+                if ($key == 0){
+                    $result .= $item.';';
+                }else{
+                    $result .= ';'.$item;
+                }
             }
 
             $input['version_id'] = $request->versi;
@@ -88,8 +92,12 @@ class MapKetegoriBalansController extends Controller
 
             $result = '';
 
-            foreach ($request->plant as $item){
-                $result .= $item.';';
+            foreach ($request->plant as $key => $item){
+                if ($key == 0){
+                    $result .= $item.';';
+                }else{
+                    $result .= ';'.$item;
+                }
             }
 
             $input['version_id'] = $request->versi;
