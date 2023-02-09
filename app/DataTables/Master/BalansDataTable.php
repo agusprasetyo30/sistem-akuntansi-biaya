@@ -47,39 +47,59 @@ class BalansDataTable extends DataTable
 
 
         foreach ($asumsi_balans as $key=> $items){
-            $datatable->addColumn('q'.$key, function ($query) use ($items){
+            $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key){
                 if ($query->kategori_balans_id == 1){
-                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items);
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
                     return $result['total_stock'];
                 }elseif ($query->kategori_balans_id == 2){
                     $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
                     return $result['qty_rendaan_value'];
+                }elseif ($query->kategori_balans_id == 3){
+                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+
+                    return $nilai_saldo_awal['total_stock'] + $total_daan['qty_rendaan_value'];
                 }else{
                     return 0;
                 }
-            })->addColumn('p'.$key, function ($query) use ($items){
+            })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key){
                 if ($query->kategori_balans_id == 1){
-                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items);
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
                     if ($result['total_stock'] != 0){
                         return $result['total_value']/$result['total_stock'];
                     }else{
                         return 0;
                     }
-                }elseif ($query->kategori_balans_id == 2 || $query->kategori_balans_id == 3){
+                }elseif ($query->kategori_balans_id == 2){
                     $quantiti = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
                     $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
 
                     return rupiah($total_daan / $quantiti['qty_rendaan_value']);
+                }elseif ($query->kategori_balans_id == 3){
+                    $p_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    $p_result = $p_saldo_awal['total_stock'] + $p_total_daan['qty_rendaan_value'];
+                    $nilai_result = $nilai_saldo_awal['total_value'] + $nilai_total_daan;
+
+                    return rupiah($nilai_result / $p_result);
                 }else{
                     return 0;
                 }
-            })->addColumn('nilai'.$key, function ($query) use ($items){
+            })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key){
                 if ($query->kategori_balans_id == 1){
-                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items);
+                    $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
                     return $result['total_value'];
                 }elseif ($query->kategori_balans_id == 2){
                     $result = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
                     return rupiah($result);
+                }elseif ($query->kategori_balans_id == 3){
+                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    return rupiah($nilai_saldo_awal['total_value'] + $total_daan);
                 }else{
                     return 0;
                 }

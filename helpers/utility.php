@@ -833,7 +833,7 @@ if (!function_exists('get_data_balans')) {
                 ->where('price_rendaan.material_code', $material)
                 ->whereNull('price_rendaan.deleted_at')
                 ->first();
-//            dd($qty_rendaan, $price_rendaan);
+
             $val_qty_rendaan =  $qty_rendaan ? $qty_rendaan->qty_rendaan_value : 0 ;
             $val_price_daan = $price_rendaan ? $price_rendaan->price_rendaan_value : 0 ;
             $val_adjustment = $qty_rendaan ? $qty_rendaan->adjustment : 0 ;
@@ -845,8 +845,6 @@ if (!function_exists('get_data_balans')) {
             }else{
                 $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
             }
-        }elseif ($kategori == 3){
-
         }
         else{
             $result = 0;
