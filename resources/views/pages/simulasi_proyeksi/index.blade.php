@@ -188,7 +188,7 @@
                 success:function (response) {
                     // console.log(response);
                     for (let i = 0; i < response.asumsi.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'<br>'+ response.plant[0].plant_code + ' ' + response.plant[0].plant_desc +'<br>'+ response.produk[0].material_code + ' ' + response.produk[0].material_name + '</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'<br>'+ response.produk[0].material_code + ' ' + response.produk[0].material_name +'<br>'+ response.plant[0].plant_code + ' ' + response.plant[0].plant_desc + '</th>';
 
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
@@ -237,8 +237,19 @@
                             }
                         },
                         initComplete: function( settings ) {
-                            let api = this.api();
-                            api.columns.adjust().draw();
+                            $('.dataTables_scrollHead').css('overflow', 'auto');
+                                $('.dataTables_scrollHead').on('scroll', function () {
+                                $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                            });
+
+                            $(document).on('scroll', function () {
+                                $('.dtfh-floatingparenthead').on('scroll', function () {
+                                    $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                                });
+                            })
+
+                            // let api = this.api();
+                            // api.columns.adjust().draw();
                         }
                     })
                 },
