@@ -32,6 +32,9 @@
                         <select id="filter_version" class="form-control custom-select select2">
                         </select>
                     </div>
+                    <div class="btn-list">
+                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                    </div>
                 </div>
                 <div class="">
                     <div class="table-responsive" id="table_main">
@@ -72,7 +75,7 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_balans" class="table table-bordered text-nowrap key-buttons text-center" style="width: auto;">' +
+        var table_main_dt = '<table id="dt_balans" class="table table-bordered text-nowrap key-buttons text-center" style="width: 100%;">' +
             '<thead>' +
             '<tr id="primary">' +
             '<th class="align-middle" style="width: 5%;" rowspan="3">Material</th>' +
@@ -107,8 +110,26 @@
                         };
                     }
                 }
-            }).on('change', function () {
-                get_data()
+            })
+
+            $('#btn_tampilkan').on('click', function () {
+                var versi = $('#filter_version').val();
+                if (versi !== null){
+                    get_data()
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Data Versi Kosong, Silahkan Isi Data Tersebut",
+                        icon: 'warning',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        // if (result.value){
+                        //     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                        // }
+                    })
+                }
             })
         })
 
@@ -136,9 +157,9 @@
                 },
                 success:function (response){
                     for (let i = 0; i < response.asumsi.length;i++){
-                        column.push({ data: 'q'+i.toString(), orderable:false});
-                        column.push({ data: 'p'+i.toString(), orderable:false});
-                        column.push({ data: 'nilai'+i.toString(), orderable:false});
+                        column.push({ width:'5%', data: 'q'+i.toString(), orderable:false});
+                        column.push({ width:'20%', data: 'p'+i.toString(), orderable:false});
+                        column.push({ width:'20%', data: 'nilai'+i.toString(), orderable:false});
 
                         kolom += '<th class="text-center" colspan="3">'+helpDateFormat(response.asumsi[i].month_year)+'</th>';
 
@@ -150,7 +171,7 @@
                             '<th>Rp/Ton</th>' +
                             '<th>Nilai (Rp)</th>';
                     }
-                    console.log(column)
+
                     $("#primary").append(kolom);
                     $("#secondary").append(kolom1);
                     $("#third").append(kolom2);
@@ -158,16 +179,20 @@
                         scrollX: true,
                         dom: 'Bfrtip',
                         orderCellsTop: true,
-                        autoWidth: true,
                         processing: true,
                         serverSide: true,
                         deferRender:true,
-                        fixedHeader: {
-                            header: true,
-                            headerOffset: $('#main_header').height()
-                        },fixedColumns:   {
+                        // fixedHeader: {
+                        //     header: true,
+                        //     headerOffset: $('#main_header').height()
+                        // },
+                        fixedColumns:   {
                             left: 3
                         },
+                        lengthMenu: [
+                            [-1, 10, 25, 50],
+                            ['All', 10, 25, 50],
+                        ],
                         initComplete: function () {
                             $('.dataTables_scrollHead').css('overflow', 'auto');
                             $('.dataTables_scrollHead').on('scroll', function () {
@@ -179,7 +204,10 @@
                                     $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                                 });
                             })
-                            this.api().columns.adjust().draw()
+
+                            $('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();
+                            // $('#dt_balans').DataTable().ajax.reload();
+                            // this.api().columns.adjust().draw()
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },

@@ -16,9 +16,12 @@ class BalansController extends Controller
 
         $antrian = antrian_material_balans(1);
         if ($request->data == 'index') {
-            return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1])->render('pages.buku_besar.balans.index');
-        }elseif ($request->data == 'horizontal'){
-            return $balansDataTable->render('pages.buku_besar.balans.index');
+            if ($request->save){
+                return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1, 'save' => false])->render('pages.buku_besar.balans.index');
+            }else{
+                return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1, 'save' => true])->render('pages.buku_besar.balans.index');
+            }
+
         }
         return view('pages.buku_besar.balans.index');
     }

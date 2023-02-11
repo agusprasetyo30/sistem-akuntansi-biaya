@@ -14,6 +14,8 @@ class BalansDataTable extends DataTable
 {
     public function dataTable($query)
     {
+
+        $test1 = [];
 //        dd($this->antrian);
         $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'kategori_balans.kategori_balans')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
@@ -45,6 +47,7 @@ class BalansDataTable extends DataTable
         $saldo_awal = '2021-12-01 00:00:00';
         array_unshift($asumsi, $saldo_awal);
 
+        $data = [];
 
         foreach ($asumsi_balans as $key=> $items){
             $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key){
@@ -134,7 +137,7 @@ class BalansDataTable extends DataTable
                 }else{
                     return 0;
                 }
-            })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key){
+            })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $datatable){
                 if ($query->kategori_balans_id == 1){
                     $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
                     return rupiah($result['total_value']);
@@ -162,6 +165,7 @@ class BalansDataTable extends DataTable
                     return rupiah($p_pakai_jual * $value);
 
                 }elseif ($query->kategori_balans_id == 5){
+
                     $nilai_saldo_awal_tersedia = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
                     $total_daan_tersedia = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
 
@@ -180,12 +184,12 @@ class BalansDataTable extends DataTable
 
                     $total_tersedia = $nilai_saldo_awal_tersedia['total_value'] + $total_daan_tersedia;
                     $total_pakai_jual = $p_pakai_jual * $value;
-
                     return rupiah($total_tersedia - $total_pakai_jual);
                 }else{
                     return 0;
                 }
             });
+//            dd($test1, $datatable->toArray());
         }
 
 //        dd($datatable->toArray());
