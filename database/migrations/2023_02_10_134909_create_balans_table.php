@@ -15,8 +15,7 @@ class CreateBalansTable extends Migration
     {
         Schema::create('balans', function (Blueprint $table) {
             $table->id();
-            $table->string('plant_code')->unsigned();
-            $table->foreign('plant_code')->references('plant_code')->on('plant')->onDelete("cascade")->onUpdate("cascade");
+            $table->string('plant_code');
             $table->foreignId('kategori_balans_id')->references('id')->on('kategori_balans')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->string('company_code')->unsigned();

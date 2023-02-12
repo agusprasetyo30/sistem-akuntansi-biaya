@@ -10,12 +10,14 @@ class Balans extends Model
     use HasFactory;
 
     protected $table = 'balans';
-
     protected $fillable = [
         'material_code',
         'plant_code',
         'kategori_balans_id',
         'asumsi_umum_id',
+        'q',
+        'p',
+        'nilai',
         'company_code',
         'created_at',
         'created_by',
