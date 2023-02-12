@@ -103,21 +103,12 @@ class BalansDataTable extends DataTable
                         $nilai_saldo_awal = $nilai_saldo_awal['total_stock'];
                     }
 
-
-
-//                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
                     $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
 
                     $pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
 
                     $tersedia = $nilai_saldo_awal + $total_daan['qty_rendaan_value'];
-//                    var_dump($nilai_saldo_awal, '-', $total_daan['qty_rendaan_value']);
-
-//                        if ($key == 3){
-//                            dd($tersedia, $pakai_jual, $tersedia-$pakai_jual);
-//                        }
-                        $result = (double)$tersedia-(double)$pakai_jual;
-//                        var_dump('tersedia ='.$tersedia, 'pakai jual ='.$pakai_jual);
+                    $result = (double)$tersedia-(double)$pakai_jual;
                     return $result;
                 }else{
                     return 0;
@@ -175,51 +166,45 @@ class BalansDataTable extends DataTable
                         return rupiah(0);
                     }
                 }elseif ($query->kategori_balans_id == 5){
-
                     if ($key > 0 ){
-
+                        $result = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $q_saldo_awal = $result->q;
+                        $nilai_saldo_awal = $result->nilai;
                     }else{
-                        $nilai_saldo_awal_saldo_akhir = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $q_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $q_saldo_awal = $q_saldo_awal['total_stock'];
+                        $nilai_saldo_awal = $nilai_saldo_awal['total_value'];
                     }
-//                    $nilai_saldo_awal_saldo_akhir = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                    $total_daan_saldo_akhir = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
 
-                    $pakai_jual_saldo_akhir = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
-
-                    $tersedia_saldo_akhir = $nilai_saldo_awal_saldo_akhir['total_stock'] + $total_daan_saldo_akhir['qty_rendaan_value'];
-
-                    $nilai_saldo_awal_tersedia = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                    $total_daan_tersedia = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
-
-                    $p_pakai_jual = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
-
-                    $p_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                    $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
-                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                    $q_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
                     $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
 
-                    $p_result = $p_saldo_awal['total_stock'] + $p_total_daan['qty_rendaan_value'];
+                    $q_tersedia = $q_saldo_awal + $q_total_daan['qty_rendaan_value'];
 
-                    $nilai_result = $nilai_saldo_awal['total_value'] + $nilai_total_daan;
+                    $nilai_tersedia = $nilai_saldo_awal + $nilai_total_daan;
 
-                    if ($p_result != 0){
-                        $value = $nilai_result / $p_result;
+                    $q_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
 
-                        $total_tersedia = $nilai_saldo_awal_tersedia['total_value'] + $total_daan_tersedia;
-                        $total_pakai_jual = $p_pakai_jual * $value;
+                    if ($q_tersedia != 0){
+                        $p_tersedia = $nilai_tersedia / $q_tersedia;
 
-                        $hasil_p_saldo_akhir = $tersedia_saldo_akhir - $pakai_jual_saldo_akhir;
-                        $hasil_total_saldo_akhir = $total_tersedia - $total_pakai_jual;
+                        $total_pakai_jual = $q_pakai_jual * $p_tersedia;
 
-                        if ($hasil_p_saldo_akhir != 0){
-                            return rupiah($hasil_total_saldo_akhir / $hasil_p_saldo_akhir);
+
+                        $hasil_q_saldo_akhir = $q_tersedia - $q_pakai_jual;
+                        $hasil_nilai_saldo_akhir = $nilai_tersedia - $total_pakai_jual;
+
+
+//                        dd($hasil_total_saldo_akhir, $p_result, $hasil_p_saldo_akhir);
+                        if ($hasil_q_saldo_akhir != 0){
+                            return rupiah($hasil_nilai_saldo_akhir / $hasil_q_saldo_akhir);
                         }else{
                             return rupiah(0);
                         }
                     }else{
                         return rupiah(0);
                     }
-
                 }else{
                     return 0;
                 }
@@ -279,30 +264,39 @@ class BalansDataTable extends DataTable
                     return rupiah($p_pakai_jual * $value);
 
                 }elseif ($query->kategori_balans_id == 5){
-
-                    $nilai_saldo_awal_tersedia = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                    $total_daan_tersedia = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
-
-                    $p_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
-
-                    $p_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                    $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
-                    $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                    $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
-
-                    $p_result = $p_saldo_awal['total_stock'] + $p_total_daan['qty_rendaan_value'];
-
-                    $nilai_result = $nilai_saldo_awal['total_value'] + $nilai_total_daan;
-
-                    if ($p_result != 0){
-                        $value = $nilai_result / $p_result;
+                    if ($key > 0 ){
+                        $result = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $q_saldo_awal = $result->q;
+                        $nilai_saldo_awal = $result->nilai;
                     }else{
-                        $value = 0;
+                        $q_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                        $q_saldo_awal = $q_saldo_awal['total_stock'];
+                        $nilai_saldo_awal = $nilai_saldo_awal['total_value'];
                     }
 
-                    $total_tersedia = $nilai_saldo_awal_tersedia['total_value'] + $total_daan_tersedia;
-                    $total_pakai_jual = $p_pakai_jual * $value;
-                    return rupiah($total_tersedia - $total_pakai_jual);
+                    $q_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                    $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+
+                    $q_tersedia = $q_saldo_awal + $q_total_daan['qty_rendaan_value'];
+
+                    $nilai_tersedia = $nilai_saldo_awal + $nilai_total_daan;
+
+                    $q_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
+
+                    if ($q_tersedia != 0){
+                        $p_tersedia = $nilai_tersedia / $q_tersedia;
+
+                        $total_pakai_jual = $q_pakai_jual * $p_tersedia;
+
+
+                        $hasil_q_saldo_akhir = $q_tersedia - $q_pakai_jual;
+                        $hasil_nilai_saldo_akhir = $nilai_tersedia - $total_pakai_jual;
+
+                        return rupiah($hasil_nilai_saldo_akhir);
+                    }else{
+                        return rupiah(0);
+                    }
                 }else{
                     return 0;
                 }
