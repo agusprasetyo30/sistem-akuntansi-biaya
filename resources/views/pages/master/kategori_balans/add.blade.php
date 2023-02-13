@@ -17,6 +17,22 @@
                                 <label class="form-label">kategori Balans Deskripsi <span class="text-red">*</span></label>
                                 <input class="form-control" type="text" placeholder="Masukkan Kategori Produk Deskripsi" required name="kategori_balans_desc" id="kategori_balans_desc" autocomplete="off">
                             </div>
+                            <div class="form-group">
+                                <label class="form-label">Type Kategori Balans</label>
+                                <select name="type_kategori_balans" id="type_kategori_balans" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Tipe kategori</option>
+                                    <option value="produksi">Produksi</option>
+                                    <option value="pemakaian">Pemakaian</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Urutan</label>
+                                <select name="urutan" id="urutan" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Status</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>

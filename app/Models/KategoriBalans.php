@@ -15,6 +15,8 @@ class KategoriBalans extends Model
         'company_code',
         'kategori_balans',
         'kategori_balans_desc',
+        'order_view',
+        'type_kategori_balans',
         'created_at',
         'created_by',
         'updated_at',

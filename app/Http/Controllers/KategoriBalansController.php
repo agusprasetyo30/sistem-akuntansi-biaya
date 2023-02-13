@@ -23,7 +23,9 @@ class KategoriBalansController extends Controller
 
             $validator = Validator::make($request->all(), [
                 "kategori_balans" => 'required',
-                "kategori_balans_desc" => 'required|min:0|not_in:0',
+                "kategori_balans_desc" => 'required',
+                "type_kategori_balans" => 'required',
+                "urutan" => 'required|min:1|max:4',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -31,6 +33,8 @@ class KategoriBalansController extends Controller
 
             $input['kategori_balans'] = $request->kategori_balans;
             $input['kategori_balans_desc'] = $request->kategori_balans_desc;
+            $input['order_view'] = $request->urutan;
+            $input['type_kategori_balans'] = $request->type_kategori_balans;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;

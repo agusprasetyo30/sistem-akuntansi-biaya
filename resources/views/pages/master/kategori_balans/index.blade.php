@@ -47,6 +47,8 @@
             '<tr>' +
             '<th data-type="text" data-name="kategori_produk" class="text-center">KATEGORI BALANS</th>' +
             '<th data-type="text" data-name="deskripsi" class="text-center">DESKRIPSI</th>' +
+            '<th data-type="text" data-name="tipe" class="text-center">TIPE</th>' +
+            '<th data-type="text" data-name="urutan" class="text-center">URUTAN</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -56,6 +58,18 @@
 
         $(document).ready(function () {
             get_data()
+
+            $('#urutan').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Urutan',
+                width: '100%'
+            })
+
+            $('#type_kategori_balans').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Tipe Kategori',
+                width: '100%'
+            })
         })
 
         function get_data(){
@@ -159,6 +173,8 @@
                 columns: [
                     { data: 'kategori_balans', name: 'filter_kategori_balans', orderable:true},
                     { data: 'kategori_balans_desc', name: 'filter_kategori_balans_desc', orderable:true},
+                    { data: 'type_kategori', name: 'filter_type_kategori', orderable:true},
+                    { data: 'urutan', name: 'filter_urutan', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
@@ -181,9 +197,10 @@
                     _token: "{{ csrf_token() }}",
                     kategori_balans: $('#kategori_balans').val(),
                     kategori_balans_desc: $('#kategori_balans_desc').val(),
+                    type_kategori_balans: $('#type_kategori_balans').val(),
+                    urutan: $('#urutan').val(),
                 },
                 success:function (response) {
-                    // $("#tanggal").attr("disabled", true);
                     Swal.fire({
                         title: response.title,
                         text: response.msg,

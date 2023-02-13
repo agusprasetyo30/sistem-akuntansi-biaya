@@ -26,17 +26,42 @@ class KategoriBalansDataTable extends DataTable
             ->addColumn('kategori_balans_desc', function ($query){
                 return $query->kategori_balans_desc;
             })
+            ->addColumn('type_kategori', function ($query) {
+                if ($query->type_kategori_balans == 'default') {
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Default</span>";
+                }elseif ($query->type_kategori_balans == 'produksi'){
+                    $span = "<span class='badge bg-primary-light border-primary mt-2'>Produksi</span>";
+                } else {
+                    $span = "<span class='badge bg-info-light border-info mt-2'>Pemakaian</span>";
+                }
+                return $span;
+            })
+            ->addColumn('urutan', function ($query){
+                return $query->order_view;
+            })
             ->filterColumn('filter_kategori_balans', function ($query, $keyword){
                 $query->where('kategori_balans.kategori_balans_desc', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_kategori_balans_desc', function ($query, $keyword){
                 $query->where('kategori_balans.kategori_balans', 'ilike', '%'.$keyword.'%');
             })
+            ->filterColumn('filter_urutan', function ($query, $keyword){
+                $query->where('kategori_balans.order_view', 'ilike', '%'.$keyword.'%');
+            })
+            ->filterColumn('filter_type_kategori', function ($query, $keyword){
+                $query->where('kategori_balans.type_kategori_balans', 'ilike', '%'.$keyword.'%');
+            })
             ->orderColumn('filter_kategori_balans', function ($query, $order){
                 $query->orderBy('kategori_balans.kategori_balans', $order);
             })
             ->orderColumn('filter_kategori_balans_desc', function ($query, $order){
                 $query->orderBy('kategori_balans.kategori_balans_desc', $order);
+            })
+            ->orderColumn('filter_urutan', function ($query, $order){
+                $query->orderBy('kategori_balans.order_view', $order);
+            })
+            ->orderColumn('filter_type_kategori', function ($query, $order){
+                $query->orderBy('kategori_balans.type_kategori_balans', $order);
             })
             ->addColumn('action', 'pages.master.kategori_balans.action')
             ->escapeColumns([]);
