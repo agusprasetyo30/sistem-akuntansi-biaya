@@ -188,14 +188,20 @@
                 success:function (response) {
                     // console.log(response);
                     for (let i = 0; i < response.asumsi.length;i++){
+
+                        column.push({ data: i.toString()+'harga_satuan', orderable:false});
+                        column.push({ data: i.toString()+'cr', orderable:false});
+                        column.push({ data: i.toString()+'biaya_perton', orderable:false});
+                        column.push({ data: i.toString()+'total_biaya', orderable:false});
+
                         kolom_top += '<th colspan="4" class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'<br>'+ response.produk[0].material_code + ' ' + response.produk[0].material_name +'<br>'+ response.plant[0].plant_code + ' ' + response.plant[0].plant_desc + '</th>';
 
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
-                    for (let j = 0; j < response.asumsi.length * 4 ; j++) {
-                        column.push({ data: j.toString(), orderable:false})
-                    }
+                    // for (let j = 0; j < response.asumsi.length * 4 ; j++) {
+                    //     column.push({ data: j.toString(), orderable:false})
+                    // }
 
                     $("#dinamic_tr_top").append(kolom_top);
                     $("#dinamic_tr").append(kolom);
