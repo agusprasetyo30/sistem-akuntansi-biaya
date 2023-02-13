@@ -741,6 +741,7 @@ if (!function_exists('find_lower_material')) {
 if (!function_exists('antrian_material_balans')) {
     function antrian_material_balans($versi)
     {
+//        dd($versi);
         $resulty = [];
         $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
             ->where([
@@ -811,7 +812,6 @@ if (!function_exists('get_data_balans')) {
 
 
         if ($kategori == 1){
-
             $result = Saldo_Awal::select(DB::raw('SUM(total_stock) as total_stock'), DB::raw('SUM(total_value) as total_value'))
                 ->where('month_year', 'ilike', '%'.$asumsi.'%')
                 ->where('material_code', $material);
@@ -854,7 +854,6 @@ if (!function_exists('get_data_balans')) {
         }elseif ($kategori == 'total_daan'){
             $cc = auth()->user()->company_code;
             $qty_rendaan = DB::table('qty_rendaan')
-//                ->select()
                 ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
                 ->where('qty_rendaan.company_code', $cc)
                 ->where('asumsi_umum.version_id', $versi)
@@ -888,6 +887,23 @@ if (!function_exists('get_data_balans')) {
             $result = 0;
         }
         return $result;
+    }
+}
+
+if (!function_exists('get_data_balans_db')) {
+    function get_data_balans_db($balans, $kategori, $plant, $material, $asumsi, $versi = null)
+    {
+        if ($kategori == 1){
+            $result = $balans->where('kategori_balans_id', 5)
+                ->where('month_year',$asumsi)
+                ->where('company_code', auth()->user()->company_code)
+                ->where('material_code', $material)
+                ->first();
+
+            return $result;
+        }else{
+            return 0 ;
+        }
     }
 }
 

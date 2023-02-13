@@ -51,8 +51,26 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- FIXED HEADER -->
 <script src="{{asset('assets/js/dataTables.fixedHeader.min.js')}}"></script>
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/dataTables.fixedHeader.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/fixedHeader.bootstrap5.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/fixedHeader.bulma.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/fixedHeader.dataTables.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/fixedHeader.foundation.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/fixedHeader.jqueryui.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedHeader/js/fixedHeader.semanticui.js')}}"></script>--}}
+
+<!-- FIXED COLUMN -->
 <script src="{{asset('assets/js/dataTables.fixedColumns.min.js')}}"></script>
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/dataTables.fixedColumns.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/fixedColumns.bootstrap5.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/fixedColumns.bulma.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/fixedColumns.dataTables.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/fixedColumns.foundation.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/fixedColumns.jqueryui.js')}}"></script>--}}
+{{--<script src="{{asset('assets/plugins/datatables/FixedColumns/js/fixedColumns.semanticui.js')}}"></script>--}}
+
 
 <script src="{{asset('assets/js/toastr.min.js')}}"></script>
 

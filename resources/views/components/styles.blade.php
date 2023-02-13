@@ -15,8 +15,23 @@
 <!--Sidemenu css -->
 <link href="{{asset('assets/css/sidemenu.css')}}" rel="stylesheet">
 
+<!--Fixed Header css -->
+<link href="{{asset('assets/css/fixedHeader.dataTables.min.css')}}" rel="stylesheet">
+{{--<link href="{{asset('assets/plugins/datatables/FixedHeader/css/fixedHeader.bootstrap5.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedHeader/css/fixedHeader.bulma.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedHeader/css/fixedHeader.dataTables.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedHeader/css/fixedHeader.foundation.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedHeader/css/fixedHeader.jqueryui.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedHeader/css/fixedHeader.semanticui.css')}}" rel="stylesheet">--}}
+
 <!--Fixed Coloumn css -->
 <link href="{{asset('assets/css/fixedColumns.dataTables.min.css')}}" rel="stylesheet">
+{{--<link href="{{asset('assets/plugins/datatables/FixedColumns/css/fixedColumns.bootstrap5.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedColumns/css/fixedColumns.bulma.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedColumns/css/fixedColumns.dataTables.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedColumns/css/fixedColumns.foundation.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedColumns/css/fixedColumns.jqueryui.css')}}" rel="stylesheet">--}}
+{{--<link href="{{asset('assets/plugins/datatables/FixedColumns/css/fixedColumns.semanticui.css')}}" rel="stylesheet">--}}
 
 <!-- P-scroll bar css-->
 <link href="{{asset('assets/plugins/p-scrollbar/p-scrollbar.css')}}" rel="stylesheet" />
