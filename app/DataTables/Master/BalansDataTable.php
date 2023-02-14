@@ -14,7 +14,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class BalansDataTable extends DataTable
 {
-    public function dataTable($query)
+    public function dataTable()
     {
         $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.kategori_balans')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
@@ -23,6 +23,9 @@ class BalansDataTable extends DataTable
             ->orderBy('map_kategori_balans.material_code', 'ASC')
             ->orderBy('kategori_balans.order_view', 'ASC');
 
+//        $data = new RegionDataTable();
+//        $data = $data->dataTable(1);
+//        dd($data);
         $datatable = datatables()
             ->eloquent($query)
             ->addColumn('material', function ($query){
@@ -337,7 +340,7 @@ class BalansDataTable extends DataTable
                         ->where('material_code', $query->material_code)
                         ->first();
 
-                    return $result->p;
+                    return rupiah($result->p);
                 })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $balans, $main_asumsi){
                     $result = $balans->where('kategori_balans_id', $query->kategori_balans_id)
                         ->where('asumsi_umum_id', $main_asumsi[$key]->id)
@@ -346,7 +349,7 @@ class BalansDataTable extends DataTable
                         ->where('material_code', $query->material_code)
                         ->first();
 
-                    return $result->nilai;
+                    return rupiah($result->nilai);
                 })->addColumn('asumsi'.$key, function ($query) use ($main_asumsi, $key){
                     return $main_asumsi[$key]->id;
                 });

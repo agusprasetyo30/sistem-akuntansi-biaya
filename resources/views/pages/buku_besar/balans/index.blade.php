@@ -205,7 +205,7 @@
                                 });
                             })
 
-                            $('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();
+                            {{--$('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();--}}
                             // $('#dt_balans').DataTable().ajax.reload();
                             // this.api().columns.adjust().draw()
                         },
