@@ -4,6 +4,7 @@ namespace App\DataTables\Master;
 
 use App\Models\Balans;
 use App\Models\MapKategoriBalans;
+use App\Models\Master\BalansStore;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
@@ -12,14 +13,21 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BalansDataTable extends DataTable
+class BalansStoreDataTable extends DataTable
 {
-    public function dataTable()
+    /**
+     * Build DataTable class.
+     *
+     * @param mixed $query Results from query() method.
+     * @return \Yajra\DataTables\DataTableAbstract
+     */
+    public function dataTable($versi, $antrian)
     {
+        $this->save = true;
         $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.kategori_balans')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
-            ->whereIn('map_kategori_balans.material_code', array_unique($this->antrian))
-            ->where('map_kategori_balans.version_id', $this->version)
+            ->whereIn('map_kategori_balans.material_code', array_unique($antrian[0]))
+            ->where('map_kategori_balans.version_id', $versi)
             ->orderBy('map_kategori_balans.material_code', 'ASC')
             ->orderBy('kategori_balans.order_view', 'ASC');
 
@@ -36,7 +44,7 @@ class BalansDataTable extends DataTable
             });
 
         $main_asumsi = DB::table('asumsi_umum')
-            ->where('version_id', $this->version)->get();
+            ->where('version_id', $versi)->get();
 
         $asumsi = $main_asumsi->pluck('month_year')->all();
         $asumsi_balans = $main_asumsi->pluck('month_year')->all();
@@ -47,20 +55,22 @@ class BalansDataTable extends DataTable
         $balans = DB::table('balans')
             ->select('balans.*', 'asumsi_umum.month_year')
             ->leftjoin('asumsi_umum', 'balans.asumsi_umum_id', '=', 'asumsi_umum.id')
-            ->where('asumsi_umum.version_id', $this->version)
+            ->where('asumsi_umum.version_id', $versi)
             ->get();
 
-        if ($this->save == true){
 
+        if ($this->save == true){
+//            dd($asumsi);
             foreach ($asumsi_balans as $key => $items){
                 if ($key > 0 ){
                     $balans = DB::table('balans')
                         ->select('balans.*', 'asumsi_umum.month_year')
                         ->leftjoin('asumsi_umum', 'balans.asumsi_umum_id', '=', 'asumsi_umum.id')
-                        ->where('asumsi_umum.version_id', $this->version)
+                        ->where('asumsi_umum.version_id', $versi)
                         ->get();
                 }
-                $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans){
+//                dd($this->save, $this->antrian);
+                $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){
                     if ($query->kategori_balans_id == 1){
                         if ($key > 0 ){
                             $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
@@ -71,7 +81,7 @@ class BalansDataTable extends DataTable
                             return $result['total_stock'];
                         }
                     }elseif ($query->kategori_balans_id == 2){
-                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $versi);
                         return $result['qty_rendaan_value'];
                     }elseif ($query->kategori_balans_id == 3){
                         if ($key > 0 ){
@@ -82,11 +92,11 @@ class BalansDataTable extends DataTable
                             $nilai_saldo_awal = $nilai_saldo_awal['total_stock'];
                         }
 
-                        $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                        $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $versi);
 
                         return $nilai_saldo_awal + $total_daan['qty_rendaan_value'];
                     }elseif ($query->kategori_balans_id == 4){
-                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $versi);
                         return $result;
                     }elseif ($query->kategori_balans_id == 5){
                         if ($key > 0 ){
@@ -97,9 +107,9 @@ class BalansDataTable extends DataTable
                             $nilai_saldo_awal = $nilai_saldo_awal['total_stock'];
                         }
 
-                        $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                        $total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $versi);
 
-                        $pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
+                        $pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $versi);
 
                         $tersedia = $nilai_saldo_awal + $total_daan['qty_rendaan_value'];
                         $result = (double)$tersedia-(double)$pakai_jual;
@@ -107,7 +117,7 @@ class BalansDataTable extends DataTable
                     }else{
                         return 0;
                     }
-                })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key, $balans){
+                })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){
                     if ($query->kategori_balans_id == 1){
                         if ($key > 0 ){
                             $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
@@ -125,8 +135,8 @@ class BalansDataTable extends DataTable
                             }
                         }
                     }elseif ($query->kategori_balans_id == 2){
-                        $quantiti = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
-                        $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $quantiti = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $versi);
+                        $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
                         if ($quantiti['qty_rendaan_value'] != 0){
                             return $total_daan / $quantiti['qty_rendaan_value'];
@@ -147,9 +157,9 @@ class BalansDataTable extends DataTable
                             $nilai_saldo_awal = $nilai_saldo_awal['total_value'];
                         }
 
-                        $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                        $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $versi);
 
-                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
                         $p_result = $p_saldo_awal + $p_total_daan['qty_rendaan_value'];
                         $nilai_result = $nilai_saldo_awal + $nilai_total_daan;
@@ -171,14 +181,14 @@ class BalansDataTable extends DataTable
                             $nilai_saldo_awal = $nilai_saldo_awal['total_value'];
                         }
 
-                        $q_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
-                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $q_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $versi);
+                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
                         $q_tersedia = $q_saldo_awal + $q_total_daan['qty_rendaan_value'];
 
                         $nilai_tersedia = $nilai_saldo_awal + $nilai_total_daan;
 
-                        $q_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
+                        $q_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $versi);
 
                         if ($q_tersedia != 0){
                             $p_tersedia = $nilai_tersedia / $q_tersedia;
@@ -199,7 +209,7 @@ class BalansDataTable extends DataTable
                     }else{
                         return 0;
                     }
-                })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $balans){
+                })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){
                     if ($query->kategori_balans_id == 1){
                         if ($key > 0 ){
                             $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
@@ -209,7 +219,7 @@ class BalansDataTable extends DataTable
                             return $result['total_value'];
                         }
                     }elseif ($query->kategori_balans_id == 2){
-                        $result = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $result = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
                         return $result;
                     }elseif ($query->kategori_balans_id == 3){
                         if ($key > 0 ){
@@ -220,11 +230,11 @@ class BalansDataTable extends DataTable
                             $nilai_saldo_awal = $nilai_saldo_awal['total_value'];
                         }
 
-                        $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
                         return $nilai_saldo_awal + $total_daan;
                     }elseif ($query->kategori_balans_id == 4){
-                        $p_pakai_jual = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $this->version);
+                        $p_pakai_jual = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $versi);
 
                         if ($key > 0 ){
                             $result = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
@@ -239,9 +249,9 @@ class BalansDataTable extends DataTable
                         }
 
 
-                        $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
+                        $p_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $versi);
 
-                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
                         $p_result = $p_saldo_awal + $p_total_daan['qty_rendaan_value'];
 
@@ -266,14 +276,14 @@ class BalansDataTable extends DataTable
                             $nilai_saldo_awal = $nilai_saldo_awal['total_value'];
                         }
 
-                        $q_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $this->version);
-                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $this->version);
+                        $q_total_daan = get_data_balans(2, $query->plant_code, $query->material_code, $items, $versi);
+                        $nilai_total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
                         $q_tersedia = $q_saldo_awal + $q_total_daan['qty_rendaan_value'];
 
                         $nilai_tersedia = $nilai_saldo_awal + $nilai_total_daan;
 
-                        $q_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $this->version);
+                        $q_pakai_jual = get_data_balans(4, $query->plant_code, $query->material_code, $items, $versi);
 
                         if ($q_tersedia != 0){
                             $p_tersedia = $nilai_tersedia / $q_tersedia;
@@ -317,7 +327,6 @@ class BalansDataTable extends DataTable
                     });
 
                 }
-//                dd($datatable->toArray());
             }
             return $datatable;
         }else{
@@ -362,10 +371,11 @@ class BalansDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('dt_balans')
+            ->setTableId('master\balansstore-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             ->dom('Bfrtip')
+            ->orderBy(1)
             ->buttons(
                 Button::make('create'),
                 Button::make('export'),
@@ -402,6 +412,6 @@ class BalansDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Master\Balans_' . date('YmdHis');
+        return 'Master\BalansStore_' . date('YmdHis');
     }
 }

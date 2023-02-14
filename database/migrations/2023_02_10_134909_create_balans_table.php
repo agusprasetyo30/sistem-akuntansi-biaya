@@ -20,9 +20,9 @@ class CreateBalansTable extends Migration
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
-            $table->double('q', 8, 2);
-            $table->double('p', 8, 2);
-            $table->double('nilai', 8, 2);
+            $table->double('q', 12, 2);
+            $table->double('p', 12, 2);
+            $table->double('nilai', 12, 2);
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
