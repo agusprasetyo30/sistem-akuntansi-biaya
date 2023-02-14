@@ -167,9 +167,9 @@
                             '<th class="text-center">P</th>' +
                             '<th class="text-center">Nilai = Q x P</th>';
 
-                        kolom2 += '<th >Ton</th>' +
-                            '<th>Rp/Ton</th>' +
-                            '<th>Nilai (Rp)</th>';
+                        kolom2 += '<th class="text-center">Ton</th>' +
+                            '<th class="text-center">Rp/Ton</th>' +
+                            '<th class="text-center">Nilai (Rp)</th>';
                     }
 
                     $("#primary").append(kolom);
@@ -194,7 +194,7 @@
                             ['All', 10, 25, 50],
                         ],
                         initComplete: function () {
-                            $('.dataTables_scrollHead').css('overflow', 'auto');
+                            $('.dataTables_scrollHead').css('overflow', 'scroll');
                             $('.dataTables_scrollHead').on('scroll', function () {
                                 $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                             });
