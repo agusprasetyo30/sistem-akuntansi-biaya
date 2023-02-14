@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddMaterialCodeTable extends Migration
+class AddTypeKategoriBalansTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddMaterialCodeTable extends Migration
      */
     public function up()
     {
-        Schema::table('balans', function (Blueprint $table) {
-            $table->string('material_code');
+        Schema::table('kategori_balans', function (Blueprint $table) {
+            $table->string('type_kategori_balans')->default('default');
         });
     }
 
@@ -25,7 +25,7 @@ class AddMaterialCodeTable extends Migration
      */
     public function down()
     {
-        Schema::table('balans', function (Blueprint $table) {
+        Schema::table('kategori_balans', function (Blueprint $table) {
             //
         });
     }

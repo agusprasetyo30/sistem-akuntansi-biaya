@@ -33,34 +33,12 @@
                         </select>
                     </div>
                     <div class="btn-list">
+                        <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
                         <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                     </div>
                 </div>
                 <div class="">
                     <div class="table-responsive" id="table_main">
-{{--                        <table id="h_dt_salr" class="table table-bordered text-nowrap key-buttons text-center" style="width: auto;">--}}
-{{--                            <thead>--}}
-{{--                            <tr id="primary">--}}
-{{--                                <th class="align-middle font-weight-bold" style="width: 5%;" rowspan="3">Group Account</th>--}}
-{{--                                <th class="align-middle font-weight-bold" style="width: 20%;"  rowspan="3">Group Account Desc</th>--}}
-{{--                                <th class="font-weight-bold" colspan="3">2023-05-01</th>--}}
-
-{{--                            </tr>--}}
-{{--                            <tr id="secondary">--}}
-{{--                                <th class="font-weight-bold">Q</th>--}}
-{{--                                <th class="font-weight-bold">P</th>--}}
-{{--                                <th class="font-weight-bold">Nilai = Q x P</th>--}}
-
-{{--                            </tr>--}}
-{{--                            <tr id="third">--}}
-{{--                                <th class="font-weight-bold">Ton</th>--}}
-{{--                                <th class="font-weight-bold">Rp/Ton</th>--}}
-{{--                                <th class="font-weight-bold">Nilai (Rp)</th>--}}
-{{--                            </tr>--}}
-{{--                            </thead>--}}
-{{--                        </table>--}}
-
-
                     </div>
                 </div>
             </div>
@@ -131,6 +109,26 @@
                     })
                 }
             })
+
+            $('#btn_generate').on('click', function () {
+                var versi = $('#filter_version').val();
+                if (versi !== null){
+                    generate_data()
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Data Versi Kosong, Silahkan Isi Data Tersebut",
+                        icon: 'warning',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result)=>{
+                        // if (result.value){
+                        //     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                        // }
+                    })
+                }
+            })
         })
 
         function get_data(){
@@ -167,14 +165,15 @@
                             '<th class="text-center">P</th>' +
                             '<th class="text-center">Nilai = Q x P</th>';
 
-                        kolom2 += '<th >Ton</th>' +
-                            '<th>Rp/Ton</th>' +
-                            '<th>Nilai (Rp)</th>';
+                        kolom2 += '<th class="text-center">Ton</th>' +
+                            '<th class="text-center">Rp/Ton</th>' +
+                            '<th class="text-center">Nilai (Rp)</th>';
                     }
 
                     $("#primary").append(kolom);
                     $("#secondary").append(kolom1);
                     $("#third").append(kolom2);
+                    // $('#dt_balans').DataTable().clear().destroy();
                     $("#dt_balans").DataTable({
                         scrollX: true,
                         dom: 'Bfrtip',
@@ -194,7 +193,7 @@
                             ['All', 10, 25, 50],
                         ],
                         initComplete: function () {
-                            $('.dataTables_scrollHead').css('overflow', 'auto');
+                            $('.dataTables_scrollHead').css('overflow', 'scroll');
                             $('.dataTables_scrollHead').on('scroll', function () {
                                 $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                             });
@@ -220,8 +219,124 @@
                         },
                         columns: column
                     });
+
                 }
             })
+
+        }
+
+        function generate_data() {
+            $.ajax({
+
+            })
+
+            var kolom;
+            var kolom1;
+            var kolom2;
+            var column = [
+                {data: 'material', orderable:false},
+                {data: 'plant', orderable:false},
+                {data: 'keterangan', orderable:false},
+            ]
+
+            $('#table_main').html(table_main_dt)
+
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{route("header_dasar_balans")}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    version:$('#filter_version').val(),
+                },
+                success:function (response){
+                    for (let i = 0; i < response.asumsi.length;i++){
+                        column.push({ width:'5%', data: 'q'+i.toString(), orderable:false});
+                        column.push({ width:'20%', data: 'p'+i.toString(), orderable:false});
+                        column.push({ width:'20%', data: 'nilai'+i.toString(), orderable:false});
+
+                        kolom += '<th class="text-center" colspan="3">'+helpDateFormat(response.asumsi[i].month_year)+'</th>';
+
+                        kolom1 += '<th class="text-center">Q</th>' +
+                            '<th class="text-center">P</th>' +
+                            '<th class="text-center">Nilai = Q x P</th>';
+
+                        kolom2 += '<th class="text-center">Ton</th>' +
+                            '<th class="text-center">Rp/Ton</th>' +
+                            '<th class="text-center">Nilai (Rp)</th>';
+                    }
+
+                    $("#primary").append(kolom);
+                    $("#secondary").append(kolom1);
+                    $("#third").append(kolom2);
+                    // $('#dt_balans').DataTable().clear().destroy();
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url : '{{route("store_dasar_balans")}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            version:$('#filter_version').val(),
+                        },success:function (response) {
+                            $("#dt_balans").DataTable({
+                                scrollX: true,
+                                dom: 'Bfrtip',
+                                orderCellsTop: true,
+                                processing: true,
+                                serverSide: true,
+                                deferRender:true,
+                                // fixedHeader: {
+                                //     header: true,
+                                //     headerOffset: $('#main_header').height()
+                                // },
+                                fixedColumns:   {
+                                    left: 3
+                                },
+                                lengthMenu: [
+                                    [-1, 10, 25, 50],
+                                    ['All', 10, 25, 50],
+                                ],
+                                initComplete: function () {
+                                    $('.dataTables_scrollHead').css('overflow', 'scroll');
+                                    $('.dataTables_scrollHead').on('scroll', function () {
+                                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                                    });
+
+                                    $(document).on('scroll', function () {
+                                        $('.dtfh-floatingparenthead').on('scroll', function () {
+                                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                                        });
+                                    })
+
+                                    {{--$('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();--}}
+                                    // $('#dt_balans').DataTable().ajax.reload();
+                                    this.api().columns.adjust().draw()
+                                },
+                                buttons: [
+                                    { extend: 'pageLength', className: 'mb-5' },
+                                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                                        }, title: 'Balans' }
+                                ],
+                                ajax: {
+                                    url : '{{route("dasar_balans")}}',
+                                    data: {data:'index'}
+                                },
+                                columns: column
+                            });
+                        }
+
+                    })
+
+                }
+            })
+        }
+
+        function create_data() {
+
 
         }
 
