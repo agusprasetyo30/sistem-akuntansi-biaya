@@ -226,6 +226,10 @@
         }
 
         function generate_data() {
+            $.ajax({
+
+            })
+
             var kolom;
             var kolom1;
             var kolom2;

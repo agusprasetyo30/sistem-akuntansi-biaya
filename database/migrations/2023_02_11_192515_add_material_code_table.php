@@ -14,8 +14,7 @@ class AddMaterialCodeTable extends Migration
     public function up()
     {
         Schema::table('balans', function (Blueprint $table) {
-            $table->string('material_code')->unsigned();
-            $table->foreign('material_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
+            $table->string('material_code');
         });
     }
 

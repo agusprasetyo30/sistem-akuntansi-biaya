@@ -17,7 +17,6 @@ class BalansController extends Controller
     {
 
         $antrian = antrian_material_balans(1);
-//        dd($antrian);
         if ($request->data == 'index') {
             return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1, 'save' => false])->render('pages.buku_besar.balans.index');
         }
@@ -38,6 +37,23 @@ class BalansController extends Controller
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
             return response()->json(['code' => 500]);
+        }
+    }
+
+    public function checker(Request $request){
+        try {
+            $balans = Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
+                ->where('asumsi_umum.version_id', $request->version)->first();
+
+            if ($balans == null) {
+                return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
+            } else {
+                return response()->json(['code' => 201, 'msg' => 'Data Ada']);
+            }
+        }catch (\Exception $exception){
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 }
