@@ -12,7 +12,17 @@ class SimulasiProyeksiController extends Controller
     public function index(Request $request, SimulasiProyeksiDataTable $simulasiproyeksiDatatable)
     {
         if ($request->data == 'horizontal') {
-            return $simulasiproyeksiDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $request->cost_center])->render('pages.simulasi_proyeksi.index');
+            try {
+                if ($request->save) {
+                    return $simulasiproyeksiDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $request->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
+                } else {
+                    return $simulasiproyeksiDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $request->cost_center, 'save' => true])->render('pages.simulasi_proyeksi.index');
+                }
+            } catch (\Exception $exception) {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         } else if ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $request->version)

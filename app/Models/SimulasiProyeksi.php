@@ -24,7 +24,7 @@ class SimulasiProyeksi extends Model
         'cr',
         'biaya_perton',
         'total_biaya',
-        'periode',
+        'asumsi_umum_id',
         'created_by',
         'created_at',
         'updated_at',

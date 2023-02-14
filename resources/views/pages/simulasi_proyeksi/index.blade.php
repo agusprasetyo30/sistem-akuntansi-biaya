@@ -254,6 +254,8 @@
                                 });
                             })
 
+                            $('#h_dt_simulasi_proyeksi').DataTable().ajax.url('{{route('simulasi_proyeksi', ['save' => 'not_save'])}}').load();
+
                             // let api = this.api();
                             // api.columns.adjust().draw();
                         }
