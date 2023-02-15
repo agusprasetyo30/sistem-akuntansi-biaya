@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\MaterialDataTable;
 use App\Exports\MultipleSheet\MS_MaterialExport;
 use App\Imports\MaterialImport;
+use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
@@ -203,9 +204,9 @@ class MaterialController extends Controller
 
             foreach ($empty_excel[0] as $key => $value) {
                 array_push($grouo_account, 'Group Account ' . $value['group_account_code'] . ' tidak ada pada master');
-                $d_grouoaccount = GroupAccountFC::whereIn('group_account_fc', [$value['group_account_code']])->first();
+                $d_grouoaccount = GroupAccount::whereIn('group_account_code', [$value['group_account_code']])->first();
                 if ($d_grouoaccount) {
-                    array_push($grouo_account, 'Group Account ' . $d_grouoaccount->group_account_fc . ' tidak ada pada master');
+                    array_push($grouo_account_, 'Group Account ' . $d_grouoaccount->group_account_code . ' tidak ada pada master');
                 }
 
                 array_push($kategori_material, 'Kategori Material ID ' . $value['kategori_material_id'] . ' tidak ada pada master');
