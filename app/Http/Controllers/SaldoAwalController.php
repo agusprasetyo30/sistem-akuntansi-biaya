@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\SaldoAwalDataTable;
 use App\Exports\MultipleSheet\MS_SaldoAwalExport;
 use App\Imports\SaldoAwalImport;
+use App\Models\CostCenter;
+use App\Models\GLAccount;
+use App\Models\Material;
+use App\Models\Plant;
 use App\Models\Saldo_Awal;
 use App\Models\Version_Asumsi;
 use Carbon\Carbon;
@@ -155,25 +159,18 @@ class SaldoAwalController extends Controller
 
     public function import(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "file" => 'required',
-            // "version" => 'required',
-        ], validatorMsg());
-
-        if ($validator->fails())
-            return $this->makeValidMsg($validator);
-
         try {
-            DB::transaction(function () use ($request) {
-                $version = $request->version;
-                // $excel = Excel::toArray(new SaldoAwalImport($version), $request->file);
-                // $colect = collect($excel[0]);
-                // $header = array_keys($colect[0]);
-                // $data_versi = explode('_', $header[7]);
-                Saldo_Awal::where('version_id', $version)->delete();
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            DB::transaction(function () use ($request) {
+                Saldo_Awal::where('version_id', $request->version)->delete();
                 $file = $request->file('file')->store('import');
-                $import = new SaldoAwalImport($version);
+                $import = new SaldoAwalImport($request->version);
                 $import->import($file);
 
                 $data_fail = $import->failures();
@@ -186,22 +183,70 @@ class SaldoAwalController extends Controller
                         $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                         array_push($err, $hasil);
                     }
-                    // dd(implode(' ', $err));
+
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
+                        'message' => $err
                     ]);
                 }
             });
-
             return setResponse([
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+        } catch (\Exception $exception) {
+            $empty_excel = Excel::toArray(new SaldoAwalImport($request->version), $request->file('file'));
+
+            $plant = [];
+            $plant_ = [];
+            $gl_account = [];
+            $gl_account_ = [];
+            $material = [];
+            $material_ = [];
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($plant, 'plant ' . $value['plant_code'] . ' tidak ada pada master');
+                $d_plant = Plant::whereIn('plant_code', [$value['plant_code']])->first();
+                if ($d_plant) {
+                    array_push($plant_, 'plant ' . $d_plant->plant_code . ' tidak ada pada master');
+                }
+
+                array_push($gl_account, 'gl account ' . $value['gl_account'] . ' tidak ada pada master');
+                $d_gl_account = GLAccount::whereIn('gl_account', [$value['gl_account']])->first();
+                if ($d_gl_account) {
+                    array_push($gl_account_, 'gl account ' . $d_gl_account->gl_account . ' tidak ada pada master');
+                }
+
+                array_push($material, 'material ' . $value['material_code'] . ' tidak ada pada master');
+                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
+                if ($d_material) {
+                    array_push($material_, 'material ' . $d_material->material_code . ' tidak ada pada master');
+                }
+            }
+
+            $result_plant = array_diff($plant, $plant_);
+            $result_gl_account = array_diff($gl_account, $gl_account_);
+            $result_material = array_diff($material, $material_);
+            $result = array_merge($result_plant, $result_gl_account, $result_material);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 
