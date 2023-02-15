@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Group Account Fixed Cost</h5>
+                <h5 class="modal-title" id="largemodal1">Import General Ledger Account Fixed Cost</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -19,7 +19,7 @@
                                     <ol>
                                         <li>Format harus sesuai template  ( <a href="{{ route('export_gl_account_fc') }}">Download Template</a> )</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
-                                    </ol> 
+                                    </ol>
                                 </div>
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>

@@ -8,7 +8,9 @@ use App\Exports\MultipleSheet\MS_KuantitiRenDaanExport;
 use App\Exports\Template\T_KuantitiRenDaanExport;
 use App\Imports\KuantitiRenDaanImport;
 use App\Models\Asumsi_Umum;
+use App\Models\Material;
 use App\Models\QtyRenDaan;
+use App\Models\Regions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -176,9 +178,48 @@ class QtyRenDaanController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         }catch (\Exception $exception){
-            return setResponse([
-                'code' => 400,
-            ]);
+            $empty_excel = Excel::toArray(new KuantitiRenDaanImport($request->version), $request->file('file'));
+
+            $material = [];
+            $material_ = [];
+            $region = [];
+            $region_ = [];
+//            dd($empty_excel[0]);
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($material, 'Material ' . $value['material_code'] . ' tidak ada pada master');
+                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
+                if ($d_material) {
+                    array_push($material_, 'Material ' . $d_material->material_code . ' tidak ada pada master');
+                }
+
+                array_push($region, 'Region ' . $value['region_name'] . ' tidak ada pada master');
+                $d_region = Regions::whereIn('region_name', [$value['region_name']])->first();
+                if ($d_region) {
+                    array_push($region_, 'Region ' . $d_region->region_name . ' tidak ada pada master');
+                }
+            }
+
+            $result_material = array_diff($material, $material_);
+            $result_region = array_diff($region, $region_);
+            $result = array_merge($result_region, $result_material);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 

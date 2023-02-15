@@ -6,6 +6,7 @@ use App\DataTables\Master\GLAccountFixedCostDataTable;
 use App\Exports\MultipleSheet\MS_GLAccountFCExport;
 use App\Imports\GLAccountFCImport;
 use App\Models\GLAccountFC;
+use App\Models\GroupAccountFC;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -105,14 +106,6 @@ class GLAccountFixedCostController extends Controller
     public function delete(Request $request)
     {
         try {
-            // $group_account = GLAccountFC::get_account($request->id);
-
-            // if ($group_account) {
-            //     return setResponse([
-            //         'code' => 400,
-            //         'title' => 'Account masih digunakan, Account hanya bisa dinonaktifkan!'
-            //     ]);
-            // } else {
             GLAccountFC::where('gl_account_fc', $request->id)->delete();
 
             return setResponse([
@@ -151,7 +144,7 @@ class GLAccountFixedCostController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                // dd(implode(' ', $err));
+
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',
@@ -163,10 +156,41 @@ class GLAccountFixedCostController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+        } catch (\Exception $exception) {
+            $empty_excel = Excel::toArray(new GLAccountFCImport(), $request->file('file'));
+
+            $grouo_account = [];
+            $grouo_account_ = [];
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($grouo_account, 'Group Account ' . $value['group_account_fc'] . ' tidak ada pada master');
+                $d_grouoaccount = GroupAccountFC::whereIn('group_account_fc', [$value['group_account_fc']])->first();
+                if ($d_grouoaccount) {
+                    array_push($grouo_account, 'Group Account ' . $d_grouoaccount->group_account_code . ' tidak ada pada master');
+                }
+
+            }
+
+            $result_grouo_account = array_diff($grouo_account, $grouo_account_);
+            $result = array_merge($result_grouo_account);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 

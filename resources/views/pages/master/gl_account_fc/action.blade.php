@@ -36,17 +36,6 @@
                                     placeholder="Group Account" value="{{$model->group_account_fc}} {{$model->group_account_fc_desc}}"
                                     name="detail_group_account_fc" id="detail_group_account_fc" autocomplete="off">
                             </div>
-                            {{-- <div class="form-group">
-                                <label class="form-label">Status</label>
-                                <select disabled name="detail_is_active" id="detail_is_active"
-                                    class="form-control form-control-sm custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_is_active() as $key => $value)
-                                    <option value="{{ $key }}" {{ $key == $model->is_active ? "selected" : "" }}>
-                                        {{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
                         </div>
                     </div>
                 </div>

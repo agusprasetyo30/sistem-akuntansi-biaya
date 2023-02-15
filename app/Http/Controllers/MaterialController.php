@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\MaterialDataTable;
 use App\Exports\MultipleSheet\MS_MaterialExport;
 use App\Imports\MaterialImport;
+use App\Models\GroupAccountFC;
+use App\Models\KategoriMaterial;
+use App\Models\KategoriProduk;
 use App\Models\Material;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -189,9 +192,58 @@ class MaterialController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            $empty_excel = Excel::toArray(new MaterialImport(), $request->file('file'));
+
+            $grouo_account = [];
+            $grouo_account_ = [];
+            $kategori_material = [];
+            $kategori_material_ = [];
+            $kategori_produk = [];
+            $kategori_produk_ = [];
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($grouo_account, 'Group Account ' . $value['group_account_code'] . ' tidak ada pada master');
+                $d_grouoaccount = GroupAccountFC::whereIn('group_account_fc', [$value['group_account_code']])->first();
+                if ($d_grouoaccount) {
+                    array_push($grouo_account, 'Group Account ' . $d_grouoaccount->group_account_fc . ' tidak ada pada master');
+                }
+
+                array_push($kategori_material, 'Kategori Material ID ' . $value['kategori_material_id'] . ' tidak ada pada master');
+                $d_kategori_material = KategoriMaterial::whereIn('id', [$value['kategori_material_id']])->first();
+                if ($d_kategori_material) {
+                    array_push($kategori_material_, 'Kategori Material ID ' . $d_grouoaccount->id . ' tidak ada pada master');
+                }
+
+                array_push($kategori_produk, 'Group Account ID ' . $value['kategori_produk_id'] . ' tidak ada pada master');
+                $d_kategori_produk = KategoriProduk::whereIn('id', [$value['kategori_produk_id']])->first();
+                if ($d_kategori_produk) {
+                    array_push($kategori_produk_, 'Group Account ID ' . $d_grouoaccount->id . ' tidak ada pada master');
+                }
+
+            }
+
+            $result_grouo_account = array_diff($grouo_account, $grouo_account_);
+            $result_kategori_material = array_diff($kategori_material, $kategori_material_);
+            $result_kategori_produk = array_diff($kategori_produk, $kategori_produk_);
+            $result = array_merge($result_grouo_account, $result_kategori_material, $result_kategori_produk);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 
