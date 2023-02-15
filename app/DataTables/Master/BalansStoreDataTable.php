@@ -73,10 +73,13 @@ class BalansStoreDataTable extends DataTable
                 $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){
                     if ($query->kategori_balans_id == 1){
                         if ($key > 0 ){
-                            $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                            return $result->q;
+                            try {
+                                $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
+                                return $result->q;
+                            }catch (\Exception $exception){
+                                return 0 ;
+                            }
                         }else{
-
                             $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
                             return $result['total_stock'];
                         }
@@ -85,8 +88,12 @@ class BalansStoreDataTable extends DataTable
                         return $result['qty_rendaan_value'];
                     }elseif ($query->kategori_balans_id == 3){
                         if ($key > 0 ){
-                            $nilai_saldo_awal = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                            $nilai_saldo_awal = $nilai_saldo_awal->q;
+                            try {
+                                $nilai_saldo_awal = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                                $nilai_saldo_awal = $nilai_saldo_awal->q;
+                            }catch (\Exception $exception){
+                                $nilai_saldo_awal = 0;
+                            }
                         }else{
                             $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
                             $nilai_saldo_awal = $nilai_saldo_awal['total_stock'];
@@ -100,8 +107,12 @@ class BalansStoreDataTable extends DataTable
                         return $result;
                     }elseif ($query->kategori_balans_id == 5){
                         if ($key > 0 ){
-                            $nilai_saldo_awal = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
-                            $nilai_saldo_awal = $nilai_saldo_awal->q;
+                            try {
+                                $nilai_saldo_awal = get_data_balans_db($balans, 1, $query->plant_code, $query->material_code, $asumsi[$key]);
+                                $nilai_saldo_awal = $nilai_saldo_awal->q;
+                            }catch (\Exception $exception){
+                                $nilai_saldo_awal = 0;
+                            }
                         }else{
                             $nilai_saldo_awal = get_data_balans(1, $query->plant_code, $query->material_code, $asumsi[$key]);
                             $nilai_saldo_awal = $nilai_saldo_awal['total_stock'];

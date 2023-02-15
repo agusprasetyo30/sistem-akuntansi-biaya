@@ -258,7 +258,7 @@ class SalrController extends Controller
             $result = array_merge($result_gl_account, $result_cost_center, $result_material);
             $res = array_unique($result);
 
-            dd($res);
+//            dd($res);
 
             if ($res) {
                 $msg = '';

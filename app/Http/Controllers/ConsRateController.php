@@ -207,13 +207,12 @@ class ConsRateController extends Controller
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
                     ]);
-                }else{
-                    return setResponse([
-                        'code' => 200,
-                        'title' => 'Berhasil meng-import data'
-                    ]);
                 }
             });
+            return setResponse([
+                'code' => 200,
+                'title' => 'Berhasil meng-import data'
+            ]);
         } catch (\Exception $exception) {
             $empty_excel = Excel::toArray(new ConsRateImport($request->version), $request->file('file'));
 

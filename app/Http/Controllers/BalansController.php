@@ -32,8 +32,16 @@ class BalansController extends Controller
     public function store(){
         try {
             $antrian = antrian_material_balans(1);
+            $result_antrian = [];
+            foreach ($antrian as $items){
+                foreach ($items as $item){
+                    array_push($result_antrian, $item);
+                }
+            }
+
             $data = new BalansStoreDataTable();
-            $data->dataTable(1, $antrian);
+            $data->dataTable(1, array_values(array_unique($result_antrian)));
+
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
             return response()->json(['code' => 500]);
