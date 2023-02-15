@@ -16,10 +16,11 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class SimulasiProyeksiDataTable extends DataTable
+class SimulasiProyeksiStoreDataTable extends DataTable
 {
-    public function dataTable($query)
+    public function dataTable($d_version, $d_plant, $d_produk, $d_cost_center)
     {
+        $this->save = true;
         if ($this->save == true) {
             $cr = DB::table("cons_rate")
                 ->select(
@@ -36,8 +37,8 @@ class SimulasiProyeksiDataTable extends DataTable
                     "cons_rate.material_code as code",
                 )
                 ->leftJoin('material', 'material.material_code', '=', 'cons_rate.material_code')
-                ->where('product_code', $this->produk)
-                ->where('plant_code', $this->plant);
+                ->where('product_code', $d_produk)
+                ->where('plant_code', $d_plant);
 
             $group_account = DB::table("group_account_fc")
                 ->select(
@@ -88,7 +89,7 @@ class SimulasiProyeksiDataTable extends DataTable
                 });
 
             $asumsi = DB::table('asumsi_umum')
-                ->where('version_id', $this->version)
+                ->where('version_id', $d_version)
                 ->get();
 
             function hsBalans($periode, $material, $produk)
@@ -347,16 +348,16 @@ class SimulasiProyeksiDataTable extends DataTable
             }
 
             foreach ($asumsi as $key => $asum) {
-                $datatable->addColumn($key . 'harga_satuan', function ($query) use ($asum) {
+                $datatable->addColumn($key . 'harga_satuan', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
                     $mat = Material::where('material_code', $query->code)->first();
                     $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
                         if ($query->kategori == 1) {
-                            $res = hsBalans($asum->id, $query->code, $this->produk);
+                            $res = hsBalans($asum->id, $query->code, $d_produk);
                             return $res;
                         } else if ($query->kategori == 2) {
-                            $res = hsZco($this->produk, $this->plant, $query->code);
+                            $res = hsZco($d_produk, $d_plant, $query->code);
                             return $res;
                         } else if ($query->kategori == 3) {
                             $res = hsStock($query->code, $asum->version_id);
@@ -372,15 +373,15 @@ class SimulasiProyeksiDataTable extends DataTable
                     } else {
                         return '';
                     }
-                })->addColumn($key . 'cr', function ($query) use ($asum) {
+                })->addColumn($key . 'cr', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
                     $mat = Material::where('material_code', $query->code)->first();
                     $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
-                        $kp = kuantumProduksi($this->cost_center, $asum->id);
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
 
                         if ($kp) {
-                            $consrate = consRate($this->plant, $this->produk, $query->code);
+                            $consrate = consRate($d_plant, $d_produk, $query->code);
                         } else {
                             $consrate = 0;
                         }
@@ -391,30 +392,30 @@ class SimulasiProyeksiDataTable extends DataTable
                     } else {
                         return '';
                     }
-                })->addColumn($key . 'biaya_perton', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung) {
+                })->addColumn($key . 'biaya_perton', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
                     $mat = Material::where('material_code', $query->code)->first();
                     $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
-                        $kp = kuantumProduksi($this->cost_center, $asum->id);
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
 
                         if ($kp) {
-                            $consrate = consRate($this->plant, $this->produk, $query->code);
+                            $consrate = consRate($d_plant, $d_produk, $query->code);
                         } else {
                             $consrate = 0;
                         }
 
                         if ($query->kategori == 1) {
-                            if ($this->produk == $query->code) {
+                            if ($d_produk == $query->code) {
                                 return 0;
                             } else {
-                                $hs_balans = hsBalans($asum->id, $query->code, $this->produk);
+                                $hs_balans = hsBalans($asum->id, $query->code, $d_produk);
                                 $biayaperton1 = $hs_balans * $consrate;
 
                                 return $biayaperton1;
                             }
                         } else if ($query->kategori == 2) {
-                            $hs_zco = hsZco($this->produk, $this->plant, $query->code);
+                            $hs_zco = hsZco($d_produk, $d_plant, $query->code);
                             $biayaperton2 = $hs_zco * $consrate;
 
                             return $biayaperton2;
@@ -435,12 +436,12 @@ class SimulasiProyeksiDataTable extends DataTable
                         $salr = DB::table("salrs")
                             ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
                             ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
-                            ->where('salrs.cost_center', $this->cost_center)
+                            ->where('salrs.cost_center', $d_cost_center)
                             ->where('group_account_fc.group_account_fc', $query->code)
                             ->first();
 
                         if ($salr) {
-                            $kp = kuantumProduksi($this->cost_center, $asum->id);
+                            $kp = kuantumProduksi($d_cost_center, $asum->id);
                             $total = totalSalr($salr->cost_center, $salr->group_account_fc, $asum->inflasi);
                             $biaya_perton = $total / $kp->qty_renprod_value;
 
@@ -450,23 +451,23 @@ class SimulasiProyeksiDataTable extends DataTable
                         }
                     } else {
                         if ($query->no == 5) {
-                            $res = totalBB($resBB, $this->plant, $this->produk, $asum->version_id, $asum->id);
+                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id);
                             return $res;
                         } else if ($query->no == 7) {
-                            $res = totalGL($resgaLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
+                            $res = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             return $res;
                         } else if ($query->no == 9) {
-                            $res = totalGL($resgatidakLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
+                            $res = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             return $res;
                         } else if ($query->no == 10) {
-                            $total_bb = totalBB($resBB, $this->plant, $this->produk, $asum->version_id, $asum->id);
-                            $total_gl_langsung = totalGL($resgaLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
-                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id);
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             $cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
 
                             return $cogm;
                         } else if ($query->no == 11) {
-                            $biaya_admin_umum = labaRugi($this->produk);
+                            $biaya_admin_umum = labaRugi($d_produk);
 
                             if ($biaya_admin_umum) {
                                 $res = $biaya_admin_umum->value_bau;
@@ -475,7 +476,7 @@ class SimulasiProyeksiDataTable extends DataTable
                             }
                             return $res;
                         } else if ($query->no == 12) {
-                            $biaya_pemasaran = labaRugi($this->produk);
+                            $biaya_pemasaran = labaRugi($d_produk);
 
                             if ($biaya_pemasaran) {
                                 $res = $biaya_pemasaran->value_bp;
@@ -484,7 +485,7 @@ class SimulasiProyeksiDataTable extends DataTable
                             }
                             return $res;
                         } else if ($query->no == 13) {
-                            $biaya_keuangan = labaRugi($this->produk);
+                            $biaya_keuangan = labaRugi($d_produk);
 
                             if ($biaya_keuangan) {
                                 $res = $biaya_keuangan->value_bb;
@@ -493,7 +494,7 @@ class SimulasiProyeksiDataTable extends DataTable
                             }
                             return $res;
                         } else if ($query->no == 14) {
-                            $biaya_periodik = labaRugi($this->produk);
+                            $biaya_periodik = labaRugi($d_produk);
 
                             if ($biaya_periodik) {
                                 $res =  $biaya_periodik->value_bp + $biaya_periodik->value_bau + $biaya_periodik->value_bb;
@@ -503,26 +504,26 @@ class SimulasiProyeksiDataTable extends DataTable
                             return $res;
                         } else if ($query->no == 15) {
                             //periodik
-                            $biaya_periodik = labaRugi($this->produk);
+                            $biaya_periodik = labaRugi($d_produk);
                             $total_periodik =  $biaya_periodik->value_bp + $biaya_periodik->value_bau + $biaya_periodik->value_bb;
 
                             //cogm
-                            $total_bb = totalBB($resBB, $this->plant, $this->produk, $asum->version_id, $asum->id);
-                            $total_gl_langsung = totalGL($resgaLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
-                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id);
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             $total_cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
 
                             $res = $total_cogm + $total_periodik;
                             return $res;
                         } else if ($query->no == 16) {
                             //periodik
-                            $biaya_periodik = labaRugi($this->produk);
+                            $biaya_periodik = labaRugi($d_produk);
                             $total_periodik =  $biaya_periodik->value_bp + $biaya_periodik->value_bau + $biaya_periodik->value_bb;
 
                             //cogm
-                            $total_bb = totalBB($resBB, $this->plant, $this->produk, $asum->version_id, $asum->id);
-                            $total_gl_langsung = totalGL($resgaLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
-                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $this->cost_center,  $asum->id, $asum->inflasi);
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id);
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             $total_cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
 
                             $total_hpp = $total_cogm + $total_periodik;
@@ -533,30 +534,30 @@ class SimulasiProyeksiDataTable extends DataTable
                             return '';
                         }
                     }
-                })->addColumn($key . 'total_biaya', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung) {
+                })->addColumn($key . 'total_biaya', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
                     $mat = Material::where('material_code', $query->code)->first();
                     $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
-                        $kp = kuantumProduksi($this->cost_center, $asum->id);
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
 
                         if ($kp) {
-                            $consrate = consRate($this->plant, $this->produk, $query->code);
+                            $consrate = consRate($d_plant, $d_produk, $query->code);
                         } else {
                             $consrate = 0;
                         }
 
                         if ($query->kategori == 1) {
-                            if ($this->produk == $query->code) {
+                            if ($d_produk == $query->code) {
                                 return 0;
                             } else {
-                                $hs_balans = hsBalans($asum->id, $query->code, $this->produk);
+                                $hs_balans = hsBalans($asum->id, $query->code, $d_produk);
                                 $total_biaya1 = $hs_balans * $consrate * $kp->qty_renprod_value;
 
                                 return $total_biaya1;
                             }
                         } else if ($query->kategori == 2) {
-                            $hs_zco = hsZco($this->produk, $this->plant, $query->code);
+                            $hs_zco = hsZco($d_produk, $d_plant, $query->code);
                             $total_biaya2 = $hs_zco * $consrate * $kp->qty_renprod_value;
 
                             return $total_biaya2;
@@ -577,7 +578,7 @@ class SimulasiProyeksiDataTable extends DataTable
                         $salr = DB::table("salrs")
                             ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
                             ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
-                            ->where('salrs.cost_center', $this->cost_center)
+                            ->where('salrs.cost_center', $d_cost_center)
                             ->where('group_account_fc.group_account_fc', $query->code)
                             ->first();
 
@@ -588,21 +589,21 @@ class SimulasiProyeksiDataTable extends DataTable
                             return '-';
                         }
                     } else {
-                        $kp = kuantumProduksi($this->cost_center, $asum->id);
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
 
                         if ($query->no == 5) {
-                            $res = totalBB($resBB, $this->plant, $this->produk, $asum->version_id, $asum->id) * $kp->qty_renprod_value;
+                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) * $kp->qty_renprod_value;
                             return $res;
                         } else if ($query->no == 7) {
-                            $res = totalGL($resgaLangsung, $this->cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
+                            $res = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
                             return $res;
                         } else if ($query->no == 9) {
-                            $res = totalGL($resgatidakLangsung, $this->cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
+                            $res = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
                             return $res;
                         } else if ($query->no == 10) {
-                            $total_bb = totalBB($resBB, $this->plant, $this->produk, $asum->version_id, $asum->id) * $kp->qty_renprod_value;
-                            $total_gl_langsung = totalGL($resgaLangsung, $this->cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
-                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $this->cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) * $kp->qty_renprod_value;
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp->qty_renprod_value;
                             $cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
 
                             return $cogm;
@@ -627,14 +628,14 @@ class SimulasiProyeksiDataTable extends DataTable
                 });
 
                 if ($this->save == true) {
-                    DB::transaction(function () use ($datatable, $key) {
+                    DB::transaction(function () use ($datatable, $key, $d_version, $d_plant, $d_produk, $d_cost_center) {
                         $dt = $datatable->toArray();
 
                         foreach ($dt['data'] as $data) {
-                            $input['version_id'] = $this->version;
-                            $input['plant_code'] = $this->plant;
-                            $input['product_code'] = $this->produk;
-                            $input['cost_center'] = $this->cost_center;
+                            $input['version_id'] = $d_version;
+                            $input['plant_code'] = $d_plant;
+                            $input['product_code'] = $d_produk;
+                            $input['cost_center'] = $d_cost_center;
                             $input['asumsi_umum_id'] = $data[$key . 'periode'];
                             $input['no'] = $data['no'];
                             $input['kategori'] = $data['kategori'];
@@ -661,10 +662,10 @@ class SimulasiProyeksiDataTable extends DataTable
         } else {
             $query = DB::table('simulasi_proyeksi')
                 ->select('simulasi_proyeksi.no', 'simulasi_proyeksi.kategori', 'simulasi_proyeksi.name', 'simulasi_proyeksi.code')
-                ->where('simulasi_proyeksi.version_id', $this->version)
-                ->where('simulasi_proyeksi.plant_code', $this->plant)
-                ->where('simulasi_proyeksi.product_code', $this->produk)
-                ->where('simulasi_proyeksi.cost_center', $this->cost_center)
+                ->where('simulasi_proyeksi.version_id', $d_version)
+                ->where('simulasi_proyeksi.plant_code', $d_plant)
+                ->where('simulasi_proyeksi.product_code', $d_produk)
+                ->where('simulasi_proyeksi.cost_center', $d_cost_center)
                 ->groupBy('simulasi_proyeksi.no', 'simulasi_proyeksi.kategori', 'simulasi_proyeksi.name', 'simulasi_proyeksi.code')
                 ->orderBy('no', 'asc')
                 ->orderBy('kategori', 'asc');
@@ -676,7 +677,7 @@ class SimulasiProyeksiDataTable extends DataTable
                 });
 
             $asumsi = DB::table('asumsi_umum')
-                ->where('version_id', $this->version)
+                ->where('version_id', $d_version)
                 ->get();
 
             $simproValues = DB::table('simulasi_proyeksi')
@@ -694,7 +695,7 @@ class SimulasiProyeksiDataTable extends DataTable
                             ->where('name', $query->name)
                             ->first();
 
-                        return rupiah($simproAsumsi->harga_satuan);
+                        return $simproAsumsi->harga_satuan;
                     } else if ($ga) {
                         return '-';
                     } else {
@@ -726,14 +727,14 @@ class SimulasiProyeksiDataTable extends DataTable
                             ->where('name', $query->name)
                             ->first();
 
-                        return rupiah($simproAsumsi->biaya_perton);
+                        return $simproAsumsi->biaya_perton;
                     } else if ($ga) {
                         $simproAsumsi = $simproValues
                             ->where('asumsi_umum_id', $asum->id)
                             ->where('name', $query->name)
                             ->first();
 
-                        return rupiah($simproAsumsi->biaya_perton);
+                        return $simproAsumsi->biaya_perton;
                     } else {
                         if ($query->no == 5 || $query->no == 7 || $query->no == 9 || $query->no == 10 || $query->no == 11 || $query->no == 12 || $query->no == 13 || $query->no == 14 || $query->no == 15 || $query->no == 16) {
                             $simproAsumsi = $simproValues
@@ -741,7 +742,7 @@ class SimulasiProyeksiDataTable extends DataTable
                                 ->where('name', $query->name)
                                 ->first();
 
-                            return rupiah($simproAsumsi->biaya_perton);
+                            return $simproAsumsi->biaya_perton;
                         } else {
                             return '';
                         }
@@ -756,14 +757,14 @@ class SimulasiProyeksiDataTable extends DataTable
                             ->where('name', $query->name)
                             ->first();
 
-                        return rupiah($simproAsumsi->total_biaya);
+                        return $simproAsumsi->total_biaya;
                     } else if ($ga) {
                         $simproAsumsi = $simproValues
                             ->where('asumsi_umum_id', $asum->id)
                             ->where('name', $query->name)
                             ->first();
 
-                        return rupiah($simproAsumsi->total_biaya);
+                        return $simproAsumsi->total_biaya;
                     } else {
                         if ($query->no == 5 || $query->no == 7 || $query->no == 9 || $query->no == 10) {
                             $simproAsumsi = $simproValues
@@ -771,7 +772,7 @@ class SimulasiProyeksiDataTable extends DataTable
                                 ->where('name', $query->name)
                                 ->first();
 
-                            return rupiah($simproAsumsi->total_biaya);
+                            return $simproAsumsi->total_biaya;
                         } else if ($query->no == 11) {
                             return '';
                         } else if ($query->no == 12) {

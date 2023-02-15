@@ -398,12 +398,12 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', [BalansController::class, 'index'])->name('dasar_balans');
             Route::post('header', [BalansController::class, 'index_header'])->name('header_dasar_balans');
             Route::post('store_dasar_balans', [BalansController::class, 'store'])->name('store_dasar_balans');
-//                Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
-//                Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
-//                Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
-//                Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
-//                Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
-//                Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
+            //                Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
+            //                Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
+            //                Route::post('delete', [LabaRugiController::class, 'delete'])->name('delete_laba_rugi');
+            //                Route::post('export', [LabaRugiController::class, 'export'])->name('export_laba_rugi');
+            //                Route::post('import', [LabaRugiController::class, 'import'])->name('import_laba_rugi');
+            //                Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
         });
 
         Route::group(['prefix' => 'pakai-jual'], function () {
@@ -430,7 +430,11 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    Route::get('/simulasi-proyeksi', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
+    Route::group(['prefix' => 'simulasi-proyeksi'], function () {
+        Route::get('/', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
+        Route::post('header', [SimulasiProyeksiController::class, 'index_header'])->name('header_simulasi_proyeksi');
+        Route::post('store', [SimulasiProyeksiController::class, 'store'])->name('store_simulasi_proyeksi');
+    });
 
     Route::get('/kontrol-proyeksi', [KontrolProyeksiController::class, 'index'])->name('kontrol_proyeksi');
 

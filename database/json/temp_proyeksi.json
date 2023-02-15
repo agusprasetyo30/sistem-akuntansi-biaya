@@ -1,0 +1,82 @@
+[
+  {
+    "id": 5,
+    "proyeksi_no": "I",
+    "proyeksi_name": "Total Bahan Baku"
+  },
+  {
+    "id": 6,
+    "proyeksi_no": "II",
+    "proyeksi_name": "Overhead Langsung"
+  },
+  {
+    "id": 7,
+    "proyeksi_no": "II",
+    "proyeksi_name": "Total Overhead Langsung"
+  },
+  {
+    "id": 8,
+    "proyeksi_no": "III",
+    "proyeksi_name": "Overhead Tidak Langsung"
+  },
+  {
+    "id": 9,
+    "proyeksi_no": "III",
+    "proyeksi_name": "Total Overhead Tidak Langsung"
+  },
+  {
+    "id": 10,
+    "proyeksi_no": "IV",
+    "proyeksi_name": "COGM"
+  },
+  {
+    "id": 12,
+    "proyeksi_no": "VI",
+    "proyeksi_name": "Biaya Pemasaran"
+  },
+  {
+    "id": 13,
+    "proyeksi_no": "VII",
+    "proyeksi_name": "Biaya Keuangan"
+  },
+  {
+    "id": 14,
+    "proyeksi_no": "VII",
+    "proyeksi_name": "Biaya Periodik"
+  },
+  {
+    "id": 15,
+    "proyeksi_no": "VIII",
+    "proyeksi_name": "HPP Fullcosting Lini 1"
+  },
+  {
+    "id": 16,
+    "proyeksi_no": "VIII",
+    "proyeksi_name": "HPP Fullcosting Lini 1 (USD)"
+  },
+  {
+    "id": 1,
+    "proyeksi_no": "I",
+    "proyeksi_name": "Bahan Baku, Penolong dan Utilitas - Dasar Balans"
+  },
+  {
+    "id": 2,
+    "proyeksi_no": "I",
+    "proyeksi_name": "Bahan Baku, Penolong dan Utilitas - Dasar Stock"
+  },
+  {
+    "id": 3,
+    "proyeksi_no": "I",
+    "proyeksi_name": "Bahan Baku, Penolong dan Utilitas - Dasar ZCOHPPDET"
+  },
+  {
+    "id": 4,
+    "proyeksi_no": "I",
+    "proyeksi_name": "Bahan Baku, Penolong dan Utilitas - Dasar Saldo Awal dan CR Sesuai Perhitungan"
+  },
+  {
+    "id": 11,
+    "proyeksi_no": "V",
+    "proyeksi_name": "Biaya Administrasi dan Umum"
+  }
+]
