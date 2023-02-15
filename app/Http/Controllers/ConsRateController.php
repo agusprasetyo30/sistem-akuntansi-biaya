@@ -9,6 +9,8 @@ use App\Imports\ConsRateImport;
 use App\Jobs\ConsRatePodcast;
 use App\Models\Asumsi_Umum;
 use App\Models\ConsRate;
+use App\Models\Material;
+use App\Models\Plant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
@@ -205,16 +207,66 @@ class ConsRateController extends Controller
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
                     ]);
+                }else{
+                    return setResponse([
+                        'code' => 200,
+                        'title' => 'Berhasil meng-import data'
+                    ]);
                 }
             });
-            return setResponse([
-                'code' => 200,
-                'title' => 'Berhasil meng-import data'
-            ]);
         } catch (\Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            $empty_excel = Excel::toArray(new ConsRateImport($request->version), $request->file('file'));
+
+            $plant_code = [];
+            $plant_code_ = [];
+            $product_code = [];
+            $product_code_ = [];
+            $material = [];
+            $material_ = [];
+
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($plant_code, 'Plant ' . $value['plant_code'] . ' tidak ada pada master');
+                $d_plant_code = Plant::whereIn('plant_code', [$value['plant_code']])->first();
+                if ($d_plant_code) {
+                    array_push($plant_code_, 'Plant' . $d_plant_code->plant_code . ' tidak ada pada master');
+                }
+
+                array_push($product_code, 'Product ' . $value['product_code'] . ' tidak ada pada master');
+                $d_product = Material::whereIn('material_code', [$value['product_code']])->first();
+                if ($d_product) {
+                    array_push($product_code_, 'Product ' . $d_product->material_code . ' tidak ada pada master');
+                }
+
+                array_push($material, 'Material ' . $value['material_code'] . ' tidak ada pada master');
+                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
+                if ($d_material) {
+                    array_push($material_, 'Material ' . $d_material->material_code . ' tidak ada pada master');
+                }
+            }
+
+            $result_plant = array_diff($plant_code, $plant_code_);
+            $result_product = array_diff($product_code, $product_code_);
+            $result_material = array_diff($material, $material_);
+            $result = array_merge($result_plant, $result_product, $result_material);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 
