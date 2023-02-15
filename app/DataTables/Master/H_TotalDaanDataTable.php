@@ -106,7 +106,11 @@ class H_TotalDaanDataTable extends DataTable
                         if ($this->currency == 'Rupiah') {
                             return rupiah($result);
                         } elseif ($this->currency == 'Dollar') {
-                            return helpDollar($result, $rendaanAsumsi->usd_rate);
+                            if ($result != 0) {
+                                return helpDollar($result, $val_kurs);
+                            } else {
+                                return '$ 0';
+                            }
                         }
                     }
                 } else if ($this->val == '1') {
@@ -141,7 +145,11 @@ class H_TotalDaanDataTable extends DataTable
                         if ($this->currency == 'Rupiah') {
                             return rupiah($result);
                         } elseif ($this->currency == 'Dollar') {
-                            return helpDollar($result, $rendaanAsumsi->usd_rate);
+                            if ($result != 0) {
+                                return helpDollar($result, $val_kurs);
+                            } else {
+                                return '$ 0';
+                            }
                         }
                     }
                 } else {
