@@ -7,6 +7,7 @@ use App\DataTables\Master\QtyRenProdDataTable;
 use App\Exports\MultipleSheet\MS_KuantitiRenProdExport;
 use App\Imports\QtyRenProdImport;
 use App\Models\Asumsi_Umum;
+use App\Models\CostCenter;
 use App\Models\QtyRenProd;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -135,26 +136,18 @@ class QtyRenProdController extends Controller
 
     public function import(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "file" => 'required',
-            "version" => 'required',
-        ], validatorMsg());
-
-        if ($validator->fails())
-            return $this->makeValidMsg($validator);
-
         try {
-            DB::transaction(function () use ($request) {
-                $version = $request->version;
-                // $excel = Excel::toArray(new QtyRenProdImport($version), $request->file);
-                // $colect = collect($excel[0]);
-                // $header = array_keys($colect[0]);
-                // $data_versi = explode('_', $header[1]);
-                // $version = Asumsi_Umum::where('id', $data_versi[2])->first();
-                QtyRenProd::where('version_id', $version)->delete();
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            DB::transaction(function () use ($request) {
+                QtyRenProd::where('version_id', $request->version)->delete();
                 $file = $request->file('file')->store('import');
-                $import = new QtyRenProdImport($version);
+                $import = new QtyRenProdImport($request->version);
                 $import->import($file);
 
                 $data_fail = $import->failures();
@@ -171,6 +164,7 @@ class QtyRenProdController extends Controller
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
+                        'message' => $err
                     ]);
                 }
             });
@@ -180,9 +174,36 @@ class QtyRenProdController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+            $empty_excel = Excel::toArray(new QtyRenProdImport($request->version), $request->file('file'));
+            $cost_center = [];
+            $cost_center_ = [];
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($cost_center, 'cost center ' . $value['cost_center'] . ' tidak ada pada master');
+                $d_cost_center = CostCenter::whereIn('cost_center', [$value['cost_center']])->first();
+                if ($d_cost_center) {
+                    array_push($cost_center_, 'cost center ' . $d_cost_center->cost_center . ' tidak ada pada master');
+                }
+            }
+
+            $result_cost_center = array_diff($cost_center, $cost_center_);
+            $res = array_unique($result_cost_center);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 
