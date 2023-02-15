@@ -6,6 +6,7 @@ use App\DataTables\Master\GLAccountDataTable;
 use App\Exports\MultipleSheet\MS_GLAccountExport;
 use App\Imports\GLAccountImport;
 use App\Models\GLAccount;
+use App\Models\GroupAccount;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -151,7 +152,7 @@ class GLAccountController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                // dd(implode(' ', $err));
+
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',
@@ -163,10 +164,39 @@ class GLAccountController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+        } catch (\Exception $exception) {
+            $empty_excel = Excel::toArray(new GLAccountImport(), $request->file('file'));
+
+            $group_account = [];
+            $group_account_ = [];
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($group_account, 'group account ' . $value['group_account_code'] . ' tidak ada pada master');
+                $d_groupaccount = GroupAccount::whereIn('group_account_code', [$value['group_account_code']])->first();
+                if ($d_groupaccount) {
+                    array_push($group_account_, 'group account ' . $d_groupaccount->group_account_code . ' tidak ada pada master');
+                }
+            }
+            $result_group_account = array_diff($group_account, $group_account_);
+            $result = array_merge($result_group_account);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 

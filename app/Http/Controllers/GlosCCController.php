@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\GlosCCDataTable;
 use App\Exports\MultipleSheet\MS_GlosCCExport;
 use App\Imports\GlosCCImport;
+use App\Models\CostCenter;
 use App\Models\GLosCC;
+use App\Models\Material;
+use App\Models\Plant;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -127,6 +130,7 @@ class GlosCCController extends Controller
             $file = $request->file('file')->store('import');
             $import = new GlosCCImport;
             $import->import($file);
+
             $data_fail = $import->failures();
 
             if ($import->failures()->isNotEmpty()) {
@@ -137,7 +141,7 @@ class GlosCCController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                // dd(implode(' ', $err));
+
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',
@@ -149,10 +153,58 @@ class GlosCCController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+        } catch (\Exception $exception) {
+            $empty_excel = Excel::toArray(new GlosCCImport(), $request->file('file'));
+
+            $plant = [];
+            $plant_ = [];
+            $cost_center = [];
+            $cost_center_ = [];
+            $material = [];
+            $material_ = [];
+
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($plant, 'plant ' . $value['plant_code'] . ' tidak ada pada master');
+                $d_plant = Plant::whereIn('plant_code', [$value['plant_code']])->first();
+                if ($d_plant) {
+                    array_push($plant_, 'plant ' . $d_plant->plant_code . ' tidak ada pada master');
+                }
+
+                array_push($cost_center, 'cost center ' . $value['cost_center'] . ' tidak ada pada master');
+                $d_cost_center = CostCenter::whereIn('cost_center', [$value['cost_center']])->first();
+                if ($d_cost_center) {
+                    array_push($cost_center_, 'cost center ' . $d_cost_center->cost_center . ' tidak ada pada master');
+                }
+
+                array_push($material, 'material ' . $value['material_code'] . ' tidak ada pada master');
+                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
+                if ($d_material) {
+                    array_push($material_, 'material ' . $d_material->material_code . ' tidak ada pada master');
+                }
+            }
+
+            $result_plant = array_diff($plant, $plant_);
+            $result_cost_center = array_diff($cost_center, $cost_center_);
+            $result_material = array_diff($material, $material_);
+            $result = array_merge($result_plant, $result_cost_center, $result_material);
+            $res = array_unique($result);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 

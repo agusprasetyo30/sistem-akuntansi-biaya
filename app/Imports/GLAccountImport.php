@@ -25,7 +25,7 @@ class GLAccountImport implements ToModel, WithHeadingRow, SkipsOnError, WithVali
      */
     public function model(array $row)
     {
-        return new GLAccount([
+        GLAccount::create([
             'gl_account' => strtoupper($row['gl_account']),
             'gl_account_desc' => $row['gl_account_desc'],
             'group_account_code' => $row['group_account_code'],
