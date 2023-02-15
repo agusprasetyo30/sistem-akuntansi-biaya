@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\SimulasiProyeksiDataTable;
 use App\DataTables\Master\SimulasiProyeksiStoreDataTable;
 use App\Models\Asumsi_Umum;
+use App\Models\SimulasiProyeksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -56,10 +57,17 @@ class SimulasiProyeksiController extends Controller
                 ->groupBy('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
                 ->get();
 
-            foreach ($cons_rate as $key => $cr) {
-                $data = new SimulasiProyeksiStoreDataTable();
-                $data->dataTable($cr->version_id, $cr->plant_code, $cr->product_code, $cr->cost_center);
-            }
+//            dd($cons_rate);
+
+            DB::transaction(function () use ($cons_rate, $request){
+                SimulasiProyeksi::where('version_id', $request->version)->delete();
+                foreach ($cons_rate as $key => $cr) {
+                    $data = new SimulasiProyeksiStoreDataTable();
+                    $data->dataTable($cr->version_id, $cr->plant_code, $cr->product_code, $cr->cost_center);
+
+                }
+            });
+
             // return response()->json(['code' => 200]);
         } catch (\Exception $exception) {
             return response()->json(['code' => 500]);
