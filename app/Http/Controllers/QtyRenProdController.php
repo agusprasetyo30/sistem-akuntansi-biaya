@@ -152,19 +152,10 @@ class QtyRenProdController extends Controller
 
                 $data_fail = $import->failures();
 
-                if ($import->failures()->isNotEmpty()) {
-                    $err = [];
-
-                    foreach ($data_fail as $rows) {
-                        $er = implode(' ', array_values($rows->errors()));
-                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                        array_push($err, $hasil);
-                    }
-                    // dd(implode(' ', $err));
+                if ($data_fail->isNotEmpty()){
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
-                        'message' => $err
                     ]);
                 }
             });
@@ -173,7 +164,7 @@ class QtyRenProdController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             $empty_excel = Excel::toArray(new QtyRenProdImport($request->version), $request->file('file'));
             $cost_center = [];
             $cost_center_ = [];
