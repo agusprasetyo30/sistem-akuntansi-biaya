@@ -18,7 +18,7 @@ class BalansDataTable extends DataTable
     {
         $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.kategori_balans')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
-            ->whereIn('map_kategori_balans.material_code', array_unique($this->antrian))
+            ->whereIn('map_kategori_balans.material_code', $this->antrian)
             ->where('map_kategori_balans.version_id', $this->version)
             ->orderBy('map_kategori_balans.material_code', 'ASC')
             ->orderBy('kategori_balans.order_view', 'ASC');

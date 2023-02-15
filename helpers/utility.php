@@ -1061,7 +1061,7 @@ if (!function_exists('kuantumProduksi')) {
         if ($renprod != null){
             return $renprod;
         }else{
-            return 1;
+            return 0;
         }
 
     }
@@ -1138,6 +1138,14 @@ if (!function_exists('totalBB')) {
 
         $res = array_sum($res_bb);
         return $res;
+    }
+}
+
+if (!function_exists('handle_null')) {
+    function handle_null($data, $check)
+    {
+        $result = $data != null ? $check :0;
+        return $result;
     }
 }
 
