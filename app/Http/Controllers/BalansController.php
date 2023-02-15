@@ -17,8 +17,14 @@ class BalansController extends Controller
     {
 
         $antrian = antrian_material_balans(1);
+        $result_antrian = [];
+        foreach ($antrian as $items){
+            foreach ($items as $item){
+                array_push($result_antrian, $item);
+            }
+        }
         if ($request->data == 'index') {
-            return $balansDataTable->with(['antrian' => $antrian[0], 'version' => 1, 'save' => false])->render('pages.buku_besar.balans.index');
+            return $balansDataTable->with(['antrian' => array_values(array_unique($result_antrian)), 'version' => 1, 'save' => false])->render('pages.buku_besar.balans.index');
         }
         return view('pages.buku_besar.balans.index');
     }
