@@ -35,7 +35,7 @@ class MapKetegoriBalansController extends Controller
 
             foreach ($request->plant as $key => $item){
                 if ($key == 0){
-                    $result .= $item.';';
+                    $result .= $item;
                 }else{
                     $result .= ';'.$item;
                 }
@@ -94,7 +94,7 @@ class MapKetegoriBalansController extends Controller
 
             foreach ($request->plant as $key => $item){
                 if ($key == 0){
-                    $result .= $item.';';
+                    $result .= $item;
                 }else{
                     $result .= ';'.$item;
                 }
