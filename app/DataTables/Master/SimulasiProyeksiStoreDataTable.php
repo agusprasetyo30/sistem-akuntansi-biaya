@@ -118,13 +118,303 @@ class SimulasiProyeksiStoreDataTable extends DataTable
 
             foreach ($asumsi as $key => $asum) {
                 $datatable->addColumn($key . 'harga_satuan', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    return 0 ;
+                    $mat = Material::where('material_code', $query->code)->first();
+                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+                    if ($mat) {
+                        if ($query->kategori == 1) {
+                            $res = hsBalans($asum->id, $query->code, $d_produk);
+                            return $res;
+                        } else if ($query->kategori == 2) {
+                            $res = hsZco($d_produk, $d_plant, $query->code);
+                            return $res;
+                        } else if ($query->kategori == 3) {
+                            $res = hsStock($query->code, $asum->version_id);
+                            return $res;
+                        } else if ($query->kategori == 4) {
+                            $res = hsKantong($query->code, $asum->version_id);
+                            return $res;
+                        } else {
+                            return '';
+                        }
+                    } else if ($ga) {
+                        return '-';
+                    } else {
+                        return '';
+                    }
                 })->addColumn($key . 'cr', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    return 0 ;
+                    $mat = Material::where('material_code', $query->code)->first();
+                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+                    if ($mat) {
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
+
+                        if ($kp) {
+                            $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                        } else {
+                            $consrate = 0;
+                        }
+
+                        return round($consrate, 4);
+                    } else if ($ga) {
+                        return '-';
+                    } else {
+                        return '';
+                    }
                 })->addColumn($key . 'biaya_perton', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    return 0 ;
+                    $mat = Material::where('material_code', $query->code)->first();
+                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+                    if ($mat) {
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
+
+                        if ($kp) {
+                            $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                        } else {
+                            $consrate = 0;
+                        }
+
+                        if ($query->kategori == 1) {
+                            if ($d_produk == $query->code) {
+                                return 0;
+                            } else {
+                                $hs_balans = hsBalans($asum->id, $query->code, $d_produk);
+                                $biayaperton1 = $hs_balans * $consrate;
+
+                                return $biayaperton1;
+                            }
+                        } else if ($query->kategori == 2) {
+                            $hs_zco = hsZco($d_produk, $d_plant, $query->code);
+                            $biayaperton2 = $hs_zco * $consrate;
+
+                            return $biayaperton2;
+                        } else if ($query->kategori == 3) {
+                            $hs_stock = hsStock($query->code, $asum->version_id);
+                            $biayaperton3 = $hs_stock * $consrate;
+
+                            return $biayaperton3;
+                        } else if ($query->kategori == 4) {
+                            $hs_kantong = hsKantong($query->code, $asum->version_id);
+                            $biayaperton4 = $hs_kantong * $consrate;
+
+                            return $biayaperton4;
+                        } else {
+                            return '';
+                        }
+                    } else if ($ga) {
+                        $salr = DB::table("salrs")
+                            ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+                            ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+                            ->where('salrs.cost_center', $d_cost_center)
+                            ->where('group_account_fc.group_account_fc', $query->code)
+                            ->first();
+
+                        if ($salr) {
+                            $kp = kuantumProduksi($d_cost_center, $asum->id);
+                            $total = totalSalr($salr->cost_center, $salr->group_account_fc, $asum->inflasi);
+
+                            $biaya_perton = 0;
+                            if ($total > 0 && $kp > 0) {
+                                $biaya_perton = $total / $kp->qty_renprod_value;
+                            }
+
+                            return $biaya_perton;
+                        } else {
+                            return '-';
+                        }
+                    } else {
+                        if ($query->no == 5) {
+                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) ?? 0;
+                            return $res;
+                        } else if ($query->no == 7) {
+                            $res = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            return $res;
+                        } else if ($query->no == 9) {
+                            $res = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            return $res;
+                        } else if ($query->no == 10) {
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) ?? 0;
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            $cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
+
+                            return $cogm;
+                        } else if ($query->no == 11) {
+                            $biaya_admin_umum = labaRugi($d_produk);
+
+                            if ($biaya_admin_umum) {
+                                $res = $biaya_admin_umum->value_bau;
+                            } else {
+                                $res = 0;
+                            }
+                            return $res;
+                        } else if ($query->no == 12) {
+                            $biaya_pemasaran = labaRugi($d_produk);
+
+                            if ($biaya_pemasaran) {
+                                $res = $biaya_pemasaran->value_bp;
+                            } else {
+                                $res = 0;
+                            }
+                            return $res;
+                        } else if ($query->no == 13) {
+                            $biaya_keuangan = labaRugi($d_produk);
+
+                            if ($biaya_keuangan) {
+                                $res = $biaya_keuangan->value_bb;
+                            } else {
+                                $res = 0;
+                            }
+                            return $res;
+                        } else if ($query->no == 14) {
+                            $biaya_periodik = labaRugi($d_produk);
+
+                            if ($biaya_periodik) {
+                                $res =  $biaya_periodik->value_bp + $biaya_periodik->value_bau + $biaya_periodik->value_bb;
+                            } else {
+                                $res = 0;
+                            }
+                            return $res;
+                        } else if ($query->no == 15) {
+                            //periodik
+                            $biaya_periodik = labaRugi($d_produk);
+                            $bp = $biaya_periodik->value_bp ?? 0;
+                            $bau = $biaya_periodik->value_bau ?? 0;
+                            $bb = $biaya_periodik->value_bb ?? 0;
+
+                            $total_periodik =  $bp + $bau + $bb;
+
+                            //cogm
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) ?? 0;
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            $total_cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
+
+                            $res = $total_cogm + $total_periodik;
+                            return $res;
+                        } else if ($query->no == 16) {
+                            //periodik
+                            $biaya_periodik = labaRugi($d_produk);
+                            $bp = $biaya_periodik->value_bp ?? 0;
+                            $bau = $biaya_periodik->value_bau ?? 0;
+                            $bb = $biaya_periodik->value_bb ?? 0;
+
+                            $total_periodik =  $bp + $bau + $bb;
+
+                            //cogm
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) ?? 0;
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
+                            $total_cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
+
+                            $total_hpp = $total_cogm + $total_periodik;
+                            $kurs = $asum->usd_rate ?? 0;
+
+                            if ($total_hpp > 0 && $kurs > 0) {
+                                $total_hpp_usd = helpDollar($total_hpp, $kurs);
+                            } else {
+                                $total_hpp_usd = 0;
+                            }
+
+                            return $total_hpp_usd;
+                        } else {
+                            return '';
+                        }
+                    }
                 })->addColumn($key . 'total_biaya', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    return 0 ;
+                    $mat = Material::where('material_code', $query->code)->first();
+                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+                    if ($mat) {
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
+
+                        if ($kp) {
+                            $consrate = consRate($d_plant, $d_produk, $query->code);
+                        } else {
+                            $consrate = 0;
+                        }
+
+                        if ($query->kategori == 1) {
+                            if ($d_produk == $query->code) {
+                                return 0;
+                            } else {
+                                $hs_balans = hsBalans($asum->id, $query->code, $d_produk);
+                                $total_biaya1 = $hs_balans * $consrate * $kp->qty_renprod_value;
+
+                                return $total_biaya1;
+                            }
+                        } else if ($query->kategori == 2) {
+                            $hs_zco = hsZco($d_produk, $d_plant, $query->code);
+                            $total_biaya2 = $hs_zco * $consrate * $kp->qty_renprod_value;
+
+                            return $total_biaya2;
+                        } else if ($query->kategori == 3) {
+                            $hs_stock = hsStock($query->code, $asum->version_id);
+                            $total_biaya3 = $hs_stock * $consrate * $kp->qty_renprod_value;
+
+                            return $total_biaya3;
+                        } else if ($query->kategori == 4) {
+                            $hs_kantong = hsKantong($query->code, $asum->version_id);
+                            $total_biaya4 = $hs_kantong * $consrate * $kp->qty_renprod_value;
+
+                            return $total_biaya4;
+                        } else {
+                            return '';
+                        }
+                    } else if ($ga) {
+                        $salr = DB::table("salrs")
+                            ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+                            ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+                            ->where('salrs.cost_center', $d_cost_center)
+                            ->where('group_account_fc.group_account_fc', $query->code)
+                            ->first();
+
+                        if ($salr) {
+                            $res = totalSalr($salr->cost_center, $salr->group_account_fc, $asum->inflasi);
+                            return $res;
+                        } else {
+                            return '-';
+                        }
+                    } else {
+                        $kp = kuantumProduksi($d_cost_center, $asum->id);
+
+                        $kp_value = 0;
+                        if ($kp) {
+                            $kp_value = $kp->qty_renprod_value;
+                        }
+
+                        if ($query->no == 5) {
+                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) * $kp_value;
+                            return $res;
+                        } else if ($query->no == 7) {
+                            $res = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
+                            return $res;
+                        } else if ($query->no == 9) {
+                            $res = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
+                            return $res;
+                        } else if ($query->no == 10) {
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) * $kp_value;
+                            $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
+                            $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
+                            $cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
+
+                            return $cogm;
+                        } else if ($query->no == 11) {
+                            return '';
+                        } else if ($query->no == 12) {
+                            return '';
+                        } else if ($query->no == 13) {
+                            return '';
+                        } else if ($query->no == 14) {
+                            return '';
+                        } else if ($query->no == 15) {
+                            return '';
+                        } else if ($query->no == 16) {
+                            return '';
+                        } else {
+                            return '';
+                        }
+                    }
                 })->addColumn($key . 'periode', function ($query) use ($asum) {
                     return $asum->id;
                 });
@@ -158,10 +448,10 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             array_push($result, $input);
                         }
                         $chunk = array_chunk($result, 500);
-                        foreach ($chunk as $y){
+                        foreach ($chunk as $y) {
                             SimulasiProyeksi::insert($y);
                         }
-//                        var_dump($result);
+                        //                        var_dump($result);
                     });
                 }
             }
