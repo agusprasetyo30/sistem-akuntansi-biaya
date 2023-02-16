@@ -480,7 +480,7 @@ class SimulasiProyeksiDataTable extends DataTable
                             ->where('name', $query->name)
                             ->first();
 
-                        return $simproAsumsi->cr;
+                        return round($simproAsumsi->cr, 4);
                     } else if ($ga) {
                         return '-';
                     } else {

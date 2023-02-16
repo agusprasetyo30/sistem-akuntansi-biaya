@@ -170,12 +170,16 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                     if ($mat) {
                         $kp = kuantumProduksi($d_cost_center, $asum->id);
                         if ($kp) {
-                            $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                            if ($kp->qty_renprod_value == 1) {
+                                $consrate = 0;
+                            } else {
+                                $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                            }
                         } else {
                             $consrate = 0;
                         }
 
-                        return round($consrate, 4);
+                        return $consrate;
                     } else if ($ga) {
                         return '-';
                     } else {
@@ -199,7 +203,11 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                         $kp = kuantumProduksi($d_cost_center, $asum->id);
 
                         if ($kp) {
-                            $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                            if ($kp->qty_renprod_value == 1) {
+                                $consrate = 0;
+                            } else {
+                                $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                            }
                         } else {
                             $consrate = 0;
                         }
@@ -254,7 +262,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                         }
                     } else {
                         if ($query->no == 5) {
-                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id);
+                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id, $d_cost_center);
                             return $res;
                         } else if ($query->no == 7) {
                             $res = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
@@ -263,7 +271,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             $res = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             return $res;
                         } else if ($query->no == 10) {
-                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id);
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id, $d_cost_center);
                             $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi);
                             $cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
@@ -315,7 +323,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             $total_periodik =  $bp + $bau + $bb;
 
                             //cogm
-                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) ?? 0;
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id, $d_cost_center) ?? 0;
                             $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
                             $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
                             $total_cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
@@ -332,7 +340,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             $total_periodik =  $bp + $bau + $bb;
 
                             //cogm
-                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) ?? 0;
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id, $d_cost_center) ?? 0;
                             $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
                             $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) ?? 0;
                             $total_cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
@@ -369,7 +377,11 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                         $kp = kuantumProduksi($d_cost_center, $asum->id);
                         $kp_val = 0;
                         if ($kp) {
-                            $consrate = consRate($d_plant, $d_produk, $query->code);
+                            if ($kp->qty_renprod_value == 1) {
+                                $consrate = 0;
+                            } else {
+                                $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
+                            }
                             $kp_val = $kp->qty_renprod_value;
                         } else {
                             $consrate = 0;
@@ -424,7 +436,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                         }
 
                         if ($query->no == 5) {
-                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) * $kp_value;
+                            $res = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id, $d_cost_center) * $kp_value;
                             return $res;
                         } else if ($query->no == 7) {
                             $res = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
@@ -433,7 +445,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             $res = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
                             return $res;
                         } else if ($query->no == 10) {
-                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id) * $kp_value;
+                            $total_bb = totalBB($resBB, $d_plant, $d_produk, $asum->version_id, $asum->id, $d_cost_center) * $kp_value;
                             $total_gl_langsung = totalGL($resgaLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
                             $total_gl_tidak_langsung = totalGL($resgatidakLangsung, $d_cost_center,  $asum->id, $asum->inflasi) * $kp_value;
                             $cogm = $total_bb + $total_gl_langsung + $total_gl_tidak_langsung;
