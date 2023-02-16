@@ -1115,7 +1115,7 @@ if (!function_exists('totalBB')) {
         $res_bb = [];
 
         foreach ($data as $key => $value) {
-            $consrate_bb = consRate($plant, $produk, $value->code);
+            $consrate_bb = consRate($plant, $produk, $value->code) ?? 0;
             if ($value->kategori == 1) {
                 $hs_balans = hsBalans($periode, $value->code, $produk);
                 $biayaperton1 = $hs_balans * $consrate_bb;
