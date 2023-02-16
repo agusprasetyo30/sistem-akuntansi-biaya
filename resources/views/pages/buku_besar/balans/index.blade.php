@@ -113,7 +113,46 @@
             $('#btn_generate').on('click', function () {
                 var versi = $('#filter_version').val();
                 if (versi !== null){
-                    generate_data()
+                    $.ajax({
+                        type: "POST",
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url : '{{route("check_dasar_balans")}}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            version:$('#filter_version').val(),
+                        },
+                        success:function (response) {
+                            if (response.code === 201){
+                                Swal.fire({
+                                    title: 'Apakah anda yakin?',
+                                    text: "Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#019267',
+                                    cancelButtonColor: '#EF4B4B',
+                                    confirmButtonText: 'Konfirmasi',
+                                    cancelButtonText: 'Kembali'
+                                }).then((result) =>{
+                                    if (result.value){
+                                        generate_data()
+                                    }
+                                })
+                            }else {
+                                generate_data()
+                            }
+                        }, error:function () {
+                            Swal.fire({
+                                title: 'PERINGATAN',
+                                text: "Data Versi Kosong, Silahkan Isi Data Tersebut",
+                                icon: 'warning',
+                                confirmButtonColor: '#019267',
+                                cancelButtonColor: '#EF4B4B',
+                                confirmButtonText: 'Konfirmasi',
+                            })
+                        }
+                    })
                 }else {
                     Swal.fire({
                         title: 'PERINGATAN',
@@ -122,10 +161,6 @@
                         confirmButtonColor: '#019267',
                         cancelButtonColor: '#EF4B4B',
                         confirmButtonText: 'Konfirmasi',
-                    }).then((result)=>{
-                        // if (result.value){
-                        //     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                        // }
                     })
                 }
             })
@@ -215,7 +250,10 @@
                         ],
                         ajax: {
                             url : '{{route("dasar_balans")}}',
-                            data: {data:'index'}
+                            data: {
+                                data:'index',
+                                version:$('#filter_version').val(),
+                            }
                         },
                         columns: column
                     });
@@ -226,10 +264,6 @@
         }
 
         function generate_data() {
-            $.ajax({
-
-            })
-
             var kolom;
             var kolom1;
             var kolom2;
@@ -323,7 +357,10 @@
                                 ],
                                 ajax: {
                                     url : '{{route("dasar_balans")}}',
-                                    data: {data:'index'}
+                                    data: {
+                                        data:'index',
+                                        version:$('#filter_version').val(),
+                                    }
                                 },
                                 columns: column
                             });
