@@ -24,6 +24,12 @@
         </div>
         <!--- End Global-loader-->
 
+        <!---Local-loader-->
+        <div id="local_loader" style="display: none;">
+            <img src="{{asset('assets/images/svgs/loader.svg')}}" alt="loader">
+        </div>
+        <!--- End Local-loader-->
+
 		<!-- PAGE -->
 		<div class="page">
 			<div class="page-main">

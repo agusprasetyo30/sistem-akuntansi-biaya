@@ -136,6 +136,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
+                                        // $('#local_loader').show();
                                         generate_data()
                                     }
                                 })
@@ -345,6 +346,7 @@
                                     {{--$('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();--}}
                                     // $('#dt_balans').DataTable().ajax.reload();
                                     this.api().columns.adjust().draw()
+                                    // $('#local_loader').hide();
                                 },
                                 buttons: [
                                     { extend: 'pageLength', className: 'mb-5' },
@@ -360,6 +362,7 @@
                                 },
                                 columns: column
                             });
+
                         }
 
                     })

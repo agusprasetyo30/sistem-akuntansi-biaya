@@ -330,7 +330,7 @@ class BalansDataTable extends DataTable
                         ->where('material_code', $query->material_code)
                         ->first();
 
-                    return $result->q;
+                    return handle_null($result, $result->q);
                 })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key, $balans, $main_asumsi){
                     $result = $balans->where('kategori_balans_id', $query->kategori_balans_id)
                         ->where('asumsi_umum_id', $main_asumsi[$key]->id)
@@ -339,7 +339,7 @@ class BalansDataTable extends DataTable
                         ->where('material_code', $query->material_code)
                         ->first();
 
-                    return rupiah($result->p);
+                    return rupiah(handle_null($result, $result->p));
                 })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $balans, $main_asumsi){
                     $result = $balans->where('kategori_balans_id', $query->kategori_balans_id)
                         ->where('asumsi_umum_id', $main_asumsi[$key]->id)
@@ -348,7 +348,7 @@ class BalansDataTable extends DataTable
                         ->where('material_code', $query->material_code)
                         ->first();
 
-                    return rupiah($result->nilai);
+                    return rupiah(handle_null($result, $result->nilai));
                 })->addColumn('asumsi'.$key, function ($query) use ($main_asumsi, $key){
                     return $main_asumsi[$key]->id;
                 });
