@@ -1055,11 +1055,11 @@ if (!function_exists('kuantumProduksi')) {
             ->where('qty_renprod.asumsi_umum_id', $periode)
             ->first();
 
-//                dd($renprod != null);
-//         if ($renprod == null){
-//             $renprod = DB::select('select 0 as qty_renprod_value');
-//         }
-//        dd($renprod);
+        //                dd($renprod != null);
+        //         if ($renprod == null){
+        //             $renprod = DB::select('select 0 as qty_renprod_value');
+        //         }
+        //        dd($renprod);
 
         return $renprod;
     }
@@ -1162,12 +1162,13 @@ if (!function_exists('totalGL')) {
 
             if ($salr) {
                 $kp = kuantumProduksi($cost_center, $asum_id) ?? 0;
-//                dd($kp);
+                //                dd($kp);
                 $total = totalSalr($salr->cost_center, $salr->group_account_fc, $asum_inflasi);
 
                 $biaya_perton = 0;
 
-                if ($total > 0 && $kp > 0) {
+                $biaya_perton = 0;
+                if ($total > 0 && $kp != null) {
                     $biaya_perton = $total / $kp->qty_renprod_value;
                 }
                 array_push($res_gl, $biaya_perton);
