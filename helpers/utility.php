@@ -477,11 +477,11 @@ if (!function_exists('mapping_plant')) {
     {
         $plant = 'all';
 
-        if ($product == '2000000'){
+        if ($product == '2000000') {
             $plant = 'B018 - Plant Utilitas II';
-        }elseif ($product == '2000001'){
+        } elseif ($product == '2000001') {
             $plant = 'B018 - Plant Utilitas II';
-        }elseif ($product == '2000002'){
+        } elseif ($product == '2000002') {
             $plant = 'B031 - Plant Utilitas IIIA';
         }
 
@@ -495,7 +495,7 @@ if (!function_exists('mapping_plant_insert')) {
         $data_plant = mapping_plant($material_code);
 
         $versi = Version_Asumsi::get();
-        foreach ($versi as $data){
+        foreach ($versi as $data) {
             $mapping = [
                 [
                     'material_code' => strtoupper($material_code),
@@ -554,7 +554,7 @@ if (!function_exists('mapping_plant_insert')) {
                 ],
             ];
             DB::table('map_kategori_balans')->insert($mapping);
-//            array_push($data_ready, $mapping);
+            //            array_push($data_ready, $mapping);
         }
     }
 }
@@ -743,7 +743,7 @@ if (!function_exists('find_lower_material')) {
 if (!function_exists('antrian_material_balans')) {
     function antrian_material_balans($versi)
     {
-//        dd($versi);
+        //        dd($versi);
         $resulty = [];
         $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
             ->where([
@@ -753,7 +753,7 @@ if (!function_exists('antrian_material_balans')) {
             ->get();
         $data = find_lower_material($versi);
 
-        foreach ($data as $items){
+        foreach ($data as $items) {
             $temp = [$items];
             $temp_resulty = [];
             $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
@@ -773,21 +773,21 @@ if (!function_exists('temp_material_produk')) {
         array_push($temp_resulty1, $items1);
 
 
-        $produk = $material_balans->where('material_code',$items1)->pluck('product_code')->all();
+        $produk = $material_balans->where('material_code', $items1)->pluck('product_code')->all();
 
         $count_produk = count($produk);
 
-        if ($count_produk == 1){
+        if ($count_produk == 1) {
             $data_produk = $produk[0];
-            $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
-//            dd($hasil);
-//            array_push($temp_resulty1, $hasil);
+            $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil, $temp_resulty1);
+            //            dd($hasil);
+            //            array_push($temp_resulty1, $hasil);
             $temp_resulty1 = $hasil;
-        }else if ($count_produk > 1){
-            foreach ($produk as $items){
+        } else if ($count_produk > 1) {
+            foreach ($produk as $items) {
                 $data_produk = $items;
-                $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil,$temp_resulty1);
-//                array_push($temp_resulty1, $hasil);
+                $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil, $temp_resulty1);
+                //                array_push($temp_resulty1, $hasil);
                 $temp_resulty1 = $hasil;
             }
         }
@@ -802,34 +802,34 @@ if (!function_exists('get_data_balans')) {
         $plant = explode(';', $plant);
         $data_plant = [];
 
-        if (count($plant) > 1){
-            foreach ($plant as $items){
+        if (count($plant) > 1) {
+            foreach ($plant as $items) {
                 $temp = explode(' - ', $items);
                 array_push($data_plant, $temp[0]);
             }
-        }else{
+        } else {
             $temp = explode(' - ', $plant[0]);
             array_push($data_plant, $temp[0]);
         }
 
 
-        if ($kategori == 1){
+        if ($kategori == 1) {
             $result = Saldo_Awal::select(DB::raw('SUM(total_stock) as total_stock'), DB::raw('SUM(total_value) as total_value'))
-                ->where('month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('month_year', 'ilike', '%' . $asumsi . '%')
                 ->where('material_code', $material);
-            if ($data_plant[0] != 'all'){
+            if ($data_plant[0] != 'all') {
                 $result = $result->whereIn('plant_code', $data_plant);
             }
 
             $result = $result->first();
-        }elseif ($kategori == 2){
+        } elseif ($kategori == 2) {
             $result = QtyRenDaan::select(DB::raw('SUM(qty_rendaan.qty_rendaan_value) as qty_rendaan_value'))
                 ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $asumsi . '%')
                 ->where('asumsi_umum.version_id', $versi)
                 ->where('qty_rendaan.material_code', $material);
             $result = $result->first();
-        }elseif ($kategori == 4){
+        } elseif ($kategori == 4) {
             $cc = auth()->user()->company_code;
             $pemakaian = DB::table('pj_pemakaian')
                 ->select('pj_pemakaian.pj_pemakaian_value')
@@ -837,7 +837,7 @@ if (!function_exists('get_data_balans')) {
                 ->where('pj_pemakaian.company_code', $cc)
                 ->where('pj_pemakaian.material_code', $material)
                 ->where('pj_pemakaian.version_id', $versi)
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $asumsi . '%')
                 ->whereNull('pj_pemakaian.deleted_at')
                 ->first();
 
@@ -847,19 +847,18 @@ if (!function_exists('get_data_balans')) {
                 ->where('pj_penjualan.company_code', $cc)
                 ->where('pj_penjualan.material_code', $material)
                 ->where('pj_penjualan.version_id', $versi)
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $asumsi . '%')
                 ->whereNull('pj_penjualan.deleted_at')
                 ->first();
 
             return $pemakaian->pj_pemakaian_value + $penjualan->pj_penjualan_value;
-
-        }elseif ($kategori == 'total_daan'){
+        } elseif ($kategori == 'total_daan') {
             $cc = auth()->user()->company_code;
             $qty_rendaan = DB::table('qty_rendaan')
                 ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
                 ->where('qty_rendaan.company_code', $cc)
                 ->where('asumsi_umum.version_id', $versi)
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $asumsi . '%')
                 ->where('qty_rendaan.material_code', $material)
                 ->whereNull('qty_rendaan.deleted_at')
                 ->first();
@@ -868,24 +867,23 @@ if (!function_exists('get_data_balans')) {
                 ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')
                 ->where('price_rendaan.company_code', $cc)
                 ->where('asumsi_umum.version_id', $versi)
-                ->where('asumsi_umum.month_year', 'ilike', '%'.$asumsi.'%')
+                ->where('asumsi_umum.month_year', 'ilike', '%' . $asumsi . '%')
                 ->where('price_rendaan.material_code', $material)
                 ->whereNull('price_rendaan.deleted_at')
                 ->first();
 
-            $val_qty_rendaan =  $qty_rendaan ? $qty_rendaan->qty_rendaan_value : 0 ;
-            $val_price_daan = $price_rendaan ? $price_rendaan->price_rendaan_value : 0 ;
-            $val_adjustment = $qty_rendaan ? $qty_rendaan->adjustment : 0 ;
-            $val_kurs = $qty_rendaan ? $qty_rendaan->usd_rate : 0 ;
+            $val_qty_rendaan =  $qty_rendaan ? $qty_rendaan->qty_rendaan_value : 0;
+            $val_price_daan = $price_rendaan ? $price_rendaan->price_rendaan_value : 0;
+            $val_adjustment = $qty_rendaan ? $qty_rendaan->adjustment : 0;
+            $val_kurs = $qty_rendaan ? $qty_rendaan->usd_rate : 0;
 
 
             if ($val_qty_rendaan > 0 && $val_price_daan == 0) {
                 $result = '-';
-            }else{
+            } else {
                 $result = $val_qty_rendaan * ($val_price_daan * (1 + ($val_adjustment / 100)) * $val_kurs);
             }
-        }
-        else{
+        } else {
             $result = 0;
         }
         return $result;
@@ -895,16 +893,16 @@ if (!function_exists('get_data_balans')) {
 if (!function_exists('get_data_balans_db')) {
     function get_data_balans_db($balans, $kategori, $plant, $material, $asumsi, $versi = null)
     {
-        if ($kategori == 1){
+        if ($kategori == 1) {
             $result = $balans->where('kategori_balans_id', 5)
-                ->where('month_year',$asumsi)
+                ->where('month_year', $asumsi)
                 ->where('company_code', auth()->user()->company_code)
                 ->where('material_code', $material)
                 ->first();
 
             return $result;
-        }else{
-            return 0 ;
+        } else {
+            return 0;
         }
     }
 }
@@ -1052,18 +1050,19 @@ if (!function_exists('hsKantong')) {
 if (!function_exists('kuantumProduksi')) {
     function kuantumProduksi($cost_center, $periode)
     {
-//        dd($cost_center, $periode);
+        //        dd($cost_center, $periode);
         $renprod = DB::table("qty_renprod")
             ->where('qty_renprod.cost_center', $cost_center)
             ->where('qty_renprod.asumsi_umum_id', $periode)
             ->first();
-//        dd($renprod != null);
-        if ($renprod != null){
-            return $renprod;
-        }else{
-            return 0;
-        }
+        //        dd($renprod != null);
+        // if ($renprod != null){
+        //     return $renprod;
+        // }else{
+        //     return 0;
+        // }
 
+        return $renprod;
     }
 }
 
@@ -1144,7 +1143,7 @@ if (!function_exists('totalBB')) {
 if (!function_exists('handle_null')) {
     function handle_null($data, $check)
     {
-        $result = $data != null ? $check :0;
+        $result = $data != null ? $check : 0;
         return $result;
     }
 }
@@ -1165,7 +1164,12 @@ if (!function_exists('totalGL')) {
             if ($salr) {
                 $kp = kuantumProduksi($cost_center, $asum_id);
                 $total = totalSalr($salr->cost_center, $salr->group_account_fc, $asum_inflasi);
-                $biaya_perton = $total / $kp->qty_renprod_value;
+
+                $biaya_perton = 0;
+
+                if ($total > 0 && $kp > 0) {
+                    $biaya_perton = $total / $kp->qty_renprod_value;
+                }
                 array_push($res_gl, $biaya_perton);
             }
         }
