@@ -323,10 +323,6 @@
                                 processing: true,
                                 serverSide: true,
                                 deferRender:true,
-                                // fixedHeader: {
-                                //     header: true,
-                                //     headerOffset: $('#main_header').height()
-                                // },
                                 fixedColumns:   {
                                     left: 3
                                 },

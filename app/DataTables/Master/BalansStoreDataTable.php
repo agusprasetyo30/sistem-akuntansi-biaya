@@ -3,8 +3,10 @@
 namespace App\DataTables\Master;
 
 use App\Models\Balans;
+use App\Models\GLosCC;
 use App\Models\MapKategoriBalans;
 use App\Models\Master\BalansStore;
+use App\Models\QtyRenDaan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
@@ -58,6 +60,13 @@ class BalansStoreDataTable extends DataTable
             ->where('asumsi_umum.version_id', $versi)
             ->get();
 
+        $glos_cc = GLosCC::select('glos_cc.cost_center', 'qty_renprod.qty_renprod_value', 'qty_renprod.asumsi_umum_id', 'glos_cc.material_code')
+            ->leftjoin('qty_renprod', 'qty_renprod.cost_center', '=', 'glos_cc.cost_center')
+            ->where('qty_renprod.version_id', $versi)
+            ->get();
+
+
+
 
         if ($this->save == true){
             foreach ($asumsi_balans as $key => $items){
@@ -69,7 +78,7 @@ class BalansStoreDataTable extends DataTable
                         ->get();
                 }
 //                dd($this->save, $this->antrian);
-                $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){
+                $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi, $glos_cc){
                     if ($query->kategori_balans_id == 1){
                         if ($key > 0 ){
                             try {
@@ -125,6 +134,9 @@ class BalansStoreDataTable extends DataTable
                         $tersedia = $nilai_saldo_awal + handle_null($total_daan['qty_rendaan_value'], $total_daan['qty_rendaan_value']);
                         $result = (double)$tersedia-(double)handle_null($pakai_jual, $pakai_jual);
                         return $result;
+                    } elseif ($query->kategori_balans_id > 5){
+                        $glos_cc = $glos_cc->where('material_code', $query->material_code)->first();
+//                        dd($glos_cc);
                     }else{
                         return 0;
                     }
