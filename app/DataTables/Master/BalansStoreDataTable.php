@@ -78,7 +78,7 @@ class BalansStoreDataTable extends DataTable
                         ->get();
                 }
 //                dd($this->save, $this->antrian);
-                $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi, $glos_cc){
+                $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi,$main_asumsi, $glos_cc){
                     if ($query->kategori_balans_id == 1){
                         if ($key > 0 ){
                             try {
@@ -135,8 +135,10 @@ class BalansStoreDataTable extends DataTable
                         $result = (double)$tersedia-(double)handle_null($pakai_jual, $pakai_jual);
                         return $result;
                     } elseif ($query->kategori_balans_id > 5){
-                        $glos_cc = $glos_cc->where('material_code', $query->material_code)->first();
-//                        dd($glos_cc);
+                        $glos_cc = $glos_cc->where('material_code', $query->material_code)
+                            ->where('asumsi_umum_id', $main_asumsi[$key]->id)
+                            ->first();
+                        return handle_null($glos_cc['qty_renprod_value'], $glos_cc['qty_renprod_value']);
                     }else{
                         return 0;
                     }
@@ -355,9 +357,10 @@ class BalansStoreDataTable extends DataTable
                         }
 
                     });
-
+//                    dd($datatable->toArray());
                 }
             }
+
             return $datatable;
         }else{
             foreach ($asumsi_balans as $key => $items){
