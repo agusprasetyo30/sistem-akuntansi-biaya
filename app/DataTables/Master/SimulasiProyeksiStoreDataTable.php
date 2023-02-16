@@ -116,10 +116,13 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                 }
             }
 
+            $mat = Material::get();
+            $ga = GroupAccountFC::get();
+
             foreach ($asumsi as $key => $asum) {
-                $datatable->addColumn($key . 'harga_satuan', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    $mat = Material::where('material_code', $query->code)->first();
-                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+                $datatable->addColumn($key . 'harga_satuan', function ($query) use ($mat, $ga, $asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
+                    $mat = $mat->where('material_code', $query->code)->first();
+                    $ga = $ga->where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
                         if ($query->kategori == 1) {
@@ -142,9 +145,9 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                     } else {
                         return '';
                     }
-                })->addColumn($key . 'cr', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    $mat = Material::where('material_code', $query->code)->first();
-                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+                })->addColumn($key . 'cr', function ($query) use ($mat, $ga, $asum, $d_version, $d_plant, $d_produk, $d_cost_center) {
+                    $mat = $mat->where('material_code', $query->code)->first();
+                    $ga = $ga->where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
                         $kp = kuantumProduksi($d_cost_center, $asum->id);
@@ -161,9 +164,9 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                     } else {
                         return '';
                     }
-                })->addColumn($key . 'biaya_perton', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    $mat = Material::where('material_code', $query->code)->first();
-                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+                })->addColumn($key . 'biaya_perton', function ($query) use ($mat, $ga, $asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
+                    $mat = $mat->where('material_code', $query->code)->first();
+                    $ga = $ga->where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
                         $kp = kuantumProduksi($d_cost_center, $asum->id);
@@ -212,10 +215,13 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                         if ($salr) {
                             $kp = kuantumProduksi($d_cost_center, $asum->id);
                             $total = totalSalr($salr->cost_center, $salr->group_account_fc, $asum->inflasi);
-
+//                            dd($kp, '1');
                             $biaya_perton = 0;
-                            if ($total > 0 && $kp > 0) {
-                                $biaya_perton = $total / $kp->qty_renprod_value;
+                            if ($kp != null){
+                                if ($total > 0) {
+//                                dd($kp, '2');
+                                    $biaya_perton = $total / $kp->qty_renprod_value;
+                                }
                             }
 
                             return $biaya_perton;
@@ -321,15 +327,15 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             return '';
                         }
                     }
-                })->addColumn($key . 'total_biaya', function ($query) use ($asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
-                    $mat = Material::where('material_code', $query->code)->first();
-                    $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+                })->addColumn($key . 'total_biaya', function ($query) use ( $mat, $ga, $asum, $resBB, $resgaLangsung, $resgatidakLangsung, $d_version, $d_plant, $d_produk, $d_cost_center) {
+                    $mat = $mat->where('material_code', $query->code)->first();
+                    $ga = $ga->where('group_account_fc', $query->code)->first();
 
                     if ($mat) {
-                        $kp = kuantumProduksi($d_cost_center, $asum->id);
-
+                        $kp = kuantumProduksi($d_cost_center, $asum->id) ?? 0;
+//                        dd($kp, '3');
                         if ($kp) {
-                            $consrate = consRate($d_plant, $d_produk, $query->code);
+                            $consrate = consRate($d_plant, $d_produk, $query->code) ?? 0;
                         } else {
                             $consrate = 0;
                         }
@@ -339,23 +345,38 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                                 return 0;
                             } else {
                                 $hs_balans = hsBalans($asum->id, $query->code, $d_produk);
-                                $total_biaya1 = $hs_balans * $consrate * $kp->qty_renprod_value;
+                                $total_biaya1 = 0;
+                                if ($kp != null){
+                                    $total_biaya1 = $hs_balans * $consrate * $kp->qty_renprod_value;
+                                }
 
                                 return $total_biaya1;
                             }
                         } else if ($query->kategori == 2) {
                             $hs_zco = hsZco($d_produk, $d_plant, $query->code);
-                            $total_biaya2 = $hs_zco * $consrate * $kp->qty_renprod_value;
+                            $total_biaya2 = 0;
+                            if ($kp != null){
+                                $total_biaya2 = $hs_zco * $consrate * $kp->qty_renprod_value;
+                            }
+
 
                             return $total_biaya2;
                         } else if ($query->kategori == 3) {
                             $hs_stock = hsStock($query->code, $asum->version_id);
-                            $total_biaya3 = $hs_stock * $consrate * $kp->qty_renprod_value;
+                            $total_biaya3 = 0;
+                            if ($kp != null){
+                                $total_biaya3 = $hs_stock * $consrate * $kp->qty_renprod_value;
+                            }
 
                             return $total_biaya3;
                         } else if ($query->kategori == 4) {
                             $hs_kantong = hsKantong($query->code, $asum->version_id);
-                            $total_biaya4 = $hs_kantong * $consrate * $kp->qty_renprod_value;
+
+                            $total_biaya4 = 0;
+                            if ($kp != null){
+                                $total_biaya4 = $hs_kantong * $consrate * $kp->qty_renprod_value;
+                            }
+
 
                             return $total_biaya4;
                         } else {
@@ -379,7 +400,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                         $kp = kuantumProduksi($d_cost_center, $asum->id);
 
                         $kp_value = 0;
-                        if ($kp) {
+                        if ($kp != null) {
                             $kp_value = $kp->qty_renprod_value;
                         }
 
@@ -423,6 +444,7 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                     DB::transaction(function () use ($datatable, $key, $d_version, $d_plant, $d_produk, $d_cost_center) {
                         $dt = $datatable->toArray();
 
+//                        dd($dt);
                         $result = [];
                         foreach ($dt['data'] as $data) {
                             $input['version_id'] = $d_version;
