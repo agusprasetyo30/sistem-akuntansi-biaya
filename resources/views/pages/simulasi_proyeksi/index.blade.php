@@ -23,50 +23,63 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="mb-5 row">
-                                <div class="form-group">
-                                    <label class="form-label">VERSI</label>
-                                    <select id="filter_version_generate" class="form-control custom-select select2">
-                                    </select>
-                                </div>
-                                <div class="btn-list mb-5">
-                                    <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
-                                </div>
+                    <div class="panel panel-primary">
+                        <div class=" tab-menu-heading p-0 bg-light">
+                            <div class="tabs-menu1 ">
+                                <!-- Tabs -->
+                                <ul class="nav panel-tabs">
+                                    <li class="" id="tabs_generate"> <a href="#generate" class="active" data-bs-toggle="tab">Generate</a> </li>
+                                    <li id="tabs_laporan"> <a href="#laporan" data-bs-toggle="tab">Laporan</a> </li>
+                                </ul>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="mb-5 row">
-                                <div class="form-group">
-                                    <label class="form-label">VERSI</label>
-                                    <select id="filter_version" class="form-control custom-select select2">
-                                    </select>
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active " id="generate">
+                                    <div class="mb-5 row">
+                                        <div class="form-group">
+                                            <label class="form-label">VERSI</label>
+                                            <select id="filter_version_generate" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                        <div class="btn-list mb-5">
+                                            <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">PRODUK</label>
-                                    <select id="filter_material" class="form-control custom-select select2">
-                                        {{-- <option value="all" selected>Semua</option> --}}
-                                    </select>
-                                </div>
-                                <div class="form-group" id="format_plant">
-                                    <label class="form-label">PLANT</label>
-                                    <select id="filter_plant" class="form-control custom-select select2">
-                                        {{-- <option value="all" selected>Semua</option> --}}
-                                    </select>
-                                </div>
-                                <div class="form-group" id="format_plant">
-                                    <label class="form-label">COST CENTER</label>
-                                    <select id="filter_cost_center" class="form-control custom-select select2">
-                                        {{-- <option value="all" selected>Semua</option> --}}
-                                    </select>
-                                </div>
-                                <div class="btn-list mb-5">
-                                    <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                <div class="tab-pane " id="laporan">
+                                    <div class="mb-5 row">
+                                        <div class="form-group">
+                                            <label class="form-label">VERSI</label>
+                                            <select id="filter_version" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">PRODUK</label>
+                                            <select id="filter_material" class="form-control custom-select select2">
+                                                {{-- <option value="all" selected>Semua</option> --}}
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="format_plant">
+                                            <label class="form-label">PLANT</label>
+                                            <select id="filter_plant" class="form-control custom-select select2">
+                                                {{-- <option value="all" selected>Semua</option> --}}
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="format_plant">
+                                            <label class="form-label">COST CENTER</label>
+                                            <select id="filter_cost_center" class="form-control custom-select select2">
+                                                {{-- <option value="all" selected>Semua</option> --}}
+                                            </select>
+                                        </div>
+                                        <div class="btn-list mb-5">
+                                            <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive" id="dinamic_table">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="table-responsive" id="dinamic_table">
                         </div>
                     </div>
                 </div>
@@ -375,7 +388,7 @@
                         },success:function (response) {
                             Swal.fire({
                                 title: 'Data berhasil diproyeksikan',
-                                text: 'pilih versi, produk, plant dan cost center untuk menampilkan data proyeksi',
+                                text: 'Pilih menu laporan untuk melihat hasil proyeksi!',
                                 icon: 'success',
                                 allowOutsideClick: false,
                                 confirmButtonColor: '#019267',
