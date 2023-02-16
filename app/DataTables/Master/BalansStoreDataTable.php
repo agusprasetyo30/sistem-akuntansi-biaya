@@ -60,7 +60,6 @@ class BalansStoreDataTable extends DataTable
 
 
         if ($this->save == true){
-//            dd($asumsi);
             foreach ($asumsi_balans as $key => $items){
                 if ($key > 0 ){
                     $balans = DB::table('balans')
@@ -302,8 +301,6 @@ class BalansStoreDataTable extends DataTable
 
                             $total_pakai_jual = handle_null($q_pakai_jual, $q_pakai_jual) * $p_tersedia;
 
-
-                            $hasil_q_saldo_akhir = $q_tersedia - handle_null($q_pakai_jual, $q_pakai_jual);
                             $hasil_nilai_saldo_akhir = $nilai_tersedia - $total_pakai_jual;
 
                             return $hasil_nilai_saldo_akhir;
@@ -322,20 +319,29 @@ class BalansStoreDataTable extends DataTable
                     DB::transaction(function () use ($parse, $key){
 
                         $data_temp = $parse->toArray();
-                        foreach ($data_temp['data'] as $data_insert){
+                        $input_value = [];
+                        $input_nilai_value = [];
+                        foreach ($data_temp['data'] as $key1 => $data_insert){
                             $input['asumsi_umum_id'] = $data_insert['asumsi'.$key];
                             $input['kategori_balans_id'] = $data_insert['kategori_balans_id'];
                             $input['plant_code'] = $data_insert['plant_code'];
                             $input['material_code'] = $data_insert['material'];
-                            $input_nilai['q'] =(double) str_replace('Rp ', '', $data_insert['q'.$key]);
-                            $input_nilai['p'] =(double) str_replace('Rp ', '', $data_insert['p'.$key]);
-                            $input_nilai['nilai'] =(double) str_replace('Rp ', '', $data_insert['nilai'.$key]);
-                            $input_nilai['company_code'] = auth()->user()->company_code;
-                            $input_nilai['created_by'] = auth()->user()->id;
-                            $input_nilai['created_at'] = Carbon::now()->format('Y-m-d');
-                            $input_nilai['updated_at'] = Carbon::now()->format('Y-m-d');
-                            Balans::updateOrCreate($input, $input_nilai);
+                            $input['q'] =(double) str_replace('Rp ', '', $data_insert['q'.$key]);
+                            $input['p'] =(double) str_replace('Rp ', '', $data_insert['p'.$key]);
+                            $input['nilai'] =(double) str_replace('Rp ', '', $data_insert['nilai'.$key]);
+                            $input['company_code'] = auth()->user()->company_code;
+                            $input['created_by'] = auth()->user()->id;
+                            $input['created_at'] = Carbon::now()->format('Y-m-d');
+                            $input['updated_at'] = Carbon::now()->format('Y-m-d');
+                            array_push($input_value, $input);
+//                            array_push($input_nilai_value, $input_nilai);
                         }
+                        $result = array_chunk($input_value, 500);
+
+                        foreach ($result as $item){
+                            Balans::insert($item);
+                        }
+
                     });
 
                 }

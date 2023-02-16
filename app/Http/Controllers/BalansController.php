@@ -16,7 +16,7 @@ class BalansController extends Controller
     public function index(Request $request, BalansDataTable $balansDataTable)
     {
 
-        $antrian = antrian_material_balans(1);
+        $antrian = antrian_material_balans($request->version);
         $result_antrian = [];
         foreach ($antrian as $items){
             foreach ($items as $item){
@@ -24,7 +24,7 @@ class BalansController extends Controller
             }
         }
         if ($request->data == 'index') {
-            return $balansDataTable->with(['antrian' => array_values(array_unique($result_antrian)), 'version' => 1, 'save' => false])->render('pages.buku_besar.balans.index');
+            return $balansDataTable->with(['antrian' => array_values(array_unique($result_antrian)), 'version' => $request->version, 'save' => false])->render('pages.buku_besar.balans.index');
         }
         return view('pages.buku_besar.balans.index');
     }
@@ -35,18 +35,23 @@ class BalansController extends Controller
         return response()->json(['code' => 200, 'asumsi' => $asumsi]);
     }
 
-    public function store(){
+    public function store(Request $request){
         try {
-            $antrian = antrian_material_balans(1);
+            $antrian = antrian_material_balans($request->version);
             $result_antrian = [];
             foreach ($antrian as $items){
                 foreach ($items as $item){
                     array_push($result_antrian, $item);
                 }
             }
+            DB::transaction(function () use ($request, $result_antrian){
+                Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
+                    ->where('asumsi_umum.version_id', $request->version)->delete();
 
-            $data = new BalansStoreDataTable();
-            $data->dataTable(1, array_values(array_unique($result_antrian)));
+                $data = new BalansStoreDataTable();
+                $data->dataTable($request->version, array_values(array_unique($result_antrian)));
+            });
+
 
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
