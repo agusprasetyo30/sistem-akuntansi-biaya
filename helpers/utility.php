@@ -1109,12 +1109,23 @@ if (!function_exists('labaRugi')) {
 }
 
 if (!function_exists('totalBB')) {
-    function totalBB($data, $plant, $produk, $version, $periode)
+    function totalBB($data, $plant, $produk, $version, $periode, $cost_center)
     {
         $res_bb = [];
 
         foreach ($data as $key => $value) {
-            $consrate_bb = consRate($plant, $produk, $value->code) ?? 0;
+            $kp = kuantumProduksi($cost_center, $periode);
+
+            if ($kp) {
+                if ($kp->qty_renprod_value == 1) {
+                    $consrate_bb = 0;
+                } else {
+                    $consrate_bb = consRate($plant, $produk, $value->code) ?? 0;
+                }
+            } else {
+                $consrate_bb = 0;
+            }
+
             if ($value->kategori == 1) {
                 $hs_balans = hsBalans($periode, $value->code, $produk);
                 $biayaperton1 = $hs_balans * $consrate_bb;

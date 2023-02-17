@@ -15,16 +15,19 @@ class SimulasiProyeksiController extends Controller
     public function index(Request $request, SimulasiProyeksiDataTable $simulasiproyeksiDatatable)
     {
         if ($request->data == 'index') {
-            $cons_rate = DB::table('cons_rate')
-                ->select('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
-                ->leftJoin('glos_cc', 'glos_cc.material_code', '=', 'cons_rate.product_code')
-                ->where('cons_rate.version_id', $request->version)
-                ->groupBy('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
-                ->get();
+            // $cons_rate = DB::table('cons_rate')
+            //     ->select('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
+            //     ->leftJoin('glos_cc', 'glos_cc.material_code', '=', 'cons_rate.product_code')
+            //     ->where('cons_rate.version_id', $request->version)
+            //     ->groupBy('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
+            //     ->get();
 
-            foreach ($cons_rate as $key => $cr) {
-                return $simulasiproyeksiDatatable->with(['version' => $cr->version_id, 'plant' => $cr->plant_code, 'produk' => $cr->product_code, 'cost_center' => $cr->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
-            }
+            // foreach ($cons_rate as $key => $cr) {
+            //     return $simulasiproyeksiDatatable->with(['version' => $cr->version_id, 'plant' => $cr->plant_code, 'produk' => $cr->product_code, 'cost_center' => $cr->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
+            // }
+
+
+            return $simulasiproyeksiDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $request->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
         }
         return view('pages.simulasi_proyeksi.index');
     }
@@ -57,14 +60,13 @@ class SimulasiProyeksiController extends Controller
                 ->groupBy('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
                 ->get();
 
-//            dd($cons_rate);
+            //            dd($cons_rate);
 
-            DB::transaction(function () use ($cons_rate, $request){
+            DB::transaction(function () use ($cons_rate, $request) {
                 SimulasiProyeksi::where('version_id', $request->version)->delete();
                 foreach ($cons_rate as $key => $cr) {
                     $data = new SimulasiProyeksiStoreDataTable();
                     $data->dataTable($cr->version_id, $cr->plant_code, $cr->product_code, $cr->cost_center);
-
                 }
             });
 
