@@ -34,6 +34,7 @@
 				<li><a href="{{url('master/material')}}" class="slide-item"> Material</a></li>
 				<li><a href="{{url('master/plant')}}" class="slide-item"> Plant</a></li>
 				<li><a href="{{url('master/glos-cc')}}" class="slide-item"> Glos CC</a></li>
+				<li><a href="{{url('master/tarif')}}" class="slide-item"> Tarif</a></li>
                 <li><a href="{{route('asumsi_umum')}}" class="slide-item"> Asumsi Umum</a></li>
                 <li><a href="{{route('kurs')}}" class="slide-item"> Kurs</a></li>
                 <li><a href="{{route('regions')}}" class="slide-item"> Region</a></li>
