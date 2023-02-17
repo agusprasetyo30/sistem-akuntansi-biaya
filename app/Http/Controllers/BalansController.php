@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\BalansDataTable;
 use App\DataTables\Master\BalansStoreDataTable;
+use App\DataTables\Master\SimulasiProyeksiStoreDataTable;
 use App\Models\Asumsi_Umum;
 use App\Models\Balans;
 use App\Models\ConsRate;
 use App\Models\Material;
+use App\Models\SimulasiProyeksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -50,6 +52,20 @@ class BalansController extends Controller
 
                 $data = new BalansStoreDataTable();
                 $data->dataTable($request->version, array_values(array_unique($result_antrian)));
+
+                $cons_rate = DB::table('cons_rate')
+                    ->select('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
+                    ->leftJoin('glos_cc', 'glos_cc.material_code', '=', 'cons_rate.product_code')
+                    ->where('cons_rate.version_id', $request->version)
+                    ->groupBy('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
+                    ->get();
+
+                SimulasiProyeksi::where('version_id', $request->version)->delete();
+                foreach ($cons_rate as $key => $cr) {
+                    $data = new SimulasiProyeksiStoreDataTable();
+                    $data->dataTable($cr->version_id, $cr->plant_code, $cr->product_code, $cr->cost_center);
+
+                }
             });
 
 
