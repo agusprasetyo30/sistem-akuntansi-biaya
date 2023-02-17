@@ -40,6 +40,7 @@ use App\Http\Controllers\KontrolProyeksiController;
 use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
+use App\Http\Controllers\TarifController;
 
 /*
 |--------------------------------------------------------------------------
@@ -254,6 +255,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [MapKetegoriBalansController::class, 'create'])->name('insert_map_kategori_balans');
             Route::post('update', [MapKetegoriBalansController::class, 'update'])->name('update_map_kategori_balans');
             Route::post('delete', [MapKetegoriBalansController::class, 'delete'])->name('delete_map_kategori_balans');
+        });
+
+        Route::group(['prefix' => 'tarif'], function () {
+            Route::get('/', [TarifController::class, 'index'])->name('tarif');
+            Route::post('insert', [TarifController::class, 'create'])->name('insert_tarif');
+            Route::post('update', [TarifController::class, 'update'])->name('update_tarif');
+            Route::post('delete', [TarifController::class, 'delete'])->name('delete_tarif');
+            Route::post('import', [TarifController::class, 'import'])->name('import_tarif');
+            Route::get('export', [TarifController::class, 'export'])->name('export_tarif');
         });
 
         // Main Select2
