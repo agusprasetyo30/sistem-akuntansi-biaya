@@ -53,6 +53,7 @@ class BalansController extends Controller
                 $data = new BalansStoreDataTable();
                 $data->dataTable($request->version, array_values(array_unique($result_antrian)));
 
+
                 $cons_rate = DB::table('cons_rate')
                     ->select('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
                     ->leftJoin('glos_cc', 'glos_cc.material_code', '=', 'cons_rate.product_code')

@@ -6,6 +6,7 @@ use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
 use App\Models\GLAccountFC;
 use App\Models\GLAccount;
+use App\Models\GLosCC;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriBalans;
@@ -97,6 +98,36 @@ class SelectController extends Controller
                     ->whereNull('deleted_at')
                     ->get();
             }
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'All'
+        );
+        foreach ($plant as $items) {
+            $response[] = array(
+                "id" => $items->plant_code . ' - ' . $items->plant_desc,
+                "text" => $items->plant_code . ' - ' . $items->plant_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function glos_cc_balans(Request $request)
+    {
+        $search = $request->search;
+
+        if ($search == '') {
+            $plant = GLosCC::limit(10)
+                ->whereNull('deleted_at')
+                ->get();
+        } else {
+            $plant = Plant::limit(10)
+                ->where('is_active', 't')
+                ->whereNull('deleted_at')
+                ->get();
         }
 
         $response = array();

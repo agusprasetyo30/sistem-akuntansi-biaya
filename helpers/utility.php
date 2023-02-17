@@ -751,6 +751,7 @@ if (!function_exists('antrian_material_balans')) {
                 'cons_rate.deleted_at' => null,
             ])
             ->get();
+
         $data = find_lower_material($versi);
 
         foreach ($data as $items) {
@@ -772,7 +773,6 @@ if (!function_exists('temp_material_produk')) {
         $temp_resulty1 = $temp_resulty;
         array_push($temp_resulty1, $items1);
 
-
         $produk = $material_balans->where('material_code', $items1)->pluck('product_code')->all();
 
         $count_produk = count($produk);
@@ -780,14 +780,11 @@ if (!function_exists('temp_material_produk')) {
         if ($count_produk == 1) {
             $data_produk = $produk[0];
             $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil, $temp_resulty1);
-            //            dd($hasil);
-            //            array_push($temp_resulty1, $hasil);
             $temp_resulty1 = $hasil;
         } else if ($count_produk > 1) {
             foreach ($produk as $items) {
                 $data_produk = $items;
                 $hasil = temp_material_produk($data_produk, $material_balans, $temp_hasil, $temp_resulty1);
-                //                array_push($temp_resulty1, $hasil);
                 $temp_resulty1 = $hasil;
             }
         }

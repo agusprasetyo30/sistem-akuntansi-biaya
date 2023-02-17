@@ -101,6 +101,17 @@
                     }
                 }
             }).on('change', function () {
+                var url;
+                if ($('#data_main_kategori_balans').val() > 5){
+                    $('#plant_field').css('display', 'block');
+                    $('#data_main_plant').removeAttr('multiple', 'multiple');
+                    {{--url = "{{route('')}}"--}}
+                }else {
+                    $('#plant_field').css('display', 'block');
+                    $('#data_main_plant').attr('multiple', 'multiple');
+                    url = "{{ route('plant_balans_select') }}";
+                }
+
                 $('#data_main_plant').val([]).change().select2({
                     dropdownParent: $('#modal_add'),
                     placeholder: 'Pilih Plant / Cost Center',
@@ -108,7 +119,7 @@
                     multiple: true,
                     allowClear: false,
                     ajax: {
-                        url: "{{ route('plant_balans_select') }}",
+                        url: url,
                         dataType: 'json',
                         delay: 250,
                         data: function (params) {
@@ -133,23 +144,6 @@
                 width: '100%',
                 multiple: true,
                 allowClear: false,
-                ajax: {
-                    url: "{{ route('plant_balans_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term,
-                            kategori: $('#data_main_kategori_balans').val(),
-                            material: $('#data_main_material_balans').val(),
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
             });
 
             $('#data_main_version').select2({

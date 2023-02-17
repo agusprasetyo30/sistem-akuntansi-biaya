@@ -241,8 +241,6 @@
                             })
 
                             $('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();
-                            // $('#dt_balans').DataTable().ajax.reload();
-                            // this.api().columns.adjust().draw()
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
@@ -265,116 +263,29 @@
         }
 
         function generate_data() {
-            var kolom;
-            var kolom1;
-            var kolom2;
-            var column = [
-                {data: 'material', orderable:false},
-                {data: 'plant', orderable:false},
-                {data: 'keterangan', orderable:false},
-            ]
-
-            $('#table_main').html(table_main_dt)
-
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url : '{{route("header_dasar_balans")}}',
+                url : '{{route("store_dasar_balans")}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     version:$('#filter_version').val(),
-                },
-                success:function (response){
-                    for (let i = 0; i < response.asumsi.length;i++){
-                        column.push({ width:'5%', data: 'q'+i.toString(), orderable:false});
-                        column.push({ width:'20%', data: 'p'+i.toString(), orderable:false});
-                        column.push({ width:'20%', data: 'nilai'+i.toString(), orderable:false});
-
-                        kolom += '<th class="text-center" colspan="3">'+helpDateFormat(response.asumsi[i].month_year)+'</th>';
-
-                        kolom1 += '<th class="text-center">Q</th>' +
-                            '<th class="text-center">P</th>' +
-                            '<th class="text-center">Nilai = Q x P</th>';
-
-                        kolom2 += '<th class="text-center">Ton</th>' +
-                            '<th class="text-center">Rp/Ton</th>' +
-                            '<th class="text-center">Nilai (Rp)</th>';
-                    }
-
-                    $("#primary").append(kolom);
-                    $("#secondary").append(kolom1);
-                    $("#third").append(kolom2);
-                    // $('#dt_balans').DataTable().clear().destroy();
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url : '{{route("store_dasar_balans")}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            version:$('#filter_version').val(),
-                        },success:function (response) {
-                            $("#dt_balans").DataTable({
-                                scrollX: true,
-                                dom: 'Bfrtip',
-                                orderCellsTop: true,
-                                processing: true,
-                                serverSide: true,
-                                deferRender:true,
-                                fixedColumns:   {
-                                    left: 3
-                                },
-                                lengthMenu: [
-                                    [-1, 10, 25, 50],
-                                    ['All', 10, 25, 50],
-                                ],
-                                initComplete: function () {
-                                    $('.dataTables_scrollHead').css('overflow', 'scroll');
-                                    $('.dataTables_scrollHead').on('scroll', function () {
-                                        $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                                    });
-
-                                    $(document).on('scroll', function () {
-                                        $('.dtfh-floatingparenthead').on('scroll', function () {
-                                            $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
-                                        });
-                                    })
-
-                                    {{--$('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();--}}
-                                    // $('#dt_balans').DataTable().ajax.reload();
-                                    this.api().columns.adjust().draw()
-                                    // $('#local_loader').hide();
-                                },
-                                buttons: [
-                                    { extend: 'pageLength', className: 'mb-5' },
-                                    { extend: 'excel', className: 'mb-5', exportOptions:{
-                                        }, title: 'Balans' }
-                                ],
-                                ajax: {
-                                    url : '{{route("dasar_balans")}}',
-                                    data: {
-                                        data:'index',
-                                        version:$('#filter_version').val(),
-                                    }
-                                },
-                                columns: column
-                            });
-
-                        }
-
+                },success:function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
                     })
 
                 }
             })
         }
 
-        function create_data() {
-
-
-        }
 
         $('#submit').on('click', function () {
             $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);

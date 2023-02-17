@@ -27,7 +27,7 @@ class BalansStoreDataTable extends DataTable
      */
     public function dataTable($versi, $antrian)
     {
-        $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.kategori_balans')
+        $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.type_kategori_balans')
             ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
             ->whereIn('map_kategori_balans.material_code', $antrian)
             ->where('map_kategori_balans.version_id', $versi)
@@ -65,7 +65,6 @@ class BalansStoreDataTable extends DataTable
             ->leftjoin('qty_renprod', 'qty_renprod.cost_center', '=', 'glos_cc.cost_center')
             ->where('qty_renprod.version_id', $versi)
             ->get();
-
 
 
         foreach ($asumsi_balans as $key => $items){
@@ -133,10 +132,15 @@ class BalansStoreDataTable extends DataTable
                     $result = (double)$tersedia-(double)handle_null($pakai_jual, $pakai_jual);
                     return $result;
                 } elseif ($query->kategori_balans_id > 5){
-                    $glos_cc = $glos_cc->where('material_code', $query->material_code)
-                        ->where('asumsi_umum_id', $main_asumsi[$key]->id)
-                        ->first();
-                    return handle_null($glos_cc['qty_renprod_value'], $glos_cc['qty_renprod_value']);
+                    if ($query->type_kategori_balans == 'produksi'){
+                        $glos_cc = $glos_cc->where('material_code', $query->material_code)
+                            ->where('asumsi_umum_id', $main_asumsi[$key]->id)
+                            ->first();
+                        return handle_null($glos_cc['qty_renprod_value'], $glos_cc['qty_renprod_value']);
+                    }else{
+                        dd($glos_cc);
+                    }
+
                 }else{
                     return 0;
                 }
