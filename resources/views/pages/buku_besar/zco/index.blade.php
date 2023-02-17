@@ -156,6 +156,9 @@
 
 @section('scripts')
     <script>
+        const alphabet = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        const alphabet2nd = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         $(document).ready(function () {
             table()
 
@@ -842,7 +845,7 @@
                     // }
 
                     for (let i = 0; i < response.material.length;i++){
-                        kolom_top += '<th colspan="4" class="text-center">'+ response.material[i].product_code+'  '+ response.material[i].material_name+'<br>'+ response.material[i].plant_code +' '+ response.material[i].plant_desc +'</th>';
+                        kolom_top += '<th colspan="4" class="text-center"><strong>'+ response.material[i].product_code+'  '+ response.material[i].material_name+'<br>'+ response.material[i].plant_code +' '+ response.material[i].plant_desc +'<strong></th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
@@ -869,7 +872,64 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excelHtml5',
+                                className: 'mb-5', 
+                                title: '',
+                                customize: function (file) {
+                                    var sheet = file.xl.worksheets['sheet1.xml'];
+                                    var style = file.xl['styles.xml'];
+                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
+                                    $('row', sheet).first().attr('ht', '30').attr('customHeight', "1");
+                                    var mergeCells = $('mergeCells', sheet);
+                                    
+                                    for (let i = 0; i < response.material.length;i++) {
+                                        const columnDef = generateAbjad(i)
+
+                                        mergeCells[0].appendChild( 
+                                            _createNode( sheet, 'mergeCell', {
+                                                attr: { ref: columnDef }
+                                            }) 
+                                        )
+                                    }
+
+                                    mergeCells[0].appendChild( 
+                                        _createNode( sheet, 'mergeCell', {
+                                            attr: { ref: 'A1:A2' }
+                                        }) 
+                                    );
+
+                                    mergeCells[0].appendChild( 
+                                        _createNode( sheet, 'mergeCell', {
+                                            attr: { ref: 'B1:B2' }
+                                        }) 
+                                    );
+
+                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+ 
+                                    function _createNode( doc, nodeName, opts ) {
+                                        var tempNode = doc.createElement( nodeName );
+                                        
+                                        if ( opts ) {
+                                            if ( opts.attr ) {
+                                                $(tempNode).attr( opts.attr );
+                                            }
+                        
+                                            if ( opts.children ) {
+                                                $.each( opts.children, function ( key, value ) {
+                                                    tempNode.appendChild( value );
+                                                } );
+                                            }
+                        
+                                            if ( opts.text !== null && opts.text !== undefined ) {
+                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
+                                            }
+                                        }
+                        
+                                        return tempNode;
+                                    }
+                                }
+                            }
                         ],
                         ajax: {
                             url : '{{route("zco")}}',
@@ -891,6 +951,33 @@
                     })
                 }
             })
+        }
+
+        function generateAbjad(idx) {            
+            const multiple = 4
+            const start = (multiple * idx) + 2
+            const end = start + 3
+            let rangeColumn = '';
+            
+            let firstAlp1st = 0;
+            let firstAlp2nd = start;
+            let secondAlp1st = 0;
+            let secondAlp2nd = end;
+
+            if(start > 25) {
+                firstAlp1st = parseInt(start / 26)
+                firstAlp2nd = start % 26
+            }
+            if(end > 25) {
+                secondAlp1st = parseInt(end / 26)
+                secondAlp2nd = end % 26
+            }
+
+            let col1st = alphabet[firstAlp1st]+alphabet2nd[firstAlp2nd]
+            let col2nd = alphabet[secondAlp1st]+alphabet2nd[secondAlp2nd]
+            rangeColumn = col1st+'1'+':'+col2nd+'1'
+
+            return rangeColumn
         }
 
         function get_data_group_account_horiz(){

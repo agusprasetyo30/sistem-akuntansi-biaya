@@ -14,6 +14,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Horizontal\H_Salr;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class SalrController extends Controller
 {
@@ -176,6 +179,12 @@ class SalrController extends Controller
     public function export(Request $request)
     {
         return Excel::download(new MS_SalrExport(), 'SALR.xlsx');
+    }
+
+    public function export_horizon_salr(Request $request)
+    {
+        // dd('bagas');
+        return Excel::download(new H_Salr(), 'SALR_HORIZONTAL.xlsx');
     }
 
     public function import(Request $request)

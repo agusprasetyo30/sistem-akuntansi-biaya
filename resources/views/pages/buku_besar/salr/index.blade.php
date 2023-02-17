@@ -94,6 +94,7 @@
                                     </div>
                                     <div class="btn-list">
                                         <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        <button type="button" class="btn btn-primary" data-bs-target="#modal_export"  class="btn btn-primary btn-pill" id="export_horizon_salr">Export</button>
                                     </div>
                                 </div>
                                 <div class="mt-auto">
@@ -591,6 +592,45 @@
 
         })
 
+        // Export Horizon
+        $('#export_horizon_salr').on('click', function () {
+            //console.log('bgs bwzr');
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                type: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('export_horizon_salr')}}',
+                success:function (result, status, xhr) {
+
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : 'company.xlsx');
+
+                    // The actual download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(){
+                    $('#modal_import').modal('hide');
+                    $("#modal_import input").val("")
+                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                }
+            })
+        })
+
         function get_data(){
             $('#table_main').html(table_main_dt)
 
@@ -736,7 +776,7 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                    { extend: 'excel', className: 'mb-5',  footer: true, exportOptions:{
                         columns:[0,1,2,3,4]
                     }, title: 'SALR'  }
                 ],
@@ -764,8 +804,8 @@
             var table = '<table id="h_dt_salr" class="table table-bordered text-nowrap key-buttons text-center" style="width: auto;">' +
                 '<thead>' +
                 '<tr id="primary">' +
-                '<th class="align-middle" style="width: 5%;" rowspan="2">Group Account</th>' +
-                '<th class="align-middle" style="width: 20%;"  rowspan="2">Group Account Desc</th>' +
+                '<th class="align-middle" rowspan="2">Group Account</th>' +
+                '<th class="align-middle" rowspan="2">Group Account Desc</th>' +
                 '</tr>' +
                 '<tr id="secondary">' +
                 '</tr>' +
@@ -827,7 +867,69 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                title: '',
+                                footer: true,
+                                exportOptions: {
+                                    header: function (data, colIdx) {
+                                        console.log('opt', colIdx)
+                                    }
+                                },
+                                customize: function (file) {
+                                    var sheet = file.xl.worksheets['sheet1.xml'];
+                                    var style = file.xl['styles.xml'];
+                                    
+                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
+                                    
+                                    var col = $('col', sheet);
+                                    $(col[0]).attr("width", 8.5);
+
+                                    for(let i = 0; i < response.cost_center.length;i++) {
+                                        const idx = i + 2
+                                        $(col[idx]).attr("width", 25).attr('customWidth', '1');
+                                    }
+                                    
+                                    var mergeCells = $('mergeCells', sheet);
+                                    
+                                    mergeCells[0].appendChild( 
+                                        _createNode( sheet, 'mergeCell', {
+                                            attr: { ref: 'A1:A2' }
+                                        }) 
+                                    );
+
+                                    mergeCells[0].appendChild( 
+                                        _createNode( sheet, 'mergeCell', {
+                                            attr: { ref: 'B1:B2' }
+                                        }) 
+                                    );
+
+                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+ 
+                                    function _createNode( doc, nodeName, opts ) {
+                                        var tempNode = doc.createElement( nodeName );
+                                        
+                                        if ( opts ) {
+                                            if ( opts.attr ) {
+                                                $(tempNode).attr( opts.attr );
+                                            }
+                        
+                                            if ( opts.children ) {
+                                                $.each( opts.children, function ( key, value ) {
+                                                    tempNode.appendChild( value );
+                                                } );
+                                            }
+                        
+                                            if ( opts.text !== null && opts.text !== undefined ) {
+                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
+                                            }
+                                        }
+                        
+                                        return tempNode;
+                                    }
+                                }
+                            }, 
                         ],
                         ajax: {
                             url : '{{route("salr")}}',
@@ -844,11 +946,12 @@
                             }
                         },
                         columns: column,
-                        columnDefs: [
-                            { targets: [0, 1], className: 'fs-6'}
-                        ],
+                        // columnDefs: [
+                        //     { targets: [0, 1], className: 'fs-6'},
+                        // ],
                         initComplete:function () {
-                            this.api().columns.adjust().draw()
+                            let api = this.api();
+                            api.columns.adjust().draw();
                         },
                         footerCallback: function () {
                             var response = this.api().ajax.json();

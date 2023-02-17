@@ -382,6 +382,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('export', [SalrController::class, 'export'])->name('export_salr');
             Route::post('import', [SalrController::class, 'import'])->name('import_salr');
             Route::post('check', [SalrController::class, 'check'])->name('check_salr');
+            Route::get('export_horizon_salr', [SalrController::class, 'export_horizon_salr'])->name('export_horizon_salr');
         });
 
         Route::group(['prefix' => 'laba-rugi'], function () {
