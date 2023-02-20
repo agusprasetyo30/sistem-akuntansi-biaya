@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Glos CC</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Tarif</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -11,7 +11,13 @@
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
-                        <div class="col-md-12">                      
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-label">Produk</label>
+                                <select name="main_produk" id="data_main_produk" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">Plant</label>
                                 <select name="main_plant" id="data_main_plant" class="form-control custom-select select2">
@@ -19,16 +25,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Cost Center</label>
-                                <select name="main_cost_center" id="data_main_cost_center" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Cost Center</option>
+                                <label class="form-label">Group Account</label>
+                                <select name="group_account_fc" id="group_account_fc" class="form-control custom-select select2">
+                                    <option value="" selected>Pilih Group Account</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="main_material" id="data_main_material" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Material</option>
-                                </select>
+                                <label>Value </label>
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="tarif_value"
+                                    id="tarif_value" autocomplete="off">
                             </div>
                         </div>
                     </div>

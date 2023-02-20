@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Import Glos CC</h5>
+                <h5 class="modal-title" id="largemodal1">Import Tarif</h5>
                 {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button> --}}
@@ -17,7 +17,7 @@
                                 <div class="col-lg mb-3">
                                     <b>Ketentuan :</b>
                                     <ol>
-                                        <li>Format harus sesuai template  ( <a href="{{ route('export_glos_cc') }}">Download Template</a> )</li>
+                                        <li>Format harus sesuai template  ( <a href="{{ route('export_tarif') }}">Download Template</a> )</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol> 
                                 </div>
