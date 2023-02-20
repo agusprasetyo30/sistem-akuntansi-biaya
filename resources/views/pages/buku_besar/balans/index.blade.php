@@ -274,12 +274,11 @@
                     version:$('#filter_version').val(),
                 },success:function (response) {
                     Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
+                        title: 'Data berhasil diproyeksikan',
+                        icon: 'success',
                         confirmButtonColor: '#019267',
                         confirmButtonText: 'Konfirmasi',
+
                     })
 
                 }

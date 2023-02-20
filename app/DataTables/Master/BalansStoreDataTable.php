@@ -55,11 +55,7 @@ class BalansStoreDataTable extends DataTable
         $saldo_awal = '2021-12-01 00:00:00';
         array_unshift($asumsi, $saldo_awal);
 
-        $balans = DB::table('balans')
-            ->select('balans.*', 'asumsi_umum.month_year')
-            ->leftjoin('asumsi_umum', 'balans.asumsi_umum_id', '=', 'asumsi_umum.id')
-            ->where('asumsi_umum.version_id', $versi)
-            ->get();
+        $balans = [];
 
         $glos_cc = GLosCC::select('glos_cc.cost_center','glos_cc.plant_code', 'qty_renprod.qty_renprod_value', 'qty_renprod.asumsi_umum_id', 'glos_cc.material_code')
             ->leftjoin('qty_renprod', 'qty_renprod.cost_center', '=', 'glos_cc.cost_center')
@@ -131,17 +127,19 @@ class BalansStoreDataTable extends DataTable
                     $tersedia = $nilai_saldo_awal + handle_null($total_daan['qty_rendaan_value'], $total_daan['qty_rendaan_value']);
                     $result = (double)$tersedia-(double)handle_null($pakai_jual, $pakai_jual);
                     return $result;
-                } elseif ($query->kategori_balans_id > 5){
-                    if ($query->type_kategori_balans == 'produksi'){
-                        $glos_cc = $glos_cc->where('material_code', $query->material_code)
-                            ->where('asumsi_umum_id', $main_asumsi[$key]->id)
-                            ->first();
-                        return handle_null($glos_cc['qty_renprod_value'], $glos_cc['qty_renprod_value']);
-                    }else{
-                        dd($glos_cc);
-                    }
-
-                }else{
+                }
+//                elseif ($query->kategori_balans_id > 5){
+//                    if ($query->type_kategori_balans == 'produksi'){
+//                        $glos_cc = $glos_cc->where('material_code', $query->material_code)
+//                            ->where('asumsi_umum_id', $main_asumsi[$key]->id)
+//                            ->first();
+//                        return handle_null($glos_cc['qty_renprod_value'], $glos_cc['qty_renprod_value']);
+//                    }else{
+////                        dd($glos_cc);
+//                    }
+//
+//                }
+                else{
                     return 0;
                 }
             })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi, $main_asumsi, $glos_cc){
@@ -233,33 +231,35 @@ class BalansStoreDataTable extends DataTable
                     }else{
                         return 0;
                     }
-                }elseif ($query->kategori_balans_id > 5){
-                    try {
-                        if ($query->type_kategori_balans == 'produksi'){
-                            $glos_cc = $glos_cc->where('material_code', $query->material_code)
-                                ->where('asumsi_umum_id', $main_asumsi[$key]->id)
-                                ->first();
-
-                            $data = new SimulasiProyeksiStoreDataTable();
-                            $data->dataTable($versi, $glos_cc['plant_code'], $query->material_code, $glos_cc['cost_center']);
-
-                            $simulasi = SimulasiProyeksi::where('version_id', $versi)
-                                ->where('plant_code', $glos_cc['plant_code'])
-                                ->where('product_code', $query->material_code)
-                                ->where('cost_center', $glos_cc['cost_center'])
-                                ->where('name', 'ilike', '%COGM%')
-                                ->first();
-
-
-                            return rupiah(handle_null($simulasi, $simulasi->harga_satuan));
-                        }else{
-                            return rupiah(0);
-                        }
-
-                    }catch (\Exception $exception){
-                        return rupiah(0);
-                    }
-                }else{
+                }
+//                elseif ($query->kategori_balans_id > 5){
+//                    try {
+//                        if ($query->type_kategori_balans == 'produksi'){
+//                            $glos_cc = $glos_cc->where('material_code', $query->material_code)
+//                                ->where('asumsi_umum_id', $main_asumsi[$key]->id)
+//                                ->first();
+//
+//                            $data = new SimulasiProyeksiStoreDataTable();
+//                            $data->dataTable($versi, $glos_cc['plant_code'], $query->material_code, $glos_cc['cost_center']);
+//
+//                            $simulasi = SimulasiProyeksi::where('version_id', $versi)
+//                                ->where('plant_code', $glos_cc['plant_code'])
+//                                ->where('product_code', $query->material_code)
+//                                ->where('cost_center', $glos_cc['cost_center'])
+//                                ->where('name', 'ilike', '%COGM%')
+//                                ->first();
+//
+//
+//                            return rupiah(handle_null($simulasi, $simulasi->harga_satuan));
+//                        }else{
+//                            return rupiah(0);
+//                        }
+//
+//                    }catch (\Exception $exception){
+//                        return rupiah(0);
+//                    }
+//                }
+                else{
                     return 0;
                 }
             })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){

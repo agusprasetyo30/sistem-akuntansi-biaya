@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Validator;
 class KursController extends Controller
 {
     public function index(Request $request, KursDataTable $kursDataTable){
+
+//        DB::transaction(function (){
+//            $input['month_year'] = '2024-01-01';
+//            $input['usd_rate'] = (double) str_replace('.', '', str_replace('Rp ', '', 'Rp 1000'));
+//
+//            Kurs::create($input);
+//
+//            $cek = Kurs::where('month_year', 'ilike', '%2024-01-01%')->first();
+//
+//            dd($cek);
+//        });
+
         if ($request->data == 'index'){
             return $kursDataTable->render('pages.master.kurs.index');
         }
@@ -22,6 +34,7 @@ class KursController extends Controller
 
     public function create(Request $request){
         try {
+
             $validasi = $request->all();
             $validasi['kurs'] =str_replace('.', '', str_replace('Rp ', '', $request->kurs));
 

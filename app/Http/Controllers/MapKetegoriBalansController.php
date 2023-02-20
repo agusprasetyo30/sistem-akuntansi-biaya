@@ -33,11 +33,15 @@ class MapKetegoriBalansController extends Controller
 
             $result = '';
 
-            foreach ($request->plant as $key => $item){
-                if ($key == 0){
-                    $result .= $item;
-                }else{
-                    $result .= ';'.$item;
+            if ($request->kategori_balans > 5){
+                $result = $request->plant;
+            }else{
+                foreach ($request->plant as $key => $item){
+                    if ($key == 0){
+                        $result .= $item;
+                    }else{
+                        $result .= ';'.$item;
+                    }
                 }
             }
 
@@ -92,13 +96,18 @@ class MapKetegoriBalansController extends Controller
 
             $result = '';
 
-            foreach ($request->plant as $key => $item){
-                if ($key == 0){
-                    $result .= $item;
-                }else{
-                    $result .= ';'.$item;
+            if ($request->kategori_balans > 5){
+                $result = $request->plant;
+            }else{
+                foreach ($request->plant as $key => $item){
+                    if ($key == 0){
+                        $result .= $item;
+                    }else{
+                        $result .= ';'.$item;
+                    }
                 }
             }
+
 
             $input['version_id'] = $request->versi;
             $input['material_code'] = $request->material_balans;

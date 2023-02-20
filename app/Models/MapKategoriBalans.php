@@ -24,4 +24,12 @@ class MapKategoriBalans extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function kategori_saldo_awal(){
+
+    }
+
+
+
+
 }

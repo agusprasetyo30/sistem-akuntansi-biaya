@@ -61,11 +61,13 @@ class BalansController extends Controller
                     ->groupBy('cons_rate.product_code', 'cons_rate.plant_code', 'glos_cc.cost_center', 'cons_rate.version_id')
                     ->get();
 
+//                dd($cons_rate);
                 SimulasiProyeksi::where('version_id', $request->version)->delete();
                 foreach ($cons_rate as $key => $cr) {
-                    $data = new SimulasiProyeksiStoreDataTable();
-                    $data->dataTable($cr->version_id, $cr->plant_code, $cr->product_code, $cr->cost_center);
-
+                    if ($key == 0){
+                        $data = new SimulasiProyeksiStoreDataTable();
+//                        $data->dataTable($cr->version_id, $cr->plant_code, $cr->product_code, $cr->cost_center);
+                    }
                 }
             });
 

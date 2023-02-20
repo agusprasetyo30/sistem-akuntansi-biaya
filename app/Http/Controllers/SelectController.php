@@ -120,25 +120,27 @@ class SelectController extends Controller
         $search = $request->search;
 
         if ($search == '') {
-            $plant = GLosCC::limit(10)
-                ->whereNull('deleted_at')
+            $glos_cc = GLosCC::limit(10)
+                ->leftjoin('cost_center', 'glos_cc.cost_center', '=', 'cost_center.cost_center')
+                ->where('glos_cc.company_code', auth()->user()->company_code)
+                ->whereNull('glos_cc.deleted_at')
                 ->get();
         } else {
-            $plant = Plant::limit(10)
-                ->where('is_active', 't')
-                ->whereNull('deleted_at')
+            $glos_cc = GLosCC::limit(10)
+                ->leftjoin('cost_center', 'glos_cc.cost_center', '=', 'cost_center.cost_center')
+                ->where('glos_cc.company_code', auth()->user()->company_code)
+                ->whereNull('glos_cc.deleted_at')
+                ->where('cost_center.cost_center', 'ilike', '%'.$search.'%')
+                ->orWhere('cost_center.cost_center_desc', 'ilike', '%'.$search.'%')
+                ->orWhere('glos_cc.material_code', 'ilike', '%'.$search.'%')
                 ->get();
         }
 
         $response = array();
-        $response[] = array(
-            "id" => 'all',
-            "text" => 'All'
-        );
-        foreach ($plant as $items) {
+        foreach ($glos_cc as $items) {
             $response[] = array(
-                "id" => $items->plant_code . ' - ' . $items->plant_desc,
-                "text" => $items->plant_code . ' - ' . $items->plant_desc
+                "id" => $items->cost_center . ' - ' . $items->cost_center_desc. ' - ' .$items->material_code,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc.' ( '.$items->material_code.' )'
             );
         }
 
