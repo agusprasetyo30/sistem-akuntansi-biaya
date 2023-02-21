@@ -743,7 +743,6 @@ if (!function_exists('find_lower_material')) {
 if (!function_exists('antrian_material_balans')) {
     function antrian_material_balans($versi)
     {
-        //        dd($versi);
         $resulty = [];
         $material_balans = ConsRate::leftjoin('material', 'material.material_code', '=', 'cons_rate.material_code')
             ->where([

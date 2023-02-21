@@ -41,6 +41,7 @@ use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
 use App\Http\Controllers\TarifController;
+use App\Http\Controllers\Balans2Controller;
 
 /*
 |--------------------------------------------------------------------------
@@ -410,6 +411,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('header', [BalansController::class, 'index_header'])->name('header_dasar_balans');
             Route::post('store_dasar_balans', [BalansController::class, 'store'])->name('store_dasar_balans');
             Route::post('check_dasar_balans', [BalansController::class, 'checker'])->name('check_dasar_balans');
+        });
+
+        Route::group(['prefix' => 'dasar_balans2'], function () {
+            Route::get('/', [Balans2Controller::class, 'index'])->name('dasar_balans2');
+            Route::post('header', [Balans2Controller::class, 'index_header'])->name('header_dasar_balans2');
+            Route::post('store_dasar_balans', [Balans2Controller::class, 'store'])->name('store_dasar_balans2');
+            Route::post('check_dasar_balans', [Balans2Controller::class, 'checker'])->name('check_dasar_balans2');
         });
 
         Route::group(['prefix' => 'pakai-jual'], function () {

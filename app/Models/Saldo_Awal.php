@@ -30,4 +30,8 @@ class Saldo_Awal extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function map_kategori_balans(){
+        return $this->belongsTo(MapKategoriBalans::class, 'material_code', 'material_code');
+    }
 }
