@@ -27,9 +27,9 @@
                                     <option value="" disabled selected>Pilih Kategori Balans</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" id="plant_field" style="display: none;">
                                 <label class="form-label">Plant <span class="text-red">*</span></label>
-                                <select multiple="multiple" id="data_main_plant" class="form-control custom-select select2">
+                                <select id="data_main_plant" class="form-control custom-select select2">
                                 </select>
                             </div>
                         </div>

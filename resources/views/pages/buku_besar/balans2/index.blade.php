@@ -42,8 +42,8 @@
                     </div>
                 </div>
             </div>
-            @include('pages.buku_besar.balans.add')
-            @include('pages.buku_besar.balans.import')
+            @include('pages.buku_besar.balans2.add')
+            @include('pages.buku_besar.balans2.import')
         </div>
     </div>
 </div>
@@ -118,7 +118,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url : '{{route("check_dasar_balans")}}',
+                        url : '{{route("check_dasar_balans2")}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             version:$('#filter_version').val(),
@@ -184,7 +184,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url : '{{route("header_dasar_balans")}}',
+                url : '{{route("header_dasar_balans2")}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     version:$('#filter_version').val(),
@@ -217,10 +217,6 @@
                         processing: true,
                         serverSide: true,
                         deferRender:true,
-                        // fixedHeader: {
-                        //     header: true,
-                        //     headerOffset: $('#main_header').height()
-                        // },
                         fixedColumns:   {
                             left: 3
                         },
@@ -248,7 +244,7 @@
                                 }, title: 'Balans' }
                         ],
                         ajax: {
-                            url : '{{route("dasar_balans")}}',
+                            url : '{{route("dasar_balans2")}}',
                             data: {
                                 data:'index',
                                 version:$('#filter_version').val(),
@@ -268,7 +264,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url : '{{route("store_dasar_balans")}}',
+                url : '{{route("store_dasar_balans2")}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     version:$('#filter_version').val(),
@@ -285,151 +281,5 @@
             })
         }
 
-
-        $('#submit').on('click', function () {
-            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('insert_laba_rugi')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    tanggal:$('#tanggal').val(),
-                    kategori_produk:$('#data_main_kategori_produk').val(),
-                    biaya_penjualan: $('#biaya_penjualan').val(),
-                    biaya_administrasi_umum: $('#biaya_administrasi_umum').val(),
-                    biaya_bunga: $('#biaya_bunga').val(),
-                },
-                success:function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result) => {
-                        if (result.value) {
-                            $('#modal_add').modal('hide');
-                            $("#modal_add input").val("")
-                            $('#data_main_kategori_produk').val('').trigger("change");
-                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            // update_dt_horizontal()
-                            // $("#table_main").empty();
-                            // get_data()
-                            $('#dt_balans').DataTable().ajax.reload();
-                        }
-                    })
-                },
-                error:function (response) {
-                    handleError(response)
-                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    // $('#dt_price_rendaan').DataTable().ajax.reload();
-                }
-            })
-        })
-
-        function update_laba_rugi(id) {
-            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            $("#back_edit"+id).attr("disabled", true);
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('update_laba_rugi')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    id: id,
-                    tanggal:$('#edit_tanggal'+id).val(),
-                    kategori_produk:$('#edit_data_main_kategori_produk'+id).val(),
-                    biaya_penjualan: $('#edit_biaya_penjualan'+id).val(),
-                    biaya_administrasi_umum: $('#edit_biaya_administrasi_umum'+id).val(),
-                    biaya_bunga: $('#edit_biaya_bunga'+id).val(),
-                },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    })
-                        .then((result) => {
-                            if (result.value) {
-                                $('#modal_edit'+id).modal('hide')
-                                $('body').removeClass('modal-open');
-                                $('.modal-backdrop').remove();
-                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                                // update_dt_horizontal()
-                                // $("#table_main").empty();
-                                // get_data()
-                                $('#dt_balans').DataTable().ajax.reload();
-                            }
-                        })
-                },
-                error: function (response) {
-                    handleError(response)
-                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                    $("#back_edit"+id).attr("disabled", false);
-                    // $('#dt_price_rendaan').DataTable().ajax.reload();
-                }
-            })
-        }
-
-        function delete_laba_rugi(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dihapus",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('delete_laba_rugi')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                        },
-                        success: function (response) {
-                            Swal.fire({
-                                title: response.title,
-                                text: response.msg,
-                                icon: response.type,
-                                allowOutsideClick: false,
-                                confirmButtonColor: '#019267',
-                                confirmButtonText: 'Konfirmasi',
-                            })
-                                .then((result) => {
-                                    if (result.value) {
-                                        update_dt_horizontal()
-                                        // $("#table_main").empty();
-                                        // get_data()
-                                        $('#dt_balans').DataTable().ajax.reload();
-                                    }
-                                })
-                        },
-                        error: function (response) {
-                            handleError(response)
-                            // $('#dt_price_rendaan').DataTable().ajax.reload();
-                        }
-                    })
-
-                }
-
-            })
-        }
     </script>
 @endsection

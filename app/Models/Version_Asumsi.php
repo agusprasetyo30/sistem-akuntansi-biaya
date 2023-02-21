@@ -21,4 +21,8 @@ class Version_Asumsi extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function asumsi_umum(){
+        return $this->hasMany(Asumsi_Umum::class, 'version_id', 'id');
+    }
 }

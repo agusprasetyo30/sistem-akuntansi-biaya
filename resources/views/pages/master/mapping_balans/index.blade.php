@@ -101,56 +101,59 @@
                     }
                 }
             }).on('change', function () {
-                $('#data_main_plant').val([]).change().select2({
-                    dropdownParent: $('#modal_add'),
-                    placeholder: 'Pilih Plant / Cost Center',
-                    width: '100%',
-                    multiple: true,
-                    allowClear: false,
-                    ajax: {
-                        url: "{{ route('plant_balans_select') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                kategori: $('#data_main_kategori_balans').val(),
-                                material: $('#data_main_material_balans').val(),
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
+                if ($('#data_main_kategori_balans').val() > 5){
+                    $('#plant_field').css('display', 'block');
+                    $('#data_main_plant').removeAttr('multiple', 'multiple').val([]).change().select2({
+                        dropdownParent: $('#modal_add'),
+                        placeholder: 'Pilih Plant / Cost Center',
+                        width: '100%',
+                        allowClear: false,
+                        ajax: {
+                            url: "{{route('glos_cc_balans_select')}}",
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    search: params.term,
+                                    kategori: $('#data_main_kategori_balans').val(),
+                                    material: $('#data_main_material_balans').val(),
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            }
                         }
-                    }
-                });
-            })
-
-            $('#data_main_plant').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Plant / Cost Center',
-                width: '100%',
-                multiple: true,
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('plant_balans_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term,
-                            kategori: $('#data_main_kategori_balans').val(),
-                            material: $('#data_main_material_balans').val(),
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
+                    });
+                }else {
+                    $('#plant_field').css('display', 'block');
+                    $('#data_main_plant').attr('multiple', 'multiple').val([]).change().select2({
+                        dropdownParent: $('#modal_add'),
+                        placeholder: 'Pilih Plant / Cost Center',
+                        width: '100%',
+                        multiple: true,
+                        allowClear: false,
+                        ajax: {
+                            url: "{{ route('plant_balans_select') }}",
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    search: params.term,
+                                    kategori: $('#data_main_kategori_balans').val(),
+                                    material: $('#data_main_material_balans').val(),
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            }
+                        }
+                    });
                 }
-            });
+            })
 
             $('#data_main_version').select2({
                 dropdownParent: $('#modal_add'),

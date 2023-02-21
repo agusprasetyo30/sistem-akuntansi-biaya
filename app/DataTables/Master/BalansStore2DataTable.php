@@ -5,11 +5,8 @@ namespace App\DataTables\Master;
 use App\Models\Balans;
 use App\Models\GLosCC;
 use App\Models\MapKategoriBalans;
-use App\Models\Master\BalansStore;
-use App\Models\QtyRenDaan;
-use App\Models\SimulasiProyeksi;
+use App\Models\Master\BalansStore2;
 use Carbon\Carbon;
-use Complex\Exception;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -17,14 +14,8 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BalansStoreDataTable extends DataTable
+class BalansStore2DataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
     public function dataTable($versi, $antrian)
     {
         $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.type_kategori_balans')
@@ -33,6 +24,7 @@ class BalansStoreDataTable extends DataTable
             ->where('map_kategori_balans.version_id', $versi)
             ->orderBy('map_kategori_balans.material_code', 'ASC')
             ->orderBy('kategori_balans.order_view', 'ASC');
+
 
         $datatable = datatables()
             ->eloquent($query)
@@ -73,19 +65,7 @@ class BalansStoreDataTable extends DataTable
             }
 
             $datatable->addColumn('q'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi,$main_asumsi, $glos_cc){
-                if ($query->kategori_balans_id == 1){
-                    if ($key > 0 ){
-                        try {
-                            $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                            return handle_null($result, $result->q) ;
-                        }catch (\Exception $exception){
-                            return 0 ;
-                        }
-                    }else{
-                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                        return handle_null($result, $result['total_stock']);
-                    }
-                }elseif ($query->kategori_balans_id == 2){
+                if ($query->kategori_balans_id == 2){
                     $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $versi);
                     return handle_null($result, $result['qty_rendaan_value']);
                 }elseif ($query->kategori_balans_id == 3){
@@ -128,38 +108,11 @@ class BalansStoreDataTable extends DataTable
                     $result = (double)$tersedia-(double)handle_null($pakai_jual, $pakai_jual);
                     return $result;
                 }
-//                elseif ($query->kategori_balans_id > 5){
-//                    if ($query->type_kategori_balans == 'produksi'){
-//                        $glos_cc = $glos_cc->where('material_code', $query->material_code)
-//                            ->where('asumsi_umum_id', $main_asumsi[$key]->id)
-//                            ->first();
-//                        return handle_null($glos_cc['qty_renprod_value'], $glos_cc['qty_renprod_value']);
-//                    }else{
-////                        dd($glos_cc);
-//                    }
-//
-//                }
                 else{
                     return 0;
                 }
             })->addColumn('p'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi, $main_asumsi, $glos_cc){
-                if ($query->kategori_balans_id == 1){
-                    if ($key > 0 ){
-                        $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                        if (handle_null($result, $result->q) != 0){
-                            return $result->nilai / handle_null($result, $result->q);
-                        }else{
-                            return 0;
-                        }
-                    }else{
-                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                        if (handle_null($result['total_stock'], $result['total_stock']) != 0){
-                            return handle_null($result['total_value'], $result['total_value']) / handle_null($result['total_stock'], $result['total_stock']);
-                        }else{
-                            return 0;
-                        }
-                    }
-                }elseif ($query->kategori_balans_id == 2){
+                if ($query->kategori_balans_id == 2){
                     $quantiti = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $items, $versi);
                     $total_daan = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
 
@@ -232,46 +185,11 @@ class BalansStoreDataTable extends DataTable
                         return 0;
                     }
                 }
-//                elseif ($query->kategori_balans_id > 5){
-//                    try {
-//                        if ($query->type_kategori_balans == 'produksi'){
-//                            $glos_cc = $glos_cc->where('material_code', $query->material_code)
-//                                ->where('asumsi_umum_id', $main_asumsi[$key]->id)
-//                                ->first();
-//
-//                            $data = new SimulasiProyeksiStoreDataTable();
-//                            $data->dataTable($versi, $glos_cc['plant_code'], $query->material_code, $glos_cc['cost_center']);
-//
-//                            $simulasi = SimulasiProyeksi::where('version_id', $versi)
-//                                ->where('plant_code', $glos_cc['plant_code'])
-//                                ->where('product_code', $query->material_code)
-//                                ->where('cost_center', $glos_cc['cost_center'])
-//                                ->where('name', 'ilike', '%COGM%')
-//                                ->first();
-//
-//
-//                            return rupiah(handle_null($simulasi, $simulasi->harga_satuan));
-//                        }else{
-//                            return rupiah(0);
-//                        }
-//
-//                    }catch (\Exception $exception){
-//                        return rupiah(0);
-//                    }
-//                }
                 else{
                     return 0;
                 }
             })->addColumn('nilai'.$key, function ($query) use ($items, $asumsi, $key, $balans, $versi){
-                if ($query->kategori_balans_id == 1){
-                    if ($key > 0 ){
-                        $result = get_data_balans_db($balans, $query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                        return handle_null($result, $result->nilai);
-                    }else{
-                        $result = get_data_balans($query->kategori_balans_id, $query->plant_code, $query->material_code, $asumsi[$key]);
-                        return handle_null($result['total_value'], $result['total_value']);
-                    }
-                }elseif ($query->kategori_balans_id == 2){
+                if ($query->kategori_balans_id == 2){
                     $result = get_data_balans('total_daan', $query->plant_code, $query->material_code, $items, $versi);
                     return handle_null($result, $result);
                 }elseif ($query->kategori_balans_id == 3){
@@ -388,18 +306,18 @@ class BalansStoreDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-            ->setTableId('master\balansstore-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('Bfrtip')
-            ->orderBy(1)
-            ->buttons(
-                Button::make('create'),
-                Button::make('export'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            );
+                    ->setTableId('master\balansstore2-table')
+                    ->columns($this->getColumns())
+                    ->minifiedAjax()
+                    ->dom('Bfrtip')
+                    ->orderBy(1)
+                    ->buttons(
+                        Button::make('create'),
+                        Button::make('export'),
+                        Button::make('print'),
+                        Button::make('reset'),
+                        Button::make('reload')
+                    );
     }
 
     /**
@@ -429,6 +347,6 @@ class BalansStoreDataTable extends DataTable
      */
     protected function filename()
     {
-        return 'Master\BalansStore_' . date('YmdHis');
+        return 'Master\BalansStore2_' . date('YmdHis');
     }
 }

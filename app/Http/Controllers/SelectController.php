@@ -6,6 +6,7 @@ use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
 use App\Models\GLAccountFC;
 use App\Models\GLAccount;
+use App\Models\GLosCC;
 use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriBalans;
@@ -108,6 +109,38 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->plant_code . ' - ' . $items->plant_desc,
                 "text" => $items->plant_code . ' - ' . $items->plant_desc
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function glos_cc_balans(Request $request)
+    {
+        $search = $request->search;
+
+        if ($search == '') {
+            $glos_cc = GLosCC::limit(10)
+                ->leftjoin('cost_center', 'glos_cc.cost_center', '=', 'cost_center.cost_center')
+                ->where('glos_cc.company_code', auth()->user()->company_code)
+                ->whereNull('glos_cc.deleted_at')
+                ->get();
+        } else {
+            $glos_cc = GLosCC::limit(10)
+                ->leftjoin('cost_center', 'glos_cc.cost_center', '=', 'cost_center.cost_center')
+                ->where('glos_cc.company_code', auth()->user()->company_code)
+                ->whereNull('glos_cc.deleted_at')
+                ->where('cost_center.cost_center', 'ilike', '%'.$search.'%')
+                ->orWhere('cost_center.cost_center_desc', 'ilike', '%'.$search.'%')
+                ->orWhere('glos_cc.material_code', 'ilike', '%'.$search.'%')
+                ->get();
+        }
+
+        $response = array();
+        foreach ($glos_cc as $items) {
+            $response[] = array(
+                "id" => $items->cost_center . ' - ' . $items->cost_center_desc. ' - ' .$items->material_code,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc.' ( '.$items->material_code.' )'
             );
         }
 

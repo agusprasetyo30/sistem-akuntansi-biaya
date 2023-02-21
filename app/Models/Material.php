@@ -32,4 +32,8 @@ class Material extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function saldo_awal(){
+        return $this->belongsTo(MapKategoriBalans::class, 'material_code', 'material_code');
+    }
 }

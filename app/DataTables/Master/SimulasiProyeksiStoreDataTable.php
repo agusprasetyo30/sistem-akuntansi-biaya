@@ -2,6 +2,7 @@
 
 namespace App\DataTables\Master;
 
+use App\Models\Balans;
 use App\Models\ConsRate;
 use App\Models\GroupAccountFC;
 use App\Models\LabaRugi;
@@ -88,6 +89,9 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                     return $query->name;
                 });
 
+
+
+
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $d_version)
                 ->get();
@@ -118,9 +122,13 @@ class SimulasiProyeksiStoreDataTable extends DataTable
 
             $mat = Material::get();
             $ga = GroupAccountFC::get();
+            $cek = Balans::where('q', 9999)->first();
+//            dd($cek);
 
+//            dd($datatable->toArray());
             foreach ($asumsi as $key => $asum) {
                 $datatable->addColumn($key . 'harga_satuan', function ($query) use ($asum, $d_version, $d_plant, $d_produk, $d_cost_center, $mat, $ga) {
+
                     $mat = $mat
                         ->where('material_code', $query->code)
                         ->first();
@@ -499,9 +507,15 @@ class SimulasiProyeksiStoreDataTable extends DataTable
                             array_push($result, $input);
                         }
                         $chunk = array_chunk($result, 500);
-                        foreach ($chunk as $y) {
-                            SimulasiProyeksi::insert($y);
+
+                        $data_ara = [];
+                        foreach ($chunk as $key=> $y) {
+                            if ($key == 0){
+//                                SimulasiProyeksi::insert($y);
+                            }
+//                            array_push($data_ara, $key);
                         }
+//                        dd($chunk);
                     });
                 }
             }

@@ -24,4 +24,9 @@ class KategoriBalans extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function mapping_kategori_balans()
+    {
+        return $this->hasMany(MapKategoriBalans::class, 'kategori_balans_id', 'id');
+    }
 }
