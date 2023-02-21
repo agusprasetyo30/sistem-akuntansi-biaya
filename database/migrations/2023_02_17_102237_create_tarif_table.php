@@ -15,6 +15,8 @@ class CreateTarifTable extends Migration
     {
         Schema::create('tarif', function (Blueprint $table) {
             $table->id();
+            $table->string('company_code')->unsigned();
+            $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('product_code')->unsigned();
             $table->foreign('product_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
             $table->string('plant_code')->unsigned();

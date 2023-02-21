@@ -1,6 +1,6 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a class="btn bg-danger-transparent" onclick="delete_glos_cc('{{$model->id}}')" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+<a class="btn bg-danger-transparent" onclick="delete_tarif('{{$model->id}}')" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 
 <!-- Modal Detail-->
@@ -9,12 +9,16 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Glos CC</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Tarif</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
+                            <div class="form-group">
+                                <label>Produk </label>
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="product" value="{{$model->product_code}} - {{$model->material_name}}" name="detail_product" id="detail_product" autocomplete="off">
+                            </div>
                             <div class="form-group">
                                 <label>Plant </label>
                                 <input disabled type="text" class="form-control form-control-sm"
@@ -22,16 +26,16 @@
                                     id="detail_plant_name" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Cost Center </label>
+                                <label>Group Account FC</label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->cost_center}} - {{$model->cost_center_desc}}" name="detail_cost_center"
-                                    id="detail_cost_center" autocomplete="off">
+                                    placeholder="Group Account" value="{{$model->group_account_fc}} {{$model->group_account_fc_desc}}"
+                                    name="detail_group_account_fc" id="detail_group_account_fc" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label>Material </label>
+                                <label>Value </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->material_code}} - {{$model->material_name}}" name="detail_material_code"
-                                    id="detail_material_code" autocomplete="off">
+                                    placeholder="Nilai Satuan" value="{{$model->tarif_value}}" name="detail_tarif_value"
+                                    id="detail_tarif_value" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -51,12 +55,18 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Glos CC</h5>
+                <h5 class="modal-title" id="largemodal1">Edit Tarif</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
+                            <div class="form-group">
+                                <label class="form-label">Produk <span class="text-red">*</span></label>
+                                <select name="edit_data_main_produk{{$model->id}}" id="edit_data_main_produk{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->product_code}}" selected>{{$model->product_code}} - {{$model->material_name}}</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">Plant</label>
                                 <select name="main_plant" id="edit_data_main_plant{{$model->id}}" class="form-control custom-select select2">
@@ -64,23 +74,23 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Cost Center</label>
-                                <select name="main_cost_center" id="edit_data_main_cost_center{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->cost_center}}" selected>{{$model->cost_center}} - {{$model->cost_center_desc}}</option>
+                                <label class="form-label">Group Account FC</label>
+                                <select name="edit_group_account_fc" id="edit_group_account_fc{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->group_account_fc}}" selected>{{$model->group_account_fc}} {{$model->group_account_fc_desc}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Material</label>
-                                <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} - {{$model->material_name}}</option>
-                                </select>
+                                <label>Value </label>
+                                <input type="number" class="form-control form-control-sm" placeholder="Value"
+                                    value="{{$model->tarif_value}}" name="edit_qty_renprod_value"
+                                    id="edit_tarif_value{{$model->id}}" autocomplete="off">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit" onclick="update_glos_cc('{{$model->id}}')"
+                <button type="button" id="submit_edit" onclick="update_tarif('{{$model->id}}')"
                     class="btn btn-primary">Simpan</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
@@ -91,6 +101,28 @@
 
 <script>
     $(document).ready(function () {
+        $('#edit_data_main_produk'+{{$model->id}}).select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih Produk',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('material_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
+
         $('#edit_data_main_plant'+{{$model->id}}).select2({
             dropdownParent: $('#modal_edit'+{{$model->id}}),
             placeholder: 'Pilih Plant',
@@ -113,13 +145,13 @@
             }
         })
 
-        $('#edit_data_main_cost_center'+{{$model->id}}).select2({
+        $('#edit_group_account_fc'+{{$model->id}}).select2({
             dropdownParent: $('#modal_edit'+{{$model->id}}),
-            placeholder: 'Pilih Cost Center',
+            placeholder: 'Pilih Group Account',
             width: '100%',
             allowClear: false,
             ajax: {
-                url: "{{ route('cost_center_select') }}",
+                url: "{{ route('group_account_fc_select') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -134,27 +166,6 @@
                 }
             }
         })
-        
-        $('#edit_data_main_material'+{{$model->id}}).select2({
-            dropdownParent: $('#modal_edit'+{{$model->id}}),
-            placeholder: 'Pilih Material',
-            width: '100%',
-            allowClear: false,
-            ajax: {
-                url: "{{ route('material_select') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                }
-            }
-        })
+
     })
 </script>

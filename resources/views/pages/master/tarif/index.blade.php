@@ -13,7 +13,7 @@
     </div>
     <div class="page-rightheader">
         <div class="btn-list">
-            {{-- <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button> --}}
+            <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button>
             <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
         </div>
     </div>
@@ -44,7 +44,7 @@
 @endsection()
 
 @section('scripts')
-    {{-- <script>
+    <script>
         $(document).ready(function () {
             table()
 
@@ -70,29 +70,7 @@
                 }
             })
 
-            $('#data_main_cost_center').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Cost Center',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('cost_center_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
-            })
-
-            $('#data_main_material').select2({
+            $('#data_main_produk').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Material',
                 width: '100%',
@@ -113,16 +91,39 @@
                     }
                 }
             })
+
+            $('#group_account_fc').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Group Account',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('group_account_fc_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
         })
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_glos_cc" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+            <table id="dt_tarif" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
+                    <th data-type='select' data-name='produk' class="text-center">PRODUK</th>
                     <th data-type='select' data-name='plant' class="text-center">PLANT</th>
-                    <th data-type='select' data-name='cost_center' class="text-center">COST CENTER</th>
-                    <th data-type='select' data-name='material' class="text-center">MATERIAL</th>
+                    <th data-type='select' data-name='group_account_fc' class="text-center">GROUP ACCOUNT</th>
+                    <th data-type='text' data-name='tarif_value' class="text-center">TARIF</th>
                     <th data-type='text' data-name='nomor' class="text-center">ACTION</th>
                 </tr>
                 </thead>
@@ -136,13 +137,13 @@
 
 
         function get_data(){
-            $('#dt_glos_cc thead tr')
+            $('#dt_tarif thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_glos_cc thead');
+                .appendTo('#dt_tarif thead');
 
-            // $('#dt_glos_cc').DataTable().clear().destroy();
-            $("#dt_glos_cc").DataTable({
+            // $('#dt_tarif').DataTable().clear().destroy();
+            $("#dt_tarif").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -197,11 +198,11 @@
                                 } else if(iName == 'plant'){
                                     input.className = "plant_search form-control custom-select select2";
 
-                                } else if(iName == 'cost_center'){
-                                    input.className = "cost_center_search form-control custom-select select2";
+                                } else if(iName == 'produk'){
+                                    input.className = "produk_search form-control custom-select select2";
 
-                                } else if(iName == 'material'){
-                                    input.className = "material_search form-control custom-select select2";
+                                } else if(iName == 'group_account_fc'){
+                                    input.className = "group_account_fc_search form-control custom-select select2";
 
                                 }
                                 input.innerHTML = options
@@ -215,28 +216,8 @@
                             cell.empty()
                         }
 
-                        $('.cost_center_search').select2({
-                            placeholder: 'Pilih Cost Center',
-                            allowClear: false,
-                            ajax: {
-                                url: "{{ route('cost_center_dt') }}",
-                                dataType: 'json',
-                                delay: 250,
-                                data: function (params) {
-                                    return {
-                                        search: params.term
-                                    };
-                                },
-                                processResults: function(response) {
-                                    return {
-                                        results: response
-                                    };
-                                }
-                            }
-                        })
-
-                        $('.material_search').select2({
-                            placeholder: 'Pilih Material',
+                        $('.produk_search').select2({
+                            placeholder: 'Pilih Produk',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('material_dt') }}",
@@ -275,6 +256,26 @@
                             }
                         })
 
+                        $('.group_account_fc_search').select2({
+                            placeholder: 'Pilih Group Account',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('group_account_fc_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
                     });
 
                     let api = this.api();
@@ -287,18 +288,19 @@
                         }, title: 'Glos CC' }
                 ],
                 ajax: {
-                    url : '{{route("glos_cc")}}',
+                    url : '{{route("tarif")}}',
                     data: {data:'index'}
                 },
                 columns: [
+                    { data: 'produk', name: 'filter_produk', orderable:true},
                     { data: 'plant', name: 'filter_plant', orderable:true},
-                    { data: 'cost_center', name: 'filter_cost_center', orderable:true},
-                    { data: 'material', name: 'filter_material', orderable:true},
+                    { data: 'group_account_fc', name: 'filter_group_account', orderable:true},
+                    { data: 'tarif_value', name: 'tarif_value', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3]}
+                    {className: 'text-center', targets: [0,1,2,3,4]}
                 ],
 
             })
@@ -310,12 +312,13 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_glos_cc')}}',
+                url: '{{route('insert_tarif')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     plant_code: $('#data_main_plant').val(),
-                    cost_center: $('#data_main_cost_center').val(),
-                    material_code: $('#data_main_material').val(),
+                    product_code: $('#data_main_produk').val(),
+                    group_account_fc: $('#group_account_fc').val(),
+                    tarif_value: $('#tarif_value').val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -329,11 +332,12 @@
                     .then((result) => {
                         if (result.value) {
                             $('#modal_add').modal('hide')
+                            $("#modal_add input").val("")
                             $('#data_main_plant').val('').trigger("change");
-                            $('#data_main_cost_center').val('').trigger("change");
-                            $('#data_main_material').val('').trigger("change");
+                            $('#data_main_produk').val('').trigger("change");
+                            $('#group_account_fc').val('').trigger("change");
                             // table()
-                            $('#dt_glos_cc').DataTable().ajax.reload();
+                            $('#dt_tarif').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -355,7 +359,7 @@
                 },
                 processData: false,
                 contentType: false,
-                url: '{{route('import_glos_cc')}}',
+                url: '{{route('import_tarif')}}',
                 data: file,
                 success:function (response) {
                     $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -373,7 +377,7 @@
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
                             // table()
-                            $('#dt_glos_cc').DataTable().ajax.reload();
+                            $('#dt_tarif').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -385,19 +389,20 @@
             })
         })
 
-        function update_glos_cc(id) {
+        function update_tarif(id) {
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_glos_cc')}}',
+                url: '{{route('update_tarif')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id : id,
                     plant_code: $('#edit_data_main_plant'+id).val(),
-                    cost_center: $('#edit_data_main_cost_center'+id).val(),
-                    material_code: $('#edit_data_main_material'+id).val(),
+                    product_code: $('#edit_data_main_produk'+id).val(),
+                    group_account_fc: $('#edit_group_account_fc'+id).val(),
+                    tarif_value: $('#edit_tarif_value'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -414,7 +419,7 @@
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
                             // table()
-                            $('#dt_glos_cc').DataTable().ajax.reload();
+                            $('#dt_tarif').DataTable().ajax.reload();
                         }
                     })
                 },
@@ -424,7 +429,7 @@
             })
         }
 
-        function delete_glos_cc(id) {
+        function delete_tarif(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -442,7 +447,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_glos_cc')}}',
+                        url: '{{route('delete_tarif')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -459,7 +464,7 @@
                             .then((result) => {
                                 if (result.value) {
                                     // table()
-                                    $('#dt_glos_cc').DataTable().ajax.reload();
+                                    $('#dt_tarif').DataTable().ajax.reload();
                                 }
                             })
                         },
@@ -473,5 +478,5 @@
             })
         }
 
-    </script> --}}
+    </script>
 @endsection

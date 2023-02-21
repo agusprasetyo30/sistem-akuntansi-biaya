@@ -24,7 +24,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="mb-5 row">
+                        {{-- <div class="mb-5 row">
                             <div class="form-group">
                                 <label class="form-label">VERSI</label>
                                 <select id="filter_version_generate" class="form-control custom-select select2">
@@ -33,7 +33,7 @@
                             <div class="btn-list mb-5">
                                 <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="mb-5 row">
                             <div class="form-group">
                                 <label class="form-label">VERSI</label>
@@ -52,12 +52,12 @@
                                     {{-- <option value="all" selected>Semua</option> --}}
                                 </select>
                             </div>
-                            <div class="form-group" id="format_plant">
+                            {{-- <div class="form-group" id="format_plant">
                                 <label class="form-label">COST CENTER</label>
                                 <select id="filter_cost_center" class="form-control custom-select select2">
-                                    {{-- <option value="all" selected>Semua</option> --}}
+                                    <option value="all" selected>Semua</option>
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="btn-list mb-5">
                                 <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                             </div>
