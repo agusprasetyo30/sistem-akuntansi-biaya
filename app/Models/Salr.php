@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Salr extends Model
 {
@@ -31,4 +32,16 @@ class Salr extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function getData($cost_center, $code)
+    {
+        $result = DB::table("salrs")
+            ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+            ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+            ->where('salrs.cost_center', $cost_center)
+            ->where('group_account_fc.group_account_fc', $code);
+
+        $result = $result->first();
+        return $result;
+    }
 }
