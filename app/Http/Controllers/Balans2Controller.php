@@ -54,14 +54,6 @@ class Balans2Controller extends Controller
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
 
-//                $query = MapKategoriBalans::select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code', 'kategori_balans.type_kategori_balans')
-//                    ->leftjoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
-//                    ->whereIn('map_kategori_balans.material_code', array_values(array_unique($result_antrian)))
-//                    ->where('map_kategori_balans.version_id', 1)
-//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-//                    ->orderBy('kategori_balans.order_view', 'ASC')
-//                    ->get();
-
                 $main_asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment')
                     ->select('id', 'version')
                     ->where([
@@ -79,8 +71,6 @@ class Balans2Controller extends Controller
                         return array_search($query['material_code'], $antrian);
                     }])->all();
 
-
-//                dd($query);
                 $collection_input_temp = collect();
                 foreach ($main_asumsi->asumsi_umum as $key => $data){
                     $q=0;
@@ -107,7 +97,6 @@ class Balans2Controller extends Controller
                                     $p = 0;
                                     $nilai = 0;
                                 }
-
                             }
                         }
                         elseif ($data_map->kategori_balans_id == 2){
@@ -170,13 +159,9 @@ class Balans2Controller extends Controller
                 foreach ($chunk as $insert){
                     Balans::insert($insert);
                 }
-
             });
-
-
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
-//            dd($exception);
             return response()->json(['code' => 500]);
         }
     }

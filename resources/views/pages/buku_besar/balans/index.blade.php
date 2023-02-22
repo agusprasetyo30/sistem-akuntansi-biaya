@@ -26,19 +26,56 @@
                 <div class="card-title">PERHITUNGAN BALANS</div>
             </div>
             <div class="card-body">
-                <div class="mb-4">
-                    <div class="form-group" id="cost_center_pick">
-                        <label class="form-label">Versi <span class="text-red">*</span></label>
-                        <select id="filter_version" class="form-control custom-select select2">
-                        </select>
+
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading p-0 bg-light">
+                        <div class="tabs-menu1 ">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li class="" id="tabs_vertical"> <a href="#generate" class="active" data-bs-toggle="tab">Generate</a> </li>
+                                <li id="tabs_horizontal"> <a href="#laporan" data-bs-toggle="tab">Laporan</a> </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="btn-list">
-                        <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
-                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="table-responsive" id="table_main">
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active " id="generate">
+                                <div class="mb-4">
+                                    <div class="mb-4">
+                                        <div class="form-group" id="cost_center_pick">
+                                            <label class="form-label">Versi <span class="text-red">*</span></label>
+                                            <select id="filter_version_generate" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                        <div class="btn-list">
+                                            <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="laporan">
+                                <div class="mb-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Versi <span class="text-red">*</span></label>
+                                        <select id="filter_version_laporan" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">PRODUK</label>
+                                        <select id="filter_material" class="form-control custom-select select2">
+                                            <option value="all" selected>Semua</option>
+                                        </select>
+                                    </div>
+                                    <div class="btn-list">
+                                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                    </div>
+                                </div>
+                                <div class="">
+                                    <div class="table-responsive" id="table_main">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,7 +106,7 @@
 
         $(document).ready(function () {
 
-            $('#filter_version').select2({
+            $('#filter_version_generate').select2({
                 placeholder: 'Pilih Versi',
                 width: '100%',
                 allowClear: false,
@@ -90,9 +127,51 @@
                 }
             })
 
+            $('#filter_version_laporan').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#filter_material').select2({
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('material_balans_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
             $('#btn_tampilkan').on('click', function () {
-                var versi = $('#filter_version').val();
-                if (versi !== null){
+                var versi = $('#filter_version_laporan').val();
+                var material = $('#filter_material').val();
+                if (versi !== null && material !== null){
                     get_data()
                 }else {
                     Swal.fire({
@@ -187,7 +266,7 @@
                 url : '{{route("header_dasar_balans")}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    version:$('#filter_version').val(),
+                    version:$('#filter_version_laporan').val(),
                 },
                 success:function (response){
                     for (let i = 0; i < response.asumsi.length;i++){
@@ -251,7 +330,8 @@
                             url : '{{route("dasar_balans")}}',
                             data: {
                                 data:'index',
-                                version:$('#filter_version').val(),
+                                version:$('#filter_version_laporan').val(),
+                                material:$('#filter_material').val(),
                             }
                         },
                         columns: column
@@ -271,7 +351,7 @@
                 url : '{{route("store_dasar_balans")}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    version:$('#filter_version').val(),
+                    version:$('#filter_version_generate').val(),
                 },success:function (response) {
                     Swal.fire({
                         title: 'Data berhasil diproyeksikan',
@@ -282,153 +362,6 @@
                     })
 
                 }
-            })
-        }
-
-
-        $('#submit').on('click', function () {
-            $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('insert_laba_rugi')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    tanggal:$('#tanggal').val(),
-                    kategori_produk:$('#data_main_kategori_produk').val(),
-                    biaya_penjualan: $('#biaya_penjualan').val(),
-                    biaya_administrasi_umum: $('#biaya_administrasi_umum').val(),
-                    biaya_bunga: $('#biaya_bunga').val(),
-                },
-                success:function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result) => {
-                        if (result.value) {
-                            $('#modal_add').modal('hide');
-                            $("#modal_add input").val("")
-                            $('#data_main_kategori_produk').val('').trigger("change");
-                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            // update_dt_horizontal()
-                            // $("#table_main").empty();
-                            // get_data()
-                            $('#dt_balans').DataTable().ajax.reload();
-                        }
-                    })
-                },
-                error:function (response) {
-                    handleError(response)
-                    $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    // $('#dt_price_rendaan').DataTable().ajax.reload();
-                }
-            })
-        })
-
-        function update_laba_rugi(id) {
-            $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
-            $("#back_edit"+id).attr("disabled", true);
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('update_laba_rugi')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    id: id,
-                    tanggal:$('#edit_tanggal'+id).val(),
-                    kategori_produk:$('#edit_data_main_kategori_produk'+id).val(),
-                    biaya_penjualan: $('#edit_biaya_penjualan'+id).val(),
-                    biaya_administrasi_umum: $('#edit_biaya_administrasi_umum'+id).val(),
-                    biaya_bunga: $('#edit_biaya_bunga'+id).val(),
-                },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    })
-                        .then((result) => {
-                            if (result.value) {
-                                $('#modal_edit'+id).modal('hide')
-                                $('body').removeClass('modal-open');
-                                $('.modal-backdrop').remove();
-                                $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                                // update_dt_horizontal()
-                                // $("#table_main").empty();
-                                // get_data()
-                                $('#dt_balans').DataTable().ajax.reload();
-                            }
-                        })
-                },
-                error: function (response) {
-                    handleError(response)
-                    $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
-                    $("#back_edit"+id).attr("disabled", false);
-                    // $('#dt_price_rendaan').DataTable().ajax.reload();
-                }
-            })
-        }
-
-        function delete_laba_rugi(id) {
-            Swal.fire({
-                title: 'Apakah anda yakin?',
-                text: "Data akan segera dihapus",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#019267',
-                cancelButtonColor: '#EF4B4B',
-                confirmButtonText: 'Konfirmasi',
-                cancelButtonText: 'Kembali'
-            }).then((result) =>{
-                if (result.value){
-
-                    $.ajax({
-                        type: "POST",
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        url: '{{route('delete_laba_rugi')}}',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            id: id,
-                        },
-                        success: function (response) {
-                            Swal.fire({
-                                title: response.title,
-                                text: response.msg,
-                                icon: response.type,
-                                allowOutsideClick: false,
-                                confirmButtonColor: '#019267',
-                                confirmButtonText: 'Konfirmasi',
-                            })
-                                .then((result) => {
-                                    if (result.value) {
-                                        update_dt_horizontal()
-                                        // $("#table_main").empty();
-                                        // get_data()
-                                        $('#dt_balans').DataTable().ajax.reload();
-                                    }
-                                })
-                        },
-                        error: function (response) {
-                            handleError(response)
-                            // $('#dt_price_rendaan').DataTable().ajax.reload();
-                        }
-                    })
-
-                }
-
             })
         }
     </script>

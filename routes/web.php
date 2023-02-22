@@ -413,13 +413,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check_dasar_balans', [BalansController::class, 'checker'])->name('check_dasar_balans');
         });
 
-        Route::group(['prefix' => 'dasar_balans2'], function () {
-            Route::get('/', [Balans2Controller::class, 'index'])->name('dasar_balans2');
-            Route::post('header', [Balans2Controller::class, 'index_header'])->name('header_dasar_balans2');
-            Route::post('store_dasar_balans', [Balans2Controller::class, 'store'])->name('store_dasar_balans2');
-            Route::post('check_dasar_balans', [Balans2Controller::class, 'checker'])->name('check_dasar_balans2');
-        });
-
         Route::group(['prefix' => 'pakai-jual'], function () {
 
             Route::group(['prefix' => 'pemakaian'], function () {
