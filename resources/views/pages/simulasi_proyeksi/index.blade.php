@@ -24,7 +24,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        {{-- <div class="mb-5 row">
+                        <div class="mb-5 row">
                             <div class="form-group">
                                 <label class="form-label">VERSI</label>
                                 <select id="filter_version_generate" class="form-control custom-select select2">
@@ -33,7 +33,7 @@
                             <div class="btn-list mb-5">
                                 <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
                             </div>
-                        </div> --}}
+                        </div>
                         <div class="mb-5 row">
                             <div class="form-group">
                                 <label class="form-label">VERSI</label>

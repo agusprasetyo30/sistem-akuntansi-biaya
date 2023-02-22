@@ -35,6 +35,6 @@ class ConsRate extends Model
 
     public function material()
     {
-        return $this->hasOne(Material::class, 'material_code', 'material_code');
+        return $this->belongsTo(Material::class, 'material_code', 'material_code');
     }
 }
