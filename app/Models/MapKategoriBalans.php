@@ -52,13 +52,13 @@ class MapKategoriBalans extends Model
     }
 
     public function get_data_qty_rencana_pengadaan($asumsi){
-        $qty_rendaan = $this->qty_rencana_pengadaan()->where('asumsi_umum_id', $asumsi)->get();
+        $qty_rendaan = $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('qty_rendaan_value');
         return $qty_rendaan;
     }
 
     public function get_data_total_pengadaan($asumsi, $kurs, $adjustment){
-        $qty_rendaan = (double) $this->qty_rencana_pengadaan()->where('asumsi_umum_id', $asumsi)->sum('qty_rendaan_value');
-        $price_rendaan = (double) $this->price_rencana_pengadaan()->where('asumsi_umum_id', $asumsi)->sum('price_rendaan_value');
+        $qty_rendaan = (double) $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('qty_rendaan_value');
+        $price_rendaan = (double) $this->price_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('price_rendaan_value');
 
         if ($qty_rendaan > 0 && $price_rendaan == 0){
             $result = 0;
@@ -69,8 +69,8 @@ class MapKategoriBalans extends Model
     }
 
     public function get_data_nilai_pakai_jual($asumsi){
-        $pemkaian = (double) $this->pemakaian()->where('asumsi_umum_id', $asumsi)->sum('pj_pemakaian_value');
-        $penjualan = (double) $this->penjualan()->where('asumsi_umum_id', $asumsi)->sum('pj_penjualan_value');
+        $pemkaian = (double) $this->pemakaian->where('asumsi_umum_id', $asumsi)->sum('pj_pemakaian_value');
+        $penjualan = (double) $this->penjualan->where('asumsi_umum_id', $asumsi)->sum('pj_penjualan_value');
 
         $result = $pemkaian + $penjualan;
         return $result;
