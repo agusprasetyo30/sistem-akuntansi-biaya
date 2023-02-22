@@ -27,4 +27,14 @@ class ConsRate extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function glos_cc()
+    {
+        return $this->hasOne(GLosCC::class, 'material_code', 'product_code');
+    }
+
+    public function material()
+    {
+        return $this->hasOne(Material::class, 'material_code', 'material_code');
+    }
 }
