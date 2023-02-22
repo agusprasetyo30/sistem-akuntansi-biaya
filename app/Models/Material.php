@@ -33,7 +33,13 @@ class Material extends Model
         'deleted_by'
     ];
 
-    public function saldo_awal(){
+    public function saldo_awal()
+    {
         return $this->belongsTo(MapKategoriBalans::class, 'material_code', 'material_code');
+    }
+
+    public function const_rate()
+    {
+        return $this->hasMany(ConsRate::class, 'material_code', 'material_code');
     }
 }
