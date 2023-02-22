@@ -49,10 +49,21 @@ class KategoriBalansSeeder extends Seeder
         ]);
 
         KategoriBalans::create([
-            'kategori_balans' => 'Pemakaian dan Penjualan',
-            'kategori_balans_desc' => 'Pemakaian dan Penjualan',
+            'kategori_balans' => 'Pemakaian',
+            'kategori_balans_desc' => 'Pemakaian',
             'company_code'=> 'B000',
             'order_view'=> 6,
+            'created_by'=> 1,
+            'updated_by'=> 1,
+            'created_at'=> Carbon::now(),
+            'updated_at'=> Carbon::now(),
+        ]);
+
+        KategoriBalans::create([
+            'kategori_balans' => 'Penjualan',
+            'kategori_balans_desc' => 'Penjualan',
+            'company_code'=> 'B000',
+            'order_view'=> 7,
             'created_by'=> 1,
             'updated_by'=> 1,
             'created_at'=> Carbon::now(),
@@ -63,7 +74,7 @@ class KategoriBalansSeeder extends Seeder
             'kategori_balans' => 'Saldo Akhir',
             'kategori_balans_desc' => 'Saldo Akhir',
             'company_code'=> 'B000',
-            'order_view'=> 7,
+            'order_view'=> 8,
             'created_by'=> 1,
             'updated_by'=> 1,
             'created_at'=> Carbon::now(),

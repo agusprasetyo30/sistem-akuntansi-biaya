@@ -68,6 +68,19 @@ class MapKategoriBalans extends Model
         return $result;
     }
 
+    public function get_data_nilai_pamakaian($asumsi){
+        $pemkaian = (double) $this->pemakaian->where('asumsi_umum_id', $asumsi)->sum('pj_pemakaian_value');
+        $result = $pemkaian;
+        return $result;
+    }
+
+    public function get_data_nilai_penjualan($asumsi){
+        $penjualan = (double) $this->penjualan->where('asumsi_umum_id', $asumsi)->sum('pj_penjualan_value');
+
+        $result = $penjualan;
+        return $result;
+    }
+
     public function get_data_nilai_pakai_jual($asumsi){
         $pemkaian = (double) $this->pemakaian->where('asumsi_umum_id', $asumsi)->sum('pj_pemakaian_value');
         $penjualan = (double) $this->penjualan->where('asumsi_umum_id', $asumsi)->sum('pj_penjualan_value');

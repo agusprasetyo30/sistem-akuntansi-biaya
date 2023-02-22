@@ -552,6 +552,17 @@ if (!function_exists('mapping_plant_insert')) {
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ],
+                [
+                    'material_code' => strtoupper($material_code),
+                    'kategori_balans_id' => 6,
+                    'version_id' => $data->id,
+                    'plant_code' => $data_plant,
+                    'company_code' => auth()->user()->company_code,
+                    'created_by' => auth()->user()->id,
+                    'updated_by' => auth()->user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
             ];
             DB::table('map_kategori_balans')->insert($mapping);
             //            array_push($data_ready, $mapping);
