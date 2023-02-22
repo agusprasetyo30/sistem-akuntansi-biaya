@@ -63,7 +63,7 @@ class BalansController extends Controller
                     ])->first();
 
                 $antrian = array_values(array_unique($result_antrian));
-                $query = MapKategoriBalans::with(['kategori_balans:id,order_view' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id'])
+                $query = MapKategoriBalans::with(['kategori_balans:id,order_view,type_kategori_balans' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id'])
                     ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                     ->whereIn('map_kategori_balans.material_code', $antrian)
                     ->where('map_kategori_balans.version_id', $request->version)
@@ -86,7 +86,7 @@ class BalansController extends Controller
                                 $p = $nilai / $q;
                             }else{
                                 $temp = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                    ->where('kategori_balans_id', '=', 5)
+                                    ->where('kategori_balans_id', '=', 6)
                                     ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key-1]->id)->first();
 
                                 if ($temp != null){
@@ -106,6 +106,7 @@ class BalansController extends Controller
                             $p = $nilai / $q ;
                         }
                         elseif ($data_map->kategori_balans_id == 3){
+                            dd($data_map);
                             $q = $collection_input_temp->where('material_code', '=', $data_map->material_code)
                                 ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
                                 ->sum('q');
@@ -159,11 +160,10 @@ class BalansController extends Controller
                                 $p = $nilai / $q;
                             }
                         }
-                        elseif ($data_map->kategori_balans_id > 5){
-                            //
-                        }
-                        else{
-                            return 0;
+                        elseif ($data_map->kategori_balans_id > 6){
+                            $q = 2;
+                            $p = 2;
+                            $nilai = 4;
                         }
                         $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai));
                     }
