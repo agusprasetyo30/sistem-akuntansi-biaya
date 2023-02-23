@@ -23,9 +23,6 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                <div class="card-title">Master Company</div>
-            </div>
             <div class="card-body">
                 <div class="">
                     <div class="table-responsive" id="table-wrapper">
@@ -161,7 +158,8 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2]
-                        }, title: 'Master Company'
+                        }, title: '',
+                        filename: 'Master Company'
                     }
                 ],
 
