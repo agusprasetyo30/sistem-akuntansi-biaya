@@ -25,5 +25,9 @@ class GLosCC extends Model
         'deleted_by'
     ];
 
+    public function qty_rencana_produksi(){
+        return $this->hasMany(QtyRenProd::class, 'cost_center', 'cost_center');
+    }
+
 
 }
