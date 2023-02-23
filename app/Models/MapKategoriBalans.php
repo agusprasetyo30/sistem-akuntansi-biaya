@@ -51,6 +51,14 @@ class MapKategoriBalans extends Model
         return $this->hasMany(PJ_Penjualan::class, 'material_code', 'material_code');
     }
 
+    public function const_rate(){
+        return $this->hasMany(ConsRate::class, 'material_code', 'material_code');
+    }
+
+    public function glos_cc(){
+        return $this->hasOne(GLosCC::class, 'material_code', 'product_code');
+    }
+
     public function get_data_qty_rencana_pengadaan($asumsi){
         $qty_rendaan = $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('qty_rendaan_value');
         return $qty_rendaan;
@@ -81,11 +89,13 @@ class MapKategoriBalans extends Model
         return $result;
     }
 
-    public function get_data_nilai_pakai_jual($asumsi){
-        $pemkaian = (double) $this->pemakaian->where('asumsi_umum_id', $asumsi)->sum('pj_pemakaian_value');
-        $penjualan = (double) $this->penjualan->where('asumsi_umum_id', $asumsi)->sum('pj_penjualan_value');
-
-        $result = $pemkaian + $penjualan;
+    public function get_data_glos_cc($plant_code){
+        $plant = explode(' - ', $plant_code);
+//        dd($plant);
+        $result = $this->const_rate()->with('glos_cc', function ($query) use ($plant){
+             $query->where('cost_center', $plant[0])
+                 ->where('material_code', $plant[2]);
+        })->get();
         return $result;
     }
 

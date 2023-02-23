@@ -24,4 +24,6 @@ class GLosCC extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+
 }
