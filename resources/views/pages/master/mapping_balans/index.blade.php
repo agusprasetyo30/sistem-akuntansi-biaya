@@ -292,8 +292,10 @@
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
-                        columns:[0,1]
-                        }, title: 'Mapping Kategori Balans'}
+                        columns:[0,1,2]
+                        }, title: '',
+                        filename: 'Mapping Kategori Balans'
+                    }
                 ],
                 ajax: {
                     url : '{{route("map_kategori_balans")}}',

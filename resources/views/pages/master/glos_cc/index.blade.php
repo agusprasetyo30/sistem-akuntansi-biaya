@@ -284,7 +284,9 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2]
-                        }, title: 'Glos CC' }
+                        }, title: '',
+                        filename: 'Glos CC'  
+                    }
                 ],
                 ajax: {
                     url : '{{route("glos_cc")}}',

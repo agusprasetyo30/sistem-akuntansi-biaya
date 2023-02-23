@@ -142,9 +142,10 @@
                 buttons: [
                     {extend: 'pageLength', className: 'mb-5'},
                     {
-                        extend: 'excel', className: 'mb-5', exportoptions: {
-                            columns: [0, 1, 2]
-                        }, title: 'Consumption Center'
+                        extend: 'excel', className: 'mb-5', exportOptions:{
+                        columns:[0,1]
+                        }, title: '',
+                        filename: 'Consumption Center bagas'
                     }
                 ],
                 ajax: {

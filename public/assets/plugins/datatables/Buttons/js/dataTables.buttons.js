@@ -2020,7 +2020,7 @@ var _exportData = function ( dt, inOpts )
 	// } ).toArray();
 	var rawHeaderMatrix = getHeaders( dt );
     var headerMatrix = [];
-        var numRows = dt.table().header().rows.length;
+	var numRows = dt.table().header().rows.length;
         for ( var rowIdx = 0;  rowIdx < numRows;  rowIdx++ ) {
           var headerRow = dt.columns( config.columns ).indexes('visible').map( function (colIdx) {
              var $th = rawHeaderMatrix[rowIdx][colIdx];

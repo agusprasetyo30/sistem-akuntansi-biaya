@@ -1,160 +1,165 @@
 @extends('layouts.app')
 
 @section('styles')
-<style>
-    .dt-buttons {
-        z-index: 10;
-    }
-</style>
+    <style>
+        .dt-buttons {
+            z-index: 10;
+        }
+    </style>
 @endsection
 
 @section('content')
-
-<!--Page header-->
-<div class="page-header">
-    <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">ZCO</h4>
-    </div>
-    <div class="page-rightheader">
-        <div class="btn-list">
-            <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
+    <!--Page header-->
+    <div class="page-header">
+        <div class="page-leftheader">
+            <h4 class="page-title mb-0 text-primary">ZCO</h4>
         </div>
-    </div>
-</div>
-<!--End Page header-->
-
-<!-- Row -->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="panel panel-primary">
-                    <div class=" tab-menu-heading p-0 bg-light">
-                        <div class="tabs-menu1 ">
-                            <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
-                                <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
-                                <li id="tabs_group_account"> <a href="#group_account" data-bs-toggle="tab">Group Account</a> </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="panel-body tabs-menu-body">
-                        <div class="tab-content">
-                            <div class="tab-pane active " id="vertical">
-                                <div class="">
-                                    <div class="table-responsive" id="table-wrapper">
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane " id="horizontal">
-                                <div class="mb-2 row">
-                                    <div class="form-group">
-                                        <label class="form-label">PRODUK</label>
-                                        <select id="filter_material" class="form-control custom-select select2">
-                                            <option value="all" selected>Semua</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="format_plant">
-                                        <label class="form-label">PLANT</label>
-                                        <select id="filter_plant" class="form-control custom-select select2">
-                                            {{-- <option value="all" selected>Semua</option> --}}
-                                            <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">PERIODE </label>
-                                        <select id="filter_format" class="form-control custom-select select2">
-                                            {{-- <option selected disabled value="">Pilih Format</option> --}}
-                                            @foreach (format_zco() as $key => $value)
-                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="month_pick_range">
-                                        <label class="form-label">BULAN </label>
-                                        <div class="input-group input-daterange">
-                                            <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="form-group" id="month_pick">
-                                        <label class="form-label">BULAN </label>
-                                        <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
-                                    </div>
-                                </div>
-                                <div class="btn-list mb-5">
-                                    <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
-                                    {{-- <button type="button" class="btn btn-danger btn-pill" id="btn_reset"><i class="fa fa-trash me-2 fs-14"></i> Reset Filter</button> --}}
-                                </div>
-                                <div class="mt-auto">
-                                    <div class="table-responsive" id="dinamic_table">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane " id="group_account">
-                                <div class="mb-2 row">
-                                    <div class="form-group">
-                                        <label class="form-label">PRODUK</label>
-                                        <select id="filter_material_group_account" class="form-control custom-select select2">
-                                            <option value="all" selected>Semua</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="format_plant_group_account">
-                                        <label class="form-label">PLANT</label>
-                                        <select id="filter_plant_group_account" class="form-control custom-select select2">
-                                            <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">PERIODE </label>
-                                        <select id="filter_format_group_account" class="form-control custom-select select2">
-                                            {{-- <option selected disabled value="">Pilih Format</option> --}}
-                                            @foreach (format_zco() as $key => $value)
-                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="month_pick_range_group_account">
-                                        <label class="form-label">BULAN </label>
-                                        <div class="input-group input-daterange">
-                                            <input type="text" id="bulan_filter1_group_account" class="form-control" placeholder="Month" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input disabled type="text" id="bulan_filter2_group_account" class="form-control" placeholder="Month" autocomplete="off">
-                                        </div>
-                                    </div>
-                                    <div class="form-group" id="month_pick_group_account">
-                                        <label class="form-label">BULAN </label>
-                                        <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1_group_account" id="bulan_satuan_filter1_group_account" placeholder="Month" autocomplete="off" required>
-                                    </div>
-                                </div>
-                                <div class="btn-list mb-5">
-                                    <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan_group_account"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
-                                    {{-- <button type="button" class="btn btn-danger btn-pill" id="btn_reset_group_account"><i class="fa fa-trash me-2 fs-14"></i> Reset Filter</button> --}}
-                                </div>
-                                <div class="mt-auto">
-                                    <div class="table-responsive" id="dinamic_group_account_table">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="page-rightheader">
+            <div class="btn-list">
+                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_import"  class="btn btn-outline-primary" id="btn-import"><i class="fe fe-download me-2"></i> Import</button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
             </div>
-            @include('pages.buku_besar.zco.add')
-            @include('pages.buku_besar.zco.import')
         </div>
     </div>
-</div>
-<!-- /Row -->
+    <!--End Page header-->
 
+    <!-- Row -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="panel panel-primary">
+                        <div class=" tab-menu-heading p-0 bg-light">
+                            <div class="tabs-menu1 ">
+                                <!-- Tabs -->
+                                <ul class="nav panel-tabs">
+                                    <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
+                                    <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
+                                    <li id="tabs_group_account"> <a href="#group_account" data-bs-toggle="tab">Group Account</a> </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active " id="vertical">
+                                    <div class="">
+                                        <div class="table-responsive" id="table-wrapper">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="horizontal">
+                                    <div class="mb-2 row">
+                                        <div class="form-group">
+                                            <label class="form-label">PRODUK</label>
+                                            <select id="filter_material" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="format_plant">
+                                            <label class="form-label">PLANT</label>
+                                            <select id="filter_plant" class="form-control custom-select select2">
+                                                {{-- <option value="all" selected>Semua</option> --}}
+                                                <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">PERIODE </label>
+                                            <select id="filter_format" class="form-control custom-select select2">
+                                                {{-- <option selected disabled value="">Pilih Format</option> --}}
+                                                @foreach (format_zco() as $key => $value)
+                                                    options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="month_pick_range">
+                                            <label class="form-label">BULAN </label>
+                                            <div class="input-group input-daterange">
+                                                <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
+                                                <div class="input-group-addon">to</div>
+                                                <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="month_pick">
+                                            <label class="form-label">BULAN </label>
+                                            <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                    <div class="btn-list mb-5">
+                                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        {{-- <button type="button" class="btn btn-danger btn-pill" id="btn_reset"><i class="fa fa-trash me-2 fs-14"></i> Reset Filter</button> --}}
+                                    </div>
+                                    <div class="mt-auto">
+                                        <div class="table-responsive" id="dinamic_table">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="group_account">
+                                    <div class="mb-2 row">
+                                        <div class="form-group">
+                                            <label class="form-label">PRODUK</label>
+                                            <select id="filter_material_group_account" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="format_plant_group_account">
+                                            <label class="form-label">PLANT</label>
+                                            <select id="filter_plant_group_account" class="form-control custom-select select2">
+                                                <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">PERIODE </label>
+                                            <select id="filter_format_group_account" class="form-control custom-select select2">
+                                                {{-- <option selected disabled value="">Pilih Format</option> --}}
+                                                @foreach (format_zco() as $key => $value)
+                                                    options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="month_pick_range_group_account">
+                                            <label class="form-label">BULAN </label>
+                                            <div class="input-group input-daterange">
+                                                <input type="text" id="bulan_filter1_group_account" class="form-control" placeholder="Month" autocomplete="off">
+                                                <div class="input-group-addon">to</div>
+                                                <input disabled type="text" id="bulan_filter2_group_account" class="form-control" placeholder="Month" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="month_pick_group_account">
+                                            <label class="form-label">BULAN </label>
+                                            <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1_group_account" id="bulan_satuan_filter1_group_account" placeholder="Month" autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                    <div class="btn-list mb-5">
+                                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan_group_account"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        {{-- <button type="button" class="btn btn-danger btn-pill" id="btn_reset_group_account"><i class="fa fa-trash me-2 fs-14"></i> Reset Filter</button> --}}
+                                    </div>
+                                    <div class="mt-auto">
+                                        <div class="table-responsive" id="dinamic_group_account_table">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                @include('pages.buku_besar.zco.add')
+                @include('pages.buku_besar.zco.import')
+            </div>
+        </div>
+    </div>
+    <!-- /Row -->
 @endsection()
 
 @section('scripts')
+    
+    <!-- Custom Script -->
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.js?v=1.0.0')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.templates.js?v=1.0.1')}}"></script>
+
     <script>
         const alphabet = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         const alphabet2nd = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -775,9 +780,98 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5', 
+                        exportOptions:{
                         columns: 'th:not(:last-child)'
-                    }, title: 'ZCO' }
+                        }, 
+                        title: '',
+                        filename: 'ZCO - Vertikal',
+                        customize: function (file) {
+                            var sheet = file.xl.worksheets['sheet1.xml'];
+                            var style = file.xl['styles.xml'];
+                            var row = $('row', sheet);
+                            var mergeCells = $('mergeCells', sheet);
+                            // console.log('row', row);
+                            $(row[1]).remove()
+
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'A1:A2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'B1:B2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'C1:C2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'D1:D2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'E1:E2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'F1:F2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'G1:G2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'H1:H2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'I1:I2' }
+                                }) 
+                            );
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'J1:J2' }
+                                }) 
+                            );
+
+                            mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+ 
+                            function _createNode( doc, nodeName, opts ) {
+                                var tempNode = doc.createElement( nodeName );
+                                
+                                if ( opts ) {
+                                    if ( opts.attr ) {
+                                        $(tempNode).attr( opts.attr );
+                                    }
+                
+                                    if ( opts.children ) {
+                                        $.each( opts.children, function ( key, value ) {
+                                            tempNode.appendChild( value );
+                                        } );
+                                    }
+                
+                                    if ( opts.text !== null && opts.text !== undefined ) {
+                                        tempNode.appendChild( doc.createTextNode( opts.text ) );
+                                    }
+                                }
+                
+                                return tempNode;
+                            }
+                        }
+                    }
                 ],
                 ajax: {
                     url : '{{route("zco")}}',
@@ -863,10 +957,10 @@
                         processing: true,
                         serverSide: true,
                         pageLength: -1,
-                        // fixedHeader: {
-                        //     header: true,
-                        //     headerOffset: $('#main_header').height()
-                        // },
+                        fixedHeader: {
+                            header: true,
+                            headerOffset: $('#main_header').height()
+                        },
                         fixedColumns:   {
                             left: 2
                         },
@@ -876,6 +970,7 @@
                                 extend: 'excelHtml5',
                                 className: 'mb-5', 
                                 title: '',
+                                filename: 'ZCO - Horizontal',
                                 customize: function (file) {
                                     var sheet = file.xl.worksheets['sheet1.xml'];
                                     var style = file.xl['styles.xml'];
@@ -953,33 +1048,6 @@
             })
         }
 
-        function generateAbjad(idx) {            
-            const multiple = 4
-            const start = (multiple * idx) + 2
-            const end = start + 3
-            let rangeColumn = '';
-            
-            let firstAlp1st = 0;
-            let firstAlp2nd = start;
-            let secondAlp1st = 0;
-            let secondAlp2nd = end;
-
-            if(start > 25) {
-                firstAlp1st = parseInt(start / 26)
-                firstAlp2nd = start % 26
-            }
-            if(end > 25) {
-                secondAlp1st = parseInt(end / 26)
-                secondAlp2nd = end % 26
-            }
-
-            let col1st = alphabet[firstAlp1st]+alphabet2nd[firstAlp2nd]
-            let col2nd = alphabet[secondAlp1st]+alphabet2nd[secondAlp2nd]
-            rangeColumn = col1st+'1'+':'+col2nd+'1'
-
-            return rangeColumn
-        }
-
         function get_data_group_account_horiz(){
             var table = `
             <table id="h_dt_zco_group_account" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
@@ -1050,7 +1118,65 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                title: '',
+                                filename: 'ZCO - Group Account',
+                                customize: function (file) {
+                                    var sheet = file.xl.worksheets['sheet1.xml'];
+                                    var style = file.xl['styles.xml'];
+                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
+                                    $('row', sheet).first().attr('ht', '30').attr('customHeight', "1");
+                                    var mergeCells = $('mergeCells', sheet);
+                                    
+                                    for (let i = 0; i < response.group_account.length;i++) {
+                                        const columnDef = generateAbjad(i)
+
+                                        mergeCells[0].appendChild( 
+                                            _createNode( sheet, 'mergeCell', {
+                                                attr: { ref: columnDef }
+                                            }) 
+                                        )
+                                    }
+
+                                    mergeCells[0].appendChild( 
+                                        _createNode( sheet, 'mergeCell', {
+                                            attr: { ref: 'A1:A2' }
+                                        }) 
+                                    );
+
+                                    mergeCells[0].appendChild( 
+                                        _createNode( sheet, 'mergeCell', {
+                                            attr: { ref: 'B1:B2' }
+                                        }) 
+                                    );
+
+                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+ 
+                                    function _createNode( doc, nodeName, opts ) {
+                                        var tempNode = doc.createElement( nodeName );
+                                        
+                                        if ( opts ) {
+                                            if ( opts.attr ) {
+                                                $(tempNode).attr( opts.attr );
+                                            }
+                        
+                                            if ( opts.children ) {
+                                                $.each( opts.children, function ( key, value ) {
+                                                    tempNode.appendChild( value );
+                                                } );
+                                            }
+                        
+                                            if ( opts.text !== null && opts.text !== undefined ) {
+                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
+                                            }
+                                        }
+                        
+                                        return tempNode;
+                                    }
+                                } 
+                            }
                         ],
                         ajax: {
                             url : '{{route("zco")}}',
@@ -1072,6 +1198,34 @@
                     })
                 }
             })
+        }
+
+        // Function Generate Abjad
+        function generateAbjad(idx) {            
+            const multiple = 4
+            const start = (multiple * idx) + 2
+            const end = start + 3
+            let rangeColumn = '';
+            
+            let firstAlp1st = 0;
+            let firstAlp2nd = start;
+            let secondAlp1st = 0;
+            let secondAlp2nd = end;
+
+            if(start > 25) {
+                firstAlp1st = parseInt(start / 26)
+                firstAlp2nd = start % 26
+            }
+            if(end > 25) {
+                secondAlp1st = parseInt(end / 26)
+                secondAlp2nd = end % 26
+            }
+
+            let col1st = alphabet[firstAlp1st]+alphabet2nd[firstAlp2nd]
+            let col2nd = alphabet[secondAlp1st]+alphabet2nd[secondAlp2nd]
+            rangeColumn = col1st+'1'+':'+col2nd+'1'
+
+            return rangeColumn
         }
 
         function update_dt_horizontal() {

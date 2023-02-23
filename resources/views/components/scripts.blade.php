@@ -30,12 +30,12 @@
 <!-- INTERNAL Data tables -->
 <script src="{{asset('assets/plugins/datatables/DataTables/js/jquery.dataTables.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/DataTables/js/dataTables.bootstrap5.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
+<script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.bootstrap4.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/JSZip/jszip.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/pdfmake/pdfmake.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/pdfmake/vfs_fonts.js')}}"></script>
-<script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
+<script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.colVis.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables/Responsive/js/dataTables.responsive.min.js')}}"></script>
@@ -138,9 +138,16 @@
 <!-- INTERNAL Prism js -->
 <script src="{{asset('assets/plugins/prism/prism.js')}}"></script>
 {{--<script src="https://dhobi.github.io/datatables.colResize/jquery.dataTables.colResize.js"></script>--}}
+
 @yield('scripts')
 
 <!-- Custom js-->
 <script src="{{asset('assets/js/custom.js')}}"></script>
 
+<!-- Custom JS V Export Tabel Horizontal -->
+<!-- @yield('custom-scripts') -->
+<!-- <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script> -->
+<!-- <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script> -->
+<!-- <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.js?v=1.0.0')}}"></script> -->
+<!-- <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.templates.js?v=1.0.1')}}"></script> -->
 

@@ -181,12 +181,6 @@ class SalrController extends Controller
         return Excel::download(new MS_SalrExport(), 'SALR.xlsx');
     }
 
-    public function export_horizon_salr(Request $request)
-    {
-        // dd('bagas');
-        return Excel::download(new H_Salr(), 'SALR_HORIZONTAL.xlsx');
-    }
-
     public function import(Request $request)
     {
         try {

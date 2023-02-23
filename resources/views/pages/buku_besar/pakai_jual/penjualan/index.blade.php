@@ -346,9 +346,15 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5', exportOptions:{
-                        columns:[0,1,2,3,4]
-                    }, title: 'Penjualan' }
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5', 
+                        exportOptions:{
+                        columns:[0,1,2,3]
+                    }, 
+                        title: '',
+                        filename: 'Penjualan - Vertikal'
+                    }
                 ],
                 ajax: {
                     url : '{{route("penjualan")}}',
@@ -403,7 +409,12 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                title: '',
+                                filename: 'Penjualan - Horizontal'
+                            }
                         ],
                         ajax: {
                             url : '{{route("penjualan")}}',

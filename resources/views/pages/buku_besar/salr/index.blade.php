@@ -9,114 +9,117 @@
 @endsection
 
 @section('content')
-
-<!--Page header-->
-<div class="page-header">
-    <div class="page-leftheader">
-        <h4 class="page-title mb-0 text-primary">Data Salr</h4>
-    </div>
-    <div class="page-rightheader">
-        <div class="btn-list">
-            <button data-bs-toggle="modal" data-bs-target="#modal_import" class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
-            <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
+    <!--Page header-->
+    <div class="page-header">
+        <div class="page-leftheader">
+            <h4 class="page-title mb-0 text-primary">Data Salr</h4>
+        </div>
+        <div class="page-rightheader">
+            <div class="btn-list">
+                <button data-bs-toggle="modal" data-bs-target="#modal_import" class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
+            </div>
         </div>
     </div>
-</div>
-<!--End Page header-->
+    <!--End Page header-->
 
-<!-- Row -->
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="panel panel-primary">
-                    <div class=" tab-menu-heading p-0 bg-light">
-                        <div class="tabs-menu1 ">
-                            <!-- Tabs -->
-                            <ul class="nav panel-tabs">
-                                <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
-                                <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="panel-body tabs-menu-body">
-                        <div class="tab-content">
-                            <div class="tab-pane active " id="vertical">
-                                <div class="">
-                                    <div class="table-responsive" id="table_main">
-                                    </div>
-                                </div>
+    <!-- Row -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="panel panel-primary">
+                        <div class=" tab-menu-heading p-0 bg-light">
+                            <div class="tabs-menu1 ">
+                                <!-- Tabs -->
+                                <ul class="nav panel-tabs">
+                                    <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
+                                    <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
+                                </ul>
                             </div>
-                            <div class="tab-pane " id="horizontal">
-                                <div class="mb-3 row">
-                                    <div class="form-group" id="cost_center_pick">
-                                        <label class="form-label">COST CENTER <span class="text-red">*</span></label>
-                                        <select id="cost_center_format" class="form-control custom-select select2">
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">PERIODE <span class="text-red">*</span></label>
-                                        <select id="filter_format" class="form-control custom-select select2">
-                                            <option selected disabled value="">Pilih Format</option>
-                                            @foreach (format_salr() as $key => $value)
-                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="year_pick" style="display:none;">
-                                        <label class="form-label">TAHUN <span class="text-red">*</span></label>
-                                        <input type="text" class="form-control" name="tahun_satuan_filter1" id="tahun_satuan_filter1" placeholder="Year" autocomplete="off" required>
-                                    </div>
-                                    <div class="form-group" id="month_pick_range" style="display:none;">
-                                        <label class="form-label">BULAN <span class="text-red">*</span></label>
-                                        <div class="input-group input-daterange">
-                                            <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
-                                            <div class="input-group-addon">to</div>
-                                            <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                        </div>
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active " id="vertical">
+                                    <div class="">
+                                        <div class="table-responsive" id="table_main">
                                         </div>
                                     </div>
-                                    <div class="form-group" id="month_pick" style="display:none;">
-                                        <label class="form-label">BULAN <span class="text-red">*</span></label>
-                                        <input type="text" class="form-control" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
-                                    </div>
-                                    <div class="form-group" id="inflasi_pick" style="display:none;">
-                                        <label class="form-label">INFLASI <span class="text-red">*</span></label>
-                                        <select id="filter_inflasi" class="form-control custom-select select2">
-                                            <option selected disabled value="">Pilih Format</option>
-                                            <option value="1">Ya</option>
-                                            <option value="0">Tidak</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" id="versi_pick" style="display:none;">
-                                        <label class="form-label">VERSI INFLASI <span class="text-red">*</span></label>
-                                        <select id="versi_format" class="form-control custom-select select2">
-                                        </select>
-                                    </div>
-                                    <div class="btn-list">
-                                        <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
-                                        <button type="button" class="btn btn-primary" data-bs-target="#modal_export"  class="btn btn-primary btn-pill" id="export_horizon_salr">Export</button>
-                                    </div>
                                 </div>
-                                <div class="mt-auto">
-                                    <div class="table-responsive" id="dinamic_table">
+                                <div class="tab-pane " id="horizontal">
+                                    <div class="mb-3 row">
+                                        <div class="form-group" id="cost_center_pick">
+                                            <label class="form-label">COST CENTER <span class="text-red">*</span></label>
+                                            <select id="cost_center_format" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">PERIODE <span class="text-red">*</span></label>
+                                            <select id="filter_format" class="form-control custom-select select2">
+                                                <option selected disabled value="">Pilih Format</option>
+                                                @foreach (format_salr() as $key => $value)
+                                                    options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="year_pick" style="display:none;">
+                                            <label class="form-label">TAHUN <span class="text-red">*</span></label>
+                                            <input type="text" class="form-control" name="tahun_satuan_filter1" id="tahun_satuan_filter1" placeholder="Year" autocomplete="off" required>
+                                        </div>
+                                        <div class="form-group" id="month_pick_range" style="display:none;">
+                                            <label class="form-label">BULAN <span class="text-red">*</span></label>
+                                            <div class="input-group input-daterange">
+                                                <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
+                                                <div class="input-group-addon">to</div>
+                                                <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" id="month_pick" style="display:none;">
+                                            <label class="form-label">BULAN <span class="text-red">*</span></label>
+                                            <input type="text" class="form-control" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
+                                        </div>
+                                        <div class="form-group" id="inflasi_pick" style="display:none;">
+                                            <label class="form-label">INFLASI <span class="text-red">*</span></label>
+                                            <select id="filter_inflasi" class="form-control custom-select select2">
+                                                <option selected disabled value="">Pilih Format</option>
+                                                <option value="1">Ya</option>
+                                                <option value="0">Tidak</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="versi_pick" style="display:none;">
+                                            <label class="form-label">VERSI INFLASI <span class="text-red">*</span></label>
+                                            <select id="versi_format" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                        <div class="btn-list">
+                                            <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        </div>
+                                    </div>
+                                    <div class="mt-auto">
+                                        <div class="table-responsive" id="dinamic_table">
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                @include('pages.buku_besar.salr.add')
+                @include('pages.buku_besar.salr.import')
             </div>
-            @include('pages.buku_besar.salr.add')
-            @include('pages.buku_besar.salr.import')
         </div>
     </div>
-</div>
-<!-- /Row -->
-
-@endsection()
+    <!-- /Row -->
+@endsection
 
 @section('scripts')
+
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.js?v=1.0.0')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.templates.js?v=1.0.1')}}"></script>
+
     <script>
         var table_main_dt = '<table id="dt_salr" class="table table-bordered text-wrap wrap key-buttons" style="width: 100%;">' +
             '<thead>' +
@@ -592,45 +595,6 @@
 
         })
 
-        // Export Horizon
-        $('#export_horizon_salr').on('click', function () {
-            //console.log('bgs bwzr');
-            $.ajax({
-                xhrFields: {
-                    responseType: 'blob',
-                },
-                type: "GET",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('export_horizon_salr')}}',
-                success:function (result, status, xhr) {
-
-                    var disposition = xhr.getResponseHeader('content-disposition');
-                    var matches = /"([^"]*)"/.exec(disposition);
-                    var filename = (matches != null && matches[1] ? matches[1] : 'company.xlsx');
-
-                    // The actual download
-                    var blob = new Blob([result], {
-                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-                    });
-                    var link = document.createElement('a');
-                    link.href = window.URL.createObjectURL(blob);
-                    link.download = filename;
-
-                    document.body.appendChild(link);
-
-                    link.click();
-                    document.body.removeChild(link);
-                },
-                error: function(){
-                    $('#modal_import').modal('hide');
-                    $("#modal_import input").val("")
-                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
-                }
-            })
-        })
-
         function get_data(){
             $('#table_main').html(table_main_dt)
 
@@ -776,9 +740,78 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5',  footer: true, exportOptions:{
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5',  
+                        footer: true, 
+                        exportOptions:{
                         columns:[0,1,2,3,4]
-                    }, title: 'SALR'  }
+                        }, 
+                        title: '',
+                        filename: 'Salr Tabel Vertikal',
+                        customize: function (file) {
+                            var sheet = file.xl.worksheets['sheet1.xml'];
+                            var style = file.xl['styles.xml'];
+                            var row = $('row', sheet);
+                            var mergeCells = $('mergeCells', sheet);
+                            // console.log('row', row);
+                            $(row[1]).remove()
+
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'A1:A2' }
+                                }) 
+                            );
+
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'B1:B2' }
+                                }) 
+                            );
+
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'C1:C2' }
+                                }) 
+                            );
+
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'D1:D2' }
+                                }) 
+                            );
+
+                            mergeCells[0].appendChild( 
+                                _createNode( sheet, 'mergeCell', {
+                                    attr: { ref: 'E1:E2' }
+                                }) 
+                            );
+
+                            mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+ 
+                            function _createNode( doc, nodeName, opts ) {
+                                var tempNode = doc.createElement( nodeName );
+                                
+                                if ( opts ) {
+                                    if ( opts.attr ) {
+                                        $(tempNode).attr( opts.attr );
+                                    }
+                
+                                    if ( opts.children ) {
+                                        $.each( opts.children, function ( key, value ) {
+                                            tempNode.appendChild( value );
+                                        } );
+                                    }
+                
+                                    if ( opts.text !== null && opts.text !== undefined ) {
+                                        tempNode.appendChild( doc.createTextNode( opts.text ) );
+                                    }
+                                }
+                
+                                return tempNode;
+                            }
+                        }
+                    }
                 ],
                 ajax: {
                     url : '{{route("salr")}}',
@@ -804,8 +837,8 @@
             var table = '<table id="h_dt_salr" class="table table-bordered text-nowrap key-buttons text-center" style="width: auto;">' +
                 '<thead>' +
                 '<tr id="primary">' +
-                '<th class="align-middle" rowspan="2">Group Account</th>' +
-                '<th class="align-middle" rowspan="2">Group Account Desc</th>' +
+                '<th class="align-middle" style="width: 5%;" rowspan="2">Group Account</th>' +
+                '<th class="align-middle" style="width: 20%;"  rowspan="2">Group Account Desc</th>' +
                 '</tr>' +
                 '<tr id="secondary">' +
                 '</tr>' +
@@ -871,6 +904,7 @@
                                 extend: 'excel', 
                                 className: 'mb-5',
                                 title: '',
+                                filename: 'Salr Tabel Horizontal',
                                 footer: true,
                                 exportOptions: {
                                     header: function (data, colIdx) {
@@ -946,10 +980,10 @@
                             }
                         },
                         columns: column,
-                        // columnDefs: [
-                        //     { targets: [0, 1], className: 'fs-6'},
-                        // ],
-                        initComplete:function () {
+                        columnDefs: [
+                            { targets: [0, 1], className: 'fs-6'},
+                        ],
+                        initComplete:function () {                            
                             let api = this.api();
                             api.columns.adjust().draw();
                         },
@@ -1171,4 +1205,5 @@
             })
         }
     </script>
+
 @endsection

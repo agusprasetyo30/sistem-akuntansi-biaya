@@ -150,7 +150,9 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1]
-                        }, title: 'Kategori Balans'}
+                        }, title: '',
+                        filename: 'Kategori Balans'
+                    }
                 ],
                 ajax: {
                     url : '{{route("kategori_balans")}}',

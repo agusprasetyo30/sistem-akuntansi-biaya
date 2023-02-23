@@ -282,7 +282,12 @@
                         ]
 
                     },
-                    { extend: 'excel', className: 'mb-5' }
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5',
+                        title: '',
+                        filename: 'Total Pengadaan - Vertikal'  
+                    }
                 ],
                 ajax: {
                     url : '{{route("total_daan")}}',
@@ -357,7 +362,12 @@
                                 ]
 
                             },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                title: '',
+                                filename: 'Total Pengadaan - Horizontal' 
+                            }
                         ],
                         ajax: {
                             url : '{{route("total_daan")}}',
