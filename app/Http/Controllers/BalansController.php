@@ -121,16 +121,17 @@ class BalansController extends Controller
                             $type = $data_map->kategori_balans->type_kategori_balans;
                         }
                         elseif ($data_map->kategori_balans_id == 4){
-                            $q = $data_map->get_data_nilai_pamakaian($data->id);
+                            $q = $data_map->get_data_nilai_pamakaian($data->id) * -1;
                             $p = $collection_input_temp->where('material_code', '=', $data_map->material_code)
                                 ->where('kategori_balans_id', '=', 3)
                                 ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
                                 ->sum('p');
+
                             $nilai = $q * $p;
                             $type = $data_map->kategori_balans->type_kategori_balans;
                         }
                         elseif ($data_map->kategori_balans_id == 5){
-                            $q = $data_map->get_data_nilai_penjualan($data->id);
+                            $q = $data_map->get_data_nilai_penjualan($data->id)* -1;
                             $p = $collection_input_temp->where('material_code', '=', $data_map->material_code)
                                 ->where('kategori_balans_id', '=', 3)
                                 ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
@@ -158,8 +159,8 @@ class BalansController extends Controller
                                 ->sum('nilai');
 
 
-                            $q = $q_tersedia - $q_pj;
-                            $nilai = $nilai_tersedia - $nilai_pj;
+                            $q = $q_tersedia + $q_pj;
+                            $nilai = $nilai_tersedia + $nilai_pj;
                             $type = $data_map->kategori_balans->type_kategori_balans;
 
                             if ($q == 0){
