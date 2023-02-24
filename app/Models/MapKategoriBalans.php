@@ -122,7 +122,7 @@ class MapKategoriBalans extends Model
 
     public function get_data_qty_renprod($cost_center, $asumsi){
         $result = $this->glos_cc()
-            ->with(['qty_rencana_produksi' => function($query) use($cost_center, $asumsi){
+            ->with(['renprod' => function($query) use($cost_center, $asumsi){
                 $query->where('cost_center', $cost_center)
                     ->where('asumsi_umum_id', $asumsi);
             }])
