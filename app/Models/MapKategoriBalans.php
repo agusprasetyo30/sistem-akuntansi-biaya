@@ -100,6 +100,19 @@ class MapKategoriBalans extends Model
         return $result;
     }
 
+    public function get_data_cons_rate($material, $plant, $asumsi){
+        $temp_plant = explode(' - ', $material->plant_code);
+
+        $result = $this->const_rate()->with(['asumsi_umum' => function($query) use($asumsi){
+            $query->where('id', $asumsi);
+        }])
+            ->where('material_code', $material->material_code)
+            ->where('product_code', $temp_plant[2])
+            ->where('plant_code', $plant)
+            ->sum('cons_rate');
+        return $result;
+    }
+
     public function get_data_glos_cc($plant_code){
         $plant = explode(' - ', $plant_code);
         $result = $this->glos_cc()
@@ -112,17 +125,23 @@ class MapKategoriBalans extends Model
             ->with(['qty_rencana_produksi' => function($query) use($cost_center, $asumsi){
                 $query->where('cost_center', $cost_center)
                     ->where('asumsi_umum_id', $asumsi);
-            }])->get();
+            }])
+            ->where('cost_center', $cost_center)
+            ->get();
         return $result;
     }
 
     public function get_data_simulasi($glos_cc, $asumsi){
-        $result = $this->simulasi_proyeksi()
-            ->where('cost_center', $glos_cc[0]->cost_center)
-            ->where('plant_code', $glos_cc[0]->plant_code)
-            ->where('asumsi_umum_id', $asumsi)
-            ->where('code', '=', 'COGM')
-            ->sum('biaya_perton');
+        try {
+            $result = $this->simulasi_proyeksi()
+                ->where('cost_center', $glos_cc[0]->cost_center)
+                ->where('plant_code', $glos_cc[0]->plant_code)
+                ->where('asumsi_umum_id', $asumsi)
+                ->where('code', '=', 'COGM')
+                ->sum('biaya_perton');
+        }catch (\Exception $exception){
+            dd('model',$glos_cc, $asumsi, $exception);
+        }
         return $result;
     }
 

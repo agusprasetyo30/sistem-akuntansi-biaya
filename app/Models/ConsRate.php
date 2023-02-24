@@ -37,4 +37,9 @@ class ConsRate extends Model
     {
         return $this->belongsTo(Material::class, 'material_code', 'material_code');
     }
+
+    public function asumsi_umum()
+    {
+        return $this->hasMany(Asumsi_Umum::class, 'month_year', 'month_year');
+    }
 }

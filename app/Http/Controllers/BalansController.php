@@ -79,7 +79,7 @@ class BalansController extends Controller
                     $p=0;
                     $nilai=0;
 
-                    foreach ($query as $data_map){
+                    foreach ($query as $key1 => $data_map){
                         if ($data_map->kategori_balans_id == 1){
                             if ($key == 0){
                                 $q = $data_map->saldo_awal->sum('total_stock');
@@ -170,16 +170,32 @@ class BalansController extends Controller
                         }
                         elseif ($data_map->kategori_balans_id > 6){
                             $glos_cc = $data_map->get_data_glos_cc($data_map->plant_code);
+                            if ($glos_cc->isNotEmpty()){
+                                $check_simulasi = $collection_input_temp
+                                    ->where('kategori_balans_id', '>', 6)
+                                    ->where('asumsi_umum_id', '=', $data->id)
+                                    ->where('material_code', $data_map->material_code)->first();
 
-                            if ($glos_cc != null){
-//                                dd($data_map, $data_map->kategori_balans->type_kategori_balans);
+                                if ($check_simulasi == null){
+                                    $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
+                                }else{
+                                    $p = (double) $check_simulasi['p'];
+                                }
+
                                 if ($data_map->kategori_balans->type_kategori_balans == 'produksi'){
                                     $temp_q = $data_map->get_data_qty_renprod($glos_cc[0]->cost_center, $data->id);
                                     $q = $temp_q[0]->qty_rencana_produksi->sum('qty_renprod_value');
-                                    $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
                                     $nilai = $q * $p;
+
                                 }else{
 
+                                    // cell q
+                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc[0]->cost_center, $data->id);
+                                    $qty_renprod = (double) $temp_q[0]->qty_rencana_produksi->sum('qty_renprod_value');
+                                    $cons_rate = (double) $data_map->get_data_cons_rate($data_map, $glos_cc[0]->plant_code, $data->id);
+                                    $q = $qty_renprod * $cons_rate * -1;
+
+                                    $nilai = $q * $p;
                                 }
 
                                 $type = $data_map->kategori_balans->type_kategori_balans;
@@ -190,6 +206,7 @@ class BalansController extends Controller
                                 $type = $data_map->kategori_balans->type_kategori_balans;
                             }
                         }
+
                         $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type));
                     }
                 }
