@@ -18,6 +18,7 @@ class Balans extends Model
         'q',
         'p',
         'nilai',
+        'type_kategori_balans',
         'company_code',
         'created_at',
         'created_by',

@@ -121,26 +121,32 @@ class SelectController extends Controller
 
         if ($search == '') {
             $glos_cc = GLosCC::limit(10)
+                ->select('glos_cc.cost_center', 'cost_center.cost_center_desc', 'cons_rate.product_code')
                 ->leftjoin('cost_center', 'glos_cc.cost_center', '=', 'cost_center.cost_center')
+                ->rightjoin('cons_rate', 'cons_rate.product_code', '=', 'glos_cc.material_code')
                 ->where('glos_cc.company_code', auth()->user()->company_code)
                 ->whereNull('glos_cc.deleted_at')
+                ->groupBy('glos_cc.cost_center', 'cost_center.cost_center_desc', 'cons_rate.product_code')
                 ->get();
         } else {
             $glos_cc = GLosCC::limit(10)
+                ->select('glos_cc.cost_center', 'cost_center.cost_center_desc', 'cons_rate.product_code')
                 ->leftjoin('cost_center', 'glos_cc.cost_center', '=', 'cost_center.cost_center')
+                ->rightjoin('cons_rate', 'cons_rate.product_code', '=', 'glos_cc.material_code')
                 ->where('glos_cc.company_code', auth()->user()->company_code)
                 ->whereNull('glos_cc.deleted_at')
                 ->where('cost_center.cost_center', 'ilike', '%'.$search.'%')
                 ->orWhere('cost_center.cost_center_desc', 'ilike', '%'.$search.'%')
                 ->orWhere('glos_cc.material_code', 'ilike', '%'.$search.'%')
+                ->groupBy('glos_cc.cost_center', 'cost_center.cost_center_desc', 'cons_rate.product_code')
                 ->get();
         }
 
         $response = array();
         foreach ($glos_cc as $items) {
             $response[] = array(
-                "id" => $items->cost_center . ' - ' . $items->cost_center_desc. ' - ' .$items->material_code,
-                "text" => $items->cost_center . ' - ' . $items->cost_center_desc.' ( '.$items->material_code.' )'
+                "id" => $items->cost_center . ' - ' . $items->cost_center_desc. ' - ' .$items->product_code,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc.' ( '.$items->product_code.' )'
             );
         }
 
