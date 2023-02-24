@@ -73,38 +73,43 @@ class Material extends Model
         return $this->hasOne(GroupAccountFC::class, 'group_account_fc', 'material_code');
     }
 
+    public function gl_account_fc()
+    {
+        return $this->hasMany(GLAccountFC::class, 'group_account_fc', 'group_account_fc');
+    }
+
+    public function salr()
+    {
+        return $this->hasMany(Salr::class, 'gl_account_fc', 'gl_account_fc');
+    }
+
+    // public function laba_rugi()
+    // {
+    //     return $this->hasOne(LabaRugi::class, 'kategori_produk_id', 'kategori_produk_id');
+    // }
+
     public function kuantumProduksi($periode)
     {
         $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
-        })->get();
+        })->first();
 
-        return $renprod;
+        $result = sizeof($renprod->glos_cc->renprod);
+        return $result;
     }
 
     public function kpValue($periode)
     {
-        // $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
-        //     $q->where('asumsi_umum_id', '=', $periode);
-        // })->first();
-
-        // $renprod = $renprod->glos_cc->renprod;
-        // $renprod = $renprod[0]->qty_renprod_value;
-        // return $renprod;
-
         $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
         })->first();
-
-        $res = (float) $renprod->glos_cc->renprod[0]->qty_renprod_value;
-        return $res;
-    }
-
-    public function getSalr()
-    {
-        $salr = $this->group_account_fc->with('gl_account_fc.salr')->get();
-
-        return $salr;
+        // $renprod = $renprod->glos_cc->renprod;
+        // $renprod = $renprod[0]->qty_renprod_value;
+        // $result = isset($renprod->glos_cc->renprod->first()->qty_renprod_value) ? $renprod->glos_cc->renprod->first()->qty_renprod_value : 0;
+        // $result = isset($qtyRenprodVal) ? $qtyRenprodVal : 0;
+        $result = $renprod->glos_cc->renprod->first()->qty_renprod_value;
+        // print_r($renprod->glos_cc->renprod->first() . '<br><br><br>');
+        return $result;
     }
 
     public function consRate()
@@ -116,11 +121,12 @@ class Material extends Model
         //     'material_code' => $material
         // ])->get();
 
-        $total_cr = $this->const_rate()->get();
+        $total_cr = $this->const_rate()->sum('cons_rate');
         // dd($total_cr[0]['cons_rate']);
-        $cr = (float) $total_cr[0]['cons_rate'];
+        // $cr = (float) $total_cr[0]['cons_rate'];
+        // dd($total_cr);
 
-        return $cr;
+        return $total_cr;
     }
 
     public function hsBalans($periode, $material, $produk)
@@ -227,6 +233,20 @@ class Material extends Model
         return $biaya_kantong;
     }
 
+    public function getSalr()
+    {
+        // $res_salr = $this->group_account_fc()->with('gl_account_fc.salr')->first();
+        // $result = $res_salr->gl_account_fc;
+        // $result = sizeof($salr->gl_account_fc->first()->salr);
+
+
+        $res_salr =  $this->group_account_fc()->with('gl_account_fc.salr')->first()->gl_account_fc;
+        $result = $res_salr;
+        // dd($result);
+        // print_r($res_salr . '<br><br><br>');
+        return $result;
+    }
+
     public function totalSalr($inflasi)
     {
 
@@ -239,12 +259,23 @@ class Material extends Model
         //     ])->first();
 
 
-        $total = $this->group_account_fc->with(['gl_account_fc.salr' => function ($query) {
+        $total = $this->group_account_fc()->with(['gl_account_fc.salr' => function ($query) {
             $query->sum('value');
-        }])->get();
-
-        // dd($total[0]);
-        $result = $total->value * $inflasi / 100;
+        }])->first();
+        print_r($total);
+        $res = $total->first()->gl_account_fc->first()->salr ?? 0;
+        // dd($total, $inflasi);
+        $result = $res * $inflasi / 100;
         return $result;
+    }
+
+    public function labaRugi($produk)
+    {
+        $lb = DB::table("laba_rugi")
+            ->leftjoin('material', 'material.kategori_produk_id', '=', 'laba_rugi.kategori_produk_id')
+            ->where('material.material_code', $produk)
+            ->first();
+
+        return $lb;
     }
 }

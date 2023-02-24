@@ -30,6 +30,7 @@ class CreateSimulasiProyeksiTable extends Migration
             $table->double('cr', 8, 2)->nullable();
             $table->double('biaya_perton', 8, 2)->nullable();
             $table->double('total_biaya', 8, 2)->nullable();
+            $table->double('kuantum_produksi', 8, 2)->nullable();
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum');
             $table->dateTime('created_at');
             $table->integer('created_by');
