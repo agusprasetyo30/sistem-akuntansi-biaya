@@ -346,9 +346,22 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5', exportOptions:{
-                        columns:[0,1,2,3,4]
-                    }, title: 'Pemakaian' }
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5', 
+                        filename: 'Pemakaian - Vertikal',
+                        title: '', 
+                        exportOptions: {
+                            columns: [0,1,2,3],
+                        },
+                        // customize: function (file) {
+                        //     var sheet = file.xl.worksheets['sheet1.xml'];
+                        //     var style = file.xl['styles.xml'];
+                        //     var row = $('row', sheet);
+                        //     console.log('row', row);
+                        //     $(row[1]).remove()
+                        // }
+                    },
                 ],
                 ajax: {
                     url : '{{route("pemakaian")}}',
@@ -403,7 +416,12 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                filename: 'Pemakaian - Horizontal',
+                                title: ''
+                            }
                         ],
                         ajax: {
                             url : '{{route("pemakaian")}}',

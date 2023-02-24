@@ -35,4 +35,9 @@ class GroupAccountFC extends Model
         $result = $result->first();
         return $result;
     }
+
+    public function gl_account_fc()
+    {
+        return $this->hasMany(GLAccountFC::class, 'group_account_fc', 'group_account_fc');
+    }
 }

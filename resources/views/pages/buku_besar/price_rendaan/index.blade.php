@@ -578,9 +578,16 @@
                         ]
 
                     },
-                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5', 
+                        exportOptions:{
                         columns:[0,1,2,3,4]
-                    }, title: 'Price Rencana Pengadaan'  }
+                    },
+                        title: '',
+                        filename: 'Price Rencana Pengadaan - Vertikal'  
+                    
+                    }
                 ],
                 ajax: {
                     url : '{{route("price_rendaan")}}',
@@ -655,7 +662,12 @@
                                 ]
 
                             },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                title: '',
+                                filename: 'Price Rencana Pengadaan - Horizontal'   
+                            }
                         ],
                         ajax: {
                             url : '{{route("price_rendaan")}}',

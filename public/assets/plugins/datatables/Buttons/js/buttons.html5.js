@@ -309,7 +309,13 @@ var _exportData = function ( dt, config )
 		return s;
 	};
 
-	var header = config.header ? join( data.header )+newLine : '';
+	// var header = config.header ? join( data.header )+newLine : '';
+	var header = '';
+	if ( config.header ) {
+	for ( i = 0;  i < data.header.length;  i++ ) {
+		header = header + join( data.header[i] ) + newLine;
+	}
+	}
 	var footer = config.footer && data.footer ? newLine+join( data.footer ) : '';
 	var body = [];
 
@@ -526,10 +532,11 @@ function _excelColWidth( data, col ) {
 		}
 	}
 
-	max *= 1.35;
+	max *= 2.0;
 
 	// And a min width
-	return max > 6 ? max : 6;
+	console.log('colWidth', max)
+	return max > 15 ? max : 15;
 }
 
 // Excel - Pre-defined strings to build a basic XLSX file
@@ -1009,7 +1016,6 @@ DataTable.ext.buttons.excelHtml5 = {
 
 	action: function ( e, dt, button, config ) {
 		this.processing( true );
-
 		var that = this;
 		var rowPos = 0;
 		var dataStartRow, dataEndRow;
@@ -1042,6 +1048,8 @@ DataTable.ext.buttons.excelHtml5 = {
 		};
 
 		var data = dt.buttons.exportData( config.exportOptions );
+		console.log('data', data);
+		var numColumns = data.header[data.header.length - 1].length;  // # of columns in last header row
 		var currentRow, rowNode;
 		var addRow = function ( row ) {
 			currentRow = rowPos+1;
@@ -1167,19 +1175,27 @@ DataTable.ext.buttons.excelHtml5 = {
 		var exportInfo = dt.buttons.exportInfo( config );
 		if ( exportInfo.title ) {
 			addRow( [exportInfo.title], rowPos );
-			mergeCells( rowPos, data.header.length-1 );
+			// mergeCells( rowPos, data.header.length-1 );
+			console.log('numColumns', numColumns);
+			mergeCells( rowPos, numColumns - 1 );
 		}
 
 		if ( exportInfo.messageTop ) {
 			addRow( [exportInfo.messageTop], rowPos );
-			mergeCells( rowPos, data.header.length-1 );
+			// mergeCells( rowPos, data.header.length-1 );
+			mergeCells( rowPos, numColumns - 1 );
 		}
-
 
 		// Table itself
 		if ( config.header ) {
-			addRow( data.header, rowPos );
-			$('row:last c', rels).attr( 's', '2' ); // bold
+			// addRow( data.header, rowPos );
+			for ( i = 0;  i < data.header.length;  i++ ) {
+				console.log('dataHeader', data.header[i]);
+				console.log('rowPos', rowPos);
+				addRow( data.header[i], rowPos );
+			}
+			// mergeCells( 1, 2);
+			$('row c', rels).attr( 's', '51' ); // centre and bold
 		}
 	
 		dataStartRow = rowPos;
@@ -1198,13 +1214,14 @@ DataTable.ext.buttons.excelHtml5 = {
 		// Below the table
 		if ( exportInfo.messageBottom ) {
 			addRow( [exportInfo.messageBottom], rowPos );
-			mergeCells( rowPos, data.header.length-1 );
+			// mergeCells( rowPos, data.header.length-1 );
+			mergeCells( rowPos, numColumns - 1 );
 		}
 
 		// Set column widths
 		var cols = _createNode( rels, 'cols' );
 		$('worksheet', rels).prepend( cols );
-
+		console.log('dataHeader', data.header);
 		for ( var i=0, ien=data.header.length ; i<ien ; i++ ) {
 			cols.appendChild( _createNode( rels, 'col', {
 				attr: {

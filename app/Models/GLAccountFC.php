@@ -24,4 +24,9 @@ class GLAccountFC extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function salr()
+    {
+        return $this->hasMany(Salr::class, 'gl_account_fc', 'gl_account_fc');
+    }
 }
