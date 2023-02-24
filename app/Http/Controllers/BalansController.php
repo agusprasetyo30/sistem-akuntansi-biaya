@@ -184,14 +184,14 @@ class BalansController extends Controller
 
                                 if ($data_map->kategori_balans->type_kategori_balans == 'produksi'){
                                     $temp_q = $data_map->get_data_qty_renprod($glos_cc[0]->cost_center, $data->id);
-                                    $q = $temp_q[0]->qty_rencana_produksi->sum('qty_renprod_value');
+                                    $q = $temp_q[0]->renprod->sum('qty_renprod_value');
                                     $nilai = $q * $p;
 
                                 }else{
 
                                     // cell q
                                     $temp_q = $data_map->get_data_qty_renprod($glos_cc[0]->cost_center, $data->id);
-                                    $qty_renprod = (double) $temp_q[0]->qty_rencana_produksi->sum('qty_renprod_value');
+                                    $qty_renprod = (double) $temp_q[0]->renprod->sum('qty_renprod_value');
                                     $cons_rate = (double) $data_map->get_data_cons_rate($data_map, $glos_cc[0]->plant_code, $data->id);
                                     $q = $qty_renprod * $cons_rate * -1;
 
