@@ -68,25 +68,20 @@ class Material extends Model
         return $this->hasMany(QtyRenProd::class, 'cost_center', 'cost_center');
     }
 
-    public function group_account_fc()
-    {
-        return $this->hasOne(GroupAccountFC::class, 'group_account_fc', 'material_code');
-    }
-
     public function gl_account_fc()
     {
-        return $this->hasMany(GLAccountFC::class, 'group_account_fc', 'group_account_fc');
+        return $this->hasMany(GLAccountFC::class, 'group_account_fc', 'material_code');
     }
 
-    public function salr()
+    public function tarif()
     {
-        return $this->hasMany(Salr::class, 'gl_account_fc', 'gl_account_fc');
+        return $this->hasMany(Tarif::class, 'product_code', 'data_produk');
     }
 
-    // public function laba_rugi()
-    // {
-    //     return $this->hasOne(LabaRugi::class, 'kategori_produk_id', 'kategori_produk_id');
-    // }
+    public function laba_rugi()
+    {
+        return $this->hasMany(LabaRugi::class, 'kategori_produk_id', 'kategori_produk');
+    }
 
     public function kuantumProduksi($periode)
     {
@@ -103,6 +98,7 @@ class Material extends Model
         $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
         })->first();
+
         // $renprod = $renprod->glos_cc->renprod;
         // $renprod = $renprod[0]->qty_renprod_value;
         // $result = isset($renprod->glos_cc->renprod->first()->qty_renprod_value) ? $renprod->glos_cc->renprod->first()->qty_renprod_value : 0;
@@ -140,16 +136,15 @@ class Material extends Model
             //     'kategori_balans_id' => 3
             // ])->first();
 
-//            dd($periode, $material, $produk);
+            //            dd($periode, $material, $produk);
             $balans = $this->balans()->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->get();
 
-
-            if ($balans->isNotEmpty()){
+            if ($balans->isNotEmpty()) {
                 $res = (float) $balans[0]['p'] ?? 0;
-            }else{
+            } else {
                 $res = 0;
             }
-//             dd($res);
+            //             dd($res);
             return $res;
         }
     }
@@ -239,48 +234,49 @@ class Material extends Model
         return $biaya_kantong;
     }
 
-    public function getSalr()
+    public function getSalr($data_cost_center, $group_account)
     {
+        // dd($data_cost_center, $group_account);
         // $res_salr = $this->group_account_fc()->with('gl_account_fc.salr')->first();
         // $result = $res_salr->gl_account_fc;
         // $result = sizeof($salr->gl_account_fc->first()->salr);
 
 
-        $res_salr =  $this->group_account_fc()->with('gl_account_fc.salr')->first()->gl_account_fc;
+        // $res_salr =  $this->group_account_fc()->with('gl_account_fc.salr')->first()->gl_account_fc;
+        // dd($data_cost_center);
+        // $res_salr = $this->gl_account_fc()->with('salr', function ($s) use ($data_cost_center) {
+        //     $s->where('cost_center', $data_cost_center);
+        // })->get();
+
+        // $res_salr =  $this->group_account_fc()->with('gl_account_fc.salr', function ($query) use ($data_cost_center) {
+        //     $query->where('cost_center', $data_cost_center);
+        // })->where('group_account_fc', $group_account)->get();
+
+        // $res_salr = $this->gl_account_fc()->with(['salr' => function ($query) use ($data_cost_center) {
+        //     $query->where('cost_center', $data_cost_center);
+        // }])->where('group_account_fc', $group_account)->get();
+
+
+        $res_salr = $this->gl_account_fc()->with(['salr' => function ($query) use ($data_cost_center) {
+            $query->where('cost_center', $data_cost_center);
+        }])->where('group_account_fc', $group_account)->get();
+
         $result = $res_salr;
         // dd($result);
-        // print_r($res_salr . '<br><br><br>');
         return $result;
     }
 
-    public function totalSalr($inflasi)
+    public function gaTarif($code, $plant)
     {
+        $tarif = $this->tarif()->where('group_account_fc', $code)->where('plant_code', $plant)->first();
 
-        // $total = Salr::select(DB::raw('SUM(value) as value'))
-        //     ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
-        //     ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
-        //     ->where([
-        //         'salrs.cost_center' => $cost_center,
-        //         'group_account_fc.group_account_fc' => $group_account
-        //     ])->first();
-
-
-        $total = $this->group_account_fc()->with(['gl_account_fc.salr' => function ($query) {
-            $query->sum('value');
-        }])->first();
-        print_r($total);
-        $res = $total->first()->gl_account_fc->first()->salr ?? 0;
-        // dd($total, $inflasi);
-        $result = $res * $inflasi / 100;
-        return $result;
+        $res = $tarif->tarif_value ?? 0;
+        return $res;
     }
 
-    public function labaRugi($produk)
+    public function getLabarugi()
     {
-        $lb = DB::table("laba_rugi")
-            ->leftjoin('material', 'material.kategori_produk_id', '=', 'laba_rugi.kategori_produk_id')
-            ->where('material.material_code', $produk)
-            ->first();
+        $lb = $this->laba_rugi()->first();
 
         return $lb;
     }
