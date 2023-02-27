@@ -66,7 +66,7 @@ class BalansController extends Controller
                     ])->first();
 
                 $antrian = array_values(array_unique($result_antrian));
-                $query = MapKategoriBalans::with(['kategori_balans:id,order_view,type_kategori_balans' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate.glos_cc', 'simulasi_proyeksi'])
+                $query = MapKategoriBalans::with(['material:material_code,material_name' , 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate.glos_cc', 'simulasi_proyeksi'])
                     ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                     ->whereIn('map_kategori_balans.material_code', $antrian)
                     ->where('map_kategori_balans.version_id', $request->version)
@@ -75,6 +75,7 @@ class BalansController extends Controller
                         return array_search($query['material_code'], $antrian);
                     }])->all();
 
+//                dd($query[0]->material);
                 $collection_input_temp = collect();
                 foreach ($main_asumsi->asumsi_umum as $key => $data){
                     $q=0;
@@ -218,7 +219,13 @@ class BalansController extends Controller
                             }
                         }
 
-                        $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type));
+                        $material_name = $data_map->material->material_name;
+                        $version_id = $main_asumsi->id;
+                        $order_view = $data_map->kategori_balans->order_view;
+                        $kategori_balans_desc = $data_map->kategori_balans->kategori_balans_desc;
+                        $month_year = $data->month_year;
+
+                        $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
                     }
                 }
 
@@ -229,7 +236,6 @@ class BalansController extends Controller
             });
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
-            dd($exception);
             return response()->json(['code' => 500]);
         }
     }
@@ -520,7 +526,7 @@ class BalansController extends Controller
         }
     }
 
-    public function submit_temp($asumsi, $kategori_balans, $plant_code, $material_code, $q, $p, $nilai, $type){
+    public function submit_temp($asumsi, $kategori_balans, $plant_code, $material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year){
         $input['asumsi_umum_id'] = $asumsi;
         $input['kategori_balans_id'] = $kategori_balans;
         $input['plant_code'] = $plant_code;
@@ -529,6 +535,11 @@ class BalansController extends Controller
         $input['p'] =(double) $p;
         $input['nilai'] =(double) $nilai;
         $input['type_kategori_balans'] =$type;
+        $input['material_name'] =$material_name;
+        $input['version_id'] =$version_id;
+        $input['order_view'] =$order_view;
+        $input['kategori_balans_desc'] =$kategori_balans_desc;
+        $input['month_year'] =$month_year;
         $input['company_code'] = auth()->user()->company_code;
         $input['created_by'] = auth()->user()->id;
         $input['created_at'] = Carbon::now()->format('Y-m-d');

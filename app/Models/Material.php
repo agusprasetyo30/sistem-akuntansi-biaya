@@ -143,8 +143,6 @@ class Material extends Model
 //            dd($periode, $material, $produk);
             $balans = $this->balans()->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->get();
 
-//            dd($balans);
-//            $res = (float) $balans[0]['p'] ?? 0;
 
             if ($balans->isNotEmpty()){
                 $res = (float) $balans[0]['p'] ?? 0;
