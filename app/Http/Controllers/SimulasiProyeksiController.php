@@ -32,7 +32,7 @@ class SimulasiProyeksiController extends Controller
                 ['glos_cc' => function ($query) {
                     $query->select('cost_center', 'material_code')->groupBy('cost_center', 'material_code');
                 }]
-            )->with('material')
+            )
                 ->select('product_code', 'plant_code', 'version_id')
                 ->where('version_id', $version)
                 ->groupBy('product_code', 'plant_code', 'version_id')
