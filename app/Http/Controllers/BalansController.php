@@ -58,7 +58,9 @@ class BalansController extends Controller
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
 
-                $main_asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment')
+                SimulasiProyeksi::where('version_id', $request->version)->delete();
+
+                $main_asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
                     ->select('id', 'version')
                     ->where([
                         'id' => $request->version,
@@ -66,7 +68,7 @@ class BalansController extends Controller
                     ])->first();
 
                 $antrian = array_values(array_unique($result_antrian));
-                $query = MapKategoriBalans::with(['material:material_code,material_name' , 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate.glos_cc', 'simulasi_proyeksi'])
+                $query = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
                     ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                     ->whereIn('map_kategori_balans.material_code', $antrian)
                     ->where('map_kategori_balans.version_id', $request->version)
@@ -173,38 +175,48 @@ class BalansController extends Controller
                             }
                         }
                         elseif ($data_map->kategori_balans_id > 6){
+
                             $glos_cc = $data_map->get_data_glos_cc($data_map->plant_code);
-                            if ($glos_cc->isNotEmpty()){
+//                            dd($glos_cc);
+                            if ($glos_cc != null){
 
 //                                dd($request->version, $glos_cc[0]->plant_code, $data_map->material_code, $glos_cc[0]->cost_center);
 
                                 $check_simulasi = $collection_input_temp
                                     ->where('kategori_balans_id', '>', 6)
-                                    ->where('asumsi_umum_id', '=', $data->id)
-                                    ->where('material_code', $data_map->material_code)->first();
+//                                    ->where('asumsi_umum_id', '=', $data->id)
+                                    ->where('material_code', $data_map->material_code)
+                                    ->first();
 
 
 //                                if ($data_map->kategori_balans_id == 9){
 //                                    dd($check_simulasi);
 //                                }
+
+//                                if ($key == 1){
+//                                    dd($collection_input_temp, $check_simulasi);
+//                                }
                                 if ($check_simulasi == null){
-                                    $this->simulasi($request->version, $glos_cc[0]->plant_code, $data_map->material_code, $glos_cc[0]->cost_center);
+                                    $simulasi_create = new SimulasiProyeksiController();
+                                    $simulasi_create->hitung_satuan_simpro($request->version, $main_asumsi, $glos_cc->plant_code, $data_map->material_code, $glos_cc->cost_center);
+//                                    $this->simulasi($request->version, $glos_cc[0]->plant_code, $data_map->material_code, $glos_cc[0]->cost_center);
                                     $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
                                 }else{
                                     $p = (double) $check_simulasi['p'];
+
                                 }
 
                                 if ($data_map->kategori_balans->type_kategori_balans == 'produksi'){
-                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc[0]->cost_center, $data->id);
+                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc->cost_center, $data->id);
                                     $q = $temp_q[0]->renprod->sum('qty_renprod_value');
                                     $nilai = $q * $p;
 
                                 }else{
 
                                     // cell q
-                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc[0]->cost_center, $data->id);
+                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc->cost_center, $data->id);
                                     $qty_renprod = (double) $temp_q[0]->renprod->sum('qty_renprod_value');
-                                    $cons_rate = (double) $data_map->get_data_cons_rate($data_map, $glos_cc[0]->plant_code, $data->id);
+                                    $cons_rate = (double) $data_map->get_data_cons_rate($data_map, $glos_cc->plant_code, $data->id);
                                     $q = $qty_renprod * $cons_rate * -1;
 
                                     $nilai = $q * $p;
@@ -233,6 +245,7 @@ class BalansController extends Controller
                 foreach ($chunk as $insert){
                     Balans::insert($insert);
                 }
+//                $simulasi_create->hitung_simpro($request->version);
             });
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){

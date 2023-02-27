@@ -355,33 +355,36 @@ class SimulasiProyeksiController extends Controller
         }
     }
 
-    public function hitung_satuan_simpro($version, $plant, $product)
+    public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center)
     {
         try {
-            $cons_rate = ConsRate::with(
-                ['glos_cc' => function ($query) {
-                    $query->select('cost_center', 'material_code')->groupBy('cost_center', 'material_code');
-                }]
-            )
-                ->select('product_code', 'plant_code', 'version_id')
-                ->where('version_id', $version)
-                ->groupBy('product_code', 'plant_code', 'version_id')
-                ->first();
-
-
-            $asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
-                ->select('id', 'version')
-                ->where([
-                    'id' => $version,
-                    'company_code' => auth()->user()->company_code
-                ])->first();
+//            $cons_rate = ConsRate::with(
+//                ['glos_cc' => function ($query) {
+//                    $query->select('cost_center', 'material_code')->groupBy('cost_center', 'material_code');
+//                }]
+//            )
+//                ->select('product_code', 'plant_code', 'version_id')
+//                ->where('version_id', $version)
+//                ->where('plant_code', $plant)
+//                ->where('product_code', $product)
+//                ->groupBy('product_code', 'plant_code', 'version_id')
+//                ->first();
+//
+//
+//            dd($cons_rate->glos_cc, $plant, $product);
+//            $asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
+//                ->select('id', 'version')
+//                ->where([
+//                    'id' => $version,
+//                    'company_code' => auth()->user()->company_code
+//                ])->first();
 
             $collection_input_temp = collect();
 
             $data_version = $version;
             $data_plant = $plant;
             $data_product = $product;
-            $data_cost_center = $cons_rate->glos_cc->cost_center;
+            $data_cost_center = $cost_center;
 
             $lb = Material::select('kategori_produk_id')->where('material_code', $data_product)->first();
 
@@ -451,6 +454,7 @@ class SimulasiProyeksiController extends Controller
                 ->addSelect(DB::raw("'$lb->kategori_produk_id' as kategori_produk "))
                 ->union($temp_pro)
                 ->orderBy('no', 'asc')
+                ->with(['const_rate.glos_cc.renprod','tarif'])
                 ->orderBy('kategori', 'asc')
                 ->get();
             // dd($query->toArray());
@@ -473,17 +477,20 @@ class SimulasiProyeksiController extends Controller
                 foreach ($query as $key3 => $val) {
                     // $mat = $mat_->where('material_code', $val->code)->first();
                     // $ga = $ga_->where('group_account_fc', $val->code)->first();
-
+                    $kp_val = 0;
                     if ($val->jenis == 'material') {
                         //ConsRate
-                        $kp = $val->kuantumProduksi($periode);
+//                        $kp = $val->kuantumProduksi($periode);
                         // print_r($kp);
-                        $kp_val = 0;
-                        if ($kp) {
+
+
+                        $kp_v = $val->kpValue($periode);
+                        if ($kp_v) {
+//                        if ($kp) {
                             // dd($kp);
                             // $kp_v = (float) $kp[0]->glos_cc->renprod[0]->qty_renprod_value;
                             // $kp_v = (float) $val->kpValue($periode);
-                            $kp_v = $val->kpValue($periode);
+
                             $kuan_prod = $kp_v;
                             //Data Dummy
                             // $kp_v = 2;
