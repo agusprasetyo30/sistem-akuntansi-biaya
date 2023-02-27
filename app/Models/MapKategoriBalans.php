@@ -26,6 +26,11 @@ class MapKategoriBalans extends Model
         'deleted_by'
     ];
 
+    public function material()
+    {
+        return $this->hasOne(Material::class, 'material_code', 'material_code');
+    }
+
     public function saldo_awal()
     {
         return $this->hasMany(Saldo_Awal::class, 'material_code', 'material_code');

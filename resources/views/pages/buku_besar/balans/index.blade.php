@@ -190,7 +190,7 @@
             })
 
             $('#btn_generate').on('click', function () {
-                var versi = $('#filter_version').val();
+                var versi = $('#filter_version_generate').val();
                 if (versi !== null){
                     $.ajax({
                         type: "POST",
@@ -200,7 +200,7 @@
                         url : '{{route("check_dasar_balans")}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            version:$('#filter_version').val(),
+                            version:versi,
                         },
                         success:function (response) {
                             if (response.code === 201){
