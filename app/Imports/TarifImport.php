@@ -34,6 +34,7 @@ class TarifImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
             'product_code' => $row['product_code'],
             'plant_code' => $row['plant_code'],
             'group_account_fc' => $row['group_account_fc'],
+            'tarif_value' => $row['tarif_value'],
             'company_code' => auth()->user()->company_code,
             'created_by' => auth()->user()->id,
             'created_at' => Carbon::now()->format('Y-m-d'),
@@ -57,6 +58,7 @@ class TarifImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
             'plant_code' => 'required',
             'product_code' => 'required',
             'group_account_fc' => 'required',
+            'tarif_value' => 'required',
         ];
     }
 
