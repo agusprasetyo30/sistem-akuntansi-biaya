@@ -245,7 +245,7 @@ class BalansController extends Controller
                 foreach ($chunk as $insert){
                     Balans::insert($insert);
                 }
-//                $simulasi_create->hitung_simpro($request->version);
+                $simulasi_create->hitung_simpro($request->version);
             });
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
