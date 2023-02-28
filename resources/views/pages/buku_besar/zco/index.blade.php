@@ -53,7 +53,8 @@
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material" class="form-control custom-select select2">
-                                                <option value="all" selected>Semua</option>
+                                                <option value="" disabled selected>Pilih Produk</option>
+                                                {{-- <option value="all" selected>Semua</option> --}}
                                             </select>
                                         </div>
                                         <div class="form-group" id="format_plant">
@@ -66,6 +67,7 @@
                                         <div class="form-group">
                                             <label class="form-label">PERIODE </label>
                                             <select id="filter_format" class="form-control custom-select select2">
+                                                <option value="" disabled selected>Pilih Periode</option>
                                                 {{-- <option selected disabled value="">Pilih Format</option> --}}
                                                 @foreach (format_zco() as $key => $value)
                                                     options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
@@ -99,7 +101,8 @@
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material_group_account" class="form-control custom-select select2">
-                                                <option value="all" selected>Semua</option>
+                                                <option value="" disabled selected>Pilih Produk</option>
+                                                {{-- <option value="all" selected>Semua</option> --}}
                                             </select>
                                         </div>
                                         <div class="form-group" id="format_plant_group_account">
@@ -111,6 +114,7 @@
                                         <div class="form-group">
                                             <label class="form-label">PERIODE </label>
                                             <select id="filter_format_group_account" class="form-control custom-select select2">
+                                                <option value="" disabled selected>Pilih Periode</option>
                                                 {{-- <option selected disabled value="">Pilih Format</option> --}}
                                                 @foreach (format_zco() as $key => $value)
                                                     options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
@@ -179,14 +183,14 @@
             })
 
             $('#tabs_horizontal').on('click', function () {
-                $("#dinamic_table").empty();
-                get_data_horiz()
+                // $("#dinamic_table").empty();
+                // get_data_horiz()
                 // $('#h_dt_zco').DataTable().ajax.reload();
             })
 
             $('#tabs_group_account').on('click', function () {
-                $("#dinamic_group_account_table").empty();
-                get_data_group_account_horiz()
+                // $("#dinamic_group_account_table").empty();
+                // get_data_group_account_horiz()
                 // $('#h_dt_zco_group_account').DataTable().ajax.reload();
             })
 
