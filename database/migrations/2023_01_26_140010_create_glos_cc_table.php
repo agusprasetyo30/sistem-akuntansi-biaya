@@ -23,6 +23,7 @@ class CreateGlosCcTable extends Migration
             $table->foreign('cost_center')->references('cost_center')->on('cost_center')->onDelete("cascade")->onUpdate("cascade");
             $table->string('material_code')->unsigned();
             $table->foreign('material_code')->references('material_code')->on('material')->onDelete("cascade")->onUpdate("cascade");
+            $table->string('kode_future')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

@@ -22,6 +22,7 @@ class CreateLabaRugiTable extends Migration
             $table->double('value_bp', 8, 2)->default(0.0);
             $table->double('value_bau', 8, 2)->default(0.0);
             $table->double('value_bb', 8, 2)->default(0.0);
+            $table->string('kode_future')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();

@@ -19,6 +19,7 @@ class CreateKategoriMaterialTable extends Migration
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('kategori_material_name');
             $table->string('kategori_material_desc');
+            $table->string('kode_future')->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_at');
             $table->integer('created_by');

@@ -381,6 +381,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
+                                        $('#local_loader').show();
                                         importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -399,6 +400,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
+                                        $('#local_loader').show();
                                         importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -444,6 +446,7 @@
                     data: file,
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $('#local_loader').hide();
                         Swal.fire({
                             title: response.title,
                             text: response.message,
@@ -740,13 +743,13 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5',  
-                        footer: true, 
+                    {
+                        extend: 'excel',
+                        className: 'mb-5',
+                        footer: true,
                         exportOptions:{
                         columns:[0,1,2,3,4]
-                        }, 
+                        },
                         title: '',
                         filename: 'Salr Tabel Vertikal',
                         customize: function (file) {
@@ -757,57 +760,57 @@
                             // console.log('row', row);
                             $(row[1]).remove()
 
-                            mergeCells[0].appendChild( 
+                            mergeCells[0].appendChild(
                                 _createNode( sheet, 'mergeCell', {
                                     attr: { ref: 'A1:A2' }
-                                }) 
+                                })
                             );
 
-                            mergeCells[0].appendChild( 
+                            mergeCells[0].appendChild(
                                 _createNode( sheet, 'mergeCell', {
                                     attr: { ref: 'B1:B2' }
-                                }) 
+                                })
                             );
 
-                            mergeCells[0].appendChild( 
+                            mergeCells[0].appendChild(
                                 _createNode( sheet, 'mergeCell', {
                                     attr: { ref: 'C1:C2' }
-                                }) 
+                                })
                             );
 
-                            mergeCells[0].appendChild( 
+                            mergeCells[0].appendChild(
                                 _createNode( sheet, 'mergeCell', {
                                     attr: { ref: 'D1:D2' }
-                                }) 
+                                })
                             );
 
-                            mergeCells[0].appendChild( 
+                            mergeCells[0].appendChild(
                                 _createNode( sheet, 'mergeCell', {
                                     attr: { ref: 'E1:E2' }
-                                }) 
+                                })
                             );
 
                             mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
- 
+
                             function _createNode( doc, nodeName, opts ) {
                                 var tempNode = doc.createElement( nodeName );
-                                
+
                                 if ( opts ) {
                                     if ( opts.attr ) {
                                         $(tempNode).attr( opts.attr );
                                     }
-                
+
                                     if ( opts.children ) {
                                         $.each( opts.children, function ( key, value ) {
                                             tempNode.appendChild( value );
                                         } );
                                     }
-                
+
                                     if ( opts.text !== null && opts.text !== undefined ) {
                                         tempNode.appendChild( doc.createTextNode( opts.text ) );
                                     }
                                 }
-                
+
                                 return tempNode;
                             }
                         }
@@ -879,6 +882,7 @@
                         kolom1 += '<th class="text-center">'+response.cost_center[i].cost_center_desc+'</th>';
                         kolom_tfoot += '<th class="text-center"></th>';
                     }
+                    console.log(column)
                     $("#primary").append(kolom);
                     $("#secondary").append(kolom1);
                     $("#total_foot").append(kolom_tfoot);
@@ -900,8 +904,8 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { 
-                                extend: 'excel', 
+                            {
+                                extend: 'excel',
                                 className: 'mb-5',
                                 title: '',
                                 filename: 'Salr Tabel Horizontal',
@@ -914,9 +918,9 @@
                                 customize: function (file) {
                                     var sheet = file.xl.worksheets['sheet1.xml'];
                                     var style = file.xl['styles.xml'];
-                                    
+
                                     $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
-                                    
+
                                     var col = $('col', sheet);
                                     $(col[0]).attr("width", 8.5);
 
@@ -924,46 +928,46 @@
                                         const idx = i + 2
                                         $(col[idx]).attr("width", 25).attr('customWidth', '1');
                                     }
-                                    
+
                                     var mergeCells = $('mergeCells', sheet);
-                                    
-                                    mergeCells[0].appendChild( 
+
+                                    mergeCells[0].appendChild(
                                         _createNode( sheet, 'mergeCell', {
                                             attr: { ref: 'A1:A2' }
-                                        }) 
+                                        })
                                     );
 
-                                    mergeCells[0].appendChild( 
+                                    mergeCells[0].appendChild(
                                         _createNode( sheet, 'mergeCell', {
                                             attr: { ref: 'B1:B2' }
-                                        }) 
+                                        })
                                     );
 
                                     mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
- 
+
                                     function _createNode( doc, nodeName, opts ) {
                                         var tempNode = doc.createElement( nodeName );
-                                        
+
                                         if ( opts ) {
                                             if ( opts.attr ) {
                                                 $(tempNode).attr( opts.attr );
                                             }
-                        
+
                                             if ( opts.children ) {
                                                 $.each( opts.children, function ( key, value ) {
                                                     tempNode.appendChild( value );
                                                 } );
                                             }
-                        
+
                                             if ( opts.text !== null && opts.text !== undefined ) {
                                                 tempNode.appendChild( doc.createTextNode( opts.text ) );
                                             }
                                         }
-                        
+
                                         return tempNode;
                                     }
                                 }
-                            }, 
+                            },
                         ],
                         ajax: {
                             url : '{{route("salr")}}',
@@ -983,7 +987,7 @@
                         columnDefs: [
                             { targets: [0, 1], className: 'fs-6'},
                         ],
-                        initComplete:function () {                            
+                        initComplete:function () {
                             let api = this.api();
                             api.columns.adjust().draw();
                         },

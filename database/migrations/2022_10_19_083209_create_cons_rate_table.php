@@ -25,6 +25,7 @@ class CreateConsRateTable extends Migration
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->double('cons_rate', 8, 2);
+            $table->string('kode_future')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamp('month_year')->nullable();
             $table->integer('created_by');

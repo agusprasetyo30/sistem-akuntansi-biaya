@@ -22,6 +22,7 @@ class CretaePjPenjualanTable extends Migration
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->float('pj_penjualan_value');
+            $table->string('kode_future')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

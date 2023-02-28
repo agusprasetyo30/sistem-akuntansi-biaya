@@ -20,6 +20,7 @@ class CreateGlAccountTable extends Migration
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('group_account_code')->unsigned();
             $table->foreign('group_account_code')->references('group_account_code')->on('group_account')->onDelete("cascade")->onUpdate("cascade");
+            $table->string('kode_future')->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
