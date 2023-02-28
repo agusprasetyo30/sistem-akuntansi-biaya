@@ -120,8 +120,8 @@ class MapKategoriBalans extends Model
 
     public function get_data_glos_cc($plant_code){
         $plant = explode(' - ', $plant_code);
-        $result = $this->glos_cc()
-            ->where('cost_center', $plant[0])->get();
+        $result = $this->glos_cc
+            ->where('cost_center', $plant[0])->first();
         return $result;
     }
 
@@ -139,8 +139,8 @@ class MapKategoriBalans extends Model
     public function get_data_simulasi($glos_cc, $asumsi){
         try {
             $result = $this->simulasi_proyeksi()
-                ->where('cost_center', $glos_cc[0]->cost_center)
-                ->where('plant_code', $glos_cc[0]->plant_code)
+                ->where('cost_center', $glos_cc->cost_center)
+                ->where('plant_code', $glos_cc->plant_code)
                 ->where('asumsi_umum_id', $asumsi)
                 ->where('code', '=', 'COGM')
                 ->sum('biaya_perton');

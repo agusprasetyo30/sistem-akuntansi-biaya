@@ -28,8 +28,58 @@
                     <div class="card-title">Kontrol Proyeksi</div>
                 </div>
                 <div class="card-body">
-                    <div class="">
-                        <div class="table-responsive" id="table_main">
+                    <div class="mb-4">
+                        <div class="form-group" id="cost_center_pick">
+                            <label class="form-label">Versi <span class="text-red">*</span></label>
+                            <select id="filter_version_generate" class="form-control custom-select select2">
+                            </select>
+                        </div>
+                        <div class="btn-list">
+                            <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
+                        </div>
+                    </div>
+                    <div class="panel panel-primary">
+                        <div class=" tab-menu-heading p-0 bg-light">
+                            <div class="tabs-menu1 ">
+                                <!-- Tabs -->
+                                <ul class="nav panel-tabs">
+                                    <li class="" id="tabs_vertical"> <a href="#generate" class="active" data-bs-toggle="tab">Generate</a> </li>
+                                    <li id="tabs_horizontal"> <a href="#laporan" data-bs-toggle="tab">Laporan</a> </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body tabs-menu-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active " id="generate">
+                                    <div class="mb-4">
+                                        <div class="mb-4">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="laporan">
+                                    <div class="mb-4">
+                                        <div class="form-group">
+                                            <label class="form-label">Versi <span class="text-red">*</span></label>
+                                            <select id="filter_version_laporan" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">PRODUK</label>
+                                            <select id="filter_material" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua</option>
+                                            </select>
+                                        </div>
+                                        <div class="btn-list">
+                                            <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <div class="table-responsive" id="table_main">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

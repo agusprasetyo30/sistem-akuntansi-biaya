@@ -874,6 +874,7 @@ pre code {
     position: fixed;
     top: 0;
     width: 100%;
+    opacity: 75%;
     z-index: 99999999
 }
 
