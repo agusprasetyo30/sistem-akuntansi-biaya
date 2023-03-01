@@ -30,6 +30,7 @@ class CreateSalrsTable extends Migration
             $table->string('document_number')->nullable();
             $table->string('document_number_text')->nullable();
             $table->string('purchase_order')->nullable();
+            $table->string('kode_future')->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');

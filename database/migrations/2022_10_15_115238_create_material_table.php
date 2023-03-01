@@ -24,6 +24,7 @@ class CreateMaterialTable extends Migration
             $table->string('material_name')->nullable();
             $table->text('material_desc')->nullable();
             $table->string('material_uom')->nullable();
+            $table->string('kode_future')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_dummy')->default(true);
             $table->dateTime('created_at');

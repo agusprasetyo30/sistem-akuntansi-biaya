@@ -30,6 +30,7 @@ class CreateSaldoAwalTable extends Migration
             $table->double('total_stock', 8, 2)->nullable();
             $table->double('total_value', 8, 2)->nullable();
             $table->double('nilai_satuan', 8, 2)->nullable();
+            $table->string('kode_future')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

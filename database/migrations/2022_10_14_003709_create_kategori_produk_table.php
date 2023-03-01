@@ -19,6 +19,7 @@ class CreateKategoriProdukTable extends Migration
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('kategori_produk_name')->unique();
             $table->string('kategori_produk_desc');
+            $table->string('kode_future')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at');
             $table->integer('created_by');

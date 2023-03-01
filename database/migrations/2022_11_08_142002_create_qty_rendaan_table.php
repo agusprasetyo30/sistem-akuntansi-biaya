@@ -24,6 +24,7 @@ class CreateQtyRendaanTable extends Migration
             $table->foreignId('version_id')->references('id')->on('version_asumsi')->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->double('qty_rendaan_value', 8, 2)->default(0);
+            $table->string('kode_future')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

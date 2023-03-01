@@ -20,6 +20,7 @@ class CreateGeneralLedgerAccountTable extends Migration
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('group_account_fc')->unsigned();
             $table->foreign('group_account_fc')->references('group_account_fc')->on('group_account_fc')->onDelete("cascade")->onUpdate("cascade");
+            $table->string('kode_future')->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');

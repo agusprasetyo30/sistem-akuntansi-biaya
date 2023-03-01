@@ -334,7 +334,13 @@
                                 material:$('#filter_material').val(),
                             }
                         },
-                        columns: column
+                        columns: column,
+                        rowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                            // if (aData.kategori_balans_id === 6){
+                            //     // $('td', nRow).css('background-color', 'Red').css('color', 'white');
+                            //     console.log(iDisplayIndex)
+                            // }
+                        }
                     });
 
                 }

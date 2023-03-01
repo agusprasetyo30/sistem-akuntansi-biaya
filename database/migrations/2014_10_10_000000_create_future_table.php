@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKursTable extends Migration
+class CreateFutureTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateKursTable extends Migration
      */
     public function up()
     {
-        Schema::create('kurs', function (Blueprint $table) {
-            $table->id();
-            $table->double('usd_rate', 8, 2);
-            $table->timestamp('month_year');
-            $table->string('kode_future')->nullable();
+        Schema::create('future', function (Blueprint $table) {
+            $table->string('kode_unik')->primary();
+            $table->string('db')->unique();
+            $table->string('future');
+            $table->string('future_name');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateKursTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kurs');
+        Schema::dropIfExists('future');
     }
 }

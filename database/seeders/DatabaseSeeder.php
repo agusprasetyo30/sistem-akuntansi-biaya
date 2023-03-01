@@ -33,5 +33,6 @@ class DatabaseSeeder extends Seeder
         $this->call(KategoriBalansSeeder::class);
         $this->call(TempSimulasiProyeksiSeeder::class);
         //        $this->call(MappingMaterialBallansSeeder::class);
+        $this->call(FutureSeeder::class);
     }
 }

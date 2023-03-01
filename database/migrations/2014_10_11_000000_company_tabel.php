@@ -18,6 +18,7 @@ class CompanyTabel extends Migration
             $table->string('company_name')->nullable();
             $table->string('link_sso')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('kode_future')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

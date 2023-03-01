@@ -19,6 +19,7 @@ class CreateKategoriBalansTable extends Migration
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('kategori_balans')->unique();
             $table->string('kategori_balans_desc');
+            $table->string('kode_future')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
