@@ -220,6 +220,7 @@
                                     }
                                 })
                             }else {
+                                $('#local_loader').show();
                                 generate_data()
                             }
                         }, error:function () {

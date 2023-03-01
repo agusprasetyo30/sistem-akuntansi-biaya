@@ -64,7 +64,7 @@ class GlosCCImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidat
         return [
             'plant_code' => 'required',
             'cost_center' => 'required',
-            'material_code' => 'required',
+//            'material_code' => 'required',
         ];
     }
 

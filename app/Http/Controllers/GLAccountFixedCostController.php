@@ -157,40 +157,44 @@ class GLAccountFixedCostController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            $empty_excel = Excel::toArray(new GLAccountFCImport(), $request->file('file'));
-
-            $grouo_account = [];
-            $grouo_account_ = [];
-
-            foreach ($empty_excel[0] as $key => $value) {
-                array_push($grouo_account, 'Group Account ' . $value['group_account_fc'] . ' tidak ada pada master');
-                $d_grouoaccount = GroupAccountFC::whereIn('group_account_fc', [$value['group_account_fc']])->first();
-                if ($d_grouoaccount) {
-                    array_push($grouo_account, 'Group Account ' . $d_grouoaccount->group_account_code . ' tidak ada pada master');
-                }
-
-            }
-
-            $result_grouo_account = array_diff($grouo_account, $grouo_account_);
-            $result = array_merge($result_grouo_account);
-            $res = array_unique($result);
-
-            if ($res) {
-                $msg = '';
-
-                foreach ($res as $message)
-                    $msg .= '<p>' . $message . '</p>';
-
-                return setResponse([
-                    'code' => 430,
-                    'title' => 'Gagal meng-import data',
-                    'message' => $msg
-                ]);
-            } else {
-                return setResponse([
-                    'code' => 400,
-                ]);
-            }
+//            dd($exception);
+            return setResponse([
+                'code' => 400,
+            ]);
+//            $empty_excel = Excel::toArray(new GLAccountFCImport(), $request->file('file'));
+//
+//            $grouo_account = [];
+//            $grouo_account_ = [];
+//
+//            foreach ($empty_excel[0] as $key => $value) {
+//                array_push($grouo_account, 'Group Account ' . $value['group_account_fc'] . ' tidak ada pada master');
+//                $d_grouoaccount = GroupAccountFC::whereIn('group_account_fc', [$value['group_account_fc']])->first();
+//                if ($d_grouoaccount) {
+//                    array_push($grouo_account, 'Group Account ' . $d_grouoaccount->group_account_code . ' tidak ada pada master');
+//                }
+//
+//            }
+//
+//            $result_grouo_account = array_diff($grouo_account, $grouo_account_);
+//            $result = array_merge($result_grouo_account);
+//            $res = array_unique($result);
+//
+//            if ($res) {
+//                $msg = '';
+//
+//                foreach ($res as $message)
+//                    $msg .= '<p>' . $message . '</p>';
+//
+//                return setResponse([
+//                    'code' => 430,
+//                    'title' => 'Gagal meng-import data',
+//                    'message' => $msg
+//                ]);
+//            } else {
+//                return setResponse([
+//                    'code' => 400,
+//                ]);
+//            }
         }
     }
 

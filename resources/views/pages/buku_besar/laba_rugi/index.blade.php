@@ -188,6 +188,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
+                                        $('#local_loader').show();
                                         importStore()
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -206,6 +207,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
+                                        $('#local_loader').show();
                                         importStore()
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -250,6 +252,7 @@
                     url: '{{route('import_laba_rugi')}}',
                     data: file,
                     success:function (response) {
+                        $('#local_loader').hide();
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         Swal.fire({
                             title: response.title,
@@ -450,14 +453,14 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5', 
+                    {
+                        extend: 'excel',
+                        className: 'mb-5',
                         exportOptions:{
                         columns:[0,1,2,3,4]
-                    }, 
+                    },
                         title: '',
-                        filename: 'Laba Rugi'  
+                        filename: 'Laba Rugi'
                     }
                 ],
                 ajax: {

@@ -48,7 +48,7 @@ class KategoriProdukImport implements ToModel, WithHeadingRow, SkipsOnError, Wit
     public function rules(): array
     {
         return [
-            'kategori_produk_name' => ['required', 'unique:kategori_produk_name,kategori_produk_name']
+            'kategori_produk_name' => ['required', 'unique:kategori_produk,kategori_produk_name']
         ];
     }
 }

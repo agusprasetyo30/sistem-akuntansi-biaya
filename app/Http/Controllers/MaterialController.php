@@ -193,6 +193,7 @@ class MaterialController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
+//            dd($exception);
             $empty_excel = Excel::toArray(new MaterialImport(), $request->file('file'));
 
             $grouo_account = [];
@@ -210,15 +211,15 @@ class MaterialController extends Controller
                 }
 
                 array_push($kategori_material, 'Kategori Material ID ' . $value['kategori_material_id'] . ' tidak ada pada master');
-                $d_kategori_material = KategoriMaterial::whereIn('id', [$value['kategori_material_id']])->first();
+                $d_kategori_material = KategoriMaterial::where('id', $value['kategori_material_id'])->first();
                 if ($d_kategori_material) {
-                    array_push($kategori_material_, 'Kategori Material ID ' . $d_grouoaccount->id . ' tidak ada pada master');
+                    array_push($kategori_material_, 'Kategori Material ID ' . $d_kategori_material->id . ' tidak ada pada master');
                 }
 
-                array_push($kategori_produk, 'Group Account ID ' . $value['kategori_produk_id'] . ' tidak ada pada master');
-                $d_kategori_produk = KategoriProduk::whereIn('id', [$value['kategori_produk_id']])->first();
+                array_push($kategori_produk, 'Kategori Produk ID ' . $value['kategori_produk_id'] . ' tidak ada pada master');
+                $d_kategori_produk = KategoriProduk::where('id', $value['kategori_produk_id'])->first();
                 if ($d_kategori_produk) {
-                    array_push($kategori_produk_, 'Group Account ID ' . $d_grouoaccount->id . ' tidak ada pada master');
+                    array_push($kategori_produk_, 'Kategori Produk ID ' . $d_kategori_produk->id . ' tidak ada pada master');
                 }
 
             }

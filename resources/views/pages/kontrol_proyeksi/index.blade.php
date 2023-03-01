@@ -30,52 +30,57 @@
                 <div class="card-body">
                     <div class="mb-4">
                         <div class="form-group" id="cost_center_pick">
-                            <label class="form-label">Versi <span class="text-red">*</span></label>
-                            <select id="filter_version_generate" class="form-control custom-select select2">
+                            <label class="form-label">Perusahaan <span class="text-red">*</span></label>
+                            <select id="filter_company_code" class="form-control custom-select select2">
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label class="form-label">Bulan </label>
+                            <input type="text" class="form-control" name="filter_periode" id="filter_periode" placeholder="Bulan-Tahun" autocomplete="off" required>
+                        </div>
                         <div class="btn-list">
-                            <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
+                            <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                         </div>
                     </div>
-                    <div class="panel panel-primary">
+                    <div class="panel panel-primary" id="main_tab" style="display: none;">
                         <div class=" tab-menu-heading p-0 bg-light">
                             <div class="tabs-menu1 ">
                                 <!-- Tabs -->
                                 <ul class="nav panel-tabs">
-                                    <li class="" id="tabs_vertical"> <a href="#generate" class="active" data-bs-toggle="tab">Generate</a> </li>
-                                    <li id="tabs_horizontal"> <a href="#laporan" data-bs-toggle="tab">Laporan</a> </li>
+                                    <li id="tabs_simulasi"> <a href="#simulasi" class="active" data-bs-toggle="tab">Parameter Simulasi</a> </li>
+                                    <li id="tabs_biaya_tetap"> <a href="#biaya_tetap" data-bs-toggle="tab">kelengkapan Biaya Tetap</a> </li>
+                                    <li id="tabs_harga_material"> <a href="#harga_material" data-bs-toggle="tab">kelengkapan Harga Material</a> </li>
+                                    <li id="tabs_bom"> <a href="#bom" data-bs-toggle="tab">Kelengkapan BOM</a> </li>
                                 </ul>
                             </div>
                         </div>
                         <div class="panel-body tabs-menu-body">
                             <div class="tab-content">
-                                <div class="tab-pane active " id="generate">
+                                <div class="tab-pane active " id="simulasi">
                                     <div class="mb-4">
                                         <div class="mb-4">
-
+                                            <div class="table-responsive" id="parameter_simulasi"></div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane " id="laporan">
+                                <div class="tab-pane " id="biaya_tetap">
                                     <div class="mb-4">
-                                        <div class="form-group">
-                                            <label class="form-label">Versi <span class="text-red">*</span></label>
-                                            <select id="filter_version_laporan" class="form-control custom-select select2">
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">PRODUK</label>
-                                            <select id="filter_material" class="form-control custom-select select2">
-                                                <option value="all" selected>Semua</option>
-                                            </select>
-                                        </div>
-                                        <div class="btn-list">
-                                            <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
+                                        <div class="mb-4">
+                                            <div class="table-responsive" id="kelengkapan_biaya_tetap"></div>
                                         </div>
                                     </div>
-                                    <div class="">
-                                        <div class="table-responsive" id="table_main">
+                                </div>
+                                <div class="tab-pane " id="harga_material">
+                                    <div class="mb-4">
+                                        <div class="mb-4">
+                                            <div class="table-responsive" id="kelengkapan_harga_material"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="bom">
+                                    <div class="mb-4">
+                                        <div class="mb-4">
+                                            <div class="table-responsive" id="kelengkapan_bom"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -92,6 +97,59 @@
 
 @section('scripts')
     <script>
+        $(document).ready(function () {
 
+            $('#btn_tampilkan').on('click', function () {
+                var company = $('#filter_company_code').val();
+                var periode = $('#filter_periode').val();
+
+                if (company !== null && periode !== ''){
+                    $('#main_tab').css('display', 'block')
+                }else {
+                    Swal.fire({
+                        title: 'PERINGATAN',
+                        text: "Terdapat Data Perusahaan dan Periode yang kosong. Silakan Isi data tersebut",
+                        icon: 'warning',
+                        confirmButtonColor: '#019267',
+                        cancelButtonColor: '#EF4B4B',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                }
+
+
+            })
+
+            $('#filter_periode').bootstrapdatepicker({
+                format: "mm-yyyy",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#filter_periode').bootstrapdatepicker("show");
+            });
+
+            $('#filter_company_code').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('company_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+        })
     </script>
 @endsection

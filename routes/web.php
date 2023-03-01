@@ -270,6 +270,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Main Select2
         Route::group(['prefix' => 'main_data'], function () {
             Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
+            Route::get('/company_select', [SelectController::class, 'company'])->name('company_select');
             Route::get('/plant_balans_select', [SelectController::class, 'plant_balans'])->name('plant_balans_select');
             Route::get('/glos_cc_balans', [SelectController::class, 'glos_cc_balans'])->name('glos_cc_balans_select');
             Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');
