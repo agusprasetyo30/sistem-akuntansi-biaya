@@ -34,5 +34,6 @@ class DatabaseSeeder extends Seeder
         $this->call(TempSimulasiProyeksiSeeder::class);
         //        $this->call(MappingMaterialBallansSeeder::class);
         $this->call(FeatureSeeder::class);
+        $this->call(PermissionDemoSeeder::class);
     }
 }
