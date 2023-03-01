@@ -862,9 +862,13 @@
             ]
             $("#dinamic_table").append(table);
             $.ajax({
-                type: "GET",
-                url : '{{route("salr")}}',
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url : '{{route("get_data_salr")}}',
                 data: {
+                    _token: "{{ csrf_token() }}",
                     data:'dynamic',
                     format_data:$('#filter_format').val(),
                     cost_center:$('#cost_center_format').val(),
@@ -970,8 +974,13 @@
                             },
                         ],
                         ajax: {
-                            url : '{{route("salr")}}',
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url : '{{route("get_data_salr")}}',
                             data: {
+                                _token: "{{ csrf_token() }}",
                                 data:'horizontal',
                                 format_data:$('#filter_format').val(),
                                 cost_center:$('#cost_center_format').val(),

@@ -389,6 +389,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'salr'], function () {
             Route::get('/', [SalrController::class, 'index'])->name('salr');
+            Route::post('get_data', [SalrController::class, 'get_data'])->name('get_data_salr');
             Route::post('insert', [SalrController::class, 'create'])->name('insert_salr');
             Route::post('update', [SalrController::class, 'update'])->name('update_salr');
             Route::post('delete', [SalrController::class, 'delete'])->name('delete_salr');
