@@ -18,7 +18,7 @@ class CreatePlantTable extends Migration
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->string('plant_desc')->nullable();
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->boolean('is_active')->default(true);
             $table->dateTime('created_at');
             $table->integer('created_by');

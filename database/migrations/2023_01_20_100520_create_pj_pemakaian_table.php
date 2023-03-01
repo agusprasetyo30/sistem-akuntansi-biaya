@@ -24,7 +24,7 @@ class CreatePjPemakaianTable extends Migration
             $table->float('pj_pemakaian_value');
             $table->dateTime('created_at');
             $table->integer('created_by');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->dateTime('updated_at')->nullable();
             $table->integer('updated_by')->nullable();
             $table->dateTime('deleted_at')->nullable();

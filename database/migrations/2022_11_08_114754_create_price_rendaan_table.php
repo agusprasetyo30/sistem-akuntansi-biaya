@@ -25,7 +25,7 @@ class CreatePriceRendaanTable extends Migration
             $table->foreignId('asumsi_umum_id')->references('id')->on('asumsi_umum')->onDelete("cascade")->onUpdate("cascade");
             $table->double('price_rendaan_value', 8, 2)->default(0);
             $table->string('type_currency');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

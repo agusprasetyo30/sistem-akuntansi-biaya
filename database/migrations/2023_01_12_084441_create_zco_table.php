@@ -30,7 +30,7 @@ class CreateZcoTable extends Migration
             $table->string('currency')->nullable();
             $table->double('total_amount', 8, 2)->default(0)->nullable();
             $table->double('unit_price_product', 8, 2)->default(0)->nullable();
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

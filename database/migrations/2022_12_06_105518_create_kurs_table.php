@@ -17,7 +17,7 @@ class CreateKursTable extends Migration
             $table->id();
             $table->double('usd_rate', 8, 2);
             $table->timestamp('month_year');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->timestamps();
         });
     }

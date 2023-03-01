@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Future extends Model
+class Feature extends Model
 {
     use HasFactory;
-    protected $table = 'future';
+    protected $table = 'feature';
     protected $primaryKey = 'kode_unik';
     protected $keyType = 'string';
 

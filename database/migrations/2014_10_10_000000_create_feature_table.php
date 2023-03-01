@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFutureTable extends Migration
+class CreatefeatureTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateFutureTable extends Migration
      */
     public function up()
     {
-        Schema::create('future', function (Blueprint $table) {
+        Schema::create('feature', function (Blueprint $table) {
             $table->string('kode_unik')->primary();
             $table->string('db')->unique();
-            $table->string('future');
-            $table->string('future_name');
+            $table->string('feature');
+            $table->string('feature_name');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class CreateFutureTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('future');
+        Schema::dropIfExists('feature');
     }
 }
