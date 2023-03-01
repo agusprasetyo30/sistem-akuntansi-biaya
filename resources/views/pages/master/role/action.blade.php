@@ -19,9 +19,9 @@
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
                                 <label>Role </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="Role" value="{{$model->nama_role}}" name="detail_role" id="detail_role" autocomplete="off">
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="Role" value="{{$model->name}}" name="detail_role" id="detail_role" autocomplete="off">
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label class="form-label">Status</label>
                                 <select disabled name="detail_is_active" id="detail_is_active" class="form-control form-control-sm custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
@@ -29,7 +29,7 @@
                                         <option value="{{ $key }}" {{ $key == $model->is_active ? "selected" : "" }}>{{ $value}}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -56,9 +56,9 @@
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
                                 <label>Role </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Role"  value="{{$model->nama_role}}" name="role" id="edit_role{{$model->id}}" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Role"  value="{{$model->name}}" name="role" id="edit_role{{$model->id}}" autocomplete="off">
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label class="form-label">Status</label>
                                 <select name="edit_is_active" id="edit_is_active{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
@@ -66,7 +66,7 @@
                                         <option value="{{ $key }}" {{ $key == $model->is_active ? "selected" : "" }}>{{ $value}}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
