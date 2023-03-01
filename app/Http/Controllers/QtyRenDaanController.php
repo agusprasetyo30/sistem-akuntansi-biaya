@@ -178,6 +178,7 @@ class QtyRenDaanController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         }catch (\Exception $exception){
+            dd($exception);
             $empty_excel = Excel::toArray(new KuantitiRenDaanImport($request->version), $request->file('file'));
 
             $material = [];

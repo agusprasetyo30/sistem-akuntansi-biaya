@@ -46,7 +46,7 @@ class BalansController extends Controller
     public function store(Request $request){
         try {
 
-            $antrian = antrian_material_balans(1);
+            $antrian = antrian_material_balans($request->version);
             $result_antrian = [];
             foreach ($antrian as $items){
                 foreach ($items as $item){
@@ -60,6 +60,7 @@ class BalansController extends Controller
 
                 SimulasiProyeksi::where('version_id', $request->version)->delete();
 
+                $simulasi_create = new SimulasiProyeksiController();
                 $main_asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
                     ->select('id', 'version')
                     ->where([
@@ -89,7 +90,14 @@ class BalansController extends Controller
                             if ($key == 0){
                                 $q = $data_map->saldo_awal->sum('total_stock');
                                 $nilai = $data_map->saldo_awal->sum('total_value');
-                                $p = $nilai / $q;
+
+                                if ($q != 0){
+                                    $p = $nilai / $q;
+                                }
+                                else{
+                                    $p = 0;
+                                }
+
                                 $type = $data_map->kategori_balans->type_kategori_balans;
                             }else{
                                 $temp = $collection_input_temp->where('material_code', '=', $data_map->material_code)
@@ -112,7 +120,14 @@ class BalansController extends Controller
                         elseif ($data_map->kategori_balans_id == 2){
                             $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
                             $nilai = $data_map->get_data_total_pengadaan($data->id, $data->usd_rate, $data->adjustment);
-                            $p = $nilai / $q ;
+
+                            if ($q != 0){
+                                $p = $nilai / $q;
+                            }
+                            else{
+                                $p = 0;
+                            }
+
                             $type = $data_map->kategori_balans->type_kategori_balans;
                         }
                         elseif ($data_map->kategori_balans_id == 3){
@@ -122,7 +137,14 @@ class BalansController extends Controller
                             $nilai = $collection_input_temp->where('material_code', '=', $data_map->material_code)
                                 ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
                                 ->sum('nilai');
-                            $p = $nilai / $q ;
+
+                            if ($q != 0){
+                                $p = $nilai / $q;
+                            }
+                            else{
+                                $p = 0;
+                            }
+
                             $type = $data_map->kategori_balans->type_kategori_balans;
                         }
                         elseif ($data_map->kategori_balans_id == 4){
@@ -168,10 +190,10 @@ class BalansController extends Controller
                             $nilai = $nilai_tersedia + $nilai_pj;
                             $type = $data_map->kategori_balans->type_kategori_balans;
 
-                            if ($q == 0){
-                                $p = 0;
-                            }else{
+                            if ($q != 0){
                                 $p = $nilai / $q;
+                            }else{
+                                $p = 0;
                             }
                         }
                         elseif ($data_map->kategori_balans_id > 6){
@@ -197,7 +219,6 @@ class BalansController extends Controller
 //                                    dd($collection_input_temp, $check_simulasi);
 //                                }
                                 if ($check_simulasi == null){
-                                    $simulasi_create = new SimulasiProyeksiController();
                                     $simulasi_create->hitung_satuan_simpro($request->version, $main_asumsi, $glos_cc->plant_code, $data_map->material_code, $glos_cc->cost_center);
 //                                    $this->simulasi($request->version, $glos_cc[0]->plant_code, $data_map->material_code, $glos_cc[0]->cost_center);
                                     $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
@@ -249,6 +270,7 @@ class BalansController extends Controller
             });
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
+            dd($exception);
             return response()->json(['code' => 500]);
         }
     }

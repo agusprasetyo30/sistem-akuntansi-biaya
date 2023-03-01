@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asumsi_Umum;
+use App\Models\Company;
 use App\Models\CostCenter;
 use App\Models\GLAccountFC;
 use App\Models\GLAccount;
@@ -1196,4 +1197,48 @@ class SelectController extends Controller
 
         return response()->json($response);
     }
+
+    public function company(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            if (auth()->user()->company_code == 'A000'){
+                $company = Company::limit(10)
+                    ->where('company_code', '!=', 'A000')
+                    ->get();
+            }else{
+                $company = Company::limit(10)
+                    ->where('company_code', auth()->user()->company_code)
+                    ->get();
+            }
+        }
+        else {
+
+            if (auth()->user()->company_code == 'A000'){
+                $company = Company::limit(10)
+                    ->where('company_code', '!=', 'A000')
+                    ->where('company_code_pi', function ($query) use ($search){
+                        $query->where('company_code', 'ilike', '%' . $search . '%')
+                            ->orWhere('company_name', 'ilike', '%' . $search . '%');
+                    })
+                    ->get();
+            }else{
+                $company = Company::limit(10)
+                    ->where('company_code', auth()->user()->company_code)
+                    ->get();
+            }
+        }
+
+        $response = array();
+
+        foreach ($company as $items) {
+            $response[] = array(
+                "id" => $items->company_code,
+                "text" => $items->company_code.' - '. $items->company_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
 }
