@@ -20,7 +20,7 @@ class CreateRegionsTable extends Migration
             $table->boolean('is_active')->default(true);
             $table->double('latitude');
             $table->double('longtitude');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();

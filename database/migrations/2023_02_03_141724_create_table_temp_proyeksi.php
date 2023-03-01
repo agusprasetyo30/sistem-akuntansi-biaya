@@ -17,7 +17,7 @@ class CreateTableTempProyeksi extends Migration
             $table->id();
             $table->string('proyeksi_no')->nullable();
             $table->string('proyeksi_name')->nullable();
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->dateTime('created_at');
             $table->integer('created_by');
             $table->dateTime('updated_at')->nullable();

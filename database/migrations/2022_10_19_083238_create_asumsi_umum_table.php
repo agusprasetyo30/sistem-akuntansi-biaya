@@ -21,7 +21,7 @@ class CreateAsumsiUmumTable extends Migration
             $table->double('inflasi', 8, 2);
             $table->timestamp('month_year');
             $table->timestamp('saldo_awal');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();

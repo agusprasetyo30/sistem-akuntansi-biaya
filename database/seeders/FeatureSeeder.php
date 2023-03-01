@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Future;
+use App\Models\Feature;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 
-class FutureSeeder extends Seeder
+class FeatureSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -143,15 +143,15 @@ class FutureSeeder extends Seeder
         foreach ($data as $items){
             $kode_unik = Uuid::uuid1()->toString();
 
-            Future::create([
+            Feature::create([
                 'kode_unik' => $kode_unik,
                 'db' => $items['db'],
-                'future' => strtoupper($items['keterangan']),
-                'future_name' => $items['keterangan'],
+                'feature' => strtoupper($items['keterangan']),
+                'feature_name' => $items['keterangan'],
             ]);
 
             DB::table($items['db'])->update([
-                'kode_future' => $kode_unik
+                'kode_feature' => $kode_unik
             ]);
         }
     }

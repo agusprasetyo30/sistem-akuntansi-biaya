@@ -24,7 +24,7 @@ class CreateTarifTable extends Migration
             $table->string('group_account_fc')->unsigned();
             $table->foreign('group_account_fc')->references('group_account_fc')->on('group_account_fc')->onDelete("cascade")->onUpdate("cascade");
             $table->float('tarif_value');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();

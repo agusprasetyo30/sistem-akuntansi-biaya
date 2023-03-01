@@ -16,7 +16,7 @@ class CreateRoleTable extends Migration
         Schema::create('role', function (Blueprint $table) {
             $table->id();
             $table->string('nama_role');
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->boolean('is_active')->default(true);
             $table->string('company_code')->unsigned();
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");

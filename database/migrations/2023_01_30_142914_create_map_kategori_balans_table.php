@@ -22,7 +22,7 @@ class CreateMapKategoriBalansTable extends Migration
             $table->string('material_code')->unsigned();
             $table->foreign('material_code')->references('material_code')->on('material')->onUpdate('cascade')->onDelete('cascade');
             $table->string('plant_code')->nullable();
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
             $table->integer('updated_by')->nullable();

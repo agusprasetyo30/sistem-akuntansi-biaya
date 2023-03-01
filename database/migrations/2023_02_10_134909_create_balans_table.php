@@ -23,7 +23,7 @@ class CreateBalansTable extends Migration
             $table->double('q', 12, 2);
             $table->double('p', 12, 2);
             $table->double('nilai', 12, 2);
-            $table->string('kode_future')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
             $table->integer('created_by');
