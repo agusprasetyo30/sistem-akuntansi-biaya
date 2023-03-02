@@ -35,9 +35,9 @@ class LabaRugiNewImport implements ToModel, WithHeadingRow, SkipsOnError, WithVa
     {
         $input['periode'] = $this->periode.'-01-01';
         $input['kategori_produk_id'] = $row['kategori_produk_id'];
-        $input['value_bp'] = $row['biaya_penjualan'] != null ? (double) str_replace('.', '', str_replace('Rp ', '', $row['biaya_penjualan'])) : 0;
-        $input['value_bau'] = $row['biaya_adm_umum'] != null ? (double) str_replace('.', '', str_replace('Rp ', '', $row['biaya_adm_umum'])) : 0;
-        $input['value_bb'] = $row['biaya_bunga'] != null ? (double) str_replace('.', '', str_replace('Rp ', '', $row['biaya_bunga'])) : 0;
+        $input['value_bp'] = $row['biaya_penjualan'] != null ? (double) $row['biaya_penjualan']: 0;
+        $input['value_bau'] = $row['biaya_adm_umum'] != null ? (double) $row['biaya_adm_umum'] : 0;
+        $input['value_bb'] = $row['biaya_bunga'] != null ? (double) $row['biaya_bunga'] : 0;
         $input['company_code'] = auth()->user()->company_code;
         $input['created_by'] = auth()->user()->id;
         $input['created_at'] = Carbon::now()->format('Y-m-d');
