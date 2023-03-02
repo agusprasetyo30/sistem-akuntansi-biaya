@@ -152,12 +152,12 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 $biaya_perton = 0;
-                if ($total_biaya->total_amount > 0 && $tot_kuanprod > 0) {
+                if ($total_biaya->total_amount != 0 && $tot_kuanprod > 0) {
                     $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
                 }
 
                 $cr = 0;
-                if ($total_qty->total_qty > 0 && $tot_kuanprod > 0) {
+                if ($total_qty->total_qty != 0 && $tot_kuanprod > 0) {
                     $cr = $total_qty->total_qty / $tot_kuanprod;
                 }
 
@@ -227,7 +227,7 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 $cr = 0;
-                if ($total_qty->total_qty > 0 && $tot_kuanprod > 0) {
+                if ($total_qty->total_qty != 0 && $tot_kuanprod > 0) {
                     $cr = $total_qty->total_qty / $tot_kuanprod;
                 }
 
@@ -294,7 +294,7 @@ class H_ZcoDataTable extends DataTable
 
                 $biaya_perton = 0;
 
-                if ($total_biaya->total_amount > 0 && $tot_kuanprod > 0) {
+                if ($total_biaya->total_amount != 0 && $tot_kuanprod > 0) {
                     $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
                 }
 
