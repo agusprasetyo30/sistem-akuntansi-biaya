@@ -173,6 +173,7 @@ class LabaRugiController extends Controller
                 ]);
             }
         }catch (\Exception $exception){
+            dd($exception);
             $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
 
             $kategori_produk = [];
