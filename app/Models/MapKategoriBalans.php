@@ -97,7 +97,7 @@ class MapKategoriBalans extends Model
         if ($qty_rendaan > 0 && $price_rendaan == 0){
             $result = 0;
         }else{
-            $result = $qty_rendaan * ($price_rendaan * (1 + ($adjustment / 100)) * $kurs);
+            $result = $qty_rendaan * ($price_rendaan * (1 + ($adjustment / 100)));
         }
         return $result;
     }
