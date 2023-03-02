@@ -21,9 +21,12 @@ use function PHPUnit\Framework\isEmpty;
 
 class BalansController extends Controller
 {
-    public function index(Request $request, BalansDataTable $balansDataTable)
+    public function index(Request $request)
     {
+        return view('pages.buku_besar.balans.index');
+    }
 
+    public function get_data(Request $request, BalansDataTable $balansDataTable){
         $antrian = antrian_material_balans($request->version);
         $result_antrian = [];
         foreach ($antrian as $items){
@@ -35,6 +38,7 @@ class BalansController extends Controller
             return $balansDataTable->with(['antrian' => array_values(array_unique($result_antrian)), 'version' => $request->version, 'material' => $request->material])->render('pages.buku_besar.balans.index');
         }
         return view('pages.buku_besar.balans.index');
+
     }
 
     public function index_header(Request $request){

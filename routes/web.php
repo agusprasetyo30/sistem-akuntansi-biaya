@@ -418,6 +418,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'dasar_balans'], function () {
             Route::get('/', [BalansController::class, 'index'])->name('dasar_balans');
+            Route::post('get_data_balans', [BalansController::class, 'get_data'])->name('get_data_dasar_balans');
             Route::post('header', [BalansController::class, 'index_header'])->name('header_dasar_balans');
             Route::post('store_dasar_balans', [BalansController::class, 'store'])->name('store_dasar_balans');
             Route::post('check_dasar_balans', [BalansController::class, 'checker'])->name('check_dasar_balans');
@@ -453,7 +454,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('store', [SimulasiProyeksiController::class, 'store'])->name('store_simulasi_proyeksi');
     });
 
-    Route::get('/kontrol-proyeksi', [KontrolProyeksiController::class, 'index'])->name('kontrol_proyeksi');
+    Route::group(['prefix' => 'kontrol-proyeksi'], function () {
+        Route::get('/', [KontrolProyeksiController::class, 'index'])->name('kontrol_proyeksi');
+        Route::get('uptodate_kontrol_proyeksi', [KontrolProyeksiController::class, 'uptodate'])->name('uptodate_kontrol_proyeksi');
+        Route::post('get_data_kontrol_proyeksi', [KontrolProyeksiController::class, 'get_data'])->name('get_data_kontrol_proyeksi');
+    });
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);
 

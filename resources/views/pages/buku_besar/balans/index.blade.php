@@ -320,7 +320,10 @@
                                 });
                             })
 
-                            $('#dt_balans').DataTable().ajax.url('{{route('dasar_balans', ['save' => 'not_save'])}}').load();
+                            let api = this.api();
+                            api.columns.adjust().draw();
+
+                            {{--$('#dt_balans').DataTable().ajax.url('{{route('get_data_dasar_balans')}}').load();--}}
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
@@ -328,8 +331,13 @@
                                 }, title: 'Balans' }
                         ],
                         ajax: {
-                            url : '{{route("dasar_balans")}}',
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url : '{{route("get_data_dasar_balans")}}',
                             data: {
+                                _token: "{{ csrf_token() }}",
                                 data:'index',
                                 version:$('#filter_version_laporan').val(),
                                 material:$('#filter_material').val(),
