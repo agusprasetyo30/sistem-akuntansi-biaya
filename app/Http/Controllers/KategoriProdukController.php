@@ -149,6 +149,7 @@ class KategoriProdukController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
