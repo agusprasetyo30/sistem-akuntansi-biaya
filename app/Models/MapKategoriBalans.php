@@ -68,6 +68,16 @@ class MapKategoriBalans extends Model
         return $this->hasMany(SimulasiProyeksi::class, 'product_code', 'material_code');
     }
 
+    public function get_data_saldo_awal($plant){
+        $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->sum('total_stock');
+        return $saldo_awal;
+    }
+
+    public function get_data_saldo_awal_nilai($plant){
+        $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->sum('total_value');
+        return $saldo_awal;
+    }
+
     public function get_data_qty_rencana_pengadaan($asumsi){
         $qty_rendaan = $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('qty_rendaan_value');
         return $qty_rendaan;

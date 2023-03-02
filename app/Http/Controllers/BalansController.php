@@ -92,8 +92,16 @@ class BalansController extends Controller
                     foreach ($query as $key1 => $data_map){
                         if ($data_map->kategori_balans_id == 1){
                             if ($key == 0){
-                                $q = $data_map->saldo_awal->sum('total_stock');
-                                $nilai = $data_map->saldo_awal->sum('total_value');
+
+                                $plant = explode(' - ', $data_map->plant_code);
+
+                                if ($plant != 'all'){
+                                    $q = $data_map->get_data_saldo_awal($plant[0]);
+                                    $nilai = $data_map->get_data_saldo_awal_nilai($plant[0]);
+                                }else{
+                                    $q = $data_map->saldo_awal->sum('total_stock');
+                                    $nilai = $data_map->saldo_awal->sum('total_value');
+                                }
 
                                 if ($q != 0){
                                     $p = $nilai / $q;
