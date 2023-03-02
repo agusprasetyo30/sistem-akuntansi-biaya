@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Role</h4>
+            <h4 class="page-title mb-0 text-primary">Role</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Management Role</div>
+                    {{-- <div class="card-title">Management Role</div> --}}
                 </div>
                 <div class="card-body">
                     <div class="">
@@ -46,7 +46,6 @@
             '<thead>' +
             '<tr>' +
             '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
-            '<th data-type="select" data-name="status" class="text-center">STATUS</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -147,20 +146,19 @@
                     this.api().columns.adjust().draw()
                 },
                 buttons: [
-                    'pageLength', 'csv', 'pdf', 'excel', 'print'
+                    'pageLength',  'excel'
                 ],
                 ajax: {
                     url : '{{route("role")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'nama_role', name: 'nama_role', orderable:true},
-                    { data: 'status', name: 'filter_status', orderable:false},
+                    { data: 'name', name: 'name', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2]}
+                    {className: 'text-center', targets: [0,1]}
                 ]
 
             })
@@ -177,7 +175,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     role: $('#role').val(),
-                    status: $('#is_active').val(),
+                    // status: $('#is_active').val(),
                 },
                 success:function (response) {
                     Swal.fire({
@@ -220,7 +218,7 @@
                     _token: "{{ csrf_token() }}",
                     id: id,
                     role: $('#edit_role'+id).val(),
-                    status: $('#edit_is_active'+id).val(),
+                    // status: $('#edit_is_active'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({

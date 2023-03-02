@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
-    protected $table = 'role';
+    protected $table = 'roles';
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'nama_role',
-        'is_active',
+        'name',
+        'guard_name',
         'created_at',
         'updated_at'
     ];

@@ -13,7 +13,7 @@
                                 <label>Role </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Role" name="role" id="role" autocomplete="off">
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label class="form-label">Status</label>
                                 <select name="is_active" id="is_active" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
@@ -21,7 +21,7 @@
                                         <option value="{{ $key }}">{{ $value}}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
