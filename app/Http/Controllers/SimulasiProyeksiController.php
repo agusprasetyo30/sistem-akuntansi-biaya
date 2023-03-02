@@ -748,18 +748,18 @@ class SimulasiProyeksiController extends Controller
                 ->orderBy('asumsi_umum_id', 'asc')
                 ->get();
 
-            // $glos_cc = DB::table('glos_cc')
-            //     ->where('glos_cc.material_code', $request->produk)
-            //     ->where('glos_cc.plant_code', $request->plant)
-            //     ->first();
+            $glos_cc = DB::table('glos_cc')
+                ->where('glos_cc.material_code', $request->produk)
+                ->where('glos_cc.plant_code', $request->plant)
+                ->first();
 
-            // if (!$glos_cc) {
-            //     return setResponse([
-            //         'code' => 430,
-            //         'title' => 'Gagal menampilkan data',
-            //         'message' => 'Data cost center tidak ditemukan!',
-            //     ]);
-            // }
+            if (!$glos_cc) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal menampilkan data',
+                    'message' => 'Data cost center dari produk ' . $request->produk . ' dan plant ' . $request->plant . ' tidak ditemukan!',
+                ]);
+            }
 
             // $simpro = DB::table('simulasi_proyeksi')
             //     ->where('simulasi_proyeksi.product_code', $request->produk)
