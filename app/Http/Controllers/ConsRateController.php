@@ -229,7 +229,7 @@ class ConsRateController extends Controller
                 array_push($plant_code, 'Plant ' . $value['plant_code'] . ' tidak ada pada master');
                 $d_plant_code = Plant::whereIn('plant_code', [$value['plant_code']])->first();
                 if ($d_plant_code) {
-                    array_push($plant_code_, 'Plant' . $d_plant_code->plant_code . ' tidak ada pada master');
+                    array_push($plant_code_, 'Plant ' . $d_plant_code->plant_code . ' tidak ada pada master');
                 }
 
                 array_push($product_code, 'Product ' . $value['product_code'] . ' tidak ada pada master');
