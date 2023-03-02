@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Role</h4>
+            <h4 class="page-title mb-0 text-primary">Management Role</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.role.add')
+            @include('pages.master.maprole.add')
         </div>
     </div>
     <!-- /Row -->
@@ -45,7 +45,7 @@
         var table_main_dt = '<table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
+            '<th data-type="text" data-name="role_id" class="text-center">ROLE</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -149,11 +149,11 @@
                     'pageLength',  'excel'
                 ],
                 ajax: {
-                    url : '{{route("role")}}',
+                    url : '{{route("management_role")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'name', name: 'name', orderable:true},
+                    { data: 'role_id', name: 'role_id', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],

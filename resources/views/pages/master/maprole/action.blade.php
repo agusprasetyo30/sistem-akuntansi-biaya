@@ -19,7 +19,7 @@
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
                                 <label>Role </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="Role" value="{{$model->name}}" name="detail_role" id="detail_role" autocomplete="off">
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="Role" value="{{$model->role_id}}" name="detail_role" id="detail_role" autocomplete="off">
                             </div>
                             {{-- <div class="form-group">
                                 <label class="form-label">Status</label>
@@ -56,7 +56,7 @@
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
                                 <label>Role </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Role"  value="{{$model->name}}" name="role" id="edit_role{{$model->id}}" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Role"  value="{{$model->role_id}}" name="role" id="edit_role{{$model->id}}" autocomplete="off">
                             </div>
                             {{-- <div class="form-group">
                                 <label class="form-label">Status</label>

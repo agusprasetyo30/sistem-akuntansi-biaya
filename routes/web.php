@@ -42,6 +42,7 @@ use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
 use App\Http\Controllers\TarifController;
 use App\Http\Controllers\Balans2Controller;
+use App\Http\Controllers\ManagementRoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -172,6 +173,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
             Route::post('update', [RoleController::class, 'update'])->name('update_role');
             Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
+        });
+
+        Route::group(['prefix' => 'management-role'], function () {
+            Route::get('/', [ManagementRoleController::class, 'index'])->name('management_role');
+            Route::post('insert', [ManagementRoleController::class, 'create'])->name('insert_management_role');
+            Route::post('update', [ManagementRoleController::class, 'update'])->name('update_management_role');
+            Route::post('delete', [ManagementRoleController::class, 'delete'])->name('delete_management_role');
         });
 
         Route::group(['prefix' => 'user'], function () {

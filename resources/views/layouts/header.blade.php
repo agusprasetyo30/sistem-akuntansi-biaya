@@ -55,7 +55,7 @@
                                     <div class="text-center">
                                         <div class="text-center user pb-0 font-weight-bold">
                                             {{ Auth::user()->name }}</div>
-                                        <span class="text-center user-semi-title">Web Designer</span>
+                                        {{-- <span class="text-center user-semi-title">Web Designer</span> --}}
                                         <div class="dropdown-divider"></div>
                                     </div>
                                     {{-- <a class="dropdown-item d-flex" href="{{url('profile1')}}">

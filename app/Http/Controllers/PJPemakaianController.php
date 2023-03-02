@@ -6,6 +6,7 @@ use App\DataTables\Master\H_PJPemakaianDataTable;
 use App\DataTables\Master\PJPemakaianDataTable;
 use App\Exports\MultipleSheet\MS_PJPemakaianExport;
 use App\Imports\PJPemakaianImport;
+use App\Models\Material;
 use App\Models\PJ_Pemakaian;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -134,39 +135,23 @@ class PJPemakaianController extends Controller
 
     public function import(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            "file" => 'required',
-            // "version" => 'required',
-        ], validatorMsg());
-
-        if ($validator->fails())
-            return $this->makeValidMsg($validator);
-
         try {
-            DB::transaction(function () use ($request) {
-                $version = $request->version;
-                // $excel = Excel::toArray(new QtyRenProdImport($version), $request->file);
-                // $colect = collect($excel[0]);
-                // $header = array_keys($colect[0]);
-                // $data_versi = explode('_', $header[1]);
-                // $version = Asumsi_Umum::where('id', $data_versi[2])->first();
-                PJ_Pemakaian::where('version_id', $version)->delete();
+            $validator = Validator::make($request->all(), [
+                "file" => 'required',
+            ], validatorMsg());
 
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            DB::transaction(function () use ($request) {
+                PJ_Pemakaian::where('version_id', $request->version)->delete();
                 $file = $request->file('file')->store('import');
-                $import = new PJPemakaianImport($version);
+                $import = new PJPemakaianImport($request->version);
                 $import->import($file);
 
                 $data_fail = $import->failures();
 
-                if ($import->failures()->isNotEmpty()) {
-                    $err = [];
-
-                    foreach ($data_fail as $rows) {
-                        $er = implode(' ', array_values($rows->errors()));
-                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                        array_push($err, $hasil);
-                    }
-                    // dd(implode(' ', $err));
+                if ($data_fail->isNotEmpty()) {
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
@@ -178,10 +163,37 @@ class PJPemakaianController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        } catch (Exception $exception) {
-            return setResponse([
-                'code' => 400,
-            ]);
+        } catch (\Exception $exception) {
+            $empty_excel = Excel::toArray(new PJPemakaianImport($request->version), $request->file('file'));
+            $material_code = [];
+            $material_code_ = [];
+            foreach ($empty_excel[0] as $key => $value) {
+                array_push($material_code, 'material code ' . $value['material_code'] . ' tidak ada pada master');
+                $d_material_code = Material::whereIn('material_code', [$value['material_code']])->first();
+                if ($d_material_code) {
+                    array_push($material_code_, 'material code ' . $d_material_code->material_code . ' tidak ada pada master');
+                }
+            }
+
+            $result_material_code = array_diff($material_code, $material_code_);
+            $res = array_unique($result_material_code);
+
+            if ($res) {
+                $msg = '';
+
+                foreach ($res as $message)
+                    $msg .= '<p>' . $message . '</p>';
+
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => $msg
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 400,
+                ]);
+            }
         }
     }
 

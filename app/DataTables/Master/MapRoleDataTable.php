@@ -2,16 +2,17 @@
 
 namespace App\DataTables\Master;
 
+use App\Models\MapRole;
 use App\Models\Role;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class RoleDataTable extends DataTable
+class MapRoleDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $query = Role::query();
+        $query = MapRole::query();
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
@@ -32,7 +33,7 @@ class RoleDataTable extends DataTable
             //         }
             //     }
             // })
-            ->addColumn('action', 'pages.master.role.action')
+            ->addColumn('action', 'pages.master.maprole.action')
             ->escapeColumns([]);
     }
 

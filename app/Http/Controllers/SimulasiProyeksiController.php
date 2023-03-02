@@ -147,14 +147,15 @@ class SimulasiProyeksiController extends Controller
 
                         if ($val->jenis == 'material') {
                             //ConsRate
-                            $kp = $val->kuantumProduksi($periode);
-                            // print_r($kp);
-                            $kp_val = 0;
-                            if ($kp) {
+
+                            $kp_v = $val->kpValue($periode);
+
+                            if ($kp_v != 0) {
+                                //                        if ($kp) {
                                 // dd($kp);
                                 // $kp_v = (float) $kp[0]->glos_cc->renprod[0]->qty_renprod_value;
                                 // $kp_v = (float) $val->kpValue($periode);
-                                $kp_v = $val->kpValue($periode);
+
                                 $kuan_prod = $kp_v;
                                 //Data Dummy
                                 // $kp_v = 2;
@@ -168,6 +169,8 @@ class SimulasiProyeksiController extends Controller
                             } else {
                                 $consrate = 0;
                             }
+
+
                             //Harga Satuan dan Biaya Perton
                             if ($val->kategori == 1) {
                                 //Harga Satuan
@@ -358,27 +361,6 @@ class SimulasiProyeksiController extends Controller
     public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center)
     {
         try {
-//            $cons_rate = ConsRate::with(
-//                ['glos_cc' => function ($query) {
-//                    $query->select('cost_center', 'material_code')->groupBy('cost_center', 'material_code');
-//                }]
-//            )
-//                ->select('product_code', 'plant_code', 'version_id')
-//                ->where('version_id', $version)
-//                ->where('plant_code', $plant)
-//                ->where('product_code', $product)
-//                ->groupBy('product_code', 'plant_code', 'version_id')
-//                ->first();
-//
-//
-//            dd($cons_rate->glos_cc, $plant, $product);
-//            $asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
-//                ->select('id', 'version')
-//                ->where([
-//                    'id' => $version,
-//                    'company_code' => auth()->user()->company_code
-//                ])->first();
-
             $collection_input_temp = collect();
 
             $data_version = $version;
@@ -454,7 +436,7 @@ class SimulasiProyeksiController extends Controller
                 ->addSelect(DB::raw("'$lb->kategori_produk_id' as kategori_produk "))
                 ->union($temp_pro)
                 ->orderBy('no', 'asc')
-                ->with(['const_rate.glos_cc.renprod','tarif'])
+                ->with(['const_rate.glos_cc.renprod', 'tarif'])
                 ->orderBy('kategori', 'asc')
                 ->get();
             // dd($query->toArray());
@@ -480,13 +462,13 @@ class SimulasiProyeksiController extends Controller
                     $kp_val = 0;
                     if ($val->jenis == 'material') {
                         //ConsRate
-//                        $kp = $val->kuantumProduksi($periode);
+                        //                        $kp = $val->kuantumProduksi($periode);
                         // print_r($kp);
 
 
                         $kp_v = $val->kpValue($periode);
-                        if ($kp_v) {
-//                        if ($kp) {
+                        if ($kp_v != 0) {
+                            //                        if ($kp) {
                             // dd($kp);
                             // $kp_v = (float) $kp[0]->glos_cc->renprod[0]->qty_renprod_value;
                             // $kp_v = (float) $val->kpValue($periode);
@@ -766,18 +748,18 @@ class SimulasiProyeksiController extends Controller
                 ->orderBy('asumsi_umum_id', 'asc')
                 ->get();
 
-            // $glos_cc = DB::table('glos_cc')
-            //     ->where('glos_cc.material_code', $request->produk)
-            //     ->where('glos_cc.plant_code', $request->plant)
-            //     ->first();
+            $glos_cc = DB::table('glos_cc')
+                ->where('glos_cc.material_code', $request->produk)
+                ->where('glos_cc.plant_code', $request->plant)
+                ->first();
 
-            // if (!$glos_cc) {
-            //     return setResponse([
-            //         'code' => 430,
-            //         'title' => 'Gagal menampilkan data',
-            //         'message' => 'Data cost center tidak ditemukan!',
-            //     ]);
-            // }
+            if (!$glos_cc) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal menampilkan data',
+                    'message' => 'Data cost center dari produk ' . $request->produk . ' dan plant ' . $request->plant . ' tidak ditemukan!',
+                ]);
+            }
 
             // $simpro = DB::table('simulasi_proyeksi')
             //     ->where('simulasi_proyeksi.product_code', $request->produk)

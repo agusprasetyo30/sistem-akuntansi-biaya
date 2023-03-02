@@ -103,7 +103,7 @@ class Material extends Model
         // $renprod = $renprod[0]->qty_renprod_value;
         // $result = isset($renprod->glos_cc->renprod->first()->qty_renprod_value) ? $renprod->glos_cc->renprod->first()->qty_renprod_value : 0;
         // $result = isset($qtyRenprodVal) ? $qtyRenprodVal : 0;
-        $result = $renprod->glos_cc->renprod->first()->qty_renprod_value;
+        $result = $renprod->glos_cc->renprod->first()->qty_renprod_value ?? 0;
         // print_r($renprod->glos_cc->renprod->first() . '<br><br><br>');
         return $result;
     }
