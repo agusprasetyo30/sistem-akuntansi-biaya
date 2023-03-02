@@ -105,6 +105,68 @@
 
                 if (company !== null && periode !== ''){
                     $('#main_tab').css('display', 'block')
+                    $("#parameter_simulasi").DataTable({
+                        scrollX: true,
+                        dom: 'Bfrtip',
+                        orderCellsTop: true,
+                        processing: true,
+                        serverSide: true,
+                        deferRender:true,
+                        // fixedHeader: {
+                        //     header: true,
+                        //     headerOffset: $('#main_header').height()
+                        // },
+                        fixedColumns:   {
+                            left: 3
+                        },
+                        lengthMenu: [
+                            [-1, 10, 25, 50],
+                            ['All', 10, 25, 50],
+                        ],
+                        initComplete: function () {
+                            $('.dataTables_scrollHead').css('overflow', 'scroll');
+                            $('.dataTables_scrollHead').on('scroll', function () {
+                                $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                            });
+
+                            $(document).on('scroll', function () {
+                                $('.dtfh-floatingparenthead').on('scroll', function () {
+                                    $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
+                                });
+                            })
+
+                            let api = this.api();
+                            api.columns.adjust().draw();
+
+                            {{--$('#dt_balans').DataTable().ajax.url('{{route('get_data_dasar_balans')}}').load();--}}
+                        },
+                        buttons: [
+                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'excel', className: 'mb-5', exportOptions:{
+                                }, title: 'Balans' }
+                        ],
+                        ajax: {
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url : '{{route("get_data_kontrol_proyeksi")}}',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                            },
+                            columns: [
+                                {data: 'material', orderable:false},
+                                {data: 'plant', orderable:false},
+                                {data: 'keterangan', orderable:false},
+                            ],
+                        },
+                        rowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                            // if (aData.kategori_balans_id === 6){
+                            //     // $('td', nRow).css('background-color', 'Red').css('color', 'white');
+                            //     console.log(iDisplayIndex)
+                            // }
+                        }
+                    });
                 }else {
                     Swal.fire({
                         title: 'PERINGATAN',

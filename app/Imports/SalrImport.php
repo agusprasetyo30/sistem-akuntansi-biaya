@@ -34,7 +34,7 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
 
     public function model(array $row)
     {
-        DB::table('salrs')->insert([
+        return new Salr([
             'gl_account_fc' => $row['gl_account_fc'],
             'cost_center' => $row['cost_center'],
             'periode' => $this->periode,
