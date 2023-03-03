@@ -36,7 +36,7 @@ class PJPemakaianDataTable extends DataTable
                 return format_month($query->month_year, 'bi');
             })
             ->editColumn('pj_pemakaian_value', function ($query) {
-                return $query->pj_pemakaian_value;
+                return helpRibuan($query->pj_pemakaian_value);
             })
             ->editColumn('material', function ($query) {
                 return $query->material_code . ' ' . $query->material_name;

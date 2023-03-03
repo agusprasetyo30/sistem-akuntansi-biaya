@@ -48,6 +48,18 @@ class ZcoDataTable extends DataTable
             ->addColumn('cost_element', function ($query) {
                 return $query->cost_element . ' ' . $query->gl_account_desc;
             })
+            ->addColumn('product_qty', function ($query) {
+                return helpRibuanKoma($query->product_qty);
+            })
+            ->addColumn('total_qty', function ($query) {
+                return helpRibuanKoma($query->total_qty);
+            })
+            ->addColumn('total_amount', function ($query) {
+                return helpRibuan($query->total_amount);
+            })
+            ->addColumn('unit_price_product', function ($query) {
+                return rupiah($query->unit_price_product);
+            })
             ->orderColumn('filter_plant', function ($query, $order) {
                 $query->orderBy('plant.plant_code', $order);
             })

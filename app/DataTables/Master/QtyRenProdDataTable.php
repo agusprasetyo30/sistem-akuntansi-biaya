@@ -35,7 +35,7 @@ class QtyRenProdDataTable extends DataTable
                 return format_month($query->month_year, 'bi');
             })
             ->editColumn('qty_renprod_value', function ($query) {
-                return $query->qty_renprod_value;
+                return helpRibuan($query->qty_renprod_value);
             })
             ->editColumn('cost_center', function ($query) {
                 return $query->cost_center . ' ' . $query->cost_center_desc;

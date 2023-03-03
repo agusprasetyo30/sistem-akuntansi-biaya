@@ -36,7 +36,7 @@ class PJPenjualanDataTable extends DataTable
                 return format_month($query->month_year, 'bi');
             })
             ->editColumn('pj_penjualan_value', function ($query) {
-                return $query->pj_penjualan_value;
+                return helpRibuan($query->pj_penjualan_value);
             })
             ->editColumn('material', function ($query) {
                 return $query->material_code . ' ' . $query->material_name;
