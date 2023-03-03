@@ -148,7 +148,7 @@ class SimulasiProyeksiController extends Controller
                         if ($val->jenis == 'material') {
                             //ConsRate
 
-                            $kp_v = $val->kpValue($periode);
+                            $kp_v = $val->kpValue($periode, $data_product);
 
                             if ($kp_v != 0) {
                                 //                        if ($kp) {
@@ -247,9 +247,15 @@ class SimulasiProyeksiController extends Controller
                                 }
                             }
 
-                            if ($temp_total > 0 && $temp_perton > 0) {
-                                $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
-                                $biaya_perton = $total_biaya / $kuan_prod;
+
+                            if ($temp_total != 0 && $temp_perton != 0) {
+                                if ($inflasi == 0) {
+                                    $total_biaya = $temp_total + $tar;
+                                    $biaya_perton = $total_biaya / $kuan_prod;
+                                } else {
+                                    $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
+                                    $biaya_perton = $total_biaya / $kuan_prod;
+                                }
                             } else {
                                 $biaya_perton = 0;
                                 $total_biaya = 0;
@@ -465,8 +471,7 @@ class SimulasiProyeksiController extends Controller
                         //                        $kp = $val->kuantumProduksi($periode);
                         // print_r($kp);
 
-
-                        $kp_v = $val->kpValue($periode);
+                        $kp_v = $val->kpValue($periode, $data_product);
                         if ($kp_v != 0) {
                             //                        if ($kp) {
                             // dd($kp);
@@ -562,9 +567,14 @@ class SimulasiProyeksiController extends Controller
                             }
                         }
 
-                        if ($temp_total > 0 && $temp_perton > 0) {
-                            $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
-                            $biaya_perton = $total_biaya / $kuan_prod;
+                        if ($temp_total != 0 && $temp_perton != 0) {
+                            if ($inflasi == 0) {
+                                $total_biaya = $temp_total + $tar;
+                                $biaya_perton = $total_biaya / $kuan_prod;
+                            } else {
+                                $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
+                                $biaya_perton = $total_biaya / $kuan_prod;
+                            }
                         } else {
                             $biaya_perton = 0;
                             $total_biaya = 0;

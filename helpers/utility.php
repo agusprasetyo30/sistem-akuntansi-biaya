@@ -472,6 +472,23 @@ if (!function_exists('helpRupiah')) {
     }
 }
 
+if (!function_exists('helpRibuan')) {
+    function helpRibuan($angka)
+    {
+        $hasil_round = round($angka);
+        $hasil_ribuan = number_format($hasil_round, 0, ',', '.');
+        return $hasil_ribuan;
+    }
+}
+
+if (!function_exists('helpRibuanKoma')) {
+    function helpRibuanKoma($angka)
+    {
+        $hasil_ribuan = number_format($angka, 2, ',', '.');
+        return $hasil_ribuan;
+    }
+}
+
 if (!function_exists('mapping_plant')) {
     function mapping_plant($product)
     {
