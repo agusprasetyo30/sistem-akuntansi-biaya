@@ -48,7 +48,7 @@ class H_PJPemakaianDataTable extends DataTable
                     ->where('material_code', $query->material_code)
                     ->first();
 
-                return $pemakaianAsumsi ? $pemakaianAsumsi->pj_pemakaian_value : '-';
+                return $pemakaianAsumsi ? helpRibuan($pemakaianAsumsi->pj_pemakaian_value) : '-';
             });
         }
 

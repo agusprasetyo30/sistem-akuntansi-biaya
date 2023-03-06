@@ -40,7 +40,7 @@ class Material extends Model
 
     public function balans()
     {
-        return $this->hasMany(Balans::class, 'material_code', 'material_code');
+        return $this->hasOne(Balans::class, 'material_code', 'material_code');
     }
 
     public function zco()
@@ -93,11 +93,11 @@ class Material extends Model
         return $result;
     }
 
-    public function kpValue($periode)
+    public function kpValue($periode, $produk)
     {
         $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
-        })->first();
+        })->where('product_code', '=', $produk)->first();
 
         // $renprod = $renprod->glos_cc->renprod;
         // $renprod = $renprod[0]->qty_renprod_value;
@@ -137,14 +137,21 @@ class Material extends Model
             // ])->first();
 
             //            dd($periode, $material, $produk);
-            $balans = $this->balans()->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->get();
+            // $balans = $this->balans()->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->where('material_code', $material)->get();     dd($periode, $material, $produk);
+            $balans = $this->balans->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->where('material_code', $material)->first();
 
-            if ($balans->isNotEmpty()) {
-                $res = (float) $balans[0]['p'] ?? 0;
-            } else {
-                $res = 0;
+            // if ($balans->isNotEmpty()) {
+            //     $res = (float) $balans->p ?? 0;
+            // } else {
+            //     $res = 0;
+            // }
+
+            $res = 0;
+
+            if ($balans) {
+                $res = $balans->p;
             }
-            //             dd($res);
+
             return $res;
         }
     }

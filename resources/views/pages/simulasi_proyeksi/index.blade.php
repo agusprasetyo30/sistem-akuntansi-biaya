@@ -239,7 +239,7 @@
                         column.push({ data: i.toString()+'biaya_perton', orderable:false});
                         column.push({ data: i.toString()+'total_biaya', orderable:false});
 
-                        kolom_top += '<th colspan="4" class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'<br>'+ response.produk[0].material_code + ' ' + response.produk[0].material_name +'<br>'+ response.plant[0].plant_code + ' ' + response.plant[0].plant_desc + '<br> Kuantum Produksi ' + response.kuantum_produksi[i].kuantum_produksi +'</th>';
+                        kolom_top += '<th colspan="4" class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'<br>'+ response.produk[0].material_code + ' ' + response.produk[0].material_name +'<br>'+ response.plant[0].plant_code + ' ' + response.plant[0].plant_desc + '<br> Kuantum Produksi ' + helpRibuan(response.kuantum_produksi[i].kuantum_produksi) +'</th>';
 
                         // kolom_top += '<th colspan="4" class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+ '</th>';
 

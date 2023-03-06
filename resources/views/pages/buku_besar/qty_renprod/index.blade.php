@@ -398,6 +398,7 @@
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
+                        pageLength: -1,
                         fixedHeader: {
                             header: true,
                             headerOffset: $('#main_header').height()

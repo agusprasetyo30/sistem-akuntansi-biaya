@@ -166,7 +166,7 @@ class H_ZcoDataTable extends DataTable
                     $harga_satuan = $biaya_perton / $cr;
                 }
 
-                return $harga_satuan ? helpRupiah($harga_satuan)  : '-';
+                return $harga_satuan ? rupiah($harga_satuan)  : '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 // $total_qty = $zcoValues
                 //     ->where('product_code', $item->product_code)
@@ -231,7 +231,7 @@ class H_ZcoDataTable extends DataTable
                     $cr = $total_qty->total_qty / $tot_kuanprod;
                 }
 
-                return $cr ? round($cr, 4) : '-';
+                return $cr ? helpRibuanKoma($cr) : '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 // $total_biaya = $zcoValues
                 //     ->where('product_code', $item->product_code)
@@ -298,7 +298,7 @@ class H_ZcoDataTable extends DataTable
                     $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
                 }
 
-                return $biaya_perton ? helpRupiah($biaya_perton) : '-';
+                return $biaya_perton ? rupiah($biaya_perton) : '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 // $total_biaya = $zcoValues
                 //     ->where('product_code', $item->product_code)
@@ -333,7 +333,7 @@ class H_ZcoDataTable extends DataTable
 
                 $total_biaya = $total_biaya->first();
 
-                return $total_biaya->total_amount ? helpRupiah($total_biaya->total_amount) : '-';
+                return $total_biaya->total_amount ? rupiah($total_biaya->total_amount) : '-';
             });
         }
 

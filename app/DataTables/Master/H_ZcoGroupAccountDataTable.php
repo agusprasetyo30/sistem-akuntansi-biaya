@@ -137,7 +137,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
                     $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
                 }
 
-                return $biaya_perton ? helpRupiah($biaya_perton) : '-';
+                return $biaya_perton ? rupiah($biaya_perton) : '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 // $total_biaya = $zcoValues
                 //     ->where('product_code', $item->product_code)
@@ -172,7 +172,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
 
                 $total_biaya = $total_biaya->first();
 
-                return $total_biaya->total_amount ? helpRupiah($total_biaya->total_amount) : '-';
+                return $total_biaya->total_amount ? rupiah($total_biaya->total_amount) : '-';
             });
         }
 

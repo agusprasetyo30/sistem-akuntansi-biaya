@@ -48,7 +48,7 @@ class H_PJPenjualanDataTable extends DataTable
                     ->where('material_code', $query->material_code)
                     ->first();
 
-                return $penjualanAsumsi ? $penjualanAsumsi->pj_penjualan_value : '-';
+                return $penjualanAsumsi ? helpRibuan($penjualanAsumsi->pj_penjualan_value) : '-';
             });
         }
 

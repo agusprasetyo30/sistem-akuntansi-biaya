@@ -45,7 +45,7 @@ class H_QtyRenProdDataTable extends DataTable
                     ->where('cost_center', $query->cost_center)
                     ->first();
 
-                return $renprodAsumsi ? $renprodAsumsi->qty_renprod_value : '-';
+                return $renprodAsumsi ? helpRibuan($renprodAsumsi->qty_renprod_value) : '-';
             });
         }
 

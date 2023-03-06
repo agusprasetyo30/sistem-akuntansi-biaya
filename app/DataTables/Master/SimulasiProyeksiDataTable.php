@@ -480,7 +480,8 @@ class SimulasiProyeksiDataTable extends DataTable
                             ->where('name', $query->name)
                             ->first();
 
-                        return round($simproAsumsi->cr, 4);
+                        // return round($simproAsumsi->cr, 4);
+                        return helpRibuanKoma($simproAsumsi->cr);
                     } else if ($ga) {
                         return '-';
                     } else {
@@ -518,7 +519,7 @@ class SimulasiProyeksiDataTable extends DataTable
                                 ->where('name', $query->name)
                                 ->first();
 
-                            return '$ ' . $simproAsumsi->biaya_perton;
+                            return '$ ' . helpRibuanKoma($simproAsumsi->biaya_perton);
                         } else {
                             return '';
                         }
