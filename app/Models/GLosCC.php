@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GLosCC extends Model
 {
     use HasFactory;
+    use \Awobaz\Compoships\Compoships;
 
     protected $table = 'glos_cc';
     protected $primaryKey = 'id';
@@ -28,5 +29,10 @@ class GLosCC extends Model
     public function renprod()
     {
         return $this->hasMany(QtyRenProd::class, 'cost_center', 'cost_center');
+    }
+
+    public function cons_rate()
+    {
+        return $this->belongsTo(ConsRate::class, ['product_code', 'plant_code'], ['material_code', 'plant_code']);
     }
 }

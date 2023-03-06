@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ConsRate extends Model
 {
     use HasFactory;
+    use \Awobaz\Compoships\Compoships;
     protected $table = 'cons_rate';
     protected $primaryKey = 'id';
 
@@ -31,6 +32,11 @@ class ConsRate extends Model
     public function glos_cc()
     {
         return $this->hasOne(GLosCC::class, 'material_code', 'product_code');
+    }
+
+    public function glos_cc1()
+    {
+        return $this->hasOne(GLosCC::class, ['material_code', 'plant_code'], ['product_code', 'plant_code']);
     }
 
     public function material()

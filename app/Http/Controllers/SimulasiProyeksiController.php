@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\SimulasiProyeksiDataTable;
 use App\DataTables\Master\SimulasiProyeksiStoreDataTable;
 use App\Models\Asumsi_Umum;
+use App\Models\Balans;
 use App\Models\ConsRate;
 use App\Models\GroupAccountFC;
 use App\Models\Material;
@@ -29,13 +30,19 @@ class SimulasiProyeksiController extends Controller
     public function hitung_simpro($version)
     {
         try {
+            $balans = Balans::select('material_code')
+                ->where('version_id', $version)
+                ->where('kategori_balans_id', '>', 6)
+                ->groupBy('material_code')->get()
+                ->pluck('material_code')
+                ->all();
+
             $cons_rate = ConsRate::with(
-                ['glos_cc' => function ($query) {
-                    $query->select('cost_center', 'material_code')->groupBy('cost_center', 'material_code');
-                }]
+                ['glos_cc1']
             )
                 ->select('product_code', 'plant_code', 'version_id')
                 ->where('version_id', $version)
+                ->whereNotIn('product_code', $balans)
                 ->groupBy('product_code', 'plant_code', 'version_id')
                 ->get();
 
@@ -357,7 +364,7 @@ class SimulasiProyeksiController extends Controller
             foreach ($chunk as $insert) {
                 SimulasiProyeksi::insert($insert);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);
@@ -367,6 +374,7 @@ class SimulasiProyeksiController extends Controller
     public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center)
     {
         try {
+
             $collection_input_temp = collect();
 
             $data_version = $version;
@@ -671,12 +679,12 @@ class SimulasiProyeksiController extends Controller
                 }
             }
 
-            // dd($collection_input_temp);
+//             dd($collection_input_temp);
             $chunk = array_chunk($collection_input_temp->toArray(), 500);
             foreach ($chunk as $insert) {
                 SimulasiProyeksi::insert($insert);
             }
-        } catch (\Throwable $th) {
+        } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);

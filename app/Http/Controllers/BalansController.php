@@ -215,18 +215,23 @@ class BalansController extends Controller
                         }
                         elseif ($data_map->kategori_balans_id > 6){
 
+
                             $glos_cc = $data_map->get_data_glos_cc($data_map->plant_code);
-//                            dd($glos_cc);
                             if ($glos_cc != null){
 
 //                                dd($request->version, $glos_cc[0]->plant_code, $data_map->material_code, $glos_cc[0]->cost_center);
-
+//                                if ($data_map->material_code == '2000002' && $data_map->kategori_balans_id ==8){
+//                                    dd($glos_cc->cost_center);
+//                                }
                                 $check_simulasi = $collection_input_temp
                                     ->where('kategori_balans_id', '>', 6)
-//                                    ->where('asumsi_umum_id', '=', $data->id)
+                                    ->where('cost_center', '=', $glos_cc->cost_center)
                                     ->where('material_code', $data_map->material_code)
                                     ->first();
 
+//                                if ($data_map->material_code == '2000002' && $data_map->kategori_balans_id ==8){
+//                                    dd($check_simulasi);
+//                                }
 
 //                                if ($data_map->kategori_balans_id == 9){
 //                                    dd($check_simulasi);
@@ -236,10 +241,20 @@ class BalansController extends Controller
 //                                    dd($collection_input_temp, $check_simulasi);
 //                                }
                                 if ($check_simulasi == null){
+//                                    if ($data_map->material_code == '2000002' && $data_map->kategori_balans_id ==7) {
+//                                        dd($key1, $check_simulasi);
+//                                    }
+//                                    if ($key1 == 7){
+//                                        dd($glos_cc->plant_code, $data_map->material_code, $glos_cc->cost_center);
+//                                    }
+//                                    dd('dawdawd');
                                     $simulasi_create->hitung_satuan_simpro($request->version, $main_asumsi, $glos_cc->plant_code, $data_map->material_code, $glos_cc->cost_center);
 //                                    $this->simulasi($request->version, $glos_cc[0]->plant_code, $data_map->material_code, $glos_cc[0]->cost_center);
                                     $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
                                 }else{
+//                                    if ($data_map->material_code == '2000002' && $data_map->kategori_balans_id ==8) {
+//                                        dd($key1, $glos_cc, $check_simulasi);
+//                                    }
                                     $p = (double) $check_simulasi['p'];
 
                                 }
