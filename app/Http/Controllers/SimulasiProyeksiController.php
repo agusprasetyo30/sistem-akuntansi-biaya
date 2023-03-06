@@ -42,7 +42,7 @@ class SimulasiProyeksiController extends Controller
             )
                 ->select('product_code', 'plant_code', 'version_id')
                 ->where('version_id', $version)
-                ->whereNotIn('product_code', $balans)
+//                ->whereNotIn('product_code', $balans)
                 ->groupBy('product_code', 'plant_code', 'version_id')
                 ->get();
 

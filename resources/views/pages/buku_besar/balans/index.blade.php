@@ -215,12 +215,12 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        // $('#local_loader').show();
+                                        $('#local_loader').show();
                                         generate_data()
                                     }
                                 })
                             }else {
-                                // $('#local_loader').show();
+                                $('#local_loader').show();
                                 generate_data()
                             }
                         }, error:function () {
@@ -368,7 +368,7 @@
                     _token: "{{ csrf_token() }}",
                     version:$('#filter_version_generate').val(),
                 },success:function (response) {
-                    // $('#local_loader').hide();
+                    $('#local_loader').hide();
                     Swal.fire({
                         title: 'Data berhasil diproyeksikan',
                         icon: 'success',
