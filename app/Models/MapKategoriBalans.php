@@ -90,15 +90,65 @@ class MapKategoriBalans extends Model
         return $qty_produksi;
     }
 
-    public function get_data_total_pengadaan($asumsi, $kurs, $adjustment){
-        $qty_rendaan = (double) $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('qty_rendaan_value');
-        $price_rendaan = (double) $this->price_rencana_pengadaan->where('asumsi_umum_id', $asumsi)->sum('price_rendaan_value');
+    public function get_data_total_pengadaan($asumsi, $adjustment){
+        $qty_rendaan = $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi);
+        $price_rendaan = $this->price_rencana_pengadaan->where('asumsi_umum_id', $asumsi);
+//        dd($qty_rendaan, $price_rendaan);
+//        if ($this->material_code == '2000002' and $asumsi == 12){
+//            $result = 0;
+//            if ($qty_rendaan->isNotEmpty()){
+//                foreach ($qty_rendaan as $key =>$items){
+//                    $qty_rendaan_temp = (double) $items->qty_rendaan_value;
+//                    try {
+//                        $price_rendaan_temp = (double) $price_rendaan[$key]->price_rendaan_value;
+//                        $result += $qty_rendaan_temp * ($price_rendaan_temp * (1 + ($adjustment / 100)));
+//                    }catch (\Exception $exception){
+//                        $result = 0;
+//                    }
+//                }
+//            }else{
+//                $result = 0;
+//            }
+//
+//
+////            dd($result, $qty_rendaan, $price_rendaan);
+//        }else{
+//            $result = 0;
+//            if ($qty_rendaan->isNotEmpty()){
+//                foreach ($qty_rendaan as $key =>$items){
+//                    $qty_rendaan_temp = (double) $items->qty_rendaan_value;
+//                    try {
+//                        $price_rendaan_temp = (double) $price_rendaan[$key]->price_rendaan_value;
+//                        $result += $qty_rendaan_temp * ($price_rendaan_temp * (1 + ($adjustment / 100)));
+//                    }catch (\Exception $exception){
+//                        $result = 0;
+//                    }
+//                }
+//            }else{
+//                $result = 0;
+//            }
+//        }
 
-        if ($qty_rendaan > 0 && $price_rendaan == 0){
-            $result = 0;
+        $result = 0;
+        if ($qty_rendaan->isNotEmpty()){
+            foreach ($qty_rendaan as $key =>$items){
+                $qty_rendaan_temp = (double) $items->qty_rendaan_value;
+                try {
+                    $price_rendaan_temp = (double) $price_rendaan[$key]->price_rendaan_value;
+                    $result += $qty_rendaan_temp * ($price_rendaan_temp * (1 + ($adjustment / 100)));
+                }catch (\Exception $exception){
+                    $result = 0;
+                }
+            }
         }else{
-            $result = $qty_rendaan * ($price_rendaan * (1 + ($adjustment / 100)));
+            $result = 0;
         }
+//        $result = 0;
+//        if ($qty_rendaan > 0 && $price_rendaan == 0){
+//            $result = 0;
+//        }else{
+//            $result = $qty_rendaan * ($price_rendaan * (1 + ($adjustment / 100)));
+//        }
         return $result;
     }
 
