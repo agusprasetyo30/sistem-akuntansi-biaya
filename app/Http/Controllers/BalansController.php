@@ -131,7 +131,12 @@ class BalansController extends Controller
                         }
                         elseif ($data_map->kategori_balans_id == 2){
                             $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
-                            $nilai = $data_map->get_data_total_pengadaan($data->id, $data->usd_rate, $data->adjustment);
+                            $nilai = $data_map->get_data_total_pengadaan($data->id, $data->adjustment);
+
+//                            if ($data_map->material_code == '2000002' && $data->id == 11){{
+//                                dd('dwadaw');
+//                            }}
+
 
                             if ($q != 0){
                                 $p = $nilai / $q;
