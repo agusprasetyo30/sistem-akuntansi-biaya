@@ -62,7 +62,7 @@ class BalansController extends Controller
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
 
-                SimulasiProyeksi::where('version_id', $request->version)->delete();
+
 
                 $simulasi_create = new SimulasiProyeksiController();
                 $main_asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
@@ -298,6 +298,8 @@ class BalansController extends Controller
                 foreach ($chunk as $insert){
                     Balans::insert($insert);
                 }
+
+                SimulasiProyeksi::where('version_id', $request->version)->delete();
                 $simulasi_create->hitung_simpro($request->version);
             });
             return response()->json(['code' => 200]);
