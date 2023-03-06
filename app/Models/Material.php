@@ -136,16 +136,21 @@ class Material extends Model
             //     'kategori_balans_id' => 3
             // ])->first();
 
-            //            dd($periode, $material, $produk);
+//            dd($periode, $material, $produk);
             // $balans = $this->balans()->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->where('material_code', $material)->get();     dd($periode, $material, $produk);
-            $balans = $this->balans->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->where('material_code', $material)->first();
+            $balans = $this->balans()
+                ->where('asumsi_umum_id', $periode)
+                ->where('kategori_balans_id', 3)
+                ->where('material_code', $material)
+                ->first();
 
-            // if ($balans->isNotEmpty()) {
-            //     $res = (float) $balans->p ?? 0;
-            // } else {
-            //     $res = 0;
-            // }
+//             if ($balans->isNotEmpty()) {
+//                 $res = (float) $balans->p ?? 0;
+//             } else {
+//                 $res = 0;
+//             }
 
+//            dd($balans);
             $res = 0;
 
             if ($balans) {
