@@ -3,15 +3,15 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Role</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Permission</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label>Role </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Role" name="role" id="role" autocomplete="off">
+                                <label>Permission </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Permission" name="permission" id="permission" autocomplete="off">
                             </div>
                             {{-- <div class="form-group">
                                 <label class="form-label">Status</label>

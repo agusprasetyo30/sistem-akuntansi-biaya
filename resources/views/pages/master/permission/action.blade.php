@@ -1,6 +1,6 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a  class="btn bg-danger-transparent" onclick="delete_role({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+<a  class="btn bg-danger-transparent" onclick="delete_permission({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 
 <!-- Modal Detail-->
@@ -8,7 +8,7 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Role</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Permission</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -18,8 +18,8 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Role </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="Role" value="{{$model->role_id}}" name="detail_role" id="detail_role" autocomplete="off">
+                                <label>Permission </label>
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="Permission" value="{{$model->name}}" name="detail_permission" id="detail_permission" autocomplete="off">
                             </div>
                             {{-- <div class="form-group">
                                 <label class="form-label">Status</label>
@@ -48,15 +48,15 @@
     <div class="modal-dialog modal-lg " role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Role</h5>
+                <h5 class="modal-title" id="largemodal1">Edit Permission</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label>Role </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Role"  value="{{$model->role_id}}" name="role" id="edit_role{{$model->id}}" autocomplete="off">
+                                <label>Permission </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Permission"  value="{{$model->name}}" name="permission" id="edit_permission{{$model->id}}" autocomplete="off">
                             </div>
                             {{-- <div class="form-group">
                                 <label class="form-label">Status</label>
@@ -73,7 +73,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-list btn-animation">
-                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_role({{$model->id}})" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_permission({{$model->id}})" class="btn btn-primary">Simpan</button>
                     <button type="button" id="back_edit{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
                 </div>
             </div>

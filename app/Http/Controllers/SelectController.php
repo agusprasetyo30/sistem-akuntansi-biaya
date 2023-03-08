@@ -26,6 +26,9 @@ use App\Models\Zco;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role as SpatieRole;
+
 use function PHPUnit\Framework\isEmpty;
 
 class SelectController extends Controller
@@ -66,26 +69,26 @@ class SelectController extends Controller
         $material = $request->material;
 
         if ($search == '') {
-            if ($kategori == '1'){
+            if ($kategori == '1') {
                 $plant = Saldo_Awal::select('saldo_awal.plant_code', 'plant.plant_desc')
                     ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
                     ->where('saldo_awal.material_code', $material)
                     ->whereNull('saldo_awal.deleted_at')
                     ->groupBy('saldo_awal.plant_code', 'plant.plant_desc')
                     ->get();
-            }else{
+            } else {
                 $plant = Plant::limit(10)
                     ->where('is_active', 't')
                     ->whereNull('deleted_at')
                     ->get();
             }
         } else {
-            if ($kategori == '1'){
+            if ($kategori == '1') {
                 $plant = Saldo_Awal::select('saldo_awal.plant_code', 'plant.plant_desc')
                     ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
                     ->where('saldo_awal.material_code', $material)
                     ->whereNull('saldo_awal.deleted_at')
-                    ->where(function ($query) use ($search){
+                    ->where(function ($query) use ($search) {
                         $query->where('saldo_awal.plant_code', 'ilike', '%' . $search . '%')
                             ->orWhere('plant.plant_desc', 'ilike', '%' . $search . '%');
                     })
@@ -93,7 +96,7 @@ class SelectController extends Controller
                     ->get();
 
                 dd($plant);
-            }else{
+            } else {
                 $plant = Plant::limit(10)
                     ->where('is_active', 't')
                     ->whereNull('deleted_at')
@@ -136,9 +139,9 @@ class SelectController extends Controller
                 ->rightjoin('cons_rate', 'cons_rate.product_code', '=', 'glos_cc.material_code')
                 ->where('glos_cc.company_code', auth()->user()->company_code)
                 ->whereNull('glos_cc.deleted_at')
-                ->where('cost_center.cost_center', 'ilike', '%'.$search.'%')
-                ->orWhere('cost_center.cost_center_desc', 'ilike', '%'.$search.'%')
-                ->orWhere('glos_cc.material_code', 'ilike', '%'.$search.'%')
+                ->where('cost_center.cost_center', 'ilike', '%' . $search . '%')
+                ->orWhere('cost_center.cost_center_desc', 'ilike', '%' . $search . '%')
+                ->orWhere('glos_cc.material_code', 'ilike', '%' . $search . '%')
                 ->groupBy('glos_cc.cost_center', 'cost_center.cost_center_desc', 'cons_rate.product_code')
                 ->get();
         }
@@ -146,8 +149,8 @@ class SelectController extends Controller
         $response = array();
         foreach ($glos_cc as $items) {
             $response[] = array(
-                "id" => $items->cost_center . ' - ' . $items->cost_center_desc. ' - ' .$items->product_code,
-                "text" => $items->cost_center . ' - ' . $items->cost_center_desc.' ( '.$items->product_code.' )'
+                "id" => $items->cost_center . ' - ' . $items->cost_center_desc . ' - ' . $items->product_code,
+                "text" => $items->cost_center . ' - ' . $items->cost_center_desc . ' ( ' . $items->product_code . ' )'
             );
         }
 
@@ -198,7 +201,7 @@ class SelectController extends Controller
         foreach ($kategori_produk as $items) {
             $response[] = array(
                 "id" => $items->id,
-                "text" => $items->kategori_produk_name. ' - '. $items->kategori_produk_desc
+                "text" => $items->kategori_produk_name . ' - ' . $items->kategori_produk_desc
             );
         }
 
@@ -224,7 +227,7 @@ class SelectController extends Controller
         foreach ($kategori_balans as $items) {
             $response[] = array(
                 "id" => $items->id,
-                "text" => $items->kategori_balans. ' - '. $items->kategori_balans_desc
+                "text" => $items->kategori_balans . ' - ' . $items->kategori_balans_desc
             );
         }
 
@@ -408,9 +411,9 @@ class SelectController extends Controller
                 ->get();
         } else {
             $material = Material::where(function ($query) use ($search) {
-                    $query->where('material_code', 'ilike', '%' . $search . '%')
-                        ->orWhere('material_name', 'ilike', '%' . $search . '%');
-                })
+                $query->where('material_code', 'ilike', '%' . $search . '%')
+                    ->orWhere('material_name', 'ilike', '%' . $search . '%');
+            })
                 ->limit(10)
                 ->where('is_active', 't')
                 ->get();
@@ -741,14 +744,14 @@ class SelectController extends Controller
 
     public function check_kursv2(Request $request)
     {
-//        $data = explode('-', $request->periode);
+        //        $data = explode('-', $request->periode);
 
         $kurs = DB::table('kurs')
-            ->where('month_year', 'ilike', '%'.$request->periode.'%')
+            ->where('month_year', 'ilike', '%' . $request->periode . '%')
             ->first();
 
 
-//        dd($kurs, $request->periode);
+        //        dd($kurs, $request->periode);
         if ($kurs == null) {
             return response()->json(['Code' => 200, 'data_kurs' => '']);
         } else {
@@ -935,7 +938,7 @@ class SelectController extends Controller
         foreach ($kat_produk as $items) {
             $response[] = array(
                 "id" => $items->id,
-                "text" => $items->kategori_produk_name.' - '.$items->kategori_produk_desc
+                "text" => $items->kategori_produk_name . ' - ' . $items->kategori_produk_desc
             );
         }
 
@@ -965,7 +968,7 @@ class SelectController extends Controller
         foreach ($kat_balans as $items) {
             $response[] = array(
                 "id" => $items->id,
-                "text" => $items->kategori_balans.' - '.$items->kategori_balans_desc
+                "text" => $items->kategori_balans . ' - ' . $items->kategori_balans_desc
             );
         }
 
@@ -1202,27 +1205,26 @@ class SelectController extends Controller
     {
         $search = $request->search;
         if ($search == '') {
-            if (auth()->user()->company_code == 'A000'){
+            if (auth()->user()->company_code == 'A000') {
                 $company = Company::limit(10)
                     ->where('company_code', '!=', 'A000')
                     ->get();
-            }else{
+            } else {
                 $company = Company::limit(10)
                     ->where('company_code', auth()->user()->company_code)
                     ->get();
             }
-        }
-        else {
+        } else {
 
-            if (auth()->user()->company_code == 'A000'){
+            if (auth()->user()->company_code == 'A000') {
                 $company = Company::limit(10)
                     ->where('company_code', '!=', 'A000')
-                    ->where('company_code_pi', function ($query) use ($search){
+                    ->where('company_code_pi', function ($query) use ($search) {
                         $query->where('company_code', 'ilike', '%' . $search . '%')
                             ->orWhere('company_name', 'ilike', '%' . $search . '%');
                     })
                     ->get();
-            }else{
+            } else {
                 $company = Company::limit(10)
                     ->where('company_code', auth()->user()->company_code)
                     ->get();
@@ -1234,11 +1236,56 @@ class SelectController extends Controller
         foreach ($company as $items) {
             $response[] = array(
                 "id" => $items->company_code,
-                "text" => $items->company_code.' - '. $items->company_name
+                "text" => $items->company_code . ' - ' . $items->company_name
             );
         }
 
         return response()->json($response);
     }
 
+    public function permission(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $permission = Permission::limit(10)
+                ->get();
+        } else {
+            $permission = Permission::where('name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($permission as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->name,
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function role_spatie(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $role = SpatieRole::limit(10)
+                ->get();
+        } else {
+            $role = SpatieRole::where('name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($role as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->name,
+            );
+        }
+
+        return response()->json($response);
+    }
 }

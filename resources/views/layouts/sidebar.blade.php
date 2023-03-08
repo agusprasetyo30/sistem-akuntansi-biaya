@@ -38,9 +38,9 @@
                 <li><a href="{{route('asumsi_umum')}}" class="slide-item"> Asumsi Umum</a></li>
                 <li><a href="{{route('kurs')}}" class="slide-item"> Kurs</a></li>
                 <li><a href="{{route('regions')}}" class="slide-item"> Region</a></li>
+                <li><a href="{{route('permission')}}" class="slide-item"> Permission</a></li>
                 <li><a href="{{route('role')}}" class="slide-item"> Role</a></li>
                 <li><a href="{{route('user')}}" class="slide-item"> Users</a></li>
-                <li><a href="{{route('management_role')}}" class="slide-item"> Management Role</a></li>
 			</ul>
 		</li>
 		<li class="slide">

@@ -11,9 +11,7 @@ class UsersDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $query = User::select('users.*', 'role.nama_role', 'management_role.login_method', 'management_role.role_id')
-            ->leftJoin('management_role', 'management_role.user_id', '=', 'users.id')
-            ->leftJoin('role', 'role.id', '=', 'management_role.role_id');
+        $query = User::select('users.*');
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
@@ -35,7 +33,7 @@ class UsersDataTable extends DataTable
                 Button::make('print'),
                 Button::make('reset'),
                 Button::make('reload')
-                    );
+            );
     }
 
     /**
@@ -47,10 +45,10 @@ class UsersDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),

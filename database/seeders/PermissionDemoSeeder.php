@@ -70,5 +70,21 @@ class PermissionDemoSeeder extends Seeder
             'company_code' => 'B000',
         ]);
         $user->assignRole($superadminRole);
+
+        $user = User::create([
+            'name' => 'Agung Santoso',
+            'username' => 'PilotJinix',
+            'password' => bcrypt('Petrokimia1'),
+            'company_code' => 'B000',
+        ]);
+        $user->assignRole($superadminRole);
+
+        $user = User::create([
+            'name' => 'Bayu Luky',
+            'username' => 'lukybayu',
+            'password' => bcrypt('Petrokimia1'),
+            'company_code' => 'B000',
+        ]);
+        $user->assignRole($superadminRole);
     }
 }

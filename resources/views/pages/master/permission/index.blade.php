@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Role</h4>
+            <h4 class="page-title mb-0 text-primary">Permission</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    {{-- <div class="card-title">Management Role</div> --}}
+                    {{-- <div class="card-title">Management Permission</div> --}}
                 </div>
                 <div class="card-body">
                     <div class="">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.maprole.add')
+            @include('pages.master.permission.add')
         </div>
     </div>
     <!-- /Row -->
@@ -42,10 +42,10 @@
 
 @section('scripts')
     <script>
-        var table_main_dt = '<table id="dt_role" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
+        var table_main_dt = '<table id="dt_permission" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="role_id" class="text-center">ROLE</th>' +
+            '<th data-type="text" data-name="role" class="text-center">PERMISSION</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -56,24 +56,18 @@
         $(document).ready(function () {
             get_data()
 
-            $('#is_active').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
         })
 
         function get_data(){
             $('#table_main').append(table_main_dt)
 
-            $('#dt_role thead tr')
+            $('#dt_permission thead tr')
                 .clone(true)
                 .addClass('filters')
-                .appendTo('#dt_role thead');
+                .appendTo('#dt_permission thead');
 
-            // $('#dt_role').DataTable().clear().destroy();
-            $("#dt_role").DataTable({
+            // $('#dt_permission').DataTable().clear().destroy();
+            $("#dt_permission").DataTable({
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
@@ -119,13 +113,7 @@
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
-                                if (iName == 'status'){
-                                    input.className = "status_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }
+
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
@@ -136,11 +124,6 @@
                         }else {
                             cell.empty()
                         }
-                        $('.status_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
 
                     });
                     this.api().columns.adjust().draw()
@@ -149,11 +132,11 @@
                     'pageLength',  'excel'
                 ],
                 ajax: {
-                    url : '{{route("management_role")}}',
+                    url : '{{route("permission")}}',
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'role_id', name: 'role_id', orderable:true},
+                    { data: 'name', name: 'name', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
@@ -171,10 +154,10 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_role')}}',
+                url: '{{route('insert_permission')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    role: $('#role').val(),
+                    permission: $('#permission').val(),
                     // status: $('#is_active').val(),
                 },
                 success:function (response) {
@@ -193,19 +176,19 @@
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                             // $("#table_main").empty();
                             // get_data()
-                            $('#dt_role').DataTable().ajax.reload();
+                            $('#dt_permission').DataTable().ajax.reload();
                         }
                     })
                 },
                 error:function (response) {
                     handleError(response)
                     $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                    // $('#dt_role').DataTable().ajax.reload();
+                    // $('#dt_permission').DataTable().ajax.reload();
                 }
             })
         })
 
-        function update_role(id) {
+        function update_permission(id) {
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back_edit"+id).attr("disabled", true);
             $.ajax({
@@ -213,11 +196,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_role')}}',
+                url: '{{route('update_permission')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    role: $('#edit_role'+id).val(),
+                    permission: $('#edit_permission'+id).val(),
                     // status: $('#edit_is_active'+id).val(),
                 },
                 success: function (response) {
@@ -238,7 +221,7 @@
                                 $("#back_edit"+id).attr("disabled", false);
                                 // $("#table_main").empty();
                                 // get_data()
-                                $('#dt_role').DataTable().ajax.reload();
+                                $('#dt_permission').DataTable().ajax.reload();
                             }
                         })
                 },
@@ -246,12 +229,12 @@
                     handleError(response)
                     $("#submit_edit"+id).attr('class', 'btn btn-primary').attr("disabled", false);
                     $("#back_edit"+id).attr("disabled", false);
-                    // $('#dt_role').DataTable().ajax.reload();
+                    // $('#dt_permission').DataTable().ajax.reload();
                 }
             })
         }
 
-        function delete_role(id) {
+        function delete_permission(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -269,7 +252,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_role')}}',
+                        url: '{{route('delete_permission')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,
@@ -287,13 +270,13 @@
                                     if (result.value) {
                                         // $("#table_main").empty();
                                         // get_data()
-                                        $('#dt_role').DataTable().ajax.reload();
+                                        $('#dt_permission').DataTable().ajax.reload();
                                     }
                                 })
                         },
                         error: function (response) {
                             handleError(response)
-                            // $('#dt_role').DataTable().ajax.reload();
+                            // $('#dt_permission').DataTable().ajax.reload();
                         }
                     })
 
