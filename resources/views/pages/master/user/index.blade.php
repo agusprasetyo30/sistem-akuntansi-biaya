@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Users</h4>
+            <h4 class="page-title mb-0 text-primary">Users</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Management Users</div>
+                    {{-- <div class="card-title">Management Users</div> --}}
                 </div>
                 <div class="card-body">
                     <div class="">
@@ -47,7 +47,6 @@
             '<tr>' +
             '<th data-type="text" data-name="nama" class="text-center">NAMA</th>' +
             '<th data-type="text" data-name="username" class="text-center">USERNAME</th>' +
-            '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -185,12 +184,11 @@
                 columns: [
                     { data: 'name', name: 'users.name', orderable:true},
                     { data: 'username', name: 'users.username', orderable:true},
-                    { data: 'nama_role', name: 'role.nama_role', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3]}
+                    {className: 'text-center', targets: [0,1,2]}
                 ]
             })
         }
@@ -363,6 +361,106 @@
 
                 }
 
+            })
+        }
+
+        function assign_role(id) {
+            $("#submit_assign_role"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_assign_role"+id).attr("disabled", true);
+            $("#submit_remove_role"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('assign_role_user')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    user: $('#assign_role'+id).val(),
+                    role:$('#role'+id).val(),
+                    // status: $('#give_permission_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_assign_role'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_assign_role"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_assign_role"+id).attr("disabled", false);
+                                $("#submit_remove_role"+id).attr("disabled", false);
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_role').DataTable().ajax.reload();
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_assign_role"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_assign_role"+id).attr("disabled", false);
+                    $("#submit_remove_role"+id).attr("disabled", false);
+                    // $('#dt_role').DataTable().ajax.reload();
+                }
+            })
+        }
+
+        function remove_role(id) {
+            $("#submit_remove_role"+id).attr('class', 'btn btn-warning btn-loaders btn-icon').attr("disabled", true);
+            $("#back_assign_role"+id).attr("disabled", true);
+            $("#submit_assign_role"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('remove_role_user')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    user: $('#assign_role'+id).val(),
+                    role:$('#role'+id).val(),
+                    // status: $('#give_permission_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_assign_role'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_remove_role"+id).attr('class', 'btn btn-warning').attr("disabled", false);
+                                $("#back_assign_role"+id).attr("disabled", false);
+                                $("#submit_assign_role"+id).attr("disabled", false);
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_role').DataTable().ajax.reload();
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_remove_role"+id).attr('class', 'btn btn-warning').attr("disabled", false);
+                    $("#back_assign_role"+id).attr("disabled", false);
+                    $("#submit_assign_role"+id).attr("disabled", false);
+                    // $('#dt_role').DataTable().ajax.reload();
+                }
             })
         }
     </script>

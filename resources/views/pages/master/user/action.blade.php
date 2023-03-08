@@ -1,7 +1,7 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
 <a  class="btn bg-danger-transparent" onclick="delete_user({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
-
+<a  class="btn bg-success-transparent" title="role" data-bs-toggle="modal" data-bs-target="{{__('#modal_assign_role'.$model->id)}}"><i class="fe fe-unlock"></i></a>
 
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail" aria-hidden="true">
@@ -98,6 +98,43 @@
 </div>
 <!--/div-->
 
+<!-- Modal Role-->
+<div class="modal fade" id="{{__('modal_assign_role'.$model->id)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
+    <div class="modal-dialog modal-lg " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="largemodal1">Assign Role</h5>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 mt1">
+                    <div class="row">
+                        <div class="col-md-12" style="text-align: start;">
+                            <div class="form-group">
+                                <label>User </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Role"  value="{{$model->username}}" name="assign_role" id="assign_role{{$model->id}}" autocomplete="off" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <select name="role" id="role{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="" selected>Pilih Permission</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-list btn-animation">
+                    <button type="button" id="submit_assign_role{{$model->id}}" onclick="assign_role({{$model->id}})" class="btn btn-primary">Assign Role</button>
+                    <button type="button" id="submit_remove_role{{$model->id}}" onclick="remove_role({{$model->id}})" class="btn btn-warning">Remove Role</button>
+                    <button type="button" id="back_assign_role{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/div-->
+
 <script>
     $('#edit_data_main_role'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
@@ -125,5 +162,27 @@
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Metode',
         width: '100%'
+    })
+
+    $('#role'+'{{$model->id}}').select2({
+        dropdownParent: $('#modal_assign_role'+'{{$model->id}}'),
+        placeholder: 'Pilih Role',
+        width: '100%',
+        allowClear: false,
+        ajax: {
+            url: "{{ route('role_spatie_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
     })
 </script>

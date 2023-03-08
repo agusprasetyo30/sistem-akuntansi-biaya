@@ -1215,27 +1215,6 @@ if (!function_exists('totalGL')) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function helpDollar($money, $dollar)
 {
     $res = round($money / $dollar, 2);

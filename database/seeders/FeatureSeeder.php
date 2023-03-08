@@ -32,7 +32,7 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'plant',
                 'keterangan' => 'Plant',
-            ],[
+            ], [
                 'db' => 'kategori_material',
                 'keterangan' => 'Kategori Material',
             ],
@@ -47,7 +47,7 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'gl_account',
                 'keterangan' => 'General Ledger',
-            ],[
+            ], [
                 'db' => 'cost_center',
                 'keterangan' => 'Cost Center',
             ],
@@ -62,7 +62,7 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'asumsi_umum',
                 'keterangan' => 'Asumsi Umum',
-            ],[
+            ], [
                 'db' => 'saldo_awal',
                 'keterangan' => 'Saldo Awal',
             ],
@@ -77,13 +77,6 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'qty_rendaan',
                 'keterangan' => 'Kuantiti Rencana Pengadaan',
-            ],[
-                'db' => 'role',
-                'keterangan' => 'Role',
-            ],
-            [
-                'db' => 'management_role',
-                'keterangan' => 'Management Role',
             ],
             [
                 'db' => 'kurs',
@@ -92,7 +85,7 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'group_account_fc',
                 'keterangan' => 'Group Account Fixed Cost',
-            ],[
+            ], [
                 'db' => 'gl_account_fc',
                 'keterangan' => 'General Ledger Account Fixed Cost',
             ],
@@ -107,7 +100,7 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'pj_pemakaian',
                 'keterangan' => 'Pakai Jual Pemakaian',
-            ],[
+            ], [
                 'db' => 'pj_penjualan',
                 'keterangan' => 'Pakai Jual Penjualan',
             ],
@@ -122,7 +115,7 @@ class FeatureSeeder extends Seeder
             [
                 'db' => 'map_kategori_balans',
                 'keterangan' => 'Mapping Kategori Balans',
-            ],[
+            ], [
                 'db' => 'temp_proyeksi',
                 'keterangan' => 'Temp Proyeksi',
             ],
@@ -140,7 +133,7 @@ class FeatureSeeder extends Seeder
             ]
         ];
 
-        foreach ($data as $items){
+        foreach ($data as $items) {
             $kode_unik = Uuid::uuid1()->toString();
 
             Feature::create([

@@ -13,15 +13,17 @@
                                 <label>Role </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Role" name="role" id="role" autocomplete="off">
                             </div>
-                            {{-- <div class="form-group">
-                                <label class="form-label">Status</label>
-                                <select name="is_active" id="is_active" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_is_active() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
+                            <div class="form-group">
+                                <div class="form-label">Permissions</div>
+                                <div class="custom-control-stacked">
+                                    @foreach($permission as $value)
+                                    <label class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input permissioncheck" name="permission[]" id="{{$value->id}}" value="{{$value->id}}">
+                                        <span class="custom-control-label">{{$value->name}}</span>
+                                    </label>
                                     @endforeach
-                                </select>
-                            </div> --}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -3,23 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\UsersDataTable;
-use App\Models\Management_Role;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role as SpatieRole;
 
 class UserController extends Controller
 {
-    public function index(Request $request, UsersDataTable $usersDataTable){
-        if ($request->data == 'index'){
+    public function index(Request $request, UsersDataTable $usersDataTable)
+    {
+        if ($request->data == 'index') {
             return $usersDataTable->render('pages.master.user.index');
         }
         return view('pages.master.user.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
@@ -41,12 +42,12 @@ class UserController extends Controller
             $input_management['username'] = $request->username;
             $input_management['company_code'] = 'B000';
 
-            DB::transaction(function () use ($input, $input_management){
+            DB::transaction(function () use ($input, $input_management) {
                 $user = User::create($input);
 
                 $input_management['user_id'] = $user->id;
 
-                Management_Role::create($input_management);
+                // Management_Role::create($input_management);
             });
 
             return setResponse([
@@ -83,12 +84,12 @@ class UserController extends Controller
             $input_management['username'] = $request->username;
             $input_management['company_code'] = 'B000';
 
-            DB::transaction(function () use ($input, $input_management, $request){
+            DB::transaction(function () use ($input, $input_management, $request) {
                 User::where('id', $request->id)
                     ->update($input);
 
-                Management_Role::where('user_id', $request->id)
-                    ->update($input_management);
+                // Management_Role::where('user_id', $request->id)
+                //     ->update($input_management);
             });
             return setResponse([
                 'code' => 200,
@@ -104,8 +105,8 @@ class UserController extends Controller
     public function delete(Request $request)
     {
         try {
-            Management_Role::where('user_id', $request->id)
-                ->delete();
+            // Management_Role::where('user_id', $request->id)
+            //     ->delete();
             User::where('id', $request->id)
                 ->delete();
             return setResponse([
@@ -117,5 +118,45 @@ class UserController extends Controller
                 'code' => 400,
             ]);
         }
+    }
+
+    public function assignRole(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $role = SpatieRole::findOrFail($request->role);
+
+        if ($user->hasRole($role->name)) {
+            return setResponse([
+                'code' => 430,
+                'title' => 'Role sudah ada!',
+                'message' => 'user sudah memiliki role tersebut'
+            ]);
+        }
+
+        $user->assignRole($role->name);
+        return setResponse([
+            'code' => 200,
+            'title' => 'Permission berhasil ditambahkan'
+        ]);
+    }
+
+    public function removeRole(Request $request)
+    {
+        $user = User::findOrFail($request->id);
+        $role = SpatieRole::findOrFail($request->role);
+
+        if ($user->hasRole($role->name)) {
+            $user->removeRole($role->name);
+            return setResponse([
+                'code' => 200,
+                'title' => 'Role berhasil diremove'
+            ]);
+        }
+
+        return setResponse([
+            'code' => 430,
+            'title' => 'Role tidak ada!',
+            'message' => 'Role tidak ditemukan'
+        ]);
     }
 }

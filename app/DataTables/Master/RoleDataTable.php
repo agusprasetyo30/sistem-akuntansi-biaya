@@ -2,7 +2,7 @@
 
 namespace App\DataTables\Master;
 
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -12,6 +12,7 @@ class RoleDataTable extends DataTable
     public function dataTable($query)
     {
         $query = Role::query();
+
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()

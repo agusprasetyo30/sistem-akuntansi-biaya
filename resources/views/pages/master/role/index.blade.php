@@ -56,11 +56,27 @@
         $(document).ready(function () {
             get_data()
 
-            $('#is_active').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
+            // $('#permission').select2({
+            //     dropdownParent: $('#modal_add'),
+            //     placeholder: 'Pilih Permission',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('permission_select') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
 
         })
 
@@ -165,6 +181,11 @@
         }
 
         $('#submit').on('click', function () {
+            let arr = [];
+            $("input:checkbox:checked").each(function(){
+                arr.push($(this).val());
+            });
+
             $("#submit").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $.ajax({
                 type: "POST",
@@ -175,7 +196,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     role: $('#role').val(),
-                    // status: $('#is_active').val(),
+                    permission: arr,
                 },
                 success:function (response) {
                     Swal.fire({
@@ -299,6 +320,106 @@
 
                 }
 
+            })
+        }
+
+        function give_permission(id) {
+            $("#submit_give_permission"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_give_permission"+id).attr("disabled", true);
+            $("#submit_revoke_permission"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('give_permission_role')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    role: $('#give_permission'+id).val(),
+                    permission:$('#permission'+id).val(),
+                    // status: $('#give_permission_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_give_permission'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_give_permission"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_give_permission"+id).attr("disabled", false);
+                                $("#submit_revoke_permission"+id).attr("disabled", false);
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_role').DataTable().ajax.reload();
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_give_permission"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_give_permission"+id).attr("disabled", false);
+                    $("#submit_revoke_permission"+id).attr("disabled", false);
+                    // $('#dt_role').DataTable().ajax.reload();
+                }
+            })
+        }
+
+        function revoke_permission(id) {
+            $("#submit_revoke_permission"+id).attr('class', 'btn btn-warning btn-loaders btn-icon').attr("disabled", true);
+            $("#back_give_permission"+id).attr("disabled", true);
+            $("#submit_give_permission"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('revoke_permission_role')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    role: $('#give_permission'+id).val(),
+                    permission:$('#permission'+id).val(),
+                    // status: $('#give_permission_is_active'+id).val(),
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    })
+                        .then((result) => {
+                            if (result.value) {
+                                $('#modal_give_permission'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_revoke_permission"+id).attr('class', 'btn btn-warning').attr("disabled", false);
+                                $("#back_give_permission"+id).attr("disabled", false);
+                                $("#submit_give_permission"+id).attr("disabled", false);
+                                // $("#table_main").empty();
+                                // get_data()
+                                $('#dt_role').DataTable().ajax.reload();
+                            }
+                        })
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_revoke_permission"+id).attr('class', 'btn btn-warning').attr("disabled", false);
+                    $("#back_give_permission"+id).attr("disabled", false);
+                    $("#submit_give_permission"+id).attr("disabled", false);
+                    // $('#dt_role').DataTable().ajax.reload();
+                }
             })
         }
     </script>

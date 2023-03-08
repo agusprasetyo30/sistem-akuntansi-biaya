@@ -2,17 +2,16 @@
 
 namespace App\DataTables\Master;
 
-use App\Models\MapRole;
-use App\Models\Role;
+use Spatie\Permission\Models\Permission as SpatiePermission;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class MapRoleDataTable extends DataTable
+class PermissionDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $query = MapRole::query();
+        $query = SpatiePermission::query();
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
@@ -33,7 +32,7 @@ class MapRoleDataTable extends DataTable
             //         }
             //     }
             // })
-            ->addColumn('action', 'pages.master.maprole.action')
+            ->addColumn('action', 'pages.master.permission.action')
             ->escapeColumns([]);
     }
 
