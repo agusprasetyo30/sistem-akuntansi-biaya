@@ -13,9 +13,8 @@ class RoleController extends Controller
     public function index(Request $request, RoleDataTable $roleDataTable)
     {
         $permission = Permission::get();
-        $yuhu = 'aaaa';
         if ($request->data == 'index') {
-            return $roleDataTable->render('pages.master.role.index', compact('yuhu'));
+            return $roleDataTable->render('pages.master.role.index');
         }
         return view('pages.master.role.index', compact('permission'));
     }
@@ -58,9 +57,15 @@ class RoleController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['name'] = $request->role;
+            // $input['name'] = $request->role;
+            // dd($request->permission, $request->role);
 
-            $role = SpatieRole::where('id', $request->id)->update($input);
+            // $role = SpatieRole::where('id', $request->id)->update($input);
+
+            $role = SpatieRole::find($request->id);
+            $role->name = $request->input('role');
+            $role->save();
+
             $role->syncPermissions($request->input('permission'));
 
             return setResponse([
