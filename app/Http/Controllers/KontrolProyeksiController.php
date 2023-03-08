@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\DataTables\Master\KelengkapanBiayaTetapDataTable;
+use App\DataTables\Master\KelengkapanBOMDataTable;
+use App\DataTables\Master\KelengkapanHargaMaterialDataTable;
 use App\DataTables\Master\ParameterSimulasiDataTable;
+use App\Models\Asumsi_Umum;
 use App\Models\Feature;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +16,7 @@ class KontrolProyeksiController extends Controller
 {
     public function index(Request $request)
     {
+        $this->uptodate();
         return view('pages.kontrol_proyeksi.index');
     }
 
@@ -147,9 +152,10 @@ class KontrolProyeksiController extends Controller
             foreach ($data as $items){
                 $kode_unik = Uuid::uuid1()->toString();
 
-                Feature::create([
-                    'kode_unik' => $kode_unik,
+                Feature::updateOrCreate([
                     'db' => $items['db'],
+                ],[
+                    'kode_unik' => $kode_unik,
                     'feature' => strtoupper($items['keterangan']),
                     'feature_name' => $items['keterangan'],
                 ]);
@@ -163,7 +169,23 @@ class KontrolProyeksiController extends Controller
         return view('pages.kontrol_proyeksi.index');
     }
 
-    public function get_data(Request $request, ParameterSimulasiDataTable $parameterSimulasiDataTable){
-        return $parameterSimulasiDataTable->render('pages.kontrol_proyeksi.index');
+    public function get_data(Request $request, ParameterSimulasiDataTable $parameterSimulasiDataTable, KelengkapanBiayaTetapDataTable $kelengkapanBiayaTetapDataTable, KelengkapanHargaMaterialDataTable $kelengkapanHargaMaterialDataTable, KelengkapanBOMDataTable $kelengkapanBOMDataTable){
+        $asumsi_data = Asumsi_Umum::where('id',$request->asumsi)
+            ->get();
+
+        $asumsi = $asumsi_data->pluck('id')->all();
+        $temp = explode(' ', $asumsi_data->pluck('month_year')->first());
+        $date = $temp[0];
+
+        if ($request->data == 'index'){
+            return $parameterSimulasiDataTable->with(['company' => $request->company, 'asumsi' => $asumsi, 'date' => $date, 'versi' => $request->versi])->render('pages.kontrol_proyeksi.index');
+        }elseif ($request->data == 'kelengkapan_biaya_tetap'){
+            return $kelengkapanBiayaTetapDataTable->with(['company' => $request->company, 'asumsi' => $asumsi, 'date' => $date, 'versi' => $request->versi])->render('pages.kontrol_proyeksi.index');
+        }elseif ($request->data == 'kelengkapan_harga_material'){
+            return $kelengkapanHargaMaterialDataTable->with(['company' => $request->company, 'asumsi' => $asumsi, 'date' => $date, 'versi' => $request->versi])->render('pages.kontrol_proyeksi.index');
+        }elseif ($request->data == 'kelengkapan_bom'){
+            return $kelengkapanBOMDataTable->with(['company' => $request->company, 'asumsi' => $asumsi, 'date' => $date, 'versi' => $request->versi])->render('pages.kontrol_proyeksi.index');
+        }
+
     }
 }

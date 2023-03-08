@@ -108,7 +108,7 @@ class Material extends Model
         return $result;
     }
 
-    public function consRate()
+    public function consRate($version, $plant)
     {
         // dd($plant, $produk, $material);
         // $total_cr = $this->const_rate()->where([
@@ -117,7 +117,10 @@ class Material extends Model
         //     'material_code' => $material
         // ])->get();
 
-        $total_cr = $this->const_rate()->sum('cons_rate');
+        $total_cr = $this->const_rate()
+            ->where('version_id', $version)
+            ->where('plant_code', $plant)
+            ->sum('cons_rate');
         // dd($total_cr[0]['cons_rate']);
         // $cr = (float) $total_cr[0]['cons_rate'];
         // dd($total_cr);

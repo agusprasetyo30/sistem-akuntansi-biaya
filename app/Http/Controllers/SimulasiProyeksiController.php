@@ -170,7 +170,7 @@ class SimulasiProyeksiController extends Controller
                                 if ($kp_v == 1) {
                                     $consrate = 0;
                                 } else {
-                                    $consrate = $val->consRate() ?? 0;
+                                    $consrate = $val->consRate($data_version, $data_plant) ?? 0;
                                 }
                                 $kp_val = $kp_v;
                             } else {
@@ -493,7 +493,7 @@ class SimulasiProyeksiController extends Controller
                             if ($kp_v == 1) {
                                 $consrate = 0;
                             } else {
-                                $consrate = $val->consRate() ?? 0;
+                                $consrate = $val->consRate($data_version, $data_plant) ?? 0;
                             }
                             $kp_val = $kp_v;
                         } else {
