@@ -21,15 +21,6 @@
                                 <label>Role </label>
                                 <input disabled type="text" class="form-control form-control-sm" placeholder="Role" value="{{$model->name}}" name="detail_role" id="detail_role" autocomplete="off">
                             </div>
-                            {{-- <div class="form-group">
-                                <label class="form-label">Status</label>
-                                <select disabled name="detail_is_active" id="detail_is_active" class="form-control form-control-sm custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_is_active() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->is_active ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -61,12 +52,12 @@
                             <div class="form-group">
                                 <div class="form-label">Permissions</div>
                                 <div class="custom-control-stacked">
-                                    {{-- @foreach($permission as $value)
+                                    @foreach($data as $value)
                                     <label class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input permissioncheck" name="permission[]" id="{{$value->id}}" value="{{$value->id}}">
+                                        {{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'custom-control-input')) }}
                                         <span class="custom-control-label">{{$value->name}}</span>
                                     </label>
-                                    @endforeach --}}
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

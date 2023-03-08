@@ -227,6 +227,11 @@
         })
 
         function update_role(id) {
+            let arr_ = [];
+            $("input:checkbox:checked").each(function(){
+                arr_.push($(this).val());
+            });
+
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back_edit"+id).attr("disabled", true);
             $.ajax({
@@ -239,7 +244,7 @@
                     _token: "{{ csrf_token() }}",
                     id: id,
                     role: $('#edit_role'+id).val(),
-                    // status: $('#edit_is_active'+id).val(),
+                    permission: arr_,
                 },
                 success: function (response) {
                     Swal.fire({

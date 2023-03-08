@@ -2,6 +2,8 @@
 
 namespace App\DataTables\Master;
 
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -12,28 +14,19 @@ class RoleDataTable extends DataTable
     public function dataTable($query)
     {
         $query = Role::query();
+        $data = Permission::all();
+        $permiss = DB::table("role_has_permissions");
 
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            // ->addColumn('status', function ($query){
-            //     if ($query->is_active == true){
-            //         $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Aktif</span>";
-            //     }else{
-            //         $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Aktif</span>";
-            //     }
-            //     return $span;
-            // })
-            // ->filterColumn('filter_status', function ($query, $keyword) {
-            //     if ($keyword != 'all'){
-            //         if ($keyword == true) {
-            //             $query->where('is_active', true);
-            //         } elseif ($keyword == false) {
-            //             $query->where('is_active', false);
-            //         }
-            //     }
-            // })
-            ->addColumn('action', 'pages.master.role.action')
+            ->addColumn('action', function ($model) use ($data, $permiss) {
+                $rolePermissions = $permiss->where("role_has_permissions.role_id", $model->id)
+                    ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
+                    ->all();
+
+                return view('pages.master.role.action', compact('data', 'model', 'rolePermissions'));
+            })
             ->escapeColumns([]);
     }
 
