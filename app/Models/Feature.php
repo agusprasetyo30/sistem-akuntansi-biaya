@@ -61,15 +61,15 @@ class Feature extends Model
         return $this->hasMany(Salr::class, 'kode_feature', 'kode_unik');
     }
 
-    public function labarugi(){
+    public function laba_rugi(){
         return $this->hasMany(LabaRugi::class, 'kode_feature', 'kode_unik');
     }
 
-    public function pemakaian(){
+    public function pj_pemakaian(){
         return $this->hasMany(PJ_Pemakaian::class, 'kode_feature', 'kode_unik');
     }
 
-    public function penjualan(){
+    public function pj_penjualan(){
         return $this->hasMany(PJ_Penjualan::class, 'kode_feature', 'kode_unik');
     }
 

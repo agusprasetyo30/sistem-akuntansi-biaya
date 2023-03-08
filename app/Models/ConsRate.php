@@ -48,4 +48,8 @@ class ConsRate extends Model
     {
         return $this->hasMany(Asumsi_Umum::class, 'month_year', 'month_year');
     }
+
+    public function simulasi_proyeksi(){
+        return $this->hasOne(SimulasiProyeksi::class, 'code', 'material_code');
+    }
 }

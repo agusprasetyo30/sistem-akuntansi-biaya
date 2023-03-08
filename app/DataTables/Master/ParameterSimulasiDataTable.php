@@ -2,8 +2,9 @@
 
 namespace App\DataTables\Master;
 
+use App\Models\Asumsi_Umum;
 use App\Models\Feature;
-use App\Models\Master\ParameterSimulasi;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
@@ -12,22 +13,17 @@ use Yajra\DataTables\Services\DataTable;
 
 class ParameterSimulasiDataTable extends DataTable
 {
-    /**
-     * Build DataTable class.
-     *
-     * @param mixed $query Results from query() method.
-     * @return \Yajra\DataTables\DataTableAbstract
-     */
+
     public function dataTable($query)
     {
         $data = [
-            'cons_rate',
+            'kurs',
             'asumsi_umum',
+            'cons_rate',
             'saldo_awal',
             'qty_renprod',
             'price_rendaan',
             'qty_rendaan',
-            'kurs',
             'zco',
             'salrs',
             'pj_pemakaian',
@@ -35,30 +31,87 @@ class ParameterSimulasiDataTable extends DataTable
             'laba_rugi',
             'tarif',
         ];
-        $query = Feature::with(['kurs', 'asumsi_umum', 'cons_rate', 'saldo_awal', 'qty_renprod', 'qty_rendaan', 'price_rendaan', 'zco', 'salr', 'labarugi', 'pemakaian', 'penjualan', 'tarif'])
+
+        $query = Feature::with(['kurs' =>function($query) {
+            $query->where('month_year', 'ilike', '%'.$this->date.'%');
+        }, 'asumsi_umum' =>function($query){
+            $query->whereIn('id', $this->asumsi)
+                ->where('company_code', $this->company);
+        }, 'cons_rate' =>function($query){
+            $query->where('month_year', 'ilike', '%'.$this->date.'%')
+                ->where('version_id', $this->versi)
+                ->where('company_code', $this->company);
+        }, 'saldo_awal' =>function($query){
+            $query->where('version_id', $this->versi)
+                ->where('company_code', $this->company);
+        }, 'qty_renprod' =>function($query){
+            $query->whereIn('asumsi_umum_id', $this->asumsi)
+                ->where('company_code', $this->company);
+        }, 'qty_rendaan' =>function($query){
+            $query->whereIn('asumsi_umum_id', $this->asumsi)
+                ->where('company_code', $this->company);
+        }, 'price_rendaan' =>function($query){
+            $query->whereIn('asumsi_umum_id', $this->asumsi)
+                ->where('company_code', $this->company);
+        }, 'zco' =>function($query){
+            $query->where('periode', 'ilike', '%'.$this->date.'%')
+                ->where('company_code', $this->company);
+        }, 'salr' =>function($query){
+            $query->where('periode', 'ilike', '%'.$this->date.'%')
+                ->where('company_code', $this->company);
+        }, 'laba_rugi' =>function($query){
+            $query->where('periode', 'ilike', '%'.$this->date.'%')
+                ->where('company_code', $this->company);
+        }, 'pj_pemakaian' =>function($query){
+            $query->whereIn('asumsi_umum_id', $this->asumsi)
+                ->where('company_code', $this->company);
+        }, 'pj_penjualan' =>function($query){
+            $query->whereIn('asumsi_umum_id', $this->asumsi)
+                ->where('company_code', $this->company);
+        }, 'tarif' =>function($query){
+            $query->where('company_code', $this->company);
+        }])
             ->whereIn('db', $data);
 
         $datatable = datatables()
-            ->eloquent($query);
+            ->eloquent($query)
+            ->addIndexColumn()
+            ->addColumn('jumlah_feature', function ($query){
+////                $data = $query->db.'_count';
+                $data = $query[$query->db];
+                if ($data == null){
+                    return 0;
+                }else{
+                    return count($data);
+                }
 
+            })
+            ->addColumn('data_db', function ($query){
+                return $query->feature;
+            })
+            ->filterColumn('filter_data_db', function ($query, $keyword) {
+                $query->where('feature', 'ilike', '%' . $keyword . '%');
+            })
+            ->escapeColumns([]);
+//        dd($datatable->toArray());
         return $datatable;
     }
 
     public function html()
     {
         return $this->builder()
-                    ->setTableId('master\parametersimulasi-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('dt_parameter_simulasi')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
