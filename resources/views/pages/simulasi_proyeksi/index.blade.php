@@ -83,7 +83,16 @@
         }
     </script> --}}
 
+    <!-- Custom Script -->
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.js?v=1.0.0')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.templates.js?v=1.0.1')}}"></script>
+
+ 
     <script>
+        const alphabet = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        const alphabet2nd = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
         $(document).ready(function () {
             // get_data_horiz()
@@ -269,7 +278,52 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5' }
+                            { 
+                                extend: 'excel', 
+                                className: 'mb-5',
+                                title: '',
+                                filename: 'Simulasi Proyeksi',
+                                customize: function (file) {
+                                    var sheet = file.xl.worksheets['sheet1.xml'];
+                                    var style = file.xl['styles.xml'];
+                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
+                                    $('row', sheet).first().attr('ht', '60').attr('customHeight', "1");
+                                    var mergeCells = $('mergeCells', sheet);
+                                    
+                                    for (let i = 0; i < response.asumsi.length;i++) {
+                                        const columnDef = generateAbjad(i)
+
+                                        mergeCells[0].appendChild( 
+                                            _createNode( sheet, 'mergeCell', {
+                                                attr: { ref: columnDef }
+                                            }) 
+                                        )
+                                    }
+                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+                                    
+                                    function _createNode( doc, nodeName, opts ) {
+                                        var tempNode = doc.createElement( nodeName );
+                                        
+                                        if ( opts ) {
+                                            if ( opts.attr ) {
+                                                $(tempNode).attr( opts.attr );
+                                            }
+                        
+                                            if ( opts.children ) {
+                                                $.each( opts.children, function ( key, value ) {
+                                                    tempNode.appendChild( value );
+                                                } );
+                                            }
+                        
+                                            if ( opts.text !== null && opts.text !== undefined ) {
+                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
+                                            }
+                                        }
+                        
+                                        return tempNode;
+                                    }
+                                } 
+                             }
                         ],
                         ajax: {
                             url : '{{route("simulasi_proyeksi")}}',
@@ -312,6 +366,33 @@
                     handleError(response)
                 }
             })
+        }
+            // Function Generate Abjad
+            function generateAbjad(idx) {            
+            const multiple = 4
+            const start = (multiple * idx) + 1
+            const end = start + 3
+            let rangeColumn = '';
+            
+            let firstAlp1st = 0;
+            let firstAlp2nd = start;
+            let secondAlp1st = 0;
+            let secondAlp2nd = end;
+
+            if(start > 25) {
+                firstAlp1st = parseInt(start / 26)
+                firstAlp2nd = start % 26
+            }
+            if(end > 25) {
+                secondAlp1st = parseInt(end / 26)
+                secondAlp2nd = end % 26
+            }
+
+            let col1st = alphabet[firstAlp1st]+alphabet2nd[firstAlp2nd]
+            let col2nd = alphabet[secondAlp1st]+alphabet2nd[secondAlp2nd]
+            rangeColumn = col1st+'1'+':'+col2nd+'1'
+
+            return rangeColumn
         }
 
 
