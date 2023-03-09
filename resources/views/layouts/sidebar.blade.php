@@ -40,6 +40,7 @@
                 <li><a href="{{route('regions')}}" class="slide-item"> Region</a></li>
                 <li><a href="{{route('role')}}" class="slide-item"> Role</a></li>
                 <li><a href="{{route('user')}}" class="slide-item"> Users</a></li>
+                <li><a href="{{route('management_role')}}" class="slide-item"> Management Role</a></li>
 			</ul>
 		</li>
 		<li class="slide">

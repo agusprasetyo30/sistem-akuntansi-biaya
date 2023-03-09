@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Users</h4>
+            <h4 class="page-title mb-0 text-primary">Users</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -24,7 +24,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Management Users</div>
+                    {{-- <div class="card-title">Management Users</div> --}}
                 </div>
                 <div class="card-body">
                     <div class="">

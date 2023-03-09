@@ -40,6 +40,7 @@ use App\Http\Controllers\KontrolProyeksiController;
 use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
+use App\Http\Controllers\ManagementRoleController;
 use App\Http\Controllers\TarifController;
 
 /*
@@ -171,8 +172,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
             Route::post('update', [RoleController::class, 'update'])->name('update_role');
             Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
-            Route::post('give-permission', [RoleController::class, 'givePermission'])->name('give_permission_role');
-            Route::post('revoke-permission', [RoleController::class, 'revokePermission'])->name('revoke_permission_role');
+        });
+
+
+        Route::group(['prefix' => 'management-role'], function () {
+            Route::get('/', [ManagementRoleController::class, 'index'])->name('management_role');
+            Route::post('insert', [ManagementRoleController::class, 'create'])->name('insert_management_role');
+            Route::post('update', [ManagementRoleController::class, 'update'])->name('update_management_role');
+            Route::post('delete', [ManagementRoleController::class, 'delete'])->name('delete_management_role');
         });
 
         Route::group(['prefix' => 'user'], function () {
@@ -180,8 +187,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [UserController::class, 'create'])->name('insert_user');
             Route::post('update', [UserController::class, 'update'])->name('update_user');
             Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
-            Route::post('assign-role', [UserController::class, 'assignRole'])->name('assign_role_user');
-            Route::post('remove-role', [UserController::class, 'removeRole'])->name('remove_role_user');
         });
 
         Route::group(['prefix' => 'company'], function () {
@@ -297,6 +302,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/cost_element', [SelectController::class, 'cost_element'])->name('cost_element_select');
             Route::get('/permission', [SelectController::class, 'permission'])->name('permission_select');
             Route::get('/role_spatie', [SelectController::class, 'role_spatie'])->name('role_spatie_select');
+            Route::get('/user_select', [SelectController::class, 'user'])->name('user_select');
+            Route::get('/menu_select', [SelectController::class, 'menu'])->name('menu_select');
 
 
             //            Helper
