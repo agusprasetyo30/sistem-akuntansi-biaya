@@ -41,7 +41,6 @@ use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
 use App\Http\Controllers\TarifController;
-use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -174,13 +173,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
             Route::post('give-permission', [RoleController::class, 'givePermission'])->name('give_permission_role');
             Route::post('revoke-permission', [RoleController::class, 'revokePermission'])->name('revoke_permission_role');
-        });
-
-        Route::group(['prefix' => 'permission'], function () {
-            Route::get('/', [PermissionController::class, 'index'])->name('permission');
-            Route::post('insert', [PermissionController::class, 'create'])->name('insert_permission');
-            Route::post('update', [PermissionController::class, 'update'])->name('update_permission');
-            Route::post('delete', [PermissionController::class, 'delete'])->name('delete_permission');
         });
 
         Route::group(['prefix' => 'user'], function () {
