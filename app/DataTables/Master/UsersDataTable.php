@@ -11,7 +11,9 @@ class UsersDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $query = User::select('users.*');
+        $query = User::select('users.*', 'role.nama_role', 'management_role.login_method', 'management_role.role_id')
+            ->leftJoin('management_role', 'management_role.user_id', '=', 'users.id')
+            ->leftJoin('role', 'role.id', '=', 'management_role.role_id');
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()

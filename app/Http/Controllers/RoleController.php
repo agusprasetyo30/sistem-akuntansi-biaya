@@ -3,37 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\Master\RoleDataTable;
+use App\Models\periode;
+use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role as SpatieRole;
 
 class RoleController extends Controller
 {
     public function index(Request $request, RoleDataTable $roleDataTable)
     {
-        $permission = Permission::get();
         if ($request->data == 'index') {
             return $roleDataTable->render('pages.master.role.index');
         }
-        return view('pages.master.role.index', compact('permission'));
+        return view('pages.master.role.index');
     }
 
     public function create(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                "role" => 'required|unique:roles,name',
-                "permission" => 'required',
+                "role" => 'required',
+                "status" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['name'] = $request->role;
+            $input['nama_role'] = $request->role;
+            $input['is_active'] = $request->status;
+            $input['company_code'] = 'B000';
 
-            $role = SpatieRole::create($input);
-            $role->syncPermissions($request->input('permission'));
+            Role::create($input);
 
             return setResponse([
                 'code' => 200,
@@ -51,23 +53,17 @@ class RoleController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
-                "permission" => 'required',
+                "status" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            // $input['name'] = $request->role;
-            // dd($request->permission, $request->role);
+            $input['nama_role'] = $request->role;
+            $input['is_active'] = $request->status;
+            $input['company_code'] = 'B000';
 
-            // $role = SpatieRole::where('id', $request->id)->update($input);
-
-            $role = SpatieRole::find($request->id);
-            $role->name = $request->input('role');
-            $role->save();
-
-            $role->syncPermissions($request->input('permission'));
-
+            Role::where('id', $request->id)->update($input);
             return setResponse([
                 'code' => 200,
                 'title' => 'Data berhasil disimpan'
@@ -82,56 +78,16 @@ class RoleController extends Controller
     public function delete(Request $request)
     {
         try {
-            SpatieRole::where('id', $request->id)
+            Role::where('id', $request->id)
                 ->delete();
             return setResponse([
                 'code' => 200,
-                'title' => 'Data berhasil disimpan'
+                'title' => 'Data berhasil dihapus'
             ]);
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);
         }
-    }
-
-    public function givePermission(Request $request)
-    {
-        $role = SpatieRole::where('id', $request->id)->first();
-        $permission = Permission::where('id', $request->permission)->first();
-
-        if ($role->hasPermissionTo($permission->name)) {
-            return setResponse([
-                'code' => 430,
-                'title' => 'Permission sudah ada!',
-                'message' => 'Role sudah memiliki permission tersebut'
-            ]);
-        }
-
-        $role->givePermissionTo($permission->name);
-        return setResponse([
-            'code' => 200,
-            'title' => 'Permission berhasil ditambahkan'
-        ]);
-    }
-
-    public function revokePermission(Request $request)
-    {
-        $role = SpatieRole::where('id', $request->id)->first();
-        $permission = Permission::where('id', $request->permission)->first();
-
-        if ($role->hasPermissionTo($permission->name)) {
-            $role->revokePermissionTo($permission->name);
-            return setResponse([
-                'code' => 200,
-                'title' => 'Permission berhasil revoke'
-            ]);
-        }
-
-        return setResponse([
-            'code' => 430,
-            'title' => 'Permission tidak ada!',
-            'message' => 'Permission tidak ditemukan'
-        ]);
     }
 }
