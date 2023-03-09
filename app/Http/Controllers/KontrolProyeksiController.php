@@ -86,14 +86,17 @@ class KontrolProyeksiController extends Controller
                 [
                     'db' => 'qty_rendaan',
                     'keterangan' => 'Kuantiti Rencana Pengadaan',
-                ],[
-                    'db' => 'role',
-                    'keterangan' => 'Role',
-                ],
-                [
-                    'db' => 'management_role',
-                    'keterangan' => 'Management Role',
-                ],
+                ]
+//                ,[
+//                    'db' => 'role',
+//                    'keterangan' => 'Role',
+//                ]
+//                ,
+//                [
+//                    'db' => 'management_role',
+//                    'keterangan' => 'Management Role',
+//                ]
+                ,
                 [
                     'db' => 'kurs',
                     'keterangan' => 'Kurs',
