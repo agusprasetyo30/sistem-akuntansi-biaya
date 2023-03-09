@@ -299,6 +299,33 @@ if (!function_exists('status_dt')) {
     }
 }
 
+if (!function_exists('status_crud_dt')) {
+    function status_crud_dt()
+    {
+        $status = array(
+            'all' => 'Semua',
+            true => 'Ada',
+            false => 'Tidak Ada',
+
+        );
+
+        return $status;
+    }
+}
+
+if (!function_exists('status_crud')) {
+    function status_crud()
+    {
+        $status = array(
+            true => 'Ada',
+            false => 'Tidak Ada',
+
+        );
+
+        return $status;
+    }
+}
+
 if (!function_exists('status_is_dummy')) {
     function status_is_dummy()
     {
