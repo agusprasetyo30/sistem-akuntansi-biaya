@@ -345,10 +345,23 @@
                         },
                         columns: column,
                         rowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
-                            // if (aData.kategori_balans_id === 6){
-                            //     // $('td', nRow).css('background-color', 'Red').css('color', 'white');
-                            //     console.log(iDisplayIndex)
-                            // }
+
+                            if (aData.kategori_balans_id === 6){
+
+                                // $('td', nRow).css('background-color', 'Red').css('color', 'white');
+                                // console.log(response.asumsi.length)
+                                var cek_minus = false;
+                                for (let j = 0; j < response.asumsi.length;j++){
+                                    // console.log(aData.q+j)
+                                    if ( Boolean(aData['q'+j].match('-')) || Boolean(aData['p'+j].match('-')) || Boolean(aData['nilai'+j].match('-'))){
+                                        cek_minus = true
+                                        j = response.asumsi.length
+                                    }
+                                }
+                                if (cek_minus){
+                                    $('td', nRow).css('background-color', 'Red').css('color', 'white');
+                                }
+                            }
                         }
                     });
 

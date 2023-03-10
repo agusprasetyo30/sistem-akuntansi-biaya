@@ -16,6 +16,13 @@ class Management_Role extends Model
         'role_id',
         'username',
         'login_method',
+        'kode_feature',
+        'create',
+        'read',
+        'update',
+        'delete',
+        'approve',
+        'submit',
         'created_at',
         'updated_at',
         'company_code'

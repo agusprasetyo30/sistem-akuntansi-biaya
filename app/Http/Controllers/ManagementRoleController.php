@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\ManagementRoleDataTable;
 use App\Models\Management_Role;
 use Illuminate\Http\Request;
-use Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ManagementRoleController extends Controller
 {
@@ -20,7 +21,7 @@ class ManagementRoleController extends Controller
 
     public function create(Request $request)
     {
-        dd($request->create);
+//        dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
@@ -37,15 +38,19 @@ class ManagementRoleController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $user = DB::table('users')->where('id', $request->user)
+                ->first();
+
             $input['user_id'] = $request->user;
+            $input['username'] = $user->username;
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
-            $input['create'] = $request->create;
-            $input['read'] = $request->read;
-            $input['update'] = $request->update;
-            $input['delete'] = $request->delete;
-            $input['approve'] = $request->approve;
-            $input['submit'] = $request->submit;
+            $input['create'] = $request->create == 1 ? true:false;
+            $input['read'] = $request->read == 1 ? true:false;
+            $input['update'] = $request->update == 1 ? true:false;
+            $input['delete'] = $request->delete == 1 ? true:false;
+            $input['approve'] = $request->approve == 1 ? true:false;
+            $input['submit'] = $request->submit == 1 ? true:false;
 
             Management_Role::create($input);
 
@@ -62,6 +67,7 @@ class ManagementRoleController extends Controller
 
     public function update(Request $request)
     {
+//        dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
@@ -78,15 +84,19 @@ class ManagementRoleController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $user = DB::table('users')->where('id', $request->user)
+                ->first();
+
             $input['user_id'] = $request->user;
+            $input['username'] = $user->username;
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
-            $input['create'] = $request->create;
-            $input['read'] = $request->read;
-            $input['update'] = $request->update;
-            $input['delete'] = $request->delete;
-            $input['approve'] = $request->approve;
-            $input['submit'] = $request->submit;
+            $input['create'] = $request->create == 1 ? true:false;
+            $input['read'] = $request->read == 1 ? true:false;
+            $input['update'] = $request->update == 1 ? true:false;
+            $input['delete'] = $request->delete == 1 ? true:false;
+            $input['approve'] = $request->approve == 1 ? true:false;
+            $input['submit'] = $request->submit == 1 ? true:false;
 
             Management_Role::where('id', $request->id)->update($input);
             return setResponse([
