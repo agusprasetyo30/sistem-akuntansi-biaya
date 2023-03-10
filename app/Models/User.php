@@ -48,4 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Karyawan::class, 'nik_sap', 'nik');
     }
+//
+//
+//
+//    public function mapping_akses(){
+//
+//    }
 }
