@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Asumsi_Umum;
 use App\Models\Company;
 use App\Models\CostCenter;
+use App\Models\Feature;
 use App\Models\GLAccountFC;
 use App\Models\GLAccount;
 use App\Models\GLosCC;
@@ -1283,6 +1284,52 @@ class SelectController extends Controller
             $response[] = array(
                 "id" => $items->id,
                 "text" => $items->name,
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function user(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $usr = User::limit(10)
+                ->get();
+        } else {
+            $usr = User::where('name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($usr as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->name
+            );
+        }
+
+        return response()->json($response);
+    }
+
+    public function menu(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $feat = Feature::limit(10)
+                ->get();
+        } else {
+            $feat = Feature::where('feature_name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($feat as $items) {
+            $response[] = array(
+                "id" => $items->kode_unik,
+                "text" => $items->feature_name
             );
         }
 
