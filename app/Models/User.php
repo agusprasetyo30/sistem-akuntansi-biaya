@@ -48,10 +48,27 @@ class User extends Authenticatable
     {
         return $this->hasOne(Karyawan::class, 'nik_sap', 'nik');
     }
-//
-//
-//
-//    public function mapping_akses(){
-//
-//    }
+
+    public function mapping_role(){
+        return $this->hasMany(Management_Role::class, 'user_id', 'id');
+    }
+
+    public function mapping_fitur(){
+        return $this->hasOne(Feature::class, 'kode_unik', 'kode_feature');
+    }
+
+    public function mapping_side_bar_akses(){
+        $result = $this->mapping_role()
+            ->get()->pluck('role_id')->all();
+
+        return $result;
+    }
+
+    public function mapping_akses($feature){
+        $result = $this->mapping_role()
+            ->where('db', $feature)
+            ->first();
+
+        return $result;
+    }
 }

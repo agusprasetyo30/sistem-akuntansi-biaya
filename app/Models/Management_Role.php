@@ -23,6 +23,7 @@ class Management_Role extends Model
         'delete',
         'approve',
         'submit',
+        'db',
         'created_at',
         'updated_at',
         'company_code'
