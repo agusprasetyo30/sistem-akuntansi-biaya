@@ -12,6 +12,11 @@ class ManagementRoleController extends Controller
 {
     public function index(Request $request, ManagementRoleDataTable $mroleDataTable)
     {
+//        dd(auth()->user()->mapping_akses('users'));
+//        dd(array_diff(auth()->user()->mapping_side_bar_akses(), [1,2,3,4]));
+//        , count(auth()->user()->mapping_side_bar_akses(), count(array_diff([10], auth()->user()->mapping_side_bar_akses())) != count(auth()->user()->mapping_side_bar_akses())
+//        dd(count(array_diff([10], auth()->user()->mapping_side_bar_akses()))  , count(auth()->user()->mapping_side_bar_akses()) , count(array_diff([10,11,12,13], auth()->user()->mapping_side_bar_akses()))  != count(auth()->user()->mapping_side_bar_akses())  );
+
         if ($request->data == 'index') {
             return $mroleDataTable->render('pages.master.management_role.index');
         }
@@ -41,10 +46,15 @@ class ManagementRoleController extends Controller
             $user = DB::table('users')->where('id', $request->user)
                 ->first();
 
+            $feature = DB::table('feature')->where('kode_unik', $request->menu)
+                ->first();
+
             $input['user_id'] = $request->user;
             $input['username'] = $user->username;
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
+            $input['db'] = $feature->db;
+            $input['company_code'] = auth()->user()->company_code;
             $input['create'] = $request->create == 1 ? true:false;
             $input['read'] = $request->read == 1 ? true:false;
             $input['update'] = $request->update == 1 ? true:false;
@@ -87,10 +97,15 @@ class ManagementRoleController extends Controller
             $user = DB::table('users')->where('id', $request->user)
                 ->first();
 
+            $feature = DB::table('feature')->where('kode_unik', $request->menu)
+                ->first();
+
             $input['user_id'] = $request->user;
             $input['username'] = $user->username;
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
+            $input['db'] = $feature->db;
+            $input['company_code'] = auth()->user()->company_code;
             $input['create'] = $request->create == 1 ? true:false;
             $input['read'] = $request->read == 1 ? true:false;
             $input['update'] = $request->update == 1 ? true:false;
@@ -124,5 +139,15 @@ class ManagementRoleController extends Controller
                 'code' => 400,
             ]);
         }
+    }
+
+    public function validasi_akses($feature){
+        $validasi_akses = false;
+
+        if (auth()->user()->mapping_akses($feature) != null){
+            $validasi_akses = true;
+        }
+
+        return $validasi_akses;
     }
 }
