@@ -14,6 +14,7 @@ class Role extends Model
     protected $fillable = [
         'nama_role',
         'is_active',
+        'company_code',
         'created_at',
         'updated_at'
     ];

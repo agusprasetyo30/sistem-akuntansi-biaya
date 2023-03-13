@@ -282,7 +282,7 @@
                     }else if (response.Code === 201){
                         $('#username').removeClass('is-valid');
                         $('#username').addClass('is-invalid');
-                        $('#submit').prop('disabled', 'true');
+                        // $('#submit').prop('disabled', 'true');
                     }else {
                         toastr.error('Terdapat Kesalahan System', 'System Error')
                     }

@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management Role</h4>
+            <h4 class="page-title mb-0 text-primary">Management User Akses</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-            @include('pages.master.management_role.add')
+            @include('pages.master.management_user_akses.add')
         </div>
     </div>
     <!-- /Row -->
@@ -150,13 +150,14 @@
         })
 
         $('#submit-data').on('click', function () {
+            console.log( $('#create').val())
             $("#submit-data").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $.ajax({
                 type: "POST",
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('insert_management_role')}}',
+                url: '{{route('insert_user_akses')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     user: $('#data_main_user').val(),
@@ -369,7 +370,7 @@
                     'pageLength', 'excel'
                 ],
                 ajax: {
-                    url : '{{route("management_role")}}',
+                    url : '{{route("user_akses")}}',
                     data: {data:'index'}
                 },
                 columns: [
@@ -392,7 +393,7 @@
             })
         }
 
-        function update_management_role(id) {
+        function update_management_user_akses(id) {
             $("#submit_edit"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $("#back_edit"+id).attr("disabled", true);
             $.ajax({
@@ -400,7 +401,7 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                url: '{{route('update_management_role')}}',
+                url: '{{route('update_user_akses')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
@@ -441,7 +442,7 @@
             })
         }
 
-        function delete_management_role(id) {
+        function delete_management_user_akses(id) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
                 text: "Data akan segera dihapus",
@@ -459,7 +460,7 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        url: '{{route('delete_management_role')}}',
+                        url: '{{route('delete_user_akses')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
                             id: id,

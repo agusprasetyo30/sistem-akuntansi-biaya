@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Management Role</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Management User Akses</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">

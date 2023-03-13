@@ -1,6 +1,6 @@
 <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
 <a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a  class="btn bg-danger-transparent" onclick="delete_management_role({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+<a  class="btn bg-danger-transparent" onclick="delete_management_user_akses({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 
 
 <!-- Modal Detail-->
@@ -8,7 +8,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Management Role</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Management User Akses</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -107,7 +107,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Role</h5>
+                <h5 class="modal-title" id="largemodal1">Edit Management User Akses</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -191,7 +191,7 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-list btn-animation">
-                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_management_role({{$model->id}})" class="btn btn-primary">Simpan</button>
+                    <button type="button" id="submit_edit{{$model->id}}" onclick="update_management_user_akses({{$model->id}})" class="btn btn-primary">Simpan</button>
                     <button type="button" id="back_edit{{$model->id}}" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
                 </div>
             </div>

@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\DataTables\Master\ManagementRoleDataTable;
+use App\DataTables\Master\ManagementUserAksesDataTable;
 use App\Models\Management_Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class ManagementRoleController extends Controller
+class ManagementUserAksesController extends Controller
 {
-    public function index(Request $request, ManagementRoleDataTable $mroleDataTable)
+    public function index(Request $request, ManagementUserAksesDataTable $mroleDataTable)
     {
 //        dd(auth()->user()->mapping_akses('users'));
 //        dd(array_diff(auth()->user()->mapping_side_bar_akses(), [1,2,3,4]));
@@ -18,15 +18,15 @@ class ManagementRoleController extends Controller
 //        dd(count(array_diff([10], auth()->user()->mapping_side_bar_akses()))  , count(auth()->user()->mapping_side_bar_akses()) , count(array_diff([10,11,12,13], auth()->user()->mapping_side_bar_akses()))  != count(auth()->user()->mapping_side_bar_akses())  );
 
         if ($request->data == 'index') {
-            return $mroleDataTable->render('pages.master.management_role.index');
+            return $mroleDataTable->render('pages.master.management_user_akses.index');
         }
 
-        return view('pages.master.management_role.index');
+        return view('pages.master.management_user_akses.index');
     }
 
     public function create(Request $request)
     {
-//        dd($request);
+       dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
