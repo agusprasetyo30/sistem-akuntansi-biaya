@@ -8,6 +8,7 @@ use App\DataTables\Master\KelengkapanHargaMaterialDataTable;
 use App\DataTables\Master\ParameterSimulasiDataTable;
 use App\Models\Asumsi_Umum;
 use App\Models\Feature;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
@@ -17,7 +18,12 @@ class KontrolProyeksiController extends Controller
     public function index(Request $request)
     {
         $this->uptodate();
-        return view('pages.kontrol_proyeksi.index');
+
+        $data_company = User::select('users.company_code', 'company.company_name')
+            ->where('id', auth()->user()->id)
+            ->leftjoin('company', 'company.company_code', '=', 'users.company_code')
+            ->first();
+        return view('pages.kontrol_proyeksi.index', compact('data_company'));
     }
 
     public function uptodate(){
