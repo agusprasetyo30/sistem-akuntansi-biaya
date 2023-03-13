@@ -112,37 +112,37 @@
                 }
             })
 
-            $('#create').select2({
+            $('#akses_create').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
 
-            $('#read').select2({
+            $('#akses_read').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
 
-            $('#update').select2({
+            $('#akses_update').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
 
-            $('#delete').select2({
+            $('#akses_delete').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
 
-            $('#approve').select2({
+            $('#akses_approve').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
             })
 
-            $('#submit').select2({
+            $('#akses_submit').select2({
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
@@ -163,12 +163,12 @@
                     user: $('#data_main_user').val(),
                     role: $('#data_main_role').val(),
                     menu: $('#data_main_menu').val(),
-                    create: $('#create').val(),
-                    read: $('#read').val(),
-                    update: $('#update').val(),
-                    delete: $('#delete').val(),
-                    approve: $('#approve').val(),
-                    submit: $('#submit').val(),
+                    create: $('#akses_create').val(),
+                    read: $('#akses_read').val(),
+                    update: $('#akses_update').val(),
+                    delete: $('#akses_delete').val(),
+                    approve: $('#akses_approve').val(),
+                    submit: $('#akses_submit').val(),
                 },
                 success:function (response) {
                     Swal.fire({
@@ -211,12 +211,12 @@
                     <th data-type='text' data-name='user_id' class="text-center">NAMA</th>
                     <th data-type='text' data-name='role_id' class="text-center">ROLE</th>
                     <th data-type='text' data-name='feature_name' class="text-center">MENU</th>
-                    <th data-type='select' data-name='create' class="text-center">AKSES CREATE</th>
-                    <th data-type='select' data-name='read' class="text-center">AKSES READ</th>
-                    <th data-type='select' data-name='update' class="text-center">AKSES UPDATE</th>
-                    <th data-type='select' data-name='delete' class="text-center">AKSES DELETE</th>
-                    <th data-type='select' data-name='approve' class="text-center">AKSES APPROVE</th>
-                    <th data-type='select' data-name='submit' class="text-center">AKSES SUBMIT</th>
+                    <th data-type='select' data-name='create' class="text-center">ACCESS CREATE</th>
+                    <th data-type='select' data-name='read' class="text-center">ACCESS READ</th>
+                    <th data-type='select' data-name='update' class="text-center">ACCESS UPDATE</th>
+                    <th data-type='select' data-name='delete' class="text-center">ACCESS DELETE</th>
+                    <th data-type='select' data-name='approve' class="text-center">ACCESS APPROVE</th>
+                    <th data-type='select' data-name='submit' class="text-center">ACCESS SUBMIT</th>
                     <th data-type='text' data-name='action' class="text-center">ACTION</th>
                 </tr>
                 </thead>

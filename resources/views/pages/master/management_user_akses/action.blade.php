@@ -36,8 +36,8 @@
                                     id="detail_feature_name" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Create</label>
-                                <select disabled name="create" id="create" class="form-control custom-select select2 form-control-sm">
+                                <label class="form-label">Access Create</label>
+                                <select disabled name="detail_create" id="detail_create" class="form-control custom-select select2 form-control-sm">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}" {{ $key == $model->create ? "selected" : "" }}>{{ $value}}</option>
@@ -45,8 +45,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Read</label>
-                                <select disabled name="read" id="read" class="form-control custom-select select2 form-control-sm">
+                                <label class="form-label">Access Read</label>
+                                <select disabled name="detail_read" id="detail_read" class="form-control custom-select select2 form-control-sm">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}" {{ $key == $model->read ? "selected" : "" }}>{{ $value}}</option>
@@ -54,8 +54,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Update</label>
-                                <select disabled name="update" id="update" class="form-control custom-select select2 form-control-sm">
+                                <label class="form-label">Access Update</label>
+                                <select disabled name="detail_update" id="detail_update" class="form-control custom-select select2 form-control-sm">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}" {{ $key == $model->update ? "selected" : "" }}>{{ $value}}</option>
@@ -63,8 +63,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Delete</label>
-                                <select disabled name="delete" id="delete" class="form-control custom-select select2 form-control-sm">
+                                <label class="form-label">Access Delete</label>
+                                <select disabled name="detail_delete" id="detail_delete" class="form-control custom-select select2 form-control-sm">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}" {{ $key == $model->delete ? "selected" : "" }}>{{ $value}}</option>
@@ -72,8 +72,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Approve</label>
-                                <select disabled name="approve" id="approve" class="form-control custom-select select2 form-control-sm">
+                                <label class="form-label">Access Approve</label>
+                                <select disabled name="detail_approve" id="detail_approve" class="form-control custom-select select2 form-control-sm">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}" {{ $key == $model->approve ? "selected" : "" }}>{{ $value}}</option>
@@ -81,8 +81,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Submit</label>
-                                <select disabled name="submit" id="submit" class="form-control custom-select select2 form-control-sm">
+                                <label class="form-label">Access Submit</label>
+                                <select disabled name="detail_submit" id="detail_submit" class="form-control custom-select select2 form-control-sm">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}" {{ $key == $model->submit ? "selected" : "" }}>{{ $value}}</option>
@@ -132,7 +132,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Create</label>
+                                <label class="form-label">Access Create</label>
                                 <select name="edit_create" id="edit_create{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
@@ -141,7 +141,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Read</label>
+                                <label class="form-label">Access Read</label>
                                 <select name="edit_read" id="edit_read{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
@@ -150,7 +150,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Update</label>
+                                <label class="form-label">Access Update</label>
                                 <select name="edit_update" id="edit_update{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
@@ -159,7 +159,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Delete</label>
+                                <label class="form-label">Access Delete</label>
                                 <select name="edit_delete" id="edit_delete{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
@@ -168,7 +168,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Approve</label>
+                                <label class="form-label">Access Approve</label>
                                 <select name="edit_approve" id="edit_approve{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
@@ -177,7 +177,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Submit</label>
+                                <label class="form-label">Access Submit</label>
                                 <select name="edit_submit" id="edit_submit{{$model->id}}">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)

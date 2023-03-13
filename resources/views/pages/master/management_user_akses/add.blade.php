@@ -28,8 +28,17 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Create</label>
-                                <select name="create" id="create" class="form-control custom-select select2">
+                                <label class="form-label">Access Create</label>
+                                <select name="akses_create" id="akses_create">
+                                    <option value="" disabled selected>Pilih Status</option>
+                                    @foreach (status_crud() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Access Read</label>
+                                <select name="akses_read" id="akses_read" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}">{{ $value}}</option>
@@ -37,8 +46,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Read</label>
-                                <select name="read" id="read" class="form-control custom-select select2">
+                                <label class="form-label">Access Update</label>
+                                <select name="akses_update" id="akses_update" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}">{{ $value}}</option>
@@ -46,8 +55,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Update</label>
-                                <select name="update" id="update" class="form-control custom-select select2">
+                                <label class="form-label">Access Delete</label>
+                                <select name="akses_delete" id="akses_delete" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}">{{ $value}}</option>
@@ -55,8 +64,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Delete</label>
-                                <select name="delete" id="delete" class="form-control custom-select select2">
+                                <label class="form-label">Access Approve</label>
+                                <select name="akses_approve" id="akses_approve" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}">{{ $value}}</option>
@@ -64,17 +73,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Akses Approve</label>
-                                <select name="approve" id="approve" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Akses Submit</label>
-                                <select name="submit" id="submit" class="form-control custom-select select2">
+                                <label class="form-label">Access Submit</label>
+                                <select name="akses_submit" id="akses_submit" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Status</option>
                                     @foreach (status_crud() as $key => $value)
                                         <option value="{{ $key }}">{{ $value}}</option>
