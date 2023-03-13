@@ -11,12 +11,18 @@ class UsersDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $query = User::select('users.*', 'role.nama_role', 'management_role.login_method', 'management_role.role_id')
-            ->leftJoin('management_role', 'management_role.user_id', '=', 'users.id')
-            ->leftJoin('role', 'role.id', '=', 'management_role.role_id');
+        $query = User::select('users.name', 'users.username', 'users.company_code', 'company.company_name')
+            ->leftjoin('company', 'company.company_code', '=', 'users.company_code');
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
+            ->addColumn('company', function ($query){
+                return $query->company_code. ' - '. $query->company_name;
+            })
+            ->filterColumn('filter_company', function ($query, $keyword){
+                $query->where('company.company_code', 'ilike', '%'.$keyword.'%')
+                    ->orWhere('company.company_name', 'ilike', '%'.$keyword.'%');
+            })
             ->addColumn('action', 'pages.master.user.action')
             ->escapeColumns([]);
     }

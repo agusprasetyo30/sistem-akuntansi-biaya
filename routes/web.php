@@ -102,6 +102,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard_admin');
+    Route::get('/profile/{id}', [DashboardController::class, 'profile'])->name('profile_user');
+    Route::post('/check_pass', [DashboardController::class, 'check_pass'])->name('check_pass');
 
     Route::group(['prefix' => 'master'], function () {
         Route::group(['prefix' => 'material'], function () {

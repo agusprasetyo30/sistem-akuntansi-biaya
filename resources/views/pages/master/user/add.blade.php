@@ -24,19 +24,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="data_main_role" class="form-label">Role</label>
-                                <select name="main_role" id="data_main_role" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Role</option>
-                                </select>
+                                <label>Password </label>
+                                <div class="input-group" id="Password-toggle">
+                                    <button id="toggle_new_pass" class="input-group-text">
+                                        <i id="icon_new_pass" class="fe fe-eye" aria-hidden="true"></i>
+                                    </button>
+                                    <input id="new_pass" class="form-control" type="password"
+                                           name="new_pass" required autocomplete="off"
+                                           placeholder="Masukkan Password Baru Anda">
+                                    <button class="btn btn btn-primary br-tl-0 br-bl-0" id="generate_pass">Generate Password</button>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label for="login_method" class="form-label">Metode</label>
-                                <select name="login_method" id="login_method" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Metode</option>
-                                    @foreach (login_method() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
+                                <label>Konfirmasi Password </label>
+                                <div class="input-group" id="Password-toggle">
+                                    <button id="toggle_confirm_pass" class="input-group-text">
+                                        <i id="icon_confirm_pass" class="fe fe-eye" aria-hidden="true"></i>
+                                    </button>
+                                    <input id="confirm_pass" class="form-control" type="password"
+                                           name="confirm_pass" required autocomplete="off"
+                                           placeholder="Konfirmasi Password Baru Anda">
+                                </div>
                             </div>
                         </div>
                     </div>
