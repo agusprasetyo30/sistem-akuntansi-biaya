@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Management User Akses</h4>
+            <h4 class="page-title mb-0 text-primary">Mapping User Akses</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -185,12 +185,12 @@
                             $('#data_main_user').val('').trigger("change");
                             $('#data_main_role').val('').trigger("change");
                             $('#data_main_menu').val('').trigger("change");
-                            $('#create').val('').trigger("change");
-                            $('#read').val('').trigger("change");
-                            $('#update').val('').trigger("change");
-                            $('#delete').val('').trigger("change");
-                            $('#approve').val('').trigger("change");
-                            $('#submit').val('').trigger("change");
+                            $('#akses_create').val('').trigger("change");
+                            $('#akses_read').val('').trigger("change");
+                            $('#akses_update').val('').trigger("change");
+                            $('#akses_delete').val('').trigger("change");
+                            $('#akses_approve').val('').trigger("change");
+                            $('#akses_submit').val('').trigger("change");
                             $("#submit-data").attr('class', 'btn btn-primary').attr("disabled", false);
                             get_data()
                         }

@@ -24,7 +24,7 @@ class H_ZcoDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = Material::select('material_code', 'material_name', 'group_account_code')
-            ->where('company_code', $cc);
+            ->where('company_code', $cc)->orderBy('material_code','asc');
 
         $datatable = datatables()
             ->eloquent($query);
