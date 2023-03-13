@@ -41,6 +41,7 @@ use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
 use App\Http\Controllers\ManagementUserAksesController;
+use App\Http\Controllers\ManagementUserRoleController;
 use App\Http\Controllers\TarifController;
 
 /*
@@ -119,6 +120,13 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [ManagementUserAksesController::class, 'create'])->name('insert_user_akses');
             Route::post('update', [ManagementUserAksesController::class, 'update'])->name('update_user_akses');
             Route::post('delete', [ManagementUserAksesController::class, 'delete'])->name('delete_user_akses');
+        });
+
+        Route::group(['prefix' => 'user-role'], function () {
+            Route::get('/', [ManagementUserRoleController::class, 'index'])->name('user_role');
+            Route::post('insert', [ManagementUserRoleController::class, 'create'])->name('insert_user_role');
+            Route::post('update', [ManagementUserRoleController::class, 'update'])->name('update_user_role');
+            Route::post('delete', [ManagementUserRoleController::class, 'delete'])->name('delete_user_role');
         });
 
         Route::group(['prefix' => 'user'], function () {
