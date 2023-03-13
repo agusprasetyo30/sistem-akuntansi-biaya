@@ -26,6 +26,7 @@ class UserController extends Controller
             $validator = Validator::make($request->all(), [
                 "new_pass" => 'required|min:8',
                 "nama" => 'required',
+                "company" => 'required',
                 "username" => 'required',
                 "confirm_pass" => 'required|min:8',
             ], validatorMsg())
@@ -41,7 +42,7 @@ class UserController extends Controller
 
             $input['name'] = $request->nama;
             $input['username'] = $request->username;
-            $input['company_code'] = 'B000';
+            $input['company_code'] = $request->company;
 
             if (trim($request->new_pass) == trim($request->confirm_pass)){
                 $input['password'] = bcrypt(trim($request->new_pass));
@@ -71,10 +72,9 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-//                "role" => 'required',
                 "nama" => 'required',
                 "username" => 'required',
-//                "metode" => 'required',
+                "company" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -82,7 +82,7 @@ class UserController extends Controller
 
             $input['name'] = $request->nama;
             $input['username'] = $request->username;
-            $input['company_code'] = 'B000';
+            $input['company_code'] = $request->company;
 
             DB::transaction(function () use ($input, $request) {
                 User::where('id', $request->id)
@@ -92,6 +92,38 @@ class UserController extends Controller
                 'code' => 200,
                 'title' => 'Data berhasil disimpan'
             ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function update_password(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "id" => 'required',
+                "new_pass" => 'required|min:8',
+                "confirm_pass" => 'required|min:8',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            if (trim($request->new_pass) == trim($request->confirm_pass)){
+                $input['password'] = bcrypt(trim($request->new_pass));
+
+                User::where('id', $request->id)
+                    ->update($input);
+
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Data berhasil disimpan'
+                ]);
+            }else{
+                return response()->json(['code' => 201, 'msg' => 'Password Salah']);
+            }
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,

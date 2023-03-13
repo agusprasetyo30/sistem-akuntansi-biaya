@@ -23,6 +23,11 @@
                                     Username sudah ada.
                                 </div>
                             </div>
+                            <div class="form-group" id="cost_center_pick">
+                                <label class="form-label">Perusahaan <span class="text-red">*</span></label>
+                                <select id="filter_company_code" class="form-control custom-select select2">
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label>Password </label>
                                 <div class="input-group" id="Password-toggle">

@@ -58,6 +58,28 @@
         $(document).ready(function () {
             get_data()
 
+            $('#filter_company_code').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('company_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
             $('#toggle_new_pass').on('click', function () {
                 const type = $('#new_pass').attr('type') === 'password' ? 'text':'password'
                 if (type === 'password'){
@@ -218,6 +240,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     nama: $('#nama').val(),
+                    company: $('#filter_company_code').val(),
                     username: $('#username').val(),
                     new_pass: $('#new_pass').val(),
                     confirm_pass: $('#confirm_pass').val(),
@@ -305,8 +328,7 @@
                     id: id,
                     nama: $('#edit_name'+id).val(),
                     username: $('#edit_username'+id).val(),
-                    // role: $('#edit_data_main_role'+id).val(),
-                    // metode: $('#edit_login_method'+id).val(),
+                    company: $('#filter_company_code'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -386,6 +408,65 @@
 
                 }
 
+            })
+        }
+
+        function update_password(id){
+            $("#submit_password"+id).attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
+            $("#back_edit_password"+id).attr("disabled", true);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('update_user_password')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    id: id,
+                    new_pass: $('#new_pass'+id).val(),
+                    confirm_pass: $('#confirm_pass'+id).val(),
+                },
+                success: function (response) {
+                    if (response.code === 200){
+                        Swal.fire({
+                            title: response.title,
+                            text: response.msg,
+                            icon: response.type,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#019267',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result)=>{
+                            if (result.value) {
+                                $('#ganti_password'+id).modal('hide')
+                                $('body').removeClass('modal-open');
+                                $('.modal-backdrop').remove();
+                                $("#submit_password"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_edit_password"+id).attr("disabled", false);
+                                $('#dt_users').DataTable().ajax.reload();
+                            }
+                        })
+                    }else if (response.code === 201){
+                        Swal.fire({
+                            title: 'Password Tidak Sama',
+                            text: "Cek kembali password baru dan password konfirmasi anda!",
+                            icon: 'warning',
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result)=>{
+                            if (result.value) {
+                                $("#submit_password"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back_edit_password"+id).attr("disabled", false);
+                            }
+                        })
+                    }
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit_password"+id).attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back_edit_password"+id).attr("disabled", false);
+                    // $('#dt_users').DataTable().ajax.reload();
+                }
             })
         }
     </script>
