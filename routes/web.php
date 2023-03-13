@@ -40,7 +40,7 @@ use App\Http\Controllers\KontrolProyeksiController;
 use App\Http\Controllers\MapKetegoriBalansController;
 use App\Http\Controllers\SimulasiProyeksiController;
 use  App\Http\Controllers\BalansController;
-use App\Http\Controllers\ManagementRoleController;
+use App\Http\Controllers\ManagementUserAksesController;
 use App\Http\Controllers\TarifController;
 
 /*
@@ -105,6 +105,30 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile/{id}', [DashboardController::class, 'profile'])->name('profile_user');
     Route::post('/check_pass', [DashboardController::class, 'check_pass'])->name('check_pass');
 
+    Route::group(['prefix' => 'management-user'], function () {
+
+        Route::group(['prefix' => 'role'], function () {
+            Route::get('/', [RoleController::class, 'index'])->name('role');
+            Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
+            Route::post('update', [RoleController::class, 'update'])->name('update_role');
+            Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
+        });
+
+        Route::group(['prefix' => 'user-akses'], function () {
+            Route::get('/', [ManagementUserAksesController::class, 'index'])->name('user_akses');
+            Route::post('insert', [ManagementUserAksesController::class, 'create'])->name('insert_user_akses');
+            Route::post('update', [ManagementUserAksesController::class, 'update'])->name('update_user_akses');
+            Route::post('delete', [ManagementUserAksesController::class, 'delete'])->name('delete_user_akses');
+        });
+
+        Route::group(['prefix' => 'user'], function () {
+            Route::get('/', [UserController::class, 'index'])->name('user');
+            Route::post('insert', [UserController::class, 'create'])->name('insert_user');
+            Route::post('update', [UserController::class, 'update'])->name('update_user');
+            Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
+        });
+    });
+
     Route::group(['prefix' => 'master'], function () {
         Route::group(['prefix' => 'material'], function () {
             Route::get('/', [MaterialController::class, 'index'])->name('material');
@@ -167,28 +191,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [GlosCCController::class, 'delete'])->name('delete_glos_cc');
             Route::post('import', [GlosCCController::class, 'import'])->name('import_glos_cc');
             Route::get('export', [GlosCCController::class, 'export'])->name('export_glos_cc');
-        });
-
-        Route::group(['prefix' => 'role'], function () {
-            Route::get('/', [RoleController::class, 'index'])->name('role');
-            Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
-            Route::post('update', [RoleController::class, 'update'])->name('update_role');
-            Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
-        });
-
-
-        Route::group(['prefix' => 'management-role'], function () {
-            Route::get('/', [ManagementRoleController::class, 'index'])->name('management_role');
-            Route::post('insert', [ManagementRoleController::class, 'create'])->name('insert_management_role');
-            Route::post('update', [ManagementRoleController::class, 'update'])->name('update_management_role');
-            Route::post('delete', [ManagementRoleController::class, 'delete'])->name('delete_management_role');
-        });
-
-        Route::group(['prefix' => 'user'], function () {
-            Route::get('/', [UserController::class, 'index'])->name('user');
-            Route::post('insert', [UserController::class, 'create'])->name('insert_user');
-            Route::post('update', [UserController::class, 'update'])->name('update_user');
-            Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
         });
 
         Route::group(['prefix' => 'company'], function () {

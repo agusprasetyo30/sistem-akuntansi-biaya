@@ -9,7 +9,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class ManagementRoleDataTable extends DataTable
+class ManagementUserAksesDataTable extends DataTable
 {
     public function dataTable($query)
     {
@@ -142,7 +142,7 @@ class ManagementRoleDataTable extends DataTable
             ->orderColumn('filter_submit', function ($query, $order) {
                 $query->orderBy('submit', $order);
             })
-            ->addColumn('action', 'pages.master.management_role.action')
+            ->addColumn('action', 'pages.master.management_user_akses.action')
             ->escapeColumns([]);
     }
 
