@@ -47,7 +47,7 @@
             '<tr>' +
             '<th data-type="text" data-name="nama" class="text-center">NAMA</th>' +
             '<th data-type="text" data-name="username" class="text-center">USERNAME</th>' +
-            '<th data-type="text" data-name="role" class="text-center">ROLE</th>' +
+            '<th data-type="text" data-name="role" class="text-center">COMPANY</th>' +
             '<th data-type="text" data-name="action" class="text-center">ACTION</th>' +
             '</tr>' +
             '</thead>' +
@@ -58,34 +58,46 @@
         $(document).ready(function () {
             get_data()
 
-            $('#login_method').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Metode',
-                width: '100%'
-            })
-
-            $('#data_main_role').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Role',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('role_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
+            $('#toggle_new_pass').on('click', function () {
+                const type = $('#new_pass').attr('type') === 'password' ? 'text':'password'
+                if (type === 'password'){
+                    $('#icon_new_pass').attr('class', 'fe fe-eye')
                 }
+                else {
+                    $('#icon_new_pass').attr('class', 'fe fe-eye-off')
+                }
+
+                $('#new_pass').attr('type', type)
             })
 
+            $('#toggle_confirm_pass').on('click', function () {
+                const type = $('#confirm_pass').attr('type') === 'password' ? 'text':'password'
+                if (type === 'password'){
+                    $('#icon_confirm_pass').attr('class', 'fe fe-eye')
+                }
+                else {
+                    $('#icon_confirm_pass').attr('class', 'fe fe-eye-off')
+                }
+
+                $('#confirm_pass').attr('type', type)
+            })
+
+            $('#generate_pass').on('click', function () {
+                generate_pass()
+            })
+
+            function generate_pass() {
+                var chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                var passwordLength = 8;
+                var password = "";
+
+                for (var i = 0; i <= passwordLength; i++) {
+                    var randomNumber = Math.floor(Math.random() * chars.length);
+                    password += chars.substring(randomNumber, randomNumber +1);
+                }
+
+                $('#new_pass').val(password)
+            }
         })
 
         function get_data(){
@@ -185,12 +197,12 @@
                 columns: [
                     { data: 'name', name: 'users.name', orderable:true},
                     { data: 'username', name: 'users.username', orderable:true},
-                    { data: 'nama_role', name: 'role.nama_role', orderable:true},
+                    { data: 'company', name: 'filter_company', orderable:true},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3]}
+                    {className: 'text-center', targets: [0,1,2]}
                 ]
             })
         }
@@ -207,31 +219,42 @@
                     _token: "{{ csrf_token() }}",
                     nama: $('#nama').val(),
                     username: $('#username').val(),
-                    role: $('#data_main_role').val(),
-                    metode: $('#login_method').val(),
+                    new_pass: $('#new_pass').val(),
+                    confirm_pass: $('#confirm_pass').val(),
                 },
                 success:function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result)=>{
-                        if (result.value) {
-                            $('#modal_add').modal('hide');
-                            $("#modal_add input").val("")
-                            $('#data_main_role').val('').trigger("change");
-                            $('#login_method').val('').trigger("change");
-                            $('#username').removeClass('is-invalid');
-                            $('#username').removeClass('is-valid');
-                            $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
-                            // $("#table_main").empty();
-                            // get_data()
-                            $('#dt_users').DataTable().ajax.reload();
-                        }
-                    })
+                    if (response.code === 200){
+                        Swal.fire({
+                            title: response.title,
+                            text: response.msg,
+                            icon: response.type,
+                            allowOutsideClick: false,
+                            confirmButtonColor: '#019267',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result)=>{
+                            if (result.value) {
+                                $('#modal_add').modal('hide');
+                                $("#modal_add input").val("")
+                                $('#username').removeClass('is-invalid');
+                                $('#username').removeClass('is-valid');
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $('#dt_users').DataTable().ajax.reload();
+                            }
+                        })
+                    }else if (response.code === 201){
+                        Swal.fire({
+                            title: 'Password Tidak Sama',
+                            text: "Cek kembali password baru dan password konfirmasi anda!",
+                            icon: 'warning',
+                            confirmButtonColor: '#019267',
+                            cancelButtonColor: '#EF4B4B',
+                            confirmButtonText: 'Konfirmasi',
+                        }).then((result)=>{
+                            if (result.value) {
+                                $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
+                            }
+                        })
+                    }
                 },
                 error:function (response) {
                     handleError(response)
@@ -282,8 +305,8 @@
                     id: id,
                     nama: $('#edit_name'+id).val(),
                     username: $('#edit_username'+id).val(),
-                    role: $('#edit_data_main_role'+id).val(),
-                    metode: $('#edit_login_method'+id).val(),
+                    // role: $('#edit_data_main_role'+id).val(),
+                    // metode: $('#edit_login_method'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({

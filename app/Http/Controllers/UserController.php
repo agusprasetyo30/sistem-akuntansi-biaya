@@ -24,37 +24,42 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "role" => 'required',
+                "new_pass" => 'required|min:8',
                 "nama" => 'required',
                 "username" => 'required',
-                "metode" => 'required',
-            ], validatorMsg());
+                "confirm_pass" => 'required|min:8',
+            ], validatorMsg())
+                ->setAttributeNames(
+                    [
+                        'new_pass' => 'Password',
+                        'confirm_pass' => 'Konfirmasi Password',
+                    ]
+            );
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
             $input['name'] = $request->nama;
             $input['username'] = $request->username;
-            $input['password'] = bcrypt('Petrokimia1');
             $input['company_code'] = 'B000';
 
-            $input_management['role_id'] = (int) $request->role;
-            $input_management['login_method'] = $request->metode;
-            $input_management['username'] = $request->username;
-            $input_management['company_code'] = 'B000';
+            if (trim($request->new_pass) == trim($request->confirm_pass)){
+                $input['password'] = bcrypt(trim($request->new_pass));
 
-            DB::transaction(function () use ($input, $input_management) {
-                $user = User::create($input);
+                User::create($input);
 
-                $input_management['user_id'] = $user->id;
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Data berhasil disimpan'
+                ]);
+            }else{
+                return response()->json(['code' => 202, 'msg' => 'Password Salah']);
+            }
 
-                Management_Role::create($input_management);
-            });
-
-            return setResponse([
-                'code' => 200,
-                'title' => 'Data berhasil disimpan'
-            ]);
+//            $input_management['role_id'] = (int) $request->role;
+//            $input_management['login_method'] = $request->metode;
+//            $input_management['username'] = $request->username;
+//            $input_management['company_code'] = 'B000';
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
@@ -66,10 +71,10 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                "role" => 'required',
+//                "role" => 'required',
                 "nama" => 'required',
                 "username" => 'required',
-                "metode" => 'required',
+//                "metode" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -77,20 +82,11 @@ class UserController extends Controller
 
             $input['name'] = $request->nama;
             $input['username'] = $request->username;
-            $input['password'] = bcrypt('Petrokimia1');
             $input['company_code'] = 'B000';
 
-            $input_management['role_id'] = (int) $request->role;
-            $input_management['login_method'] = $request->metode;
-            $input_management['username'] = $request->username;
-            $input_management['company_code'] = 'B000';
-
-            DB::transaction(function () use ($input, $input_management, $request) {
+            DB::transaction(function () use ($input, $request) {
                 User::where('id', $request->id)
                     ->update($input);
-
-                Management_Role::where('user_id', $request->id)
-                    ->update($input_management);
             });
             return setResponse([
                 'code' => 200,

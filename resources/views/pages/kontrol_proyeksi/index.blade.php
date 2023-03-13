@@ -73,6 +73,12 @@
                             <div class="tab-content">
                                 <div class="tab-pane active " id="simulasi">
                                     <div  class="mb-4">
+                                        <div class="col-lg mb-3 mt-3">
+                                            <b>Parameter simulasi :</b>
+                                            <ol>
+                                                <li>Memastikan masing-masing data pada menu telah tersubmit. Apabila data ada yg belum tersubmit, hasil simulasi proyeksi juga belum akurat</li>
+                                            </ol>
+                                        </div>
                                         <div class="mb-4">
                                             <div class="table-responsive" id="parameter_simulasi"></div>
                                         </div>
@@ -80,6 +86,13 @@
                                 </div>
                                 <div class="tab-pane " id="biaya_tetap">
                                     <div class="mb-4">
+                                        <div class="col-lg mb-3 mt-3">
+                                            <b>Kelengkapan Biaya Tetap :</b>
+                                            <ol>
+                                                <li>Terbilang lengkap apabila semua cost center yang ada rencana produksinya (QtyRenProd) ada datanya di data SALR.</li>
+                                                <li>Terbilang tidak lengkap apabila cost center ada rencana produksinya (QtyRenProd), tp tidak ada datanya di SALR.</li>
+                                            </ol>
+                                        </div>
                                         <div class="mb-4">
                                             <div class="table-responsive" id="kelengkapan_biaya_tetap"></div>
                                         </div>
@@ -87,6 +100,15 @@
                                 </div>
                                 <div class="tab-pane " id="harga_material">
                                     <div class="mb-4">
+
+                                        <div class="col-lg mb-3 mt-3">
+                                            <b>Kelengkapan Harga Material :</b>
+                                            <ol>
+                                                <li>Terbilang lengkap apabila ada harga material yg Rp0, tetapi ada cons ratenya.</li>
+                                                <li>Terbilang tidak lengkap apabila material tersebut menjadi material pembentuk di cons rate, tetapi harga materialnya Rp0.</li>
+                                            </ol>
+                                        </div>
+
                                         <div class="mb-4">
                                             <div class="table-responsive" id="kelengkapan_harga_material"></div>
                                         </div>
@@ -94,6 +116,15 @@
                                 </div>
                                 <div class="tab-pane " id="bom">
                                     <div class="mb-4">
+
+                                        <div class="col-lg mb-3 mt-3">
+                                            <b>Kelengkapan BOM :</b>
+                                            <ol>
+                                                <li>Terbilang lengkap apabila jumlah consumption rate pada hasil simulasi proyeksi sama dengan jumlah consumption rate pada bagian cons rate..</li>
+                                                <li>Terbilang tidak lengkap apabila jumlah consumption rate pada hasil simulasi proyeksi tidak sama dengan jumlah consumption rate pada bagian cons rate..</li>
+                                            </ol>
+                                        </div>
+
                                         <div class="mb-4">
                                             <div class="table-responsive" id="kelengkapan_bom"></div>
                                         </div>
