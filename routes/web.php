@@ -125,6 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('/', [UserController::class, 'index'])->name('user');
             Route::post('insert', [UserController::class, 'create'])->name('insert_user');
             Route::post('update', [UserController::class, 'update'])->name('update_user');
+            Route::post('update_user_password', [UserController::class, 'update_password'])->name('update_user_password');
             Route::post('delete', [UserController::class, 'delete'])->name('delete_user');
         });
     });

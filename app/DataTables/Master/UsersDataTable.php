@@ -11,7 +11,7 @@ class UsersDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $query = User::select('users.name', 'users.username', 'users.company_code', 'company.company_name')
+        $query = User::select('users.id', 'users.name', 'users.username', 'users.company_code', 'company.company_name')
             ->leftjoin('company', 'company.company_code', '=', 'users.company_code');
         return datatables()
             ->eloquent($query)
