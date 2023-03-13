@@ -1,11 +1,17 @@
-<button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
+{{-- @if (auth()->user()->mapping_akses('users')->read) --}}
+    <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
+{{-- @endif --}}
 
-@if($model->role_id != 1 and auth()->user()->id != $model->id)
-    <button type="button" class="btn bg-success-transparent" title="Ganti Password" data-bs-toggle="modal" data-bs-target=""><i class="fe fe-unlock"></i></button>
-@endif
-<a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a  class="btn bg-danger-transparent" onclick="delete_user({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+{{-- @if (auth()->user()->mapping_akses('users')->update) --}}
+    @if($model->role_id != 1 and auth()->user()->id != $model->id)
+        <button type="button" class="btn bg-success-transparent" title="Ganti Password" data-bs-toggle="modal" data-bs-target=""><i class="fe fe-unlock"></i></button>
+    @endif
+    <a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
+{{-- @endif --}}
 
+{{-- @if (auth()->user()->mapping_akses('users')->delete) --}}
+    <a  class="btn bg-danger-transparent" onclick="delete_user({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+{{-- @endif --}}
 
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail" aria-hidden="true">

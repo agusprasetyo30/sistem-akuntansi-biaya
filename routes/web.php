@@ -130,7 +130,7 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => 'master'], function () {
-        Route::group(['prefix' => 'material'], function () {
+        Route::group(['prefix' => 'material', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [MaterialController::class, 'index'])->name('material');
             Route::post('insert', [MaterialController::class, 'create'])->name('insert_material');
             Route::post('update', [MaterialController::class, 'update'])->name('update_material');
