@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class GLAccountFixedCostController extends Controller
 {
