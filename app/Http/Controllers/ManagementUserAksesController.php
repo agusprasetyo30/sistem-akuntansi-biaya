@@ -26,7 +26,7 @@ class ManagementUserAksesController extends Controller
 
     public function create(Request $request)
     {
-       dd($request);
+    //    dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
