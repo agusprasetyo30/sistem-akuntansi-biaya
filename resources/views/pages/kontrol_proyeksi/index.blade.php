@@ -32,6 +32,7 @@
                         <div class="form-group" id="cost_center_pick">
                             <label class="form-label">Perusahaan <span class="text-red">*</span></label>
                             <select id="filter_company_code" class="form-control custom-select select2">
+                                <option selected value="{{$data_company->company_code}}">{{$data_company->company_code}} - {{$data_company->company_name}}</option>
                             </select>
                         </div>
 
