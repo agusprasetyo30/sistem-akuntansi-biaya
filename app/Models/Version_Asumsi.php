@@ -25,4 +25,13 @@ class Version_Asumsi extends Model
     public function asumsi_umum(){
         return $this->hasMany(Asumsi_Umum::class, 'version_id', 'id');
     }
+    
+    public function balans()
+    {
+        return $this->belongsTo(Balans::class);
+    }
+    public function simulasi_proyeksi()
+    {
+        return $this->belongsTo(SimulasiProyeksi::class);
+    }
 }

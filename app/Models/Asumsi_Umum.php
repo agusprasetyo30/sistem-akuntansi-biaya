@@ -26,4 +26,13 @@ class Asumsi_Umum extends Model
         'deleted_at',
         'deleted_by'
     ];
+    
+    public function balans()
+    {
+        return $this->belongsTo(Balans::class);
+    }
+    public function simulasiProyeksi()
+    {
+        return $this->belongsTo(SimulasiProyeksi::class);
+    }
 }
