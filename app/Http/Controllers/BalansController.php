@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\BalansDataTable;
 use App\DataTables\Master\BalansStoreDataTable;
 use App\DataTables\Master\SimulasiProyeksiStoreDataTable;
+use App\Exports\Horizontal\BalansExport;
 use App\Models\Asumsi_Umum;
 use App\Models\Balans;
 use App\Models\ConsRate;
@@ -18,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use function PHPUnit\Framework\isEmpty;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BalansController extends Controller
 {
@@ -41,15 +43,118 @@ class BalansController extends Controller
 
     }
 
+
     public function index_header(Request $request){
         $asumsi = Asumsi_Umum::where('version_id', $request->version)->get();
 
         return response()->json(['code' => 200, 'asumsi' => $asumsi]);
     }
 
-    public function store(Request $request){
-        try {
+    public function export(Request $request, BalansDataTable $balansDataTable)
+    {
+        $antrian = antrian_material_balans($request->version);
+        $result_antrian = [];
+        foreach ($antrian as $items){
+            foreach ($items as $item){
+                array_push($result_antrian, $item);
+            }
+        }
 
+        $antrian = array_values(array_unique($result_antrian));
+
+        $balans_data = Balans::select('kategori_balans_id','material_code', 'plant_code', 'company_code', 'kategori_balans_desc', 'order_view')
+            ->whereIn('material_code', $request->material == 'all' ? $antrian : [$request->material])
+            ->where('version_id', $request->version)
+            ->groupBy('kategori_balans_id','material_code', 'plant_code', 'company_code', 'kategori_balans_desc', 'order_view')
+            ->orderBy('material_code', 'ASC')
+            ->orderBy('order_view', 'ASC')->get();
+
+        $main_asumsi = Asumsi_Umum::where('version_id', $request->version)->get();
+
+        $balans_default = Balans::where('version_id', $request->version)
+            ->get();
+
+        $temporary_value['p'] = [];
+        $temporary_value['q'] = [];
+        $temporary_value['nilai'] = [];
+
+        foreach ($balans_data as $query) {
+            foreach ($main_asumsi as $key_sub => $value) {
+                $p_value_temp = $balans_default->where('kategori_balans_id', $query->kategori_balans_id)
+                    ->where('asumsi_umum_id', $main_asumsi[$key_sub]->id)
+                    ->where('company_code', $query->company_code)
+                    ->where('plant_code', $query->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->first();
+
+                $q_value_temp = $balans_default->where('kategori_balans_id', $query->kategori_balans_id)
+                    ->where('asumsi_umum_id', $main_asumsi[$key_sub]->id)
+                    ->where('company_code', $query->company_code)
+                    ->where('plant_code', $query->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->first();
+
+                $result_value_temp = $balans_default->where('kategori_balans_id', $query->kategori_balans_id)
+                    ->where('asumsi_umum_id', $main_asumsi[$key_sub]->id)
+                    ->where('company_code', $query->company_code)
+                    ->where('plant_code', $query->plant_code)
+                    ->where('material_code', $query->material_code)
+                    ->first();
+
+                array_push($temporary_value['p'], ["key" => $key_sub, "value" => $p_value_temp->p]);
+                array_push($temporary_value['q'], ["key" => $key_sub, "value" => $q_value_temp->q]);
+                array_push($temporary_value['nilai'], ["key" => $key_sub, "value" => $result_value_temp->nilai]);
+            }
+
+        }
+        
+        $main_asumsi_index_count = $main_asumsi->count() - 1;
+        
+        $fixed_value['p'] = $this->getSeparateValue($temporary_value['p'], $main_asumsi_index_count);
+        $fixed_value['q'] = $this->getSeparateValue($temporary_value['q'], $main_asumsi_index_count);
+        $fixed_value['nilai'] = $this->getSeparateValue($temporary_value['nilai'], $main_asumsi_index_count);
+
+        $data = [
+            'balans_datas'     => $balans_data,
+            'asumsi_umum'      => $main_asumsi,
+            'fixed_value_data' => $fixed_value 
+        ];
+
+        $filename = "Balans " . $request->material . '.xlsx';
+
+        return Excel::download(new BalansExport($data), $filename);
+    }
+
+    /**
+     * melakukan filter dan memisahkan data array sesuai dengan 
+     *
+     * @param [type] $arr
+     * @param [type] $dinamic_reference_count
+     * @return array
+     */
+    public function getSeparateValue($arr, $dinamic_reference_count) : array
+    {
+        $temp_index = 0;
+
+        foreach ($arr as $key => $value) {
+            if ($arr[$key]['key'] == $temp_index) {
+                $fixed_value[$temp_index][] = $arr[$key]['value'];
+
+                $temp_index++;
+
+                if ($temp_index > $dinamic_reference_count) {
+                    $temp_index = 0;
+                }
+            }
+        }
+
+        return $fixed_value;
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            
             $antrian = antrian_material_balans($request->version);
             $result_antrian = [];
             foreach ($antrian as $items){
