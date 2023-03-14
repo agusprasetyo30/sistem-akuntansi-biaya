@@ -18,21 +18,26 @@ class FeatureSeeder extends Seeder
     {
         $data = [
             [
-                'db' => 'company',
-                'keterangan' => 'Company',
+                'db' => 'role',
+                'keterangan' => 'Role',
             ],
             [
                 'db' => 'users',
                 'keterangan' => 'User',
             ],
             [
-                'db' => 'version_asumsi',
-                'keterangan' => 'Versi Asumsi',
+                'db' => 'mapping_role',
+                'keterangan' => 'Mapping User Role',
             ],
             [
-                'db' => 'plant',
-                'keterangan' => 'Plant',
-            ], [
+                'db' => 'management_role',
+                'keterangan' => 'Mapping User Akses',
+            ],
+            [
+                'db' => 'company',
+                'keterangan' => 'Company',
+            ],
+            [
                 'db' => 'kategori_material',
                 'keterangan' => 'Kategori Material',
             ],
@@ -41,15 +46,56 @@ class FeatureSeeder extends Seeder
                 'keterangan' => 'Kategori Produk',
             ],
             [
+                'db' => 'kategori_balans',
+                'keterangan' => 'Kategori Balans',
+            ],
+            [
+                'db' => 'map_kategori_balans',
+                'keterangan' => 'Mapping Kategori Balans',
+            ],
+            [
                 'db' => 'group_account',
                 'keterangan' => 'Group Account',
             ],
             [
                 'db' => 'gl_account',
                 'keterangan' => 'General Ledger',
-            ], [
+            ],
+            [
+                'db' => 'group_account_fc',
+                'keterangan' => 'Group Account Fixed Cost',
+            ],
+            [
+                'db' => 'gl_account_fc',
+                'keterangan' => 'General Ledger Account Fixed Cost',
+            ],
+            [
                 'db' => 'cost_center',
                 'keterangan' => 'Cost Center',
+            ],
+            [
+                'db' => 'material',
+                'keterangan' => 'Material',
+            ],
+            [
+                'db' => 'plant',
+                'keterangan' => 'Plant',
+            ],
+            [
+                'db' => 'glos_cc',
+                'keterangan' => 'Glos CC',
+            ],
+            [
+                'db' => 'tarif',
+                'keterangan' => 'Tarif',
+            ],
+            [
+                'db' => 'asumsi_umum',
+                'keterangan' => 'Asumsi Umum',
+            ],
+            [
+                'db' => 'kurs',
+                'keterangan' => 'Kurs',
             ],
             [
                 'db' => 'regions',
@@ -60,9 +106,6 @@ class FeatureSeeder extends Seeder
                 'keterangan' => 'Const Rate',
             ],
             [
-                'db' => 'asumsi_umum',
-                'keterangan' => 'Asumsi Umum',
-            ], [
                 'db' => 'saldo_awal',
                 'keterangan' => 'Saldo Awal',
             ],
@@ -71,23 +114,12 @@ class FeatureSeeder extends Seeder
                 'keterangan' => 'Kuantiti Rencana Produksi',
             ],
             [
-                'db' => 'price_rendaan',
-                'keterangan' => 'Price Rencana Pengadaan',
-            ],
-            [
                 'db' => 'qty_rendaan',
                 'keterangan' => 'Kuantiti Rencana Pengadaan',
             ],
             [
-                'db' => 'kurs',
-                'keterangan' => 'Kurs',
-            ],
-            [
-                'db' => 'group_account_fc',
-                'keterangan' => 'Group Account Fixed Cost',
-            ], [
-                'db' => 'gl_account_fc',
-                'keterangan' => 'General Ledger Account Fixed Cost',
+                'db' => 'price_rendaan',
+                'keterangan' => 'Price Rencana Pengadaan',
             ],
             [
                 'db' => 'zco',
@@ -98,39 +130,29 @@ class FeatureSeeder extends Seeder
                 'keterangan' => 'SALR',
             ],
             [
-                'db' => 'pj_pemakaian',
-                'keterangan' => 'Pakai Jual Pemakaian',
-            ], [
-                'db' => 'pj_penjualan',
-                'keterangan' => 'Pakai Jual Penjualan',
-            ],
-            [
                 'db' => 'laba_rugi',
                 'keterangan' => 'Laba Rugi',
             ],
             [
-                'db' => 'glos_cc',
-                'keterangan' => 'Glos CC',
+                'db' => 'pj_pemakaian',
+                'keterangan' => 'Pakai Jual Pemakaian',
             ],
             [
-                'db' => 'map_kategori_balans',
-                'keterangan' => 'Mapping Kategori Balans',
-            ], [
-                'db' => 'temp_proyeksi',
-                'keterangan' => 'Temp Proyeksi',
+                'db' => 'pj_penjualan',
+                'keterangan' => 'Pakai Jual Penjualan',
             ],
             [
-                'db' => 'simulasi_proyeksi',
-                'keterangan' => 'Simulasi Proyeksi',
+                'db' => 'kontrol_proyeksi',
+                'keterangan' => 'Kontrol Proyeksi ',
             ],
             [
                 'db' => 'balans',
                 'keterangan' => 'Balans ',
             ],
             [
-                'db' => 'tarif',
-                'keterangan' => 'Tarif',
-            ]
+                'db' => 'simulasi_proyeksi',
+                'keterangan' => 'Simulasi Proyeksi',
+            ],
         ];
 
         foreach ($data as $items) {
