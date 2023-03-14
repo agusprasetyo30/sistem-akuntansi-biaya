@@ -28,7 +28,7 @@
 			<ul class="slide-menu">
                 <li><a href="{{route('role')}}" class="slide-item"> Roles</a></li>
                 <li><a href="{{route('user')}}" class="slide-item"> Users</a></li>
-                {{-- <li><a href="{{route('user_role')}}" class="slide-item"> Mapping User Role</a></li> --}}
+                <li><a href="{{route('user_role')}}" class="slide-item"> Mapping User Role</a></li>
                 <li><a href="{{route('user_akses')}}" class="slide-item"> Mapping User Akses</a></li>
 			</ul>
 		</li>
