@@ -25,7 +25,8 @@ class BalansDataTable extends DataTable
 //
 //        dd($query);
 
-        $query = Balans::select('kategori_balans_id','material_code', 'plant_code', 'company_code', 'kategori_balans_desc', 'order_view')
+            $query = Balans::
+            select('kategori_balans_id','material_code', 'plant_code', 'company_code', 'kategori_balans_desc', 'order_view')
             ->whereIn('material_code', $this->material == 'all' ? $this->antrian : [$this->material])
             ->where('version_id', $this->version)
             ->groupBy('kategori_balans_id','material_code', 'plant_code', 'company_code', 'kategori_balans_desc', 'order_view')

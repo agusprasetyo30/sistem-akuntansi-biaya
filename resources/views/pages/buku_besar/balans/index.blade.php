@@ -326,9 +326,20 @@
                             {{--$('#dt_balans').DataTable().ajax.url('{{route('get_data_dasar_balans')}}').load();--}}
                         },
                         buttons: [
-                            { extend: 'pageLength', className: 'mb-5' },
-                            { extend: 'excel', className: 'mb-5', exportOptions:{
-                                }, title: 'Balans' }
+                            { extend: 'pageLength'},
+                            {
+                                text: 'Excel',
+                                classname: 'mb-5',
+                                action: function ( e, dt, node, config ) {
+                                    var version = $('#filter_version_laporan').val();
+                                    var material = $('#filter_material').val();
+
+                                    let route_default = '{{ route("export_balans") }}'
+                                    let route_complete = route_default + '?material=' + material + '&version=' + version;
+
+                                    window.location = route_complete
+                                }
+                            }
                         ],
                         ajax: {
                             type: "POST",

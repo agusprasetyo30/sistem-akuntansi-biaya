@@ -10,6 +10,8 @@ class Balans extends Model
     use HasFactory;
 
     protected $table = 'balans';
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'material_code',
         'plant_code',
@@ -32,4 +34,19 @@ class Balans extends Model
         'deleted_at',
         'deleted_by'
     ];
+
+    public function asumsi_umum()
+    {
+        return $this->hasOne(Asumsi_Umum::class, 'id', 'asumsi_umum_id');
+    }
+
+    public function kategori_balans()
+    {
+        return $this->hasOne(KategoriBalans::class, 'id', 'kategori_balans_id');
+    }
+
+    public function version_asumsi()
+    {
+        return $this->hasOne(Version_Asumsi::class, 'id', 'version_id');
+    }
 }

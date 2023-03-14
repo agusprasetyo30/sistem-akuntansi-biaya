@@ -141,10 +141,10 @@ class FeatureSeeder extends Seeder
                 'db' => 'pj_penjualan',
                 'keterangan' => 'Pakai Jual Penjualan',
             ],
-            [
-                'db' => 'kontrol_proyeksi',
-                'keterangan' => 'Kontrol Proyeksi ',
-            ],
+            // [
+            //     'db' => 'kontrol_proyeksi',
+            //     'keterangan' => 'Kontrol Proyeksi ',
+            // ],
             [
                 'db' => 'balans',
                 'keterangan' => 'Balans ',

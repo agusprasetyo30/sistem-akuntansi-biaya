@@ -384,6 +384,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('header', [BalansController::class, 'index_header'])->name('header_dasar_balans');
             Route::post('store_dasar_balans', [BalansController::class, 'store'])->name('store_dasar_balans');
             Route::post('check_dasar_balans', [BalansController::class, 'checker'])->name('check_dasar_balans');
+            Route::get('/export', [BalansController::class, 'export'])->name('export_balans');
         });
 
         Route::group(['prefix' => 'pakai-jual', 'middleware' => ['role:1&2&3&4&5']], function () {

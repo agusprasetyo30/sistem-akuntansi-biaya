@@ -18,6 +18,7 @@ class CreateMappingRoleTable extends Migration
             $table->foreignId('user_id')->references('id')->on('users')->onDelete("cascade")->onUpdate("cascade");
             $table->foreignId('role_id')->references('id')->on('role')->onDelete("cascade")->onUpdate("cascade");
             $table->string('login_method')->default('DB')->nullable();
+            $table->string('kode_feature')->nullable();
             $table->timestamps();
         });
     }
