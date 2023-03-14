@@ -19,6 +19,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'username',
         'password',
@@ -44,31 +45,24 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function pegawai()
-    {
-        return $this->hasOne(Karyawan::class, 'nik_sap', 'nik');
-    }
-
     public function mapping_role(){
-        return $this->hasMany(Management_Role::class, 'user_id', 'id');
-    }
-
-    public function mapping_fitur(){
-        return $this->hasOne(Feature::class, 'kode_unik', 'kode_feature');
+        return $this->hasMany(MappingRole::class, 'user_id', 'id');
     }
 
     public function mapping_side_bar_akses(){
-        $result = $this->mapping_role()
-            ->get()->pluck('role_id')->all();
-
+        $data = $this->mapping_role()->with('mapping_fitur')->get()->pluck('mapping_fitur.*.id');
+        $result = array_merge(...$data);
         return $result;
     }
 
     public function mapping_akses($feature){
-        $result = $this->mapping_role()
-            ->where('db', $feature)
-            ->first();
+        $data = $this->mapping_role()->with(['mapping_fitur'=>function($query) use($feature){
+            $query->where('db', $feature);
+        }])->whereHas('mapping_fitur' , function($query) use($feature){
+            $query->where('db', $feature);
+        })->get()->pluck('mapping_fitur.*')->all();
 
-        return $result;
+        $result = array_merge(...$data);
+        return $result[0];
     }
 }
