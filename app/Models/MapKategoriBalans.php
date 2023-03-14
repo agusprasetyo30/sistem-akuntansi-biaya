@@ -74,6 +74,7 @@ class MapKategoriBalans extends Model
     }
 
     public function get_data_saldo_awal_nilai($plant){
+//        dd($this->saldo_awal()->get());
         $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->sum('total_value');
         return $saldo_awal;
     }

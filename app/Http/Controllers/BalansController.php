@@ -95,9 +95,13 @@ class BalansController extends Controller
 
                                 $plant = explode(' - ', $data_map->plant_code);
 
-                                if ($plant != 'all'){
+
+                                if ($plant[0] != 'all'){
+
                                     $q = $data_map->get_data_saldo_awal($plant[0]);
                                     $nilai = $data_map->get_data_saldo_awal_nilai($plant[0]);
+
+
                                 }else{
                                     $q = $data_map->saldo_awal->sum('total_stock');
                                     $nilai = $data_map->saldo_awal->sum('total_value');
@@ -131,11 +135,8 @@ class BalansController extends Controller
                         }
                         elseif ($data_map->kategori_balans_id == 2){
                             $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
+//
                             $nilai = $data_map->get_data_total_pengadaan($data->id, $data->adjustment);
-
-//                            if ($data_map->material_code == '2000002' && $data->id == 11){{
-//                                dd('dwadaw');
-//                            }}
 
 
                             if ($q != 0){
@@ -299,12 +300,19 @@ class BalansController extends Controller
                     Balans::insert($insert);
                 }
 
-                SimulasiProyeksi::where('version_id', $request->version)->delete();
-                $simulasi_create->hitung_simpro($request->version);
+                $data_simulasi = SimulasiProyeksi::where('product_code','2000001')
+                    ->where('name', 'COGM')
+                    ->where('asumsi_umum_id', '10')
+                    ->where('plant_code', 'B019')
+                    ->get();
+
+//                dd($data_simulasi);
+
+//                SimulasiProyeksi::where('version_id', $request->version)->delete();
+//                $simulasi_create->hitung_simpro($request->version);
             });
             return response()->json(['code' => 200]);
         }catch (\Exception $exception){
-            dd($exception);
             return response()->json(['code' => 500]);
         }
     }
