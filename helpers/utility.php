@@ -1249,3 +1249,39 @@ function helpDollar($money, $dollar)
 
     return $res;
 }
+
+if (!function_exists('mapping_akses')) {
+    function mapping_akses($db, $akses)
+    {
+        $map_akses = auth()->user()->mapping_akses($db);
+
+        if ($map_akses) {
+            switch ($akses) {
+                case "create":
+                    $result = $map_akses->create;
+                    break;
+                case "read":
+                    $result = $map_akses->read;
+                    break;
+                case "update":
+                    $result = $map_akses->update;
+                    break;
+                case "delete":
+                    $result = $map_akses->delete;
+                    break;
+                case "approve":
+                    $result = $map_akses->approve;
+                    break;
+                case "submit":
+                    $result = $map_akses->submit;
+                    break;
+                default:
+                    $result = false;
+            }
+        } else {
+            $result = false;
+        }
+
+        return $result;
+    }
+}

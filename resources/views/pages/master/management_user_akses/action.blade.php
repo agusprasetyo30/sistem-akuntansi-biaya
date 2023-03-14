@@ -1,7 +1,14 @@
-<button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
-<a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a  class="btn bg-danger-transparent" onclick="delete_management_user_akses({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@if (mapping_akses('management_role','read'))
+    <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
+@endif
 
+@if (mapping_akses('management_role','update'))
+    <a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
+@endif
+
+@if (mapping_akses('management_role','delete'))
+    <a  class="btn bg-danger-transparent" onclick="delete_management_user_akses({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@endif
 
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->id)}}" role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
@@ -17,12 +24,6 @@
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
-                            <div class="form-group">
-                                <label>User </label>
-                                <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="User" value="{{$model->name}}" name="detail_name"
-                                    id="detail_name" autocomplete="off">
-                            </div>
                             <div class="form-group">
                                 <label>Role </label>
                                 <input disabled type="text" class="form-control form-control-sm"
@@ -113,12 +114,6 @@
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
-                            <div class="form-group">
-                                <label for="data_main_user" class="form-label">User</label>
-                                <select name="main_user" id="edit_data_main_user{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->user_id}}" selected>{{$model->name}}</option>
-                                </select>
-                            </div>
                             <div class="form-group">
                                 <label for="data_main_role" class="form-label">Role</label>
                                 <select name="main_role" id="edit_data_main_role{{$model->id}}" class="form-control custom-select select2">
@@ -235,28 +230,6 @@
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Status',
         width: '100%'
-    })
-
-    $('#edit_data_main_user'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih User',
-        width: '100%',
-        allowClear: false,
-        ajax: {
-            url: "{{ route('user_select') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term
-                };
-            },
-            processResults: function(response) {
-                return {
-                    results: response
-                };
-            }
-        }
     })
 
     $('#edit_data_main_role'+{{$model->id}}).select2({
