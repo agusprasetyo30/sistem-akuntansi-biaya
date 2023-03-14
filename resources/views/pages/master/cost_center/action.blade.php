@@ -1,8 +1,14 @@
+@if (mapping_akses('cost_center','read'))
+    <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->cost_center)}}"><i class="fe fe-info"></i></button>
+@endif
 
-<button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->cost_center)}}"><i class="fe fe-info"></i></button>
-<a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->cost_center)}}"><i class="fe fe-edit"></i></a>
-<a  class="btn bg-danger-transparent" onclick="delete_cost_center('{{$model->cost_center}}')" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@if (mapping_akses('cost_center','update'))
+    <a  class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->cost_center)}}"><i class="fe fe-edit"></i></a>
+@endif
 
+@if (mapping_akses('cost_center','delete'))
+    <a  class="btn bg-danger-transparent" onclick="delete_cost_center('{{$model->cost_center}}')" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@endif
 
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->cost_center)}}" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-labelledby="modal_detail" aria-hidden="true">

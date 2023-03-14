@@ -10,12 +10,6 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="data_main_user" class="form-label">User</label>
-                                <select name="main_user" id="data_main_user" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih User</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
                                 <label for="data_main_role" class="form-label">Role</label>
                                 <select name="main_role" id="data_main_role" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Role</option>

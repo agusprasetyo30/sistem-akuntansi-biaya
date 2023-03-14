@@ -1,10 +1,14 @@
-<button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
-<a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
-<a class="btn bg-danger-transparent" onclick="delete_kategori_material({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@if (mapping_akses('kategori_material','read'))
+    <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
+@endif
 
-{{-- @can('submit posts')
-<a class="btn bg-dark-transparent" title="submit" data-toggle="tooltip"><i class="fe fe-upload"></i></a>
-@endcan --}}
+@if (mapping_akses('kategori_material','update'))
+    <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
+@endif
+
+@if (mapping_akses('kategori_material','delete'))
+    <a class="btn bg-danger-transparent" onclick="delete_kategori_material({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@endif
 
 <!-- Modal Detail-->
 <div class="modal fade" id="{{__('modal_detail'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
