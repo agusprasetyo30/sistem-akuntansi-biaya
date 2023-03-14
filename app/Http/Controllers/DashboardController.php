@@ -12,6 +12,11 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
+//        $data = User::with('mapping_role')->get();
+
+//        dd(auth()->user()->mapping_akses('company'));
+//        dd(auth()->user()->mapping_side_bar_akses());
+//        dd($data);
         return view('pages.dashboard.index');
     }
 
