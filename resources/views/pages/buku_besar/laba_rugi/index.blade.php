@@ -188,7 +188,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        $('#local_loader').show();
+                                        // $('#local_loader').show();
                                         importStore()
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -207,7 +207,7 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        $('#local_loader').show();
+                                        // $('#local_loader').show();
                                         importStore()
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);

@@ -173,41 +173,44 @@ class LabaRugiController extends Controller
                 ]);
             }
         }catch (\Exception $exception){
-            dd($exception);
-            $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
+//            dd($exception);
+            if ($exception->getCode() == 23503){
+                $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
 
-            $kategori_produk = [];
-            $kategori_produk_ = [];
+                $kategori_produk = [];
+                $kategori_produk_ = [];
 
-            foreach ($empty_excel[0] as $key => $value) {
-                array_push($kategori_produk, 'Kategori Produk ID ' . $value['kategori_produk_id'] . ' tidak ada pada master');
-                $d_kkategori_produk = KategoriProduk::whereIn('id', [$value['kategori_produk_id']])->first();
-                if ($d_kkategori_produk) {
-                    array_push($kategori_produk_, 'Kategori Produk ID ' . $d_kkategori_produk->kategori_produk_id . ' tidak ada pada master');
+                foreach ($empty_excel[0] as $key => $value) {
+                    array_push($kategori_produk, 'Kategori Produk ID ' . $value['kategori_produk_id'] . ' tidak ada pada master');
+                    $d_kkategori_produk = KategoriProduk::whereIn('id', [$value['kategori_produk_id']])->first();
+                    if ($d_kkategori_produk) {
+                        array_push($kategori_produk_, 'Kategori Produk ID ' . $d_kkategori_produk->kategori_produk_id . ' tidak ada pada master');
+                    }
+
                 }
 
-            }
+                $result_kategori_produk = array_diff($kategori_produk, $kategori_produk_);
+                $result = array_merge($result_kategori_produk);
+                $res = array_unique($result);
 
-            $result_kategori_produk = array_diff($kategori_produk, $kategori_produk_);
-            $result = array_merge($result_kategori_produk);
-            $res = array_unique($result);
+                if ($res) {
+                    $msg = '';
 
-            if ($res) {
-                $msg = '';
+                    foreach ($res as $message)
+                        $msg .= '<p>' . $message . '</p>';
 
-                foreach ($res as $message)
-                    $msg .= '<p>' . $message . '</p>';
-
-                return setResponse([
-                    'code' => 430,
-                    'title' => 'Gagal meng-import data',
-                    'message' => $msg
-                ]);
-            } else {
+                    return setResponse([
+                        'code' => 430,
+                        'title' => 'Gagal meng-import data',
+                        'message' => $msg
+                    ]);
+                }
+            }else{
                 return setResponse([
                     'code' => 400,
                 ]);
             }
+
         }
     }
 

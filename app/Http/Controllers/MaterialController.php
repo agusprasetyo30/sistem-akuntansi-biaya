@@ -170,21 +170,21 @@ class MaterialController extends Controller
 
             if ($import->failures()->isNotEmpty()) {
                 $err = [];
-
                 foreach ($data_fail as $rows) {
                     try {
                         $er = implode(' ', array_values($rows->errors()));
                         $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                        array_push($err, $hasil);
+                        array_push($err, '<p>' . $hasil . '</p>');
+
                     } catch (\Throwable $th) {
                         return response()->json(['Code' => $th->getCode(), 'msg' => $th->getMessage()]);
                     }
+
                 }
-                // dd(implode(' ', $err));
                 return setResponse([
-                    'code' => 500,
+                    'code' => 430,
                     'title' => 'Gagal meng-import data',
-                    'message' => $err
+                    'message' => str_replace(',', '', implode(',', array_unique($err)))
                 ]);
             }
 

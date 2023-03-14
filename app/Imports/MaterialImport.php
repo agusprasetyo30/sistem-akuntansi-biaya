@@ -68,6 +68,8 @@ class MaterialImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
             'group_account_code' => ['required'],
             'kategori_material_id' => ['required'],
             'material_uom' => ['required'],
+            'is_active' => ['required'],
+            'is_dummy' => ['required'],
         ];
     }
 
