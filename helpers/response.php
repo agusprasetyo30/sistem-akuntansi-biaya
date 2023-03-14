@@ -94,6 +94,10 @@ function setResponse($params = null)
 			$defaultStatus = 'Gateway timeout';
 			$defaultMessage = 'The request couldn`t be serviced due to some failure within the internal stack.';
 			break;
+        case 431:
+            $defaultStatus = 'Data Tidak Valid';
+            $defaultMessage = 'Silakan Cek kembali data yang anda masukkan.';
+            break;
 		default:
 			$defaultStatus = 'Undefined';
 			$defaultMessage = 'Undefined';

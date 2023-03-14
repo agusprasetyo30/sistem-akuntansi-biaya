@@ -21,9 +21,10 @@ class RoleMiddleware
         {
             $session = auth()->user()->mapping_side_bar_akses();
 
-            $roles = (strpos($idRole, '&') !== false) ? explode('&', $idRole) : array($idRole);
 
-            if (in_array($session, $roles))
+
+            $roles = (strpos($idRole, '&') !== false) ? explode('&', $idRole) : array($idRole);
+            if (count(array_intersect($session, $roles)) > 0)
             {
                 return $next($request);
             }

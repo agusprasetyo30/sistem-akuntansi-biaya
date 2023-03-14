@@ -165,36 +165,46 @@ class QtyRenProdController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            $empty_excel = Excel::toArray(new QtyRenProdImport($request->version), $request->file('file'));
-            $cost_center = [];
-            $cost_center_ = [];
-            foreach ($empty_excel[0] as $key => $value) {
-                array_push($cost_center, 'cost center ' . $value['cost_center'] . ' tidak ada pada master');
-                $d_cost_center = CostCenter::whereIn('cost_center', [$value['cost_center']])->first();
-                if ($d_cost_center) {
-                    array_push($cost_center_, 'cost center ' . $d_cost_center->cost_center . ' tidak ada pada master');
+            if ($exception->getCode() == 23503){
+                $empty_excel = Excel::toArray(new QtyRenProdImport($request->version), $request->file('file'));
+                $cost_center = [];
+                $cost_center_ = [];
+                foreach ($empty_excel[0] as $key => $value) {
+                    array_push($cost_center, 'cost center ' . $value['cost_center'] . ' tidak ada pada master');
+                    $d_cost_center = CostCenter::whereIn('cost_center', [$value['cost_center']])->first();
+                    if ($d_cost_center) {
+                        array_push($cost_center_, 'cost center ' . $d_cost_center->cost_center . ' tidak ada pada master');
+                    }
                 }
-            }
 
-            $result_cost_center = array_diff($cost_center, $cost_center_);
-            $res = array_unique($result_cost_center);
+                $result_cost_center = array_diff($cost_center, $cost_center_);
+                $res = array_unique($result_cost_center);
 
-            if ($res) {
-                $msg = '';
+                if ($res) {
+                    $msg = '';
 
-                foreach ($res as $message)
-                    $msg .= '<p>' . $message . '</p>';
+                    foreach ($res as $message)
+                        $msg .= '<p>' . $message . '</p>';
 
+                    return setResponse([
+                        'code' => 430,
+                        'title' => 'Gagal meng-import data',
+                        'message' => $msg
+                    ]);
+                }
+            }elseif ($exception->getCode() == 0){
+//                dd($exception->getMessage());
                 return setResponse([
-                    'code' => 430,
+                    'code' => 431,
                     'title' => 'Gagal meng-import data',
-                    'message' => $msg
+                    'message' => 'Format Tidak Sesuai.'
                 ]);
-            } else {
+            } else{
                 return setResponse([
                     'code' => 400,
                 ]);
             }
+
         }
     }
 

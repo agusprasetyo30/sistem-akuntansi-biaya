@@ -127,20 +127,29 @@ var ewpDatatables = function (data) {
 }
 
 var handleError = function (response) {
-    
-    if (response.status == 500){
+
+    if (response.status === 500){
         Swal.fire('Oopss...', 'Internal Server Error', 'error')
         return false
-    } else if (response.status == 404){
+    } else if (response.status === 404){
         Swal.fire('Oopss...', 'URL Not Found', 'error')
         return false
-    } else if (response.status == 405){
+    } else if (response.status === 405){
         Swal.fire('Oopss...', 'Method Not Allowed Http Exception', 'error')
         return false
-    } else if (response.status == 422){
+    } else if (response.status === 422){
         Swal.fire('Oopss...', 'Unprocessable Entity', 'error')
         return false
-    } else if (response.status == 430){
+    } else if (response.status === 430){
+        Swal.fire({
+            title: response.responseJSON.title,
+            html: response.responseJSON.message,
+            icon: 'warning',
+            allowOutsideClick: false,
+            confirmButtonColor: "#019267",
+            confirmButtonText: 'Konfirmasi',
+        })
+    }else if (response.status === 431){
         Swal.fire({
             title: response.responseJSON.title,
             html: response.responseJSON.message,
