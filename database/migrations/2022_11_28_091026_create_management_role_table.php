@@ -19,7 +19,7 @@ class CreateManagementRoleTable extends Migration
             $table->foreignId('role_id')->references('id')->on('role')->onDelete("cascade")->onUpdate("cascade");
             $table->string('username')->nullable();
             $table->string('login_method')->default('DB')->nullable();
-            $table->string('kode_feature')->nullable()->nullable();
+            $table->string('kode_feature')->nullable();
             $table->string('company_code')->unsigned()->nullable();
             $table->foreign('company_code')->references('company_code')->on('company')->onDelete("cascade")->onUpdate("cascade");
             $table->boolean('create')->default(0)->nullable();
