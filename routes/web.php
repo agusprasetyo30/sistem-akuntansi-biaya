@@ -106,30 +106,30 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/profile/{id}', [DashboardController::class, 'profile'])->name('profile_user');
     Route::post('/check_pass', [DashboardController::class, 'check_pass'])->name('check_pass');
 
-    Route::group(['prefix' => 'management-user'], function () {
+    Route::group(['prefix' => 'management-user', 'middleware' => ['role:1&2&5']], function () {
 
-        Route::group(['prefix' => 'role'], function () {
+        Route::group(['prefix' => 'role', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [RoleController::class, 'index'])->name('role');
             Route::post('insert', [RoleController::class, 'create'])->name('insert_role');
             Route::post('update', [RoleController::class, 'update'])->name('update_role');
             Route::post('delete', [RoleController::class, 'delete'])->name('delete_role');
         });
 
-        Route::group(['prefix' => 'user-akses'], function () {
+        Route::group(['prefix' => 'user-akses', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [ManagementUserAksesController::class, 'index'])->name('user_akses');
             Route::post('insert', [ManagementUserAksesController::class, 'create'])->name('insert_user_akses');
             Route::post('update', [ManagementUserAksesController::class, 'update'])->name('update_user_akses');
             Route::post('delete', [ManagementUserAksesController::class, 'delete'])->name('delete_user_akses');
         });
 
-        Route::group(['prefix' => 'user-role'], function () {
+        Route::group(['prefix' => 'user-role', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [ManagementUserRoleController::class, 'index'])->name('user_role');
             Route::post('insert', [ManagementUserRoleController::class, 'create'])->name('insert_user_role');
             Route::post('update', [ManagementUserRoleController::class, 'update'])->name('update_user_role');
             Route::post('delete', [ManagementUserRoleController::class, 'delete'])->name('delete_user_role');
         });
 
-        Route::group(['prefix' => 'user'], function () {
+        Route::group(['prefix' => 'user', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [UserController::class, 'index'])->name('user');
             Route::post('insert', [UserController::class, 'create'])->name('insert_user');
             Route::post('update', [UserController::class, 'update'])->name('update_user');
@@ -138,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    Route::group(['prefix' => 'master'], function () {
+    Route::group(['prefix' => 'master', 'middleware' => ['role:1&2&5']], function () {
         Route::group(['prefix' => 'material', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [MaterialController::class, 'index'])->name('material');
             Route::post('insert', [MaterialController::class, 'create'])->name('insert_material');
@@ -148,7 +148,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [MaterialController::class, 'export'])->name('export_material');
         });
 
-        Route::group(['prefix' => 'plant'], function () {
+        Route::group(['prefix' => 'plant', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [PlantController::class, 'index'])->name('plant');
             Route::post('insert', [PlantController::class, 'create'])->name('insert_plant');
             Route::post('update', [PlantController::class, 'update'])->name('update_plant');
@@ -157,7 +157,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [PlantController::class, 'export'])->name('export_plant');
         });
 
-        Route::group(['prefix' => 'kategori-material'], function () {
+        Route::group(['prefix' => 'kategori-material', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [KategoriMaterialController::class, 'index'])->name('kategori_material');
             Route::post('insert', [KategoriMaterialController::class, 'create'])->name('insert_kategori_material');
             Route::post('update', [KategoriMaterialController::class, 'update'])->name('update_kategori_material');
@@ -166,7 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [KategoriMaterialController::class, 'export'])->name('export_kategori_material');
         });
 
-        Route::group(['prefix' => 'kategori-produk'], function () {
+        Route::group(['prefix' => 'kategori-produk', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [KategoriProdukController::class, 'index'])->name('kategori_produk');
             Route::post('insert', [KategoriProdukController::class, 'create'])->name('insert_kategori_produk');
             Route::post('update', [KategoriProdukController::class, 'update'])->name('update_kategori_produk');
@@ -175,7 +175,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [KategoriProdukController::class, 'export'])->name('export_kategori_produk');
         });
 
-        Route::group(['prefix' => 'regions'], function () {
+        Route::group(['prefix' => 'regions', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [RegionsController::class, 'index'])->name('regions');
             Route::post('insert', [RegionsController::class, 'create'])->name('insert_regions');
             Route::post('update', [RegionsController::class, 'update'])->name('update_regions');
@@ -184,7 +184,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [RegionsController::class, 'export'])->name('export_regions');
         });
 
-        Route::group(['prefix' => 'cost_center'], function () {
+        Route::group(['prefix' => 'cost_center', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
             Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
             Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
@@ -193,7 +193,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [CostCenterController::class, 'export'])->name('export_cost_center');
         });
 
-        Route::group(['prefix' => 'glos-cc'], function () {
+        Route::group(['prefix' => 'glos-cc', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [GlosCCController::class, 'index'])->name('glos_cc');
             Route::post('insert', [GlosCCController::class, 'create'])->name('insert_glos_cc');
             Route::post('update', [GlosCCController::class, 'update'])->name('update_glos_cc');
@@ -202,7 +202,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GlosCCController::class, 'export'])->name('export_glos_cc');
         });
 
-        Route::group(['prefix' => 'company'], function () {
+        Route::group(['prefix' => 'company', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [CompanyController::class, 'index'])->name('company');
             Route::post('insert', [CompanyController::class, 'create'])->name('insert_company');
             Route::post('update', [CompanyController::class, 'update'])->name('update_company');
@@ -210,14 +210,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [CompanyController::class, 'import'])->name('import_company');
         });
 
-        Route::group(['prefix' => 'kurs'], function () {
+        Route::group(['prefix' => 'kurs', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [KursController::class, 'index'])->name('kurs');
             Route::post('insert', [KursController::class, 'create'])->name('insert_kurs');
             Route::post('update', [KursController::class, 'update'])->name('update_kurs');
             Route::post('delete', [KursController::class, 'delete'])->name('delete_kurs');
         });
 
-        Route::group(['prefix' => 'group-account'], function () {
+        Route::group(['prefix' => 'group-account', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [GroupAccountController::class, 'index'])->name('group_account');
             Route::post('insert', [GroupAccountController::class, 'create'])->name('insert_group_account');
             Route::post('update', [GroupAccountController::class, 'update'])->name('update_group_account');
@@ -226,7 +226,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GroupAccountController::class, 'export'])->name('export_group_account');
         });
 
-        Route::group(['prefix' => 'group-account-fixed-cost'], function () {
+        Route::group(['prefix' => 'group-account-fixed-cost', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [GroupAccountFixedCostController::class, 'index'])->name('group_account_fc');
             Route::post('insert', [GroupAccountFixedCostController::class, 'create'])->name('insert_group_account_fc');
             Route::post('update', [GroupAccountFixedCostController::class, 'update'])->name('update_group_account_fc');
@@ -235,7 +235,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GroupAccountFixedCostController::class, 'export'])->name('export_group_account_fc');
         });
 
-        Route::group(['prefix' => 'gl-account'], function () {
+        Route::group(['prefix' => 'gl-account', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [GLAccountController::class, 'index'])->name('gl_account');
             Route::post('insert', [GLAccountController::class, 'create'])->name('insert_gl_account');
             Route::post('update', [GLAccountController::class, 'update'])->name('update_gl_account');
@@ -244,7 +244,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GLAccountController::class, 'export'])->name('export_gl_account');
         });
 
-        Route::group(['prefix' => 'gl-account-fc'], function () {
+        Route::group(['prefix' => 'gl-account-fc', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [GLAccountFixedCostController::class, 'index'])->name('gl_account_fc');
             Route::post('insert', [GLAccountFixedCostController::class, 'create'])->name('insert_gl_account_fc');
             Route::post('update', [GLAccountFixedCostController::class, 'update'])->name('update_gl_account_fc');
@@ -253,7 +253,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GLAccountFixedCostController::class, 'export'])->name('export_gl_account_fc');
         });
 
-        Route::group(['prefix' => 'asumsi_umum'], function () {
+        Route::group(['prefix' => 'asumsi_umum', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [AsumsiUmumController::class, 'index'])->name('asumsi_umum');
             Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
             Route::post('update', [AsumsiUmumController::class, 'update'])->name('update_asumsi_umum');
@@ -265,21 +265,21 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
         });
 
-        Route::group(['prefix' => 'kategori_balans'], function () {
+        Route::group(['prefix' => 'kategori_balans', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [KategoriBalansController::class, 'index'])->name('kategori_balans');
             Route::post('insert', [KategoriBalansController::class, 'create'])->name('insert_kategori_balans');
             Route::post('update', [KategoriBalansController::class, 'update'])->name('update_kategori_balans');
             Route::post('delete', [KategoriBalansController::class, 'delete'])->name('delete_kategori_balans');
         });
 
-        Route::group(['prefix' => 'map_kategori_balans'], function () {
+        Route::group(['prefix' => 'map_kategori_balans', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [MapKetegoriBalansController::class, 'index'])->name('map_kategori_balans');
             Route::post('insert', [MapKetegoriBalansController::class, 'create'])->name('insert_map_kategori_balans');
             Route::post('update', [MapKetegoriBalansController::class, 'update'])->name('update_map_kategori_balans');
             Route::post('delete', [MapKetegoriBalansController::class, 'delete'])->name('delete_map_kategori_balans');
         });
 
-        Route::group(['prefix' => 'tarif'], function () {
+        Route::group(['prefix' => 'tarif', 'middleware' => ['role:1&2&5']], function () {
             Route::get('/', [TarifController::class, 'index'])->name('tarif');
             Route::post('insert', [TarifController::class, 'create'])->name('insert_tarif');
             Route::post('update', [TarifController::class, 'update'])->name('update_tarif');
@@ -287,66 +287,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [TarifController::class, 'import'])->name('import_tarif');
             Route::get('export', [TarifController::class, 'export'])->name('export_tarif');
         });
-
-        // Main Select2
-        Route::group(['prefix' => 'main_data'], function () {
-            Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
-            Route::get('/company_select', [SelectController::class, 'company'])->name('company_select');
-            Route::get('/plant_balans_select', [SelectController::class, 'plant_balans'])->name('plant_balans_select');
-            Route::get('/glos_cc_balans', [SelectController::class, 'glos_cc_balans'])->name('glos_cc_balans_select');
-            Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');
-            Route::get('/kategori_material', [SelectController::class, 'kategori_material'])->name('kategori_material_select');
-            Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
-            Route::get('/kategori_balans_select', [SelectController::class, 'kategori_balans'])->name('kategori_balans_select');
-            Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
-            Route::get('/material_balans_select', [SelectController::class, 'material_balans'])->name('material_balans_select');
-            Route::get('/material_keyword_select', [SelectController::class, 'material_keyword'])->name('material_keyword_select');
-            Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
-            Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
-            Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
-            Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
-            Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
-            Route::get('/version_inflasi', [SelectController::class, 'version_inflasi'])->name('version_inflasi_select');
-            Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
-            Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
-            Route::get('/general_ledger_fc_detail_select', [SelectController::class, 'general_ledger_fc_detail'])->name('general_ledger_fc_detail_select');
-            Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
-            Route::get('/cost_center_salr', [SelectController::class, 'cost_center_salr'])->name('cost_center_salr_select');
-            Route::get('/cost_element', [SelectController::class, 'cost_element'])->name('cost_element_select');
-            Route::get('/permission', [SelectController::class, 'permission'])->name('permission_select');
-            Route::get('/role_spatie', [SelectController::class, 'role_spatie'])->name('role_spatie_select');
-            Route::get('/user_select', [SelectController::class, 'user'])->name('user_select');
-            Route::get('/menu_select', [SelectController::class, 'menu'])->name('menu_select');
-
-
-            //            Helper
-            Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
-            Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
-            Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
-            Route::post('/check_kursv1', [SelectController::class, 'check_kursv1'])->name('helper_kursv1');
-            Route::post('/check_kursv2', [SelectController::class, 'check_kursv2'])->name('helper_kursv2');
-
-            //            Datatable
-            Route::get('/version_dt', [SelectController::class, 'version_dt'])->name('version_dt');
-            Route::get('/material_dt', [SelectController::class, 'material_dt'])->name('material_dt');
-            Route::get('/material_balans_dt', [SelectController::class, 'material_balans_dt'])->name('material_balans_dt');
-            Route::get('/plant_dt', [SelectController::class, 'plant_dt'])->name('plant_dt');
-            Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
-            Route::get('/kategori_produk_dt', [SelectController::class, 'kategori_produk_dt'])->name('kategori_produk_dt');
-            Route::get('/kategori_balans_dt', [SelectController::class, 'kategori_balans_dt'])->name('kategori_balans_dt');
-            Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
-            Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
-            Route::get('/gl_account_fc_dt', [SelectController::class, 'gl_account_fc_dt'])->name('gl_account_fc_dt');
-            Route::get('/cost_center_dt', [SelectController::class, 'cost_center_dt'])->name('cost_center_dt');
-            Route::get('/cost_element_dt', [SelectController::class, 'cost_element_dt'])->name('cost_element_dt');
-            Route::get('/zco_product_dt', [SelectController::class, 'zco_product_dt'])->name('zco_product_dt');
-            Route::get('/zco_plant_dt', [SelectController::class, 'zco_plant_dt'])->name('zco_plant_dt');
-        });
     });
 
-    Route::group(['prefix' => 'buku-besar'], function () {
+    Route::group(['prefix' => 'buku-besar', 'middleware' => ['role:1&2&3&4&5']], function () {
 
-        Route::group(['prefix' => 'consrate'], function () {
+        Route::group(['prefix' => 'consrate', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [ConsRateController::class, 'index'])->name('consrate');
             Route::post('insert', [ConsRateController::class, 'create'])->name('insert_consrate');
             Route::post('update', [ConsRateController::class, 'update'])->name('update_consrate');
@@ -357,7 +302,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check_duplicated', [ConsRateController::class, 'check_duplicated'])->name('check_consrate_dublicate');
         });
 
-        Route::group(['prefix' => 'saldo-awal'], function () {
+        Route::group(['prefix' => 'saldo-awal', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [SaldoAwalController::class, 'index'])->name('saldo_awal');
             Route::post('insert', [SaldoAwalController::class, 'create'])->name('insert_saldo_awal');
             Route::post('update', [SaldoAwalController::class, 'update'])->name('update_saldo_awal');
@@ -368,7 +313,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check_input', [SaldoAwalController::class, 'check_input'])->name('check_input_saldo_awal');
         });
 
-        Route::group(['prefix' => 'qty-renprod'], function () {
+        Route::group(['prefix' => 'qty-renprod', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [QtyRenProdController::class, 'index'])->name('qty_renprod');
             Route::post('insert', [QtyRenProdController::class, 'create'])->name('insert_qty_renprod');
             Route::post('update', [QtyRenProdController::class, 'update'])->name('update_qty_renprod');
@@ -378,7 +323,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [QtyRenProdController::class, 'check'])->name('check_qty_renprod');
         });
 
-        Route::group(['prefix' => 'qty-rendaan'], function () {
+        Route::group(['prefix' => 'qty-rendaan', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [QtyRenDaanController::class, 'index'])->name('qty_rendaan');
             Route::post('insert', [QtyRenDaanController::class, 'create'])->name('insert_qty_rendaan');
             Route::post('update', [QtyRenDaanController::class, 'update'])->name('update_qty_rendaan');
@@ -388,7 +333,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [QtyRenDaanController::class, 'check'])->name('check_qty_rendaan');
         });
 
-        Route::group(['prefix' => 'price-rendaan'], function () {
+        Route::group(['prefix' => 'price-rendaan', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [PriceRenDaanController::class, 'index'])->name('price_rendaan');
             Route::post('insert', [PriceRenDaanController::class, 'create'])->name('insert_price_rendaan');
             Route::post('update', [PriceRenDaanController::class, 'update'])->name('update_price_rendaan');
@@ -398,11 +343,11 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [PriceRenDaanController::class, 'check'])->name('check_price_rendaan');
         });
 
-        Route::group(['prefix' => 'total-daan'], function () {
+        Route::group(['prefix' => 'total-daan', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
         });
 
-        Route::group(['prefix' => 'zco'], function () {
+        Route::group(['prefix' => 'zco', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [ZcoController::class, 'index'])->name('zco');
             Route::post('insert', [ZcoController::class, 'create'])->name('insert_zco');
             Route::post('update', [ZcoController::class, 'update'])->name('update_zco');
@@ -412,7 +357,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [ZcoController::class, 'check'])->name('check_zco');
         });
 
-        Route::group(['prefix' => 'salr'], function () {
+        Route::group(['prefix' => 'salr', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [SalrController::class, 'index'])->name('salr');
             Route::post('get_data', [SalrController::class, 'get_data'])->name('get_data_salr');
             Route::post('insert', [SalrController::class, 'create'])->name('insert_salr');
@@ -423,7 +368,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [SalrController::class, 'check'])->name('check_salr');
         });
 
-        Route::group(['prefix' => 'laba-rugi'], function () {
+        Route::group(['prefix' => 'laba-rugi', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [LabaRugiController::class, 'index'])->name('laba_rugi');
             Route::post('insert', [LabaRugiController::class, 'create'])->name('insert_laba_rugi');
             Route::post('update', [LabaRugiController::class, 'update'])->name('update_laba_rugi');
@@ -433,7 +378,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
         });
 
-        Route::group(['prefix' => 'dasar_balans'], function () {
+        Route::group(['prefix' => 'dasar_balans', 'middleware' => ['role:1&2&3&4&5']], function () {
             Route::get('/', [BalansController::class, 'index'])->name('dasar_balans');
             Route::post('get_data_balans', [BalansController::class, 'get_data'])->name('get_data_dasar_balans');
             Route::post('header', [BalansController::class, 'index_header'])->name('header_dasar_balans');
@@ -441,9 +386,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check_dasar_balans', [BalansController::class, 'checker'])->name('check_dasar_balans');
         });
 
-        Route::group(['prefix' => 'pakai-jual'], function () {
+        Route::group(['prefix' => 'pakai-jual', 'middleware' => ['role:1&2&3&4&5']], function () {
 
-            Route::group(['prefix' => 'pemakaian'], function () {
+            Route::group(['prefix' => 'pemakaian', 'middleware' => ['role:1&2&3&4&5']], function () {
                 Route::get('/', [PJPemakaianController::class, 'index'])->name('pemakaian');
                 Route::post('insert', [PJPemakaianController::class, 'create'])->name('insert_pemakaian');
                 Route::post('update', [PJPemakaianController::class, 'update'])->name('update_pemakaian');
@@ -453,7 +398,7 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::post('check', [PJPemakaianController::class, 'check'])->name('check_pemakaian');
             });
 
-            Route::group(['prefix' => 'penjualan'], function () {
+            Route::group(['prefix' => 'penjualan', 'middleware' => ['role:1&2&3&4&5']], function () {
                 Route::get('/', [PJPenjualanController::class, 'index'])->name('penjualan');
                 Route::post('insert', [PJPenjualanController::class, 'create'])->name('insert_penjualan');
                 Route::post('update', [PJPenjualanController::class, 'update'])->name('update_penjualan');
@@ -465,16 +410,70 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    Route::group(['prefix' => 'simulasi-proyeksi'], function () {
+    Route::group(['prefix' => 'simulasi-proyeksi', 'middleware' => ['role:1&2&3&4&5']], function () {
         Route::get('/', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
         Route::post('header', [SimulasiProyeksiController::class, 'index_header'])->name('header_simulasi_proyeksi');
         Route::post('store', [SimulasiProyeksiController::class, 'store'])->name('store_simulasi_proyeksi');
     });
 
-    Route::group(['prefix' => 'kontrol-proyeksi'], function () {
+    Route::group(['prefix' => 'kontrol-proyeksi', 'middleware' => ['role:1&2&3&4&5']], function () {
         Route::get('/', [KontrolProyeksiController::class, 'index'])->name('kontrol_proyeksi');
         Route::get('uptodate_kontrol_proyeksi', [KontrolProyeksiController::class, 'uptodate'])->name('uptodate_kontrol_proyeksi');
         Route::post('get_data_kontrol_proyeksi', [KontrolProyeksiController::class, 'get_data'])->name('get_data_kontrol_proyeksi');
+    });
+
+    // Main Select2
+    Route::group(['prefix' => 'helper'], function () {
+        Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
+        Route::get('/company_select', [SelectController::class, 'company'])->name('company_select');
+        Route::get('/plant_balans_select', [SelectController::class, 'plant_balans'])->name('plant_balans_select');
+        Route::get('/glos_cc_balans', [SelectController::class, 'glos_cc_balans'])->name('glos_cc_balans_select');
+        Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');
+        Route::get('/kategori_material', [SelectController::class, 'kategori_material'])->name('kategori_material_select');
+        Route::get('/kategori_produk', [SelectController::class, 'kategori_produk'])->name('kategori_produk_select');
+        Route::get('/kategori_balans_select', [SelectController::class, 'kategori_balans'])->name('kategori_balans_select');
+        Route::get('/material_select', [SelectController::class, 'material'])->name('material_select');
+        Route::get('/material_balans_select', [SelectController::class, 'material_balans'])->name('material_balans_select');
+        Route::get('/material_keyword_select', [SelectController::class, 'material_keyword'])->name('material_keyword_select');
+        Route::get('/region_select', [SelectController::class, 'region'])->name('region_select');
+        Route::get('/role_select', [SelectController::class, 'role'])->name('role_select');
+        Route::get('/group_account_select', [SelectController::class, 'group_account'])->name('group_account_select');
+        Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
+        Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
+        Route::get('/version_inflasi', [SelectController::class, 'version_inflasi'])->name('version_inflasi_select');
+        Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
+        Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
+        Route::get('/general_ledger_fc_detail_select', [SelectController::class, 'general_ledger_fc_detail'])->name('general_ledger_fc_detail_select');
+        Route::get('/cost_center', [SelectController::class, 'cost_center'])->name('cost_center_select');
+        Route::get('/cost_center_salr', [SelectController::class, 'cost_center_salr'])->name('cost_center_salr_select');
+        Route::get('/cost_element', [SelectController::class, 'cost_element'])->name('cost_element_select');
+        Route::get('/permission', [SelectController::class, 'permission'])->name('permission_select');
+        Route::get('/role_spatie', [SelectController::class, 'role_spatie'])->name('role_spatie_select');
+        Route::get('/user_select', [SelectController::class, 'user'])->name('user_select');
+        Route::get('/menu_select', [SelectController::class, 'menu'])->name('menu_select');
+
+        // Helper
+        Route::post('/check_username', [SelectController::class, 'check_username'])->name('helper_username');
+        Route::post('/check_email', [SelectController::class, 'check_email'])->name('helper_email');
+        Route::post('/check_kurs', [SelectController::class, 'check_kurs'])->name('helper_kurs');
+        Route::post('/check_kursv1', [SelectController::class, 'check_kursv1'])->name('helper_kursv1');
+        Route::post('/check_kursv2', [SelectController::class, 'check_kursv2'])->name('helper_kursv2');
+
+        // Datatable
+        Route::get('/version_dt', [SelectController::class, 'version_dt'])->name('version_dt');
+        Route::get('/material_dt', [SelectController::class, 'material_dt'])->name('material_dt');
+        Route::get('/material_balans_dt', [SelectController::class, 'material_balans_dt'])->name('material_balans_dt');
+        Route::get('/plant_dt', [SelectController::class, 'plant_dt'])->name('plant_dt');
+        Route::get('/kategori_material_dt', [SelectController::class, 'kategori_material_dt'])->name('kategori_material_dt');
+        Route::get('/kategori_produk_dt', [SelectController::class, 'kategori_produk_dt'])->name('kategori_produk_dt');
+        Route::get('/kategori_balans_dt', [SelectController::class, 'kategori_balans_dt'])->name('kategori_balans_dt');
+        Route::get('/group_account_dt', [SelectController::class, 'group_account_dt'])->name('group_account_dt');
+        Route::get('/group_account_fc_dt', [SelectController::class, 'group_account_fc_dt'])->name('group_account_fc_dt');
+        Route::get('/gl_account_fc_dt', [SelectController::class, 'gl_account_fc_dt'])->name('gl_account_fc_dt');
+        Route::get('/cost_center_dt', [SelectController::class, 'cost_center_dt'])->name('cost_center_dt');
+        Route::get('/cost_element_dt', [SelectController::class, 'cost_element_dt'])->name('cost_element_dt');
+        Route::get('/zco_product_dt', [SelectController::class, 'zco_product_dt'])->name('zco_product_dt');
+        Route::get('/zco_plant_dt', [SelectController::class, 'zco_plant_dt'])->name('zco_plant_dt');
     });
 
     Route::get('/get-modal', [ModalController::class, 'getModal']);
