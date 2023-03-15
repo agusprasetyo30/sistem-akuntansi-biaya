@@ -107,9 +107,9 @@ class BalansController extends Controller
             }
 
         }
-        
+
         $main_asumsi_index_count = $main_asumsi->count() - 1;
-        
+
         $fixed_value['p'] = $this->getSeparateValue($temporary_value['p'], $main_asumsi_index_count);
         $fixed_value['q'] = $this->getSeparateValue($temporary_value['q'], $main_asumsi_index_count);
         $fixed_value['nilai'] = $this->getSeparateValue($temporary_value['nilai'], $main_asumsi_index_count);
@@ -117,7 +117,7 @@ class BalansController extends Controller
         $data = [
             'balans_datas'     => $balans_data,
             'asumsi_umum'      => $main_asumsi,
-            'fixed_value_data' => $fixed_value 
+            'fixed_value_data' => $fixed_value
         ];
 
         $filename = "Balans " . $request->material . '.xlsx';
@@ -126,7 +126,7 @@ class BalansController extends Controller
     }
 
     /**
-     * melakukan filter dan memisahkan data array sesuai dengan 
+     * melakukan filter dan memisahkan data array sesuai dengan
      *
      * @param [type] $arr
      * @param [type] $dinamic_reference_count
@@ -154,7 +154,7 @@ class BalansController extends Controller
     public function store(Request $request)
     {
         try {
-            
+
             $antrian = antrian_material_balans($request->version);
             $result_antrian = [];
             foreach ($antrian as $items){
@@ -417,7 +417,7 @@ class BalansController extends Controller
 //                $simulasi_create->hitung_simpro($request->version);
             });
             return response()->json(['code' => 200]);
-        }catch (\Exception $exception){
+        }catch (\Exception   $exception){
             return response()->json(['code' => 500]);
         }
     }
