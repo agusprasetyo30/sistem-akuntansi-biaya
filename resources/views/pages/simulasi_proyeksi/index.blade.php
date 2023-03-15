@@ -24,16 +24,16 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        {{-- <div class="mb-5 row">
-                            <div class="form-group">
-                                <label class="form-label">VERSI</label>
-                                <select id="filter_version_generate" class="form-control custom-select select2">
-                                </select>
-                            </div>
-                            <div class="btn-list mb-5">
-                                <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
-                            </div>
-                        </div> --}}
+{{--                        --}}{{-- <div class="mb-5 row">--}}
+{{--                            <div class="form-group">--}}
+{{--                                <label class="form-label">VERSI</label>--}}
+{{--                                <select id="filter_version_generate" class="form-control custom-select select2">--}}
+{{--                                </select>--}}
+{{--                            </div>--}}
+{{--                            <div class="btn-list mb-5">--}}
+{{--                                <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>--}}
+{{--                            </div>--}}
+{{--                        </div> --}}
                         <div class="mb-5 row">
                             <div class="form-group">
                                 <label class="form-label">VERSI</label>
@@ -89,7 +89,7 @@
     <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.js?v=1.0.0')}}"></script>
     <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.templates.js?v=1.0.1')}}"></script>
 
- 
+
     <script>
         const alphabet = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
         const alphabet2nd = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -278,8 +278,8 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { 
-                                extend: 'excel', 
+                            {
+                                extend: 'excel',
                                 className: 'mb-5',
                                 title: '',
                                 filename: 'Simulasi Proyeksi',
@@ -289,40 +289,40 @@
                                     $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
                                     $('row', sheet).first().attr('ht', '60').attr('customHeight', "1");
                                     var mergeCells = $('mergeCells', sheet);
-                                    
+
                                     for (let i = 0; i < response.asumsi.length;i++) {
                                         const columnDef = generateAbjad(i)
 
-                                        mergeCells[0].appendChild( 
+                                        mergeCells[0].appendChild(
                                             _createNode( sheet, 'mergeCell', {
                                                 attr: { ref: columnDef }
-                                            }) 
+                                            })
                                         )
                                     }
                                     mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
-                                    
+
                                     function _createNode( doc, nodeName, opts ) {
                                         var tempNode = doc.createElement( nodeName );
-                                        
+
                                         if ( opts ) {
                                             if ( opts.attr ) {
                                                 $(tempNode).attr( opts.attr );
                                             }
-                        
+
                                             if ( opts.children ) {
                                                 $.each( opts.children, function ( key, value ) {
                                                     tempNode.appendChild( value );
                                                 } );
                                             }
-                        
+
                                             if ( opts.text !== null && opts.text !== undefined ) {
                                                 tempNode.appendChild( doc.createTextNode( opts.text ) );
                                             }
                                         }
-                        
+
                                         return tempNode;
                                     }
-                                } 
+                                }
                              }
                         ],
                         ajax: {
@@ -368,12 +368,12 @@
             })
         }
             // Function Generate Abjad
-            function generateAbjad(idx) {            
+            function generateAbjad(idx) {
             const multiple = 4
             const start = (multiple * idx) + 1
             const end = start + 3
             let rangeColumn = '';
-            
+
             let firstAlp1st = 0;
             let firstAlp2nd = start;
             let secondAlp1st = 0;

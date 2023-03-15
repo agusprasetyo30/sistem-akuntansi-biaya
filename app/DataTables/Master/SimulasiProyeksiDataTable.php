@@ -427,7 +427,8 @@ class SimulasiProyeksiDataTable extends DataTable
         //     }
 
         //     return $datatable;
-        // } 
+        // }
+//        dd($this->version, $this->plant, $this->produk, $this->cost_center);
         if ($this->save == false) {
             $query = DB::table('simulasi_proyeksi')
                 ->select('simulasi_proyeksi.no', 'simulasi_proyeksi.kategori', 'simulasi_proyeksi.name', 'simulasi_proyeksi.code')
@@ -438,7 +439,7 @@ class SimulasiProyeksiDataTable extends DataTable
                 ->groupBy('simulasi_proyeksi.no', 'simulasi_proyeksi.kategori', 'simulasi_proyeksi.name', 'simulasi_proyeksi.code')
                 ->orderBy('no', 'asc')
                 ->orderBy('kategori', 'asc');
-
+//            dd($query->get());
             $datatable = datatables()
                 ->query($query)
                 ->addColumn('name', function ($query) {
@@ -450,8 +451,12 @@ class SimulasiProyeksiDataTable extends DataTable
                 ->get();
 
             $simproValues = DB::table('simulasi_proyeksi')
+                ->where('plant_code', $this->plant)
+                ->where('product_code', $this->produk)
+                ->where('cost_center', $this->cost_center)
                 ->whereIn('asumsi_umum_id', $asumsi->pluck('id')->all())
                 ->get();
+//            dd($simproValues);
 
             foreach ($asumsi as $key => $asum) {
                 $datatable->addColumn($key . 'harga_satuan', function ($query) use ($simproValues, $asum) {
