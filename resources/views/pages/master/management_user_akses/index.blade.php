@@ -13,7 +13,9 @@
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
-                <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
+                @if (mapping_akses('management_role','create'))
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button>
+                @endif
             </div>
         </div>
     </div>
@@ -45,28 +47,6 @@
     <script>
         $(document).ready(function () {
             table()
-
-            $('#data_main_user').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih User',
-                width: '100%',
-                allowClear: false,
-                ajax: {
-                    url: "{{ route('user_select') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            search: params.term
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    }
-                }
-            })
 
             $('#data_main_role').select2({
                 dropdownParent: $('#modal_add'),
@@ -160,7 +140,6 @@
                 url: '{{route('insert_user_akses')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    user: $('#data_main_user').val(),
                     role: $('#data_main_role').val(),
                     menu: $('#data_main_menu').val(),
                     create: $('#akses_create').val(),
@@ -182,7 +161,6 @@
                         if (result.value) {
                             $('#modal_add').modal('hide');
                             $("#modal_add input").val("")
-                            $('#data_main_user').val('').trigger("change");
                             $('#data_main_role').val('').trigger("change");
                             $('#data_main_menu').val('').trigger("change");
                             $('#akses_create').val('').trigger("change");
@@ -208,7 +186,6 @@
             <table id="dt_management_role" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
                 <thead>
                 <tr>
-                    <th data-type='text' data-name='user_id' class="text-center">NAMA</th>
                     <th data-type='text' data-name='role_id' class="text-center">ROLE</th>
                     <th data-type='text' data-name='feature_name' class="text-center">MENU</th>
                     <th data-type='select' data-name='create' class="text-center">ACCESS CREATE</th>
@@ -374,7 +351,6 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'name', name: 'users.name', orderable:true},
                     { data: 'nama_role', name: 'role.nama_role', orderable:true},
                     { data: 'feature_name', name: 'feature.feature_name', orderable:true},
                     { data: 'create', name: 'filter_create', orderable:false},
@@ -387,7 +363,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3,4,5,6,7,8]}
+                    {className: 'text-center', targets: [0,1,2,3,4,5,6,7]}
                 ]
 
             })
@@ -405,7 +381,6 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    user: $('#edit_data_main_user'+id).val(),
                     role: $('#edit_data_main_role'+id).val(),
                     menu: $('#edit_data_main_menu'+id).val(),
                     create: $('#edit_create'+id).val(),

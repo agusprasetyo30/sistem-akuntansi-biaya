@@ -12,10 +12,10 @@ class ManagementUserAksesController extends Controller
 {
     public function index(Request $request, ManagementUserAksesDataTable $mroleDataTable)
     {
-//        dd(auth()->user()->mapping_akses('users'));
-//        dd(array_diff(auth()->user()->mapping_side_bar_akses(), [1,2,3,4]));
-//        , count(auth()->user()->mapping_side_bar_akses(), count(array_diff([10], auth()->user()->mapping_side_bar_akses())) != count(auth()->user()->mapping_side_bar_akses())
-//        dd(count(array_diff([10], auth()->user()->mapping_side_bar_akses()))  , count(auth()->user()->mapping_side_bar_akses()) , count(array_diff([10,11,12,13], auth()->user()->mapping_side_bar_akses()))  != count(auth()->user()->mapping_side_bar_akses())  );
+        //        dd(auth()->user()->mapping_akses('users'));
+        //        dd(array_diff(auth()->user()->mapping_side_bar_akses(), [1,2,3,4]));
+        //        , count(auth()->user()->mapping_side_bar_akses(), count(array_diff([10], auth()->user()->mapping_side_bar_akses())) != count(auth()->user()->mapping_side_bar_akses())
+        //        dd(count(array_diff([10], auth()->user()->mapping_side_bar_akses()))  , count(auth()->user()->mapping_side_bar_akses()) , count(array_diff([10,11,12,13], auth()->user()->mapping_side_bar_akses()))  != count(auth()->user()->mapping_side_bar_akses())  );
 
         if ($request->data == 'index') {
             return $mroleDataTable->render('pages.master.management_user_akses.index');
@@ -29,7 +29,6 @@ class ManagementUserAksesController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
-                "user" => 'required',
                 "menu" => 'required',
                 "create" => 'required',
                 "read" => 'required',
@@ -42,24 +41,19 @@ class ManagementUserAksesController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $user = DB::table('users')->where('id', $request->user)
-                ->first();
-
             $feature = DB::table('feature')->where('kode_unik', $request->menu)
                 ->first();
 
-            $input['user_id'] = $request->user;
-            $input['username'] = $user->username;
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
             $input['db'] = $feature->db;
             $input['company_code'] = auth()->user()->company_code;
-            $input['create'] = $request->create == 1 ? true:false;
-            $input['read'] = $request->read == 1 ? true:false;
-            $input['update'] = $request->update == 1 ? true:false;
-            $input['delete'] = $request->delete == 1 ? true:false;
-            $input['approve'] = $request->approve == 1 ? true:false;
-            $input['submit'] = $request->submit == 1 ? true:false;
+            $input['create'] = $request->create == 1 ? true : false;
+            $input['read'] = $request->read == 1 ? true : false;
+            $input['update'] = $request->update == 1 ? true : false;
+            $input['delete'] = $request->delete == 1 ? true : false;
+            $input['approve'] = $request->approve == 1 ? true : false;
+            $input['submit'] = $request->submit == 1 ? true : false;
 
             Management_Role::create($input);
 
@@ -76,11 +70,10 @@ class ManagementUserAksesController extends Controller
 
     public function update(Request $request)
     {
-//        dd($request);
+        //        dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "role" => 'required',
-                "user" => 'required',
                 "menu" => 'required',
                 "create" => 'required',
                 "read" => 'required',
@@ -93,24 +86,19 @@ class ManagementUserAksesController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $user = DB::table('users')->where('id', $request->user)
-                ->first();
-
             $feature = DB::table('feature')->where('kode_unik', $request->menu)
                 ->first();
 
-            $input['user_id'] = $request->user;
-            $input['username'] = $user->username;
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
             $input['db'] = $feature->db;
             $input['company_code'] = auth()->user()->company_code;
-            $input['create'] = $request->create == 1 ? true:false;
-            $input['read'] = $request->read == 1 ? true:false;
-            $input['update'] = $request->update == 1 ? true:false;
-            $input['delete'] = $request->delete == 1 ? true:false;
-            $input['approve'] = $request->approve == 1 ? true:false;
-            $input['submit'] = $request->submit == 1 ? true:false;
+            $input['create'] = $request->create == 1 ? true : false;
+            $input['read'] = $request->read == 1 ? true : false;
+            $input['update'] = $request->update == 1 ? true : false;
+            $input['delete'] = $request->delete == 1 ? true : false;
+            $input['approve'] = $request->approve == 1 ? true : false;
+            $input['submit'] = $request->submit == 1 ? true : false;
 
             Management_Role::where('id', $request->id)->update($input);
             return setResponse([
@@ -140,10 +128,11 @@ class ManagementUserAksesController extends Controller
         }
     }
 
-    public function validasi_akses($feature){
+    public function validasi_akses($feature)
+    {
         $validasi_akses = false;
 
-        if (auth()->user()->mapping_akses($feature) != null){
+        if (auth()->user()->mapping_akses($feature) != null) {
             $validasi_akses = true;
         }
 

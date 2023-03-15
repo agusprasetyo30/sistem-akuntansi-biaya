@@ -48,7 +48,9 @@
                                             </select>
                                         </div>
                                         <div class="btn-list">
-                                            <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
+                                            {{-- @if (mapping_akses('balans','create')) --}}
+                                                <button type="button" class="btn btn-primary btn-pill" id="btn_generate"><i class="fa fa-search me-2 fs-14"></i> Generate</button>
+                                            {{-- @endif --}}
                                         </div>
                                     </div>
                                 </div>
