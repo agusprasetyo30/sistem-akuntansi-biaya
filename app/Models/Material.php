@@ -108,7 +108,7 @@ class Material extends Model
         return $result;
     }
 
-    public function consRate($version, $plant)
+    public function consRate($version, $plant, $periode)
     {
         // dd($plant, $produk, $material);
         // $total_cr = $this->const_rate()->where([
@@ -120,6 +120,7 @@ class Material extends Model
         $total_cr = $this->const_rate()
             ->where('version_id', $version)
             ->where('plant_code', $plant)
+            ->where('month_year', $periode)
             ->sum('cons_rate');
         // dd($total_cr[0]['cons_rate']);
         // $cr = (float) $total_cr[0]['cons_rate'];
@@ -140,21 +141,21 @@ class Material extends Model
             // ])->first();
 
 
-//            dd($periode, $material, $produk);
+            //            dd($periode, $material, $produk);
             // $balans = $this->balans()->where('asumsi_umum_id', $periode)->where('kategori_balans_id', 3)->where('material_code', $material)->get();     dd($periode, $material, $produk);
             $balans = $this->balans()
                 ->where('asumsi_umum_id', $periode)
-                ->where('kategori_balans_id','=', 3)
+                ->where('kategori_balans_id', '=', 3)
                 ->where('material_code', $material)
                 ->first();
 
-//             if ($balans->isNotEmpty()) {
-//                 $res = (float) $balans->p ?? 0;
-//             } else {
-//                 $res = 0;
-//             }
+            //             if ($balans->isNotEmpty()) {
+            //                 $res = (float) $balans->p ?? 0;
+            //             } else {
+            //                 $res = 0;
+            //             }
 
-//            dd($balans, $this->balans());
+            //            dd($balans, $this->balans());
             $res = 0;
 
             if ($balans) {
