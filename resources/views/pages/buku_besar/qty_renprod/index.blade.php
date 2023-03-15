@@ -73,7 +73,17 @@
 @endsection()
 
 @section('scripts')
+
+   <!-- Custom Script -->
+   <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.js?v=1.0.0')}}"></script>
+    <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.styles.templates.js?v=1.0.1')}}"></script>
+
     <script>
+        const alphabet = ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        const alphabet2nd = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
         $(document).ready(function () {
             table()
 
@@ -409,7 +419,30 @@
                                 extend: 'excel', 
                                 className: 'mb-5',
                                 title: '',
-                                filename: 'Kuantiti Rencana Produksi - Horizontal'
+                                filename: 'Kuantiti Rencana Produksi - Horizontal',
+                                exportOptions: {
+                                    format: {
+                                        body: function ( data, row, kolom, node ) {
+                                            if (typeof data === 'undefined') {
+                                                return;
+                                            }
+                                            if (data == null) {
+                                                return data;
+                                            }
+                                            if ( kolom !== 0) {                      
+                                                var arr = data.split(',');
+                                                arr[0] = arr[0].toString().replace( /[\.]/g, "" );
+                                                if (arr[0] > ','  || arr[1] > ',') {
+                                                    data = arr[0] + '' + arr[1];
+                                                } else {
+                                                    return '';
+                                                }
+                                                return data.toString().replace( /[^\d.-]/g, "," );    
+                                            }
+                                            return data;
+                                        }
+                                    }
+                                }
                              }
                         ],
                         ajax: {
