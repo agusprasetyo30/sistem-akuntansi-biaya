@@ -17,22 +17,27 @@ class ConsRateDataTable extends DataTable
             ->leftJoin('material as material', 'material.material_code', '=', 'cons_rate.material_code')
             ->select('cons_rate.*', 'version_asumsi.version', DB::raw('produk.material_name as product_name'), DB::raw('material.material_name'), DB::raw('material.material_uom'))
             ->distinct();
+
+        if ($this->filter_version) {
+            $query = $query->where('version_id', $this->filter_version);
+        }
+
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()
-            ->addColumn('version', function ($query){
+            ->addColumn('version', function ($query) {
                 return $query->version;
             })
-            ->addColumn('periode', function ($query){
-                return format_month($query->month_year,'bi');
+            ->addColumn('periode', function ($query) {
+                return format_month($query->month_year, 'bi');
             })
-            ->addColumn('product', function ($query){
-                return $query->product_code.' - '.$query->product_name;
+            ->addColumn('product', function ($query) {
+                return $query->product_code . ' - ' . $query->product_name;
             })
-            ->addColumn('material', function ($query){
-                return $query->material_code.' - '.$query->material_name;
+            ->addColumn('material', function ($query) {
+                return $query->material_code . ' - ' . $query->material_name;
             })
-            ->addColumn('uom', function ($query){
+            ->addColumn('uom', function ($query) {
                 return $query->material_uom;
             })
             ->addColumn('status', function ($query) {
@@ -44,36 +49,36 @@ class ConsRateDataTable extends DataTable
 
                 return $span;
             })
-            ->filterColumn('filter_plant', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('cons_rate.plant_code', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_plant', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('cons_rate.plant_code', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_version', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('version_asumsi.id', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_periode', function ($query, $keyword){
-                $query->Where('cons_rate.month_year', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_periode', function ($query, $keyword) {
+                $query->Where('cons_rate.month_year', 'ilike', '%' . $keyword . '%');
             })
-            ->filterColumn('filter_product', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('cons_rate.product_code', 'ilike', '%'.$keyword.'%')
-                        ->orWhere('produk.material_name', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_product', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('cons_rate.product_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('produk.material_name', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_material', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('cons_rate.material_code', 'ilike', '%'.$keyword.'%')
-                        ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_material', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('cons_rate.material_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_uom', function ($query, $keyword){
-                $query->where('material.material_uom', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_uom', function ($query, $keyword) {
+                $query->where('material.material_uom', 'ilike', '%' . $keyword . '%');
             })
             ->filterColumn('filter_status', function ($query, $keyword) {
-                if ($keyword != 'all'){
+                if ($keyword != 'all') {
                     if ($keyword == true) {
                         $query->where('cons_rate.is_active', true);
                     } elseif ($keyword == false) {

@@ -23,49 +23,49 @@ class ManagementUserAksesDataTable extends DataTable
             ->addIndexColumn()
             ->addColumn('create', function ($query) {
                 if ($query->create == true) {
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Ada</span>";
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
                 } else {
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Ada</span>";
+                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
                 return $span;
             })
             ->addColumn('read', function ($query) {
                 if ($query->read == true) {
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Ada</span>";
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
                 } else {
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Ada</span>";
+                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
                 return $span;
             })
             ->addColumn('update', function ($query) {
                 if ($query->update == true) {
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Ada</span>";
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
                 } else {
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Ada</span>";
+                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
                 return $span;
             })
             ->addColumn('delete', function ($query) {
                 if ($query->delete == true) {
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Ada</span>";
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
                 } else {
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Ada</span>";
+                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
                 return $span;
             })
             ->addColumn('approve', function ($query) {
                 if ($query->approve == true) {
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Ada</span>";
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
                 } else {
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Ada</span>";
+                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
                 return $span;
             })
             ->addColumn('submit', function ($query) {
                 if ($query->submit == true) {
-                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Ada</span>";
+                    $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
                 } else {
-                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak Ada</span>";
+                    $span = "<span class='badge bg-danger-light border-danger mt-2'>Tidak</span>";
                 }
                 return $span;
             })

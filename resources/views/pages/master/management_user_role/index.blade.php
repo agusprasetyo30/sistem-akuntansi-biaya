@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Mapping User Role</h4>
+            <h4 class="page-title mb-0 text-primary">Mapping User dan Role</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -101,7 +101,6 @@
         })
 
         $('#submit-data').on('click', function () {
-            console.log( $('#create').val())
             $("#submit-data").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $.ajax({
                 type: "POST",

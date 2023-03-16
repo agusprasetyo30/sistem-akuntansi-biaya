@@ -30,6 +30,29 @@
                     <div class="card-title">CONSUMPTION RATIO</div>
                 </div>
                 <div class="card-body">
+                    @if (mapping_akses('cons_rate','submit') || mapping_akses('cons_rate','approve'))
+                        <div class="mb-5 row">
+                            <div class="form-group">
+                                <label class="form-label">VERSI</label>
+                                <select id="filter_version" class="form-control custom-select select2">
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                @if (mapping_akses('cons_rate','submit'))
+                                    @if (!$cons_rate->submited_at)
+                                    <button class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
+                                    @endif
+                                @endif
+
+                                @if (mapping_akses('cons_rate','approve'))
+                                    @if ($cons_rate->submited_at && !$cons_rate->approved_at && !$cons_rate->rejected_at)
+                                    <button class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
+                                    <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button> 
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                     <div class="">
                         <div class="table-responsive" id="table_main">
                         </div>
@@ -68,6 +91,30 @@
 
 
             get_data()
+
+            $('#filter_version').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -456,6 +503,7 @@
 
                         $('.version_search').select2({
                             placeholder: 'Pilih Versi',
+                            width: '100%',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('version_dt') }}",
@@ -476,6 +524,7 @@
 
                         $('.produk_search').select2({
                             placeholder: 'Pilih Produk',
+                            width: '100%',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('material_dt') }}",
@@ -496,6 +545,7 @@
 
                         $('.material_search').select2({
                             placeholder: 'Pilih Material',
+                            width: '100%',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('material_dt') }}",
@@ -516,6 +566,7 @@
 
                         $('.plant_search').select2({
                             placeholder: 'Pilih Material',
+                            width: '100%',
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('plant_dt') }}",
@@ -547,7 +598,10 @@
                 ],
                 ajax: {
                     url : '{{route("consrate")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_version:$('#filter_version').val()
+                    }
                 },
                 columns: [
                     { data: 'version', name: 'filter_version', orderable:true},
@@ -914,5 +968,101 @@
 
             })
         }
+
+        $('#btn_submit_data').on('click', function () {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('submit_consrate')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    filter_version:$('#filter_version').val()
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result) => {
+                        if (result.value) {
+                            location.reload();
+                        }
+                    })
+                },
+                error: function (response) {
+                    handleError(response)
+                }
+            })
+
+        })
+
+        $('#btn_approve_data').on('click', function () {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('approve_consrate')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    filter_version:$('#filter_version').val()
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result) => {
+                        if (result.value) {
+                            location.reload();
+                        }
+                    })
+                },
+                error: function (response) {
+                    handleError(response)
+                }
+            })
+
+        })
+        
+        $('#btn_reject_data').on('click', function () {
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('reject_consrate')}}',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    filter_version:$('#filter_version').val()
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: response.title,
+                        text: response.msg,
+                        icon: response.type,
+                        allowOutsideClick: false,
+                        confirmButtonColor: "#019267",
+                        confirmButtonText: 'Konfirmasi',
+                    }).then((result) => {
+                        if (result.value) {
+                            location.reload();
+                        }
+                    })
+                },
+                error: function (response) {
+                    handleError(response)
+                }
+            })
+
+        })
     </script>
 @endsection

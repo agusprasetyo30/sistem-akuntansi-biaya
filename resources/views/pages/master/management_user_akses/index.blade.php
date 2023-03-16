@@ -9,7 +9,7 @@
     <!--Page header-->
     <div class="page-header">
         <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Mapping User Akses</h4>
+            <h4 class="page-title mb-0 text-primary">Mapping Role dan Menu</h4>
         </div>
         <div class="page-rightheader">
             <div class="btn-list">
@@ -91,46 +91,9 @@
                     }
                 }
             })
-
-            $('#akses_create').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
-            $('#akses_read').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
-            $('#akses_update').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
-            $('#akses_delete').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
-            $('#akses_approve').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
-
-            $('#akses_submit').select2({
-                dropdownParent: $('#modal_add'),
-                placeholder: 'Pilih Status',
-                width: '100%'
-            })
         })
 
         $('#submit-data').on('click', function () {
-            console.log( $('#create').val())
             $("#submit-data").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
             $.ajax({
                 type: "POST",
@@ -142,12 +105,12 @@
                     _token: "{{ csrf_token() }}",
                     role: $('#data_main_role').val(),
                     menu: $('#data_main_menu').val(),
-                    create: $('#akses_create').val(),
-                    read: $('#akses_read').val(),
-                    update: $('#akses_update').val(),
-                    delete: $('#akses_delete').val(),
-                    approve: $('#akses_approve').val(),
-                    submit: $('#akses_submit').val(),
+                    create: $('#akses_create').prop('checked') == true ? 1 : 0,
+                    read: $('#akses_read').prop('checked') == true ? 1 : 0,
+                    update: $('#akses_update').prop('checked') == true ? 1 : 0,
+                    delete: $('#akses_delete').prop('checked') == true ? 1 : 0,
+                    approve: $('#akses_approve').prop('checked') == true ? 1 : 0,
+                    submit: $('#akses_submit').prop('checked') == true ? 1 : 0,
                 },
                 success:function (response) {
                     Swal.fire({
@@ -163,14 +126,9 @@
                             $("#modal_add input").val("")
                             $('#data_main_role').val('').trigger("change");
                             $('#data_main_menu').val('').trigger("change");
-                            $('#akses_create').val('').trigger("change");
-                            $('#akses_read').val('').trigger("change");
-                            $('#akses_update').val('').trigger("change");
-                            $('#akses_delete').val('').trigger("change");
-                            $('#akses_approve').val('').trigger("change");
-                            $('#akses_submit').val('').trigger("change");
                             $("#submit-data").attr('class', 'btn btn-primary').attr("disabled", false);
                             get_data()
+                            location.reload();
                         }
                     })
                 },
@@ -383,12 +341,12 @@
                     id: id,
                     role: $('#edit_data_main_role'+id).val(),
                     menu: $('#edit_data_main_menu'+id).val(),
-                    create: $('#edit_create'+id).val(),
-                    read: $('#edit_read'+id).val(),
-                    update: $('#edit_update'+id).val(),
-                    delete: $('#edit_delete'+id).val(),
-                    approve: $('#edit_approve'+id).val(),
-                    submit: $('#edit_submit'+id).val(),
+                    create: $('#edit_create'+id).prop('checked') == true ? 1 : 0,
+                    read: $('#edit_read'+id).prop('checked') == true ? 1 : 0,
+                    update: $('#edit_update'+id).prop('checked') == true ? 1 : 0,
+                    delete: $('#edit_delete'+id).prop('checked') == true ? 1 : 0,
+                    approve: $('#edit_approve'+id).prop('checked') == true ? 1 : 0,
+                    submit: $('#edit_submit'+id).prop('checked') == true ? 1 : 0,
                 },
                 success: function (response) {
                     Swal.fire({
@@ -406,6 +364,7 @@
                                 $('.modal-backdrop').remove();
                                 $("#submit_edit").attr('class', 'btn btn-primary').attr("disabled", false);
                                 get_data()
+                                location.reload();
                             }
                         })
                 },
@@ -450,6 +409,7 @@
                                 .then((result) => {
                                     if (result.value) {
                                         get_data()
+                                        location.reload();
                                     }
                                 })
                         },

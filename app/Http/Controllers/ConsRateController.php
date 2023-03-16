@@ -23,11 +23,19 @@ class ConsRateController extends Controller
 {
     public function index(Request $request, ConsRateDataTable $consRateDataTable)
     {
+
+        $cons_rate = ConsRate::first();
+
         if ($request->data == 'index') {
-            return $consRateDataTable->render('pages.buku_besar.consrate.index');
+            return $consRateDataTable->with(['filter_version' => $request->filter_version])->render('pages.buku_besar.consrate.index');
         }
 
-        return view('pages.buku_besar.consrate.index');
+        if ($request->filter_version) {
+            // $cons_rate = ConsRate::where('version_id', $request->filter_version)->first();
+            $cons_rate = ConsRate::where('version_id', 3)->first();
+        }
+
+        return view('pages.buku_besar.consrate.index', compact('cons_rate'));
     }
 
     public function create(Request $request)
@@ -83,7 +91,7 @@ class ConsRateController extends Controller
                 'title' => 'Data berhasil disimpan'
             ]);
         } catch (\Exception $exception) {
-//            dd($exception);
+            //            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -140,7 +148,7 @@ class ConsRateController extends Controller
                 'company_code' => 'B000'
             ])->where('id', '!=', $request->id)->first();
 
-            DB::transaction(function () use ($data_cek, $request, $input){
+            DB::transaction(function () use ($data_cek, $request, $input) {
                 if ($data_cek == null) {
                     ConsRate::where('id', $request->id)->update($input);
                 } else {
@@ -202,7 +210,7 @@ class ConsRateController extends Controller
                 $import->import($file);
 
                 $data_fail = $import->failures();
-                if ($data_fail->isNotEmpty()){
+                if ($data_fail->isNotEmpty()) {
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
@@ -214,7 +222,7 @@ class ConsRateController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-//            dd($exception);
+            //            dd($exception);
             $empty_excel = Excel::toArray(new ConsRateImport($request->version), $request->file('file'));
 
             $plant_code = [];
@@ -270,21 +278,23 @@ class ConsRateController extends Controller
         }
     }
 
-    public function check(Request $request){
+    public function check(Request $request)
+    {
         try {
             $check = ConsRate::where('version_id', $request->version)
                 ->first();
-            if ($check == null){
+            if ($check == null) {
                 return response()->json(['Code' => 200, 'msg' => 'Data ']);
-            }else{
+            } else {
                 return response()->json(['Code' => 201, 'msg' => 'Data Berasil Disimpan']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 
-    public function check_duplicated(Request $request){
+    public function check_duplicated(Request $request)
+    {
         try {
 
             $validator = Validator::make($request->all(), [
@@ -321,13 +331,131 @@ class ConsRateController extends Controller
             ])->where('id', '!=', $request->id)
                 ->first();
 
-            if ($data_cek == null){
+            if ($data_cek == null) {
                 return response()->json(['code' => 200, 'msg' => 'Data ']);
-            }else{
+            } else {
                 return response()->json(['code' => 201, 'msg' => 'Data Berasil Disimpan']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function submit(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "filter_version" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $cr = ConsRate::where('version_id', $request->filter_version)->first();
+
+            if (!$cr) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-submit data',
+                    'message' => 'Data dengan versi tersebut tidak ditemukan!'
+                ]);
+            }
+
+            $input['submited_by'] = auth()->user()->id;
+            $input['submited_at'] = Carbon::now();
+            $input['rejected_by'] = null;
+            $input['rejected_at'] = null;
+
+            DB::transaction(function () use ($request, $input) {
+                ConsRate::where('version_id', $request->filter_version)->update($input);
+            });
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disubmit'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function approve(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "filter_version" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $cr = ConsRate::where('version_id', $request->filter_version)->first();
+
+            if (!$cr) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-approve data',
+                    'message' => 'Data dengan versi tersebut tidak ditemukan!'
+                ]);
+            }
+
+            $input['approved_by'] = auth()->user()->id;
+            $input['approved_at'] = Carbon::now();
+
+            DB::transaction(function () use ($request, $input) {
+                ConsRate::where('version_id', $request->filter_version)->update($input);
+            });
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil diapprove'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function reject(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                "filter_version" => 'required',
+            ], validatorMsg());
+
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
+
+            $cr = ConsRate::where('version_id', $request->filter_version)->first();
+
+            if (!$cr) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-reject data',
+                    'message' => 'Data dengan versi tersebut tidak ditemukan!'
+                ]);
+            }
+
+            $input['rejected_by'] = auth()->user()->id;
+            $input['rejected_at'] = Carbon::now();
+            $input['submited_by'] = null;
+            $input['submited_at'] = null;
+
+            DB::transaction(function () use ($request, $input) {
+                ConsRate::where('version_id', $request->filter_version)->update($input);
+            });
+
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil direject'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 }

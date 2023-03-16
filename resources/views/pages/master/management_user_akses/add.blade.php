@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Tambah Mapping User Akses</h5>
+                <h5 class="modal-title" id="largemodal1">Tambah Mapping Role dan Menu</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -21,59 +21,107 @@
                                     <option value="" disabled selected>Pilih Menu</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Create</label>
-                                <select name="akses_create" id="akses_create">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Read</label>
-                                <select name="akses_read" id="akses_read" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Update</label>
-                                <select name="akses_update" id="akses_update" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Delete</label>
-                                <select name="akses_delete" id="akses_delete" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Approve</label>
-                                <select name="akses_approve" id="akses_approve" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Submit</label>
-                                <select name="akses_submit" id="akses_submit" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}">{{ $value}}</option>
-                                    @endforeach
-                                </select>
+
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="row">
+                                        <label for="data_main_menu" class="form-label">Akses Menu</label>
+                                        <div class="col-lg-6">
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Create
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_create" id="akses_create" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Read
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_read" id="akses_read" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Update
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_update" id="akses_update" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Delete
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_delete" id="akses_delete" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Approve
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_approve" id="akses_approve" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Submit
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_submit" id="akses_submit" class="custom-switch-input">
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

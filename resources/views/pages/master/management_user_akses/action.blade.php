@@ -15,7 +15,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Detail Mapping User Akses</h5>
+                <h5 class="modal-title" id="largemodal1">Detail Mapping Role dan Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>
@@ -36,66 +36,112 @@
                                     placeholder="Menu" value="{{$model->feature_name}}" name="detail_feature_name"
                                     id="detail_feature_name" autocomplete="off">
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Create</label>
-                                <select disabled name="detail_create" id="detail_create" class="form-control custom-select select2 form-control-sm">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->create ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Read</label>
-                                <select disabled name="detail_read" id="detail_read" class="form-control custom-select select2 form-control-sm">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->read ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Update</label>
-                                <select disabled name="detail_update" id="detail_update" class="form-control custom-select select2 form-control-sm">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->update ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Delete</label>
-                                <select disabled name="detail_delete" id="detail_delete" class="form-control custom-select select2 form-control-sm">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->delete ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Approve</label>
-                                <select disabled name="detail_approve" id="detail_approve" class="form-control custom-select select2 form-control-sm">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->approve ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Submit</label>
-                                <select disabled name="detail_submit" id="detail_submit" class="form-control custom-select select2 form-control-sm">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->submit ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="row">
+                                        <label for="data_main_menu" class="form-label">Akses Menu</label>
+                                        <div class="col-lg-6">
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Create
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_create" id="akses_create" class="custom-switch-input" disabled {{ $model->create ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Read
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_read" id="akses_read" class="custom-switch-input" disabled {{ $model->read ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Update
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_update" id="akses_update" class="custom-switch-input" disabled {{ $model->update ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Delete
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_delete" id="akses_delete" class="custom-switch-input" disabled {{ $model->delete ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Approve
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_approve" id="akses_approve" class="custom-switch-input" disabled {{ $model->approve ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Submit
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="akses_submit" id="akses_submit" class="custom-switch-input" disabled {{ $model->submit ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-{{--                <button type="button" id="submit" class="btn btn-primary">Simpan</button>--}}
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
         </div>
@@ -108,7 +154,7 @@
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="largemodal1">Edit Mapping User Akses</h5>
+                <h5 class="modal-title" id="largemodal1">Edit Mapping Role dan Menu</h5>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 mt1">
@@ -126,59 +172,106 @@
                                     <option value="{{$model->kode_unik}}" selected>{{$model->feature_name}}</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Create</label>
-                                <select name="edit_create" id="edit_create{{$model->id}}">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->create ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Read</label>
-                                <select name="edit_read" id="edit_read{{$model->id}}">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->read ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Update</label>
-                                <select name="edit_update" id="edit_update{{$model->id}}">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->update ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Delete</label>
-                                <select name="edit_delete" id="edit_delete{{$model->id}}">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->delete ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Approve</label>
-                                <select name="edit_approve" id="edit_approve{{$model->id}}">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->approve ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Access Submit</label>
-                                <select name="edit_submit" id="edit_submit{{$model->id}}">
-                                    <option value="" disabled selected>Pilih Status</option>
-                                    @foreach (status_crud() as $key => $value)
-                                        <option value="{{ $key }}" {{ $key == $model->submit ? "selected" : "" }}>{{ $value}}</option>
-                                    @endforeach
-                                </select>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12">
+                                    <div class="row">
+                                        <label for="data_main_menu" class="form-label">Akses Menu</label>
+                                        <div class="col-lg-6">
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Create
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="edit_create" id="edit_create{{$model->id}}" class="custom-switch-input" {{ $model->create ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Read
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="edit_read" id="edit_read{{$model->id}}" class="custom-switch-input" {{ $model->read ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Update
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="edit_update" id="edit_update{{$model->id}}" class="custom-switch-input" {{ $model->update ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Delete
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="edit_delete" id="edit_delete{{$model->id}}" class="custom-switch-input" {{ $model->delete ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Approve
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="edit_approve" id="edit_approve{{$model->id}}" class="custom-switch-input" {{ $model->approve ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                            <div class="row g-xs">
+												<div class="col-4">
+                                                    Submit
+												</div>
+												<div class="col-8">
+													<div class="form-group">
+                                                        <label class="custom-switch">
+                                                            <span class="custom-switch-description me-2">Tidak</span>
+                                                            <input type="checkbox" name="edit_submit" id="edit_submit{{$model->id}}" class="custom-switch-input" {{ $model->submit ? "checked" : "" }}>
+                                                            <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
+                                                            <span class="custom-switch-description">Iya</span>
+                                                        </label>
+                                                    </div>
+												</div>
+											</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -196,42 +289,6 @@
 <!--/div-->
 
 <script>
-    $('#edit_create'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Status',
-        width: '100%'
-    })
-
-    $('#edit_read'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Status',
-        width: '100%'
-    })
-
-    $('#edit_update'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Status',
-        width: '100%'
-    })
-
-    $('#edit_delete'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Status',
-        width: '100%'
-    })
-
-    $('#edit_approve'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Status',
-        width: '100%'
-    })
-
-    $('#edit_submit'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Status',
-        width: '100%'
-    })
-
     $('#edit_data_main_role'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),
         placeholder: 'Pilih Role',
