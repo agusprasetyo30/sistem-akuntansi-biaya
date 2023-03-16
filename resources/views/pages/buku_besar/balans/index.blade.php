@@ -217,12 +217,12 @@
                                     cancelButtonText: 'Kembali'
                                 }).then((result) =>{
                                     if (result.value){
-                                        $('#local_loader').show();
+                                        // $('#local_loader').show();
                                         generate_data()
                                     }
                                 })
                             }else {
-                                $('#local_loader').show();
+                                // $('#local_loader').show();
                                 generate_data()
                             }
                         }, error:function () {

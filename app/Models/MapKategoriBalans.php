@@ -37,7 +37,7 @@ class MapKategoriBalans extends Model
     }
 
     public function kategori_balans(){
-        return $this->hasOne(KategoriBalans::class, 'id', 'kategori_balans_id');
+        return $this->hasOne(KategoriBalans::class, 'id', 'kategori_balans_id')->orderBy('order_view', 'ASC');
     }
 
     public function qty_rencana_pengadaan(){
@@ -65,7 +65,7 @@ class MapKategoriBalans extends Model
     }
 
     public function simulasi_proyeksi(){
-        return $this->hasMany(SimulasiProyeksi::class, 'product_code', 'material_code');
+        return $this->hasOne(SimulasiProyeksi::class, 'product_code', 'material_code');
     }
 
     public function get_data_saldo_awal($plant){
@@ -74,6 +74,7 @@ class MapKategoriBalans extends Model
     }
 
     public function get_data_saldo_awal_nilai($plant){
+//        dd($this->saldo_awal()->get());
         $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->sum('total_value');
         return $saldo_awal;
     }
@@ -180,6 +181,8 @@ class MapKategoriBalans extends Model
 
     public function get_data_glos_cc($plant_code){
         $plant = explode(' - ', $plant_code);
+
+//        dd($this, $plant_code);
         $result = $this->glos_cc
             ->where('cost_center', $plant[0])->first();
         return $result;
@@ -198,16 +201,29 @@ class MapKategoriBalans extends Model
 
     public function get_data_simulasi($glos_cc, $asumsi){
         try {
+
             $result = $this->simulasi_proyeksi()
                 ->where('cost_center', $glos_cc->cost_center)
                 ->where('plant_code', $glos_cc->plant_code)
                 ->where('asumsi_umum_id', $asumsi)
-                ->where('code', '=', 'COGM')
-                ->sum('biaya_perton');
+                ->where('code', '=', 'COGM')->orderBy('id', 'DESC')->first();
+
+//            $result = $this->simulasi_proyeksi()
+//                ->where('cost_center', $glos_cc->cost_center)
+//                ->where('plant_code', $glos_cc->plant_code)
+//                ->where('asumsi_umum_id', $asumsi)
+//                ->where('code', '=', 'COGM')->get();
+
+//            $result = $this->simulasi_proyeksi()
+//                ->where('cost_center', $glos_cc->cost_center)
+//                ->where('plant_code', $glos_cc->plant_code)
+//                ->where('asumsi_umum_id', $asumsi)
+//                ->where('code', '=', 'COGM')->sum('biaya_perton');
+//            dd($result, $glos_cc, $asumsi);
         }catch (\Exception $exception){
             dd('model',$glos_cc, $asumsi, $exception);
         }
-        return $result;
+        return $result->biaya_perton;
     }
 
 }

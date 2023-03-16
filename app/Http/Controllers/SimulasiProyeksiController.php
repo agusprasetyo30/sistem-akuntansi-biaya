@@ -46,6 +46,8 @@ class SimulasiProyeksiController extends Controller
                 ->groupBy('product_code', 'plant_code', 'version_id')
                 ->get();
 
+//            dd($cons_rate);
+
             $asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
                 ->select('id', 'version')
                 ->where([
@@ -54,6 +56,7 @@ class SimulasiProyeksiController extends Controller
                 ])->first();
 
             $collection_input_temp = collect();
+
 
             foreach ($cons_rate as $key1 => $cr) {
                 $data_version = $cr->version_id;
@@ -131,11 +134,12 @@ class SimulasiProyeksiController extends Controller
                     ->orderBy('no', 'asc')
                     ->orderBy('kategori', 'asc')
                     ->get();
-                // dd($query->toArray());
+//                 dd($query->toArray());
 
                 // $asumsi = Asumsi_Umum::where('version_id', $data_version)
                 //     ->get();
 
+//                dd($query)
                 foreach ($asumsi->asumsi_umum as $key2 => $asum) {
                     $hs = 0;
                     $consrate = 0;
@@ -145,13 +149,7 @@ class SimulasiProyeksiController extends Controller
                     $periode = $asum->id;
                     $inflasi = $asum->inflasi ?? 0;
 
-                    // $mat_ = Material::get();
-                    // $ga_ = GroupAccountFC::get();
-                    // dd($asum->inflasi);
                     foreach ($query as $key3 => $val) {
-                        // $mat = $mat_->where('material_code', $val->code)->first();
-                        // $ga = $ga_->where('group_account_fc', $val->code)->first();
-
                         if ($val->jenis == 'material') {
                             //ConsRate
 
@@ -170,6 +168,7 @@ class SimulasiProyeksiController extends Controller
                                 if ($kp_v == 1) {
                                     $consrate = 0;
                                 } else {
+//                                    dd($data_version, $data_plant, $asum->month_year);
                                     $consrate = $val->consRate($data_version, $data_plant, $asum->month_year) ?? 0;
                                 }
                                 $kp_val = $kp_v;
@@ -258,10 +257,18 @@ class SimulasiProyeksiController extends Controller
                             if ($temp_total != 0 && $temp_perton != 0) {
                                 if ($inflasi == 0) {
                                     $total_biaya = $temp_total + $tar;
-                                    $biaya_perton = $total_biaya / $kuan_prod;
+                                    if ($kuan_prod != 0){
+                                        $biaya_perton = $total_biaya / $kuan_prod;
+                                    }else{
+                                        $biaya_perton = 0;
+                                    }
                                 } else {
                                     $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
-                                    $biaya_perton = $total_biaya / $kuan_prod;
+                                    if ($kuan_prod != 0){
+                                        $biaya_perton = $total_biaya / $kuan_prod;
+                                    }else{
+                                        $biaya_perton = 0;
+                                    }
                                 }
                             } else {
                                 $biaya_perton = 0;
@@ -274,28 +281,80 @@ class SimulasiProyeksiController extends Controller
                             //ConsRate
                             $consrate = 0;
 
+
                             //Biaya Perton dan Total Biaya
                             if ($val->no == 5) {
-                                $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                                $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+
+                                $res_biaya_perton = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->whereIn('no', [1, 2, 3, 4])
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('biaya_perton');
+
+                                $res_total_biaya = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->whereIn('no', [1, 2, 3, 4])
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('total_biaya');
+
 
                                 $biaya_perton = $res_biaya_perton;
                                 $total_biaya = $res_total_biaya;
                             } else if ($val->no == 7) {
-                                $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [6])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                                $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [6])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                                $res_biaya_perton = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [6])
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('biaya_perton');
+                                $res_total_biaya = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [6])
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('total_biaya');
 
                                 $biaya_perton = $res_biaya_perton;
                                 $total_biaya = $res_total_biaya;
                             } else if ($val->no == 9) {
-                                $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [8])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                                $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [8])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                                $res_biaya_perton = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [8])
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('biaya_perton');
+                                $res_total_biaya = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [8])
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('total_biaya');
 
                                 $biaya_perton = $res_biaya_perton;
                                 $total_biaya = $res_total_biaya;
                             } else if ($val->no == 10) {
-                                $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4, 6, 8])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                                $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4, 6, 8])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                                $res_biaya_perton = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [1, 2, 3, 4, 6, 8])
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('biaya_perton');
+                                $res_total_biaya = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [1, 2, 3, 4, 6, 8])
+                                    ->where('kategori', '!=', 0)
+                                    ->where('plant_code', $data_plant)
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('total_biaya');
 
                                 $biaya_perton = $res_biaya_perton;
                                 $total_biaya = $res_total_biaya;
@@ -330,12 +389,20 @@ class SimulasiProyeksiController extends Controller
                                 $biaya_perton = $res;
                                 $total_biaya = 0;
                             } else if ($val->no == 14) {
-                                $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [11, 12, 13])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
+                                $res_biaya_perton = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [11, 12, 13])
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('biaya_perton');
 
                                 $biaya_perton = $res_biaya_perton;
                                 $total_biaya = 0;
                             } else if ($val->no == 15) {
-                                $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [10, 14])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
+                                $res_biaya_perton = $collection_input_temp
+                                    ->where('product_code', $data_product)
+                                    ->whereIn('no', [10, 14])
+                                    ->where('asumsi_umum_id', '=', $periode)
+                                    ->sum('biaya_perton');
 
                                 $biaya_perton = $res_biaya_perton;
                                 $total_biaya = 0;
@@ -355,11 +422,15 @@ class SimulasiProyeksiController extends Controller
                                 $total_biaya = 0;
                             }
                         }
+
                         $collection_input_temp->push($this->submit_data($data_version, $data_plant, $data_product, $data_cost_center, $hs, $consrate, $biaya_perton, $total_biaya, $periode, $val->no, $val->kategori, $val->name, $val->code, $kuan_prod));
                     }
+
+
                 }
             }
-            // dd($collection_input_temp);
+//            dd($collection_input_temp->where('product_code', '2000001')->where('plant_code', 'B019'));
+//            dd($collection_input_temp[0]['product_code']);
             $chunk = array_chunk($collection_input_temp->toArray(), 500);
             foreach ($chunk as $insert) {
                 SimulasiProyeksi::insert($insert);
@@ -371,7 +442,7 @@ class SimulasiProyeksiController extends Controller
         }
     }
 
-    public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center)
+    public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center, $collections)
     {
         // dd($asumsi);
         try {
@@ -454,12 +525,7 @@ class SimulasiProyeksiController extends Controller
                 ->with(['const_rate.glos_cc.renprod', 'tarif'])
                 ->orderBy('kategori', 'asc')
                 ->get();
-            // dd($query->toArray());
 
-            // $asumsi = Asumsi_Umum::where('version_id', $data_version)
-            //     ->get();
-
-            // foreach ($asumsi->asumsi_umum as $key2 => $asum) {
             $hs = 0;
             $consrate = 0;
             $biaya_perton = 0;
@@ -467,30 +533,12 @@ class SimulasiProyeksiController extends Controller
             $kuan_prod = 0;
             $periode = $asumsi->id;
             $inflasi = $asumsi->inflasi ?? 0;
-
-            // $mat_ = Material::get();
-            // $ga_ = GroupAccountFC::get();
-            // dd($asum->inflasi);
             foreach ($query as $key3 => $val) {
-                // $mat = $mat_->where('material_code', $val->code)->first();
-                // $ga = $ga_->where('group_account_fc', $val->code)->first();
                 $kp_val = 0;
                 if ($val->jenis == 'material') {
-                    //ConsRate
-                    //                        $kp = $val->kuantumProduksi($periode);
-                    // print_r($kp);
-
                     $kp_v = $val->kpValue($periode, $data_product);
                     if ($kp_v != 0) {
-                        //                        if ($kp) {
-                        // dd($kp);
-                        // $kp_v = (float) $kp[0]->glos_cc->renprod[0]->qty_renprod_value;
-                        // $kp_v = (float) $val->kpValue($periode);
-
                         $kuan_prod = $kp_v;
-                        //Data Dummy
-                        // $kp_v = 2;
-
                         if ($kp_v == 1) {
                             $consrate = 0;
                         } else {
@@ -503,7 +551,28 @@ class SimulasiProyeksiController extends Controller
                     //Harga Satuan dan Biaya Perton
                     if ($val->kategori == 1) {
                         //Harga Satuan
-                        $res = $val->hsBalans($periode, $val->code, $data_product);
+
+
+
+                        if ($val->code != $data_product){
+                            $balans = $collections
+                                ->where('kategori_balans_id', 3)
+                                ->where('material_code', $val->code)
+                                ->where('asumsi_umum_id', $periode)->first();
+
+                            try {
+                                if ($balans != null){
+                                    $res = $balans['p'];
+                                }else{
+                                    $res = 0;
+                                }
+                            }catch (\Exception $exception){
+                                $res = 0;
+                            }
+                        }else{
+                            $res = 0;
+                        }
+
                         $hs = $res;
                         // dd($hs);
                         //Biaya Perton
@@ -579,10 +648,19 @@ class SimulasiProyeksiController extends Controller
                     if ($temp_total != 0 && $temp_perton != 0) {
                         if ($inflasi == 0) {
                             $total_biaya = $temp_total + $tar;
-                            $biaya_perton = $total_biaya / $kuan_prod;
+                            if ($kuan_prod != 0){
+                                $biaya_perton = $total_biaya / $kuan_prod;
+                            }else{
+                                $biaya_perton = 0;
+                            }
+
                         } else {
                             $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
-                            $biaya_perton = $total_biaya / $kuan_prod;
+                            if ($kuan_prod != 0){
+                                $biaya_perton = $total_biaya / $kuan_prod;
+                            }else{
+                                $biaya_perton = 0;
+                            }
                         }
                     } else {
                         $biaya_perton = 0;
@@ -597,26 +675,74 @@ class SimulasiProyeksiController extends Controller
 
                     //Biaya Perton dan Total Biaya
                     if ($val->no == 5) {
-                        $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                        $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                        $res_biaya_perton = $collection_input_temp
+                            ->where('product_code', $data_product)
+                            ->where('kategori', '!=', 0)
+                            ->whereIn('no', [1, 2, 3, 4])
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('biaya_perton');
+                        $res_total_biaya = $collection_input_temp
+                            ->where('product_code', $data_product)
+                            ->where('kategori', '!=', 0)
+                            ->where('plant_code', $data_plant)
+                            ->whereIn('no', [1, 2, 3, 4])
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('total_biaya');
 
                         $biaya_perton = $res_biaya_perton;
                         $total_biaya = $res_total_biaya;
                     } else if ($val->no == 7) {
-                        $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [6])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                        $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [6])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                        $res_biaya_perton = $collection_input_temp
+                            ->where('product_code', $data_product)
+                            ->whereIn('no', [6])
+                            ->where('kategori', '!=', 0)
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('biaya_perton');
+                        $res_total_biaya = $collection_input_temp
+                            ->where('product_code', $data_product)
+                            ->whereIn('no', [6])
+                            ->where('kategori', '!=', 0)
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('total_biaya');
 
                         $biaya_perton = $res_biaya_perton;
                         $total_biaya = $res_total_biaya;
                     } else if ($val->no == 9) {
-                        $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [8])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                        $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [8])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                        $res_biaya_perton = $collection_input_temp
+                            ->where('product_code', $data_product)
+                            ->whereIn('no', [8])
+                            ->where('kategori', '!=', 0)
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('biaya_perton');
+                        $res_total_biaya = $collection_input_temp
+                            ->where('product_code', $data_product)
+                            ->whereIn('no', [8])
+                            ->where('kategori', '!=', 0)
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('total_biaya');
 
                         $biaya_perton = $res_biaya_perton;
                         $total_biaya = $res_total_biaya;
                     } else if ($val->no == 10) {
-                        $res_biaya_perton = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4, 6, 8])->where('asumsi_umum_id', '=', $periode)->sum('biaya_perton');
-                        $res_total_biaya = $collection_input_temp->where('product_code', $data_product)->whereIn('no', [1, 2, 3, 4, 6, 8])->where('asumsi_umum_id', '=', $periode)->sum('total_biaya');
+                        $res_biaya_perton = $collection_input_temp
+                            ->where('kategori', '!=', 0)
+                            ->where('product_code', $data_product)
+                            ->whereIn('no', [1, 2, 3, 4, 6, 8])
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('biaya_perton');
+                        $res_total_biaya = $collection_input_temp
+                            ->where('kategori', '!=', 0)
+                            ->where('product_code', $data_product)
+                            ->whereIn('no', [1, 2, 3, 4, 6, 8])
+                            ->where('plant_code', $data_plant)
+                            ->where('asumsi_umum_id', '=', $periode)
+                            ->sum('total_biaya');
 
                         $biaya_perton = $res_biaya_perton;
                         $total_biaya = $res_total_biaya;
@@ -677,15 +803,17 @@ class SimulasiProyeksiController extends Controller
                     }
                 }
                 $collection_input_temp->push($this->submit_data($data_version, $data_plant, $data_product, $data_cost_center, $hs, $consrate, $biaya_perton, $total_biaya, $periode, $val->no, $val->kategori, $val->name, $val->code, $kuan_prod));
+//                dd($collection_input_temp);
             }
             // }
 
-            // dd($collection_input_temp);
+//             dd($collection_input_temp);
             $chunk = array_chunk($collection_input_temp->toArray(), 500);
             foreach ($chunk as $insert) {
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
+//            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -724,6 +852,8 @@ class SimulasiProyeksiController extends Controller
                     ->where('glos_cc.material_code', $request->produk)
                     ->where('glos_cc.plant_code', $request->plant)
                     ->first();
+
+//                dd($glos_cc->cost_center,$request->version,$request->plant, $request->produk);
 
                 return $simulasiproyeksiDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $glos_cc->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
             }
