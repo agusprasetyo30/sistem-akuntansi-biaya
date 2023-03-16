@@ -409,7 +409,7 @@ class SimulasiProyeksiController extends Controller
         }
     }
 
-    public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center)
+    public function hitung_satuan_simpro($version, $asumsi, $plant, $product, $cost_center, $collections)
     {
         // dd($asumsi);
         try {
@@ -525,7 +525,33 @@ class SimulasiProyeksiController extends Controller
                     //Harga Satuan dan Biaya Perton
                     if ($val->kategori == 1) {
                         //Harga Satuan
-                        $res = $val->hsBalans($periode, $val->code, $data_product);
+
+
+
+                        if ($val->code != $data_product){
+                            $balans = $collections
+                                ->where('kategori_balans_id', 3)
+                                ->where('material_code', $val->code)
+                                ->where('asumsi_umum_id', $periode)->first();
+
+                            if ($val->code == '2000002'){
+                                dd($collections->where('kategori_balans_id', 3) ,$balans, $val->code, $data_product);
+                            }
+
+                            try {
+                                if ($balans == null){
+                                    $res = $balans['p'];
+                                }else{
+                                    $res = 0;
+                                }
+                            }catch (\Exception $exception){
+                                $res = 0;
+                            }
+                        }else{
+                            $res = 0;
+                        }
+
+//                        $res = $val->hsBalans($periode, $val->code, $data_product);
                         $hs = $res;
                         // dd($hs);
                         //Biaya Perton

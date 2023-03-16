@@ -37,7 +37,7 @@ class MapKategoriBalans extends Model
     }
 
     public function kategori_balans(){
-        return $this->hasOne(KategoriBalans::class, 'id', 'kategori_balans_id');
+        return $this->hasOne(KategoriBalans::class, 'id', 'kategori_balans_id')->orderBy('order_view', 'ASC');
     }
 
     public function qty_rencana_pengadaan(){
