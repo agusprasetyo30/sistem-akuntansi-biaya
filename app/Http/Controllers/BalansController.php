@@ -30,14 +30,14 @@ class BalansController extends Controller
 
     public function get_data(Request $request, BalansDataTable $balansDataTable){
         $antrian = antrian_material_balans($request->version);
-        $result_antrian = [];
-        foreach ($antrian as $items){
-            foreach ($items as $item){
-                array_push($result_antrian, $item);
-            }
-        }
+//        $result_antrian = [];
+//        foreach ($antrian as $items){
+//            foreach ($items as $item){
+//                array_push($result_antrian, $item);
+//            }
+//        }
         if ($request->data == 'index') {
-            return $balansDataTable->with(['antrian' => array_values(array_unique($result_antrian)), 'version' => $request->version, 'material' => $request->material])->render('pages.buku_besar.balans.index');
+            return $balansDataTable->with(['antrian' => $antrian, 'version' => $request->version, 'material' => $request->material])->render('pages.buku_besar.balans.index');
         }
         return view('pages.buku_besar.balans.index');
 
@@ -156,15 +156,15 @@ class BalansController extends Controller
         try {
 
             $antrian = antrian_material_balans($request->version);
-            dd($antrian);
-            $result_antrian = [];
-            foreach ($antrian as $items){
-                foreach ($items as $item){
-                    array_push($result_antrian, $item);
-                }
-            }
 
-            DB::transaction(function () use ($request, $result_antrian){
+//            $result_antrian = [];
+//            foreach ($antrian as $items){
+//                foreach ($items as $item){
+//                    array_push($result_antrian, $item);
+//                }
+//            }
+
+            DB::transaction(function () use ($request, $antrian){
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
 
@@ -179,7 +179,7 @@ class BalansController extends Controller
                         'company_code' => auth()->user()->company_code
                     ])->first();
 
-                $antrian = array_values(array_unique($result_antrian));
+//                $antrian = array_values(array_unique($result_antrian));
 
 
 //                $main_query_ori = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
@@ -193,14 +193,12 @@ class BalansController extends Controller
                 try {
 
 //                    DB::enableQueryLog();
-                    $query = MapKategoriBalans::
-//                    with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans', 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-//                        ->
-                        select('kategori_balans.order_view', 'map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
+                    $query = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans', 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
+                        ->select('kategori_balans.order_view', 'map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                         ->leftJoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
                         ->whereIn('map_kategori_balans.material_code', $antrian)
                         ->where('map_kategori_balans.version_id', $request->version)
-                        ->orderBy(DB::raw("array_position(ARRAY['3000163', '2000001', '3000026', '3000001', '2000002']::varchar[],map_kategori_balans.material_code)"))
+                        ->orderBy(DB::raw("array_position(ARRAY['3000163', '3000026', '3000001', '2000002', '2000001']::varchar[],map_kategori_balans.material_code)"))
                         ->orderBy('kategori_balans.order_view', 'ASC')
 //                        ->groupBy('kategori_balans.order_view', 'map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                         ->get();
@@ -218,56 +216,89 @@ class BalansController extends Controller
 
 
 
-                $main_query = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-                    ->whereIn('map_kategori_balans.material_code', $antrian)
-                    ->where('map_kategori_balans.version_id', $request->version)
-                    ->whereIn('map_kategori_balans.kategori_balans_id', [1,2])
-                    ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC')
-                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-                    ->get();
+//                $main_query = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
+//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
+//                    ->whereIn('map_kategori_balans.material_code', $antrian)
+//                    ->where('map_kategori_balans.version_id', $request->version)
+//                    ->whereIn('map_kategori_balans.kategori_balans_id', [1,2])
+//                    ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC')
+//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
+//                    ->get();
+//
+//                $main_query_spesial = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
+//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
+//                    ->whereIn('map_kategori_balans.material_code', $antrian)
+//                    ->where('map_kategori_balans.version_id', $request->version)
+//                    ->whereNotIn('map_kategori_balans.kategori_balans_id', [1,2,4,5,3,6])
+//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
+//                    ->get();
+//
+//                $main_query_result = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
+//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
+//                    ->whereIn('map_kategori_balans.material_code', $antrian)
+//                    ->where('map_kategori_balans.version_id', $request->version)
+//                    ->whereIn('map_kategori_balans.kategori_balans_id', [3, 6, 4,5])
+//                    ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC')
+//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
+//                    ->get();
+//
+//                $temp_query = $main_query;
 
-                $main_query_spesial = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-                    ->whereIn('map_kategori_balans.material_code', $antrian)
-                    ->where('map_kategori_balans.version_id', $request->version)
-                    ->whereNotIn('map_kategori_balans.kategori_balans_id', [1,2,4,5,3,6])
-                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-                    ->get();
+                try {
+                    $collection_input_temp = collect();
+                    foreach ($main_asumsi->asumsi_umum as $key => $data){
+                        $q=0;
+                        $p=0;
+                        $nilai=0;
+                        foreach ($query as $key1 => $data_map){
+                            if ($data_map->kategori_balans_id == 1){
+                                if ($key == 0){
 
-                $main_query_result = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-                    ->whereIn('map_kategori_balans.material_code', $antrian)
-                    ->where('map_kategori_balans.version_id', $request->version)
-                    ->whereIn('map_kategori_balans.kategori_balans_id', [3, 6, 4,5])
-                    ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC')
-                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-                    ->get();
-
-                $temp_query = $main_query;
-
-                $collection_input_temp = collect();
-                foreach ($main_asumsi->asumsi_umum as $key => $data){
-                    $q=0;
-                    $p=0;
-                    $nilai=0;
-                    foreach ($query as $key1 => $data_map){
-                        if ($data_map->kategori_balans_id == 1){
-                            if ($key == 0){
-
-                                $plant = explode(' - ', $data_map->plant_code);
-
-
-                                if ($plant[0] != 'all'){
-
-                                    $q = $data_map->get_data_saldo_awal($plant[0]);
-                                    $nilai = $data_map->get_data_saldo_awal_nilai($plant[0]);
+                                    $plant = explode(' - ', $data_map->plant_code);
 
 
+                                    if ($plant[0] != 'all'){
+
+                                        $q = $data_map->get_data_saldo_awal($plant[0]);
+                                        $nilai = $data_map->get_data_saldo_awal_nilai($plant[0]);
+
+
+                                    }else{
+                                        $q = $data_map->saldo_awal->sum('total_stock');
+                                        $nilai = $data_map->saldo_awal->sum('total_value');
+                                    }
+
+                                    if ($q != 0){
+                                        $p = $nilai / $q;
+                                    }
+                                    else{
+                                        $p = 0;
+                                    }
+
+                                    $type = $data_map->kategori_balans->type_kategori_balans;
                                 }else{
-                                    $q = $data_map->saldo_awal->sum('total_stock');
-                                    $nilai = $data_map->saldo_awal->sum('total_value');
+                                    $temp = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                        ->where('kategori_balans_id', '=', 6)
+                                        ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key-1]->id)->first();
+
+                                    if ($temp != null){
+                                        $q = $temp['q'];
+                                        $p = $temp['p'];
+                                        $nilai = $temp['nilai'];
+                                        $type = $data_map->kategori_balans->type_kategori_balans;
+                                    }else{
+                                        $q = 0;
+                                        $p = 0;
+                                        $nilai = 0;
+                                        $type = $data_map->kategori_balans->type_kategori_balans;
+                                    }
                                 }
+                            }
+                            elseif ($data_map->kategori_balans_id == 2){
+                                $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
+//
+                                $nilai = $data_map->get_data_total_pengadaan($data->id, $data->adjustment);
+
 
                                 if ($q != 0){
                                     $p = $nilai / $q;
@@ -277,508 +308,134 @@ class BalansController extends Controller
                                 }
 
                                 $type = $data_map->kategori_balans->type_kategori_balans;
-                            }else{
-                                $temp = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                    ->where('kategori_balans_id', '=', 6)
-                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key-1]->id)->first();
+                            }
+                            elseif ($data_map->kategori_balans_id == 3){
+                                $q = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('q');
+                                $nilai = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('nilai');
 
-                                if ($temp != null){
-                                    $q = $temp['q'];
-                                    $p = $temp['p'];
-                                    $nilai = $temp['nilai'];
-                                    $type = $data_map->kategori_balans->type_kategori_balans;
+                                if ($q != 0){
+                                    $p = $nilai / $q;
+                                }
+                                else{
+                                    $p = 0;
+                                }
+
+                                $type = $data_map->kategori_balans->type_kategori_balans;
+                            }
+                            elseif ($data_map->kategori_balans_id == 4){
+                                $q = $data_map->get_data_nilai_pamakaian($data->id) * -1;
+                                $p = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->where('kategori_balans_id', '=', 3)
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('p');
+
+                                $nilai = $q * $p;
+                                $type = $data_map->kategori_balans->type_kategori_balans;
+                            }
+                            elseif ($data_map->kategori_balans_id == 5){
+                                $q = $data_map->get_data_nilai_penjualan($data->id)* -1;
+                                $p = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->where('kategori_balans_id', '=', 3)
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('p');
+                                $nilai = $q * $p;
+                                $type = $data_map->kategori_balans->type_kategori_balans;
+                            }
+                            elseif ($data_map->kategori_balans_id == 6){
+                                $q_tersedia = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->where('kategori_balans_id', '=', 3)
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('q');
+                                $nilai_tersedia = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->where('kategori_balans_id', '=',3)
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('nilai');
+
+                                $q_pj = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->whereIn('kategori_balans_id', [4,5])
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('q');
+                                $nilai_pj = $collection_input_temp->where('material_code', '=', $data_map->material_code)
+                                    ->whereIn('kategori_balans_id', [4,5])
+                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
+                                    ->sum('nilai');
+
+
+                                $q = $q_tersedia + $q_pj;
+                                $nilai = $nilai_tersedia + $nilai_pj;
+                                $type = $data_map->kategori_balans->type_kategori_balans;
+
+                                if ($q != 0){
+                                    $p = $nilai / $q;
                                 }else{
+                                    $p = 0;
+                                }
+                            }
+                            elseif ($data_map->kategori_balans_id > 6){
+
+//                                dd($data_map->material_code, $collection_input_temp->where('kategori_balans_id', 3));
+                                $glos_cc = $data_map->get_data_glos_cc($data_map->plant_code);
+                                if ($glos_cc != null){
+                                    $check_simulasi = $collection_input_temp
+                                        ->where('kategori_balans_id', '>', 6)
+                                        ->where('cost_center', '=', $glos_cc->cost_center)
+                                        ->where('material_code', $data_map->material_code)
+                                        ->first();
+                                    if ($check_simulasi == null){
+                                        $simulasi_create->hitung_satuan_simpro($request->version, $data, $glos_cc->plant_code, $data_map->material_code, $glos_cc->cost_center, $collection_input_temp);
+
+                                        $sim = SimulasiProyeksi::where('product_code', '2000002')
+                                            ->where('asumsi_umum_id', 10)
+                                            ->where('name', 'COGM')
+                                            ->where('plant_code', 'B030')
+                                            ->first();
+
+                                        $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
+                                    }else{
+                                        $p = (double) $check_simulasi['p'];
+
+                                    }
+
+                                    if ($data_map->kategori_balans->type_kategori_balans == 'produksi'){
+                                        $temp_q = $data_map->get_data_qty_renprod($glos_cc->cost_center, $data->id);
+                                        $q = $temp_q[0]->renprod->sum('qty_renprod_value');
+                                        $nilai = $q * $p;
+
+                                    }else{
+
+                                        // cell q
+                                        $temp_q = $data_map->get_data_qty_renprod($glos_cc->cost_center, $data->id);
+                                        $qty_renprod = (double) $temp_q[0]->renprod->sum('qty_renprod_value');
+                                        $cons_rate = (double) $data_map->get_data_cons_rate($data_map, $glos_cc->plant_code, $data->id);
+                                        $q = $qty_renprod * $cons_rate * -1;
+
+                                        $nilai = $q * $p;
+                                    }
+
+                                    $type = $data_map->kategori_balans->type_kategori_balans;
+                                }else {
                                     $q = 0;
                                     $p = 0;
                                     $nilai = 0;
                                     $type = $data_map->kategori_balans->type_kategori_balans;
                                 }
                             }
+
+                            $material_name = $data_map->material->material_name;
+                            $version_id = $main_asumsi->id;
+                            $order_view = $data_map->kategori_balans->order_view;
+                            $kategori_balans_desc = $data_map->kategori_balans->kategori_balans_desc;
+                            $month_year = $data->month_year;
+
+                            $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
                         }
-                        elseif ($data_map->kategori_balans_id == 2){
-                            $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
-//
-                            $nilai = $data_map->get_data_total_pengadaan($data->id, $data->adjustment);
-
-
-                            if ($q != 0){
-                                $p = $nilai / $q;
-                            }
-                            else{
-                                $p = 0;
-                            }
-
-                            $type = $data_map->kategori_balans->type_kategori_balans;
-                        }
-                        elseif ($data_map->kategori_balans_id == 3){
-                            $q = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('q');
-                            $nilai = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('nilai');
-
-                            if ($q != 0){
-                                $p = $nilai / $q;
-                            }
-                            else{
-                                $p = 0;
-                            }
-
-                            $type = $data_map->kategori_balans->type_kategori_balans;
-                        }
-                        elseif ($data_map->kategori_balans_id == 4){
-                            $q = $data_map->get_data_nilai_pamakaian($data->id) * -1;
-                            $p = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->where('kategori_balans_id', '=', 3)
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('p');
-
-                            $nilai = $q * $p;
-                            $type = $data_map->kategori_balans->type_kategori_balans;
-                        }
-                        elseif ($data_map->kategori_balans_id == 5){
-                            $q = $data_map->get_data_nilai_penjualan($data->id)* -1;
-                            $p = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->where('kategori_balans_id', '=', 3)
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('p');
-                            $nilai = $q * $p;
-                            $type = $data_map->kategori_balans->type_kategori_balans;
-                        }
-                        elseif ($data_map->kategori_balans_id == 6){
-                            $q_tersedia = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->where('kategori_balans_id', '=', 3)
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('q');
-                            $nilai_tersedia = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->where('kategori_balans_id', '=',3)
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('nilai');
-
-                            $q_pj = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->whereIn('kategori_balans_id', [4,5])
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('q');
-                            $nilai_pj = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-                                ->whereIn('kategori_balans_id', [4,5])
-                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-                                ->sum('nilai');
-
-
-                            $q = $q_tersedia + $q_pj;
-                            $nilai = $nilai_tersedia + $nilai_pj;
-                            $type = $data_map->kategori_balans->type_kategori_balans;
-
-                            if ($q != 0){
-                                $p = $nilai / $q;
-                            }else{
-                                $p = 0;
-                            }
-                        }
-                        elseif ($data_map->kategori_balans_id > 6){
-
-                            dd($data_map->material_code, $collection_input_temp->where('kategori_balans_id', 3));
-                            $glos_cc = $data_map->get_data_glos_cc($data_map->plant_code);
-                            if ($glos_cc != null){
-                                $check_simulasi = $collection_input_temp
-                                    ->where('kategori_balans_id', '>', 6)
-                                    ->where('cost_center', '=', $glos_cc->cost_center)
-                                    ->where('material_code', $data_map->material_code)
-                                    ->first();
-                                if ($check_simulasi == null){
-                                    $simulasi_create->hitung_satuan_simpro($request->version, $data, $glos_cc->plant_code, $data_map->material_code, $glos_cc->cost_center, $collection_input_temp);
-
-                                    $sim = SimulasiProyeksi::where('product_code', '2000002')
-                                        ->where('asumsi_umum_id', 10)
-                                        ->where('name', 'COGM')
-                                        ->where('plant_code', 'B030')
-                                        ->first();
-
-                                    $p = (double) $data_map->get_data_simulasi($glos_cc, $data->id);
-                                }else{
-                                    $p = (double) $check_simulasi['p'];
-
-                                }
-
-                                if ($data_map->kategori_balans->type_kategori_balans == 'produksi'){
-                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc->cost_center, $data->id);
-                                    $q = $temp_q[0]->renprod->sum('qty_renprod_value');
-                                    $nilai = $q * $p;
-
-                                }else{
-
-                                    // cell q
-                                    $temp_q = $data_map->get_data_qty_renprod($glos_cc->cost_center, $data->id);
-                                    $qty_renprod = (double) $temp_q[0]->renprod->sum('qty_renprod_value');
-                                    $cons_rate = (double) $data_map->get_data_cons_rate($data_map, $glos_cc->plant_code, $data->id);
-                                    $q = $qty_renprod * $cons_rate * -1;
-
-                                    $nilai = $q * $p;
-                                }
-
-                                $type = $data_map->kategori_balans->type_kategori_balans;
-                            }else {
-                                $q = 0;
-                                $p = 0;
-                                $nilai = 0;
-                                $type = $data_map->kategori_balans->type_kategori_balans;
-                            }
-                        }
-
-                        $material_name = $data_map->material->material_name;
-                        $version_id = $main_asumsi->id;
-                        $order_view = $data_map->kategori_balans->order_view;
-                        $kategori_balans_desc = $data_map->kategori_balans->kategori_balans_desc;
-                        $month_year = $data->month_year;
-
-                        $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
                     }
-
-
-
-//                    foreach ($temp_query as $key1 => $data_map){
-//                        if ($data_map->kategori_balans_id == 1){
-//                            if ($key == 0){
-//
-//                                $plant = explode(' - ', $data_map->plant_code);
-//
-//
-//                                if ($plant[0] != 'all'){
-//
-//                                    $q = $data_map->get_data_saldo_awal($plant[0]);
-//                                    $nilai = $data_map->get_data_saldo_awal_nilai($plant[0]);
-//
-//
-//                                }else{
-//                                    $q = $data_map->saldo_awal->sum('total_stock');
-//                                    $nilai = $data_map->saldo_awal->sum('total_value');
-//                                }
-//
-//                                if ($q != 0){
-//                                    $p = $nilai / $q;
-//                                }
-//                                else{
-//                                    $p = 0;
-//                                }
-//
-//                                $type = $data_map->kategori_balans->type_kategori_balans;
-//                            }else{
-//                                $temp = $collection_input_temp->where('material_code', '=', $data_map->material_code)
-//                                    ->where('kategori_balans_id', '=', 6)
-//                                    ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key-1]->id)->first();
-//
-//                                if ($temp != null){
-//                                    $q = $temp['q'];
-//                                    $p = $temp['p'];
-//                                    $nilai = $temp['nilai'];
-//                                    $type = $data_map->kategori_balans->type_kategori_balans;
-//                                }else{
-//                                    $q = 0;
-//                                    $p = 0;
-//                                    $nilai = 0;
-//                                    $type = $data_map->kategori_balans->type_kategori_balans;
-//                                }
-//                            }
-//                        }
-//                        elseif ($data_map->kategori_balans_id == 2){
-//                            $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
-////
-//                            $nilai = $data_map->get_data_total_pengadaan($data->id, $data->adjustment);
-//
-//
-//                            if ($q != 0){
-//                                $p = $nilai / $q;
-//                            }
-//                            else{
-//                                $p = 0;
-//                            }
-//
-//                            $type = $data_map->kategori_balans->type_kategori_balans;
-//                        }
-//
-//                        $material_name = $data_map->material->material_name;
-//                        $version_id = $main_asumsi->id;
-//                        $order_view = $data_map->kategori_balans->order_view;
-//                        $kategori_balans_desc = $data_map->kategori_balans->kategori_balans_desc;
-//                        $month_year = $data->month_year;
-//
-//                        $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
-//                    }
-//
-//                    foreach ($main_query_spesial as $key2 => $data_maps_spesial){
-//                        $glos_cc = $data_maps_spesial->get_data_glos_cc($data_maps_spesial->plant_code);
-//                        if ($glos_cc != null){
-//                            $check_simulasi = $collection_input_temp
-//                                ->where('kategori_balans_id', '>', 6)
-//                                ->where('cost_center', '=', $glos_cc->cost_center)
-//                                ->where('material_code', $data_maps_spesial->material_code)
-//                                ->first();
-//
-//                            if ($check_simulasi == null){
-//                                $simulasi_create->hitung_satuan_simpro($request->version, $data, $glos_cc->plant_code, $data_maps_spesial->material_code, $glos_cc->cost_center, $collection_input_temp);
-//
-//                                $p = (double) $data_maps_spesial->get_data_simulasi($glos_cc, $data->id);
-//                            }else{
-//                                $p = (double) $check_simulasi['p'];
-//
-//                            }
-//
-//                            if ($data_maps_spesial->kategori_balans->type_kategori_balans == 'produksi'){
-//                                $temp_q = $data_maps_spesial->get_data_qty_renprod($glos_cc->cost_center, $data->id);
-//                                $q = $temp_q[0]->renprod->sum('qty_renprod_value');
-//                                $nilai = $q * $p;
-//
-//                            }else{
-//                                // cell q
-//                                $temp_q = $data_maps_spesial->get_data_qty_renprod($glos_cc->cost_center, $data->id);
-//                                $qty_renprod = (double) $temp_q[0]->renprod->sum('qty_renprod_value');
-//                                $cons_rate = (double) $data_maps_spesial->get_data_cons_rate($data_map, $glos_cc->plant_code, $data->id);
-//                                $q = $qty_renprod * $cons_rate * -1;
-//
-//                                $nilai = $q * $p;
-//                            }
-//
-//                            $type = $data_maps_spesial->kategori_balans->type_kategori_balans;
-//                        }else {
-//                            $q = 0;
-//                            $p = 0;
-//                            $nilai = 0;
-//                            $type = $data_maps_spesial->kategori_balans->type_kategori_balans;
-//                        }
-////                        try {
-////                            $collection_input_temp = $collection_input_temp->map(function ($query) use ($collection_input_temp, $data_asum, $data_maps_spesial){
-////                                if ($query['kategori_balans_id'] == 3){
-////
-////                                    $tersedia = $collection_input_temp->where('kategori_balans_id', 3)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////                                    $saldo_akhir = $collection_input_temp->where('kategori_balans_id', 6)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////
-////                                    $result = [
-////                                        "asumsi_umum_id" => $query['asumsi_umum_id'],
-////                                        "kategori_balans_id" => $query['kategori_balans_id'],
-////                                        "plant_code" => $query['plant_code'],
-////                                        "material_code" => $query['material_code'],
-////                                        "q" => 5,
-////                                        "p" => 5,
-////                                        "nilai" => 5,
-////                                        "type_kategori_balans" => $query['type_kategori_balans'],
-////                                        "material_name" => $query['material_name'],
-////                                        "version_id" => $query['version_id'],
-////                                        "order_view" => $query['order_view'],
-////                                        "kategori_balans_desc" => $query['kategori_balans_desc'],
-////                                        "month_year" => $query['month_year'],
-////                                        "company_code" => $query['company_code'],
-////                                        "created_by" => $query['created_by'],
-////                                        "created_at" => $query['created_at'],
-////                                        "updated_at" => $query['updated_at'],
-////                                    ];
-////                                }elseif ($query['kategori_balans_id'] == 6){
-////
-////                                    $tersedia = $collection_input_temp->where('kategori_balans_id', 3)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////                                    $saldo_akhir = $collection_input_temp->where('kategori_balans_id', 6)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////                                    $result = [
-////                                        "asumsi_umum_id" => $query['asumsi_umum_id'],
-////                                        "kategori_balans_id" => $query['kategori_balans_id'],
-////                                        "plant_code" => $query['plant_code'],
-////                                        "material_code" => $query['material_code'],
-////                                        "q" => 5,
-////                                        "p" => 5,
-////                                        "nilai" => 5,
-////                                        "type_kategori_balans" => $query['type_kategori_balans'],
-////                                        "material_name" => $query['material_name'],
-////                                        "version_id" => $query['version_id'],
-////                                        "order_view" => $query['order_view'],
-////                                        "kategori_balans_desc" => $query['kategori_balans_desc'],
-////                                        "month_year" => $query['month_year'],
-////                                        "company_code" => $query['company_code'],
-////                                        "created_by" => $query['created_by'],
-////                                        "created_at" => $query['created_at'],
-////                                        "updated_at" => $query['updated_at'],
-////                                    ];
-////                                }else{
-////                                    $result = $query;
-////                                }
-////
-////                                return $result;
-////                            });
-////
-////                            dd($collection_input_temp->where('kategori_balans_id', 6));
-////                        }catch (\Exception $exception){
-////                            dd($exception);
-////                        }
-//                        $material_name = $data_maps_spesial->material->material_name;
-//                        $version_id = $main_asumsi->id;
-//                        $order_view = $data_maps_spesial->kategori_balans->order_view;
-//                        $kategori_balans_desc = $data_maps_spesial->kategori_balans->kategori_balans_desc;
-//                        $month_year = $data->month_year;
-//
-//                        $collection_input_temp->push($this->submit_temp($data->id, $data_maps_spesial->kategori_balans_id, $data_maps_spesial->plant_code, $data_maps_spesial->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
-//                    }
-//
-//                    foreach ($main_query_result as $key3 => $data_maps_result){
-////                        dd($main_query_result);
-//
-//                        if ($data_maps_result->kategori_balans_id == 3){
-//                            $q = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->whereNotIn('kategori_balans_id',[3,4,5,6])
-//                                ->sum('q');
-//                            $nilai = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->whereNotIn('kategori_balans_id',[3,4,5,6])
-//                                ->sum('nilai');
-//
-//                            if ($q != 0){
-//                                $p = $nilai / $q;
-//                            }
-//                            else{
-//                                $p = 0;
-//                            }
-//
-//                            $type = $data_maps_result->kategori_balans->type_kategori_balans;
-//                        }
-//                        elseif ($data_maps_result->kategori_balans_id == 4){
-//                            $q = $data_maps_result->get_data_nilai_pamakaian($data->id) * -1;
-//                            $p = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->where('kategori_balans_id', '=', 3)
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->sum('p') / 2;
-//
-//                            $nilai = $q * $p;
-//                            $type = $data_maps_result->kategori_balans->type_kategori_balans;
-//                        }
-//                        elseif ($data_maps_result->kategori_balans_id == 5){
-//                            $q = $data_maps_result->get_data_nilai_penjualan($data->id)* -1;
-//                            $p = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->where('kategori_balans_id', '=', 3)
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->sum('p') / 2;
-//                            $nilai = $q * $p;
-//                            $type = $data_maps_result->kategori_balans->type_kategori_balans;
-//                        }
-//                        elseif ($data_maps_result->kategori_balans_id == 6){
-//
-//                            $q_tersedia = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->where('kategori_balans_id', '=', 3)
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->sum('q');
-//                            $nilai_tersedia = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->where('kategori_balans_id', '=',3)
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->sum('nilai');
-//
-//                            $q_pj = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->whereIn('kategori_balans_id', [4,5])
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->sum('q');
-//                            $nilai_pj = $collection_input_temp->where('material_code', '=', $data_maps_result->material_code)
-//                                ->whereIn('kategori_balans_id', [4,5])
-//                                ->where('asumsi_umum_id', '=', $main_asumsi->asumsi_umum[$key]->id)
-//                                ->sum('nilai');
-//
-//                            $q = $q_tersedia + $q_pj;
-//                            $nilai = $nilai_tersedia + $nilai_pj;
-//                            $type = $data_maps_result->kategori_balans->type_kategori_balans;
-//
-//                            if ($q != 0){
-//                                $p = $nilai / $q;
-//                            }else{
-//                                $p = 0;
-//                            }
-//
-//                        }
-////                        try {
-////                            $collection_input_temp = $collection_input_temp->map(function ($query) use ($collection_input_temp, $data_asum, $data_maps_spesial){
-////                                if ($query['kategori_balans_id'] == 3){
-////
-////                                    $tersedia = $collection_input_temp->where('kategori_balans_id', 3)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////                                    $saldo_akhir = $collection_input_temp->where('kategori_balans_id', 6)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////
-////                                    $result = [
-////                                        "asumsi_umum_id" => $query['asumsi_umum_id'],
-////                                        "kategori_balans_id" => $query['kategori_balans_id'],
-////                                        "plant_code" => $query['plant_code'],
-////                                        "material_code" => $query['material_code'],
-////                                        "q" => 5,
-////                                        "p" => 5,
-////                                        "nilai" => 5,
-////                                        "type_kategori_balans" => $query['type_kategori_balans'],
-////                                        "material_name" => $query['material_name'],
-////                                        "version_id" => $query['version_id'],
-////                                        "order_view" => $query['order_view'],
-////                                        "kategori_balans_desc" => $query['kategori_balans_desc'],
-////                                        "month_year" => $query['month_year'],
-////                                        "company_code" => $query['company_code'],
-////                                        "created_by" => $query['created_by'],
-////                                        "created_at" => $query['created_at'],
-////                                        "updated_at" => $query['updated_at'],
-////                                    ];
-////                                }elseif ($query['kategori_balans_id'] == 6){
-////
-////                                    $tersedia = $collection_input_temp->where('kategori_balans_id', 3)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////                                    $saldo_akhir = $collection_input_temp->where('kategori_balans_id', 6)
-////                                        ->where('asumsi_umum_id', $data_asum->id)
-////                                        ->where('material_code', $data_maps_spesial->material_code)->first();
-////
-////                                    $result = [
-////                                        "asumsi_umum_id" => $query['asumsi_umum_id'],
-////                                        "kategori_balans_id" => $query['kategori_balans_id'],
-////                                        "plant_code" => $query['plant_code'],
-////                                        "material_code" => $query['material_code'],
-////                                        "q" => 5,
-////                                        "p" => 5,
-////                                        "nilai" => 5,
-////                                        "type_kategori_balans" => $query['type_kategori_balans'],
-////                                        "material_name" => $query['material_name'],
-////                                        "version_id" => $query['version_id'],
-////                                        "order_view" => $query['order_view'],
-////                                        "kategori_balans_desc" => $query['kategori_balans_desc'],
-////                                        "month_year" => $query['month_year'],
-////                                        "company_code" => $query['company_code'],
-////                                        "created_by" => $query['created_by'],
-////                                        "created_at" => $query['created_at'],
-////                                        "updated_at" => $query['updated_at'],
-////                                    ];
-////                                }else{
-////                                    $result = $query;
-////                                }
-////
-////                                return $result;
-////                            });
-////
-////                            dd($collection_input_temp->where('kategori_balans_id', 6));
-////                        }catch (\Exception $exception){
-////                            dd($exception);
-////                        }
-//                        $material_name = $data_maps_result->material->material_name;
-//                        $version_id = $main_asumsi->id;
-//                        $order_view = $data_maps_result->kategori_balans->order_view;
-//                        $kategori_balans_desc = $data_maps_result->kategori_balans->kategori_balans_desc;
-//                        $month_year = $data->month_year;
-//
-//                        $collection_input_temp->push($this->submit_temp($data->id, $data_maps_result->kategori_balans_id, $data_maps_result->plant_code, $data_maps_result->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
-//                    }
+                }catch (\Exception $exception){
+                    dd($exception);
                 }
 
                 $chunk = array_chunk($collection_input_temp->toArray(), 5000);
@@ -786,8 +443,8 @@ class BalansController extends Controller
                     Balans::insert($insert);
                 }
 
-//                SimulasiProyeksi::where('version_id', $request->version)->delete();
-//                $simulasi_create->hitung_simpro($request->version);
+                SimulasiProyeksi::where('version_id', $request->version)->delete();
+                $simulasi_create->hitung_simpro($request->version);
             });
             return response()->json(['code' => 200]);
         }catch (\Exception   $exception){

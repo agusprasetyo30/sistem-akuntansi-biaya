@@ -608,7 +608,13 @@ if (!function_exists('find_lower_material')) {
             ->groupBy('cons_rate.product_code')
             ->get();
 
-        $result = array_diff($material_consrate->pluck('material_code')->all(), $product_consrate->pluck('product_code')->all());
+//        dd($material_consrate->pluck('material_code')->all(), $product_consrate->pluck('product_code')->all());
+
+        $low_class = array_diff($material_consrate->pluck('material_code')->all(), $product_consrate->pluck('product_code')->all());
+        $medium_class = array_intersect($material_consrate->pluck('material_code')->all(), $product_consrate->pluck('product_code')->all());
+        $high_class = array_diff($product_consrate->pluck('product_code')->all(), $material_consrate->pluck('material_code')->all());
+
+        $result = array_merge($low_class, array_merge($medium_class, $high_class));
 
         return $result;
     }
@@ -779,17 +785,23 @@ if (!function_exists('antrian_material_balans')) {
             ])
             ->get();
 
+//        dd($material_balans);
+
         $data = find_lower_material($versi);
 
-        foreach ($data as $items) {
-            $temp = [$items];
-            $temp_resulty = [];
-            $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
+        return $data;
 
-            array_push($resulty, $product);
-        }
-
-        return $resulty;
+//        dd($data);
+//
+//        foreach ($data as $items) {
+//            $temp = [$items];
+//            $temp_resulty = [];
+//            $product = temp_material_produk($items, $material_balans, $temp, $temp_resulty);
+//
+//            array_push($resulty, $product);
+//        }
+//
+//        return $resulty;
     }
 }
 
@@ -1216,7 +1228,7 @@ if (!function_exists('totalGL')) {
 }
 
 /**
-     * melakukan filter dan memisahkan data array sesuai dengan 
+     * melakukan filter dan memisahkan data array sesuai dengan
      *
      * @param [type] $arr
      * @param [type] $dinamic_reference_count
