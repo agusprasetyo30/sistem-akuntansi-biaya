@@ -432,12 +432,12 @@
                                             if ( kolom !== 0) {                      
                                                 var arr = data.split(',');
                                                 arr[0] = arr[0].toString().replace( /[\.]/g, "" );
-                                                if (arr[0] > ','  || arr[1] > ',') {
+                                                if (arr[0] > ''  || arr[1] > '') {
                                                     data = arr[0] + '' + arr[1];
                                                 } else {
                                                     return '';
                                                 }
-                                                return data.toString().replace( /[^\d.-]/g, "," );    
+                                                return data.toString().replace( /[^\d.-]/g, "" );    
                                             }
                                             return data;
                                         }

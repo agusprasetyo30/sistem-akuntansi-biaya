@@ -355,6 +355,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [ZcoController::class, 'export'])->name('export_zco');
             Route::post('import', [ZcoController::class, 'import'])->name('import_zco');
             Route::post('check', [ZcoController::class, 'check'])->name('check_zco');
+            Route::get('/export-horizontal', [ZcoController::class, 'exportHorizontal'])->name('export_zco_horizontal');
+            Route::get('/export-group-account', [ZcoController::class, 'exportGroupAccount'])->name('export_zco_account');
         });
 
         Route::group(['prefix' => 'salr', 'middleware' => ['role:1&2&3&4&5']], function () {

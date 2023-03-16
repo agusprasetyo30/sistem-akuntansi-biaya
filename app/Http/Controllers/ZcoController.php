@@ -6,6 +6,7 @@ use App\DataTables\Master\H_ZcoDataTable;
 use App\DataTables\Master\H_ZcoGroupAccountDataTable;
 use App\DataTables\Master\ZcoDataTable;
 use App\Exports\MultipleSheet\MS_ZcoExport;
+use App\Exports\Horizontal\ZCOExport;
 use App\Imports\ZcoImport;
 use App\Models\GLAccount;
 use App\Models\Material;
@@ -320,10 +321,10 @@ class ZcoController extends Controller
         }
     }
 
-    public function export(Request $request)
-    {
-        return Excel::download(new MS_ZcoExport(), 'zco.xlsx');
-    }
+    // public function export(Request $request)
+    // {
+    //     return Excel::download(new MS_ZcoExport(), 'zco.xlsx');
+    // }
 
     public function check(Request $request)
     {
@@ -357,5 +358,302 @@ class ZcoController extends Controller
                 'code' => 400,
             ]);
         }
+    }
+
+    public function exportHorizontal(Request $request)
+    {
+        // Material list by user company code
+        $material_list = Material::where('company_code', auth()->user()->company_code)
+            ->get();
+
+        // Material list for header dinamis
+        $product_list = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name')
+            ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
+            ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
+            ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name')
+            ->get();
+
+        if ($request->material != 'all') {
+            $product_list = $product_list->where('product_code',  $request->material);
+        }
+
+        if ($request->plant != 'all') {
+            $product_list = $product_list->where('plant_code', $request->plant);
+        }
+        
+
+
+        $temporary_value['harga_satuan'] = [];
+        $temporary_value['cr'] = [];
+        $temporary_value['biaya_per_ton'] = [];
+        $temporary_value['total_biaya'] = [];
+
+        // Dibuat variabel index temporary dikarenakan case nya ada index yang tidak diawali dengan 0
+        $key_temp = 0;
+        
+        foreach ($material_list as $query) {
+            foreach ($product_list as $item) {
+                array_push($temporary_value['harga_satuan'], ['key' => $key_temp, 'value' => $this->getHargaSatuanCount($request, $item, $query)]);
+                array_push($temporary_value['cr'], ['key' => $key_temp, 'value' => $this->getCRCount($request, $item, $query)]);
+                array_push($temporary_value['biaya_per_ton'], ['key' => $key_temp, 'value' => $this->getBiayaPerTon($request, $item, $query)]);
+                array_push($temporary_value['total_biaya'], ['key' => $key_temp, 'value' => $this->getTotalBiaya($request, $item, $query)]);
+                
+                $key_temp++;
+            }
+
+            $key_temp = 0;
+        }
+        
+        // Menghitung jumlah total asumsi umum sebagai acuan index
+        $product_index_count = $product_list->count() - 1;
+        
+        // Memisahkan data array yang disesuaikan dengan array key & transaksi (p, q, <nila></nila>i)
+        $fixed_value['harga_satuan'] = getSeparateValue($temporary_value['harga_satuan'], $product_index_count);
+        $fixed_value['cr'] = getSeparateValue($temporary_value['cr'], $product_index_count);
+        $fixed_value['biaya_per_ton'] = getSeparateValue($temporary_value['biaya_per_ton'], $product_index_count);
+        $fixed_value['total_biaya'] = getSeparateValue($temporary_value['total_biaya'], $product_index_count);
+
+        $data = [
+            'material_lists' => $material_list,
+            'product_lists'  => $product_list,
+            'fixed_value_data' => $fixed_value,
+            'key_temp' => $key_temp
+        ];
+
+        // dd($product->get());
+        
+        return Excel::download(new ZCOExport($data), "ZCO Horizontal.xlsx");
+        
+        // return view('pages.buku_besar.zco.export_horizontal', $data);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $request
+     * @param [type] $item
+     * @param [type] $material_list
+     * @return void
+     */
+    public function getHargaSatuanCount($request, $item, $material_list)
+    {
+        $total_qty = Zco::select(DB::raw('SUM(total_qty) as total_qty'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+                'material_code' => $material_list->material_code,
+            ]);
+
+        $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+                'material_code' => $material_list->material_code,
+            ]);
+
+        $kuantum_produksi = Zco::select(DB::raw('product_qty', 'periode'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+            ])->groupBy('product_qty', 'periode');
+
+        if ($request->format_data == '0') {
+            $temp = explode('-', $request->moth);
+            $timemonth = $temp[1] . '-' . $temp[0];
+
+            $total_qty->where('periode', 'ilike', '%' . $timemonth . '%');
+            $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
+            $kuantum_produksi->where('periode', 'ilike', '%' . $timemonth . '%');
+        } else if ($request->format_data == '1') {
+            $start_temp = explode('-', $request->start_month);
+            $end_temp = explode('-', $request->end_month);
+            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+
+            $total_qty->whereBetween('periode', [$start_date, $end_date]);
+            $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+            $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+        }
+
+        $total_qty = $total_qty->first();
+        $total_biaya = $total_biaya->first();
+        $kuantum_produksi = $kuantum_produksi->get()->toArray();
+
+        $tot_kuanprod = 0;
+
+        for ($i = 0; $i < count($kuantum_produksi); $i++) {
+            $tot_kuanprod = $tot_kuanprod + $kuantum_produksi[$i]['product_qty'];
+        }
+
+        $biaya_perton = 0;
+        if ($total_biaya->total_amount != 0 && $tot_kuanprod > 0) {
+            $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
+        }
+
+        $cr = 0;
+        if ($total_qty->total_qty != 0 && $tot_kuanprod > 0) {
+            $cr = $total_qty->total_qty / $tot_kuanprod;
+        }
+
+        $harga_satuan = 0;
+        if ($biaya_perton != 0 && $cr != 0) {
+            $harga_satuan = $biaya_perton / $cr;
+        }
+
+        return $harga_satuan ? $harga_satuan  : 0;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $request
+     * @param [type] $item
+     * @param [type] $material_list
+     * @return void
+     */
+    public function getCRCount($request, $item, $material_list)
+    {
+        $total_qty = Zco::select(DB::raw('SUM(total_qty) as total_qty'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+                'material_code' => $material_list->material_code,
+            ]);
+
+        $kuantum_produksi = Zco::select(DB::raw('product_qty', 'periode'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+            ])->groupBy('product_qty', 'periode');
+
+        if ($request->format_data == '0') {
+            $temp = explode('-', $request->moth);
+            $timemonth = $temp[1] . '-' . $temp[0];
+
+            $total_qty->where('periode', 'ilike', '%' . $timemonth . '%');
+            $kuantum_produksi->where('periode', 'ilike', '%' . $timemonth . '%');
+        } else if ($request->format_data == '1') {
+            $start_temp = explode('-', $request->start_month);
+            $end_temp = explode('-', $request->end_month);
+            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+
+            $total_qty->whereBetween('periode', [$start_date, $end_date]);
+            $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+        }
+
+        $total_qty = $total_qty->first();
+        $kuantum_produksi = $kuantum_produksi->get()->toArray();
+
+        $tot_kuanprod = 0;
+
+        for ($i = 0; $i < count($kuantum_produksi); $i++) {
+            $tot_kuanprod = $tot_kuanprod + $kuantum_produksi[$i]['product_qty'];
+        }
+
+        $cr = 0;
+        if ($total_qty->total_qty != 0 && $tot_kuanprod > 0) {
+            $cr = $total_qty->total_qty / $tot_kuanprod;
+        }
+
+        return $cr ? $cr : 0;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $request
+     * @param [type] $item
+     * @param [type] $material_list
+     * @return void
+     */
+    public function getBiayaPerTon($request, $item, $material_list)
+    {
+        $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+                'material_code' => $material_list->material_code,
+            ]);
+
+        $kuantum_produksi = Zco::select(DB::raw('product_qty', 'periode'))
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+            ])->groupBy('product_qty', 'periode');
+
+        if ($request->format_data == '0') {
+            $temp = explode('-', $request->moth);
+            $timemonth = $temp[1] . '-' . $temp[0];
+
+            $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
+            $kuantum_produksi->where('periode', 'ilike', '%' . $timemonth . '%');
+        } else if ($request->format_data == '1') {
+            $start_temp = explode('-', $request->start_month);
+            $end_temp = explode('-', $request->end_month);
+            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+
+            $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+            $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+        }
+
+        $total_biaya = $total_biaya->first();
+        $kuantum_produksi = $kuantum_produksi->get()->toArray();
+
+        $tot_kuanprod = 0;
+
+        for ($i = 0; $i < count($kuantum_produksi); $i++) {
+            $tot_kuanprod = $tot_kuanprod + $kuantum_produksi[$i]['product_qty'];
+        }
+
+        $biaya_perton = 0;
+
+        if ($total_biaya->total_amount != 0 && $tot_kuanprod > 0) {
+            $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
+        }
+
+        return $biaya_perton ? $biaya_perton : 0;
+    }
+    
+    /**
+     * Undocumented function
+     *
+     * @param [type] $request
+     * @param [type] $item
+     * @param [type] $material_list
+     * @return void
+     */
+    public function getTotalBiaya($request, $item, $material_list)
+    {
+        $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
+        ->where([
+            'product_code' => $item->product_code,
+            'plant_code' => $item->plant_code,
+            'material_code' => $material_list->material_code,
+        ]);
+
+        if ($request->format_data == '0') {
+            $temp = explode('-', $request->moth);
+            $timemonth = $temp[1] . '-' . $temp[0];
+
+            $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
+        } else if ($request->format_data == '1') {
+            $start_temp = explode('-', $request->start_month);
+            $end_temp = explode('-', $request->end_month);
+            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+
+            $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+        }
+
+        $total_biaya = $total_biaya->first();
+
+        return $total_biaya->total_amount ? $total_biaya->total_amount : 0;
+    }
+
+    public function exportGroupAccount(Request $request)
+    {
+        return view('pages.buku_besar.zco.export_group_account');
     }
 }

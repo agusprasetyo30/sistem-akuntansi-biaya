@@ -299,33 +299,6 @@ if (!function_exists('status_dt')) {
     }
 }
 
-if (!function_exists('status_crud_dt')) {
-    function status_crud_dt()
-    {
-        $status = array(
-            'all' => 'Semua',
-            true => 'Ada',
-            false => 'Tidak Ada',
-
-        );
-
-        return $status;
-    }
-}
-
-if (!function_exists('status_crud')) {
-    function status_crud()
-    {
-        $status = array(
-            true => 'Ada',
-            false => 'Tidak Ada',
-
-        );
-
-        return $status;
-    }
-}
-
 if (!function_exists('status_is_dummy')) {
     function status_is_dummy()
     {
@@ -1239,6 +1212,33 @@ if (!function_exists('totalGL')) {
 
         $res = array_sum($res_gl);
         return $res;
+    }
+}
+
+/**
+     * melakukan filter dan memisahkan data array sesuai dengan 
+     *
+     * @param [type] $arr
+     * @param [type] $dinamic_reference_count
+     * @return array
+     */
+if (!function_exists('getSeparateValue')) {
+    function getSeparateValue($arr, $dinamic_reference_count) : array
+    {
+        $temp_index = 0;
+        foreach ($arr as $key => $value) {
+            if ($arr[$key]['key'] == $temp_index) {
+                $fixed_value[$temp_index][] = $arr[$key]['value'];
+
+                $temp_index++;
+
+                if ($temp_index > $dinamic_reference_count) {
+                    $temp_index = 0;
+                }
+            }
+        }
+
+        return $fixed_value;
     }
 }
 

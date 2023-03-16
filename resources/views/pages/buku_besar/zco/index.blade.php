@@ -969,64 +969,22 @@
                             left: 2
                         },
                         buttons: [
-                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'pageLength'},
                             { 
-                                extend: 'excelHtml5',
-                                className: 'mb-5', 
-                                title: '',
-                                filename: 'ZCO - Horizontal',
-                                customize: function (file) {
-                                    var sheet = file.xl.worksheets['sheet1.xml'];
-                                    var style = file.xl['styles.xml'];
-                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
-                                    $('row', sheet).first().attr('ht', '30').attr('customHeight', "1");
-                                    var mergeCells = $('mergeCells', sheet);
-                                    
-                                    for (let i = 0; i < response.material.length;i++) {
-                                        const columnDef = generateAbjad(i)
+                                text: 'Excel',
+                                classname: 'mb-5',
+                                action: function ( e, dt, node, config ) {
+                                    var material = $('#filter_material').val();
+                                    var plant = $('#filter_plant').val();
+                                    var format_data = $('#filter_format').val();
+                                    var start_month = $('#bulan_filter1').val();
+                                    var end_month = $('#bulan_filter2').val();
+                                    var moth = $('#bulan_satuan_filter1').val();
+                                    let route_default = '{{ route("export_zco_horizontal") }}'
+                                    let route_complete = route_default + 
+                                        "?material=" + material + "&plant=" + plant + "&format_data=" + format_data +"&start_month=" + start_month + "&end_month=" + end_month + "&moth=" + moth
 
-                                        mergeCells[0].appendChild( 
-                                            _createNode( sheet, 'mergeCell', {
-                                                attr: { ref: columnDef }
-                                            }) 
-                                        )
-                                    }
-
-                                    mergeCells[0].appendChild( 
-                                        _createNode( sheet, 'mergeCell', {
-                                            attr: { ref: 'A1:A2' }
-                                        }) 
-                                    );
-
-                                    mergeCells[0].appendChild( 
-                                        _createNode( sheet, 'mergeCell', {
-                                            attr: { ref: 'B1:B2' }
-                                        }) 
-                                    );
-
-                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
- 
-                                    function _createNode( doc, nodeName, opts ) {
-                                        var tempNode = doc.createElement( nodeName );
-                                        
-                                        if ( opts ) {
-                                            if ( opts.attr ) {
-                                                $(tempNode).attr( opts.attr );
-                                            }
-                        
-                                            if ( opts.children ) {
-                                                $.each( opts.children, function ( key, value ) {
-                                                    tempNode.appendChild( value );
-                                                } );
-                                            }
-                        
-                                            if ( opts.text !== null && opts.text !== undefined ) {
-                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
-                                            }
-                                        }
-                        
-                                        return tempNode;
-                                    }
+                                    window.location = route_complete
                                 }
                             }
                         ],
