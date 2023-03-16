@@ -433,7 +433,7 @@
                                             if (data == null) {
                                                 return data;
                                             }
-                                            if ( kolom !== 0) {                      
+                                            if ( kolom >= 2) {                      
                                                 var arr = data.split(',');
                                                 arr[0] = arr[0].toString().replace( /[\.]/g, "" );
                                                 if (arr[0] > ','  || arr[1] > ',') {
