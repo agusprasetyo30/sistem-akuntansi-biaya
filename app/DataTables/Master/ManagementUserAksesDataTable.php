@@ -16,7 +16,7 @@ class ManagementUserAksesDataTable extends DataTable
         $query = DB::table('management_role')
             ->select('management_role.*', 'role.nama_role', 'feature.feature_name', 'feature.kode_unik')
             ->leftjoin('role', 'role.id', '=', 'management_role.role_id')
-            ->leftjoin('feature', 'feature.kode_unik', '=', 'management_role.kode_feature');
+            ->leftjoin('feature', 'feature.db', '=', 'management_role.db');
 
         return datatables()
             ->query($query)

@@ -897,7 +897,7 @@
                     { data: 'action', name: 'action', orderable:false, searchable: false},
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0]}
+                    {className: 'text-center', targets: [0,10]}
                 ],
             })
         }
