@@ -105,12 +105,12 @@
                     _token: "{{ csrf_token() }}",
                     role: $('#data_main_role').val(),
                     menu: $('#data_main_menu').val(),
-                    create: $('#akses_create').prop('checked') == true ? 1 : 0,
-                    read: $('#akses_read').prop('checked') == true ? 1 : 0,
-                    update: $('#akses_update').prop('checked') == true ? 1 : 0,
-                    delete: $('#akses_delete').prop('checked') == true ? 1 : 0,
-                    approve: $('#akses_approve').prop('checked') == true ? 1 : 0,
-                    submit: $('#akses_submit').prop('checked') == true ? 1 : 0,
+                    create: $('#add_akses_create').prop('checked') == true ? 1 : 0,
+                    read: $('#add_akses_read').prop('checked') == true ? 1 : 0,
+                    update: $('#add_akses_update').prop('checked') == true ? 1 : 0,
+                    delete: $('#add_akses_delete').prop('checked') == true ? 1 : 0,
+                    approve: $('#add_akses_approve').prop('checked') == true ? 1 : 0,
+                    submit: $('#add_akses_submit').prop('checked') == true ? 1 : 0,
                 },
                 success:function (response) {
                     Swal.fire({
