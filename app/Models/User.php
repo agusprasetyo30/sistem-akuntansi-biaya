@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -68,5 +69,17 @@ class User extends Authenticatable
         $result = array_merge(...$data);
 
         return $result[0] ?? false;
+    }
+
+    public function getData($user_id)
+    {
+        $usr = DB::table("users")
+            ->select('management_role.db')
+            ->leftjoin('mapping_role', 'mapping_role.user_id', '=', 'users.id')
+            ->leftjoin('management_role', 'management_role.role_id', '=', 'mapping_role.role_id')
+            ->where('users.id', $user_id);
+
+        $result = $usr->get();
+        return $result;
     }
 }

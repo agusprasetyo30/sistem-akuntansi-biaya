@@ -146,12 +146,12 @@
                 <tr>
                     <th data-type='text' data-name='role_id' class="text-center">ROLE</th>
                     <th data-type='text' data-name='feature_name' class="text-center">MENU</th>
-                    <th data-type='select' data-name='create' class="text-center">ACCESS CREATE</th>
-                    <th data-type='select' data-name='read' class="text-center">ACCESS READ</th>
-                    <th data-type='select' data-name='update' class="text-center">ACCESS UPDATE</th>
-                    <th data-type='select' data-name='delete' class="text-center">ACCESS DELETE</th>
-                    <th data-type='select' data-name='approve' class="text-center">ACCESS APPROVE</th>
-                    <th data-type='select' data-name='submit' class="text-center">ACCESS SUBMIT</th>
+                    <th data-type='text' data-name='create' class="text-center">ACCESS CREATE</th>
+                    <th data-type='text' data-name='read' class="text-center">ACCESS READ</th>
+                    <th data-type='text' data-name='update' class="text-center">ACCESS UPDATE</th>
+                    <th data-type='text' data-name='delete' class="text-center">ACCESS DELETE</th>
+                    <th data-type='text' data-name='approve' class="text-center">ACCESS APPROVE</th>
+                    <th data-type='text' data-name='submit' class="text-center">ACCESS SUBMIT</th>
                     <th data-type='text' data-name='action' class="text-center">ACTION</th>
                 </tr>
                 </thead>
@@ -214,43 +214,6 @@
                             }else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
-                                if (iName == 'create'){
-                                    input.className = "create_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_crud_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                } else if(iName == 'read'){
-                                    input.className = "read_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_crud_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }else if(iName == 'update'){
-                                    input.className = "update_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_crud_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }else if(iName == 'delete'){
-                                    input.className = "delete_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_crud_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }else if(iName == 'approve'){
-                                    input.className = "approve_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_crud_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }else if(iName == 'submit'){
-                                    input.className = "submit_search form-control custom-select select2";
-                                    options += '<option value="">Semua</option>';
-                                    @foreach (status_crud_dt() as $key => $value)
-                                        options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
-                                    @endforeach
-                                }
 
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
@@ -262,43 +225,6 @@
                         }else {
                             cell.empty()
                         }
-                        
-                        $('.create_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
-                        
-                        $('.read_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
-                        
-                        $('.update_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
-                        
-                        $('.delete_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
-                        
-                        $('.approve_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
-                        
-                        $('.submit_search').select2({
-                            placeholder: 'Pilih Status',
-                            width: '100%',
-                            allowClear: false,
-                        })
-
                     });
                 },
                 buttons: [
@@ -311,12 +237,12 @@
                 columns: [
                     { data: 'nama_role', name: 'role.nama_role', orderable:true},
                     { data: 'feature_name', name: 'feature.feature_name', orderable:true},
-                    { data: 'create', name: 'filter_create', orderable:false},
-                    { data: 'read', name: 'filter_read', orderable:false},
-                    { data: 'update', name: 'filter_update', orderable:false},
-                    { data: 'delete', name: 'filter_delete', orderable:false},
-                    { data: 'approve', name: 'filter_approve', orderable:false},
-                    { data: 'submit', name: 'filter_submit', orderable:false},
+                    { data: 'create', name: 'filter_create', orderable:false, searchable: false},
+                    { data: 'read', name: 'filter_read', orderable:false, searchable: false},
+                    { data: 'update', name: 'filter_update', orderable:false, searchable: false},
+                    { data: 'delete', name: 'filter_delete', orderable:false, searchable: false},
+                    { data: 'approve', name: 'filter_approve', orderable:false, searchable: false},
+                    { data: 'submit', name: 'filter_submit', orderable:false, searchable: false},
                     { data: 'action', name: 'action', orderable:false, searchable: false},
 
                 ],
@@ -404,7 +330,9 @@
                                 title: response.title,
                                 text: response.msg,
                                 icon: response.type,
-                                allowOutsideClick: false
+                                allowOutsideClick: false,
+                                confirmButtonColor: '#019267',
+                                confirmButtonText: 'Konfirmasi',
                             })
                                 .then((result) => {
                                     if (result.value) {
