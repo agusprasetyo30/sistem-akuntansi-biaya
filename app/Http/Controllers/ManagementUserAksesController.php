@@ -41,6 +41,15 @@ class ManagementUserAksesController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
+            $role_menu = Management_Role::where('role_id', $request->role)->where('kode_feature', $request->menu)->first();
+            if ($role_menu) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal menambahkan data',
+                    'message' => 'Role sudah mempunyai akses menu yang dipilih!'
+                ]);
+            }
+
             $feature = DB::table('feature')->where('kode_unik', $request->menu)
                 ->first();
 

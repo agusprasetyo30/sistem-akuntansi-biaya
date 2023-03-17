@@ -300,6 +300,9 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('export', [ConsRateController::class, 'export'])->name('export_consrate');
             Route::post('check', [ConsRateController::class, 'check'])->name('check_consrate');
             Route::post('check_duplicated', [ConsRateController::class, 'check_duplicated'])->name('check_consrate_dublicate');
+            Route::post('submit', [ConsRateController::class, 'submit'])->name('submit_consrate');
+            Route::post('approve', [ConsRateController::class, 'approve'])->name('approve_consrate');
+            Route::post('reject', [ConsRateController::class, 'reject'])->name('reject_consrate');
         });
 
         Route::group(['prefix' => 'saldo-awal', 'middleware' => ['role:1&2&3&4&5']], function () {
