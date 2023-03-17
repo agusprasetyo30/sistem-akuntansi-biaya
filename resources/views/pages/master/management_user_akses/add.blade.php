@@ -35,7 +35,7 @@
 													<div class="form-group">
                                                         <label class="custom-switch">
                                                             <span class="custom-switch-description me-2">Tidak</span>
-                                                            <input type="checkbox" name="akses_create" id="akses_create" class="custom-switch-input">
+                                                            <input type="checkbox" name="add_akses_create" id="add_akses_create" class="custom-switch-input">
                                                             <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
                                                             <span class="custom-switch-description">Iya</span>
                                                         </label>
@@ -50,7 +50,7 @@
 													<div class="form-group">
                                                         <label class="custom-switch">
                                                             <span class="custom-switch-description me-2">Tidak</span>
-                                                            <input type="checkbox" name="akses_read" id="akses_read" class="custom-switch-input">
+                                                            <input type="checkbox" name="add_akses_read" id="add_akses_read" class="custom-switch-input">
                                                             <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
                                                             <span class="custom-switch-description">Iya</span>
                                                         </label>
@@ -65,7 +65,7 @@
 													<div class="form-group">
                                                         <label class="custom-switch">
                                                             <span class="custom-switch-description me-2">Tidak</span>
-                                                            <input type="checkbox" name="akses_update" id="akses_update" class="custom-switch-input">
+                                                            <input type="checkbox" name="add_akses_update" id="add_akses_update" class="custom-switch-input">
                                                             <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
                                                             <span class="custom-switch-description">Iya</span>
                                                         </label>
@@ -82,7 +82,7 @@
 													<div class="form-group">
                                                         <label class="custom-switch">
                                                             <span class="custom-switch-description me-2">Tidak</span>
-                                                            <input type="checkbox" name="akses_delete" id="akses_delete" class="custom-switch-input">
+                                                            <input type="checkbox" name="add_akses_delete" id="add_akses_delete" class="custom-switch-input">
                                                             <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
                                                             <span class="custom-switch-description">Iya</span>
                                                         </label>
@@ -97,7 +97,7 @@
 													<div class="form-group">
                                                         <label class="custom-switch">
                                                             <span class="custom-switch-description me-2">Tidak</span>
-                                                            <input type="checkbox" name="akses_approve" id="akses_approve" class="custom-switch-input">
+                                                            <input type="checkbox" name="add_akses_approve" id="add_akses_approve" class="custom-switch-input">
                                                             <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
                                                             <span class="custom-switch-description">Iya</span>
                                                         </label>
@@ -112,7 +112,7 @@
 													<div class="form-group">
                                                         <label class="custom-switch">
                                                             <span class="custom-switch-description me-2">Tidak</span>
-                                                            <input type="checkbox" name="akses_submit" id="akses_submit" class="custom-switch-input">
+                                                            <input type="checkbox" name="add_akses_submit" id="add_akses_submit" class="custom-switch-input">
                                                             <span class="custom-switch-indicator custom-switch-indicator-lg"></span>
                                                             <span class="custom-switch-description">Iya</span>
                                                         </label>
