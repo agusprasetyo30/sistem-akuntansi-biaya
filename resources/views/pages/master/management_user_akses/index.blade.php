@@ -91,6 +91,28 @@
                     }
                 }
             })
+            
+            $('#data_main_company_code').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
         })
 
         $('#submit-data').on('click', function () {
@@ -111,6 +133,7 @@
                     delete: $('#add_akses_delete').prop('checked') == true ? 1 : 0,
                     approve: $('#add_akses_approve').prop('checked') == true ? 1 : 0,
                     submit: $('#add_akses_submit').prop('checked') == true ? 1 : 0,
+                    company_code: $('#data_main_company_code').val(),
                 },
                 success:function (response) {
                     Swal.fire({
@@ -141,11 +164,12 @@
 
         function table (){
             document.getElementById('table-wrapper').innerHTML = `
-            <table id="dt_management_role" class="table table-bordered text-nowrap key-buttons" style="width: 150%;">
+            <table id="dt_management_role" class="table table-bordered text-nowrap key-buttons" style="width: 200%;">
                 <thead>
                 <tr>
                     <th data-type='text' data-name='role_id' class="text-center">ROLE</th>
                     <th data-type='text' data-name='feature_name' class="text-center">MENU</th>
+                    <th data-type='text' data-name='company_code' class="text-center">ACCESS COMPANY</th>
                     <th data-type='text' data-name='create' class="text-center">ACCESS CREATE</th>
                     <th data-type='text' data-name='read' class="text-center">ACCESS READ</th>
                     <th data-type='text' data-name='update' class="text-center">ACCESS UPDATE</th>
@@ -237,6 +261,7 @@
                 columns: [
                     { data: 'nama_role', name: 'role.nama_role', orderable:true},
                     { data: 'feature_name', name: 'feature.feature_name', orderable:true},
+                    { data: 'company_code', name: 'company_code', orderable:false, searchable: false},
                     { data: 'create', name: 'filter_create', orderable:false, searchable: false},
                     { data: 'read', name: 'filter_read', orderable:false, searchable: false},
                     { data: 'update', name: 'filter_update', orderable:false, searchable: false},
@@ -247,7 +272,7 @@
 
                 ],
                 columnDefs:[
-                    {className: 'text-center', targets: [0,1,2,3,4,5,6,7]}
+                    {className: 'text-center', targets: [0,1,2,3,4,5,6,7,8]}
                 ]
 
             })
@@ -273,6 +298,7 @@
                     delete: $('#edit_delete'+id).prop('checked') == true ? 1 : 0,
                     approve: $('#edit_approve'+id).prop('checked') == true ? 1 : 0,
                     submit: $('#edit_submit'+id).prop('checked') == true ? 1 : 0,
+                    company_code: $('#edit_data_main_company_code'+id).val(),
                 },
                 success: function (response) {
                     Swal.fire({

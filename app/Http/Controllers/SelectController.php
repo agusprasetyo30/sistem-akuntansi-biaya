@@ -1247,6 +1247,52 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+
+    public function company_filter(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            if (auth()->user()->company_code == 'A000') {
+                $company = Company::limit(10)
+                    ->where('company_code', '!=', 'A000')
+                    ->get();
+            } else {
+                $company = Company::limit(10)
+                    ->where('company_code', auth()->user()->company_code)
+                    ->get();
+            }
+        } else {
+            if (auth()->user()->company_code == 'A000') {
+                $company = Company::limit(10)
+                    ->where('company_code', '!=', 'A000')
+                    ->where('company_code_pi', function ($query) use ($search) {
+                        $query->where('company_code', 'ilike', '%' . $search . '%')
+                            ->orWhere('company_name', 'ilike', '%' . $search . '%');
+                    })
+                    ->get();
+            } else {
+                $company = Company::limit(10)
+                    ->where('company_code', auth()->user()->company_code)
+                    ->get();
+            }
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua Perusahaan'
+        );
+
+        foreach ($company as $items) {
+            $response[] = array(
+                "id" => $items->company_code,
+                "text" => $items->company_code . ' - ' . $items->company_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function permission(Request $request)
     {
         $search = $request->search;

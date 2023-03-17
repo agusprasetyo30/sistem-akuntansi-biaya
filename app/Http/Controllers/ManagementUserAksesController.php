@@ -37,12 +37,13 @@ class ManagementUserAksesController extends Controller
                 "delete" => 'required',
                 "approve" => 'required',
                 "submit" => 'required',
+                "company_code" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $role_menu = Management_Role::where('role_id', $request->role)->where('kode_feature', $request->menu)->first();
+            $role_menu = Management_Role::where('role_id', $request->role)->where('kode_feature', $request->menu)->where('company_code', $request->company_code)->first();
             if ($role_menu) {
                 return setResponse([
                     'code' => 430,
@@ -57,7 +58,7 @@ class ManagementUserAksesController extends Controller
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
             $input['db'] = $feature->db;
-            $input['company_code'] = auth()->user()->company_code;
+            $input['company_code'] = $request->company_code;
             $input['create'] = $request->create == 1 ? true : false;
             $input['read'] = $request->read == 1 ? true : false;
             $input['update'] = $request->update == 1 ? true : false;
@@ -91,6 +92,7 @@ class ManagementUserAksesController extends Controller
                 "delete" => 'required',
                 "approve" => 'required',
                 "submit" => 'required',
+                "company_code" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
@@ -102,7 +104,7 @@ class ManagementUserAksesController extends Controller
             $input['role_id'] = $request->role;
             $input['kode_feature'] = $request->menu;
             $input['db'] = $feature->db;
-            $input['company_code'] = auth()->user()->company_code;
+            $input['company_code'] = $request->company_code;
             $input['create'] = $request->create == 1 ? true : false;
             $input['read'] = $request->read == 1 ? true : false;
             $input['update'] = $request->update == 1 ? true : false;

@@ -36,6 +36,12 @@
                                     placeholder="Menu" value="{{$model->feature_name}}" name="detail_feature_name"
                                     id="detail_feature_name" autocomplete="off">
                             </div>
+                            <div class="form-group">
+                                <label>Perusahaan </label>
+                                <input disabled type="text" class="form-control form-control-sm"
+                                    placeholder="Perusahaan" value="{{ $model->company_code == 'all' ? 'Semua Perusahaan' : $model->company_code.' - '.$model->company_name }}" name="detail_company_code"
+                                    id="detail_company_code" autocomplete="off">
+                            </div>
                             <div class="row">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="row">
@@ -170,6 +176,12 @@
                                 <label for="data_main_menu" class="form-label">Menu</label>
                                 <select name="main_menu" id="edit_data_main_menu{{$model->id}}" class="form-control custom-select select2">
                                     <option value="{{$model->kode_unik}}" selected>{{$model->feature_name}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="data_main_company_code" class="form-label">Perusahaan</label>
+                                <select name="main_company_code" id="edit_data_main_company_code{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->company_code}}" selected>{{ $model->company_code == 'all' ? 'Semua Perusahaan' : $model->company_code.' - '.$model->company_name }}</option>
                                 </select>
                             </div>
                             <div class="row">
@@ -318,6 +330,28 @@
         allowClear: false,
         ajax: {
             url: "{{ route('menu_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
+    })
+    
+    $('#edit_data_main_company_code'+{{$model->id}}).select2({
+        dropdownParent: $('#modal_edit'+{{$model->id}}),
+        placeholder: 'Pilih Perusahaan',
+        width: '100%',
+        allowClear: false,
+        ajax: {
+            url: "{{ route('company_filter_select') }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {

@@ -21,6 +21,12 @@
                                     <option value="" disabled selected>Pilih Menu</option>
                                 </select>
                             </div>
+                            <div class="form-group">
+                                <label for="data_main_company_code" class="form-label">Perusahaan</label>
+                                <select name="main_company_code" id="data_main_company_code" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Perusahaan</option>
+                                </select>
+                            </div>
 
                             <div class="row">
                                 <div class="col-lg-12 col-md-12">
