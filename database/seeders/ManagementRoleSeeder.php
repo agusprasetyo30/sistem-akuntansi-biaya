@@ -21,6 +21,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'role',
         ]);
@@ -32,6 +33,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'users',
         ]);
@@ -43,6 +45,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'mapping_role',
         ]);
@@ -54,6 +57,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'management_role',
         ]);
@@ -65,6 +69,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'company',
         ]);
@@ -76,6 +81,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'kategori_material',
         ]);
@@ -87,6 +93,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'kategori_produk',
         ]);
@@ -98,6 +105,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'kategori_balans',
         ]);
@@ -109,6 +117,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'map_kategori_balans',
         ]);
@@ -120,6 +129,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'group_account',
         ]);
@@ -131,6 +141,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'gl_account',
         ]);
@@ -142,6 +153,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'group_account_fc',
         ]);
@@ -153,6 +165,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'gl_account_fc',
         ]);
@@ -164,6 +177,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'cost_center',
         ]);
@@ -175,6 +189,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'material',
         ]);
@@ -186,6 +201,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'plant',
         ]);
@@ -197,6 +213,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'glos_cc',
         ]);
@@ -208,6 +225,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'tarif',
         ]);
@@ -219,6 +237,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'asumsi_umum',
         ]);
@@ -230,6 +249,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'kurs',
         ]);
@@ -241,6 +261,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'regions',
         ]);
@@ -252,6 +273,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'cons_rate',
         ]);
@@ -263,6 +285,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'saldo_awal',
         ]);
@@ -274,6 +297,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'qty_renprod',
         ]);
@@ -285,6 +309,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'qty_rendaan',
         ]);
@@ -296,6 +321,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'price_rendaan',
         ]);
@@ -307,6 +333,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'zco',
         ]);
@@ -318,6 +345,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'salrs',
         ]);
@@ -329,6 +357,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'laba_rugi',
         ]);
@@ -340,6 +369,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'pj_pemakaian',
         ]);
@@ -351,6 +381,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'pj_penjualan',
         ]);
@@ -362,6 +393,7 @@ class ManagementRoleSeeder extends Seeder
             'read' => true,
             'update' => true,
             'delete' => true,
+            'submit' => true,
             'approve' => true,
             'db' => 'balans',
         ]);
