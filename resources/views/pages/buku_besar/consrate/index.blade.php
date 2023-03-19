@@ -38,13 +38,13 @@
                                 </select>
                             </div>
                             <div class="col-12">
-                                @if (mapping_akses('cons_rate','submit'))
+                                @if (mapping_akses('cons_rate','submit') && $cons_rate)
                                     @if (!$cons_rate->submited_at)
                                     <button class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
                                     @endif
                                 @endif
 
-                                @if (mapping_akses('cons_rate','approve'))
+                                @if (mapping_akses('cons_rate','approve') && $cons_rate)
                                     @if ($cons_rate->submited_at && !$cons_rate->approved_at && !$cons_rate->rejected_at)
                                     <button class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
                                     <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button> 
