@@ -39,16 +39,16 @@
                             </div>
                             <div class="col-12">
                                 @if (mapping_akses('cons_rate','submit'))
-                                    @if (!$cons_rate->submited_at)
+{{--                                    @if (!$cons_rate->submited_at)--}}
                                     <button class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
-                                    @endif
+{{--                                    @endif--}}
                                 @endif
 
                                 @if (mapping_akses('cons_rate','approve'))
-                                    @if ($cons_rate->submited_at && !$cons_rate->approved_at && !$cons_rate->rejected_at)
+{{--                                    @if ($cons_rate->submited_at && !$cons_rate->approved_at && !$cons_rate->rejected_at)--}}
                                     <button class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
-                                    <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button> 
-                                    @endif
+                                    <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
+{{--                                    @endif--}}
                                 @endif
                             </div>
                         </div>
@@ -592,7 +592,7 @@
                     { extend: 'pageLength', className: 'mb-5' },
                     { extend: 'excel', className: 'mb-5', exportOptions:{
                         columns:[0,1,2,3,4,5,6,7]
-                        }, title: '', 
+                        }, title: '',
                         filename: 'Consumption Ratio'
                     }
                 ],
@@ -1032,7 +1032,7 @@
             })
 
         })
-        
+
         $('#btn_reject_data').on('click', function () {
             $.ajax({
                 type: "POST",

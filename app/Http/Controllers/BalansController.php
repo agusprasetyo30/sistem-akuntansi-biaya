@@ -157,6 +157,7 @@ class BalansController extends Controller
 
             $antrian = antrian_material_balans($request->version);
 
+//            dd($antrian);
 //            $result_antrian = [];
 //            foreach ($antrian as $items){
 //                foreach ($items as $item){
@@ -296,7 +297,6 @@ class BalansController extends Controller
                             }
                             elseif ($data_map->kategori_balans_id == 2){
                                 $q = $data_map->get_data_qty_rencana_pengadaan($data->id);
-//
                                 $nilai = $data_map->get_data_total_pengadaan($data->id, $data->adjustment);
 
 
