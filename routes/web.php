@@ -346,7 +346,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [PriceRenDaanController::class, 'check'])->name('check_price_rendaan');
         });
 
-        Route::group(['prefix' => 'total-daan', 'middleware' => ['role:price_rendaan']], function () {
+        Route::group(['prefix' => 'total-daan', 'middleware' => ['role:qty_rendaan&price_rendaan']], function () {
             Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
         });
 
