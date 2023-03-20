@@ -586,7 +586,7 @@ class SimulasiProyeksiController extends Controller
                         }
                     } else if ($val->kategori == 2) {
                         //Harga Satuan
-                        $res = $val->hsZco();
+                        $res = $val->hsZco($data_plant);
                         $hs = $res;
 
                         //Biaya Perton
