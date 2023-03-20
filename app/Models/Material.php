@@ -166,10 +166,10 @@ class Material extends Model
         }
     }
 
-    public function hsZco()
+    public function hsZco($data_plant)
     {
-        $total_qty = $this->zco()->sum('total_qty');
-        $total_biaya = $this->zco()->sum('total_amount');
+        $total_qty = $this->zco()->where('plant_code', $data_plant)->sum('total_qty');
+        $total_biaya = $this->zco()->where('plant_code', $data_plant)->sum('total_amount');
         $kuantum_produksi = $this->zco()->select('product_qty', 'periode')->groupBy('product_qty', 'periode')->get()->toArray();
 
         $total_qty = (float) $total_qty;
