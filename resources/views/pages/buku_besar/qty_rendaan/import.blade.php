@@ -17,6 +17,7 @@
                                         <li>Format harus sesuai template</li>
                                         <li>Template akan tersedia setelah memilih versi</li>
                                         <li>Jika data value "kosong" maka data akan terisi '0'</li>
+                                        <li>Format desimal menggunakan tanda baca ','</li>
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol>
                                 </div>
