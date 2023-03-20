@@ -85,17 +85,17 @@ class Material extends Model
 
     public function kuantumProduksi($periode)
     {
-        $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
+        $renprod = $this->const_rate()->with('glos_cc1.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
         })->first();
 
-        $result = sizeof($renprod->glos_cc->renprod);
+        $result = sizeof($renprod->glos_cc1->renprod);
         return $result;
     }
 
     public function kpValue($periode, $produk)
     {
-        $renprod = $this->const_rate()->with('glos_cc.renprod', function ($q) use ($periode) {
+        $renprod = $this->const_rate()->with('glos_cc1.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
         })->where('product_code', '=', $produk)->first();
 
@@ -103,7 +103,7 @@ class Material extends Model
         // $renprod = $renprod[0]->qty_renprod_value;
         // $result = isset($renprod->glos_cc->renprod->first()->qty_renprod_value) ? $renprod->glos_cc->renprod->first()->qty_renprod_value : 0;
         // $result = isset($qtyRenprodVal) ? $qtyRenprodVal : 0;
-        $result = $renprod->glos_cc->renprod->first()->qty_renprod_value ?? 0;
+        $result = $renprod->glos_cc1->renprod->first()->qty_renprod_value ?? 0;
         // print_r($renprod->glos_cc->renprod->first() . '<br><br><br>');
         return $result;
     }
