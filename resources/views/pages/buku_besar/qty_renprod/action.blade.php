@@ -28,7 +28,7 @@
                             <div class="form-group">
                                 <label>Versi </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Versi" value="{{$model->version}}" name="detail_version
+                                    placeholder="Nama Versi" value="{{$model->version}}" name="detail_version"
                                     id="detail_version" autocomplete="off">
                             </div>
                             <div class="form-group">

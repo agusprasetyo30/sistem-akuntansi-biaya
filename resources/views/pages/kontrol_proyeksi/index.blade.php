@@ -150,6 +150,7 @@
             '<th data-type="text" data-name="no" class="text-center">NO</th>' +
             '<th data-type="text" data-name="parameter" class="text-center">PARAMETER PROYEKSI</th>' +
             '<th data-type="text" data-name="jumlah" class="text-center">JUMLAH DATA</th>' +
+            '<th data-type="text" data-name="status" class="text-center">STATUS</th>' +
             '</tr>' +
             '</thead>' +
             '<tbody>' +
@@ -429,6 +430,7 @@
                     { data: 'DT_RowIndex', name:'DT_RowIndex', orderable:false, searchable:false},
                     { data: 'data_db', name:'filter_data_db', orderable:false, searchable:true},
                     { data: 'jumlah_feature', name:'jumlah_feature', orderable:false, searchable:false},
+                    { data: 'status_data', name:'status_data', orderable:false, searchable:false},
                 ],
             });
         }
