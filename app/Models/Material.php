@@ -55,7 +55,12 @@ class Material extends Model
 
     public function glos_cc()
     {
-        return $this->hasOne(GLosCC::class, 'material_code', 'product_code');
+        return $this->hasOne(GLosCC::class, ['material_code', 'plant_code'], ['product_code', 'plant_code']);
+    }
+
+    public function glos_cc1()
+    {
+        return $this->hasOne(GLosCC::class, ['material_code', 'plant_code'], ['product_code', 'plant_code']);
     }
 
     public function saldoawal()
@@ -93,9 +98,10 @@ class Material extends Model
         return $result;
     }
 
-    public function kpValue($periode, $produk)
+    public function kpValue($periode, $produk, $data_plant)
     {
-        $renprod = $this->const_rate()->with('glos_cc1.renprod', function ($q) use ($periode) {
+
+        $renprod = $this->const_rate()->where('plant_code', $data_plant)->with('glos_cc1.renprod', function ($q) use ($periode) {
             $q->where('asumsi_umum_id', '=', $periode);
         })->where('product_code', '=', $produk)->first();
 
@@ -104,6 +110,10 @@ class Material extends Model
         // $result = isset($renprod->glos_cc->renprod->first()->qty_renprod_value) ? $renprod->glos_cc->renprod->first()->qty_renprod_value : 0;
         // $result = isset($qtyRenprodVal) ? $qtyRenprodVal : 0;
         $result = $renprod->glos_cc1->renprod->first()->qty_renprod_value ?? 0;
+
+//        if ($produk == '2000002'){
+//            dd($result, $renprod, $periode, $produk, $data_plant);
+//        }
         // print_r($renprod->glos_cc->renprod->first() . '<br><br><br>');
         return $result;
     }

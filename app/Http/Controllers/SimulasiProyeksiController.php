@@ -153,7 +153,7 @@ class SimulasiProyeksiController extends Controller
                         if ($val->jenis == 'material') {
                             //ConsRate
 
-                            $kp_v = $val->kpValue($periode, $data_product);
+                            $kp_v = $val->kpValue($periode, $data_product, $data_plant);
 
                             if ($kp_v != 0) {
                                 //                        if ($kp) {
@@ -538,7 +538,7 @@ class SimulasiProyeksiController extends Controller
             foreach ($query as $key3 => $val) {
                 $kp_val = 0;
                 if ($val->jenis == 'material') {
-                    $kp_v = $val->kpValue($periode, $data_product);
+                    $kp_v = $val->kpValue($periode, $data_product, $data_plant);
                     if ($kp_v != 0) {
                         $kuan_prod = $kp_v;
                         if ($kp_v == 1) {
