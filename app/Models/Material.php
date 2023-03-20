@@ -228,8 +228,10 @@ class Material extends Model
             }
 
             $harga_satuan = 0;
-            if ($biaya_perton > 0 && $cr > 0) {
+            if ($cr != 0){
                 $harga_satuan = $biaya_perton / $cr;
+            }else{
+                $harga_satuan = 0;
             }
         }catch (\Exception $exception){
             dd($exception);
