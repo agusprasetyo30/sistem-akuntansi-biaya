@@ -170,6 +170,8 @@ class Material extends Model
     {
         $total_qty = $this->zco()->where('plant_code', $data_plant)->sum('total_qty');
         $total_biaya = $this->zco()->where('plant_code', $data_plant)->sum('total_amount');
+
+//        dd($total_qty);
         $kuantum_produksi = $this->zco()->select('product_qty', 'periode')->groupBy('product_qty', 'periode')->get()->toArray();
 
         $total_qty = (float) $total_qty;
@@ -199,26 +201,31 @@ class Material extends Model
         // $total_biaya = $total_biaya->first();
         // $kuantum_produksi = $kuantum_produksi->get()->toArray();
 
-        $tot_kuanprod = 0;
-        for ($i = 0; $i < count($kuantum_produksi); $i++) {
-            $tot_kuanprod += $kuantum_produksi[$i]['product_qty'];
+        try {
+            $tot_kuanprod = 0;
+            for ($i = 0; $i < count($kuantum_produksi); $i++) {
+                $tot_kuanprod += $kuantum_produksi[$i]['product_qty'];
+            }
+
+            $biaya_perton = 0;
+            if ($total_biaya != 0 && $tot_kuanprod > 0) {
+                $biaya_perton = $total_biaya / $tot_kuanprod;
+            }
+
+            $cr = 0;
+            if ($total_qty != 0 && $tot_kuanprod > 0) {
+                $cr = $total_qty / $tot_kuanprod;
+            }
+
+            $harga_satuan = 0;
+            if ($biaya_perton > 0 && $cr > 0) {
+                $harga_satuan = $biaya_perton / $cr;
+            }
+        }catch (\Exception $exception){
+            dd($exception);
         }
 
-        $biaya_perton = 0;
-        if ($total_biaya > 0 && $tot_kuanprod > 0) {
-            $biaya_perton = $total_biaya / $tot_kuanprod;
-        }
-
-        $cr = 0;
-        if ($total_qty > 0 && $tot_kuanprod > 0) {
-            $cr = $total_qty / $tot_kuanprod;
-        }
-
-        $harga_satuan = 0;
-        if ($biaya_perton > 0 && $cr > 0) {
-            $harga_satuan = $biaya_perton / $cr;
-        }
-
+//        dd($harga_satuan);
         return $harga_satuan;
     }
 
