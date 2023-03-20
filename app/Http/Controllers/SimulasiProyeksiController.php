@@ -392,6 +392,7 @@ class SimulasiProyeksiController extends Controller
                                 $res_biaya_perton = $collection_input_temp
                                     ->where('product_code', $data_product)
                                     ->whereIn('no', [11, 12, 13])
+                                    ->where('plant_code', $data_plant)
                                     ->where('asumsi_umum_id', '=', $periode)
                                     ->sum('biaya_perton');
 
@@ -400,6 +401,7 @@ class SimulasiProyeksiController extends Controller
                             } else if ($val->no == 15) {
                                 $res_biaya_perton = $collection_input_temp
                                     ->where('product_code', $data_product)
+                                    ->where('plant_code', $data_plant)
                                     ->whereIn('no', [10, 14])
                                     ->where('asumsi_umum_id', '=', $periode)
                                     ->sum('biaya_perton');
