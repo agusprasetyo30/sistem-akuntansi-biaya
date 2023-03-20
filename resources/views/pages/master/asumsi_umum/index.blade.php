@@ -47,7 +47,7 @@
             '<thead>' +
             '<tr>' +
             '<th data-type="text" data-name="version" class="text-center">VERSI</th>' +
-            '<th data-type="text" data-name="saldo_awal" class="text-center">SALDO AWAL</th>' +
+            '<th data-type="text" data-name="saldo_awal" class="text-center">SALDO AKHIR</th>' +
             '<th data-type="text" data-name="jumlah_bulan" class="text-center">JUMLAH BULAN</th>' +
             '<th data-type="text" data-name="awal_periode" class="text-center">AWAL PERIODE</th>' +
             '<th data-type="text" data-name="akhir_periode" class="text-center">AKHIR PERIODE</th>' +

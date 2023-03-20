@@ -376,6 +376,8 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
+                    versi: $('#edit_data_main_version'+id).val(),
+                    plant : $('#edit_data_main_plant'+id).val(),
                     material_balans: $('#edit_material'+id).val(),
                     kategori_balans: $('#edit_kategori_balans'+id).val(),
                 },

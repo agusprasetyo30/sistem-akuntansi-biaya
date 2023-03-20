@@ -69,13 +69,13 @@ class MapKategoriBalans extends Model
     }
 
     public function get_data_saldo_awal($plant){
-        $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->sum('total_stock');
+        $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->distinct()->sum('total_stock');
         return $saldo_awal;
     }
 
     public function get_data_saldo_awal_nilai($plant){
 //        dd($this->saldo_awal()->get());
-        $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->sum('total_value');
+        $saldo_awal = $this->saldo_awal()->where('plant_code', $plant)->distinct()->sum('total_value');
         return $saldo_awal;
     }
 
@@ -92,43 +92,28 @@ class MapKategoriBalans extends Model
     }
 
     public function get_data_total_pengadaan($asumsi, $adjustment){
-        $qty_rendaan = $this->qty_rencana_pengadaan->where('asumsi_umum_id', $asumsi);
-        $price_rendaan = $this->price_rencana_pengadaan->where('asumsi_umum_id', $asumsi);
-//        dd($qty_rendaan, $price_rendaan);
-//        if ($this->material_code == '2000002' and $asumsi == 12){
-//            $result = 0;
-//            if ($qty_rendaan->isNotEmpty()){
-//                foreach ($qty_rendaan as $key =>$items){
-//                    $qty_rendaan_temp = (double) $items->qty_rendaan_value;
-//                    try {
-//                        $price_rendaan_temp = (double) $price_rendaan[$key]->price_rendaan_value;
-//                        $result += $qty_rendaan_temp * ($price_rendaan_temp * (1 + ($adjustment / 100)));
-//                    }catch (\Exception $exception){
-//                        $result = 0;
-//                    }
-//                }
-//            }else{
-//                $result = 0;
-//            }
+
+
+//        if ($this->material_code == '3000001'){
+//            $qty_rendaan = $this->qty_rencana_pengadaan
+//                ->where('asumsi_umum_id', $asumsi);
+//            $price_rendaan = $this->price_rencana_pengadaan
+//                ->where('asumsi_umum_id', $asumsi);
 //
-//
-////            dd($result, $qty_rendaan, $price_rendaan);
+//            dd($qty_rendaan, $price_rendaan);
 //        }else{
-//            $result = 0;
-//            if ($qty_rendaan->isNotEmpty()){
-//                foreach ($qty_rendaan as $key =>$items){
-//                    $qty_rendaan_temp = (double) $items->qty_rendaan_value;
-//                    try {
-//                        $price_rendaan_temp = (double) $price_rendaan[$key]->price_rendaan_value;
-//                        $result += $qty_rendaan_temp * ($price_rendaan_temp * (1 + ($adjustment / 100)));
-//                    }catch (\Exception $exception){
-//                        $result = 0;
-//                    }
-//                }
-//            }else{
-//                $result = 0;
-//            }
+//            $qty_rendaan = $this->qty_rencana_pengadaan
+//                ->where('asumsi_umum_id', $asumsi);
+//            $price_rendaan = $this->price_rencana_pengadaan
+//                ->where('asumsi_umum_id', $asumsi);
 //        }
+
+        $qty_rendaan = $this->qty_rencana_pengadaan()
+            ->where('asumsi_umum_id', $asumsi)->get();
+        $price_rendaan = $this->price_rencana_pengadaan()
+            ->where('asumsi_umum_id', $asumsi)->get();
+
+//        $result = $qty_rendaan * ($price_rendaan * (1 + ($adjustment / 100)));
 
         $result = 0;
         if ($qty_rendaan->isNotEmpty()){
