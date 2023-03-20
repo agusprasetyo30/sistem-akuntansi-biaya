@@ -14,13 +14,22 @@ class ManagementUserAksesDataTable extends DataTable
     public function dataTable($query)
     {
         $query = DB::table('management_role')
-            ->select('management_role.*', 'role.nama_role', 'feature.feature_name', 'feature.kode_unik')
+            ->select('management_role.*', 'role.nama_role', 'feature.feature_name', 'feature.kode_unik', 'company.company_name')
             ->leftjoin('role', 'role.id', '=', 'management_role.role_id')
-            ->leftjoin('feature', 'feature.db', '=', 'management_role.db');
+            ->leftjoin('feature', 'feature.db', '=', 'management_role.db')
+            ->leftjoin('company', 'company.company_code', '=', 'management_role.company_code');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->addColumn('company_code', function ($query) {
+                if ($query->company_code == 'all') {
+                    $res = 'Semua Perusahaan';
+                } else {
+                    $res = $query->company_code . ' - ' . $query->company_name;
+                }
+                return $res;
+            })
             ->addColumn('create', function ($query) {
                 if ($query->create == true) {
                     $span = "<span class='badge bg-success-light border-success fs-11 mt-2'>Iya</span>";
