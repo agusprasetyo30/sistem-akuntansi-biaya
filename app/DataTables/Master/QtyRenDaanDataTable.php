@@ -37,7 +37,7 @@ class QtyRenDaanDataTable extends DataTable
                 return format_month($query->month_year,'bi');
             })
             ->addColumn('value', function ($query){
-                return $query->qty_rendaan_value;
+                return helpRibuanKoma($query->qty_rendaan_value);
             })
             ->addColumn('material', function ($query){
                 return $query->material_code.' - '.$query->material_name;

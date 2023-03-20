@@ -356,6 +356,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->orwhere('material_name', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->where('is_active', 't')
                 ->get();
@@ -384,6 +385,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->orWhere('material_name', 'ilike', '%' . $search . '%')
                 ->where([
                     'is_active' => 't',
                     'kategori_material_id' => 1
@@ -829,6 +831,7 @@ class SelectController extends Controller
                 ->get();
         } else {
             $material = Material::where('material_code', 'ilike', '%' . $search . '%')
+                ->orWhere('material_name', 'ilike', '%' . $search . '%')
                 ->where([
                     'is_active' => 't',
                     'kategori_material_id' => 1
