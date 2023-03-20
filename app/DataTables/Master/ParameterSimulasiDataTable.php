@@ -73,6 +73,8 @@ class ParameterSimulasiDataTable extends DataTable
         }])
             ->whereIn('db', $data);
 
+//        dd($query->get()->toArray());
+
         $datatable = datatables()
             ->eloquent($query)
             ->addIndexColumn()
@@ -84,10 +86,26 @@ class ParameterSimulasiDataTable extends DataTable
                 }else{
                     return count($data);
                 }
-
             })
             ->addColumn('data_db', function ($query){
                 return $query->feature;
+            })
+            ->addColumn('status_data', function ($query){
+//                if ($query->db == 'kurs'){
+//                    $result = '-';
+//                }else{
+//                    if ($query[$query->db][0]->submited_at != null){
+//
+//                    }elseif ($query[$query->db][0]->submited_at != null){
+//
+//                    }elseif ($query[$query->db][0]->submited_at != null){
+//
+//                    }
+//                }
+
+                $result = "<span class='badge bg-secondary-light border-secondary fs-11 mt-2'>DRAFT</span>";
+
+                return $result;
             })
             ->filterColumn('filter_data_db', function ($query, $keyword) {
                 $query->where('feature', 'ilike', '%' . $keyword . '%');
