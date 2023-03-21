@@ -138,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    Route::group(['prefix' => 'master', 'middleware' => ['role:material&plant&kategori_material&kategori_produk&regions&cost_center&glos_cc&company&kurs&group_account&group_account_fc&gl_account&gl_account_fc&asumsi_umum&kategori_balans&map_kategori_balans&tarif']], function () {
+    Route::group(['prefix' => 'master', 'middleware' => ['role:material&plant&kategori_material&kategori_produk&regions&cost_center&glos_cc&company&group_account&group_account_fc&gl_account&gl_account_fc&kategori_balans&map_kategori_balans']], function () {
         Route::group(['prefix' => 'material', 'middleware' => ['role:material']], function () {
             Route::get('/', [MaterialController::class, 'index'])->name('material');
             Route::post('insert', [MaterialController::class, 'create'])->name('insert_material');
@@ -261,7 +261,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    Route::group(['prefix' => 'buku-besar', 'middleware' => ['role:cons_rate&saldo_awal&qty_renprod&qty_rendaan&price_rendaan&zco&salrs&laba_rugi&pj_pemakaian&pj_penjualan']], function () {
+    Route::group(['prefix' => 'buku-besar', 'middleware' => ['role:cons_rate&saldo_awal&qty_renprod&qty_rendaan&price_rendaan&zco&salrs&laba_rugi&pj_pemakaian&pj_penjualan&tarif&kurs&asumsi_umum']], function () {
 
         Route::group(['prefix' => 'kurs', 'middleware' => ['role:kurs']], function () {
             Route::get('/', [KursController::class, 'index'])->name('kurs');
