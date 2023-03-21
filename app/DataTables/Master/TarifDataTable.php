@@ -22,10 +22,11 @@ class TarifDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('tarif')
-            ->select('tarif.*', 'material.material_name', 'plant.plant_desc', 'group_account_fc.group_account_fc_desc')
+            ->select('tarif.*', 'material.material_name', 'plant.plant_desc', 'group_account_fc.group_account_fc_desc', 'version_asumsi.version')
             ->leftjoin('plant', 'plant.plant_code', '=', 'tarif.plant_code')
             ->leftJoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'tarif.group_account_fc')
             ->leftjoin('material', 'material.material_code', '=', 'tarif.product_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'tarif.version_id')
             ->where('tarif.company_code', $cc)
             ->whereNull('tarif.deleted_at');
 
@@ -50,6 +51,9 @@ class TarifDataTable extends DataTable
             ->orderColumn('filter_produk', function ($query, $order) {
                 $query->orderBy('material.material_code', $order);
             })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.id', $order);
+            })
             ->filterColumn('filter_plant', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('plant.plant_code', 'ilike', '%' . $keyword . '%');
@@ -64,6 +68,12 @@ class TarifDataTable extends DataTable
                 if ($keyword != 'all') {
                     $query->where('material.material_code', 'ilike', '%' . $keyword . '%')
                         ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('version_asumsi.version', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->addColumn('action', 'pages.master.tarif.action')

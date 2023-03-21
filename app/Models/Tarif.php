@@ -13,6 +13,7 @@ class Tarif extends Model
 
     protected $fillable = [
         'company_code',
+        'version_id',
         'plant_code',
         'product_code',
         'group_account_fc',

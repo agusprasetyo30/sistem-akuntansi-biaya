@@ -115,6 +115,52 @@
                     }
                 }
             })
+
+            $('#data_main_version').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#version').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#submit-export").css("display", "block");
+            })
         })
 
         function table (){
@@ -122,6 +168,7 @@
             <table id="dt_tarif" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
                 <tr>
+                    <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='select' data-name='produk' class="text-center">PRODUK</th>
                     <th data-type='select' data-name='plant' class="text-center">PLANT</th>
                     <th data-type='select' data-name='group_account_fc' class="text-center">GROUP ACCOUNT</th>
@@ -206,7 +253,11 @@
                                 } else if(iName == 'group_account_fc'){
                                     input.className = "group_account_fc_search form-control custom-select select2";
 
+                                } else if(iName == 'version'){
+                                    input.className = "version_search form-control custom-select select2";
+
                                 }
+
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
                                     .on('change clear', function () {
@@ -278,6 +329,26 @@
                             }
                         })
 
+                        $('.version_search').select2({
+                            placeholder: 'Pilih Versi',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('version_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
                     });
 
                     let api = this.api();
@@ -294,6 +365,7 @@
                     data: {data:'index'}
                 },
                 columns: [
+                    { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'produk', name: 'filter_produk', orderable:true},
                     { data: 'plant', name: 'filter_plant', orderable:true},
                     { data: 'group_account_fc', name: 'filter_group_account', orderable:true},
@@ -317,6 +389,7 @@
                 url: '{{route('insert_tarif')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
+                    version_id: $('#data_main_version').val(),
                     plant_code: $('#data_main_plant').val(),
                     product_code: $('#data_main_produk').val(),
                     group_account_fc: $('#group_account_fc').val(),
@@ -361,6 +434,51 @@
                 },
                 processData: false,
                 contentType: false,
+                url: '{{route('check_tarif')}}',
+                data: file,
+                success:function (response) {
+                    if (response.code == 201) 
+                    {
+                        Swal.fire({
+                            title: response.title,
+                            text: response.message,
+                            icon: 'warning',
+                            allowOutsideClick: false,
+                            showDenyButton: true,
+                            confirmButtonColor: "#019267",
+                            confirmButtonText: 'Konfirmasi',
+                            denyButtonText: 'Kembali',
+                        })
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                importStore()
+                            } else {
+                                $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                                $("#back-import").attr("disabled", false);
+                            }
+                        })
+                    } else {
+                        importStore()
+                        // $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    }
+                },
+                error: function (response) {
+                    handleError(response)
+                    $("#submit-import").attr('class', 'btn btn-primary').attr("disabled", false);
+                    $("#back-import").attr("disabled", false);
+                }
+            })
+        })
+
+        function importStore() {
+            let file = new FormData($("#form-input")[0]);
+            $.ajax({
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                processData: false,
+                contentType: false,
                 url: '{{route('import_tarif')}}',
                 data: file,
                 success:function (response) {
@@ -389,6 +507,45 @@
                     $("#back-import").attr("disabled", false);
                 }
             })
+        }
+
+        $('#submit-export').on('click', function () {
+            $.ajax({
+                xhrFields: {
+                    responseType: 'blob',
+                },
+                type: "GET",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{route('export_tarif')}}',
+                data: {
+                    version: $('#version').val(),
+                },
+                success:function (result, status, xhr) {
+                    var disposition = xhr.getResponseHeader('content-disposition');
+                    var matches = /"([^"]*)"/.exec(disposition);
+                    var filename = (matches != null && matches[1] ? matches[1] : 'tarif.xlsx');
+
+                    // The actual download
+                    var blob = new Blob([result], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                    });
+                    var link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = filename;
+
+                    document.body.appendChild(link);
+
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(){
+                    $('#modal_import').modal('hide');
+                    $("#modal_import input").val("")
+                    toastr.warning('Periksa Kembali Data Input Anda', 'Warning')
+                }
+            })
         })
 
         function update_tarif(id) {
@@ -401,6 +558,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     id : id,
+                    version_id: $('#edit_data_main_version'+id).val(),
                     plant_code: $('#edit_data_main_plant'+id).val(),
                     product_code: $('#edit_data_main_produk'+id).val(),
                     group_account_fc: $('#edit_group_account_fc'+id).val(),

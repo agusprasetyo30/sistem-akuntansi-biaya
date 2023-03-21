@@ -13,6 +13,12 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="form-label">Versi Asumsi</label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div> 
+                            <div class="form-group">
                                 <label class="form-label">Produk</label>
                                 <select name="main_produk" id="data_main_produk" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Versi</option>

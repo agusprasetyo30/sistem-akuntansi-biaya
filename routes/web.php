@@ -138,7 +138,7 @@ Route::group(['middleware' => 'auth'], function () {
         });
     });
 
-    Route::group(['prefix' => 'master', 'middleware' => ['role:material&plant&kategori_material&kategori_produk&regions&cost_center&glos_cc&company&kurs&group_account&group_account_fc&gl_account&gl_account_fc&asumsi_umum&kategori_balans&map_kategori_balans&tarif']], function () {
+    Route::group(['prefix' => 'master', 'middleware' => ['role:material&plant&kategori_material&kategori_produk&regions&cost_center&glos_cc&company&group_account&group_account_fc&gl_account&gl_account_fc&kategori_balans&map_kategori_balans']], function () {
         Route::group(['prefix' => 'material', 'middleware' => ['role:material']], function () {
             Route::get('/', [MaterialController::class, 'index'])->name('material');
             Route::post('insert', [MaterialController::class, 'create'])->name('insert_material');
@@ -184,7 +184,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [RegionsController::class, 'export'])->name('export_regions');
         });
 
-        Route::group(['prefix' => 'cost_center', 'middleware' => ['role:cost_center']], function () {
+        Route::group(['prefix' => 'cost-center', 'middleware' => ['role:cost_center']], function () {
             Route::get('/', [CostCenterController::class, 'index'])->name('cost_center');
             Route::post('insert', [CostCenterController::class, 'create'])->name('insert_cost_center');
             Route::post('update', [CostCenterController::class, 'update'])->name('update_cost_center');
@@ -210,13 +210,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [CompanyController::class, 'import'])->name('import_company');
         });
 
-        Route::group(['prefix' => 'kurs', 'middleware' => ['role:kurs']], function () {
-            Route::get('/', [KursController::class, 'index'])->name('kurs');
-            Route::post('insert', [KursController::class, 'create'])->name('insert_kurs');
-            Route::post('update', [KursController::class, 'update'])->name('update_kurs');
-            Route::post('delete', [KursController::class, 'delete'])->name('delete_kurs');
-        });
-
         Route::group(['prefix' => 'group-account', 'middleware' => ['role:group_account']], function () {
             Route::get('/', [GroupAccountController::class, 'index'])->name('group_account');
             Route::post('insert', [GroupAccountController::class, 'create'])->name('insert_group_account');
@@ -226,7 +219,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GroupAccountController::class, 'export'])->name('export_group_account');
         });
 
-        Route::group(['prefix' => 'group-account-fixed-cost', 'middleware' => ['role:group_account_fc']], function () {
+        Route::group(['prefix' => 'group-account-fc', 'middleware' => ['role:group_account_fc']], function () {
             Route::get('/', [GroupAccountFixedCostController::class, 'index'])->name('group_account_fc');
             Route::post('insert', [GroupAccountFixedCostController::class, 'create'])->name('insert_group_account_fc');
             Route::post('update', [GroupAccountFixedCostController::class, 'update'])->name('update_group_account_fc');
@@ -253,7 +246,31 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('export', [GLAccountFixedCostController::class, 'export'])->name('export_gl_account_fc');
         });
 
-        Route::group(['prefix' => 'asumsi_umum', 'middleware' => ['role:asumsi_umum']], function () {
+        Route::group(['prefix' => 'kategori-balans', 'middleware' => ['role:kategori_balans']], function () {
+            Route::get('/', [KategoriBalansController::class, 'index'])->name('kategori_balans');
+            Route::post('insert', [KategoriBalansController::class, 'create'])->name('insert_kategori_balans');
+            Route::post('update', [KategoriBalansController::class, 'update'])->name('update_kategori_balans');
+            Route::post('delete', [KategoriBalansController::class, 'delete'])->name('delete_kategori_balans');
+        });
+
+        Route::group(['prefix' => 'map-kategori-balans', 'middleware' => ['role:map_kategori_balans']], function () {
+            Route::get('/', [MapKetegoriBalansController::class, 'index'])->name('map_kategori_balans');
+            Route::post('insert', [MapKetegoriBalansController::class, 'create'])->name('insert_map_kategori_balans');
+            Route::post('update', [MapKetegoriBalansController::class, 'update'])->name('update_map_kategori_balans');
+            Route::post('delete', [MapKetegoriBalansController::class, 'delete'])->name('delete_map_kategori_balans');
+        });
+    });
+
+    Route::group(['prefix' => 'buku-besar', 'middleware' => ['role:cons_rate&saldo_awal&qty_renprod&qty_rendaan&price_rendaan&zco&salrs&laba_rugi&pj_pemakaian&pj_penjualan&tarif&kurs&asumsi_umum']], function () {
+
+        Route::group(['prefix' => 'kurs', 'middleware' => ['role:kurs']], function () {
+            Route::get('/', [KursController::class, 'index'])->name('kurs');
+            Route::post('insert', [KursController::class, 'create'])->name('insert_kurs');
+            Route::post('update', [KursController::class, 'update'])->name('update_kurs');
+            Route::post('delete', [KursController::class, 'delete'])->name('delete_kurs');
+        });
+
+        Route::group(['prefix' => 'asumsi-umum', 'middleware' => ['role:asumsi_umum']], function () {
             Route::get('/', [AsumsiUmumController::class, 'index'])->name('asumsi_umum');
             Route::post('insert', [AsumsiUmumController::class, 'create'])->name('insert_asumsi_umum');
             Route::post('update', [AsumsiUmumController::class, 'update'])->name('update_asumsi_umum');
@@ -265,20 +282,6 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('view_edit_asumsi_umum', [AsumsiUmumController::class, 'view_edit'])->name('view_edit_asumsi_umum');
         });
 
-        Route::group(['prefix' => 'kategori_balans', 'middleware' => ['role:kategori_balans']], function () {
-            Route::get('/', [KategoriBalansController::class, 'index'])->name('kategori_balans');
-            Route::post('insert', [KategoriBalansController::class, 'create'])->name('insert_kategori_balans');
-            Route::post('update', [KategoriBalansController::class, 'update'])->name('update_kategori_balans');
-            Route::post('delete', [KategoriBalansController::class, 'delete'])->name('delete_kategori_balans');
-        });
-
-        Route::group(['prefix' => 'map_kategori_balans', 'middleware' => ['role:map_kategori_balans']], function () {
-            Route::get('/', [MapKetegoriBalansController::class, 'index'])->name('map_kategori_balans');
-            Route::post('insert', [MapKetegoriBalansController::class, 'create'])->name('insert_map_kategori_balans');
-            Route::post('update', [MapKetegoriBalansController::class, 'update'])->name('update_map_kategori_balans');
-            Route::post('delete', [MapKetegoriBalansController::class, 'delete'])->name('delete_map_kategori_balans');
-        });
-
         Route::group(['prefix' => 'tarif', 'middleware' => ['role:tarif']], function () {
             Route::get('/', [TarifController::class, 'index'])->name('tarif');
             Route::post('insert', [TarifController::class, 'create'])->name('insert_tarif');
@@ -286,10 +289,8 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [TarifController::class, 'delete'])->name('delete_tarif');
             Route::post('import', [TarifController::class, 'import'])->name('import_tarif');
             Route::get('export', [TarifController::class, 'export'])->name('export_tarif');
+            Route::post('check', [TarifController::class, 'check'])->name('check_tarif');
         });
-    });
-
-    Route::group(['prefix' => 'buku-besar', 'middleware' => ['role:cons_rate&saldo_awal&qty_renprod&qty_rendaan&price_rendaan&zco&salrs&laba_rugi&pj_pemakaian&pj_penjualan']], function () {
 
         Route::group(['prefix' => 'consrate', 'middleware' => ['role:cons_rate']], function () {
             Route::get('/', [ConsRateController::class, 'index'])->name('consrate');
@@ -383,27 +384,24 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('check', [LabaRugiController::class, 'check'])->name('check_laba_rugi');
         });
 
-        Route::group(['prefix' => 'pakai-jual', 'middleware' => ['role:pj_pemakaian&pj_penjualan']], function () {
+        Route::group(['prefix' => 'pemakaian', 'middleware' => ['role:pj_pemakaian']], function () {
+            Route::get('/', [PJPemakaianController::class, 'index'])->name('pemakaian');
+            Route::post('insert', [PJPemakaianController::class, 'create'])->name('insert_pemakaian');
+            Route::post('update', [PJPemakaianController::class, 'update'])->name('update_pemakaian');
+            Route::post('delete', [PJPemakaianController::class, 'delete'])->name('delete_pemakaian');
+            Route::get('export', [PJPemakaianController::class, 'export'])->name('export_pemakaian');
+            Route::post('import', [PJPemakaianController::class, 'import'])->name('import_pemakaian');
+            Route::post('check', [PJPemakaianController::class, 'check'])->name('check_pemakaian');
+        });
 
-            Route::group(['prefix' => 'pemakaian', 'middleware' => ['role:pj_pemakaian']], function () {
-                Route::get('/', [PJPemakaianController::class, 'index'])->name('pemakaian');
-                Route::post('insert', [PJPemakaianController::class, 'create'])->name('insert_pemakaian');
-                Route::post('update', [PJPemakaianController::class, 'update'])->name('update_pemakaian');
-                Route::post('delete', [PJPemakaianController::class, 'delete'])->name('delete_pemakaian');
-                Route::get('export', [PJPemakaianController::class, 'export'])->name('export_pemakaian');
-                Route::post('import', [PJPemakaianController::class, 'import'])->name('import_pemakaian');
-                Route::post('check', [PJPemakaianController::class, 'check'])->name('check_pemakaian');
-            });
-
-            Route::group(['prefix' => 'penjualan', 'middleware' => ['role:pj_penjualan']], function () {
-                Route::get('/', [PJPenjualanController::class, 'index'])->name('penjualan');
-                Route::post('insert', [PJPenjualanController::class, 'create'])->name('insert_penjualan');
-                Route::post('update', [PJPenjualanController::class, 'update'])->name('update_penjualan');
-                Route::post('delete', [PJPenjualanController::class, 'delete'])->name('delete_penjualan');
-                Route::get('export', [PJPenjualanController::class, 'export'])->name('export_penjualan');
-                Route::post('import', [PJPenjualanController::class, 'import'])->name('import_penjualan');
-                Route::post('check', [PJPenjualanController::class, 'check'])->name('check_penjualan');
-            });
+        Route::group(['prefix' => 'penjualan', 'middleware' => ['role:pj_penjualan']], function () {
+            Route::get('/', [PJPenjualanController::class, 'index'])->name('penjualan');
+            Route::post('insert', [PJPenjualanController::class, 'create'])->name('insert_penjualan');
+            Route::post('update', [PJPenjualanController::class, 'update'])->name('update_penjualan');
+            Route::post('delete', [PJPenjualanController::class, 'delete'])->name('delete_penjualan');
+            Route::get('export', [PJPenjualanController::class, 'export'])->name('export_penjualan');
+            Route::post('import', [PJPenjualanController::class, 'import'])->name('import_penjualan');
+            Route::post('check', [PJPenjualanController::class, 'check'])->name('check_penjualan');
         });
     });
 

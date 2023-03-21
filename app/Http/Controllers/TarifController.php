@@ -33,12 +33,14 @@ class TarifController extends Controller
                 'product_code' => 'required',
                 'group_account_fc' => 'required',
                 'tarif_value' => 'required',
+                "version_id" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['company_code'] = auth()->user()->company_code;
+            $input['company_code']  = auth()->user()->company_code;
+            $input['version_id'] = $request->version_id;
             $input['plant_code'] = $request->plant_code;
             $input['product_code'] = $request->product_code;
             $input['group_account_fc'] = $request->group_account_fc;
@@ -69,12 +71,14 @@ class TarifController extends Controller
                 'product_code' => 'required',
                 'group_account_fc' => 'required',
                 'tarif_value' => 'required',
+                "version_id" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
             $input['company_code'] = auth()->user()->company_code;
+            $input['version_id'] = $request->version_id;
             $input['plant_code'] = $request->plant_code;
             $input['product_code'] = $request->product_code;
             $input['group_account_fc'] = $request->group_account_fc;
@@ -131,34 +135,37 @@ class TarifController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $file = $request->file('file')->store('import');
-            $import = new TarifImport;
-            $import->import($file);
+            DB::transaction(function () use ($request) {
+                Tarif::where('version_id', $request->version)->delete();
+                $file = $request->file('file')->store('import');
+                $import = new TarifImport($request->version);
+                $import->import($file);
 
-            $data_fail = $import->failures();
+                $data_fail = $import->failures();
 
-            if ($import->failures()->isNotEmpty()) {
-                $err = [];
+                if ($import->failures()->isNotEmpty()) {
+                    $err = [];
 
-                foreach ($data_fail as $rows) {
-                    $er = implode(' ', array_values($rows->errors()));
-                    $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
-                    array_push($err, $hasil);
+                    foreach ($data_fail as $rows) {
+                        $er = implode(' ', array_values($rows->errors()));
+                        $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
+                        array_push($err, $hasil);
+                    }
+
+                    return setResponse([
+                        'code' => 500,
+                        'title' => 'Gagal meng-import data',
+                        'message' => $err
+                    ]);
                 }
-
-                return setResponse([
-                    'code' => 500,
-                    'title' => 'Gagal meng-import data',
-                    'message' => $err
-                ]);
-            }
+            });
 
             return setResponse([
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            $empty_excel = Excel::toArray(new TarifImport(), $request->file('file'));
+            $empty_excel = Excel::toArray(new TarifImport($request->version), $request->file('file'));
 
             $plant = [];
             $plant_ = [];
@@ -212,8 +219,46 @@ class TarifController extends Controller
         }
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new MS_TarifExport, 'tarif.xlsx');
+        if (!$request->version) {
+            return setResponse([
+                'code' => 500,
+            ]);
+        }
+
+        $version = $request->version;
+
+        return Excel::download(new MS_TarifExport($version), 'tarif.xlsx');
+    }
+
+    public function check(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            // "file" => 'required',
+            "version" => 'required',
+        ], validatorMsg());
+
+        if ($validator->fails())
+            return $this->makeValidMsg($validator);
+        try {
+            $check = Tarif::where('version_id', $request->version)->first();
+
+            if ($check == null) {
+                return setResponse([
+                    'code' => 200,
+                ]);
+            } else {
+                return setResponse([
+                    'code' => 201,
+                    'title' => 'Apakah anda yakin?',
+                    'message' => 'Data Pada Versi Ini Telah Ada, Yakin Untuk Mengganti ?'
+                ]);
+            }
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
     }
 }
