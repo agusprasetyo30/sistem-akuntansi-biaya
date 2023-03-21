@@ -27,10 +27,19 @@ class TarifImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidati
      *
      * @return \Illuminate\Database\Eloquent\Model|null
      */
+
+    protected $version;
+
+    function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function model(array $row)
     {
         // dd($row);
         DB::table('tarif')->insert([
+            'version_id' => $this->version,
             'product_code' => $row['product_code'],
             'plant_code' => $row['plant_code'],
             'group_account_fc' => $row['group_account_fc'],

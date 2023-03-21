@@ -23,6 +23,12 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
+                                <label>Versi </label>
+                                <input disabled type="text" class="form-control form-control-sm"
+                                    placeholder="Nama Versi" value="{{$model->version}}" name="detail_version
+                                    id="detail_version" autocomplete="off">
+                            </div>
+                            <div class="form-group">
                                 <label>Produk </label>
                                 <input disabled type="text" class="form-control form-control-sm" placeholder="product" value="{{$model->product_code}} - {{$model->material_name}}" name="detail_product" id="detail_product" autocomplete="off">
                             </div>
@@ -68,6 +74,12 @@
                 <div class="col-md-12 mt1">
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
+                            <div class="form-group">
+                                <label class="form-label">Versi</label>
+                                <select name="main_version" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
+                                </select>
+                            </div>
                             <div class="form-group">
                                 <label class="form-label">Produk <span class="text-red">*</span></label>
                                 <select name="edit_data_main_produk{{$model->id}}" id="edit_data_main_produk{{$model->id}}" class="form-control custom-select select2">
@@ -159,6 +171,28 @@
             allowClear: false,
             ajax: {
                 url: "{{ route('group_account_fc_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
+
+        $('#edit_data_main_version'+{{$model->id}}).select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih Versi',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('version_select') }}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

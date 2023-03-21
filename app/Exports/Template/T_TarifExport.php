@@ -7,6 +7,13 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 
 class T_TarifExport implements WithHeadings, WithTitle
 {
+    protected $version;
+
+    function __construct($version)
+    {
+        $this->version = $version;
+    }
+
     public function headings(): array
     {
         $result = ["product_code", "plant_code", "group_account_fc", "tarif_value"];
