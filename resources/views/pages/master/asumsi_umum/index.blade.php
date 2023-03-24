@@ -27,6 +27,23 @@
 
             <div class="card">
                 <div class="card-body">
+                    <div class="mb-5 row">
+                        @if (auth()->user()->mapping_akses('asumsi_umum')->company_code == 'all')
+                            <div class="form-group">
+                                <label class="form-label">PERUSAHAAN</label>
+                                <select id="filter_company" class="form-control custom-select select2">
+                                    <option value="all" selected>Semua Perusahaan</option>
+                                </select>
+                            </div>
+                        @endif
+
+                        <div class="form-group">
+                            <label class="form-label">VERSI</label>
+                            <select id="filter_version" class="form-control custom-select select2">
+                                <option value="all" selected>Semua</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="">
                         <div class="table-responsive" id="table_main">
                         </div>
@@ -67,6 +84,54 @@
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
             get_data()
+
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
+
+            $('#filter_version').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
 
             $('#data_asumsi').smartWizard({
                 selected: 0,
@@ -488,7 +553,11 @@
                 ],
                 ajax: {
                     url : '{{route("asumsi_umum")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company').val(),
+                        filter_version:$('#filter_version').val()
+                    }
                 },
                 columns: [
                     { data: 'c_version', name: 'version', orderable:true},

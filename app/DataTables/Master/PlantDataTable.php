@@ -20,9 +20,14 @@ class PlantDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
+        $query = DB::table('plant')->whereNull('deleted_at');
 
-        $query = DB::table('plant')->where('company_code', $cc)->whereNull('deleted_at');
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('plant')->company_code == 'all') {
+            $query = $query->where('plant.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('plant')->company_code != 'all') {
+            $query = $query->where('plant.company_code', auth()->user()->mapping_akses('plant')->company_code);
+        }
+
         return datatables()
             ->query($query)
             ->addIndexColumn()

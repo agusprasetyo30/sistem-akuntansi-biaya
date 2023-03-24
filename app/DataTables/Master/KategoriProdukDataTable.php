@@ -17,7 +17,14 @@ class KategoriProdukDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = KategoriProduk::where('company_code', auth()->user()->company_code);
+        $query = KategoriProduk::whereNull('deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('kategori_produk')->company_code == 'all') {
+            $query = $query->where('kategori_produk.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('kategori_produk')->company_code != 'all') {
+            $query = $query->where('kategori_produk.company_code', auth()->user()->mapping_akses('kategori_produk')->company_code);
+        }
+
         return datatables()
             ->eloquent($query)
             ->addIndexColumn()

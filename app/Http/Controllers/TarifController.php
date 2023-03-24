@@ -20,7 +20,7 @@ class TarifController extends Controller
     public function index(Request $request, TarifDataTable $tarifDataTable)
     {
         if ($request->data == 'index') {
-            return $tarifDataTable->render('pages.master.tarif.index');
+            return $tarifDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.master.tarif.index');
         }
         return view('pages.master.tarif.index');
     }

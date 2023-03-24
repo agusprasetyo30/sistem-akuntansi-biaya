@@ -19,7 +19,7 @@ class PJPenjualanController extends Controller
     public function index(Request $request, PJPenjualanDataTable $penjualanDataTable, H_PJPenjualanDataTable $h_penjualanDataTable)
     {
         if ($request->data == 'index') {
-            return $penjualanDataTable->render('pages.buku_besar.pakai_jual.penjualan.index');
+            return $penjualanDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.pakai_jual.penjualan.index');
         } elseif ($request->data == 'horizontal') {
             return $h_penjualanDataTable->with(['version' => $request->version])->render('pages.buku_besar.pakai_jual.penjualan.index');
         } elseif ($request->data == 'version') {

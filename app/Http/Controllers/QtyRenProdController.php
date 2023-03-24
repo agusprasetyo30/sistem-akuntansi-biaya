@@ -20,7 +20,7 @@ class QtyRenProdController extends Controller
     public function index(Request $request, QtyRenProdDataTable $qtyrenprodDataTable, H_QtyRenProdDataTable $h_QtyRenProdDataTable)
     {
         if ($request->data == 'index') {
-            return $qtyrenprodDataTable->render('pages.buku_besar.qty_renprod.index');
+            return $qtyrenprodDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.qty_renprod.index');
         } elseif ($request->data == 'horizontal') {
             return $h_QtyRenProdDataTable->with(['version' => $request->version])->render('pages.buku_besar.qty_renprod.index');
         } elseif ($request->data == 'version') {
@@ -152,7 +152,7 @@ class QtyRenProdController extends Controller
 
                 $data_fail = $import->failures();
 
-                if ($data_fail->isNotEmpty()){
+                if ($data_fail->isNotEmpty()) {
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
@@ -165,7 +165,7 @@ class QtyRenProdController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            if ($exception->getCode() == 23503){
+            if ($exception->getCode() == 23503) {
                 $empty_excel = Excel::toArray(new QtyRenProdImport($request->version), $request->file('file'));
                 $cost_center = [];
                 $cost_center_ = [];
@@ -192,19 +192,18 @@ class QtyRenProdController extends Controller
                         'message' => $msg
                     ]);
                 }
-            }elseif ($exception->getCode() == 0){
-//                dd($exception->getMessage());
+            } elseif ($exception->getCode() == 0) {
+                //                dd($exception->getMessage());
                 return setResponse([
                     'code' => 431,
                     'title' => 'Gagal meng-import data',
                     'message' => 'Format Tidak Sesuai.'
                 ]);
-            } else{
+            } else {
                 return setResponse([
                     'code' => 400,
                 ]);
             }
-
         }
     }
 

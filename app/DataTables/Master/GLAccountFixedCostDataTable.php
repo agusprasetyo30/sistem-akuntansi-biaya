@@ -19,13 +19,16 @@ class GLAccountFixedCostDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('gl_account_fc')
             ->select('gl_account_fc.*', 'group_account_fc.group_account_fc', 'group_account_fc.group_account_fc_desc')
             ->leftJoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
-            ->where('gl_account_fc.company_code', $cc)
             ->whereNull('gl_account_fc.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('gl_account_fc')->company_code == 'all') {
+            $query = $query->where('gl_account_fc.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('gl_account_fc')->company_code != 'all') {
+            $query = $query->where('gl_account_fc.company_code', auth()->user()->mapping_akses('gl_account_fc')->company_code);
+        }
 
         return datatables()
             ->query($query)

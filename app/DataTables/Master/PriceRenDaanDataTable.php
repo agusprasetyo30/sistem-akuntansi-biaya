@@ -27,51 +27,61 @@ class PriceRenDaanDataTable extends DataTable
             ->leftjoin('regions', 'regions.region_name', '=', 'price_rendaan.region_name')
             ->whereNull('price_rendaan.deleted_at');
 
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('price_rendaan')->company_code == 'all') {
+            $query = $query->where('price_rendaan.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('price_rendaan')->company_code != 'all') {
+            $query = $query->where('price_rendaan.company_code', auth()->user()->mapping_akses('price_rendaan')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('price_rendaan.version_id', $this->filter_version);
+        }
+
         return datatables()
             ->query($query)
             ->addIndexColumn()
-            ->addColumn('version', function ($query){
+            ->addColumn('version', function ($query) {
                 return $query->version;
             })
-            ->addColumn('periode', function ($query){
-                return format_month($query->month_year,'bi');
+            ->addColumn('periode', function ($query) {
+                return format_month($query->month_year, 'bi');
             })
-            ->addColumn('value', function ($query){
-                if ($this->currency == 'Rupiah'){
+            ->addColumn('value', function ($query) {
+                if ($this->currency == 'Rupiah') {
                     return rupiah($query->price_rendaan_value);
-                }elseif ($this->currency == 'Dollar'){
-                    return helpDollar($query->price_rendaan_value , $query->usd_rate);
+                } elseif ($this->currency == 'Dollar') {
+                    return helpDollar($query->price_rendaan_value, $query->usd_rate);
                 }
             })
-            ->addColumn('material', function ($query){
-                return $query->material_code.' - '.$query->material_name;
+            ->addColumn('material', function ($query) {
+                return $query->material_code . ' - ' . $query->material_name;
             })
-            ->filterColumn('filter_version', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('version_asumsi.id', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_periode', function ($query, $keyword){
+            ->filterColumn('filter_periode', function ($query, $keyword) {
                 $temp = explode('/', $keyword);
-                if (count($temp) == 1){
-                    $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
-                }elseif (count($temp) == 2){
-                    $keyword = $temp[1].'-'.$temp[0];
-                    $query->Where('asumsi_umum.month_year', 'ilike', '%'.$keyword.'%');
+                if (count($temp) == 1) {
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
+                } elseif (count($temp) == 2) {
+                    $keyword = $temp[1] . '-' . $temp[0];
+                    $query->Where('asumsi_umum.month_year', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_material', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('price_rendaan.material_code', 'ilike', '%'.$keyword.'%')
-                        ->orWhere('material.material_name', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_material', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('price_rendaan.material_code', 'ilike', '%' . $keyword . '%')
+                        ->orWhere('material.material_name', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_region',function ($query, $keyword){
-                $query->where('regions.region_desc', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_region', function ($query, $keyword) {
+                $query->where('regions.region_desc', 'ilike', '%' . $keyword . '%');
             })
-            ->filterColumn('filter_price_rendaan_value',function ($query, $keyword){
+            ->filterColumn('filter_price_rendaan_value', function ($query, $keyword) {
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
-                $query->where('price_rendaan.price_rendaan_value', 'ilike', '%'.$keyword.'%');
+                $query->where('price_rendaan.price_rendaan_value', 'ilike', '%' . $keyword . '%');
             })
             ->orderColumn('filter_version', function ($query, $order) {
                 $query->orderBy('version_asumsi.version', $order);

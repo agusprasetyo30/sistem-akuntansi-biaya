@@ -19,16 +19,23 @@ class TarifDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('tarif')
             ->select('tarif.*', 'material.material_name', 'plant.plant_desc', 'group_account_fc.group_account_fc_desc', 'version_asumsi.version')
             ->leftjoin('plant', 'plant.plant_code', '=', 'tarif.plant_code')
             ->leftJoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'tarif.group_account_fc')
             ->leftjoin('material', 'material.material_code', '=', 'tarif.product_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'tarif.version_id')
-            ->where('tarif.company_code', $cc)
             ->whereNull('tarif.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('tarif')->company_code == 'all') {
+            $query = $query->where('tarif.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('tarif')->company_code != 'all') {
+            $query = $query->where('tarif.company_code', auth()->user()->mapping_akses('tarif')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('tarif.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)

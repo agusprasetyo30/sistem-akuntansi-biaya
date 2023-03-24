@@ -17,11 +17,9 @@ class LabaRugiController extends Controller
 {
     public function index(Request $request, labaRugiDataTable $labaRugiDataTable)
     {
-
-
         if ($request->data == 'index') {
-            return $labaRugiDataTable->render('pages.buku_besar.laba_rugi.index');
-        }elseif ($request->data == 'horizontal'){
+            return $labaRugiDataTable->with(['filter_company' => $request->filter_company])->render('pages.buku_besar.laba_rugi.index');
+        } elseif ($request->data == 'horizontal') {
             return $labaRugiDataTable->render('pages.buku_besar.laba_rugi.index');
         }
         return view('pages.buku_besar.laba_rugi.index');
@@ -43,22 +41,22 @@ class LabaRugiController extends Controller
 
 
             $check_data = LabaRugi::where('kategori_produk_id', $request->kategori_produk)
-                ->where('periode', 'ilike', '%'.$request->tanggal.'%')
+                ->where('periode', 'ilike', '%' . $request->tanggal . '%')
                 ->first();
 
-            $input['periode'] = $request->tanggal.'-01-01';
+            $input['periode'] = $request->tanggal . '-01-01';
             $input['kategori_produk_id'] = $request->kategori_produk;
-            $input['value_bp'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->biaya_penjualan));
-            $input['value_bau'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->biaya_administrasi_umum));
-            $input['value_bb'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->biaya_bunga));
+            $input['value_bp'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->biaya_penjualan));
+            $input['value_bau'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->biaya_administrasi_umum));
+            $input['value_bb'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->biaya_bunga));
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
-            if ($check_data != null){
+            if ($check_data != null) {
                 LabaRugi::where('id', $check_data->id)
                     ->update($input);
-            }else{
+            } else {
                 LabaRugi::create($input);
             }
 
@@ -87,11 +85,11 @@ class LabaRugiController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $input['periode'] = $request->tanggal.'-01-01';
+            $input['periode'] = $request->tanggal . '-01-01';
             $input['kategori_produk_id'] = $request->kategori_produk;
-            $input['value_bp'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->biaya_penjualan));
-            $input['value_bau'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->biaya_administrasi_umum));
-            $input['value_bb'] = (double) str_replace('.', '', str_replace('Rp ', '', $request->biaya_bunga));
+            $input['value_bp'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->biaya_penjualan));
+            $input['value_bau'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->biaya_administrasi_umum));
+            $input['value_bb'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->biaya_bunga));
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -140,41 +138,40 @@ class LabaRugiController extends Controller
                 "tanggal_import" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails()){
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
             }
 
-            $transaction = DB::transaction(function () use ($request){
+            $transaction = DB::transaction(function () use ($request) {
                 $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
-                if ($empty_excel[0]){
+                if ($empty_excel[0]) {
                     $file = $request->file('file')->store('import');
 
-                    LabaRugi::where('periode', 'ilike', '%'.$request->tanggal_import.'%')->delete();
+                    LabaRugi::where('periode', 'ilike', '%' . $request->tanggal_import . '%')->delete();
                     $import = new LabaRugiNewImport($request->tanggal_import);
                     $import->import($file);
 
                     $data_fail = $import->failures();
-
-                }else{
+                } else {
                     $data_fail = [];
                 }
                 return $data_fail;
             });
 
-            if ($transaction->isNotEmpty()){
+            if ($transaction->isNotEmpty()) {
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',
                 ]);
-            }else{
+            } else {
                 return setResponse([
                     'code' => 200,
                     'title' => 'Berhasil meng-import data'
                 ]);
             }
-        }catch (\Exception $exception){
-//            dd($exception);
-            if ($exception->getCode() == 23503){
+        } catch (\Exception $exception) {
+            //            dd($exception);
+            if ($exception->getCode() == 23503) {
                 $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
 
                 $kategori_produk = [];
@@ -186,7 +183,6 @@ class LabaRugiController extends Controller
                     if ($d_kkategori_produk) {
                         array_push($kategori_produk_, 'Kategori Produk ID ' . $d_kkategori_produk->kategori_produk_id . ' tidak ada pada master');
                     }
-
                 }
 
                 $result_kategori_produk = array_diff($kategori_produk, $kategori_produk_);
@@ -205,26 +201,26 @@ class LabaRugiController extends Controller
                         'message' => $msg
                     ]);
                 }
-            }else{
+            } else {
                 return setResponse([
                     'code' => 400,
                 ]);
             }
-
         }
     }
 
-    public function check(Request $request){
+    public function check(Request $request)
+    {
         try {
-            $check = LabaRugi::where('periode', 'ilike', '%'.$request->periode.'%')
+            $check = LabaRugi::where('periode', 'ilike', '%' . $request->periode . '%')
                 ->first();
 
-            if ($check == null){
+            if ($check == null) {
                 return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
-            }else{
+            } else {
                 return response()->json(['code' => 201, 'msg' => 'Data Ada']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

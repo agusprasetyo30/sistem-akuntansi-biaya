@@ -16,42 +16,53 @@ class labaRugiDataTable extends DataTable
     {
         $query = LabaRugi::select('laba_rugi.*', 'kategori_produk.kategori_produk_desc', 'kategori_produk.kategori_produk_name')
             ->leftjoin('kategori_produk', 'kategori_produk.id', '=', 'laba_rugi.kategori_produk_id');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('laba_rugi')->company_code == 'all') {
+            $query = $query->where('laba_rugi.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('laba_rugi')->company_code != 'all') {
+            $query = $query->where('laba_rugi.company_code', auth()->user()->mapping_akses('laba_rugi')->company_code);
+        }
+
+        // if ($this->filter_version != 'all') {
+        //     $query = $query->where('laba_rugi.version_id', $this->filter_version);
+        // }
+
         return datatables()
             ->eloquent($query)
-            ->addColumn('periode', function ($query){
+            ->addColumn('periode', function ($query) {
                 return format_year($query->periode);
             })
-            ->addColumn('kategori_produk', function ($query){
-                return $query->kategori_produk_name. ' - '.$query->kategori_produk_desc ;
+            ->addColumn('kategori_produk', function ($query) {
+                return $query->kategori_produk_name . ' - ' . $query->kategori_produk_desc;
             })
-            ->addColumn('biaya_penjualan', function ($query){
+            ->addColumn('biaya_penjualan', function ($query) {
                 return rupiah($query->value_bp);
             })
-            ->addColumn('biaya_adm_umum', function ($query){
+            ->addColumn('biaya_adm_umum', function ($query) {
                 return rupiah($query->value_bau);
             })
-            ->addColumn('biaya_bunga', function ($query){
+            ->addColumn('biaya_bunga', function ($query) {
                 return rupiah($query->value_bb);
             })
-            ->filterColumn('filter_periode', function ($query, $keyword){
-                $query->where('laba_rugi.periode', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_periode', function ($query, $keyword) {
+                $query->where('laba_rugi.periode', 'ilike', '%' . $keyword . '%');
             })
-            ->filterColumn('filter_kategori_produk', function ($query, $keyword){
-                if ($keyword !='all'){
-                    $query->where('kategori_produk.id', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_kategori_produk', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('kategori_produk.id', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_biaya_penjualan', function ($query, $keyword){
+            ->filterColumn('filter_biaya_penjualan', function ($query, $keyword) {
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
-                $query->where('laba_rugi.value_bp', 'ilike', '%'.$keyword.'%');
+                $query->where('laba_rugi.value_bp', 'ilike', '%' . $keyword . '%');
             })
-            ->filterColumn('filter_biaya_adm_umum', function ($query, $keyword){
+            ->filterColumn('filter_biaya_adm_umum', function ($query, $keyword) {
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
-                $query->where('laba_rugi.value_bau', 'ilike', '%'.$keyword.'%');
+                $query->where('laba_rugi.value_bau', 'ilike', '%' . $keyword . '%');
             })
-            ->filterColumn('filter_biaya_bunga', function ($query, $keyword){
+            ->filterColumn('filter_biaya_bunga', function ($query, $keyword) {
                 $keyword = str_replace('.', '', str_replace('Rp ', '', $keyword));
-                $query->where('laba_rugi.value_bb', 'ilike', '%'.$keyword.'%');
+                $query->where('laba_rugi.value_bb', 'ilike', '%' . $keyword . '%');
             })
             ->orderColumn('filter_periode', function ($query, $order) {
                 $query->orderBy('laba_rugi.periode', $order);
@@ -98,10 +109,10 @@ class labaRugiDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),

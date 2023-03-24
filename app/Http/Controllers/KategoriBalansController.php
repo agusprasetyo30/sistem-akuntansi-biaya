@@ -11,14 +11,16 @@ use Illuminate\Support\Facades\Validator;
 
 class KategoriBalansController extends Controller
 {
-    public function index(Request $request, KategoriBalansDataTable $kategoriBalansDataTable){
-        if ($request->data == 'index'){
-            return $kategoriBalansDataTable->render('pages.master.kategori_balans.index');
+    public function index(Request $request, KategoriBalansDataTable $kategoriBalansDataTable)
+    {
+        if ($request->data == 'index') {
+            return $kategoriBalansDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.kategori_balans.index');
         }
         return view('pages.master.kategori_balans.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
 
             $validator = Validator::make($request->all(), [
@@ -46,10 +48,10 @@ class KategoriBalansController extends Controller
                 'company_code' => auth()->user()->company_code
             ])->first();
 
-            DB::transaction(function () use ($input, $check_data){
-                if ($check_data == null){
+            DB::transaction(function () use ($input, $check_data) {
+                if ($check_data == null) {
                     KategoriBalans::create($input);
-                }else{
+                } else {
                     KategoriBalans::where('id', $check_data->id)->update($input);
                 }
             });
@@ -82,7 +84,7 @@ class KategoriBalansController extends Controller
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
 
-            DB::transaction(function () use ($input, $request){
+            DB::transaction(function () use ($input, $request) {
                 KategoriBalans::where('id', $request->id)
                     ->update($input);
             });

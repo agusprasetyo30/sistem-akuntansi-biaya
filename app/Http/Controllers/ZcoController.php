@@ -24,7 +24,7 @@ class ZcoController extends Controller
     public function index(Request $request, ZcoDataTable $zcoDataTable, H_ZcoDataTable $h_zcoDataTable, H_ZcoGroupAccountDataTable $h_zcogroupaccountDataTable)
     {
         if ($request->data == 'index') {
-            return $zcoDataTable->render('pages.buku_besar.zco.index');
+            return $zcoDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.zco.index');
         } else if ($request->data == 'horizontal') {
             return $h_zcoDataTable->with([
                 'material' => $request->material,

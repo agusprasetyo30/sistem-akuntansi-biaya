@@ -20,9 +20,14 @@ class GroupAccountDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
+        $query = DB::table('group_account')->whereNull('deleted_at');
 
-        $query = DB::table('group_account')->where('company_code', $cc)->whereNull('deleted_at');
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('group_account')->company_code == 'all') {
+            $query = $query->where('group_account.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('group_account')->company_code != 'all') {
+            $query = $query->where('group_account.company_code', auth()->user()->mapping_akses('group_account')->company_code);
+        }
+
         return datatables()
             ->query($query)
             ->addIndexColumn()

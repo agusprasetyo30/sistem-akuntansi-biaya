@@ -44,6 +44,23 @@
                         <div class="panel-body tabs-menu-body">
                             <div class="tab-content">
                                 <div class="tab-pane active " id="vertical">
+                                    <div class="mb-5 row">
+                                        @if (auth()->user()->mapping_akses('zco')->company_code == 'all')
+                                            <div class="form-group">
+                                                <label class="form-label">PERUSAHAAN</label>
+                                                <select id="filter_company_ver" class="form-control custom-select select2">
+                                                    <option value="all" selected>Semua Perusahaan</option>
+                                                </select>
+                                            </div>
+                                        @endif
+                    
+                                        <div class="form-group">
+                                            <label class="form-label">VERSI</label>
+                                            <select id="filter_version_ver" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="">
                                         <div class="table-responsive" id="table-wrapper">
                                             
@@ -172,6 +189,54 @@
 
         $(document).ready(function () {
             table()
+
+            $('#filter_company_ver').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table-wrapper").empty();
+                table()
+            })
+
+            $('#filter_version_ver').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table-wrapper").empty();
+                table()
+            })
 
             // $("#dinamic_table").empty();
             // get_data_horiz()
@@ -933,7 +998,11 @@
                 ],
                 ajax: {
                     url : '{{route("zco")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company_ver').val(),
+                        filter_version:$('#filter_version_ver').val()
+                    }
                 },
                 columns: [
                     { data: 'version', name: 'filter_version', orderable:true},

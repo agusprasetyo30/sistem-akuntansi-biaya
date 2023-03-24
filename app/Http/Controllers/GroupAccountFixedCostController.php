@@ -17,7 +17,7 @@ class GroupAccountFixedCostController extends Controller
     public function index(Request $request, GroupAccountFixedCostDataTable $groupaccountfcDataTable)
     {
         if ($request->data == 'index') {
-            return $groupaccountfcDataTable->render('pages.master.group_account_fc.index');
+            return $groupaccountfcDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.group_account_fc.index');
         }
         return view('pages.master.group_account_fc.index');
     }

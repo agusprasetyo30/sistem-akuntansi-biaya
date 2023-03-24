@@ -19,15 +19,22 @@ class PJPemakaianDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('pj_pemakaian')
             ->select('pj_pemakaian.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version')
             ->leftjoin('material', 'material.material_code', '=', 'pj_pemakaian.material_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'pj_pemakaian.version_id')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_pemakaian.asumsi_umum_id')
-            ->where('pj_pemakaian.company_code', $cc)
             ->whereNull('pj_pemakaian.deleted_at');
+        // dd($this->filter_company, $this->filter_version);
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('pj_pemakaian')->company_code == 'all') {
+            $query = $query->where('pj_pemakaian.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('pj_pemakaian')->company_code != 'all') {
+            $query = $query->where('pj_pemakaian.company_code', auth()->user()->mapping_akses('pj_pemakaian')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('pj_pemakaian.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)

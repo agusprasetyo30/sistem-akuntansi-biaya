@@ -22,7 +22,7 @@ class SaldoAwalController extends Controller
     public function index(Request $request, SaldoAwalDataTable $saldoawalDataTable)
     {
         if ($request->data == 'index') {
-            return $saldoawalDataTable->render('pages.buku_besar.saldo_awal.index');
+            return $saldoawalDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.saldo_awal.index');
         }
         return view('pages.buku_besar.saldo_awal.index');
     }

@@ -22,12 +22,12 @@ class QtyRenDaanController extends Controller
     public function index(Request $request, QtyRenDaanDataTable $qtyrendaanDataTable, H_QtyRenDaanDataTable $h_QtyRenDaanDataTable)
     {
         if ($request->data == 'index') {
-            return $qtyrendaanDataTable->render('pages.buku_besar.qty_rendaan.index');
-        }elseif ($request->data == 'horizontal'){
+            return $qtyrendaanDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.qty_rendaan.index');
+        } elseif ($request->data == 'horizontal') {
             return $h_QtyRenDaanDataTable->with(['version' => $request->version])->render('pages.buku_besar.qty_rendaan.index');
-        }elseif ($request->data == 'version'){
+        } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
-                ->where('version_id',$request->version)
+                ->where('version_id', $request->version)
                 ->orderBy('month_year', 'ASC')
                 ->get();
             return response()->json(['code' => 200, 'asumsi' => $asumsi]);
@@ -62,15 +62,15 @@ class QtyRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['qty_rendaan_value'] = (double) $request->qty_rendaan_value;
+            $input['qty_rendaan_value'] = (float) $request->qty_rendaan_value;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
-            if ($check_data != null){
+            if ($check_data != null) {
                 QtyRenDaan::where('id', $check_data->id)
                     ->update($input);
-            }else{
+            } else {
                 QtyRenDaan::create($input);
             }
 
@@ -103,7 +103,7 @@ class QtyRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['qty_rendaan_value'] = (double) $request->qty_rendaan_value;
+            $input['qty_rendaan_value'] = (float) $request->qty_rendaan_value;
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -157,7 +157,7 @@ class QtyRenDaanController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            DB::transaction(function () use ($request){
+            DB::transaction(function () use ($request) {
                 QtyRenDaan::where('version_id', $request->version)->delete();
 
                 $file = $request->file('file')->store('import');
@@ -166,7 +166,7 @@ class QtyRenDaanController extends Controller
                 $import->import($file);
 
                 $data_fail = $import->failures();
-                if ($data_fail->isNotEmpty()){
+                if ($data_fail->isNotEmpty()) {
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
@@ -177,7 +177,7 @@ class QtyRenDaanController extends Controller
                 'code' => 200,
                 'title' => 'Berhasil meng-import data'
             ]);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             dd($exception);
             $empty_excel = Excel::toArray(new KuantitiRenDaanImport($request->version), $request->file('file'));
 
@@ -185,7 +185,7 @@ class QtyRenDaanController extends Controller
             $material_ = [];
             $region = [];
             $region_ = [];
-//            dd($empty_excel[0]);
+            //            dd($empty_excel[0]);
             foreach ($empty_excel[0] as $key => $value) {
                 array_push($material, 'Material ' . $value['material_code'] . ' tidak ada pada master');
                 $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
@@ -224,16 +224,17 @@ class QtyRenDaanController extends Controller
         }
     }
 
-    public function check(Request $request){
+    public function check(Request $request)
+    {
         try {
             $check = QtyRenDaan::where('version_id', $request->version)
                 ->first();
-            if ($check == null){
+            if ($check == null) {
                 return response()->json(['Code' => 200, 'msg' => 'Data Tidak Ada']);
-            }else{
+            } else {
                 return response()->json(['Code' => 201, 'msg' => 'Data Ada']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

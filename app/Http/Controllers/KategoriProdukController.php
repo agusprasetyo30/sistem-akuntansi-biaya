@@ -17,7 +17,7 @@ class KategoriProdukController extends Controller
     public function index(Request $request, KategoriProdukDataTable $kategoriProdukDataTable)
     {
         if ($request->data == 'index') {
-            return $kategoriProdukDataTable->render('pages.master.kategori_produk.index');
+            return $kategoriProdukDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.kategori_produk.index');
         }
         return view('pages.master.kategori_produk.index');
     }
