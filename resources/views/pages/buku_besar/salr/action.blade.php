@@ -113,8 +113,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="tanggal_awal">Bulan <span class="text-red">*</span></label>
-                                <input value="{{format_month($model->periode, 'se')}}" type="text" class="form-control" id="edit_tanggal{{$model->id}}" placeholder="Bulan-Tahun" autocomplete="off">
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="data_main_version_update" id="data_main_version_update{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                <select name="data_detail_version_update" id="data_detail_version_update{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->periode}}" selected>{{format_month($model->periode, 'se')}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value <span class="text-red">*</span></label>
@@ -168,12 +176,52 @@
 <!--/div-->
 
 <script>
-    $('#edit_tanggal'+{{$model->id}}).bootstrapdatepicker({
-        format: "mm-yyyy",
-        viewMode: "months",
-        minViewMode: "months",
-        autoclose:true
-    });
+    $('#data_main_version_update'+{{$model->id}}).select2({
+        dropdownParent: $('#modal_edit'+{{$model->id}}),
+        placeholder: 'Pilih Versi',
+        width: '100%',
+        allowClear: false,
+        ajax: {
+            url: "{{ route('version_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
+    }).on('change', function () {
+        var data_version = $('#data_main_version_update'+{{$model->id}}).val();
+        $('#data_detail_version_update'+{{$model->id}}).append('<option selected disabled value="">Pilih Bulan</option>').select2({
+            dropdownParent: $('#modal_edit'+{{$model->id}}),
+            placeholder: 'Pilih Bulan',
+            width: '100%',
+            allowClear: false,
+            ajax: {
+                url: "{{ route('version_detail_select') }}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        search: params.term,
+                        version:data_version
+
+                    };
+                },
+                processResults: function(response) {
+                    return {
+                        results: response
+                    };
+                }
+            }
+        })
+    })
 
     $('#edit_value'+{{$model->id}}).on('keyup', function(){
         let rupiah = formatRupiah($(this).val(), "Rp ")

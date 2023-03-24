@@ -25,11 +25,12 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
 
     use Importable, SkipsErrors, SkipsFailures;
 
-    protected $periode;
+    protected $asumsi;
 
-    public function __construct($periode)
+    public function __construct($asumsi)
     {
-        $this->periode = $periode;
+        $this->periode = $asumsi->month_year;
+        $this->version_id = $asumsi->version_id;
     }
 
     public function model(array $row)
@@ -38,6 +39,7 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
             'gl_account_fc' => $row['gl_account_fc'],
             'cost_center' => $row['cost_center'],
             'periode' => $this->periode,
+            'version_id' => $this->version_id,
             'name' => $row['name'],
             'value' => $row['value'] != null ? (double) str_replace('.', '', str_replace('Rp ', '', $row['value'])) : 0,
             'partner_cost_center' => $row['partner_cost_center'],

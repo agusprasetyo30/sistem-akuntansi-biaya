@@ -19,10 +19,12 @@ class SalrDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = Salr::select('salrs.*', 'cost_center.cost_center_desc', 'group_account_fc.group_account_fc', 'group_account_fc.group_account_fc_desc', 'gl_account_fc.gl_account_fc_desc')
+        $query = Salr::select('salrs.id','salrs.value', 'salrs.gl_account_fc', 'salrs.cost_center', 'salrs.version_id', 'salrs.periode', 'version_asumsi.version', 'cost_center.cost_center_desc','group_account_fc.group_account_fc', 'group_account_fc.group_account_fc_desc', 'gl_account_fc.gl_account_fc_desc')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'salrs.version_id')
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'salrs.cost_center')
             ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
             ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc');
+
         return datatables()
             ->eloquent($query)
             ->addColumn('group_account', function ($query){

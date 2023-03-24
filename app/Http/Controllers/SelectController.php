@@ -1063,8 +1063,8 @@ class SelectController extends Controller
         );
         foreach ($group_acc as $items) {
             $response[] = array(
-                "id" => $items->group_account_fc,
-                "text" => $items->group_account_fc . ' - ' . $items->gl_account_fc_desc
+                "id" => $items->gl_account_fc,
+                "text" => $items->gl_account_fc . ' - ' . $items->gl_account_fc_desc
             );
         }
 

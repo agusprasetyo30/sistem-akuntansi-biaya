@@ -152,17 +152,102 @@
                 $('#tanggal').bootstrapdatepicker("show");
             });
 
-            $('#tanggal_import').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true,
-                showOnFocus: false,
+            $('#data_main_version_add').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             }).on('change', function () {
-                $("#template").css("display", "block");
-            }).on('click', function () {
-                $('#tanggal_import').bootstrapdatepicker("show");
-            });
+                var data_version = $('#data_main_version_add').val();
+                $('#data_detail_version_add').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                })
+            })
+
+            $('#data_main_version_import').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var data_version = $('#data_main_version_import').val();
+                $('#data_detail_version_import').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_import'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                }).on('change', function () {
+                    $("#template").css("display", "block");
+                });
+            })
+
 
             $('#tahun_satuan_filter1').bootstrapdatepicker({
                 format: "yyyy",
@@ -356,9 +441,10 @@
             $('#submit_import').on('click', function () {
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
                 $("#back_import").attr("disabled", true);
-                var date = $('#tanggal_import').val();
+                var version = $('#data_main_version').val();
+                var date = $('#data_detal_version').val();
 
-                if ($('#tanggal_import').val() !== null && $('#file').val() !== ''){
+                if (version !== null && date !== null && $('#file').val() !== ''){
                     let file = new FormData($("#form_input_salr")[0]);
                     $.ajax({
                         type: "POST",
@@ -368,7 +454,8 @@
                         url: '{{route('check_salr')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            periode:$('#tanggal_import').val()
+                            version: version,
+                            periode: date
                         },
                         success:function (response) {
                             if (response.code === 200){
@@ -418,7 +505,6 @@
                         }
                     })
                 }else {
-
                     Swal.fire({
                         title: 'PERINGATAN',
                         text: "Terdapat Data Bulan dan file yang kosong. Silakan Isi data tersebut",
@@ -433,7 +519,6 @@
                         }
                     })
                 }
-
             })
 
             function importStore(file) {
@@ -448,6 +533,7 @@
                     data: file,
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
                         $('#local_loader').hide();
                         Swal.fire({
                             title: response.title,
@@ -461,9 +547,8 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
-                                    // update_dt_horizontal()
-                                    // $("#table_main").empty();
-                                    // get_data()
+                                    $("#data_main_version").val('').trigger('change')
+                                    $("#data_detal_version").val('').trigger('change')
                                     $('#dt_salr').DataTable().ajax.reload();
                                 }
                             })
@@ -888,7 +973,7 @@
                         kolom1 += '<th class="text-center">'+response.cost_center[i].cost_center_desc+'</th>';
                         kolom_tfoot += '<th class="text-center"></th>';
                     }
-                    console.log(column)
+
                     $("#primary").append(kolom);
                     $("#secondary").append(kolom1);
                     $("#total_foot").append(kolom_tfoot);
@@ -1073,7 +1158,8 @@
                     ga_account:$('#data_main_ga_account').val(),
                     gl_account:$('#data_main_gl_account').val(),
                     cost_center:$('#data_main_cost_center').val(),
-                    tanggal:$('#tanggal').val(),
+                    version:$('#data_main_version_add').val(),
+                    date:$('#data_detail_version_add').val(),
                     value:$('#value').val(),
                     nama:$('#nama').val(),
                     partner_cost_center:$('#data_main_partner_cost_center').val(),
@@ -1131,7 +1217,8 @@
                     ga_account:$('#edit_data_main_ga_account'+id).val(),
                     gl_account:$('#edit_data_main_gl_account'+id).val(),
                     cost_center:$('#edit_data_main_cost_center'+id).val(),
-                    tanggal:$('#edit_tanggal'+id).val(),
+                    version:$('#data_main_version_update'+id).val(),
+                    date:$('#data_detail_version_update'+id).val(),
                     value:$('#edit_value'+id).val(),
                     nama:$('#edit_nama'+id).val(),
                     partner_cost_center:$('#edit_data_main_partner_cost_center'+id).val(),

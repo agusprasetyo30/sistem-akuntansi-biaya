@@ -15,6 +15,7 @@ class Salr extends Model
     protected $fillable = [
         'cost_center',
         'gl_account_fc',
+        'version_id',
         'periode',
         'company_code',
         'name',
