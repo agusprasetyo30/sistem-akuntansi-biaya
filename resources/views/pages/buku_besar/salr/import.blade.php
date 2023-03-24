@@ -32,16 +32,7 @@
                                     <select name="detail_version" id="data_detail_version_import" class="form-control custom-select select2">
                                         <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
                                     </select>
-                                    <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>
-
-{{--                                <div class="form-group">--}}
-{{--                                    <label class="form-label">Bulan </label>--}}
-{{--                                    <input type="text" class="form-control" name="tanggal_import" id="tanggal_import" placeholder="Bulan-Tahun" autocomplete="off" required>--}}
-{{--                                    <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>--}}
-{{--                                </div>--}}
-
-
                                 <div class="input-group file-browser mb-5">
                                     <input type="file" name="file" id="file" class="form-control" aria-label="file example" required>
                                 </div>

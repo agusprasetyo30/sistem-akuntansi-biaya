@@ -11,6 +11,7 @@ use App\Models\CostCenter;
 use App\Models\GLAccountFC;
 use App\Models\Material;
 use App\Models\Salr;
+use App\Models\Version_Asumsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -71,6 +72,9 @@ class SalrController extends Controller
 
     public function get_data(Request $request, H_SalrDataTable $h_SalrDataTable){
         if ($request->data == 'horizontal') {
+
+//            dd($request);
+
             return $h_SalrDataTable->with([
                 'format' => $request->format_data,
                 'cost_center' => $request->cost_center,
@@ -81,12 +85,16 @@ class SalrController extends Controller
                 'inflasi' => $request->inflasi,
                 'inflasi_asumsi' => $request->inflasi_asumsi,
             ])->render('pages.buku_besar.salr.index');
+
+
         }elseif ($request->data == 'dynamic') {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
 
             // Periode
+
+//            dd($request);
             if ($request->format_data == '0') {
                 $cost_center->where('salrs.periode', 'ilike', '%' . $request->year . '%');
             } elseif ($request->format_data == '1') {
@@ -356,6 +364,17 @@ class SalrController extends Controller
                 return response()->json(['code' => 201, 'msg' => 'Data Ada']);
             }
         } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function check_version_salrs(Request $request){
+        try {
+            $data_versi = Version_Asumsi::where('id', $request->version)->first();
+            return response()->json(['code' => 200, 'data' => $data_versi]);
+        }catch (\Exception $exception){
             return setResponse([
                 'code' => 400,
             ]);
