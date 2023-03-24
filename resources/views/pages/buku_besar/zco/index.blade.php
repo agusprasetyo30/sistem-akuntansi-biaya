@@ -330,15 +330,29 @@
                 autoclose:true
             });
 
-            $('#periode_import').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                showOnFocus: false,
-                autoclose:true,
+            $('#version').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             }).on('change', function () {
-                $("#submit-export").css("display", "block");
-            });
+                $("#template").css("display", "block");
+            })
 
             $('#periode_import').on("click", function() {
                 $('#periode_import').bootstrapdatepicker("show");
@@ -518,40 +532,6 @@
                 });
             })
 
-            // $('#filter_format').select2({
-            //     placeholder: 'Pilih Format',
-            //     width: '100%',
-            //     allowClear: false,
-            // }).on('change', function () {
-            //     if ($('#filter_format').val() == 0) {
-            //         // $('#month_pick_range').css('display','none')
-            //         // $('#month_pick').css('display','block')
-
-            //         $('#month_pick_range_group_account').slideUp('slow')
-            //         $('#month_pick_group_account').slideDown('slow')
-            //     } else if ($('#filter_format').val() == 1) {
-            //         // $('#month_pick_range').css('display','block')
-            //         // $('#month_pick').css('display','none')
-
-            //         $('#month_pick_range_group_account').slideDown('slow')
-            //         $('#month_pick_group_account').slideUp('slow')
-            //     }
-            // })
-
-            // $('#bulan_filter1').bootstrapdatepicker({
-            //     format: "mm-yyyy",
-            //     viewMode: "months",
-            //     minViewMode: "months",
-            //     autoclose:true
-            // });
-
-            // $('#bulan_filter2').bootstrapdatepicker({
-            //     format: "mm-yyyy",
-            //     viewMode: "months",
-            //     minViewMode: "months",
-            //     autoclose:true
-            // });
-
             $('#bulan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
                 viewMode: "months",
@@ -599,6 +579,53 @@
                 minViewMode: "months",
                 autoclose:true
             });
+
+            $('#data_main_version').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var data_version = $('#data_main_version').val();
+                $('#data_detal_version').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            })
         })
 
         function table (){
@@ -606,8 +633,9 @@
             <table id="dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 240%;">
                 <thead>
                 <tr>
-                    <th data-type='select' data-name='plant' class="text-center">PLANT</th>
+                    <th data-type='select' data-name='version' class="text-center">VERSI</th>
                     <th data-type='text' data-name='periode' class="text-center">PERIODE</th>
+                    <th data-type='select' data-name='plant' class="text-center">PLANT</th>
                     <th data-type='select' data-name='product' class="text-center">PRODUK</th>
                     <th data-type='text' data-name='product_qty' class="text-center">PRODUK QTY</th>
                     <th data-type='select' data-name='cost_element' class="text-center">COST ELEMENT</th>
@@ -688,6 +716,9 @@
                                     input.className = "cost_element_search form-control custom-select select2";
                                 } else if(iName == 'material'){
                                     input.className = "material_search form-control custom-select select2";
+                                } else if(iName == 'version'){
+                                    input.className = "version_search form-control custom-select select2";
+
                                 }
 
                                 input.innerHTML = options
@@ -764,6 +795,27 @@
                             allowClear: false,
                             ajax: {
                                 url: "{{ route('cost_element_dt') }}",
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        search: params.term
+                                    };
+                                },
+                                processResults: function(response) {
+                                    return {
+                                        results: response
+                                    };
+                                }
+                            }
+                        })
+
+                        $('.version_search').select2({
+                            placeholder: 'Pilih Versi',
+                            width: '100%',
+                            allowClear: false,
+                            ajax: {
+                                url: "{{ route('version_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
                                 data: function (params) {
@@ -884,8 +936,9 @@
                     data: {data:'index'}
                 },
                 columns: [
-                    { data: 'plant_code', name: 'filter_plant', orderable:true},
+                    { data: 'version', name: 'filter_version', orderable:true},
                     { data: 'periode', name: 'periode', orderable:true},
+                    { data: 'plant_code', name: 'filter_plant', orderable:true},
                     { data: 'product', name: 'filter_product', orderable:true},
                     { data: 'product_qty', name: 'product_qty', orderable:true},
                     { data: 'cost_element', name: 'filter_cost_element', orderable:true},
@@ -1286,6 +1339,8 @@
                     currency: $('#currency').val(),
                     total_amount: $('#total_amount').val(),
                     unit_price_product: $('#unit_price_product').val(),
+                    version: $('#data_main_version').val(),
+                    id_asumsi: $('#data_detal_version').val(),
                 },
                 success: function (response) {
                     Swal.fire({
@@ -1466,6 +1521,8 @@
                     currency:$('#edit_currency'+id).val(),
                     total_amount: $('#edit_total_amount'+id).val(),
                     unit_price_product:$('#edit_unit_price_product'+id).val(),
+                    version: $('#edit_data_main_version'+id).val(),
+                    id_asumsi: $('#edit_data_detal_version'+id).val(),
 
                 },
                 success: function (response) {

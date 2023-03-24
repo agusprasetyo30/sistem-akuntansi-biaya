@@ -13,17 +13,27 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                <select name="detail_version" id="data_detal_version" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label">Plant</label>
                                 <select name="main_plant" id="data_main_plant" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Plant</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label>Periode </label>
-                                {{-- <input type="text" class="form-control form-control-sm" placeholder="Value" name="periode"
-                                    id="periode" autocomplete="off"> --}}
                                 <input type="text" class="form-control" id="periode" placeholder="Periode" autocomplete="off">
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <label class="form-label">Produk</label>
                                 <select name="main_produk" id="data_main_produk" class="form-control custom-select select2">
@@ -32,7 +42,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Produk Qty </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="product_qty"
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="product_qty"
                                     id="product_qty" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -49,7 +59,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Total Qty </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="total_qty"
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="total_qty"
                                     id="total_qty" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -59,12 +69,12 @@
                             </div>
                             <div class="form-group">
                                 <label>Total Amount </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="total_amount"
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="total_amount"
                                     id="total_amount" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Unit Price Produk </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="unit_price_product"
+                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="unit_price_product"
                                     id="unit_price_product" autocomplete="off">
                             </div>
                         </div>
