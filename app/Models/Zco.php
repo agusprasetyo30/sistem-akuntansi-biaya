@@ -13,6 +13,7 @@ class Zco extends Model
 
     protected $fillable = [
         'company_code',
+        'version_id',
         'plant_code',
         'periode',
         'product_code',
