@@ -19,9 +19,14 @@ class GroupAccountFixedCostDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
+        $query = DB::table('group_account_fc')->whereNull('deleted_at');
 
-        $query = DB::table('group_account_fc')->where('company_code', $cc)->whereNull('deleted_at');
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('group_account_fc')->company_code == 'all') {
+            $query = $query->where('group_account_fc.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('group_account_fc')->company_code != 'all') {
+            $query = $query->where('group_account_fc.company_code', auth()->user()->mapping_akses('group_account_fc')->company_code);
+        }
+
         return datatables()
             ->query($query)
             ->addIndexColumn()

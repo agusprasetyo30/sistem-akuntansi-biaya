@@ -1293,6 +1293,35 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function main_company_filter(Request $request)
+    {
+        $search = $request->search;
+        if ($search == '') {
+            $company = Company::limit(10)
+                ->get();
+        } else {
+            $company = Company::where('company_code', 'ilike', '%' . $search . '%')
+                ->orWhere('company_name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        $response[] = array(
+            "id" => 'all',
+            "text" => 'Semua Perusahaan'
+        );
+
+        foreach ($company as $items) {
+            $response[] = array(
+                "id" => $items->company_code,
+                "text" => $items->company_code . ' - ' . $items->company_name
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function permission(Request $request)
     {
         $search = $request->search;

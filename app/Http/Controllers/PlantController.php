@@ -19,7 +19,7 @@ class PlantController extends Controller
     public function index(Request $request, PlantDataTable $plantDataTable)
     {
         if ($request->data == 'index') {
-            return $plantDataTable->render('pages.master.plant.index');
+            return $plantDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.plant.index');
         }
         return view('pages.master.plant.index');
     }

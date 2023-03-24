@@ -31,6 +31,16 @@
                     <div class="card-title">COST CENTER</div>
                 </div>
                 <div class="card-body">
+                    <div class="mb-5 row">
+                        @if (auth()->user()->mapping_akses('cost_center')->company_code == 'all')
+                            <div class="form-group">
+                                <label class="form-label">PERUSAHAAN</label>
+                                <select id="filter_company" class="form-control custom-select select2">
+                                    <option value="all" selected>Semua Perusahaan</option>
+                                </select>
+                            </div>
+                        @endif
+                    </div>
                     <div class="">
                         <div class="table-responsive" id="table_main">
 
@@ -63,6 +73,30 @@
             $('#code_cost_center').keyup(function(){
                 this.value = this.value.toUpperCase();
             });
+
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
         })
 
 
@@ -151,7 +185,10 @@
                 ],
                 ajax: {
                     url: '{{route("cost_center")}}',
-                    data: {data: 'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company').val(),
+                    }
                 },
                 columns: [
                     {data: 'cost_center', name: 'filter_cost_center', orderable: true},

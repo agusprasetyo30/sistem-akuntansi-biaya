@@ -17,7 +17,7 @@ class KategoriMaterialController extends Controller
     public function index(Request $request, KategoriMaterialDataTable $kategorimaterialDataTable)
     {
         if ($request->data == 'index') {
-            return $kategorimaterialDataTable->render('pages.master.kategori_material.index');
+            return $kategorimaterialDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.kategori_material.index');
         }
         return view('pages.master.kategori_material.index');
     }

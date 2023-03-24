@@ -18,7 +18,7 @@ class GLAccountController extends Controller
     public function index(Request $request, GLAccountDataTable $glaccountDataTable)
     {
         if ($request->data == 'index') {
-            return $glaccountDataTable->render('pages.master.gl_account.index');
+            return $glaccountDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.gl_account.index');
         }
         return view('pages.master.gl_account.index');
     }

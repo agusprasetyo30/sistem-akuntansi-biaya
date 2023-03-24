@@ -11,14 +11,16 @@ use Illuminate\Support\Facades\Validator;
 
 class MapKetegoriBalansController extends Controller
 {
-    public function index(Request $request, MapKategoriBalansDataTable $mapKategoriBalansDataTable){
-        if ($request->data == 'index'){
-            return $mapKategoriBalansDataTable->render('pages.master.mapping_balans.index');
+    public function index(Request $request, MapKategoriBalansDataTable $mapKategoriBalansDataTable)
+    {
+        if ($request->data == 'index') {
+            return $mapKategoriBalansDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.mapping_balans.index');
         }
         return view('pages.master.mapping_balans.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
 
             $validator = Validator::make($request->all(), [
@@ -33,14 +35,14 @@ class MapKetegoriBalansController extends Controller
 
             $result = '';
 
-            if ($request->kategori_balans > 5){
+            if ($request->kategori_balans > 5) {
                 $result = $request->plant;
-            }else{
-                foreach ($request->plant as $key => $item){
-                    if ($key == 0){
+            } else {
+                foreach ($request->plant as $key => $item) {
+                    if ($key == 0) {
                         $result .= $item;
-                    }else{
-                        $result .= ';'.$item;
+                    } else {
+                        $result .= ';' . $item;
                     }
                 }
             }
@@ -62,10 +64,10 @@ class MapKetegoriBalansController extends Controller
                 'material_code' => $request->material_balans
             ])->first();
 
-            DB::transaction(function () use ($input, $check_data){
-                if ($check_data == null){
+            DB::transaction(function () use ($input, $check_data) {
+                if ($check_data == null) {
                     MapKategoriBalans::create($input);
-                }else{
+                } else {
                     MapKategoriBalans::where('id', $check_data->id)->update($input);
                 }
             });
@@ -96,14 +98,14 @@ class MapKetegoriBalansController extends Controller
 
             $result = '';
 
-            if ($request->kategori_balans > 5){
+            if ($request->kategori_balans > 5) {
                 $result = $request->plant;
-            }else{
-                foreach ($request->plant as $key => $item){
-                    if ($key == 0){
+            } else {
+                foreach ($request->plant as $key => $item) {
+                    if ($key == 0) {
                         $result .= $item;
-                    }else{
-                        $result .= ';'.$item;
+                    } else {
+                        $result .= ';' . $item;
                     }
                 }
             }
@@ -119,7 +121,7 @@ class MapKetegoriBalansController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            DB::transaction(function () use ($input, $request){
+            DB::transaction(function () use ($input, $request) {
 
                 $check_data = MapKategoriBalans::where([
                     'version_id' => $request->versi,
@@ -128,9 +130,9 @@ class MapKetegoriBalansController extends Controller
                     'material_code' => $request->material_balans
                 ])->first();
 
-                if ($check_data == null){
+                if ($check_data == null) {
                     MapKategoriBalans::where('id', $check_data->id)->update($input);
-                }else{
+                } else {
                     MapKategoriBalans::where('id', $check_data->id)->delete();
                     MapKategoriBalans::where('id', $check_data->id)->update($input);
                 }

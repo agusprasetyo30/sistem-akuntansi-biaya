@@ -19,9 +19,14 @@ class KategoriMaterialDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
+        $query = DB::table('kategori_material')->whereNull('deleted_at');
 
-        $query = DB::table('kategori_material')->where('company_code', $cc)->whereNull('deleted_at');
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('kategori_material')->company_code == 'all') {
+            $query = $query->where('kategori_material.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('kategori_material')->company_code != 'all') {
+            $query = $query->where('kategori_material.company_code', auth()->user()->mapping_akses('kategori_material')->company_code);
+        }
+
         return datatables()
             ->query($query)
             ->addIndexColumn()

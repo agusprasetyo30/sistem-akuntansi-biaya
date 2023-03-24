@@ -14,15 +14,16 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CostCenterController extends Controller
 {
-    public function index(Request $request, CostCenterDataTable $costCenterDataTable){
-        if ($request->data == 'index'){
-//            dd($request->data);
-            return $costCenterDataTable->render('pages.master.cost_center.index');
+    public function index(Request $request, CostCenterDataTable $costCenterDataTable)
+    {
+        if ($request->data == 'index') {
+            return $costCenterDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.cost_center.index');
         }
         return view('pages.master.cost_center.index');
     }
 
-    public function create(Request $request){
+    public function create(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 "code" => 'required',
@@ -47,14 +48,15 @@ class CostCenterController extends Controller
                 'code' => 200,
                 'title' => 'Data berhasil disimpan'
             ]);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);
         }
     }
 
-    public function update(Request $request){
+    public function update(Request $request)
+    {
         try {
             $validator = Validator::make($request->all(), [
                 "code" => 'required',
@@ -79,14 +81,15 @@ class CostCenterController extends Controller
                 'code' => 200,
                 'title' => 'Data berhasil disimpan'
             ]);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);
         }
     }
 
-    public function delete(Request $request){
+    public function delete(Request $request)
+    {
         try {
 
             $input['deleted_at'] = Carbon::now();
@@ -97,7 +100,7 @@ class CostCenterController extends Controller
                 'code' => 200,
                 'title' => 'Data berhasil disimpan'
             ]);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
             ]);

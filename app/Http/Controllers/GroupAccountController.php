@@ -17,7 +17,7 @@ class GroupAccountController extends Controller
     public function index(Request $request, GroupAccountDataTable $groupaccountDataTable)
     {
         if ($request->data == 'index') {
-            return $groupaccountDataTable->render('pages.master.group_account.index');
+            return $groupaccountDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.group_account.index');
         }
         return view('pages.master.group_account.index');
     }

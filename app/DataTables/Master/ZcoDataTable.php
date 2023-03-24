@@ -19,8 +19,6 @@ class ZcoDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('zco')
             ->select('zco.*', 'produk.material_name as product_name', 'material.material_name', 'material.material_uom', 'gl_account.gl_account_desc', 'plant.plant_desc', 'version_asumsi.version')
             ->leftJoin('material as produk', 'produk.material_code', '=', 'zco.product_code')
@@ -28,8 +26,17 @@ class ZcoDataTable extends DataTable
             ->leftjoin('plant', 'plant.plant_code', '=', 'zco.plant_code')
             ->leftjoin('gl_account', 'gl_account.gl_account', '=', 'zco.cost_element')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'zco.version_id')
-            ->where('zco.company_code', $cc)
             ->whereNull('zco.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('zco')->company_code == 'all') {
+            $query = $query->where('zco.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('zco')->company_code != 'all') {
+            $query = $query->where('zco.company_code', auth()->user()->mapping_akses('zco')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('zco.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)

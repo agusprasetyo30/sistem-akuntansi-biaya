@@ -19,15 +19,18 @@ class GlosCCDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('glos_cc')
             ->select('glos_cc.*', 'material.material_name', 'plant.plant_desc', 'cost_center.cost_center_desc')
             ->leftjoin('plant', 'plant.plant_code', '=', 'glos_cc.plant_code')
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'glos_cc.cost_center')
             ->leftjoin('material', 'material.material_code', '=', 'glos_cc.material_code')
-            ->where('glos_cc.company_code', $cc)
             ->whereNull('glos_cc.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('glos_cc')->company_code == 'all') {
+            $query = $query->where('glos_cc.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('glos_cc')->company_code != 'all') {
+            $query = $query->where('glos_cc.company_code', auth()->user()->mapping_akses('glos_cc')->company_code);
+        }
 
         return datatables()
             ->query($query)

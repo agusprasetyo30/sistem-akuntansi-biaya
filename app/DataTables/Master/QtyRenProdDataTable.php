@@ -19,14 +19,21 @@ class QtyRenProdDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('qty_renprod')->select('qty_renprod.*', 'cost_center.cost_center', 'cost_center.cost_center_desc', 'version_asumsi.version', 'asumsi_umum.month_year')
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_renprod.version_id')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_renprod.asumsi_umum_id')
-            ->where('qty_renprod.company_code', $cc)
             ->whereNull('qty_renprod.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('qty_renprod')->company_code == 'all') {
+            $query = $query->where('qty_renprod.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('qty_renprod')->company_code != 'all') {
+            $query = $query->where('qty_renprod.company_code', auth()->user()->mapping_akses('qty_renprod')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('qty_renprod.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)
