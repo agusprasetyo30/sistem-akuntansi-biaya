@@ -22,17 +22,21 @@ class ZcoDataTable extends DataTable
         $cc = auth()->user()->company_code;
 
         $query = DB::table('zco')
-            ->select('zco.*', 'produk.material_name as product_name', 'material.material_name', 'material.material_uom', 'gl_account.gl_account_desc', 'plant.plant_desc')
+            ->select('zco.*', 'produk.material_name as product_name', 'material.material_name', 'material.material_uom', 'gl_account.gl_account_desc', 'plant.plant_desc', 'version_asumsi.version')
             ->leftJoin('material as produk', 'produk.material_code', '=', 'zco.product_code')
             ->leftJoin('material as material', 'material.material_code', '=', 'zco.material_code')
             ->leftjoin('plant', 'plant.plant_code', '=', 'zco.plant_code')
             ->leftjoin('gl_account', 'gl_account.gl_account', '=', 'zco.cost_element')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'zco.version_id')
             ->where('zco.company_code', $cc)
             ->whereNull('zco.deleted_at');
 
         return datatables()
             ->query($query)
             ->addIndexColumn()
+            ->addColumn('version', function ($query) {
+                return $query->version;
+            })
             ->addColumn('product', function ($query) {
                 return $query->product_code . ' - ' . $query->product_name;
             })
@@ -72,6 +76,9 @@ class ZcoDataTable extends DataTable
             ->orderColumn('filter_cost_element', function ($query, $order) {
                 $query->orderBy('gl_account.gl_account', $order);
             })
+            ->orderColumn('filter_version', function ($query, $order) {
+                $query->orderBy('version_asumsi.version', $order);
+            })
             ->filterColumn('filter_plant', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('zco.plant_code', 'ilike', '%' . $keyword . '%');
@@ -93,6 +100,11 @@ class ZcoDataTable extends DataTable
                 if ($keyword != 'all') {
                     $query->where('zco.cost_element', 'ilike', '%' . $keyword . '%')
                         ->orWhere('gl_account.gl_account', 'ilike', '%' . $keyword . '%');
+                }
+            })
+            ->filterColumn('filter_version', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
                 }
             })
             ->addColumn('action', 'pages.buku_besar.zco.action')

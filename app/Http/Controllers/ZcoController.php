@@ -8,6 +8,7 @@ use App\DataTables\Master\ZcoDataTable;
 use App\Exports\MultipleSheet\MS_ZcoExport;
 use App\Exports\Horizontal\ZCOExport;
 use App\Imports\ZcoImport;
+use App\Models\Asumsi_Umum;
 use App\Models\GLAccount;
 use App\Models\Material;
 use App\Models\Plant;
@@ -111,47 +112,49 @@ class ZcoController extends Controller
 
     public function create(Request $request)
     {
-        // try {
-        $validator = Validator::make($request->all(), [
-            "plant_code" => 'required',
-            "product_code" => 'required',
-            "material_code" => 'required',
-            "cost_element" => 'required',
-            "periode" => 'required',
-        ], validatorMsg());
+        try {
+            $validator = Validator::make($request->all(), [
+                "plant_code" => 'required',
+                "product_code" => 'required',
+                "material_code" => 'required',
+                "cost_element" => 'required',
+                "version" => 'required',
+                "id_asumsi" => 'required',
+            ], validatorMsg());
 
-        if ($validator->fails())
-            return $this->makeValidMsg($validator);
+            if ($validator->fails())
+                return $this->makeValidMsg($validator);
 
-        $periode = explode('-', $request->periode);
+            $data_asumsi = Asumsi_Umum::where('id', $request->id_asumsi)->first();
 
-        $input['company_code'] = auth()->user()->company_code;
-        $input['plant_code'] = $request->plant_code;
-        $input['periode'] = $periode[1] . '-' . $periode[0] . '-01';
-        $input['product_code'] = $request->product_code;
-        $input['product_qty'] = $request->product_qty;
-        $input['cost_element'] = $request->cost_element;
-        $input['material_code'] = $request->material_code;
-        $input['total_qty'] = $request->total_qty;
-        $input['currency'] = $request->currency;
-        $input['total_amount'] = $request->total_amount;
-        $input['unit_price_product'] = $request->unit_price_product;
-        $input['created_by'] = auth()->user()->id;
-        $input['updated_by'] = auth()->user()->id;
-        $input['created_at'] = Carbon::now();
-        $input['updated_at'] = Carbon::now();
+            $input['company_code'] = auth()->user()->company_code;
+            $input['version_id'] = (int) $request->version;
+            $input['periode'] = $data_asumsi->month_year;
+            $input['plant_code'] = $request->plant_code;
+            $input['product_code'] = $request->product_code;
+            $input['product_qty'] = $request->product_qty;
+            $input['cost_element'] = $request->cost_element;
+            $input['material_code'] = $request->material_code;
+            $input['total_qty'] = $request->total_qty;
+            $input['currency'] = $request->currency;
+            $input['total_amount'] = $request->total_amount;
+            $input['unit_price_product'] = $request->unit_price_product;
+            $input['created_by'] = auth()->user()->id;
+            $input['updated_by'] = auth()->user()->id;
+            $input['created_at'] = Carbon::now();
+            $input['updated_at'] = Carbon::now();
 
-        Zco::create($input);
+            Zco::create($input);
 
-        return setResponse([
-            'code' => 200,
-            'title' => 'Data berhasil disimpan'
-        ]);
-        // } catch (\Exception $exception) {
-        //     return setResponse([
-        //         'code' => 400,
-        //     ]);
-        // }
+            return setResponse([
+                'code' => 200,
+                'title' => 'Data berhasil disimpan'
+            ]);
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
     }
 
     public function update(Request $request)
@@ -162,17 +165,19 @@ class ZcoController extends Controller
                 "product_code" => 'required',
                 "material_code" => 'required',
                 "cost_element" => 'required',
-                "periode" => 'required',
+                "version" => 'required',
+                "id_asumsi" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $periode = explode('-', $request->periode);
+            $data_asumsi = Asumsi_Umum::where('id', $request->id_asumsi)->first();
 
             $input['company_code'] = auth()->user()->company_code;
             $input['plant_code'] = $request->plant_code;
-            $input['periode'] = $periode[1] . '-' . $periode[0] . '-01';
+            $input['version_id'] = (int) $request->version;
+            $input['periode'] = $data_asumsi->month_year;
             $input['product_code'] = $request->product_code;
             $input['product_qty'] = $request->product_qty;
             $input['cost_element'] = $request->cost_element;
@@ -380,7 +385,7 @@ class ZcoController extends Controller
         if ($request->plant != 'all') {
             $product_list = $product_list->where('plant_code', $request->plant);
         }
-        
+
 
 
         $temporary_value['harga_satuan'] = [];
@@ -390,23 +395,23 @@ class ZcoController extends Controller
 
         // Dibuat variabel index temporary dikarenakan case nya ada index yang tidak diawali dengan 0
         $key_temp = 0;
-        
+
         foreach ($material_list as $query) {
             foreach ($product_list as $item) {
                 array_push($temporary_value['harga_satuan'], ['key' => $key_temp, 'value' => $this->getHargaSatuanCount($request, $item, $query)]);
                 array_push($temporary_value['cr'], ['key' => $key_temp, 'value' => $this->getCRCount($request, $item, $query)]);
                 array_push($temporary_value['biaya_per_ton'], ['key' => $key_temp, 'value' => $this->getBiayaPerTon($request, $item, $query)]);
                 array_push($temporary_value['total_biaya'], ['key' => $key_temp, 'value' => $this->getTotalBiaya($request, $item, $query)]);
-                
+
                 $key_temp++;
             }
 
             $key_temp = 0;
         }
-        
+
         // Menghitung jumlah total asumsi umum sebagai acuan index
         $product_index_count = $product_list->count() - 1;
-        
+
         // Memisahkan data array yang disesuaikan dengan array key & transaksi (p, q, <nila></nila>i)
         $fixed_value['harga_satuan'] = getSeparateValue($temporary_value['harga_satuan'], $product_index_count);
         $fixed_value['cr'] = getSeparateValue($temporary_value['cr'], $product_index_count);
@@ -421,9 +426,9 @@ class ZcoController extends Controller
         ];
 
         // dd($product->get());
-        
+
         return Excel::download(new ZCOExport($data), "ZCO Horizontal.xlsx");
-        
+
         // return view('pages.buku_besar.zco.export_horizontal', $data);
     }
 
@@ -615,7 +620,7 @@ class ZcoController extends Controller
 
         return $biaya_perton ? $biaya_perton : 0;
     }
-    
+
     /**
      * Undocumented function
      *
@@ -627,11 +632,11 @@ class ZcoController extends Controller
     public function getTotalBiaya($request, $item, $material_list)
     {
         $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
-        ->where([
-            'product_code' => $item->product_code,
-            'plant_code' => $item->plant_code,
-            'material_code' => $material_list->material_code,
-        ]);
+            ->where([
+                'product_code' => $item->product_code,
+                'plant_code' => $item->plant_code,
+                'material_code' => $material_list->material_code,
+            ]);
 
         if ($request->format_data == '0') {
             $temp = explode('-', $request->moth);
