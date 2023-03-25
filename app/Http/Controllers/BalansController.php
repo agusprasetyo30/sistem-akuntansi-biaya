@@ -52,15 +52,17 @@ class BalansController extends Controller
 
     public function export(Request $request, BalansDataTable $balansDataTable)
     {
+        // ini
         $antrian = antrian_material_balans($request->version);
-        $result_antrian = [];
-        foreach ($antrian as $items){
-            foreach ($items as $item){
-                array_push($result_antrian, $item);
-            }
-        }
+        // $antrian = antrian_material_balans($request->version);
+        // $result_antrian = [];
+        // foreach ($antrian as $items){
+        //     foreach ($items as $item){
+        //         array_push($result_antrian, $item);
+        //     }
+        // }
 
-        $antrian = array_values(array_unique($result_antrian));
+        // $antrian = array_values(array_unique($result_antrian));
 
         $balans_data = Balans::select('kategori_balans_id','material_code', 'plant_code', 'company_code', 'kategori_balans_desc', 'order_view')
             ->whereIn('material_code', $request->material == 'all' ? $antrian : [$request->material])
@@ -71,6 +73,7 @@ class BalansController extends Controller
 
         $main_asumsi = Asumsi_Umum::where('version_id', $request->version)->get();
 
+        // Query data untuk mendapatkan data balans default
         $balans_default = Balans::where('version_id', $request->version)
             ->get();
 
@@ -78,7 +81,9 @@ class BalansController extends Controller
         $temporary_value['q'] = [];
         $temporary_value['nilai'] = [];
 
+        // Filtering Balans data dan Filtering 
         foreach ($balans_data as $query) {
+            // Melakukan filtering sesuai dengan data main asumsi
             foreach ($main_asumsi as $key_sub => $value) {
                 $p_value_temp = $balans_default->where('kategori_balans_id', $query->kategori_balans_id)
                     ->where('asumsi_umum_id', $main_asumsi[$key_sub]->id)
@@ -101,15 +106,18 @@ class BalansController extends Controller
                     ->where('material_code', $query->material_code)
                     ->first();
 
+                // Memasukan data yang sudah difilter kedalam array & ditambahkan key sesuai dengan lokasi asumsi umum
                 array_push($temporary_value['p'], ["key" => $key_sub, "value" => $p_value_temp->p]);
                 array_push($temporary_value['q'], ["key" => $key_sub, "value" => $q_value_temp->q]);
                 array_push($temporary_value['nilai'], ["key" => $key_sub, "value" => $result_value_temp->nilai]);
             }
 
         }
-
+        
+        // Menghitung jumlah total asumsi umum sebagai acuan index
         $main_asumsi_index_count = $main_asumsi->count() - 1;
-
+        
+        // Memisahkan data array yang disesuaikan dengan array key & transaksi (p, q, nilai)
         $fixed_value['p'] = $this->getSeparateValue($temporary_value['p'], $main_asumsi_index_count);
         $fixed_value['q'] = $this->getSeparateValue($temporary_value['q'], $main_asumsi_index_count);
         $fixed_value['nilai'] = $this->getSeparateValue($temporary_value['nilai'], $main_asumsi_index_count);
@@ -117,7 +125,7 @@ class BalansController extends Controller
         $data = [
             'balans_datas'     => $balans_data,
             'asumsi_umum'      => $main_asumsi,
-            'fixed_value_data' => $fixed_value
+            'fixed_value_data' => $fixed_value 
         ];
 
         $filename = "Balans " . $request->material . '.xlsx';
@@ -126,7 +134,7 @@ class BalansController extends Controller
     }
 
     /**
-     * melakukan filter dan memisahkan data array sesuai dengan
+     * melakukan filter dan memisahkan data array sesuai dengan 
      *
      * @param [type] $arr
      * @param [type] $dinamic_reference_count

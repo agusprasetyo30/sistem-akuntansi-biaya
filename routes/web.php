@@ -418,6 +418,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
         Route::post('header', [SimulasiProyeksiController::class, 'index_header'])->name('header_simulasi_proyeksi');
         Route::post('store', [SimulasiProyeksiController::class, 'store'])->name('store_simulasi_proyeksi');
+        Route::get('export', [SimulasiProyeksiController::class, 'export'])->name('export.simulasi_proyeksi');
     });
 
     Route::group(['prefix' => 'kontrol-proyeksi'], function () {

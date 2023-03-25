@@ -29,4 +29,8 @@ class KategoriBalans extends Model
     {
         return $this->hasMany(MapKategoriBalans::class, 'kategori_balans_id', 'id');
     }
+    public function balans()
+    {
+        return $this->belongsTo(Balans::class);
+    }
 }

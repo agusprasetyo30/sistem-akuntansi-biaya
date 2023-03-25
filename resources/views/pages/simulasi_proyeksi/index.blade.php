@@ -277,53 +277,28 @@
                             left: 1
                         },
                         buttons: [
-                            { extend: 'pageLength', className: 'mb-5' },
+                            { extend: 'pageLength' },
                             {
-                                extend: 'excel',
-                                className: 'mb-5',
-                                title: '',
-                                filename: 'Simulasi Proyeksi',
-                                customize: function (file) {
-                                    var sheet = file.xl.worksheets['sheet1.xml'];
-                                    var style = file.xl['styles.xml'];
-                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
-                                    $('row', sheet).first().attr('ht', '60').attr('customHeight', "1");
-                                    var mergeCells = $('mergeCells', sheet);
+                                text: 'Excel',
+                                action: function ( e, dt, node, config ) {
+                                    let version_search = $('#filter_version').val()
+                                    let produk_search = $('#filter_material').val()
+                                    let plant_search = $('#filter_plant').val()
+                                    let cost_center_search = $('#filter_cost_center').val()
 
-                                    for (let i = 0; i < response.asumsi.length;i++) {
-                                        const columnDef = generateAbjad(i)
+                                    // console.log(version_search);
+                                    // console.log(produk_search);
+                                    // console.log(plant_search);
+                                    // console.log(cost_center_search);
 
-                                        mergeCells[0].appendChild(
-                                            _createNode( sheet, 'mergeCell', {
-                                                attr: { ref: columnDef }
-                                            })
-                                        )
-                                    }
-                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+                                    let route_default = '{{ route("export.simulasi_proyeksi") }}'
+                                    let route_complete = route_default + 
+                                        "?version=" + version_search + "&produk=" + produk_search + "&plant=" + plant_search +"&cost_center=" + cost_center_search;
 
-                                    function _createNode( doc, nodeName, opts ) {
-                                        var tempNode = doc.createElement( nodeName );
-
-                                        if ( opts ) {
-                                            if ( opts.attr ) {
-                                                $(tempNode).attr( opts.attr );
-                                            }
-
-                                            if ( opts.children ) {
-                                                $.each( opts.children, function ( key, value ) {
-                                                    tempNode.appendChild( value );
-                                                } );
-                                            }
-
-                                            if ( opts.text !== null && opts.text !== undefined ) {
-                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
-                                            }
-                                        }
-
-                                        return tempNode;
-                                    }
+                                    // ?version=3&produk=2000002&plant=B029&    cost_center=
+                                    window.location = route_complete
                                 }
-                             }
+                            }
                         ],
                         ajax: {
                             url : '{{route("simulasi_proyeksi")}}',
