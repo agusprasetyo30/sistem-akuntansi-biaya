@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\SimulasiProyeksiDataTable;
 use App\DataTables\Master\SimulasiProyeksiStoreDataTable;
+use App\Exports\Horizontal\SimulasiProyeksiExport;
 use App\Models\Asumsi_Umum;
 use App\Models\Balans;
 use App\Models\ConsRate;
 use App\Models\GroupAccountFC;
 use App\Models\Material;
+use App\Models\Plant;
 use App\Models\Salr;
 use App\Models\SimulasiProyeksi;
 use App\Models\TempProyeksi;
@@ -17,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 use Ramsey\Collection\Collection;
 
 class SimulasiProyeksiController extends Controller
@@ -956,6 +959,248 @@ class SimulasiProyeksiController extends Controller
             // return response()->json(['code' => 200]);
         } catch (\Exception $exception) {
             return response()->json(['code' => 500]);
+        }
+    }
+
+    public function export(Request $request)
+    {
+        $produk = Material::where('material_code', $request->produk)
+            ->whereNull('deleted_at')
+            ->get();
+
+        $plant = Plant::where('plant_code', $request->plant)
+            ->whereNull('deleted_at')
+            ->get();
+
+        $asumsi = Asumsi_Umum::where('version_id',  $request->version)->get();
+
+        $kp = SimulasiProyeksi::select('asumsi_umum_id', 'kuantum_produksi')
+                ->where('product_code', $request->produk)
+                ->where('plant_code', $request->plant)
+                ->where('kategori', 1)
+                ->groupBy('asumsi_umum_id', 'kuantum_produksi')
+                ->orderBy('asumsi_umum_id', 'asc')
+                ->get();
+        
+        $glos_cc = DB::table('glos_cc')
+            ->where('glos_cc.material_code', $request->produk)
+            ->where('glos_cc.plant_code', $request->plant)
+            ->first();
+
+        $simproValues = DB::table('simulasi_proyeksi')
+            ->where('plant_code', $request->plant)
+            ->where('product_code', $request->produk)
+            ->where('cost_center', $glos_cc->cost_center)
+            ->whereIn('asumsi_umum_id', $asumsi->pluck('id')->all())
+            ->get();
+        // dd($simproValues);
+
+        $query_simulasi_proyeksi = DB::table('simulasi_proyeksi')
+            ->select('simulasi_proyeksi.no', 'simulasi_proyeksi.kategori', 'simulasi_proyeksi.name', 'simulasi_proyeksi.code')
+            ->where('simulasi_proyeksi.version_id', $request->version)
+            ->where('simulasi_proyeksi.plant_code', $request->plant)
+            ->where('simulasi_proyeksi.product_code', $request->produk)
+            ->where('simulasi_proyeksi.cost_center', $glos_cc->cost_center)
+            ->groupBy('simulasi_proyeksi.no', 'simulasi_proyeksi.kategori', 'simulasi_proyeksi.name', 'simulasi_proyeksi.code')
+            ->orderBy('no', 'asc')
+            ->orderBy('kategori', 'asc')->get();
+
+
+        $temporary_value['harga_satuan'] = [];
+        $temporary_value['cr'] = [];
+        $temporary_value['biaya_per_ton'] = [];
+        $temporary_value['total_biaya'] = [];
+
+        // Dibuat variabel index temporary dikarenakan case nya ada index yang tidak diawali dengan 0
+        $key_temp = 0;
+        
+        foreach ($query_simulasi_proyeksi as $key => $data_query) {
+            foreach ($asumsi as $key1 => $data_asumsi) {
+                array_push($temporary_value['harga_satuan'], ['key' => $key_temp, 'value' => $this->hargaSatuanCount($data_query, $simproValues, $data_asumsi)]);
+                array_push($temporary_value['cr'], ['key' => $key_temp, 'value' => $this->crCount($data_query, $simproValues, $data_asumsi)]);
+                array_push($temporary_value['biaya_per_ton'], ['key' => $key_temp, 'value' => $this->biayaPerTonCount($data_query, $simproValues, $data_asumsi)]);
+                array_push($temporary_value['total_biaya'], ['key' => $key_temp, 'value' => $this->totalBiayaCount($data_query, $simproValues, $data_asumsi)]);
+                
+                $key_temp++;
+            }
+
+            $key_temp = 0;
+        }
+
+        // Menghitung jumlah total asumsi umum sebagai acuan index
+        $asumsi_index_count = $asumsi->count() - 1;
+
+        $fixed_value['harga_satuan'] = getSeparateValue($temporary_value['harga_satuan'], $asumsi_index_count);
+        $fixed_value['cr'] = getSeparateValue($temporary_value['cr'], $asumsi_index_count);
+        $fixed_value['biaya_per_ton'] = getSeparateValue($temporary_value['biaya_per_ton'], $asumsi_index_count);
+        $fixed_value['total_biaya'] = getSeparateValue($temporary_value['total_biaya'], $asumsi_index_count);
+
+        // return response()->json( $query_simulasi_proyeksi);
+
+        // dd($temporary_value['harga_satuan'], $fixed_value['harga_satuan'], count($temporary_value['harga_satuan']));
+        // return response()->json($fixed_value['harga_satuan']);
+
+        $data = [
+            'product' => $produk,
+            'plant'   => $plant,
+            'asumsi'  => $asumsi,
+            'kp'      => $kp,
+            'query'   => $query_simulasi_proyeksi,
+            'fixed_value_data' => $fixed_value,
+        ];
+
+        // return view('pages.kontrol_proyeksi.export', $data);
+        return Excel::download(new SimulasiProyeksiExport($data), "Simulasi Proyeksi Horizontal.xlsx");
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $query
+     * @param [type] $simproValues
+     * @param [type] $asumsi
+     * @return void
+     */
+    public function hargaSatuanCount($query, $simproValues, $asumsi)
+    {
+        $mat = Material::where('material_code', $query->code)->first();
+        $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+        if ($mat) {
+            $simproAsumsi = $simproValues
+                ->where('asumsi_umum_id', $asumsi->id)
+                ->where('name', $query->name)
+                ->first();
+
+            return $simproAsumsi->harga_satuan;
+        } else if ($ga) {
+            return '-';
+            // return '0';
+        } else {
+            // return '0';
+            return '';
+        }
+    }
+
+    public function crCount($query, $simproValues, $asumsi)
+    {
+        $mat = Material::where('material_code', $query->code)->first();
+        $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+        if ($mat) {
+            $simproAsumsi = $simproValues
+                ->where('asumsi_umum_id', $asumsi->id)
+                ->where('name', $query->name)
+                ->first();
+
+            // return round($simproAsumsi->cr, 4);
+            return $simproAsumsi->cr;
+        } else if ($ga) {
+            // return '0';
+            return '-';
+        } else {
+            // return '0';
+            return '';
+        }
+    }
+
+    public function biayaPerTonCount($query, $simproValues, $asumsi)
+    {
+        $mat = Material::where('material_code', $query->code)->first();
+        $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+        if ($mat) {
+            $simproAsumsi = $simproValues
+                ->where('asumsi_umum_id', $asumsi->id)
+                ->where('name', $query->name)
+                ->first();
+
+            // return rupiah($simproAsumsi->biaya_perton);
+            return $simproAsumsi->biaya_perton;
+        } else if ($ga) {
+            $simproAsumsi = $simproValues
+                ->where('asumsi_umum_id', $asumsi->id)
+                ->where('name', $query->name)
+                ->first();
+
+            // return rupiah($simproAsumsi->biaya_perton);
+            return $simproAsumsi->biaya_perton;
+        } else {
+            if ($query->no == 5 || $query->no == 7 || $query->no == 9 || $query->no == 10 || $query->no == 11 || $query->no == 12 || $query->no == 13 || $query->no == 14 || $query->no == 15) {
+                $simproAsumsi = $simproValues
+                    ->where('asumsi_umum_id', $asumsi->id)
+                    ->where('name', $query->name)
+                    ->first();
+
+                // return rupiah($simproAsumsi->biaya_perton);
+                return $simproAsumsi->biaya_perton;
+            } else if ($query->no == 16) {
+                $simproAsumsi = $simproValues
+                    ->where('asumsi_umum_id', $asumsi->id)
+                    ->where('name', $query->name)
+                    ->first();
+
+                // return '$ ' . helpRibuanKoma($simproAsumsi->biaya_perton);
+                return $simproAsumsi->biaya_perton;
+            } else {
+                // return '0';
+                return '';
+            }
+        }
+    }
+
+    public function totalBiayaCount($query, $simproValues, $asumsi)
+    {
+        $mat = Material::where('material_code', $query->code)->first();
+        $ga = GroupAccountFC::where('group_account_fc', $query->code)->first();
+
+        if ($mat) {
+            $simproAsumsi = $simproValues
+                ->where('asumsi_umum_id', $asumsi->id)
+                ->where('name', $query->name)
+                ->first();
+
+            // return rupiah($simproAsumsi->total_biaya);
+            return $simproAsumsi->total_biaya;
+        } else if ($ga) {
+            $simproAsumsi = $simproValues
+                ->where('asumsi_umum_id', $asumsi->id)
+                ->where('name', $query->name)
+                ->first();
+
+            // return rupiah($simproAsumsi->total_biaya);
+            return $simproAsumsi->total_biaya;
+        } else {
+            if ($query->no == 5 || $query->no == 7 || $query->no == 9 || $query->no == 10) {
+                $simproAsumsi = $simproValues
+                    ->where('asumsi_umum_id', $asumsi->id)
+                    ->where('name', $query->name)
+                    ->first();
+
+                // return rupiah($simproAsumsi->total_biaya);
+                return $simproAsumsi->total_biaya;
+            } else if ($query->no == 11) {
+                return '';
+                // return '0';
+            } else if ($query->no == 12) {
+                return '';
+                // return '0';
+            } else if ($query->no == 13) {
+                return '';
+                // return '0';
+            } else if ($query->no == 14) {
+                return '';
+                // return '0';
+            } else if ($query->no == 15) {
+                return '';
+                // return '0';
+            } else if ($query->no == 16) {
+                return '';
+                // return '0';
+            } else {
+                return '';
+                // return '0';
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <td align="center" valign="top" rowspan="3"><b>Biaya</b></td>
-            <td align="center" valign="top" rowspan="3"><b>Material</b></td>
+            <td align="center" valign="top" rowspan="3"><b>Group Account</b></td>
             
             @foreach ($product_lists as $product)
                 <td colspan="4">
@@ -34,10 +34,10 @@
             // Variabel ini digunakan untuk inisialiasi index manual (karena kalau diambil dari data foreach pas dilakukan filtering datanya beda)
             $key_temp = 0;
         @endphp
-        @foreach ($material_lists as $key => $material)    
+        @foreach ($group_account_list as $key => $group_account)    
             <tr>
-                <td>{{ $material->material_code }}</td>
-                <td>{{ $material->material_name }}</td>
+                <td>{{ $group_account->group_account_code }}</td>
+                <td>{{ $group_account->group_account_desc }}</td>
     
                 @foreach ($product_lists as $product)
                     <td data-format='Rp* #,##0_-;Rp* -#,##0_-;Rp* "0"_-;_-@_-'>{{ $fixed_value_data['harga_satuan'][$key_temp][$key] }}</td>
@@ -60,7 +60,6 @@
             <td colspan="2" style="text-align: right">
                 <b>Total</b>
             </td>
-            
             @foreach ($product_lists as $product)
                 <td data-format='Rp* #,##0.00_-;Rp* -#,##0.00_-;Rp* "0"_-;_-@_-'>{{ $total['harga_satuan'][$key_temp] }}</td>
                 <td data-format='#,##0.00_-;-#,##0.00_-;"0"_-;_-@_-'>{{ $total['cr'][$key_temp] }}</td>
