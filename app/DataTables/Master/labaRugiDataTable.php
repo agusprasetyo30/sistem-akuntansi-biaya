@@ -14,12 +14,13 @@ class labaRugiDataTable extends DataTable
 
     public function dataTable($query)
     {
-        $query = LabaRugi::select('laba_rugi.*', 'kategori_produk.kategori_produk_desc', 'kategori_produk.kategori_produk_name')
+        $query = LabaRugi::select('laba_rugi.*', 'kategori_produk.kategori_produk_desc', 'kategori_produk.kategori_produk_name', 'version_asumsi.version')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'laba_rugi.version_id')
             ->leftjoin('kategori_produk', 'kategori_produk.id', '=', 'laba_rugi.kategori_produk_id');
         return datatables()
             ->eloquent($query)
             ->addColumn('periode', function ($query){
-                return format_year($query->periode);
+                return $query->version;
             })
             ->addColumn('kategori_produk', function ($query){
                 return $query->kategori_produk_name. ' - '.$query->kategori_produk_desc ;
@@ -34,7 +35,7 @@ class labaRugiDataTable extends DataTable
                 return rupiah($query->value_bb);
             })
             ->filterColumn('filter_periode', function ($query, $keyword){
-                $query->where('laba_rugi.periode', 'ilike', '%'.$keyword.'%');
+                $query->where('version_asumsi.version', 'ilike', '%'.$keyword.'%');
             })
             ->filterColumn('filter_kategori_produk', function ($query, $keyword){
                 if ($keyword !='all'){
@@ -54,7 +55,7 @@ class labaRugiDataTable extends DataTable
                 $query->where('laba_rugi.value_bb', 'ilike', '%'.$keyword.'%');
             })
             ->orderColumn('filter_periode', function ($query, $order) {
-                $query->orderBy('laba_rugi.periode', $order);
+                $query->orderBy('version_asumsi.version', $order);
             })
             ->orderColumn('filter_kategori_produk', function ($query, $order) {
                 $query->orderBy('kategori_produk.kategori_produk_name', $order);

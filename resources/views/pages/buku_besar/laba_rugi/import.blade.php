@@ -20,8 +20,10 @@
                                     </ol>
                                 </div>
                                 <div class="form-group">
-                                    <label >Tahun <span class="text-red">*</span></label>
-                                    <input type="text" class="form-control" id="tanggal_import" name="tanggal_import" placeholder="Masukkan Tahun" autocomplete="off" required>
+                                    <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                    <select name="data_main_version_import" id="data_main_version_import" class="form-control custom-select select2">
+                                        <option value="" disabled selected>Pilih Versi</option>
+                                    </select>
                                     <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>
                                 <div class="input-group file-browser mb-5">

@@ -23,8 +23,8 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label >Tahun <span class="text-red">*</span></label>
-                                <input disabled type="text" class="form-control" value="{{format_year($model->periode)}}" id="detail_tanggal{{$model->id}}" placeholder="Masukkan Tahun" autocomplete="off" required>
+                                <label >Versi Asumsi <span class="text-red">*</span></label>
+                                <input disabled type="text" class="form-control" value="{{$model->version}}" id="detail_tanggal{{$model->id}}" placeholder="Masukkan Tahun" autocomplete="off" required>
                             </div>
                             <div class="form-group">
                                 <label >Kategori Produk <span class="text-red">*</span></label>
@@ -67,8 +67,10 @@
                     <div class="row">
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
-                                <label for="tanggal_awal">Tahun <span class="text-red">*</span></label>
-                                <input value="{{format_year($model->periode)}}" type="text" class="form-control" id="edit_tanggal{{$model->id}}" placeholder="Masukkan Tahun" autocomplete="off" required>
+                                <label >Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="edit_data_version{{$model->id}}" id="edit_data_version{{$model->id}}" class="form-control custom-select select2">
+                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Kategori Produk</label>
@@ -104,16 +106,27 @@
 <!--/div-->
 
 <script>
-    $('#edit_tanggal'+{{$model->id}}).bootstrapdatepicker({
+    $('#edit_data_version'+{{$model->id}}).select2({
         dropdownParent:$('#modal_edit'+{{$model->id}}),
-        format: "yyyy",
-        viewMode: "years",
-        minViewMode: "years",
-        autoclose:true,
-        showOnFocus: false,
-    }).on('click', function () {
-        $('#edit_tanggal'+{{$model->id}}).bootstrapdatepicker("show");
-    });
+        placeholder: 'Pilih Versi',
+        width: '100%',
+        allowClear: false,
+        ajax: {
+            url: "{{ route('version_select') }}",
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return {
+                    search: params.term
+                };
+            },
+            processResults: function(response) {
+                return {
+                    results: response
+                };
+            }
+        }
+    })
 
     $('#edit_data_main_kategori_produk'+{{$model->id}}).select2({
         dropdownParent: $('#modal_edit'+{{$model->id}}),

@@ -68,6 +68,52 @@
                 $('#dt_laba_rugi').DataTable().ajax.reload();
             })
 
+            $('#data_main_version_add').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#data_main_version_import').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#template").css("display", "block");
+            })
+
             $('#tanggal').bootstrapdatepicker({
                 format: "yyyy",
                 viewMode: "years",
@@ -173,7 +219,7 @@
                         url: '{{route('check_laba_rugi')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            periode:$('#tanggal_import').val()
+                            periode:$('#data_main_version_import').val()
                         },
                         success:function (response) {
                             if (response.code === 200){
@@ -492,7 +538,7 @@
                 url: '{{route('insert_laba_rugi')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    tanggal:$('#tanggal').val(),
+                    tanggal:$('#data_main_version_add').val(),
                     kategori_produk:$('#data_main_kategori_produk').val(),
                     biaya_penjualan: $('#biaya_penjualan').val(),
                     biaya_administrasi_umum: $('#biaya_administrasi_umum').val(),
@@ -510,6 +556,7 @@
                         if (result.value) {
                             $('#modal_add').modal('hide');
                             $("#modal_add input").val("")
+                            $('#data_main_version_add').val('').trigger("change");
                             $('#data_main_kategori_produk').val('').trigger("change");
                             $("#submit").attr('class', 'btn btn-primary').attr("disabled", false);
                             // update_dt_horizontal()
@@ -539,7 +586,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     id: id,
-                    tanggal:$('#edit_tanggal'+id).val(),
+                    tanggal:$('#edit_data_version'+id).val(),
                     kategori_produk:$('#edit_data_main_kategori_produk'+id).val(),
                     biaya_penjualan: $('#edit_biaya_penjualan'+id).val(),
                     biaya_administrasi_umum: $('#edit_biaya_administrasi_umum'+id).val(),

@@ -30,12 +30,14 @@ class SalrController extends Controller
             return $h_SalrDataTable->with([
                 'format' => $request->format_data,
                 'cost_center' => $request->cost_center,
+                'version' => $request->version,
+
+                'start_month_versi' => $request->start_month_versi,
+                'end_month_versi' => $request->end_month_versi,
                 'start_month' => $request->start_month,
                 'end_month' => $request->end_month,
-                'moth' => $request->moth,
-                'year' => $request->year,
+                'month' => $request->month,
                 'inflasi' => $request->inflasi,
-                'inflasi_asumsi' => $request->inflasi_asumsi,
             ])->render('pages.buku_besar.salr.index');
         } elseif ($request->data == 'dynamic') {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
@@ -44,19 +46,23 @@ class SalrController extends Controller
 
             // Periode
             if ($request->format_data == '0') {
-                $cost_center->where('salrs.periode', 'ilike', '%' . $request->year . '%');
-            } elseif ($request->format_data == '1') {
-                $temp = explode('-', $request->moth);
-                $timemonth = $temp[1] . '-' . $temp[0];
+                $cost_center->where('salrs.version_id', $request->version);
 
-                $cost_center->where('salrs.periode', 'ilike', '%' . $timemonth . '%');
+            } elseif ($request->format_data == '1') {
+                $timemonth = Asumsi_Umum::where('id', $request->month)->first();
+
+                $cost_center->where('salrs.periode', $timemonth->month_year)
+                    ->where('version_id', $request->version);
+
             } elseif ($request->format_data == '2') {
                 $start_temp = explode('-', $request->start_month);
                 $end_temp = explode('-', $request->end_month);
                 $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
                 $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
 
-                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+                    ->where('version_id', $request->version);
+
             }
 
             if ($request->cost_center != 'all') {
@@ -73,17 +79,17 @@ class SalrController extends Controller
     public function get_data(Request $request, H_SalrDataTable $h_SalrDataTable){
         if ($request->data == 'horizontal') {
 
-//            dd($request);
-
             return $h_SalrDataTable->with([
                 'format' => $request->format_data,
                 'cost_center' => $request->cost_center,
+                'version' => $request->version,
+
+                'start_month_versi' => $request->start_month_versi,
+                'end_month_versi' => $request->end_month_versi,
                 'start_month' => $request->start_month,
                 'end_month' => $request->end_month,
-                'moth' => $request->moth,
-                'year' => $request->year,
+                'month' => $request->month,
                 'inflasi' => $request->inflasi,
-                'inflasi_asumsi' => $request->inflasi_asumsi,
             ])->render('pages.buku_besar.salr.index');
 
 
@@ -92,23 +98,26 @@ class SalrController extends Controller
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
 
-            // Periode
-
 //            dd($request);
+            // Periode
             if ($request->format_data == '0') {
-                $cost_center->where('salrs.periode', 'ilike', '%' . $request->year . '%');
-            } elseif ($request->format_data == '1') {
-                $temp = explode('-', $request->moth);
-                $timemonth = $temp[1] . '-' . $temp[0];
+                $cost_center->where('salrs.version_id', $request->version);
 
-                $cost_center->where('salrs.periode', 'ilike', '%' . $timemonth . '%');
+            } elseif ($request->format_data == '1') {
+                $timemonth = Asumsi_Umum::where('id', $request->month)->first();
+
+                $cost_center->where('salrs.periode', $timemonth->month_year)
+                    ->where('version_id', $request->version);
+
             } elseif ($request->format_data == '2') {
                 $start_temp = explode('-', $request->start_month);
                 $end_temp = explode('-', $request->end_month);
                 $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
                 $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
 
-                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+                    ->where('version_id', $request->version);
+
             }
 
             if ($request->cost_center != 'all') {

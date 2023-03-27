@@ -742,17 +742,13 @@
                 let cek = true;
                 if ($('#filter_format').val() !== null && $('#cost_center_format').val() !== null && $('#data_main_version_horizontal').val() !== null){
 
+
                     if ($('#filter_format').val() === '1'){
+
                         if ($('#filter_inflasi').val() === '1'){
-                            if ($('#bulan_satuan_filter1').val() === '' || $('#filter_inflasi').val() === null || $('#versi_format').val() === null){
+                            if ($('#data_detail_version_horizontal').val() === null || $('#filter_inflasi').val() === null){
                                 cek = false
                             }
-                        }else if ($('#filter_inflasi').val() === '0'){
-                            if ($('#bulan_satuan_filter1').val() === '' || $('#filter_inflasi').val() === null ){
-                                cek = false
-                            }
-                        }else {
-                            cek = false
                         }
                     }else if ($('#filter_format').val() === '2'){
                         if ($('#bulan_filter1').val() === '' || $('#bulan_filter2').val() === ''){
@@ -1077,7 +1073,7 @@
                     start_month:$('#bulan_filter1').val(),
                     end_month:$('#bulan_filter2').val(),
 
-                    moth:$('#data_detail_version_horizontal').val(),
+                    month:$('#data_detail_version_horizontal').val(),
 
                     inflasi:$('#filter_inflasi').val(),
                 },
@@ -1194,7 +1190,7 @@
                                 start_month:$('#bulan_filter1').val(),
                                 end_month:$('#bulan_filter2').val(),
 
-                                moth:$('#data_detail_version_horizontal').val(),
+                                month:$('#data_detail_version_horizontal').val(),
 
                                 inflasi:$('#filter_inflasi').val(),
                             }
