@@ -56,6 +56,12 @@
                                             </select>
                                         </div>
                                         <div class="form-group">
+                                            <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                            <select name="data_main_version_horizontal" id="data_main_version_horizontal" class="form-control custom-select select2">
+                                                <option value="" disabled selected>Pilih Versi</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group" id="format_pick" style="display:none;">
                                             <label class="form-label">PERIODE <span class="text-red">*</span></label>
                                             <select id="filter_format" class="form-control custom-select select2">
                                                 <option selected disabled value="">Pilih Format</option>
@@ -64,21 +70,29 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="form-group" id="year_pick" style="display:none;">
-                                            <label class="form-label">TAHUN <span class="text-red">*</span></label>
-                                            <input type="text" class="form-control" name="tahun_satuan_filter1" id="tahun_satuan_filter1" placeholder="Year" autocomplete="off" required>
+
+                                        <div class="form-group" id="month_pick_range_versi" style="display:none;">
+                                            <label class="form-label">BULAN <span class="text-red">*</span></label>
+                                            <div class="input-group input-daterange">
+                                                <input readonly type="text" id="bulan_filter1_versi" class="form-control" placeholder="Month" autocomplete="off">
+                                                <div class="input-group-addon">to</div>
+                                                <input readonly type="text" id="bulan_filter2_versi" class="form-control" placeholder="Month" autocomplete="off">
+                                            </div>
                                         </div>
+
                                         <div class="form-group" id="month_pick_range" style="display:none;">
                                             <label class="form-label">BULAN <span class="text-red">*</span></label>
                                             <div class="input-group input-daterange">
                                                 <input type="text" id="bulan_filter1" class="form-control" placeholder="Month" autocomplete="off">
                                                 <div class="input-group-addon">to</div>
-                                                <input disabled type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
+                                                <input type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
                                             </div>
                                         </div>
                                         <div class="form-group" id="month_pick" style="display:none;">
-                                            <label class="form-label">BULAN <span class="text-red">*</span></label>
-                                            <input type="text" class="form-control" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
+                                            <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                            <select name="data_detail_version_horizontal" id="data_detail_version_horizontal" class="form-control custom-select select2">
+                                                <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
+                                            </select>
                                         </div>
                                         <div class="form-group" id="inflasi_pick" style="display:none;">
                                             <label class="form-label">INFLASI <span class="text-red">*</span></label>
@@ -88,11 +102,11 @@
                                                 <option value="0">Tidak</option>
                                             </select>
                                         </div>
-                                        <div class="form-group" id="versi_pick" style="display:none;">
-                                            <label class="form-label">VERSI INFLASI <span class="text-red">*</span></label>
-                                            <select id="versi_format" class="form-control custom-select select2">
-                                            </select>
-                                        </div>
+{{--                                        <div class="form-group" id="versi_pick" style="display:none;">--}}
+{{--                                            <label class="form-label">VERSI INFLASI <span class="text-red">*</span></label>--}}
+{{--                                            <select id="versi_format" class="form-control custom-select select2">--}}
+{{--                                            </select>--}}
+{{--                                        </div>--}}
                                         <div class="btn-list">
                                             <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i class="fa fa-search me-2 fs-14"></i> Tampilkan</button>
                                         </div>
@@ -152,41 +166,132 @@
                 $('#tanggal').bootstrapdatepicker("show");
             });
 
-            $('#tanggal_import').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true,
-                showOnFocus: false,
+            $('#data_main_version_add').select2({
+                dropdownParent: $('#modal_add'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             }).on('change', function () {
-                $("#template").css("display", "block");
-            }).on('click', function () {
-                $('#tanggal_import').bootstrapdatepicker("show");
-            });
+                var data_version = $('#data_main_version_add').val();
+                $('#data_detail_version_add').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_add'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
 
-            $('#tahun_satuan_filter1').bootstrapdatepicker({
-                format: "yyyy",
-                viewMode: "years",
-                minViewMode: "years",
-                autoclose:true
-            });
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                })
+            })
 
-            $('#bulan_filter1').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
+            $('#data_main_version_import').select2({
+                dropdownParent: $('#modal_import'),
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
             }).on('change', function () {
-                var periode = moment($('#bulan_filter1').val(), "MM-YYYY").add(1, 'months').format('MM-YYYY');
-                $('#bulan_filter2').attr('disabled', false)
-                    .bootstrapdatepicker({
-                    format: "mm-yyyy",
-                    viewMode: "months",
-                    minViewMode: "months",
-                    autoclose:true,
-                    startDate: periode
+                var data_version = $('#data_main_version_import').val();
+                $('#data_detail_version_import').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_import'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                }).on('change', function () {
+                    $("#template").css("display", "block");
                 });
-            });
+            })
+
+
+            $('#data_main_version_horizontal').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#format_pick").css("display", "block");
+                var periode = $('#filter_format').val()
+
+                if (periode === '0'){
+                    set_versi_date()
+                }else if (periode === '1'){
+                    set_month_date()
+                }
+            })
 
             $('#bulan_satuan_filter1').bootstrapdatepicker({
                 format: "mm-yyyy",
@@ -356,9 +461,10 @@
             $('#submit_import').on('click', function () {
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
                 $("#back_import").attr("disabled", true);
-                var date = $('#tanggal_import').val();
+                var version = $('#data_main_version').val();
+                var date = $('#data_detal_version').val();
 
-                if ($('#tanggal_import').val() !== null && $('#file').val() !== ''){
+                if (version !== null && date !== null && $('#file').val() !== ''){
                     let file = new FormData($("#form_input_salr")[0]);
                     $.ajax({
                         type: "POST",
@@ -368,7 +474,8 @@
                         url: '{{route('check_salr')}}',
                         data: {
                             _token: "{{ csrf_token() }}",
-                            periode:$('#tanggal_import').val()
+                            version: version,
+                            periode: date
                         },
                         success:function (response) {
                             if (response.code === 200){
@@ -418,7 +525,6 @@
                         }
                     })
                 }else {
-
                     Swal.fire({
                         title: 'PERINGATAN',
                         text: "Terdapat Data Bulan dan file yang kosong. Silakan Isi data tersebut",
@@ -433,7 +539,6 @@
                         }
                     })
                 }
-
             })
 
             function importStore(file) {
@@ -448,6 +553,7 @@
                     data: file,
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
                         $('#local_loader').hide();
                         Swal.fire({
                             title: response.title,
@@ -461,9 +567,8 @@
                                 if (result.value) {
                                     $('#modal_import').modal('hide')
                                     $("#modal_import input").val("")
-                                    // update_dt_horizontal()
-                                    // $("#table_main").empty();
-                                    // get_data()
+                                    $("#data_main_version").val('').trigger('change')
+                                    $("#data_detal_version").val('').trigger('change')
                                     $('#dt_salr').DataTable().ajax.reload();
                                 }
                             })
@@ -499,25 +604,118 @@
                     $("#month_pick").css("display", "none");
                     $("#inflasi_pick").css("display", "none");
 
-                    $("#year_pick").css("display", "block");
+                    $("#month_pick_range_versi").css("display", "block");
+
+                    set_versi_date()
                 }else if ($('#filter_format').val() === '1'){
                     $("#month_pick_range").css("display", "none");
-                    $("#year_pick").css("display", "none");
+                    $("#month_pick_range_versi").css("display", "none");
 
                     $("#month_pick").css("display", "block");
-
-                    if ($('#bulan_satuan_filter1').val() === ''){
-                        $("#inflasi_pick").css("display", "block");
-                    }
+                    $("#inflasi_pick").css("display", "block");
+                    set_month_date()
 
                 }else if($('#filter_format').val() === '2'){
                     $("#month_pick").css("display", "none");
-                    $("#year_pick").css("display", "none");
+                    $("#month_pick_range_versi").css("display", "none");
                     $("#inflasi_pick").css("display", "none");
 
                     $("#month_pick_range").css("display", "block");
+                    set_month_date_custom()
                 }
             })
+
+            function set_versi_date() {
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route('check_version_salrs')}}',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        version: $('#data_main_version_horizontal').val(),
+                    },
+                    success:function (response) {
+                        $('#bulan_filter1_versi').val(helpDateFormat(response.data['awal_periode'],'se'))
+                        $('#bulan_filter2_versi').val(helpDateFormat(response.data['akhir_periode'],'se'))
+                    },
+                    error: function (response) {
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
+                        handleError(response)
+                    }
+                })
+            }
+
+            function set_month_date() {
+                var data_version = $('#data_main_version_horizontal').val();
+                $('#data_detail_version_horizontal').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:data_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                });
+            }
+
+            function set_month_date_custom() {
+                $.ajax({
+                    type: "POST",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: '{{route('check_version_salrs')}}',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        version: $('#data_main_version_horizontal').val(),
+                    },
+                    success:function (response) {
+                        // var awal_periode = moment(response.data['awal_periode'])
+                        // var akhir_periode = moment(response.data['akhir_periode'])
+                        // console.log(response.data['akhir_periode'], awal_periode, akhir_periode)
+                        $('#bulan_filter1').bootstrapdatepicker({
+                            format: "mm-yyyy",
+                            viewMode: "months",
+                            minViewMode: "months",
+                            autoclose:true,
+                            // startDate: response.data['awal_periode'],
+                            // endDate: response.data['akhir_periode'],
+                        });
+
+                        $('#bulan_filter2').bootstrapdatepicker({
+                            format: "mm-yyyy",
+                            viewMode: "months",
+                            minViewMode: "months",
+                            autoclose:true,
+                            // startDate: response.data['awal_periode'],
+                            // endDate: response.data['akhir_periode'],
+                        });
+                    },
+                    error: function (response) {
+                        $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
+                        $("#back_import").attr("disabled", false);
+                        handleError(response)
+                    }
+                })
+
+
+            }
 
             $('#cost_center_format').select2({
                 placeholder: 'Pilih Cost Center',
@@ -542,22 +740,15 @@
 
             $('#btn_tampilkan').on('click', function () {
                 let cek = true;
-                if ($('#filter_format').val() !== null && $('#cost_center_format').val() !== null){
-                    if ($('#filter_format').val() === '0'){
-                        if ($('#tahun_satuan_filter1').val() == ''){
-                            cek = false
-                        }
-                    }else if ($('#filter_format').val() === '1'){
+                if ($('#filter_format').val() !== null && $('#cost_center_format').val() !== null && $('#data_main_version_horizontal').val() !== null){
+
+
+                    if ($('#filter_format').val() === '1'){
+
                         if ($('#filter_inflasi').val() === '1'){
-                            if ($('#bulan_satuan_filter1').val() === '' || $('#filter_inflasi').val() === null || $('#versi_format').val() === null){
+                            if ($('#data_detail_version_horizontal').val() === null || $('#filter_inflasi').val() === null){
                                 cek = false
                             }
-                        }else if ($('#filter_inflasi').val() === '0'){
-                            if ($('#bulan_satuan_filter1').val() === '' || $('#filter_inflasi').val() === null ){
-                                cek = false
-                            }
-                        }else {
-                            cek = false
                         }
                     }else if ($('#filter_format').val() === '2'){
                         if ($('#bulan_filter1').val() === '' || $('#bulan_filter2').val() === ''){
@@ -874,12 +1065,17 @@
                     data:'dynamic',
                     format_data:$('#filter_format').val(),
                     cost_center:$('#cost_center_format').val(),
+                    version:$('#data_main_version_horizontal').val(),
+
+                    start_month_versi:$('#bulan_filter1_versi').val(),
+                    end_month_versi:$('#bulan_filter2_versi').val(),
+
                     start_month:$('#bulan_filter1').val(),
                     end_month:$('#bulan_filter2').val(),
-                    moth:$('#bulan_satuan_filter1').val(),
-                    year:$('#tahun_satuan_filter1').val(),
+
+                    month:$('#data_detail_version_horizontal').val(),
+
                     inflasi:$('#filter_inflasi').val(),
-                    inflasi_asumsi:$('#versi_format').val(),
                 },
                 success:function (response) {
                     for (let i = 0; i < response.cost_center.length;i++){
@@ -888,7 +1084,7 @@
                         kolom1 += '<th class="text-center">'+response.cost_center[i].cost_center_desc+'</th>';
                         kolom_tfoot += '<th class="text-center"></th>';
                     }
-                    console.log(column)
+
                     $("#primary").append(kolom);
                     $("#secondary").append(kolom1);
                     $("#total_foot").append(kolom_tfoot);
@@ -1004,12 +1200,17 @@
                                 data:'horizontal',
                                 format_data:$('#filter_format').val(),
                                 cost_center:$('#cost_center_format').val(),
+                                version:$('#data_main_version_horizontal').val(),
+
+                                start_month_versi:$('#bulan_filter1_versi').val(),
+                                end_month_versi:$('#bulan_filter2_versi').val(),
+
                                 start_month:$('#bulan_filter1').val(),
                                 end_month:$('#bulan_filter2').val(),
-                                moth:$('#bulan_satuan_filter1').val(),
-                                year:$('#tahun_satuan_filter1').val(),
+
+                                month:$('#data_detail_version_horizontal').val(),
+
                                 inflasi:$('#filter_inflasi').val(),
-                                inflasi_asumsi:$('#versi_format').val(),
                             }
                         },
                         columns: column,
@@ -1091,7 +1292,8 @@
                     ga_account:$('#data_main_ga_account').val(),
                     gl_account:$('#data_main_gl_account').val(),
                     cost_center:$('#data_main_cost_center').val(),
-                    tanggal:$('#tanggal').val(),
+                    version:$('#data_main_version_add').val(),
+                    date:$('#data_detail_version_add').val(),
                     value:$('#value').val(),
                     nama:$('#nama').val(),
                     partner_cost_center:$('#data_main_partner_cost_center').val(),
@@ -1149,7 +1351,8 @@
                     ga_account:$('#edit_data_main_ga_account'+id).val(),
                     gl_account:$('#edit_data_main_gl_account'+id).val(),
                     cost_center:$('#edit_data_main_cost_center'+id).val(),
-                    tanggal:$('#edit_tanggal'+id).val(),
+                    version:$('#data_main_version_update'+id).val(),
+                    date:$('#data_detail_version_update'+id).val(),
                     value:$('#edit_value'+id).val(),
                     nama:$('#edit_nama'+id).val(),
                     partner_cost_center:$('#edit_data_main_partner_cost_center'+id).val(),

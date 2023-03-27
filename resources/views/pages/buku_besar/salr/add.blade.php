@@ -28,8 +28,17 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="tanggal_awal">Bulan <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" id="tanggal" placeholder="Bulan-Tahun" autocomplete="off">
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="main_version" id="data_main_version_add" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                <select name="detail_version" id="data_detail_version_add" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
+                                </select>
+                                <button style="display: none;" type="button" class="btn btn-primary mt-2" id="template"><i class="fe fe-download me-2"></i>Download Template</button>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value <span class="text-red">*</span></label>

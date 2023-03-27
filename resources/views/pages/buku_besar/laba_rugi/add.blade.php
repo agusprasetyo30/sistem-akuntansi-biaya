@@ -10,8 +10,10 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="tanggal_awal">Tahun <span class="text-red">*</span></label>
-                                <input type="text" class="form-control" id="tanggal" placeholder="Masukkan Tahun" autocomplete="off" required>
+                                <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
+                                <select name="main_version" id="data_main_version_add" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Versi</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Kategori Produk</label>

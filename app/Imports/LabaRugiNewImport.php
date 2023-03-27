@@ -28,12 +28,12 @@ class LabaRugiNewImport implements ToModel, WithHeadingRow, SkipsOnError, WithVa
 
     public function __construct($periode)
     {
-        $this->periode = $periode;
+        $this->data_main_version_import = $periode;
     }
 
     public function model(array $row)
     {
-        $input['periode'] = $this->periode.'-01-01';
+        $input['version_id'] = $this->data_main_version_import;
         $input['kategori_produk_id'] = $row['kategori_produk_id'];
         $input['value_bp'] = $row['biaya_penjualan'] != null ? (double) $row['biaya_penjualan']: 0;
         $input['value_bau'] = $row['biaya_adm_umum'] != null ? (double) $row['biaya_adm_umum'] : 0;

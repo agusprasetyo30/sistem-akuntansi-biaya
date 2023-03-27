@@ -7,6 +7,7 @@ use App\Models\CostCenter;
 use App\Models\GroupAccountFC;
 use App\Models\Master\H_Salr;
 use App\Models\Salr;
+use App\Models\Version_Asumsi;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
@@ -34,23 +35,34 @@ class H_SalrDataTable extends DataTable
 
         // Periode
         if ($this->format == '0'){
-            $cost_center->where('salrs.periode', 'ilike', '%'.$this->year.'%');
+            $cost_center->where('salrs.version_id', $this->version);
         }elseif ($this->format == '1'){
-            $temp = explode('-', $this->moth);
-            $timemonth = $temp[1].'-'.$temp[0];
+            $timemonth = Asumsi_Umum::where('id', $this->month)->first();
 
-            $cost_center->where('salrs.periode', 'ilike', '%'.$timemonth.'%');
+            $cost_center->where('salrs.periode', $timemonth->month_year)
+                ->where('version_id', $this->version);
+
         }elseif ($this->format == '2'){
             $start_temp = explode('-', $this->start_month);
             $end_temp = explode('-', $this->end_month);
             $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
             $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
 
-            $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+            $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+                ->where('version_id', $this->version);
         }
 
+//        // Inflasi
+//        if ($this->inflasi == '1'){
+//            $data_inflasi = Asumsi_Umum::where('id', $this->inflasi_asumsi)
+//                ->first();
+//        }else{
+//            $data_inflasi = Asumsi_Umum::where('id', $this->inflasi_asumsi)
+//                ->first();
+//        }
 
-        $data_inflasi = Asumsi_Umum::where('id', $this->inflasi_asumsi)
+
+        $data_inflasi = Asumsi_Umum::where('id', $this->month)
             ->first();
 
         if ($this->cost_center != 'all'){
@@ -71,50 +83,56 @@ class H_SalrDataTable extends DataTable
 
                 // Periode
                 if ($this->format == '0'){
-                    $value_salr->where('salrs.periode', 'ilike', '%'.$this->year.'%');
+                    $value_salr->where('salrs.version_id', $this->version);
                 }elseif ($this->format == '1'){
-                    $temp = explode('-', $this->moth);
-                    $timemonth = $temp[1].'-'.$temp[0];
+                    $timemonth = Asumsi_Umum::where('id', $this->month)->first();
 
-                    $value_salr->where('salrs.periode', 'ilike', '%'.$timemonth.'%');
+                    $value_salr->where('salrs.periode', $timemonth->month_year)
+                        ->where('version_id', $this->version);
                 }elseif ($this->format == '2'){
                     $start_temp = explode('-', $this->start_month);
                     $end_temp = explode('-', $this->end_month);
                     $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
                     $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
 
-                    $value_salr->whereBetween('salrs.periode', [$start_date, $end_date]);
+                    $value_salr->whereBetween('salrs.periode', [$start_date, $end_date])->where('version_id', $this->version);
                 }
 
                 $value_salr = $value_salr->first();
 
                 // Inflasi
                 if ($this->inflasi == '1'){
+//                    dd($value_salr->value, $data_inflasi->inflasi / 100);
                     $result = $value_salr->value * $data_inflasi->inflasi / 100;
                 }else{
+//                    dd($value_salr->value);
                     $result = $value_salr->value;
                 }
-
                 return $value_salr->value != null ? rupiah($result):'-';
             })->with('total'.$key , function () use ($item, $data_inflasi){
                 $total = Salr::select(DB::raw('SUM(value) as value'))
-                    ->where('cost_center', $item->cost_center);
+                    ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+                    ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+                    ->where([
+                        'salrs.cost_center' => $item->cost_center,
+//                        'group_account_fc.group_account_fc' => $query-> group_account_fc
+                    ]);
 
                 // Periode
                 if ($this->format == '0'){
-                    $total->where('periode', 'ilike', '%'.$this->year.'%');
+                    $total->where('salrs.version_id', $this->version);
                 }elseif ($this->format == '1'){
-                    $temp = explode('-', $this->moth);
-                    $timemonth = $temp[1].'-'.$temp[0];
+                    $timemonth = Asumsi_Umum::where('id', $this->month)->first();
 
-                    $total->where('periode', 'ilike', '%'.$timemonth.'%');
+                    $total->where('salrs.periode', $timemonth->month_year)
+                        ->where('version_id', $this->version);
                 }elseif ($this->format == '2'){
                     $start_temp = explode('-', $this->start_month);
                     $end_temp = explode('-', $this->end_month);
                     $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
                     $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
 
-                    $total->whereBetween('periode', [$start_date, $end_date]);
+                    $total->whereBetween('salrs.periode', [$start_date, $end_date])->where('version_id', $this->version);
                 }
 
                 $total = $total->first();

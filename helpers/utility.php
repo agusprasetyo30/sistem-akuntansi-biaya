@@ -344,7 +344,7 @@ if (!function_exists('format_salr')) {
     function format_salr()
     {
         $status = array(
-            '0' => '1 Tahun',
+            '0' => '1 Versi',
             '1' => '1 Bulan',
             '2' => 'Custom',
         );

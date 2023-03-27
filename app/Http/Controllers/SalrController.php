@@ -6,10 +6,12 @@ use App\DataTables\Master\H_SalrDataTable;
 use App\DataTables\Master\SalrDataTable;
 use App\Exports\MultipleSheet\MS_SalrExport;
 use App\Imports\SalrImport;
+use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
 use App\Models\GLAccountFC;
 use App\Models\Material;
 use App\Models\Salr;
+use App\Models\Version_Asumsi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -28,12 +30,14 @@ class SalrController extends Controller
             return $h_SalrDataTable->with([
                 'format' => $request->format_data,
                 'cost_center' => $request->cost_center,
+                'version' => $request->version,
+
+                'start_month_versi' => $request->start_month_versi,
+                'end_month_versi' => $request->end_month_versi,
                 'start_month' => $request->start_month,
                 'end_month' => $request->end_month,
-                'moth' => $request->moth,
-                'year' => $request->year,
+                'month' => $request->month,
                 'inflasi' => $request->inflasi,
-                'inflasi_asumsi' => $request->inflasi_asumsi,
             ])->render('pages.buku_besar.salr.index');
         } elseif ($request->data == 'dynamic') {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
@@ -42,19 +46,23 @@ class SalrController extends Controller
 
             // Periode
             if ($request->format_data == '0') {
-                $cost_center->where('salrs.periode', 'ilike', '%' . $request->year . '%');
-            } elseif ($request->format_data == '1') {
-                $temp = explode('-', $request->moth);
-                $timemonth = $temp[1] . '-' . $temp[0];
+                $cost_center->where('salrs.version_id', $request->version);
 
-                $cost_center->where('salrs.periode', 'ilike', '%' . $timemonth . '%');
+            } elseif ($request->format_data == '1') {
+                $timemonth = Asumsi_Umum::where('id', $request->month)->first();
+
+                $cost_center->where('salrs.periode', $timemonth->month_year)
+                    ->where('version_id', $request->version);
+
             } elseif ($request->format_data == '2') {
                 $start_temp = explode('-', $request->start_month);
                 $end_temp = explode('-', $request->end_month);
                 $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
                 $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
 
-                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+                    ->where('version_id', $request->version);
+
             }
 
             if ($request->cost_center != 'all') {
@@ -70,36 +78,46 @@ class SalrController extends Controller
 
     public function get_data(Request $request, H_SalrDataTable $h_SalrDataTable){
         if ($request->data == 'horizontal') {
+
             return $h_SalrDataTable->with([
                 'format' => $request->format_data,
                 'cost_center' => $request->cost_center,
+                'version' => $request->version,
+
+                'start_month_versi' => $request->start_month_versi,
+                'end_month_versi' => $request->end_month_versi,
                 'start_month' => $request->start_month,
                 'end_month' => $request->end_month,
-                'moth' => $request->moth,
-                'year' => $request->year,
+                'month' => $request->month,
                 'inflasi' => $request->inflasi,
-                'inflasi_asumsi' => $request->inflasi_asumsi,
             ])->render('pages.buku_besar.salr.index');
+
+
         }elseif ($request->data == 'dynamic') {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
 
+//            dd($request);
             // Periode
             if ($request->format_data == '0') {
-                $cost_center->where('salrs.periode', 'ilike', '%' . $request->year . '%');
-            } elseif ($request->format_data == '1') {
-                $temp = explode('-', $request->moth);
-                $timemonth = $temp[1] . '-' . $temp[0];
+                $cost_center->where('salrs.version_id', $request->version);
 
-                $cost_center->where('salrs.periode', 'ilike', '%' . $timemonth . '%');
+            } elseif ($request->format_data == '1') {
+                $timemonth = Asumsi_Umum::where('id', $request->month)->first();
+
+                $cost_center->where('salrs.periode', $timemonth->month_year)
+                    ->where('version_id', $request->version);
+
             } elseif ($request->format_data == '2') {
                 $start_temp = explode('-', $request->start_month);
                 $end_temp = explode('-', $request->end_month);
                 $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
                 $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
 
-                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date]);
+                $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+                    ->where('version_id', $request->version);
+
             }
 
             if ($request->cost_center != 'all') {
@@ -120,20 +138,22 @@ class SalrController extends Controller
                 "ga_account" => 'required',
                 "gl_account" => 'required',
                 "cost_center" => 'required',
-                "tanggal" => 'required',
+                "version" => 'required',
+                "date" => 'required',
                 "value" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $timestamps = explode('-', $request->tanggal);
+            $asumsi = Asumsi_Umum::where('id', $request->date)->first();
 
             $input['gl_account_fc'] = $request->gl_account;
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['periode'] = $timestamps[1] . '-' . $timestamps[0] . '-01';
+            $input['periode'] = $asumsi->month_year;
+            $input['version_id'] = $asumsi->version_id;
             $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
             $input['partner_cost_center'] = $request->partner_cost_center;
@@ -165,20 +185,27 @@ class SalrController extends Controller
                 "ga_account" => 'required',
                 "gl_account" => 'required',
                 "cost_center" => 'required',
-                "tanggal" => 'required',
+                "version" => 'required',
+                "date" => 'required',
                 "value" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $timestamps = explode('-', $request->tanggal);
+            try {
+                $asumsi = Asumsi_Umum::where('id', $request->date)->first();
+            }catch (\Exception $exception){
+                $asumsi = Asumsi_Umum::where('month_year', 'ilike', '%'.$request->date.'%')
+                    ->where('version_id', $request->version)->first();
+            }
 
             $input['gl_account_fc'] = $request->gl_account;
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['periode'] = $timestamps[1] . '-' . $timestamps[0] . '-01';
+            $input['periode'] = $asumsi->month_year;
+            $input['version_id'] = $asumsi->version_id;
             $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
             $input['partner_cost_center'] = $request->partner_cost_center;
@@ -231,7 +258,8 @@ class SalrController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "file" => 'required',
-                'tanggal_import' => 'required'
+                "detail_version" => 'required',
+                'main_version' => 'required'
             ], validatorMsg());
 
             if ($validator->fails()) {
@@ -239,15 +267,18 @@ class SalrController extends Controller
             }
 
             $transaction = DB::transaction(function () use ($request) {
-                $temp = explode('-', $request->tanggal_import);
-                $timestamp = $temp[1] . '-' . $temp[0] . '-01';
-                $empty_excel = Excel::toArray(new SalrImport($timestamp), $request->file('file'));
+
+                $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
+
+                $empty_excel = Excel::toArray(new SalrImport($asumsi), $request->file('file'));
+
                 if ($empty_excel[0]) {
                     $file = $request->file('file')->store('import');
+                    Salr::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
+                        ->where('version_id', $asumsi->version_id)
+                        ->delete();
 
-
-                    Salr::where('periode', 'ilike', '%' . $timestamp . '%')->delete();
-                    $import = new SalrImport($timestamp);
+                    $import = new SalrImport($asumsi);
                     $import->import($file);
 
                     $data_fail = $import->failures();
@@ -269,9 +300,12 @@ class SalrController extends Controller
                 ]);
             }
         } catch (\Exception $exception) {
-            $temp = explode('-', $request->tanggal_import);
-            $timestamp = $temp[1] . '-' . $temp[0] . '-01';
-            $empty_excel = Excel::toArray(new SalrImport($timestamp), $request->file('file'));
+//            $temp = explode('-', $request->tanggal_import);
+//            $timestamp = $temp[1] . '-' . $temp[0] . '-01';
+
+            $asumsi = Asumsi_Umum::where('id', $request->periode)->first();
+
+            $empty_excel = Excel::toArray(new SalrImport($asumsi->month_year), $request->file('file'));
 
             $gl_account = [];
             $gl_account_ = [];
@@ -328,8 +362,10 @@ class SalrController extends Controller
     public function check(Request $request)
     {
         try {
-            $timestamp = explode('-', $request->periode);
-            $check = Salr::where('periode', 'ilike', '%' . $timestamp[1] . '-' . $timestamp[0] . '-01' . '%')
+
+            $asumsi = Asumsi_Umum::where('id', $request->periode)->first();
+//            $timestamp = explode('-', $request->periode);
+            $check = Salr::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
                 ->first();
             if ($check == null) {
                 return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
@@ -337,6 +373,17 @@ class SalrController extends Controller
                 return response()->json(['code' => 201, 'msg' => 'Data Ada']);
             }
         } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function check_version_salrs(Request $request){
+        try {
+            $data_versi = Version_Asumsi::where('id', $request->version)->first();
+            return response()->json(['code' => 200, 'data' => $data_versi]);
+        }catch (\Exception $exception){
             return setResponse([
                 'code' => 400,
             ]);

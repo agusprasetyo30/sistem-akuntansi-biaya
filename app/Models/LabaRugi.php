@@ -13,7 +13,7 @@ class LabaRugi extends Model
 
     protected $fillable = [
         'company_code',
-        'periode',
+        'version_id',
         'kategori_produk_id',
         'value_bp',
         'value_bau',
