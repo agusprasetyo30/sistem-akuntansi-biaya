@@ -14,15 +14,18 @@ class H_PJPenjualanDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('pj_penjualan')
             ->select('pj_penjualan.material_code', 'material.material_name', 'material.material_uom')
             ->leftjoin('material', 'material.material_code', '=', 'pj_penjualan.material_code')
             ->whereNull('pj_penjualan.deleted_at')
             ->where('pj_penjualan.version_id', $this->version)
-            ->where('pj_penjualan.company_code', $cc)
             ->groupBy('pj_penjualan.material_code', 'material.material_name', 'material.material_uom');
+
+        if ($this->company != 'all' && auth()->user()->mapping_akses('pj_penjualan')->company_code == 'all') {
+            $query = $query->where('pj_penjualan.company_code', $this->company);
+        } else if ($this->company != 'all' && auth()->user()->mapping_akses('pj_penjualan')->company_code != 'all') {
+            $query = $query->where('pj_penjualan.company_code', auth()->user()->mapping_akses('pj_penjualan')->company_code);
+        }
 
         $datatable = datatables()
             ->query($query)

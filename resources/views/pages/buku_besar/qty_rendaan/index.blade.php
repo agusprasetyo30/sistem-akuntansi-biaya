@@ -67,13 +67,20 @@
                                 </div>
                             </div>
                             <div class="tab-pane " id="horizontal">
-                                <div class="mb-2 row">
+                                <div class="mb-5 row">
+                                    @if (auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all')
+                                        <div class="form-group">
+                                            <label class="form-label">PERUSAHAAN</label>
+                                            <select id="filter_company" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                    @endif
+
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version" class="form-control custom-select select2">
                                         </select>
                                     </div>
-
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
@@ -460,6 +467,30 @@
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
+            
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
         })
 
         function get_data(){
@@ -643,7 +674,8 @@
                 url : '{{route("qty_rendaan")}}',
                 data: {
                     data:'version',
-                    version:$('#filter_version').val()
+                    version:$('#filter_version').val(),
+                    company:$('#filter_company').val()
                 },
                 success:function (response) {
                     for (let i = 0; i < response.asumsi.length;i++){
@@ -698,7 +730,8 @@
                             url : '{{route("qty_rendaan")}}',
                             data: {
                                 data:'horizontal',
-                                version:$('#filter_version').val()
+                                version:$('#filter_version').val(),
+                                company:$('#filter_company').val()
                             }
                         },
                         columns: column,

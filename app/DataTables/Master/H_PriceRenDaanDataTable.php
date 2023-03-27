@@ -28,10 +28,16 @@ class H_PriceRenDaanDataTable extends DataTable
             ->where('price_rendaan.version_id', $this->version)
             ->groupBy('price_rendaan.material_code', 'price_rendaan.region_name', 'regions.region_desc', 'material.material_name');
 
+        if ($this->company != 'all' && auth()->user()->mapping_akses('price_rendaan')->company_code == 'all') {
+            $query = $query->where('price_rendaan.company_code', $this->company);
+        } else if ($this->company != 'all' && auth()->user()->mapping_akses('price_rendaan')->company_code != 'all') {
+            $query = $query->where('price_rendaan.company_code', auth()->user()->mapping_akses('price_rendaan')->company_code);
+        }
+
         $datatable = datatables()
             ->query($query)
-            ->addColumn('material', function ($query){
-                return $query->material_code.' - '.$query->material_name;
+            ->addColumn('material', function ($query) {
+                return $query->material_code . ' - ' . $query->material_name;
             });
 
         $asumsi = DB::table('asumsi_umum')
@@ -54,12 +60,11 @@ class H_PriceRenDaanDataTable extends DataTable
                     ->where('material_code', $query->material_code)
                     ->first();
 
-                if ($currency == 'Rupiah'){
+                if ($currency == 'Rupiah') {
                     return $pricerendaanAsumsi ? rupiah($pricerendaanAsumsi->price_rendaan_value) : '-';
-                }elseif ($currency == 'Dollar'){
+                } elseif ($currency == 'Dollar') {
                     return $pricerendaanAsumsi ? helpDollar($pricerendaanAsumsi->price_rendaan_value, $pricerendaanAsumsi->usd_rate) : '-';
                 }
-
             });
         }
 
@@ -93,10 +98,10 @@ class H_PriceRenDaanDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),

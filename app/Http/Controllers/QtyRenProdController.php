@@ -22,7 +22,7 @@ class QtyRenProdController extends Controller
         if ($request->data == 'index') {
             return $qtyrenprodDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.qty_renprod.index');
         } elseif ($request->data == 'horizontal') {
-            return $h_QtyRenProdDataTable->with(['version' => $request->version])->render('pages.buku_besar.qty_renprod.index');
+            return $h_QtyRenProdDataTable->with(['version' => $request->version, 'company' => $request->company])->render('pages.buku_besar.qty_renprod.index');
         } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $request->version)

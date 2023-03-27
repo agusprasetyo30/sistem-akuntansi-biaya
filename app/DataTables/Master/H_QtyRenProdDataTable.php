@@ -14,15 +14,18 @@ class H_QtyRenProdDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('qty_renprod')
             ->select('qty_renprod.cost_center', 'cost_center.cost_center_desc')
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
             ->whereNull('qty_renprod.deleted_at')
             ->where('qty_renprod.version_id', $this->version)
-            ->where('qty_renprod.company_code', $cc)
             ->groupBy('qty_renprod.cost_center', 'cost_center.cost_center_desc');
+
+        if ($this->company != 'all' && auth()->user()->mapping_akses('qty_renprod')->company_code == 'all') {
+            $query = $query->where('qty_renprod.company_code', $this->company);
+        } else if ($this->company != 'all' && auth()->user()->mapping_akses('qty_renprod')->company_code != 'all') {
+            $query = $query->where('qty_renprod.company_code', auth()->user()->mapping_akses('qty_renprod')->company_code);
+        }
 
         $datatable = datatables()
             ->query($query)
