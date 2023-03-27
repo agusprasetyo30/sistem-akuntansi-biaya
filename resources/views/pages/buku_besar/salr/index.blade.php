@@ -1113,8 +1113,26 @@
                                 filename: 'Salr Tabel Horizontal',
                                 footer: true,
                                 exportOptions: {
-                                    header: function (data, colIdx) {
-                                        console.log('opt', colIdx)
+                                    format: {
+                                        body: function ( data, row, kolom, node ) {
+                                            if (typeof data === 'undefined') {
+                                                return;
+                                            }
+                                            if (data == null) {
+                                                return data;
+                                            }
+                                            if ( kolom >= 2) {                      
+                                                var arr = data.split(',');
+                                                arr[0] = arr[0].toString().replace( /[\.]/g, "" );
+                                                if (arr[0] > ','  || arr[1] > ',') {
+                                                    data = arr[0] + ',' + arr[1] + ',';
+                                                } else {
+                                                    return '';
+                                                }
+                                                return data.toString().replace( /[^\d.,]/g, "," );
+                                            }
+                                            return data;
+                                        }
                                     }
                                 },
                                 customize: function (file) {

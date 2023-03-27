@@ -419,6 +419,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
         Route::post('header', [SimulasiProyeksiController::class, 'index_header'])->name('header_simulasi_proyeksi');
         Route::post('store', [SimulasiProyeksiController::class, 'store'])->name('store_simulasi_proyeksi');
+        Route::get('export', [SimulasiProyeksiController::class, 'export'])->name('export.simulasi_proyeksi');
     });
 
     Route::group(['prefix' => 'kontrol-proyeksi'], function () {
@@ -432,6 +433,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
         Route::get('/company_select', [SelectController::class, 'company'])->name('company_select');
         Route::get('/company_filter_select', [SelectController::class, 'company_filter'])->name('company_filter_select');
+        Route::get('/main_company_filter_select', [SelectController::class, 'main_company_filter'])->name('main_company_filter_select');
         Route::get('/plant_balans_select', [SelectController::class, 'plant_balans'])->name('plant_balans_select');
         Route::get('/glos_cc_balans', [SelectController::class, 'glos_cc_balans'])->name('glos_cc_balans_select');
         Route::get('/periode_select', [SelectController::class, 'periode'])->name('periode_select');

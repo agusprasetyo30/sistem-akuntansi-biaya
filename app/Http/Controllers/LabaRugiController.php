@@ -17,11 +17,9 @@ class LabaRugiController extends Controller
 {
     public function index(Request $request, labaRugiDataTable $labaRugiDataTable)
     {
-
-
         if ($request->data == 'index') {
-            return $labaRugiDataTable->render('pages.buku_besar.laba_rugi.index');
-        }elseif ($request->data == 'horizontal'){
+            return $labaRugiDataTable->with(['filter_company' => $request->filter_company])->render('pages.buku_besar.laba_rugi.index');
+        } elseif ($request->data == 'horizontal') {
             return $labaRugiDataTable->render('pages.buku_besar.laba_rugi.index');
         }
         return view('pages.buku_besar.laba_rugi.index');
@@ -55,10 +53,10 @@ class LabaRugiController extends Controller
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
-            if ($check_data != null){
+            if ($check_data != null) {
                 LabaRugi::where('id', $check_data->id)
                     ->update($input);
-            }else{
+            } else {
                 LabaRugi::create($input);
             }
 
@@ -140,7 +138,7 @@ class LabaRugiController extends Controller
                 "data_main_version_import" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails()){
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
             }
 
@@ -154,26 +152,25 @@ class LabaRugiController extends Controller
                     $import->import($file);
 
                     $data_fail = $import->failures();
-
-                }else{
+                } else {
                     $data_fail = [];
                 }
                 return $data_fail;
             });
 
-            if ($transaction->isNotEmpty()){
+            if ($transaction->isNotEmpty()) {
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',
                 ]);
-            }else{
+            } else {
                 return setResponse([
                     'code' => 200,
                     'title' => 'Berhasil meng-import data'
                 ]);
             }
         }catch (\Exception $exception){
-            dd($exception);
+//            dd($exception);
             if ($exception->getCode() == 23503){
                 $empty_excel = Excel::toArray(new LabaRugiNewImport($request->tanggal_import), $request->file('file'));
 
@@ -186,7 +183,6 @@ class LabaRugiController extends Controller
                     if ($d_kkategori_produk) {
                         array_push($kategori_produk_, 'Kategori Produk ID ' . $d_kkategori_produk->kategori_produk_id . ' tidak ada pada master');
                     }
-
                 }
 
                 $result_kategori_produk = array_diff($kategori_produk, $kategori_produk_);
@@ -205,12 +201,11 @@ class LabaRugiController extends Controller
                         'message' => $msg
                     ]);
                 }
-            }else{
+            } else {
                 return setResponse([
                     'code' => 400,
                 ]);
             }
-
         }
     }
 
@@ -219,12 +214,12 @@ class LabaRugiController extends Controller
             $check = LabaRugi::where('version_id', $request->periode)
                 ->first();
 
-            if ($check == null){
+            if ($check == null) {
                 return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
-            }else{
+            } else {
                 return response()->json(['code' => 201, 'msg' => 'Data Ada']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

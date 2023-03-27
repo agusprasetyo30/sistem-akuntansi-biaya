@@ -21,7 +21,7 @@ class MaterialController extends Controller
     public function index(Request $request, MaterialDataTable $materialDataTable)
     {
         if ($request->data == 'index') {
-            return $materialDataTable->render('pages.master.material.index');
+            return $materialDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.material.index');
         }
         return view('pages.master.material.index');
     }
@@ -61,9 +61,9 @@ class MaterialController extends Controller
             $input['created_at'] = Carbon::now();
             $input['updated_at'] = Carbon::now();
 
-            DB::transaction(function () use ($input, $material_code, $request){
+            DB::transaction(function () use ($input, $material_code, $request) {
                 Material::create($input);
-                if ($request->kategori_material_id == '1'){
+                if ($request->kategori_material_id == '1') {
                     mapping_plant_insert($material_code);
                 }
             });
@@ -175,11 +175,9 @@ class MaterialController extends Controller
                         $er = implode(' ', array_values($rows->errors()));
                         $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                         array_push($err, '<p>' . $hasil . '</p>');
-
                     } catch (\Throwable $th) {
                         return response()->json(['Code' => $th->getCode(), 'msg' => $th->getMessage()]);
                     }
-
                 }
                 return setResponse([
                     'code' => 430,
@@ -193,7 +191,7 @@ class MaterialController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-//            dd($exception);
+            //            dd($exception);
             $empty_excel = Excel::toArray(new MaterialImport(), $request->file('file'));
 
             $grouo_account = [];
@@ -221,7 +219,6 @@ class MaterialController extends Controller
                 if ($d_kategori_produk) {
                     array_push($kategori_produk_, 'Kategori Produk ID ' . $d_kategori_produk->id . ' tidak ada pada master');
                 }
-
             }
 
             $result_grouo_account = array_diff($grouo_account, $grouo_account_);

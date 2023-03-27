@@ -20,7 +20,7 @@ class GlosCCController extends Controller
     public function index(Request $request, GlosCCDataTable $glosccDataTable)
     {
         if ($request->data == 'index') {
-            return $glosccDataTable->render('pages.master.glos_cc.index');
+            return $glosccDataTable->with(['filter_company' => $request->filter_company])->render('pages.master.glos_cc.index');
         }
         return view('pages.master.glos_cc.index');
     }

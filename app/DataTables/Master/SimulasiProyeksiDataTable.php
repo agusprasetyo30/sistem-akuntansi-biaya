@@ -34,7 +34,7 @@ class SimulasiProyeksiDataTable extends DataTable
             $datatable = datatables()
                 ->query($query)
                 ->addColumn('name', function ($query) {
-                    if ($query->no == 1 || $query->no == 2 || $query->no == 3 || $query->no == 4 || $query->no == 6 || $query->no == 8 && $query->kategori != 0) {
+                    if (($query->no == 1 || $query->no == 2 || $query->no == 3 || $query->no == 4 || $query->no == 6 || $query->no == 8) && $query->kategori != 0) {
                         $res = $query->code . ' - ' . $query->name;
                     } else {
                         $res = $query->name;

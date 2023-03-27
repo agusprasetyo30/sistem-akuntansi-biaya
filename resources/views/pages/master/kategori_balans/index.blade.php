@@ -29,6 +29,16 @@
                     <div class="card-title">Kategori Balans</div>
                 </div>
                 <div class="card-body">
+                    <div class="mb-5 row">
+                        @if (auth()->user()->mapping_akses('kategori_balans')->company_code == 'all')
+                            <div class="form-group">
+                                <label class="form-label">PERUSAHAAN</label>
+                                <select id="filter_company" class="form-control custom-select select2">
+                                    <option value="all" selected>Semua Perusahaan</option>
+                                </select>
+                            </div>
+                        @endif
+                    </div>
                     <div class="">
                         <div class="table-responsive" id="table_main">
                         </div>
@@ -60,6 +70,30 @@
 
         $(document).ready(function () {
             get_data()
+
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
 
             $('#urutan').select2({
                 dropdownParent: $('#modal_add'),
@@ -172,7 +206,10 @@
                 ],
                 ajax: {
                     url : '{{route("kategori_balans")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company').val(),
+                    }
                 },
                 columns: [
                     { data: 'kategori_balans', name: 'filter_kategori_balans', orderable:true},

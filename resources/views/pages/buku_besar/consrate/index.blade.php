@@ -30,29 +30,42 @@
                     <div class="card-title">CONSUMPTION RATIO</div>
                 </div>
                 <div class="card-body">
-                    @if (mapping_akses('cons_rate','submit') || mapping_akses('cons_rate','approve'))
+                    <div class="mb-5 row">
+                        @if (auth()->user()->mapping_akses('cons_rate')->company_code == 'all')
+                            <div class="form-group">
+                                <label class="form-label">PERUSAHAAN</label>
+                                <select id="filter_company" class="form-control custom-select select2">
+                                    <option value="all" selected>Semua Perusahaan</option>
+                                </select>
+                            </div>
+                        @endif
+
                         <div class="mb-5 row">
                             <div class="form-group">
                                 <label class="form-label">VERSI</label>
                                 <select id="filter_version" class="form-control custom-select select2">
+                                    <option value="all" selected>Semua</option>
                                 </select>
                             </div>
-                            <div class="col-12">
-                                @if (mapping_akses('cons_rate','submit') && $cons_rate)
-                                    @if (!$cons_rate->submited_at)
-                                    <button class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
+                            @if (mapping_akses('cons_rate','submit') || mapping_akses('cons_rate','approve'))
+                                <div class="col-12">
+                                    @if (mapping_akses('cons_rate','submit') && $cons_rate)
+                                        @if (!$cons_rate->submited_at)
+                                        <button class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
+                                        @endif
                                     @endif
-                                @endif
 
-                                @if (mapping_akses('cons_rate','approve') && $cons_rate)
-                                    @if ($cons_rate->submited_at && !$cons_rate->approved_at && !$cons_rate->rejected_at)
-                                    <button class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
-                                    <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
+                                    @if (mapping_akses('cons_rate','approve') && $cons_rate)
+                                        @if ($cons_rate->submited_at && !$cons_rate->approved_at && !$cons_rate->rejected_at)
+                                        <button class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
+                                        <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
+                                        @endif
                                     @endif
-                                @endif
-                            </div>
+                                </div>
+                            @endif
                         </div>
-                    @endif
+                    </div>
+
                     <div class="">
                         <div class="table-responsive" id="table_main">
                         </div>
@@ -92,12 +105,36 @@
 
             get_data()
 
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
+
             $('#filter_version').select2({
                 placeholder: 'Pilih Versi',
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('version_select') }}",
+                    url: "{{ route('version_dt') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -600,6 +637,7 @@
                     url : '{{route("consrate")}}',
                     data: {
                         data:'index',
+                        filter_company:$('#filter_company').val(),
                         filter_version:$('#filter_version').val()
                     }
                 },

@@ -19,13 +19,16 @@ class GLAccountDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('gl_account')
             ->select('gl_account.*', 'group_account.group_account_code', 'group_account.group_account_desc')
             ->leftJoin('group_account', 'group_account.group_account_code', '=', 'gl_account.group_account_code')
-            ->where('gl_account.company_code', $cc)
             ->whereNull('gl_account.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('gl_account')->company_code == 'all') {
+            $query = $query->where('gl_account.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('gl_account')->company_code != 'all') {
+            $query = $query->where('gl_account.company_code', auth()->user()->mapping_akses('gl_account')->company_code);
+        }
 
         return datatables()
             ->query($query)

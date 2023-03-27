@@ -351,7 +351,7 @@
         width: '100%',
         allowClear: false,
         ajax: {
-            url: "{{ route('company_filter_select') }}",
+            url: "{{ route('main_company_filter_select') }}",
             dataType: 'json',
             delay: 250,
             data: function (params) {

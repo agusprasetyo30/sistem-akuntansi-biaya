@@ -19,15 +19,22 @@ class PJPenjualanDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('pj_penjualan')
             ->select('pj_penjualan.*', 'material.material_name', 'asumsi_umum.month_year', 'version_asumsi.version')
             ->leftjoin('material', 'material.material_code', '=', 'pj_penjualan.material_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'pj_penjualan.version_id')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_penjualan.asumsi_umum_id')
-            ->where('pj_penjualan.company_code', $cc)
             ->whereNull('pj_penjualan.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('pj_penjualan')->company_code == 'all') {
+            $query = $query->where('pj_penjualan.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('pj_penjualan')->company_code != 'all') {
+            $query = $query->where('pj_penjualan.company_code', auth()->user()->mapping_akses('pj_penjualan')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('pj_penjualan.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)

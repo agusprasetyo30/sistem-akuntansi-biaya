@@ -19,15 +19,22 @@ class SaldoAwalDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('saldo_awal')->select('saldo_awal.*', 'material.material_code', 'material.material_name', 'plant.plant_code', 'plant.plant_desc', 'version_asumsi.version', 'gl_account.gl_account_desc')
             ->leftjoin('material', 'material.material_code', '=', 'saldo_awal.material_code')
             ->leftjoin('plant', 'plant.plant_code', '=', 'saldo_awal.plant_code')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'saldo_awal.version_id')
             ->leftjoin('gl_account', 'gl_account.gl_account', '=', 'saldo_awal.gl_account')
-            ->where('saldo_awal.company_code', $cc)
             ->whereNull('saldo_awal.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('saldo_awal')->company_code == 'all') {
+            $query = $query->where('saldo_awal.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('saldo_awal')->company_code != 'all') {
+            $query = $query->where('saldo_awal.company_code', auth()->user()->mapping_akses('saldo_awal')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('saldo_awal.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)

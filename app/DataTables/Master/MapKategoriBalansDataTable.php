@@ -19,37 +19,44 @@ class MapKategoriBalansDataTable extends DataTable
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'map_kategori_balans.version_id')
             ->leftjoin('material', 'material.material_code', '=', 'map_kategori_balans.material_code')
             ->leftjoin('company', 'company.company_code', '=', 'map_kategori_balans.company_code');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('map_kategori_balans')->company_code == 'all') {
+            $query = $query->where('map_kategori_balans.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('map_kategori_balans')->company_code != 'all') {
+            $query = $query->where('map_kategori_balans.company_code', auth()->user()->mapping_akses('map_kategori_balans')->company_code);
+        }
+
         return datatables()
             ->eloquent($query)
-            ->addColumn('version', function ($query){
+            ->addColumn('version', function ($query) {
                 return $query->version;
             })
-            ->addColumn('material', function ($query){
-                return $query->material_code.' - '.$query->material_name;
+            ->addColumn('material', function ($query) {
+                return $query->material_code . ' - ' . $query->material_name;
             })
-            ->addColumn('kategori_balans', function ($query){
-                return $query->kategori_balans.' - '.$query->kategori_balans_desc;
+            ->addColumn('kategori_balans', function ($query) {
+                return $query->kategori_balans . ' - ' . $query->kategori_balans_desc;
             })
-            ->filterColumn('filter_material', function ($query, $keyword){
-                if ($keyword != 'all'){
-                    $query->where('map_kategori_balans.material_code', 'ilike', '%'.$keyword.'%');
+            ->filterColumn('filter_material', function ($query, $keyword) {
+                if ($keyword != 'all') {
+                    $query->where('map_kategori_balans.material_code', 'ilike', '%' . $keyword . '%');
                 }
             })
-            ->filterColumn('filter_kategori_balans', function ($query, $keyword){
-                if ($keyword != 'all'){
+            ->filterColumn('filter_kategori_balans', function ($query, $keyword) {
+                if ($keyword != 'all') {
                     $query->where('kategori_balans.id', $keyword);
                 }
             })
-            ->filterColumn('filter_version', function ($query, $keyword){
+            ->filterColumn('filter_version', function ($query, $keyword) {
                 $query->where('version_asumsi.version', $keyword);
             })
-            ->orderColumn('filter_material', function ($query, $order){
+            ->orderColumn('filter_material', function ($query, $order) {
                 $query->orderBy('map_kategori_balans.material_code', $order);
             })
-            ->orderColumn('filter_kategori_balans', function ($query, $order){
+            ->orderColumn('filter_kategori_balans', function ($query, $order) {
                 $query->orderBy('kategori_balans.kategori_balans', $order);
             })
-            ->orderColumn('filter_version', function ($query, $order){
+            ->orderColumn('filter_version', function ($query, $order) {
                 $query->orderBy('version_asumsi.version', $order);
             })
             ->addColumn('action', 'pages.master.mapping_balans.action')
@@ -82,10 +89,10 @@ class MapKategoriBalansDataTable extends DataTable
     {
         return [
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
             Column::make('id'),
             Column::make('add your columns'),
             Column::make('created_at'),

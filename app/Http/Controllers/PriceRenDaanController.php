@@ -24,20 +24,20 @@ class PriceRenDaanController extends Controller
     public function index(Request $request, PriceRenDaanDataTable $pricerendaanDataTable, H_PriceRenDaanDataTable $h_PriceRenDaanDataTable)
     {
         if ($request->data == 'index') {
-            if ($request->currency){
-                return $pricerendaanDataTable->with(['currency' => $request->currency])->render('pages.buku_besar.price_rendaan.index');
-            }else{
-                return $pricerendaanDataTable->with(['currency' => 'Rupiah'])->render('pages.buku_besar.price_rendaan.index');
+            if ($request->currency) {
+                return $pricerendaanDataTable->with(['currency' => $request->currency, 'filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.price_rendaan.index');
+            } else {
+                return $pricerendaanDataTable->with(['currency' => 'Rupiah', 'filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.price_rendaan.index');
             }
-        }elseif ($request->data == 'horizontal'){
-            if ($request->currency){
-                return $h_PriceRenDaanDataTable->with(['version' => $request->version, 'currency' => $request->currency])->render('pages.buku_besar.price_rendaan.index');
-            }else{
-                return $h_PriceRenDaanDataTable->with(['version' => $request->version, 'currency' => 'Rupiah'])->render('pages.buku_besar.price_rendaan.index');
+        } elseif ($request->data == 'horizontal') {
+            if ($request->currency) {
+                return $h_PriceRenDaanDataTable->with(['company' => $request->company, 'version' => $request->version, 'currency' => $request->currency])->render('pages.buku_besar.price_rendaan.index');
+            } else {
+                return $h_PriceRenDaanDataTable->with(['company' => $request->company, 'version' => $request->version, 'currency' => 'Rupiah'])->render('pages.buku_besar.price_rendaan.index');
             }
-        }elseif ($request->data == 'version'){
+        } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
-                ->where('version_id',$request->version)
+                ->where('version_id', $request->version)
                 ->orderBy('month_year', 'ASC')
                 ->get();
             return response()->json(['code' => 200, 'asumsi' => $asumsi]);
@@ -71,13 +71,13 @@ class PriceRenDaanController extends Controller
             ])->first();
 
 
-            if ($request->mata_uang != 'IDR'){
+            if ($request->mata_uang != 'IDR') {
                 $check_kurs = Asumsi_Umum::where('id', $request->bulan)->first();
-                $temp = (double) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
-                $result = (double) $temp * (double) $check_kurs->usd_rate;
+                $temp = (float) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
+                $result = (float) $temp * (float) $check_kurs->usd_rate;
                 $input['price_rendaan_value'] = $result;
-            }else {
-                $input['price_rendaan_value'] = (double) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
+            } else {
+                $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
             }
 
             $input['version_id'] = $request->version_asumsi;
@@ -89,10 +89,10 @@ class PriceRenDaanController extends Controller
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
 
-            if ($check_data != null){
+            if ($check_data != null) {
                 PriceRenDaan::where('id', $check_data->id)
                     ->update($input);
-            }else{
+            } else {
                 PriceRenDaan::create($input);
             }
 
@@ -126,7 +126,7 @@ class PriceRenDaanController extends Controller
             $input['asumsi_umum_id'] = $request->bulan;
             $input['material_code'] = $request->material_id;
             $input['region_name'] = $request->region_id;
-            $input['price_rendaan_value'] = (double) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
+            $input['price_rendaan_value'] = (float) str_replace('.', '', str_replace(['Rp ', '$ '], '', $request->price_rendaan_value));
             $input['company_code'] = auth()->user()->company_code;
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
@@ -178,14 +178,14 @@ class PriceRenDaanController extends Controller
                 "mata_uang" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails()){
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
             }
 
-            $transaction = DB::transaction(function () use ($request){
+            $transaction = DB::transaction(function () use ($request) {
                 $data_kurs = Asumsi_Umum::where('version_id', $request->version)->get('usd_rate')->toArray();
                 $empty_excel = Excel::toArray(new PriceRenDaanImport($request->version, $request->mata_uang, $data_kurs), $request->file('file'));
-                if ($empty_excel[0]){
+                if ($empty_excel[0]) {
                     $file = $request->file('file')->store('import');
 
                     PriceRenDaan::where('version_id', $request->version)->delete();
@@ -193,25 +193,24 @@ class PriceRenDaanController extends Controller
                     $import->import($file);
 
                     $data_fail = $import->failures();
-
-                }else{
+                } else {
                     $data_fail = [];
                 }
                 return $data_fail;
             });
 
-            if ($transaction->isNotEmpty()){
+            if ($transaction->isNotEmpty()) {
                 return setResponse([
                     'code' => 500,
                     'title' => 'Gagal meng-import data',
                 ]);
-            }else{
+            } else {
                 return setResponse([
                     'code' => 200,
                     'title' => 'Berhasil meng-import data'
                 ]);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $data_kurs = Asumsi_Umum::where('version_id', $request->version)->get('usd_rate')->toArray();
             $empty_excel = Excel::toArray(new PriceRenDaanImport($request->version, $request->mata_uang, $data_kurs), $request->file('file'));
 
@@ -258,16 +257,17 @@ class PriceRenDaanController extends Controller
         }
     }
 
-    public function check(Request $request){
+    public function check(Request $request)
+    {
         try {
             $check = PriceRenDaan::where('version_id', $request->version)
                 ->first();
-            if ($check == null){
+            if ($check == null) {
                 return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
-            }else{
+            } else {
                 return response()->json(['code' => 201, 'msg' => 'Data Ada']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }

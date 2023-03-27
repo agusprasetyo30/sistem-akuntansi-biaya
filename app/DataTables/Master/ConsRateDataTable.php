@@ -18,8 +18,14 @@ class ConsRateDataTable extends DataTable
             ->select('cons_rate.*', 'version_asumsi.version', DB::raw('produk.material_name as product_name'), DB::raw('material.material_name'), DB::raw('material.material_uom'))
             ->distinct();
 
-        if ($this->filter_version) {
-            $query = $query->where('version_id', $this->filter_version);
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('cons_rate')->company_code == 'all') {
+            $query = $query->where('cons_rate.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('cons_rate')->company_code != 'all') {
+            $query = $query->where('cons_rate.company_code', auth()->user()->mapping_akses('cons_rate')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('cons_rate.version_id', $this->filter_version);
         }
 
         return datatables()

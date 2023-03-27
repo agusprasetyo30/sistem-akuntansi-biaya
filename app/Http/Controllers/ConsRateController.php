@@ -27,7 +27,7 @@ class ConsRateController extends Controller
         $cons_rate = ConsRate::first();
 
         if ($request->data == 'index') {
-            return $consRateDataTable->with(['filter_version' => $request->filter_version])->render('pages.buku_besar.consrate.index');
+            return $consRateDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.consrate.index');
         }
 
         if ($request->filter_version) {

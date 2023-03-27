@@ -30,6 +30,23 @@
                     <div class="card-title">Basic DataTable</div>
                 </div> --}}
                 <div class="card-body">
+                    <div class="mb-5 row">
+                        @if (auth()->user()->mapping_akses('saldo_awal')->company_code == 'all')
+                            <div class="form-group">
+                                <label class="form-label">PERUSAHAAN</label>
+                                <select id="filter_company" class="form-control custom-select select2">
+                                    <option value="all" selected>Semua Perusahaan</option>
+                                </select>
+                            </div>
+                        @endif
+
+                        <div class="form-group">
+                            <label class="form-label">VERSI</label>
+                            <select id="filter_version" class="form-control custom-select select2">
+                                <option value="all" selected>Semua</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="">
                         <div class="table-responsive" id="table-wrapper">
                         </div>
@@ -48,6 +65,54 @@
     <script>
         $(document).ready(function () {
             table()
+
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table-wrapper").empty();
+                table()
+            })
+
+            $('#filter_version').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table-wrapper").empty();
+                table()
+            })
 
             $('#data_main_plant').select2({
                 dropdownParent: $('#modal_add'),
@@ -379,7 +444,11 @@
                 ],
                 ajax: {
                     url : '{{route("saldo_awal")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company').val(),
+                        filter_version:$('#filter_version').val()
+                    }
                 },
                 columns: [
                     // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},

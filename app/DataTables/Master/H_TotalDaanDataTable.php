@@ -15,16 +15,19 @@ class H_TotalDaanDataTable extends DataTable
 {
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('qty_rendaan')
             ->select('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
             ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
             ->whereNull('qty_rendaan.deleted_at')
             ->where('qty_rendaan.version_id', $this->version)
-            ->where('qty_rendaan.company_code', $cc)
             ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name');
+
+        if ($this->company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all') {
+            $query = $query->where('qty_rendaan.company_code', $this->company);
+        } else if ($this->company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code != 'all') {
+            $query = $query->where('qty_rendaan.company_code', auth()->user()->mapping_akses('qty_rendaan')->company_code);
+        }
 
         $datatable = datatables()
             ->query($query)

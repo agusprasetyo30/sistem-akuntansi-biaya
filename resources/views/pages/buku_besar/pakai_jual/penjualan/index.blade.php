@@ -40,6 +40,23 @@
                     <div class="panel-body tabs-menu-body">
                         <div class="tab-content">
                             <div class="tab-pane active " id="vertical">
+                                <div class="mb-5 row">
+                                    @if (auth()->user()->mapping_akses('pj_penjualan')->company_code == 'all')
+                                        <div class="form-group">
+                                            <label class="form-label">PERUSAHAAN</label>
+                                            <select id="filter_company_ver" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua Perusahaan</option>
+                                            </select>
+                                        </div>
+                                    @endif
+                
+                                    <div class="form-group">
+                                        <label class="form-label">VERSI</label>
+                                        <select id="filter_version_ver" class="form-control custom-select select2">
+                                            <option value="all" selected>Semua</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
                                         
@@ -47,13 +64,20 @@
                                 </div>
                             </div>
                             <div class="tab-pane " id="horizontal">
-                                <div class="mb-2 row">
+                                <div class="mb-5 row">
+                                    @if (auth()->user()->mapping_akses('pj_penjualan')->company_code == 'all')
+                                        <div class="form-group">
+                                            <label class="form-label">PERUSAHAAN</label>
+                                            <select id="filter_company" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+                                    @endif
+
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version" class="form-control custom-select select2">
                                         </select>
                                     </div>
-
                                 </div>
                                 <div class="mt-auto">
                                     <div class="table-responsive" id="dinamic_table">
@@ -82,6 +106,54 @@
             $('#tabs_vertical').on('click', function () {
                 // table()
                 $('#dt_pj_penjualan').DataTable().ajax.reload();
+            })
+
+            $('#filter_company_ver').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table-wrapper").empty();
+                table()
+            })
+
+            $('#filter_version_ver').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table-wrapper").empty();
+                table()
             })
 
             $('#data_main_material').select2({
@@ -188,6 +260,30 @@
                 allowClear: false,
                 ajax: {
                     url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#dinamic_table").empty();
+                get_data_horiz()
+            })
+
+            $('#filter_company').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('company_filter_select') }}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -360,7 +456,11 @@
                 ],
                 ajax: {
                     url : '{{route("penjualan")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company_ver').val(),
+                        filter_version:$('#filter_version_ver').val()
+                    }
                 },
                 columns: [
                     // { data: 'DT_RowIndex', name: 'id', searchable: false, orderable:false},
@@ -390,7 +490,8 @@
                 url : '{{route("penjualan")}}',
                 data: {
                     data:'version',
-                    version:$('#filter_version').val()
+                    version:$('#filter_version').val(),
+                    company:$('#filter_company').val()
                 },
                 success:function (response) {
                     for (let i = 0; i < response.asumsi.length;i++){
@@ -446,7 +547,8 @@
                             url : '{{route("penjualan")}}',
                             data: {
                                 data:'horizontal',
-                                version:$('#filter_version').val()
+                                version:$('#filter_version').val(),
+                                company:$('#filter_company').val()
                             }
                         },
                         columns: column,

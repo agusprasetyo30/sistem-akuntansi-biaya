@@ -1240,6 +1240,7 @@ if (!function_exists('getSeparateValue')) {
         $temp_index = 0;
         foreach ($arr as $key => $value) {
             if ($arr[$key]['key'] == $temp_index) {
+            // if ($arr[$key]['key'] == 0) {
                 $fixed_value[$temp_index][] = $arr[$key]['value'];
 
                 $temp_index++;
