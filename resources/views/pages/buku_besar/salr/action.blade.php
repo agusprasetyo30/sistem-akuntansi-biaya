@@ -35,8 +35,12 @@
                                 <input disabled value="{{$model->cost_center}} - {{$model->cost_center_desc}}" type="text" class="form-control" id="detail_data_main_cost_center">
                             </div>
                             <div class="form-group">
+                                <label for="tanggal_awal">Versi <span class="text-red">*</span></label>
+                                <input disabled value="{{$model->version}}" type="text" class="form-control" id="detail_tanggal" placeholder="Bulan-Tahun" autocomplete="off">
+                            </div>
+                            <div class="form-group">
                                 <label for="tanggal_awal">Bulan <span class="text-red">*</span></label>
-                                <input disabled value="{{$model->periode}}" type="text" class="form-control" id="detail_tanggal" placeholder="Bulan-Tahun" autocomplete="off">
+                                <input disabled value="{{helpDate($model->periode, 'se')}}" type="text" class="form-control" id="detail_tanggal" placeholder="Bulan-Tahun" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value <span class="text-red">*</span></label>

@@ -38,12 +38,12 @@
                         </div>
                     @endif
 
-                    {{-- <div class="form-group">
+                     <div class="form-group">
                         <label class="form-label">VERSI</label>
                         <select id="filter_version" class="form-control custom-select select2">
                             <option value="all" selected>Semua</option>
                         </select>
-                    </div> --}}
+                    </div>
                 </div>
                 <div class="">
                     <div class="table-responsive" id="table_main">
@@ -64,7 +64,7 @@
         var table_main_dt = '<table id="dt_laba_rugi" class="table table-bordered text-wrap wrap key-buttons" style="width: 100%;">' +
             '<thead>' +
             '<tr>' +
-            '<th data-type="text" data-name="periode" class="text-center">PERIODE</th>' +
+            '<th data-type="text" data-name="periode" class="text-center">VERSI</th>' +
             '<th data-type="select" data-name="kategori_produk" class="text-center">KATEGORI PRODUK</th>' +
             '<th data-type="text" data-name="bp" class="text-center">BIAYA PENJUALAN</th>' +
             '<th data-type="text" data-name="bau" class="text-center">BIAYA ADM UMUM</th>' +
@@ -414,7 +414,7 @@
                 }
             }).on('change', function () {
                 $("#dinamic_table").empty();
-                get_data_horiz()
+                get_data()
             })
         })
 
@@ -579,7 +579,7 @@
                     data: {
                         data:'index',
                         filter_company:$('#filter_company').val(),
-                        // filter_version:$('#filter_version').val()
+                        filter_version:$('#filter_version').val()
                     }
                 },
                 columns: [

@@ -81,7 +81,7 @@ class BalansController extends Controller
         $temporary_value['q'] = [];
         $temporary_value['nilai'] = [];
 
-        // Filtering Balans data dan Filtering 
+        // Filtering Balans data dan Filtering
         foreach ($balans_data as $query) {
             // Melakukan filtering sesuai dengan data main asumsi
             foreach ($main_asumsi as $key_sub => $value) {
@@ -113,10 +113,10 @@ class BalansController extends Controller
             }
 
         }
-        
+
         // Menghitung jumlah total asumsi umum sebagai acuan index
         $main_asumsi_index_count = $main_asumsi->count() - 1;
-        
+
         // Memisahkan data array yang disesuaikan dengan array key & transaksi (p, q, nilai)
         $fixed_value['p'] = $this->getSeparateValue($temporary_value['p'], $main_asumsi_index_count);
         $fixed_value['q'] = $this->getSeparateValue($temporary_value['q'], $main_asumsi_index_count);
@@ -125,7 +125,7 @@ class BalansController extends Controller
         $data = [
             'balans_datas'     => $balans_data,
             'asumsi_umum'      => $main_asumsi,
-            'fixed_value_data' => $fixed_value 
+            'fixed_value_data' => $fixed_value
         ];
 
         $filename = "Balans " . $request->material . '.xlsx';
@@ -134,7 +134,7 @@ class BalansController extends Controller
     }
 
     /**
-     * melakukan filter dan memisahkan data array sesuai dengan 
+     * melakukan filter dan memisahkan data array sesuai dengan
      *
      * @param [type] $arr
      * @param [type] $dinamic_reference_count
@@ -172,7 +172,6 @@ class BalansController extends Controller
 //                    array_push($result_antrian, $item);
 //                }
 //            }
-
             DB::transaction(function () use ($request, $antrian){
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
@@ -198,7 +197,7 @@ class BalansController extends Controller
 //                    ->orderBy('map_kategori_balans.material_code', 'ASC')
 //                    ->get();
 
-//                dd($antrian);
+
                 try {
 
 //                    DB::enableQueryLog();
@@ -207,7 +206,7 @@ class BalansController extends Controller
                         ->leftJoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
                         ->whereIn('map_kategori_balans.material_code', $antrian)
                         ->where('map_kategori_balans.version_id', $request->version)
-                        ->orderBy(DB::raw("array_position(ARRAY['3000163', '3000026', '3000001', '2000002', '2000001']::varchar[],map_kategori_balans.material_code)"))
+                        ->orderBy(DB::raw("array_position(ARRAY[".implode(',', $antrian)."]::varchar[],map_kategori_balans.material_code)"))
                         ->orderBy('kategori_balans.order_view', 'ASC')
 //                        ->groupBy('kategori_balans.order_view', 'map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                         ->get();

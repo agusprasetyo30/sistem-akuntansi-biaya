@@ -25,6 +25,16 @@ class SalrDataTable extends DataTable
             ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
             ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc');
 
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('salrs')->company_code == 'all') {
+            $query = $query->where('salrs.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('salrs')->company_code != 'all') {
+            $query = $query->where('salrs.company_code', auth()->user()->mapping_akses('salrs')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('salrs.version_id', $this->filter_version);
+        }
+
         return datatables()
             ->eloquent($query)
             ->addColumn('group_account', function ($query){
