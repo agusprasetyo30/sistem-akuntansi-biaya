@@ -24,9 +24,9 @@ class labaRugiDataTable extends DataTable
             $query = $query->where('laba_rugi.company_code', auth()->user()->mapping_akses('laba_rugi')->company_code);
         }
 
-        // if ($this->filter_version != 'all') {
-        //     $query = $query->where('laba_rugi.version_id', $this->filter_version);
-        // }
+         if ($this->filter_version != 'all') {
+             $query = $query->where('laba_rugi.version_id', $this->filter_version);
+         }
 
         return datatables()
             ->eloquent($query)

@@ -43,6 +43,23 @@
                         <div class="panel-body tabs-menu-body">
                             <div class="tab-content">
                                 <div class="tab-pane active " id="vertical">
+                                    <div class="mb-5 row">
+                                        @if (auth()->user()->mapping_akses('salrs')->company_code == 'all')
+                                            <div class="form-group">
+                                                <label class="form-label">PERUSAHAAN</label>
+                                                <select id="filter_company_ver" class="form-control custom-select select2">
+                                                    <option value="all" selected>Semua Perusahaan</option>
+                                                </select>
+                                            </div>
+                                        @endif
+
+                                        <div class="form-group">
+                                            <label class="form-label">VERSI</label>
+                                            <select id="filter_version_ver" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="">
                                         <div class="table-responsive" id="table_main">
                                         </div>
@@ -50,6 +67,14 @@
                                 </div>
                                 <div class="tab-pane " id="horizontal">
                                     <div class="mb-3 row">
+                                        @if (auth()->user()->mapping_akses('salrs')->company_code == 'all')
+                                            <div class="form-group">
+                                                <label class="form-label">PERUSAHAAN</label>
+                                                <select id="filter_company_ver" class="form-control custom-select select2">
+                                                    <option value="all" selected>Semua Perusahaan</option>
+                                                </select>
+                                            </div>
+                                        @endif
                                         <div class="form-group" id="cost_center_pick">
                                             <label class="form-label">COST CENTER <span class="text-red">*</span></label>
                                             <select id="cost_center_format" class="form-control custom-select select2">
@@ -156,15 +181,53 @@
 
             get_data()
 
-            $('#tanggal').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true,
-                showOnFocus: false,
-            }).on('click', function () {
-                $('#tanggal').bootstrapdatepicker("show");
-            });
+            $('#filter_company_ver').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('main_company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
+
+            $('#filter_version_ver').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_dt') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                $("#table_main").empty();
+                get_data()
+            })
 
             $('#data_main_version_add').select2({
                 dropdownParent: $('#modal_add'),
@@ -713,8 +776,6 @@
                         handleError(response)
                     }
                 })
-
-
             }
 
             $('#cost_center_format').select2({
@@ -727,7 +788,8 @@
                     delay: 250,
                     data: function (params) {
                         return {
-                            search: params.term
+                            search: params.term,
+                            company:$('#filter_company_ver').val()
                         };
                     },
                     processResults: function(response) {
@@ -1011,7 +1073,11 @@
                 ],
                 ajax: {
                     url : '{{route("salr")}}',
-                    data: {data:'index'}
+                    data: {
+                        data:'index',
+                        filter_company:$('#filter_company_ver').val(),
+                        filter_version:$('#filter_version_ver').val()
+                    }
                 },
                 columns: [
                     { data: 'group_account', name: 'filter_group_account', orderable:true},
@@ -1121,7 +1187,7 @@
                                             if (data == null) {
                                                 return data;
                                             }
-                                            if ( kolom >= 2) {                      
+                                            if ( kolom >= 2) {
                                                 var arr = data.split(',');
                                                 arr[0] = arr[0].toString().replace( /[\.]/g, "" );
                                                 if (arr[0] > ','  || arr[1] > ',') {

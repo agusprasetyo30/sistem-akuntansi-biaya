@@ -18,7 +18,7 @@ class LabaRugiController extends Controller
     public function index(Request $request, labaRugiDataTable $labaRugiDataTable)
     {
         if ($request->data == 'index') {
-            return $labaRugiDataTable->with(['filter_company' => $request->filter_company])->render('pages.buku_besar.laba_rugi.index');
+            return $labaRugiDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.laba_rugi.index');
         } elseif ($request->data == 'horizontal') {
             return $labaRugiDataTable->render('pages.buku_besar.laba_rugi.index');
         }

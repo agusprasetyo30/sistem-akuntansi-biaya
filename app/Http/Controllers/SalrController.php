@@ -25,7 +25,7 @@ class SalrController extends Controller
     public function index(Request $request, SalrDataTable $salrDataTable, H_SalrDataTable $h_SalrDataTable)
     {
         if ($request->data == 'index') {
-            return $salrDataTable->render('pages.buku_besar.salr.index');
+            return $salrDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.salr.index');
         } elseif ($request->data == 'horizontal') {
             return $h_SalrDataTable->with([
                 'format' => $request->format_data,

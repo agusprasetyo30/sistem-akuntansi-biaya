@@ -615,13 +615,14 @@ class SelectController extends Controller
     public function cost_center_salr(Request $request)
     {
         $search = $request->search;
+//        dd($search == '');
         if ($search == '') {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
                 ->whereNull('salrs.deleted_at')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc')
-                ->limit(10)
-                ->get();
+                ->limit(10)->get();
+
         } else {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
@@ -629,10 +630,8 @@ class SelectController extends Controller
                 ->orWhere('cost_center.cost_center_desc', 'ilike', '%' . $search . '%')
                 ->whereNull('salrs.deleted_at')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc')
-                ->limit(10)
-                ->get();
+                ->limit(10)->get();
         }
-
         $response = array();
         $response[] = array(
             "id" => 'all',
