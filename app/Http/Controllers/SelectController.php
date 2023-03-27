@@ -1252,36 +1252,14 @@ class SelectController extends Controller
     {
         $search = $request->search;
         if ($search == '') {
-            if (auth()->user()->company_code == 'A000') {
-                $company = Company::limit(10)
-                    ->where('company_code', '!=', 'A000')
-                    ->get();
-            } else {
-                $company = Company::limit(10)
-                    ->where('company_code', auth()->user()->company_code)
-                    ->get();
-            }
+            $company = Company::limit(10)
+                ->get();
         } else {
-            if (auth()->user()->company_code == 'A000') {
-                $company = Company::limit(10)
-                    ->where('company_code', '!=', 'A000')
-                    ->where('company_code_pi', function ($query) use ($search) {
-                        $query->where('company_code', 'ilike', '%' . $search . '%')
-                            ->orWhere('company_name', 'ilike', '%' . $search . '%');
-                    })
-                    ->get();
-            } else {
-                $company = Company::limit(10)
-                    ->where('company_code', auth()->user()->company_code)
-                    ->get();
-            }
+            $company = Company::where('company_code', 'ilike', '%' . $search . '%')
+                ->orWhere('company_name', 'ilike', '%' . $search . '%')
+                ->limit(10)
+                ->get();
         }
-
-        $response = array();
-        $response[] = array(
-            "id" => 'all',
-            "text" => 'Semua Perusahaan'
-        );
 
         foreach ($company as $items) {
             $response[] = array(

@@ -21,7 +21,7 @@ class PJPemakaianController extends Controller
         if ($request->data == 'index') {
             return $pemakaianDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.pakai_jual.pemakaian.index');
         } elseif ($request->data == 'horizontal') {
-            return $h_pemakaianDataTable->with(['version' => $request->version])->render('pages.buku_besar.pakai_jual.pemakaian.index');
+            return $h_pemakaianDataTable->with(['version' => $request->version, 'company' => $request->company])->render('pages.buku_besar.pakai_jual.pemakaian.index');
         } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $request->version)

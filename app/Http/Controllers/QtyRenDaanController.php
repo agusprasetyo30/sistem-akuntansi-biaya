@@ -24,7 +24,7 @@ class QtyRenDaanController extends Controller
         if ($request->data == 'index') {
             return $qtyrendaanDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.qty_rendaan.index');
         } elseif ($request->data == 'horizontal') {
-            return $h_QtyRenDaanDataTable->with(['version' => $request->version])->render('pages.buku_besar.qty_rendaan.index');
+            return $h_QtyRenDaanDataTable->with(['version' => $request->version, 'company' => $request->company])->render('pages.buku_besar.qty_rendaan.index');
         } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')
                 ->where('version_id', $request->version)

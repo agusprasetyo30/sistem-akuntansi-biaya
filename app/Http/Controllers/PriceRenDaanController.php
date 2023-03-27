@@ -31,9 +31,9 @@ class PriceRenDaanController extends Controller
             }
         } elseif ($request->data == 'horizontal') {
             if ($request->currency) {
-                return $h_PriceRenDaanDataTable->with(['version' => $request->version, 'currency' => $request->currency])->render('pages.buku_besar.price_rendaan.index');
+                return $h_PriceRenDaanDataTable->with(['company' => $request->company, 'version' => $request->version, 'currency' => $request->currency])->render('pages.buku_besar.price_rendaan.index');
             } else {
-                return $h_PriceRenDaanDataTable->with(['version' => $request->version, 'currency' => 'Rupiah'])->render('pages.buku_besar.price_rendaan.index');
+                return $h_PriceRenDaanDataTable->with(['company' => $request->company, 'version' => $request->version, 'currency' => 'Rupiah'])->render('pages.buku_besar.price_rendaan.index');
             }
         } elseif ($request->data == 'version') {
             $asumsi = DB::table('asumsi_umum')

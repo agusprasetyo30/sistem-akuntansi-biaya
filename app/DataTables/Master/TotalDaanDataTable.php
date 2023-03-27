@@ -19,17 +19,23 @@ class TotalDaanDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
         $query = DB::table('qty_rendaan')
             ->select('qty_rendaan.*', 'material.material_name', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', 'asumsi_umum.adjustment', 'version_asumsi.version', 'regions.region_desc')
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_rendaan.version_id')
             ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
-            // ->leftjoin('price_rendaan', 'price_rendaan.material_code', '=', 'qty_rendaan.material_code')
-            ->where('qty_rendaan.company_code', $cc)
             ->whereNull('qty_rendaan.deleted_at');
+
+        if ($this->filter_company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all') {
+            $query = $query->where('qty_rendaan.company_code', $this->filter_company);
+        } else if ($this->filter_company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code != 'all') {
+            $query = $query->where('qty_rendaan.company_code', auth()->user()->mapping_akses('qty_rendaan')->company_code);
+        }
+
+        if ($this->filter_version != 'all') {
+            $query = $query->where('qty_rendaan.version_id', $this->filter_version);
+        }
 
         return datatables()
             ->query($query)

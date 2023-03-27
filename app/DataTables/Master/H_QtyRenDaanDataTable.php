@@ -25,12 +25,18 @@ class H_QtyRenDaanDataTable extends DataTable
             ->where('qty_rendaan.version_id', $this->version)
             ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name', 'material.material_uom');
 
+        if ($this->company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all') {
+            $query = $query->where('qty_rendaan.company_code', $this->company);
+        } else if ($this->company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code != 'all') {
+            $query = $query->where('qty_rendaan.company_code', auth()->user()->mapping_akses('qty_rendaan')->company_code);
+        }
+
         $datatable = datatables()
             ->query($query)
-            ->addColumn('material', function ($query){
-                return $query->material_code.' - '.$query->material_name;
+            ->addColumn('material', function ($query) {
+                return $query->material_code . ' - ' . $query->material_name;
             })
-            ->addColumn('uom', function ($query){
+            ->addColumn('uom', function ($query) {
                 return $query->material_uom;
             });
 
@@ -53,43 +59,43 @@ class H_QtyRenDaanDataTable extends DataTable
             });
         }
 
-//        $data_value=[];
-//        foreach ($column['data'] as $key => $items){
-//            foreach ($asumsi as $key1 => $items1){
-//                $value = DB::table('qty_rendaan')
-//                    ->where([
-//                        'asumsi_umum_id' => $items1->id,
-//                        'region_id' => $items['region_id'],
-//                        'material_code' => $items['material_code'],
-//                    ])
-//                    ->first();
-//                $data = collect($value);
-//
-//                if ($data->isNotEmpty()){
-////                    array_push($data_value, $data['qty_rendaan_value']);
-//                    $datatable->addColumn($key1, function ($query) use ($data,$key, $key1){
-//                        return $data['qty_rendaan_value'] ;
-//                    });
-//                }
-//                else{
-////                    array_push($data_value, '-');
-//                    $datatable->addColumn($key1, function ($query) use ($data){
-//                        return '-';
-//                    });
-//                }
-//
-//            }
-//        }
-//        $data = array_chunk($data_value, count($asumsi));
-//
-//        foreach ($data as $key2=> $items2){
-//            foreach ($items2 as $key3 => $items3){
-//                $datatable->toArray()['data'][$key2]['value'.$key3] = $items3;
-//            }
-//
-//        }
-//
-//        dd($datatable->toArray()['data']);
+        //        $data_value=[];
+        //        foreach ($column['data'] as $key => $items){
+        //            foreach ($asumsi as $key1 => $items1){
+        //                $value = DB::table('qty_rendaan')
+        //                    ->where([
+        //                        'asumsi_umum_id' => $items1->id,
+        //                        'region_id' => $items['region_id'],
+        //                        'material_code' => $items['material_code'],
+        //                    ])
+        //                    ->first();
+        //                $data = collect($value);
+        //
+        //                if ($data->isNotEmpty()){
+        ////                    array_push($data_value, $data['qty_rendaan_value']);
+        //                    $datatable->addColumn($key1, function ($query) use ($data,$key, $key1){
+        //                        return $data['qty_rendaan_value'] ;
+        //                    });
+        //                }
+        //                else{
+        ////                    array_push($data_value, '-');
+        //                    $datatable->addColumn($key1, function ($query) use ($data){
+        //                        return '-';
+        //                    });
+        //                }
+        //
+        //            }
+        //        }
+        //        $data = array_chunk($data_value, count($asumsi));
+        //
+        //        foreach ($data as $key2=> $items2){
+        //            foreach ($items2 as $key3 => $items3){
+        //                $datatable->toArray()['data'][$key2]['value'.$key3] = $items3;
+        //            }
+        //
+        //        }
+        //
+        //        dd($datatable->toArray()['data']);
         return $datatable;
     }
 
