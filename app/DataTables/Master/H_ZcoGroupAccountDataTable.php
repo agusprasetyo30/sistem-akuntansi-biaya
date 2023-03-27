@@ -22,10 +22,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $cc = auth()->user()->company_code;
-
-        $query = GroupAccount::select('group_account_code', 'group_account_desc')
-            ->where('company_code', $cc);
+        $query = GroupAccount::select('group_account_code', 'group_account_desc')->where('company_code', $this->company);
 
         $datatable = datatables()
             ->eloquent($query);
@@ -35,6 +32,16 @@ class H_ZcoGroupAccountDataTable extends DataTable
             ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
             ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name');
 
+        if ($this->company != 'all' && auth()->user()->mapping_akses('zco')->company_code == 'all') {
+            $product = $product->where('zco.company_code', $this->company);
+        } else if ($this->company != 'all' && auth()->user()->mapping_akses('zco')->company_code != 'all') {
+            $product = $product->where('zco.company_code', auth()->user()->mapping_akses('zco')->company_code);
+        }
+
+        if ($this->version) {
+            $product = $product->where('zco.version_id', $this->version);
+        }
+
         if ($this->material != 'all') {
             $product->where('zco.product_code', $this->material);
         }
@@ -43,19 +50,19 @@ class H_ZcoGroupAccountDataTable extends DataTable
             $product->where('zco.plant_code', $this->plant);
         }
 
-        if ($this->format == '0') {
-            $temp = explode('-', $this->moth);
-            $timemonth = $temp[1] . '-' . $temp[0];
+        // if ($this->format == '0') {
+        //     $temp = explode('-', $this->moth);
+        //     $timemonth = $temp[1] . '-' . $temp[0];
 
-            $product->where('periode', 'ilike', '%' . $timemonth . '%');
-        } else if ($this->format == '1') {
-            $start_temp = explode('-', $this->start_month);
-            $end_temp = explode('-', $this->end_month);
-            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+        //     $product->where('periode', 'ilike', '%' . $timemonth . '%');
+        // } else if ($this->format == '1') {
+        //     $start_temp = explode('-', $this->start_month);
+        //     $end_temp = explode('-', $this->end_month);
+        //     $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
+        //     $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
 
-            $product->whereBetween('periode', [$start_date, $end_date]);
-        }
+        //     $product->whereBetween('periode', [$start_date, $end_date]);
+        // }
 
         $product = $product->get();
 
@@ -73,26 +80,6 @@ class H_ZcoGroupAccountDataTable extends DataTable
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 return '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
-                // $total_biaya = $zcoValues
-                //     ->where('product_code', $item->product_code)
-                //     ->where('plant_code', $item->plant_code)
-                //     ->where('periode', $item->periode)
-                //     ->where('group_account_code', $query->group_account_code)
-                //     ->sum('total_amount');
-
-                // $kuantum_produksi = $zcoValues
-                //     ->where('product_code', $item->product_code)
-                //     ->where('plant_code', $item->plant_code)
-                //     ->sum('product_qty');
-
-                // $biaya_perton = 0;
-
-                // if ($total_biaya > 0 && $kuantum_produksi > 0) {
-                //     $biaya_perton = $total_biaya / $kuantum_produksi;
-                // }
-
-                // return $biaya_perton ? round($biaya_perton, 2) : '-';
-
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
                     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
                     ->where([
@@ -108,11 +95,8 @@ class H_ZcoGroupAccountDataTable extends DataTable
                     ])->groupBy('product_qty', 'periode');
 
                 if ($this->format == '0') {
-                    $temp = explode('-', $this->moth);
-                    $timemonth = $temp[1] . '-' . $temp[0];
-
-                    $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
-                    $kuantum_produksi->where('periode', 'ilike', '%' . $timemonth . '%');
+                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $kuantum_produksi->where('periode', 'ilike', '%' . $this->moth . '%');
                 } else if ($this->format == '1') {
                     $start_temp = explode('-', $this->start_month);
                     $end_temp = explode('-', $this->end_month);
@@ -139,15 +123,6 @@ class H_ZcoGroupAccountDataTable extends DataTable
 
                 return $biaya_perton ? rupiah($biaya_perton) : '-';
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
-                // $total_biaya = $zcoValues
-                //     ->where('product_code', $item->product_code)
-                //     ->where('plant_code', $item->plant_code)
-                //     ->where('periode', $item->periode)
-                //     ->where('group_account_code', $query->group_account_code)
-                //     ->sum('total_amount');
-
-                // return $total_biaya ? round($total_biaya, 2) : '-';
-
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
                     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
                     ->where([
@@ -157,10 +132,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
                     ]);
 
                 if ($this->format == '0') {
-                    $temp = explode('-', $this->moth);
-                    $timemonth = $temp[1] . '-' . $temp[0];
-
-                    $total_biaya->where('periode', 'ilike', '%' . $timemonth . '%');
+                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
                 } else if ($this->format == '1') {
                     $start_temp = explode('-', $this->start_month);
                     $end_temp = explode('-', $this->end_month);

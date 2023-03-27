@@ -23,24 +23,15 @@
                                         <li>Sistem akan memproses sheet pertama saja</li>
                                     </ol> 
                                 </div>
-
-                                {{-- <div class="form-group">
-                                    <label class="form-label">Versi Asumsi</label>
-                                    <select name="version" id="version" class="form-control custom-select select2">
-                                        <option value="" disabled selected>Pilih Versi</option>
-                                    </select>
-                                    <button style="display: none;" type="button" class="btn btn-primary mt-2" id="submit-export"><i class="fe fe-download me-2"></i>Download Template</button>
-                                </div> --}}
-
                                 <div class="form-group">
-                                    <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
-                                    <select name="version" id="version" class="form-control custom-select select2">
+                                    <label class="form-label">Versi Asumsi</label>
+                                    <select name="version_import" id="version_import" class="form-control custom-select select2">
                                         <option value="" disabled selected>Pilih Versi</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                    <select name="detail_version" id="detail_version" class="form-control custom-select select2">
+                                    <label class="form-label">Bulan</label>
+                                    <select name="detail_version_import" id="detail_version_import" class="form-control custom-select select2">
                                         <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
                                     </select>
                                     <button style="display: none;" type="button" class="btn btn-primary mt-2" id="submit-export"><i class="fe fe-download me-2"></i>Download Template</button>

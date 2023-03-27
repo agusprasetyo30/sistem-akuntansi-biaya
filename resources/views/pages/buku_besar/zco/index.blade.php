@@ -69,6 +69,20 @@
                                 </div>
                                 <div class="tab-pane " id="horizontal">
                                     <div class="mb-2 row">
+                                        @if (auth()->user()->mapping_akses('zco')->company_code == 'all')
+                                            <div class="form-group">
+                                                <label class="form-label">PERUSAHAAN</label>
+                                                <select id="filter_company_hor" class="form-control custom-select select2">
+                                                </select>
+                                            </div>
+                                        @endif
+                    
+                                        <div class="form-group">
+                                            <label class="form-label">VERSI</label>
+                                            <select id="filter_version_hor" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material" class="form-control custom-select select2">
@@ -86,7 +100,7 @@
                                         <div class="form-group">
                                             <label class="form-label">PERIODE </label>
                                             <select id="filter_format" class="form-control custom-select select2">
-                                                <option value="" disabled selected>Pilih Periode</option>
+                                                {{-- <option value="" disabled selected>Pilih Periode</option> --}}
                                                 {{-- <option selected disabled value="">Pilih Format</option> --}}
                                                 @foreach (format_zco() as $key => $value)
                                                     options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
@@ -102,8 +116,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group" id="month_pick">
-                                            <label class="form-label">BULAN </label>
-                                            <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month" autocomplete="off" required>
+                                            <label class="form-label">Bulan</label>
+                                            <select name="bulan_satuan_filter1" id="bulan_satuan_filter1" class="form-control custom-select select2">
+                                                <option value="" selected>Pilih Version Terlebih Dahulu</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="btn-list mb-5">
@@ -117,6 +133,20 @@
                                 </div>
                                 <div class="tab-pane " id="group_account">
                                     <div class="mb-2 row">
+                                        @if (auth()->user()->mapping_akses('zco')->company_code == 'all')
+                                            <div class="form-group">
+                                                <label class="form-label">PERUSAHAAN</label>
+                                                <select id="filter_company_group_account" class="form-control custom-select select2">
+                                                </select>
+                                            </div>
+                                        @endif
+                    
+                                        <div class="form-group">
+                                            <label class="form-label">VERSI</label>
+                                            <select id="filter_version_group_account" class="form-control custom-select select2">
+                                            </select>
+                                        </div>
+
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material_group_account" class="form-control custom-select select2">
@@ -133,7 +163,7 @@
                                         <div class="form-group">
                                             <label class="form-label">PERIODE </label>
                                             <select id="filter_format_group_account" class="form-control custom-select select2">
-                                                <option value="" disabled selected>Pilih Periode</option>
+                                                {{-- <option value="" disabled selected>Pilih Periode</option> --}}
                                                 {{-- <option selected disabled value="">Pilih Format</option> --}}
                                                 @foreach (format_zco() as $key => $value)
                                                     options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
@@ -149,8 +179,10 @@
                                             </div>
                                         </div>
                                         <div class="form-group" id="month_pick_group_account">
-                                            <label class="form-label">BULAN </label>
-                                            <input type="text" class="form-control form-control-sm" name="bulan_satuan_filter1_group_account" id="bulan_satuan_filter1_group_account" placeholder="Month" autocomplete="off" required>
+                                            <label class="form-label">Bulan</label>
+                                            <select name="bulan_satuan_filter1_group_account" id="bulan_satuan_filter1_group_account" class="form-control custom-select select2">
+                                                <option value="" selected>Pilih Version Terlebih Dahulu</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="btn-list mb-5">
@@ -395,7 +427,7 @@
                 autoclose:true
             });
 
-            $('#version').select2({
+            $('#version_import').select2({
                 dropdownParent: $('#modal_import'),
                 placeholder: 'Pilih Versi',
                 width: '100%',
@@ -416,7 +448,122 @@
                     }
                 }
             }).on('change', function () {
-                $("#template").css("display", "block");
+                var d_version = $('#version_import').val();
+                $('#detail_version_import').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    dropdownParent: $('#modal_import'),
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:d_version
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                }).on('change', function () {
+                    $("#submit-export").css("display", "block");
+                });
+            })
+
+            $('#filter_version_hor').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var _ver = $('#filter_version_hor').val();
+                $('#bulan_satuan_filter1').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:_ver
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                })
+            })
+
+            $('#filter_version_group_account').select2({
+                placeholder: 'Pilih Versi',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{ route('version_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            }).on('change', function () {
+                var _ver = $('#filter_version_group_account').val();
+                $('#bulan_satuan_filter1_group_account').append('<option selected disabled value="">Pilih Bulan</option>').select2({
+                    placeholder: 'Pilih Bulan',
+                    width: '100%',
+                    allowClear: false,
+                    ajax: {
+                        url: "{{ route('version_detail_select') }}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                search: params.term,
+                                version:_ver
+
+                            };
+                        },
+                        processResults: function(response) {
+                            return {
+                                results: response
+                            };
+                        }
+                    }
+                })
             })
 
             $('#periode_import').on("click", function() {
@@ -614,13 +761,6 @@
                 });
             });
 
-            $('#bulan_satuan_filter1').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
-            });
-
             $('#bulan_filter1_group_account').bootstrapdatepicker({
                 format: "mm-yyyy",
                 viewMode: "months",
@@ -636,13 +776,6 @@
                     autoclose:true,
                     startDate: periode_group_account
                 });
-            });
-
-            $('#bulan_satuan_filter1_group_account').bootstrapdatepicker({
-                format: "mm-yyyy",
-                viewMode: "months",
-                minViewMode: "months",
-                autoclose:true
             });
 
             $('#data_main_version').select2({
@@ -691,6 +824,69 @@
                     }
                 });
             })
+
+            $('#filter_company_hor').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            $('#filter_company_group_account').select2({
+                placeholder: 'Pilih Perusahaan',
+                width: '100%',
+                allowClear: false,
+                ajax: {
+                    url: "{{route('company_filter_select') }}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    }
+                }
+            })
+
+            // $('#filter_version_hor').select2({
+            //     placeholder: 'Pilih Versi',
+            //     width: '100%',
+            //     allowClear: false,
+            //     ajax: {
+            //         url: "{{ route('version_select') }}",
+            //         dataType: 'json',
+            //         delay: 250,
+            //         data: function (params) {
+            //             return {
+            //                 search: params.term
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         }
+            //     }
+            // })
         })
 
         function table (){
@@ -1033,15 +1229,23 @@
                     <tr id="dinamic_tr">
                     </tr>
                 </thead>
-                <tfoot>
-                    <tr id="dinamic_footer">
-                    </tr>
-                </tfoot>
             </table>`
-            // var kolom = '<th class="text-center">BIAYA </th>'
+            // var table = `
+            // <table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
+            //     <thead>
+            //         <tr id="dinamic_tr_top">
+            //         </tr>
+            //         <tr id="dinamic_tr">
+            //         </tr>
+            //     </thead>
+            //     <tfoot>
+            //         <tr id="dinamic_footer">
+            //         </tr>
+            //     </tfoot>
+            // </table>`
             var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th><th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">MATERIAL</th>'
             var kolom = ''
-            var kolom_footer = '<th> Total </th><th> Perhitungan </th>'
+            // var kolom_footer = '<th> Total </th><th> Perhitungan </th>'
             var column = [
                 { data: 'material_code', orderable:false},
                 { data: 'material_name', orderable:false},
@@ -1058,18 +1262,10 @@
                     start_month:$('#bulan_filter1').val(),
                     end_month:$('#bulan_filter2').val(),
                     moth:$('#bulan_satuan_filter1').val(),
+                    version:$('#filter_version_hor').val(),
+                    company:$('#filter_company_hor').val(),
                 },
                 success:function (response) {
-                    // if (response.material.length == 0) {
-                    //     Swal.fire({
-                    //         title: 'Oopss...',
-                    //         html: 'Data yang anda cari tidak dapat ditemukan',
-                    //         icon: 'warning',
-                    //         allowOutsideClick: false,
-                    //         confirmButtonColor: "#019267",
-                    //         confirmButtonText: 'Konfirmasi',
-                    //     })
-                    // }
                     for (let i = 0; i < response.material.length;i++){
                         kolom_top += '<th colspan="4" class="text-center"><strong>'+ response.material[i].product_code+'  '+ response.material[i].material_name+'<br>'+ response.material[i].plant_code +' '+ response.material[i].plant_desc +'<strong></th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
@@ -1077,12 +1273,12 @@
 
                     for (let j = 0; j < response.material.length * 4 ; j++) {
                         column.push({ data: j.toString(), orderable:false})
-                        kolom_footer += '<th class="text-center"></th>'
+                        // kolom_footer += '<th class="text-center"></th>'
                     }
 
                     $("#dinamic_tr_top").append(kolom_top);
                     $("#dinamic_tr").append(kolom);
-                    $("#dinamic_footer").append(kolom_footer);
+                    // $("#dinamic_footer").append(kolom_footer);
                     $('#h_dt_zco').DataTable().clear().destroy();
                     $("#h_dt_zco").DataTable({
                         scrollX: true,
@@ -1130,6 +1326,8 @@
                                 start_month:$('#bulan_filter1').val(),
                                 end_month:$('#bulan_filter2').val(),
                                 moth:$('#bulan_satuan_filter1').val(),
+                                version:$('#filter_version_hor').val(),
+                                company:$('#filter_company_hor').val(),
                             }
                         },
                         columns: column,
@@ -1137,19 +1335,19 @@
                             let api = this.api();
                             api.columns.adjust().draw();
                         },
-                        footerCallback: function () {
-                            var response = this.api().ajax.json();
-                            console.log(response.totalhs0);
+                        // footerCallback: function () {
+                        //     var response = this.api().ajax.json();
+                        //     console.log(response.totalhs0);
 
-                            this.api().eq(0).columns().every(function (index) {
-                                var api = this
-                                if (index > 1){
-                                    var count = parseInt(index) - 2
-                                    var variable = 'totalhs'+ count;
-                                    $( api.column(index).footer() ).html(response[variable]);
-                                }
-                            })
-                        }
+                        //     this.api().eq(0).columns().every(function (index) {
+                        //         var api = this
+                        //         if (index > 1){
+                        //             var count = parseInt(index) - 2
+                        //             var variable = 'totalhs'+ count;
+                        //             $( api.column(index).footer() ).html(response[variable]);
+                        //         }
+                        //     })
+                        // }
                     })
                 }
             })
@@ -1184,6 +1382,8 @@
                     start_month:$('#bulan_filter1_group_account').val(),
                     end_month:$('#bulan_filter2_group_account').val(),
                     moth:$('#bulan_satuan_filter1_group_account').val(),
+                    version:$('#filter_version_group_account').val(),
+                    company:$('#filter_company_group_account').val(),
                 },
                 success:function (response) {
                     // if (response.group_account.length == 0) {
@@ -1254,6 +1454,8 @@
                                 start_month:$('#bulan_filter1_group_account').val(),
                                 end_month:$('#bulan_filter2_group_account').val(),
                                 moth:$('#bulan_satuan_filter1_group_account').val(),
+                                version:$('#filter_version_group_account').val(),
+                                company:$('#filter_company_group_account').val(),
                             }
                         },
                         columns: column,
@@ -1373,7 +1575,8 @@
                 url: '{{route('check_zco')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    periode:$('#periode_import').val()
+                    version:$('#version_import').val(),
+                    periode:$('#detail_version_import').val()
                 },
                 success: function (response) {
                     if (response.code == 201) 
@@ -1435,6 +1638,8 @@
                         if (result.value) {
                             $('#modal_import').modal('hide')
                             $("#modal_import input").val("")
+                            $("#version_import").val('').trigger('change')
+                            $("#detail_version_import").val('').trigger('change')
                             // table()
                             update_dt_horizontal()
                             update_dt_group_account_horizontal()
@@ -1597,7 +1802,7 @@
             $('#filter_format').val('all').trigger('change')
             $('#bulan_filter1').val("")
             $('#bulan_filter2').val("")
-            $('#bulan_satuan_filter1').val("")
+            $('#bulan_satuan_filter1').val("").trigger('change')
         }
 
         function reset_form_group_account(){
@@ -1606,7 +1811,7 @@
             $('#filter_format_group_account').val('all').trigger('change')
             $('#bulan_filter1_group_account').val("")
             $('#bulan_filter2_group_account').val("")
-            $('#bulan_satuan_filter1_group_account').val("")
+            $('#bulan_satuan_filter1_group_account').val("").trigger('change')
         }
     </script>
 @endsection
