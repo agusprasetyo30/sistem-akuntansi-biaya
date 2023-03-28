@@ -36,6 +36,7 @@ class ConsRateImport implements ToModel, WithHeadingRow, SkipsOnError, WithValid
         $arrvalue[4] = $arrvalue[4] != null ? $arrvalue[4] : 0;
         $data = array_combine($arrHeader, $arrvalue);
         $data['version_id'] = $this->version;
+        $data['status_pengajuan'] = 'DRAFT';
         $data['company_code'] = 'B000';
         $data['created_by'] = auth()->user()->id;
         $data['updated_by'] = auth()->user()->id;

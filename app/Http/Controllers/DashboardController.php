@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Management_Role;
+use App\Models\MappingRole;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -25,12 +26,11 @@ class DashboardController extends Controller
             ->leftjoin('company', 'company.company_code', '=', 'users.company_code')
             ->where('users.id', decrypt($id))
             ->first();
-
-        $data_role = Management_Role::select('role.nama_role', 'management_role.role_id')
-            ->where('user_id', decrypt($id))
-            ->leftJoin('role', 'role.id', '=', 'management_role.role_id')
+        
+        $data_role = MappingRole::select('role.nama_role', 'mapping_role.role_id')
+            ->leftJoin('role', 'role.id', '=', 'mapping_role.role_id')
+            ->where('mapping_role.user_id', decrypt($id))
             ->get();
-
         return view('pages.profile.index', compact('data_id', 'data_role'));
     }
 

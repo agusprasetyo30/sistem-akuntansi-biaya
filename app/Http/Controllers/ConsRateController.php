@@ -66,6 +66,7 @@ class ConsRateController extends Controller
             $input['month_year'] = $data_asumsi->month_year;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = 'B000';
+            $input['status_pengajuan'] = 'DRAFT';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
