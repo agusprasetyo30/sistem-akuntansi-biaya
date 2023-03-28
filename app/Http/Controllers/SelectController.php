@@ -586,6 +586,36 @@ class SelectController extends Controller
         return response()->json($response);
     }
 
+    public function version_company(Request $request)
+    {
+        $search = $request->search;
+        $company = $request->company;
+        if ($search == '') {
+            $versi = Version_Asumsi::select('version_asumsi.id', 'version_asumsi.version', 'company.company_name')
+                ->leftjoin('company', 'company.company_code', '=', 'version_asumsi.company_code')
+                ->where('version_asumsi.company_code', $company)
+                ->limit(10)
+                ->get();
+        } else {
+            $versi = Version_Asumsi::select('version_asumsi.id', 'version_asumsi.version', 'version_asumsi.company_code', 'company.company_name')
+                ->leftjoin('company', 'company.company_code', '=', 'version_asumsi.company_code')
+                ->where('version_asumsi.company_code', $company)
+                ->where('version_asumsi.company_code', 'ilike', '%' .$search. '%')
+                ->limit(10)
+                ->get();
+        }
+
+        $response = array();
+        foreach ($versi as $items) {
+            $response[] = array(
+                "id" => $items->id,
+                "text" => $items->version
+            );
+        }
+
+        return response()->json($response);
+    }
+
     public function cost_center(Request $request)
     {
         $search = $request->search;

@@ -294,6 +294,27 @@ class ConsRateController extends Controller
         }
     }
 
+    public function check_status(Request $request)
+    {
+        try {
+            $check = ConsRate::where('version_id', $request->version)
+                ->where('company_code', $request->company)
+                ->first();
+
+            if ($check->status_pengajuan == 'DRAFT' or $check->status_pengajuan == 'REJECTED') {
+                return response()->json(['code' => 100, 'msg' => 'Data Draft']);
+            }elseif ($check->status_pengajuan == 'SUBMITTED') {
+                return response()->json(['code' => 101, 'msg' => 'Data Submitted']);
+            }elseif ($check->status_pengajuan == 'APPROVED'){
+                return response()->json(['code' => 102, 'msg' => 'Data Approved']);
+            }else{
+                return response()->json(['code' => 103, 'msg' => 'Data Tidak Ditemukan']);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
     public function check_duplicated(Request $request)
     {
         try {
