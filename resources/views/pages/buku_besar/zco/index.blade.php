@@ -1229,23 +1229,14 @@
                     <tr id="dinamic_tr">
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr id="dinamic_footer">
+                    </tr>
+                </tfoot>
             </table>`
-            // var table = `
-            // <table id="h_dt_zco" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
-            //     <thead>
-            //         <tr id="dinamic_tr_top">
-            //         </tr>
-            //         <tr id="dinamic_tr">
-            //         </tr>
-            //     </thead>
-            //     <tfoot>
-            //         <tr id="dinamic_footer">
-            //         </tr>
-            //     </tfoot>
-            // </table>`
             var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th><th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">MATERIAL</th>'
             var kolom = ''
-            // var kolom_footer = '<th> Total </th><th> Perhitungan </th>'
+            var kolom_footer = '<th> Total </th><th> Perhitungan </th>'
             var column = [
                 { data: 'material_code', orderable:false},
                 { data: 'material_name', orderable:false},
@@ -1273,12 +1264,12 @@
 
                     for (let j = 0; j < response.material.length * 4 ; j++) {
                         column.push({ data: j.toString(), orderable:false})
-                        // kolom_footer += '<th class="text-center"></th>'
+                        kolom_footer += '<th class="text-center"></th>'
                     }
 
                     $("#dinamic_tr_top").append(kolom_top);
                     $("#dinamic_tr").append(kolom);
-                    // $("#dinamic_footer").append(kolom_footer);
+                    $("#dinamic_footer").append(kolom_footer);
                     $('#h_dt_zco').DataTable().clear().destroy();
                     $("#h_dt_zco").DataTable({
                         scrollX: true,
@@ -1337,17 +1328,42 @@
                         },
                         // footerCallback: function () {
                         //     var response = this.api().ajax.json();
-                        //     console.log(response.totalhs0);
-
                         //     this.api().eq(0).columns().every(function (index) {
                         //         var api = this
                         //         if (index > 1){
                         //             var count = parseInt(index) - 2
-                        //             var variable = 'totalhs'+ count;
+                        //             console.log(index, count)
+                        //             var variable = 'total'+ count;
                         //             $( api.column(index).footer() ).html(response[variable]);
                         //         }
                         //     })
-                        // }
+                        // },
+                        footerCallback: function (row, data, start, end, display) {
+                            this.api().eq(0).columns().every(function (index) {
+                                if (index > 1){
+                                    var api = this;
+                                    var intVal = function (i) {
+                                        // return typeof i === 'string' ? parseFloat(i.replace(/[\Rp.]/g, '')) : typeof i === 'number' ? i : 0;
+                                        if (i === '-') {
+                                            return 0
+                                        } else {
+                                            return typeof i === 'string' ? parseFloat(i.replace(/[\Rp.]/g, '')) : typeof i === 'number' ? i : 0;
+                                        }
+                                    };
+
+                                    // Total over all pages
+                                    total = api
+                                        .column(index)
+                                        .data()
+                                        .reduce(function (a, b) {
+                                            return intVal(a) + intVal(b);
+                                        }, 0);
+                                        
+                                    // Update footer
+                                    $(api.column(index).footer()).html(total);
+                                }
+                            })
+                        },
                     })
                 },
                 error: function (response) {
