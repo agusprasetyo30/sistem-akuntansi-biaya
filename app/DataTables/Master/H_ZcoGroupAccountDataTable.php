@@ -22,7 +22,10 @@ class H_ZcoGroupAccountDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = GroupAccount::select('group_account_code', 'group_account_desc')->where('company_code', $this->company);
+        $query = GroupAccount::select('group_account_code', 'group_account_desc');
+        if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
+            $query = $query->where('group_account.company_code', auth()->user()->mapping_akses('zco')->company_code);
+        }
 
         $datatable = datatables()
             ->eloquent($query);
@@ -32,9 +35,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
             ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
             ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name');
 
-        if ($this->company != 'all' && auth()->user()->mapping_akses('zco')->company_code == 'all') {
-            $product = $product->where('zco.company_code', $this->company);
-        } else if ($this->company != 'all' && auth()->user()->mapping_akses('zco')->company_code != 'all') {
+        if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
             $product = $product->where('zco.company_code', auth()->user()->mapping_akses('zco')->company_code);
         }
 

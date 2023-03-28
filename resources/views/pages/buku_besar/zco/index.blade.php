@@ -86,8 +86,8 @@
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material" class="form-control custom-select select2">
-                                                <option value="" disabled selected>Pilih Produk</option>
-                                                {{-- <option value="all" selected>Semua</option> --}}
+                                                {{-- <option value="" disabled selected>Pilih Produk</option> --}}
+                                                <option value="all" selected>Semua</option>
                                             </select>
                                         </div>
                                         <div class="form-group" id="format_plant">
@@ -150,8 +150,8 @@
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material_group_account" class="form-control custom-select select2">
-                                                <option value="" disabled selected>Pilih Produk</option>
-                                                {{-- <option value="all" selected>Semua</option> --}}
+                                                {{-- <option value="" disabled selected>Pilih Produk</option> --}}
+                                                <option value="all" selected>Semua</option>
                                             </select>
                                         </div>
                                         <div class="form-group" id="format_plant_group_account">
@@ -1349,6 +1349,9 @@
                         //     })
                         // }
                     })
+                },
+                error: function (response) {
+                    handleError(response)
                 }
             })
         }
@@ -1464,6 +1467,9 @@
                             api.columns.adjust().draw();
                         }
                     })
+                },
+                error: function (response) {
+                    handleError(response)
                 }
             })
         }

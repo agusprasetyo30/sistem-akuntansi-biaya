@@ -22,7 +22,10 @@ class H_ZcoDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = Material::select('material_code', 'material_name', 'group_account_code')->where('company_code', $this->company)->orderBy('material_code', 'asc');
+        $query = Material::select('material_code', 'material_name', 'group_account_code')->orderBy('material_code', 'asc');
+        if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
+            $query = $query->where('material.company_code', auth()->user()->mapping_akses('zco')->company_code);
+        }
 
         $datatable = datatables()
             ->eloquent($query);
@@ -32,9 +35,7 @@ class H_ZcoDataTable extends DataTable
             ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
             ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name');
 
-        if ($this->company != 'all' && auth()->user()->mapping_akses('zco')->company_code == 'all') {
-            $product = $product->where('zco.company_code', $this->company);
-        } else if ($this->company != 'all' && auth()->user()->mapping_akses('zco')->company_code != 'all') {
+        if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
             $product = $product->where('zco.company_code', auth()->user()->mapping_akses('zco')->company_code);
         }
 
