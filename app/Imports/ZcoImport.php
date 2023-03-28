@@ -25,11 +25,12 @@ class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation
 
     use Importable, SkipsErrors, SkipsFailures;
 
-    protected $periode;
+    protected $asumsi;
 
-    public function __construct($periode)
+    public function __construct($asumsi)
     {
-        $this->periode = $periode;
+        $this->periode = $asumsi->month_year;
+        $this->version_id = $asumsi->version_id;
     }
 
     public function model(array $row)
@@ -37,6 +38,7 @@ class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation
         DB::table('zco')->insert([
             'plant_code' => $row['plant_code'],
             'periode' => $this->periode,
+            'version_id' => $this->version_id,
             'product_code' => $row['product_code'],
             'product_qty' => $row['product_qty'],
             'cost_element' => $row['cost_element'],
@@ -54,12 +56,12 @@ class ZcoImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidation
 
     public function batchSize(): int
     {
-        return 5000;
+        return 1000;
     }
 
     public function chunkSize(): int
     {
-        return 5000;
+        return 1000;
     }
 
     public function rules(): array
