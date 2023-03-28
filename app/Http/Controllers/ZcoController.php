@@ -52,6 +52,23 @@ class ZcoController extends Controller
                 'company' => $request->company,
             ])->render('pages.buku_besar.zco.index');
         } else if ($request->data == 'material') {
+            if (auth()->user()->mapping_akses('zco')->company_code == 'all') {
+                $validator = Validator::make($request->all(), [
+                    "version" => 'required',
+                    "company" => 'required',
+                ], validatorMsg());
+
+                if ($validator->fails())
+                    return $this->makeValidMsg($validator);
+            } else {
+                $validator = Validator::make($request->all(), [
+                    "version" => 'required',
+                ], validatorMsg());
+
+                if ($validator->fails())
+                    return $this->makeValidMsg($validator);
+            }
+
             $material = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name')
                 ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
                 ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
@@ -89,6 +106,23 @@ class ZcoController extends Controller
             // dd($material);
             return response()->json(['code' => 200, 'material' => $material]);
         } else if ($request->data == 'group_account') {
+            if (auth()->user()->mapping_akses('zco')->company_code == 'all') {
+                $validator = Validator::make($request->all(), [
+                    "version" => 'required',
+                    "company" => 'required',
+                ], validatorMsg());
+
+                if ($validator->fails())
+                    return $this->makeValidMsg($validator);
+            } else {
+                $validator = Validator::make($request->all(), [
+                    "version" => 'required',
+                ], validatorMsg());
+
+                if ($validator->fails())
+                    return $this->makeValidMsg($validator);
+            }
+
             $group_account = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name')
                 ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
                 ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
