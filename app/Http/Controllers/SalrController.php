@@ -267,11 +267,13 @@ class SalrController extends Controller
                 return $this->makeValidMsg($validator);
             }
 
-//            $transaction = DB::transaction(function () use ($request) {
+            $transaction = DB::transaction(function () use ($request) {
 
                 $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
 
                 $empty_excel = Excel::toArray(new SalrImport($asumsi), $request->file('file'));
+
+//                dd(collect($empty_excel[0])->pluck('gl_account_fc'));
 
                 if ($empty_excel[0]) {
                     $file = $request->file('file')->store('import');
@@ -287,7 +289,7 @@ class SalrController extends Controller
                     $data_fail = [];
                 }
                 return $data_fail;
-//            });
+            });
 
             if ($transaction->isNotEmpty()) {
                 return setResponse([
