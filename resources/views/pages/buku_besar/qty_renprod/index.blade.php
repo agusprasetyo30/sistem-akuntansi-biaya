@@ -49,7 +49,7 @@
                                             </select>
                                         </div>
                                     @endif
-
+                
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
-
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -289,7 +289,7 @@
                 get_data_horiz()
             })
 
-
+            
             $('#filter_company').select2({
                 placeholder: 'Pilih Perusahaan',
                 width: '100%',
@@ -456,11 +456,11 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                //     { extend: 'excel', className: 'mb-5', exportOptions:{
-                //         columns:[0,1,2,3]
-                //     }, title: '',
-                //         filename: 'Kuantiti Rencana Produksi - Vertikal'
-                // }
+                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                        columns:[0,1,2,3]
+                    }, title: '',
+                        filename: 'Kuantiti Rencana Produksi - Vertikal' 
+                }
                 ],
                 ajax: {
                     url : '{{route("qty_renprod")}}',
@@ -520,8 +520,18 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            // {
-                            //     extend: 'excel',
+                            {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
+
+                                    window.location = '{{ route("export_h_qty_renprod") }}' + "?version=" + version_search
+                                },
+                                className: 'mb-5'
+                            }
+                            // { 
+                            //     extend: 'excel', 
                             //     className: 'mb-5',
                             //     title: '',
                             //     filename: 'Kuantiti Rencana Produksi - Horizontal',
@@ -534,7 +544,7 @@
                             //                 if (data == null) {
                             //                     return data;
                             //                 }
-                            //                 if ( kolom !== 0) {
+                            //                 if ( kolom !== 0) {                      
                             //                     var arr = data.split(',');
                             //                     arr[0] = arr[0].toString().replace( /[\.]/g, "" );
                             //                     if (arr[0] > ''  || arr[1] > '') {
@@ -542,7 +552,7 @@
                             //                     } else {
                             //                         return '';
                             //                     }
-                            //                     return data.toString().replace( /[^\d.-]/g, "" );
+                            //                     return data.toString().replace( /[^\d.-]/g, "" );    
                             //                 }
                             //                 return data;
                             //             }
@@ -632,7 +642,7 @@
                     version:$('#version').val()
                 },
                 success: function (response) {
-                    if (response.code == 201)
+                    if (response.code == 201) 
                     {
                         Swal.fire({
                             title: response.title,
@@ -775,7 +785,7 @@
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
-
+                            
                             update_dt_horizontal()
                             // table()
                             $('#dt_qty_renprod').DataTable().ajax.reload();

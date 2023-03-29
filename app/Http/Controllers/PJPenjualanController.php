@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\H_PJPenjualanDataTable;
 use App\DataTables\Master\PJPenjualanDataTable;
 use App\Exports\MultipleSheet\MS_PJPenjualanExport;
+use App\Exports\Horizontal\PJPenjualanExport;
 use App\Imports\PJPenjualanImport;
 use App\Models\Material;
 use App\Models\PJ_Penjualan;
@@ -41,8 +42,9 @@ class PJPenjualanController extends Controller
                 "version_id" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             // $pj_penjualan_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->pj_penjualan_value));
 
@@ -89,8 +91,9 @@ class PJPenjualanController extends Controller
                 "version_id" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             // $pj_penjualan_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->pj_penjualan_value));
 
@@ -140,8 +143,9 @@ class PJPenjualanController extends Controller
                 "file" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             DB::transaction(function () use ($request) {
                 PJ_Penjualan::where('version_id', $request->version)->delete();
@@ -181,8 +185,9 @@ class PJPenjualanController extends Controller
             if ($res) {
                 $msg = '';
 
-                foreach ($res as $message)
+                foreach ($res as $message) {
                     $msg .= '<p>' . $message . '</p>';
+                }
 
                 return setResponse([
                     'code' => 430,
@@ -208,6 +213,63 @@ class PJPenjualanController extends Controller
         return Excel::download(new MS_PJPenjualanExport($version), 'penjualan.xlsx');
     }
 
+    public function export_horizontal(Request $request)
+    {
+        $cc = auth()->user()->company_code;
+
+
+        $query = DB::table('pj_penjualan')
+            ->select(DB::Raw("CONCAT(pj_penjualan.material_code, ' ', material.material_name) mat"), 'material.material_uom', 'asumsi_umum.month_year', 'pj_penjualan.pj_penjualan_value')
+            ->leftjoin('material', 'material.material_code', '=', 'pj_penjualan.material_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'pj_penjualan.version_id')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_penjualan.asumsi_umum_id')
+            ->whereNull('pj_penjualan.deleted_at')
+            ->where('pj_penjualan.version_id', $request->version)
+            // ->where('pj_penjualan.company_code', $cc)
+            ->orderBy('mat')
+            ->orderBy('month_year')
+            ->get()
+            ->toArray();
+
+
+        $data = array_reduce($query, function ($carry, $item) {
+            if (property_exists($carry, $item->mat . '~' . $item->material_uom)) {
+                array_push($carry->{$item->mat . '~' . $item->material_uom}, (object)[
+                    $item->month_year => $item->pj_penjualan_value
+                ]);
+            } else {
+                $carry->{$item->mat . '~' . $item->material_uom} = [(object)[$item->month_year => $item->pj_penjualan_value]];
+            }
+
+            return $carry;
+        }, (object)[]);
+
+
+        $header = ['MATERIAL', 'UOM', ...array_unique(array_map(function ($v) {
+            return $v->month_year;
+        }, $query))];
+
+
+        $body = array_map(function ($v) use ($data) {
+            list($mat, $uom) = explode("~", $v);
+            $_arr = [$mat, $uom];
+            foreach ($data->{$v} as $e) {
+                $val = array_values(get_object_vars($e))[0];
+                array_push($_arr, $val);
+            }
+            return $_arr;
+        }, array_keys(get_object_vars($data)));
+
+        // return response()->json($body);
+
+        $data = [
+            'header' => $header,
+            'body'   => $body
+        ];
+
+        return Excel::download(new PJPenjualanExport($data), "PJ Penjualan - Horizontal.xlsx");
+    }
+
     public function check(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -215,8 +277,9 @@ class PJPenjualanController extends Controller
             "version" => 'required',
         ], validatorMsg());
 
-        if ($validator->fails())
+        if ($validator->fails()) {
             return $this->makeValidMsg($validator);
+        }
 
         try {
             $check = PJ_Penjualan::where('version_id', $request->version)

@@ -49,7 +49,7 @@
                                             </select>
                                         </div>
                                     @endif
-
+                
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -493,7 +493,7 @@
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
-
+            
             $('#filter_company').select2({
                 placeholder: 'Pilih Perusahaan',
                 width: '100%',
@@ -677,16 +677,16 @@
                         ]
 
                     },
-                    // {
-                    //     extend: 'excel',
-                    //     className: 'mb-5',
-                    //     exportOptions:{
-                    //     columns:[0,1,2,3,4]
-                    // },
-                    //     title: '',
-                    //     filename: 'Price Rencana Pengadaan - Vertikal'
-                    //
-                    // }
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5', 
+                        exportOptions:{
+                        columns:[0,1,2,3,4]
+                    },
+                        title: '',
+                        filename: 'Price Rencana Pengadaan - Vertikal'  
+                    
+                    }
                 ],
                 ajax: {
                     url : '{{route("price_rendaan")}}',
@@ -711,6 +711,7 @@
             }).columns.adjust().draw();
         }
 
+        var mataUang = 'IDR'
         function get_data_horiz(){
             var table = '<table id="h_dt_price_rendaan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
             var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
@@ -755,23 +756,36 @@
                                         text:'Rupiah',
                                         action: function () {
                                             $('#h_dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Rupiah'])}}').load();
+                                            mataUang = 'IDR'
                                         }
                                     },
                                     {
                                         text:'Dollar',
                                         action: function () {
                                             $('#h_dt_price_rendaan').DataTable().ajax.url('{{route('price_rendaan', ['currency' => 'Dollar'])}}').load();
+                                            mataUang = 'USD'
                                         }
                                     }
                                 ]
 
                             },
-                            // {
-                            //     extend: 'excel',
+                            // { 
+                            //     extend: 'excel', 
                             //     className: 'mb-5',
                             //     title: '',
-                            //     filename: 'Price Rencana Pengadaan - Horizontal'
+                            //     filename: 'Price Rencana Pengadaan - Horizontal'   
                             // }
+                            {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
+                                    let mata_uang = mataUang
+
+                                    window.location = '{{ route("export_h_price_rendaan") }}' + "?version=" + version_search + "&mata_uang=" + mataUang
+                                },
+                                className: 'mb-5'
+                            }
                         ],
                         ajax: {
                             url : '{{route("price_rendaan")}}',

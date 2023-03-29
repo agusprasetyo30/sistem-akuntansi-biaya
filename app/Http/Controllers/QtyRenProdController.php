@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\H_QtyRenProdDataTable;
 use App\DataTables\Master\QtyRenProdDataTable;
+use App\Exports\Horizontal\QtyRenProdExport;
 use App\Exports\MultipleSheet\MS_KuantitiRenProdExport;
 use App\Imports\QtyRenProdImport;
 use App\Models\Asumsi_Umum;
@@ -42,8 +43,9 @@ class QtyRenProdController extends Controller
                 "version_id" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             // $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
 
@@ -90,8 +92,9 @@ class QtyRenProdController extends Controller
                 "version_id" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             // $qty_renprod_value = (float) str_replace('.', '', str_replace('Rp ', '', $request->qty_renprod_value));
 
@@ -141,8 +144,9 @@ class QtyRenProdController extends Controller
                 "file" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             DB::transaction(function () use ($request) {
                 QtyRenProd::where('version_id', $request->version)->delete();
@@ -183,8 +187,9 @@ class QtyRenProdController extends Controller
                 if ($res) {
                     $msg = '';
 
-                    foreach ($res as $message)
+                    foreach ($res as $message) {
                         $msg .= '<p>' . $message . '</p>';
+                    }
 
                     return setResponse([
                         'code' => 430,
@@ -217,6 +222,57 @@ class QtyRenProdController extends Controller
         $version = $request->version;
 
         return Excel::download(new MS_KuantitiRenProdExport($version), 'qty_renprod.xlsx');
+    }
+
+    public function export_horizontal(Request $request)
+    {
+        $cc = auth()->user()->company_code;
+
+        $query = DB::table('qty_renprod')->select(DB::Raw("CONCAT(cost_center.cost_center, ' ', cost_center.cost_center_desc) AS cc"), 'qty_renprod.qty_renprod_value', 'asumsi_umum.month_year')
+            ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_renprod.version_id')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_renprod.asumsi_umum_id')
+            ->whereNull('qty_renprod.deleted_at')
+            ->where('qty_renprod.version_id', $request->version)
+            ->where('qty_renprod.company_code', $cc)
+            ->orderBy('cc')
+            ->orderBy('month_year')
+            ->get()
+            ->toArray();
+
+
+        $data = array_reduce($query, function ($carry, $item) {
+            if (property_exists($carry, $item->cc)) {
+                array_push($carry->{$item->cc}, (object)[
+                    $item->month_year => $item->qty_renprod_value
+                ]);
+            } else {
+                $carry->{$item->cc} = [(object)[$item->month_year => $item->qty_renprod_value]];
+            }
+
+            return $carry;
+        }, (object)[]);
+
+        $header = ['COST CENTER', ...array_unique(array_map(function ($v) {
+            return $v->month_year;
+        }, $query))];
+
+
+        $body = array_map(function ($v) use ($data) {
+            $_arr = [$v];
+            foreach ($data->{$v} as $e) {
+                $val = array_values(get_object_vars($e))[0];
+                array_push($_arr, $val);
+            }
+            return $_arr;
+        }, array_keys(get_object_vars($data)));
+
+        $data = [
+           'header' => $header,
+           'body'   => $body
+        ];
+
+        return Excel::download(new QtyRenProdExport($data), "Qty Ren Prod - Horizontal.xlsx");
     }
 
     public function check(Request $request)
