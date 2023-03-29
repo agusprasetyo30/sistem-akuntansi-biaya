@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\H_QtyRenDaanDataTable;
 use App\DataTables\Master\QtyRenDaanDataTable;
 use App\Exports\MultipleSheet\MS_KuantitiRenDaanExport;
+use App\Exports\Horizontal\QtyRenDaanExport;
 use App\Exports\Template\T_KuantitiRenDaanExport;
 use App\Imports\KuantitiRenDaanImport;
 use App\Models\Asumsi_Umum;
@@ -46,8 +47,9 @@ class QtyRenDaanController extends Controller
                 "qty_rendaan_value" => 'required|numeric',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             $check_data = QtyRenDaan::where([
                 'company_code' => auth()->user()->company_code,
@@ -96,8 +98,9 @@ class QtyRenDaanController extends Controller
                 "qty_rendaan_value" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
@@ -145,17 +148,84 @@ class QtyRenDaanController extends Controller
         return Excel::download(new MS_KuantitiRenDaanExport($version), 'qty_rendaan.xlsx', null, [\Maatwebsite\Excel\Excel::XLSX]);
     }
 
+    public function export_horizontal(Request $request)
+    {
+        // $cc = auth()->user()->company_code;
+
+        $query = DB::table('qty_rendaan')->select('qty_rendaan.material_code', 'material.material_name', 'material.material_uom', 'regions.region_desc', 'asumsi_umum.month_year', DB::raw('SUM(qty_rendaan.qty_rendaan_value) as qty_rendaan_value'))
+            ->leftjoin('material', 'qty_rendaan.material_code', '=', 'material.material_code')
+            ->leftjoin('asumsi_umum', 'qty_rendaan.asumsi_umum_id', '=', 'asumsi_umum.id')
+            ->leftjoin('version_asumsi', 'qty_rendaan.version_id', '=', 'version_asumsi.id')
+            ->leftjoin('regions', 'qty_rendaan.region_name', '=', 'regions.region_name')
+            ->whereNull('qty_rendaan.deleted_at')
+            ->where('qty_rendaan.version_id', $request->version)
+            // ->where('qty_rendaan.company_code', $cc)
+            ->groupByRaw("qty_rendaan.material_code, material.material_name, material.material_uom, regions.region_desc, asumsi_umum.month_year")
+            ->orderBy('material_code')
+            ->orderBy('month_year')
+            ->orderBy('region_desc')
+            ->get()
+            ->toArray();
+
+
+        $data = array_reduce($query, function ($acc, $curr) {
+            if (property_exists($acc, $curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom)) {
+                if (property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}, $curr->region_desc)) {
+                    array_push($acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc}, $curr->qty_rendaan_value);
+                } else {
+                    $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc} = [$curr->qty_rendaan_value];
+                }
+            } else {
+                $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom} = (object)[$curr->region_desc => [$curr->qty_rendaan_value]];
+            }
+
+            return $acc;
+        }, (object)[]);
+
+
+
+        $header = ['MATERIAL', 'REGION', 'UOM', ...array_unique(array_map(function ($v) {
+            return $v->month_year;
+        }, $query))];
+
+
+        $body = array_reduce(array_map(function ($v) use ($data) {
+            list($mat, $uom) = explode("~", $v);
+            $_arrays = [];
+
+            foreach ($data->{$v} as $w => $x) {
+                $_arr = [$mat, $w, $uom];
+
+                foreach ($x as $y) {
+                    array_push($_arr, $y);
+                }
+
+                array_push($_arrays, $_arr);
+            }
+            return $_arrays;
+        }, array_keys(get_object_vars($data))), function ($acc, $curr) {
+            return array_merge($acc, $curr);
+        }, []);
+
+        $data = [
+            'header' => $header,
+            'body'   => $body
+        ];
+
+        return Excel::download(new QtyRenDaanExport($data), "Qty Ren Daan - Horizontal.xlsx");
+    }
+
     public function import(Request $request)
     {
         try {
-
             $validator = Validator::make($request->all(), [
                 "file" => 'required',
                 "version" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             DB::transaction(function () use ($request) {
                 QtyRenDaan::where('version_id', $request->version)->delete();
@@ -208,8 +278,9 @@ class QtyRenDaanController extends Controller
             if ($res) {
                 $msg = '';
 
-                foreach ($res as $message)
+                foreach ($res as $message) {
                     $msg .= '<p>' . $message . '</p>';
+                }
 
                 return setResponse([
                     'code' => 430,

@@ -166,10 +166,24 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { extend: 'excel', className: 'mb-5', exportOptions:{
-                        columns:[0,1]
-                        }, title: '',
-                        filename: 'Kurs'
+                    // { extend: 'excel', className: 'mb-5', exportOptions:{
+                    //     columns:[0,1]
+                    //     }, title: '',
+                    //     filename: 'Kurs'
+                    // },
+                    {
+                        text: 'Excel',
+                        action: function(e, dt, node, config) {
+                            let route_default = '{{ route("export_kurs") }}'
+                            let route_complete = route_default 
+                                // + "?version=" + '3' + "&produk=" + '2000002' + "&plant=" + 'B030' +
+                                // "&cost_center=" +
+                                // 'undefined';
+
+                            // ?version=3&produk=2000002&plant=B029&    cost_center=
+                            window.location = route_complete
+                        },
+                        className: 'mb-5'
                     }
                 ],
                 ajax: {

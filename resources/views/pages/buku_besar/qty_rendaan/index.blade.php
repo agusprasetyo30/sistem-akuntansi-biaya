@@ -52,7 +52,7 @@
                                             </select>
                                         </div>
                                     @endif
-
+                
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -467,7 +467,7 @@
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
-
+            
             $('#filter_company').select2({
                 placeholder: 'Pilih Perusahaan',
                 width: '100%',
@@ -625,12 +625,12 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    // { extend: 'excel', className: 'mb-5', exportOptions:{
-                    //     columns:[0,1,2,3,4]
-                    // }, title: '',
-                    //     filename: 'Kuantiti Rencana Pengadaan - Vertikal'
-                    //
-                    // }
+                    { extend: 'excel', className: 'mb-5', exportOptions:{
+                        columns:[0,1,2,3,4]
+                    }, title: '',
+                        filename: 'Kuantiti Rencana Pengadaan - Vertikal'  
+                
+                    }
 
 
                 ],
@@ -696,8 +696,18 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            // {
-                            //     extend: 'excel',
+                            {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
+
+                                    window.location = '{{ route("export_h_qty_rendaan") }}' + "?version=" + version_search
+                                },
+                                className: 'mb-5'
+                            }
+                            // { 
+                            //     extend: 'excel', 
                             //     className: 'mb-5',
                             //     title: '',
                             //     filename: 'Kuantiti Rencana Pengadaan - Horizontal',
@@ -710,7 +720,7 @@
                             //                 if (data == null) {
                             //                     return data;
                             //                 }
-                            //                 if ( kolom !== 0) {
+                            //                 if ( kolom !== 0) {                      
                             //                     var arr = data.split(',');
                             //                     arr[0] = arr[0].toString().replace( /[\.]/g, "" );
                             //                     if (arr[0] > ','  || arr[1] > ',') {
@@ -718,7 +728,7 @@
                             //                     } else {
                             //                         return '';
                             //                     }
-                            //                     return data.toString().replace( /[^\d.-]/g, "," );
+                            //                     return data.toString().replace( /[^\d.-]/g, "," );    
                             //                 }
                             //                 return data;
                             //             }

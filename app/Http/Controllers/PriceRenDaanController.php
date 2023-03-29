@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DataTables\Master\H_PriceRenDaanDataTable;
 use App\DataTables\Master\PriceRenDaanDataTable;
 use App\Exports\MultipleSheet\MS_KuantitiRenDaanExport;
+use App\Exports\Horizontal\PriceRenDaanExport;
 use App\Exports\MultipleSheet\MS_PriceRenDaanExport;
 use App\Imports\KuantitiRenDaanImport;
 use App\Imports\PriceRenDaanImport;
@@ -57,8 +58,9 @@ class PriceRenDaanController extends Controller
                 "price_rendaan_value" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
 
 
@@ -110,7 +112,6 @@ class PriceRenDaanController extends Controller
     public function update(Request $request)
     {
         try {
-
             $validator = Validator::make($request->all(), [
                 "version_asumsi" => 'required',
                 "bulan" => 'required',
@@ -119,8 +120,9 @@ class PriceRenDaanController extends Controller
                 "price_rendaan_value" => 'required',
             ], validatorMsg());
 
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
+            }
 
             $input['version_id'] = $request->version_asumsi;
             $input['asumsi_umum_id'] = $request->bulan;
@@ -148,7 +150,6 @@ class PriceRenDaanController extends Controller
     public function delete(Request $request)
     {
         try {
-
             PriceRenDaan::where('id', $request->id)
                 ->delete();
             return setResponse([
@@ -167,6 +168,83 @@ class PriceRenDaanController extends Controller
         $version = $request->temp;
 
         return Excel::download(new MS_PriceRenDaanExport($version), 'price_rendaan.xlsx');
+    }
+
+    public function export_horizontal(Request $request)
+    {
+        $cc = auth()->user()->company_code;
+        $mata_uang = $request->mata_uang;
+
+        $query = DB::table('price_rendaan')
+            ->select('price_rendaan.material_code', 'material.material_name', 'regions.region_desc', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', DB::raw('SUM(price_rendaan.price_rendaan_value) as price_rendaan_value'))
+            ->leftjoin('material', 'material.material_code', '=', 'price_rendaan.material_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'price_rendaan.version_id')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'price_rendaan.asumsi_umum_id')
+            ->leftjoin('regions', 'regions.region_name', '=', 'price_rendaan.region_name')
+            ->whereNull('price_rendaan.deleted_at')
+            ->where('price_rendaan.version_id', $request->version)
+            // ->where('pj_pemakaian.company_code', $cc)
+            ->groupByRaw("price_rendaan.material_code, material.material_name, material.material_uom, regions.region_desc, asumsi_umum.month_year, asumsi_umum.usd_rate")
+            ->orderBy('material_code')
+            ->orderBy('month_year')
+            ->orderBy('region_desc')
+            ->get()
+            ->toArray();
+
+        if ($mata_uang == 'USD') {
+            $query = array_map(function ($val) {
+                $val->price_rendaan_value = round($val->price_rendaan_value / $val->usd_rate, 2);
+                return $val;
+            }, $query);
+        }
+
+        $data = array_reduce($query, function ($acc, $curr) {
+            if (property_exists($acc, $curr->material_code . ' - ' . $curr->material_name)) {
+                if (property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name}, $curr->region_desc)) {
+                    array_push($acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc}, $curr->price_rendaan_value);
+                } else {
+                    $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc} = [$curr->price_rendaan_value];
+                }
+            } else {
+                $acc->{$curr->material_code . ' - ' . $curr->material_name} = (object)[$curr->region_desc => [$curr->price_rendaan_value]];
+            }
+
+            return $acc;
+        }, (object)[]);
+
+
+
+        $header = ['MATERIAL', 'REGION', ...array_unique(array_map(function ($v) {
+            return $v->month_year;
+        }, $query))];
+
+
+        $body = array_reduce(array_map(function ($v) use ($data) {
+            $_arrays = [];
+
+            foreach ($data->{$v} as $w => $x) {
+                $_arr = [$v, $w];
+
+                foreach ($x as $y) {
+                    array_push($_arr, $y);
+                }
+
+                array_push($_arrays, $_arr);
+            }
+            return $_arrays;
+        }, array_keys(get_object_vars($data))), function ($acc, $curr) {
+            return array_merge($acc, $curr);
+        }, []);
+
+        // return response()->json($body);
+
+        $data = [
+            'header' => $header,
+            'body'   => $body,
+            'mata_uang' => $mata_uang
+        ];
+
+        return Excel::download(new PriceRenDaanExport($data), "Price Rencana Pengadaan - Horizontal.xlsx");
     }
 
     public function import(Request $request)
@@ -241,8 +319,9 @@ class PriceRenDaanController extends Controller
             if ($res) {
                 $msg = '';
 
-                foreach ($res as $message)
+                foreach ($res as $message) {
                     $msg .= '<p>' . $message . '</p>';
+                }
 
                 return setResponse([
                     'code' => 430,

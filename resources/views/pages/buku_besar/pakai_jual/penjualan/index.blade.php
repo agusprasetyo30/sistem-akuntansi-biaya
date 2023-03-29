@@ -513,35 +513,45 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { 
-                                extend: 'excel', 
-                                className: 'mb-5',
-                                title: '',
-                                filename: 'Penjualan - Horizontal',
-                                exportOptions: {
-                                    format: {
-                                        body: function ( data, row, kolom, node ) {
-                                            if (typeof data === 'undefined') {
-                                                return;
-                                            }
-                                            if (data == null) {
-                                                return data;
-                                            }
-                                            if ( kolom >= 2) {                      
-                                                var arr = data.split(',');
-                                                arr[0] = arr[0].toString().replace( /[\.]/g, "" );
-                                                if (arr[0] > ','  || arr[1] > ',') {
-                                                    data = arr[0] + '' + arr[1];
-                                                } else {
-                                                    return '';
-                                                }
-                                                return data.toString().replace( /[^\d.-]/g, "," );    
-                                            }
-                                            return data;
-                                        }
-                                    }
-                                }
+                            {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
+
+                                    window.location = '{{ route("export_h_penjualan") }}' + "?version=" + version_search
+                                },
+                                className: 'mb-5'
                             }
+                            // { 
+                            //     extend: 'excel', 
+                            //     className: 'mb-5',
+                            //     title: '',
+                            //     filename: 'Penjualan - Horizontal',
+                            //     exportOptions: {
+                            //         format: {
+                            //             body: function ( data, row, kolom, node ) {
+                            //                 if (typeof data === 'undefined') {
+                            //                     return;
+                            //                 }
+                            //                 if (data == null) {
+                            //                     return data;
+                            //                 }
+                            //                 if ( kolom >= 2) {                      
+                            //                     var arr = data.split(',');
+                            //                     arr[0] = arr[0].toString().replace( /[\.]/g, "" );
+                            //                     if (arr[0] > ','  || arr[1] > ',') {
+                            //                         data = arr[0] + '' + arr[1];
+                            //                     } else {
+                            //                         return '';
+                            //                     }
+                            //                     return data.toString().replace( /[^\d.-]/g, "," );    
+                            //                 }
+                            //                 return data;
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         ],
                         ajax: {
                             url : '{{route("penjualan")}}',
