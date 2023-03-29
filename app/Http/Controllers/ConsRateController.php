@@ -66,6 +66,7 @@ class ConsRateController extends Controller
             $input['month_year'] = $data_asumsi->month_year;
             $input['is_active'] = $request->is_active;
             $input['company_code'] = 'B000';
+            $input['status_pengajuan'] = 'DRAFT';
             $input['created_by'] = auth()->user()->id;
             $input['updated_by'] = auth()->user()->id;
             $input['created_at'] = Carbon::now();
@@ -290,6 +291,27 @@ class ConsRateController extends Controller
             }
         } catch (\Exception $exception) {
             return response()->json(['Code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
+        }
+    }
+
+    public function check_status(Request $request)
+    {
+        try {
+            $check = ConsRate::where('version_id', $request->version)
+                ->where('company_code', $request->company)
+                ->first();
+
+            if ($check->status_pengajuan == 'DRAFT' or $check->status_pengajuan == 'REJECTED') {
+                return response()->json(['code' => 100, 'msg' => 'Data Draft']);
+            }elseif ($check->status_pengajuan == 'SUBMITTED') {
+                return response()->json(['code' => 101, 'msg' => 'Data Submitted']);
+            }elseif ($check->status_pengajuan == 'APPROVED'){
+                return response()->json(['code' => 102, 'msg' => 'Data Approved']);
+            }else{
+                return response()->json(['code' => 103, 'msg' => 'Data Tidak Ditemukan']);
+            }
+        } catch (\Exception $exception) {
+            return response()->json(['code' => $exception->getCode(), 'msg' => $exception->getMessage()]);
         }
     }
 

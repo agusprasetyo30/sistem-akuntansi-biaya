@@ -43,6 +43,7 @@ use  App\Http\Controllers\BalansController;
 use App\Http\Controllers\ManagementUserAksesController;
 use App\Http\Controllers\ManagementUserRoleController;
 use App\Http\Controllers\TarifController;
+use App\Http\Controllers\GeneralController;
 
 /*
 |--------------------------------------------------------------------------
@@ -300,6 +301,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [ConsRateController::class, 'import'])->name('import_consrate');
             Route::post('export', [ConsRateController::class, 'export'])->name('export_consrate');
             Route::post('check', [ConsRateController::class, 'check'])->name('check_consrate');
+            Route::post('check_status', [ConsRateController::class, 'check_status'])->name('check_status');
             Route::post('check_duplicated', [ConsRateController::class, 'check_duplicated'])->name('check_consrate_dublicate');
             Route::post('submit', [ConsRateController::class, 'submit'])->name('submit_consrate');
             Route::post('approve', [ConsRateController::class, 'approve'])->name('approve_consrate');
@@ -428,6 +430,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('get_data_kontrol_proyeksi', [KontrolProyeksiController::class, 'get_data'])->name('get_data_kontrol_proyeksi');
     });
 
+    Route::group(['prefix' => 'general'], function () {
+        Route::post('general_mapping_akses', [GeneralController::class, 'mapping_akses'])->name('general_mapping_akses');
+    });
+
     // Main Select2
     Route::group(['prefix' => 'helper'], function () {
         Route::get('/plant_select', [SelectController::class, 'plant'])->name('plant_select');
@@ -449,6 +455,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/version_select', [SelectController::class, 'version'])->name('version_select');
         Route::get('/version_detail', [SelectController::class, 'version_detail'])->name('version_detail_select');
         Route::get('/version_inflasi', [SelectController::class, 'version_inflasi'])->name('version_inflasi_select');
+        Route::get('/version_company', [SelectController::class, 'version_company'])->name('version_company_select');
         Route::get('/group_account_fc_select', [SelectController::class, 'group_account_fc'])->name('group_account_fc_select');
         Route::get('/general_ledger_fc_select', [SelectController::class, 'general_ledger_fc'])->name('general_ledger_fc_select');
         Route::get('/general_ledger_fc_detail_select', [SelectController::class, 'general_ledger_fc_detail'])->name('general_ledger_fc_detail_select');

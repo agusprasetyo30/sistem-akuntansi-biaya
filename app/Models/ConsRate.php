@@ -21,6 +21,7 @@ class ConsRate extends Model
         'cons_rate',
         'month_year',
         'is_active',
+        'status_pengajuan',
         'created_by',
         'created_at',
         'updated_at',
