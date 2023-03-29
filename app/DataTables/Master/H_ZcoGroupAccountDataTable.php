@@ -77,9 +77,9 @@ class H_ZcoGroupAccountDataTable extends DataTable
         // dd($zcoValues);
         foreach ($product as $key => $item) {
             $datatable->addColumn($key, function ($query) use ($zcoValues, $item) {
-                return '-';
+                return 0;
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
-                return '-';
+                return 0;
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
                     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
@@ -122,7 +122,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
                     $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
                 }
 
-                return $biaya_perton ? rupiah($biaya_perton) : '-';
+                return $biaya_perton ? $biaya_perton : 0;
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
                     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
@@ -145,7 +145,7 @@ class H_ZcoGroupAccountDataTable extends DataTable
 
                 $total_biaya = $total_biaya->first();
 
-                return $total_biaya->total_amount ? rupiah($total_biaya->total_amount) : '-';
+                return $total_biaya->total_amount ? $total_biaya->total_amount : 0;
             });
         }
 

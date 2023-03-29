@@ -77,7 +77,7 @@ class H_ZcoDataTable extends DataTable
         // dd($zcoValues);
 
         foreach ($product as $key => $item) {
-            $datatable->addColumn($key, function ($query) use ($zcoValues, $item) {
+            $datatable->addColumn($key . 'harga_satuan', function ($query) use ($zcoValues, $item) {
                 $total_qty = Zco::select(DB::raw('SUM(total_qty) as total_qty'))
                     ->where([
                         'product_code' => $item->product_code,
@@ -138,8 +138,8 @@ class H_ZcoDataTable extends DataTable
                     $harga_satuan = $biaya_perton / $cr;
                 }
 
-                return $harga_satuan ? $harga_satuan  : '-';
-            })->addColumn($key, function ($query) use ($zcoValues, $item) {
+                return $harga_satuan ? $harga_satuan  : 0;
+            })->addColumn($key . 'cr', function ($query) use ($zcoValues, $item) {
                 $total_qty = Zco::select(DB::raw('SUM(total_qty) as total_qty'))
                     ->where([
                         'product_code' => $item->product_code,
@@ -180,8 +180,8 @@ class H_ZcoDataTable extends DataTable
                     $cr = $total_qty->total_qty / $tot_kuanprod;
                 }
 
-                return $cr ? $cr : '-';
-            })->addColumn($key, function ($query) use ($zcoValues, $item) {
+                return $cr ? $cr : 0;
+            })->addColumn($key . 'biaya_perton', function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
                     ->where([
                         'product_code' => $item->product_code,
@@ -223,8 +223,8 @@ class H_ZcoDataTable extends DataTable
                     $biaya_perton = $total_biaya->total_amount / $tot_kuanprod;
                 }
 
-                return $biaya_perton ? $biaya_perton : '-';
-            })->addColumn($key, function ($query) use ($zcoValues, $item) {
+                return $biaya_perton ? $biaya_perton : 0;
+            })->addColumn($key . 'total_biaya', function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
                     ->where([
                         'product_code' => $item->product_code,
@@ -245,7 +245,7 @@ class H_ZcoDataTable extends DataTable
 
                 $total_biaya = $total_biaya->first();
 
-                return $total_biaya->total_amount ? (float) $total_biaya->total_amount : '-';
+                return $total_biaya->total_amount ? (float) $total_biaya->total_amount : 0;
             });
         }
 
