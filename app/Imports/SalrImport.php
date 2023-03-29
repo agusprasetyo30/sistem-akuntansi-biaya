@@ -58,12 +58,12 @@ class SalrImport implements ToModel, WithHeadingRow, SkipsOnError, WithValidatio
 
     public function batchSize(): int
     {
-        return 10000;
+        return 2500;
     }
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 2500;
     }
 
     public function rules(): array
