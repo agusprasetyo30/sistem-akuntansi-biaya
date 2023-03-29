@@ -53,7 +53,7 @@
                                                 </select>
                                             </div>
                                         @endif
-                    
+
                                         <div class="form-group">
                                             <label class="form-label">VERSI</label>
                                             <select id="filter_version_ver" class="form-control custom-select select2">
@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="">
                                         <div class="table-responsive" id="table-wrapper">
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                                                 </select>
                                             </div>
                                         @endif
-                    
+
                                         <div class="form-group">
                                             <label class="form-label">VERSI</label>
                                             <select id="filter_version_hor" class="form-control custom-select select2">
@@ -140,7 +140,7 @@
                                                 </select>
                                             </div>
                                         @endif
-                    
+
                                         <div class="form-group">
                                             <label class="form-label">VERSI</label>
                                             <select id="filter_version_group_account" class="form-control custom-select select2">
@@ -208,7 +208,7 @@
 @endsection()
 
 @section('scripts')
-    
+
     <!-- Custom Script -->
     <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
     <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
@@ -1099,98 +1099,98 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5', 
-                        exportOptions:{
-                        columns: 'th:not(:last-child)'
-                        }, 
-                        title: '',
-                        filename: 'ZCO - Vertikal',
-                        customize: function (file) {
-                            var sheet = file.xl.worksheets['sheet1.xml'];
-                            var style = file.xl['styles.xml'];
-                            var row = $('row', sheet);
-                            var mergeCells = $('mergeCells', sheet);
-                            // console.log('row', row);
-                            $(row[1]).remove()
-
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'A1:A2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'B1:B2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'C1:C2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'D1:D2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'E1:E2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'F1:F2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'G1:G2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'H1:H2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'I1:I2' }
-                                }) 
-                            );
-                            mergeCells[0].appendChild( 
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'J1:J2' }
-                                }) 
-                            );
-
-                            mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
- 
-                            function _createNode( doc, nodeName, opts ) {
-                                var tempNode = doc.createElement( nodeName );
-                                
-                                if ( opts ) {
-                                    if ( opts.attr ) {
-                                        $(tempNode).attr( opts.attr );
-                                    }
-                
-                                    if ( opts.children ) {
-                                        $.each( opts.children, function ( key, value ) {
-                                            tempNode.appendChild( value );
-                                        } );
-                                    }
-                
-                                    if ( opts.text !== null && opts.text !== undefined ) {
-                                        tempNode.appendChild( doc.createTextNode( opts.text ) );
-                                    }
-                                }
-                
-                                return tempNode;
-                            }
-                        }
-                    }
+                    // {
+                    //     extend: 'excel',
+                    //     className: 'mb-5',
+                    //     exportOptions:{
+                    //     columns: 'th:not(:last-child)'
+                    //     },
+                    //     title: '',
+                    //     filename: 'ZCO - Vertikal',
+                    //     customize: function (file) {
+                    //         var sheet = file.xl.worksheets['sheet1.xml'];
+                    //         var style = file.xl['styles.xml'];
+                    //         var row = $('row', sheet);
+                    //         var mergeCells = $('mergeCells', sheet);
+                    //         // console.log('row', row);
+                    //         $(row[1]).remove()
+                    //
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'A1:A2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'B1:B2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'C1:C2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'D1:D2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'E1:E2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'F1:F2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'G1:G2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'H1:H2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'I1:I2' }
+                    //             })
+                    //         );
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'J1:J2' }
+                    //             })
+                    //         );
+                    //
+                    //         mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+                    //
+                    //         function _createNode( doc, nodeName, opts ) {
+                    //             var tempNode = doc.createElement( nodeName );
+                    //
+                    //             if ( opts ) {
+                    //                 if ( opts.attr ) {
+                    //                     $(tempNode).attr( opts.attr );
+                    //                 }
+                    //
+                    //                 if ( opts.children ) {
+                    //                     $.each( opts.children, function ( key, value ) {
+                    //                         tempNode.appendChild( value );
+                    //                     } );
+                    //                 }
+                    //
+                    //                 if ( opts.text !== null && opts.text !== undefined ) {
+                    //                     tempNode.appendChild( doc.createTextNode( opts.text ) );
+                    //                 }
+                    //             }
+                    //
+                    //             return tempNode;
+                    //         }
+                    //     }
+                    // }
                 ],
                 ajax: {
                     url : '{{route("zco")}}',
@@ -1287,24 +1287,24 @@
                         },
                         buttons: [
                             { extend: 'pageLength'},
-                            { 
-                                text: 'Excel',
-                                classname: 'mb-5',
-                                action: function ( e, dt, node, config ) {
-                                    var material = $('#filter_material').val();
-                                    var plant = $('#filter_plant').val();
-                                    var format_data = $('#filter_format').val();
-                                    var start_month = $('#bulan_filter1').val();
-                                    var end_month = $('#bulan_filter2').val();
-                                    var moth = $('#bulan_satuan_filter1').val();
+                            {{--{--}}
+                            {{--    text: 'Excel',--}}
+                            {{--    classname: 'mb-5',--}}
+                            {{--    action: function ( e, dt, node, config ) {--}}
+                            {{--        var material = $('#filter_material').val();--}}
+                            {{--        var plant = $('#filter_plant').val();--}}
+                            {{--        var format_data = $('#filter_format').val();--}}
+                            {{--        var start_month = $('#bulan_filter1').val();--}}
+                            {{--        var end_month = $('#bulan_filter2').val();--}}
+                            {{--        var moth = $('#bulan_satuan_filter1').val();--}}
 
-                                    let route_default = '{{ route("export_zco_horizontal") }}'
-                                    let route_complete = route_default + 
-                                        "?material=" + material + "&plant=" + plant + "&format_data=" + format_data +"&start_month=" + start_month + "&end_month=" + end_month + "&moth=" + moth
+                            {{--        let route_default = '{{ route("export_zco_horizontal") }}'--}}
+                            {{--        let route_complete = route_default +--}}
+                            {{--            "?material=" + material + "&plant=" + plant + "&format_data=" + format_data +"&start_month=" + start_month + "&end_month=" + end_month + "&moth=" + moth--}}
 
-                                    window.location = route_complete
-                                }
-                            }
+                            {{--        window.location = route_complete--}}
+                            {{--    }--}}
+                            {{--}--}}
                         ],
 
                         ajax: {
@@ -1358,7 +1358,7 @@
                                         .reduce(function (a, b) {
                                             return intVal(a) + intVal(b);
                                         }, 0);
-                                        
+
                                     // Update footer
                                     $(api.column(index).footer()).html(total);
                                 }
@@ -1415,7 +1415,7 @@
                     //         confirmButtonText: 'Konfirmasi',
                     //     })
                     // }
-                    
+
                     for (let i = 0; i < response.group_account.length;i++){
                         kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+'  '+ response.group_account[i].material_name+'<br>'+ response.group_account[i].plant_code + ' ' + response.group_account[i].plant_desc +'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
@@ -1444,24 +1444,24 @@
                         },
                         buttons: [
                             { extend: 'pageLength'},
-                            { 
-                                text: 'Excel',
-                                classname: 'mb-5',
-                                action: function ( e, dt, node, config ) {
-                                    let material_group_account = $('#filter_material_group_account').val();
-                                    let plant_group_account = $('#filter_plant_group_account').val();
-                                    let format_data_group_account = $('#filter_format_group_account').val();
-                                    let start_month_group_account = $('#bulan_filter1_group_account').val();
-                                    let end_month_group_account = $('#bulan_filter2_group_account').val();
-                                    let moth_group_account = $('#btn_tampilkan_group_account').val();
+                            {{--{--}}
+                            {{--    text: 'Excel',--}}
+                            {{--    classname: 'mb-5',--}}
+                            {{--    action: function ( e, dt, node, config ) {--}}
+                            {{--        let material_group_account = $('#filter_material_group_account').val();--}}
+                            {{--        let plant_group_account = $('#filter_plant_group_account').val();--}}
+                            {{--        let format_data_group_account = $('#filter_format_group_account').val();--}}
+                            {{--        let start_month_group_account = $('#bulan_filter1_group_account').val();--}}
+                            {{--        let end_month_group_account = $('#bulan_filter2_group_account').val();--}}
+                            {{--        let moth_group_account = $('#btn_tampilkan_group_account').val();--}}
 
-                                    let route_default_group_account = '{{ route("export_zco_account") }}'
-                                    let route_complete_group_account = route_default_group_account + 
-                                        "?material=" + material_group_account + "&plant=" + plant_group_account + "&format_data=" + format_data_group_account +"&start_month=" + start_month_group_account + "&end_month=" + end_month_group_account + "&moth=" + moth_group_account
+                            {{--        let route_default_group_account = '{{ route("export_zco_account") }}'--}}
+                            {{--        let route_complete_group_account = route_default_group_account +--}}
+                            {{--            "?material=" + material_group_account + "&plant=" + plant_group_account + "&format_data=" + format_data_group_account +"&start_month=" + start_month_group_account + "&end_month=" + end_month_group_account + "&moth=" + moth_group_account--}}
 
-                                    window.location = route_complete_group_account
-                                }
-                            }
+                            {{--        window.location = route_complete_group_account--}}
+                            {{--    }--}}
+                            {{--}--}}
                         ],
                         ajax: {
                             url : '{{route("zco")}}',
@@ -1491,12 +1491,12 @@
         }
 
         // Function Generate Abjad
-        function generateAbjad(idx) {            
+        function generateAbjad(idx) {
             const multiple = 4
             const start = (multiple * idx) + 2
             const end = start + 3
             let rangeColumn = '';
-            
+
             let firstAlp1st = 0;
             let firstAlp2nd = start;
             let secondAlp1st = 0;
@@ -1601,7 +1601,7 @@
                     periode:$('#detail_version_import').val()
                 },
                 success: function (response) {
-                    if (response.code == 201) 
+                    if (response.code == 201)
                     {
                         Swal.fire({
                             title: response.title,
@@ -1754,7 +1754,7 @@
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
-                            
+
                             update_dt_horizontal()
                             update_dt_group_account_horizontal()
                             // table()
@@ -1817,7 +1817,7 @@
                 }
             })
         }
-        
+
         function reset_form(){
             $("#filter_material").val('all').trigger('change')
             $('#filter_plant').val('all').trigger('change')

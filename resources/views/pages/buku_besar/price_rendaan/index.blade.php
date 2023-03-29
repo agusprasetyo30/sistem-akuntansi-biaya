@@ -49,7 +49,7 @@
                                             </select>
                                         </div>
                                     @endif
-                
+
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -493,7 +493,7 @@
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
-            
+
             $('#filter_company').select2({
                 placeholder: 'Pilih Perusahaan',
                 width: '100%',
@@ -677,16 +677,16 @@
                         ]
 
                     },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5', 
-                        exportOptions:{
-                        columns:[0,1,2,3,4]
-                    },
-                        title: '',
-                        filename: 'Price Rencana Pengadaan - Vertikal'  
-                    
-                    }
+                    // {
+                    //     extend: 'excel',
+                    //     className: 'mb-5',
+                    //     exportOptions:{
+                    //     columns:[0,1,2,3,4]
+                    // },
+                    //     title: '',
+                    //     filename: 'Price Rencana Pengadaan - Vertikal'
+                    //
+                    // }
                 ],
                 ajax: {
                     url : '{{route("price_rendaan")}}',
@@ -766,12 +766,12 @@
                                 ]
 
                             },
-                            { 
-                                extend: 'excel', 
-                                className: 'mb-5',
-                                title: '',
-                                filename: 'Price Rencana Pengadaan - Horizontal'   
-                            }
+                            // {
+                            //     extend: 'excel',
+                            //     className: 'mb-5',
+                            //     title: '',
+                            //     filename: 'Price Rencana Pengadaan - Horizontal'
+                            // }
                         ],
                         ajax: {
                             url : '{{route("price_rendaan")}}',

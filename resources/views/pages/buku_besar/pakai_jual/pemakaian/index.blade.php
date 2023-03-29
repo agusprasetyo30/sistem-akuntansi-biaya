@@ -49,7 +49,7 @@
                                             </select>
                                         </div>
                                     @endif
-                
+
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -59,7 +59,7 @@
                                 </div>
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -277,7 +277,7 @@
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
-            
+
             $('#filter_company').select2({
                 placeholder: 'Pilih Perusahaan',
                 width: '100%',
@@ -444,22 +444,22 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5', 
-                        filename: 'Pemakaian - Vertikal',
-                        title: '', 
-                        exportOptions: {
-                            columns: [0,1,2,3],
-                        },
-                        // customize: function (file) {
-                        //     var sheet = file.xl.worksheets['sheet1.xml'];
-                        //     var style = file.xl['styles.xml'];
-                        //     var row = $('row', sheet);
-                        //     console.log('row', row);
-                        //     $(row[1]).remove()
-                        // }
-                    },
+                    // {
+                    //     extend: 'excel',
+                    //     className: 'mb-5',
+                    //     filename: 'Pemakaian - Vertikal',
+                    //     title: '',
+                    //     exportOptions: {
+                    //         columns: [0,1,2,3],
+                    //     },
+                    //     // customize: function (file) {
+                    //     //     var sheet = file.xl.worksheets['sheet1.xml'];
+                    //     //     var style = file.xl['styles.xml'];
+                    //     //     var row = $('row', sheet);
+                    //     //     console.log('row', row);
+                    //     //     $(row[1]).remove()
+                    //     // }
+                    // },
                 ],
                 ajax: {
                     url : '{{route("pemakaian")}}',
@@ -520,35 +520,35 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            { 
-                                extend: 'excel', 
-                                className: 'mb-5',
-                                filename: 'Pemakaian - Horizontal',
-                                title: '',
-                                exportOptions: {
-                                    format: {
-                                        body: function ( data, row, kolom, node ) {
-                                            if (typeof data === 'undefined') {
-                                                return;
-                                            }
-                                            if (data == null) {
-                                                return data;
-                                            }
-                                            if ( kolom >= 2) {                      
-                                                var arr = data.split(',');
-                                                arr[0] = arr[0].toString().replace( /[\.]/g, "" );
-                                                if (arr[0] > ','  || arr[1] > ',') {
-                                                    data = arr[0] + '' + arr[1];
-                                                } else {
-                                                    return '';
-                                                }
-                                                return data.toString().replace( /[^\d.-]/g, "," );    
-                                            }
-                                            return data;
-                                        }
-                                    }
-                                }
-                            }
+                            // {
+                            //     extend: 'excel',
+                            //     className: 'mb-5',
+                            //     filename: 'Pemakaian - Horizontal',
+                            //     title: '',
+                            //     exportOptions: {
+                            //         format: {
+                            //             body: function ( data, row, kolom, node ) {
+                            //                 if (typeof data === 'undefined') {
+                            //                     return;
+                            //                 }
+                            //                 if (data == null) {
+                            //                     return data;
+                            //                 }
+                            //                 if ( kolom >= 2) {
+                            //                     var arr = data.split(',');
+                            //                     arr[0] = arr[0].toString().replace( /[\.]/g, "" );
+                            //                     if (arr[0] > ','  || arr[1] > ',') {
+                            //                         data = arr[0] + '' + arr[1];
+                            //                     } else {
+                            //                         return '';
+                            //                     }
+                            //                     return data.toString().replace( /[^\d.-]/g, "," );
+                            //                 }
+                            //                 return data;
+                            //             }
+                            //         }
+                            //     }
+                            // }
                         ],
                         ajax: {
                             url : '{{route("pemakaian")}}',
@@ -633,7 +633,7 @@
                     version:$('#version').val()
                 },
                 success: function (response) {
-                    if (response.code == 201) 
+                    if (response.code == 201)
                     {
                         Swal.fire({
                             title: response.title,
@@ -775,7 +775,7 @@
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
-                            
+
                             update_dt_horizontal()
                             // table()
                             $('#dt_pj_pemakaian').DataTable().ajax.reload();

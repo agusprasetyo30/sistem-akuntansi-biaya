@@ -47,7 +47,7 @@
                                             </select>
                                         </div>
                                     @endif
-                
+
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -376,12 +376,12 @@
                         ]
 
                     },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5',
-                        title: '',
-                        filename: 'Total Pengadaan - Vertikal'  
-                    }
+                    // {
+                    //     extend: 'excel',
+                    //     className: 'mb-5',
+                    //     title: '',
+                    //     filename: 'Total Pengadaan - Vertikal'
+                    // }
                 ],
                 ajax: {
                     url : '{{route("total_daan")}}',
@@ -462,12 +462,12 @@
                                 ]
 
                             },
-                            { 
-                                extend: 'excel', 
-                                className: 'mb-5',
-                                title: '',
-                                filename: 'Total Pengadaan - Horizontal' 
-                            }
+                            // {
+                            //     extend: 'excel',
+                            //     className: 'mb-5',
+                            //     title: '',
+                            //     filename: 'Total Pengadaan - Horizontal'
+                            // }
                         ],
                         ajax: {
                             url : '{{route("total_daan")}}',

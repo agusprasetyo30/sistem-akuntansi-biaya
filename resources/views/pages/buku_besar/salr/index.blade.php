@@ -998,78 +998,78 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    {
-                        extend: 'excel',
-                        className: 'mb-5',
-                        footer: true,
-                        exportOptions:{
-                        columns:[0,1,2,3,4]
-                        },
-                        title: '',
-                        filename: 'Salr Tabel Vertikal',
-                        customize: function (file) {
-                            var sheet = file.xl.worksheets['sheet1.xml'];
-                            var style = file.xl['styles.xml'];
-                            var row = $('row', sheet);
-                            var mergeCells = $('mergeCells', sheet);
-                            // console.log('row', row);
-                            $(row[1]).remove()
-
-                            mergeCells[0].appendChild(
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'A1:A2' }
-                                })
-                            );
-
-                            mergeCells[0].appendChild(
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'B1:B2' }
-                                })
-                            );
-
-                            mergeCells[0].appendChild(
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'C1:C2' }
-                                })
-                            );
-
-                            mergeCells[0].appendChild(
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'D1:D2' }
-                                })
-                            );
-
-                            mergeCells[0].appendChild(
-                                _createNode( sheet, 'mergeCell', {
-                                    attr: { ref: 'E1:E2' }
-                                })
-                            );
-
-                            mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
-
-                            function _createNode( doc, nodeName, opts ) {
-                                var tempNode = doc.createElement( nodeName );
-
-                                if ( opts ) {
-                                    if ( opts.attr ) {
-                                        $(tempNode).attr( opts.attr );
-                                    }
-
-                                    if ( opts.children ) {
-                                        $.each( opts.children, function ( key, value ) {
-                                            tempNode.appendChild( value );
-                                        } );
-                                    }
-
-                                    if ( opts.text !== null && opts.text !== undefined ) {
-                                        tempNode.appendChild( doc.createTextNode( opts.text ) );
-                                    }
-                                }
-
-                                return tempNode;
-                            }
-                        }
-                    }
+                    // {
+                    //     extend: 'excel',
+                    //     className: 'mb-5',
+                    //     footer: true,
+                    //     exportOptions:{
+                    //     columns:[0,1,2,3,4]
+                    //     },
+                    //     title: '',
+                    //     filename: 'Salr Tabel Vertikal',
+                    //     customize: function (file) {
+                    //         var sheet = file.xl.worksheets['sheet1.xml'];
+                    //         var style = file.xl['styles.xml'];
+                    //         var row = $('row', sheet);
+                    //         var mergeCells = $('mergeCells', sheet);
+                    //         // console.log('row', row);
+                    //         $(row[1]).remove()
+                    //
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'A1:A2' }
+                    //             })
+                    //         );
+                    //
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'B1:B2' }
+                    //             })
+                    //         );
+                    //
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'C1:C2' }
+                    //             })
+                    //         );
+                    //
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'D1:D2' }
+                    //             })
+                    //         );
+                    //
+                    //         mergeCells[0].appendChild(
+                    //             _createNode( sheet, 'mergeCell', {
+                    //                 attr: { ref: 'E1:E2' }
+                    //             })
+                    //         );
+                    //
+                    //         mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+                    //
+                    //         function _createNode( doc, nodeName, opts ) {
+                    //             var tempNode = doc.createElement( nodeName );
+                    //
+                    //             if ( opts ) {
+                    //                 if ( opts.attr ) {
+                    //                     $(tempNode).attr( opts.attr );
+                    //                 }
+                    //
+                    //                 if ( opts.children ) {
+                    //                     $.each( opts.children, function ( key, value ) {
+                    //                         tempNode.appendChild( value );
+                    //                     } );
+                    //                 }
+                    //
+                    //                 if ( opts.text !== null && opts.text !== undefined ) {
+                    //                     tempNode.appendChild( doc.createTextNode( opts.text ) );
+                    //                 }
+                    //             }
+                    //
+                    //             return tempNode;
+                    //         }
+                    //     }
+                    // }
                 ],
                 ajax: {
                     url : '{{route("salr")}}',
@@ -1172,88 +1172,88 @@
                         },
                         buttons: [
                             { extend: 'pageLength', className: 'mb-5' },
-                            {
-                                extend: 'excel',
-                                className: 'mb-5',
-                                title: '',
-                                filename: 'Salr Tabel Horizontal',
-                                footer: true,
-                                exportOptions: {
-                                    format: {
-                                        body: function ( data, row, kolom, node ) {
-                                            if (typeof data === 'undefined') {
-                                                return;
-                                            }
-                                            if (data == null) {
-                                                return data;
-                                            }
-                                            if ( kolom >= 2) {
-                                                var arr = data.split(',');
-                                                arr[0] = arr[0].toString().replace( /[\.]/g, "" );
-                                                if (arr[0] > ','  || arr[1] > ',') {
-                                                    data = arr[0] + ',' + arr[1] + ',';
-                                                } else {
-                                                    return '';
-                                                }
-                                                return data.toString().replace( /[^\d.,]/g, "," );
-                                            }
-                                            return data;
-                                        }
-                                    }
-                                },
-                                customize: function (file) {
-                                    var sheet = file.xl.worksheets['sheet1.xml'];
-                                    var style = file.xl['styles.xml'];
-
-                                    $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
-
-                                    var col = $('col', sheet);
-                                    $(col[0]).attr("width", 8.5);
-
-                                    for(let i = 0; i < response.cost_center.length;i++) {
-                                        const idx = i + 2
-                                        $(col[idx]).attr("width", 25).attr('customWidth', '1');
-                                    }
-
-                                    var mergeCells = $('mergeCells', sheet);
-
-                                    mergeCells[0].appendChild(
-                                        _createNode( sheet, 'mergeCell', {
-                                            attr: { ref: 'A1:A2' }
-                                        })
-                                    );
-
-                                    mergeCells[0].appendChild(
-                                        _createNode( sheet, 'mergeCell', {
-                                            attr: { ref: 'B1:B2' }
-                                        })
-                                    );
-
-                                    mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
-
-                                    function _createNode( doc, nodeName, opts ) {
-                                        var tempNode = doc.createElement( nodeName );
-
-                                        if ( opts ) {
-                                            if ( opts.attr ) {
-                                                $(tempNode).attr( opts.attr );
-                                            }
-
-                                            if ( opts.children ) {
-                                                $.each( opts.children, function ( key, value ) {
-                                                    tempNode.appendChild( value );
-                                                } );
-                                            }
-
-                                            if ( opts.text !== null && opts.text !== undefined ) {
-                                                tempNode.appendChild( doc.createTextNode( opts.text ) );
-                                            }
-                                        }
-
-                                        return tempNode;
-                                    }
-                                }
-                            },
+                            // {
+                            //     extend: 'excel',
+                            //     className: 'mb-5',
+                            //     title: '',
+                            //     filename: 'Salr Tabel Horizontal',
+                            //     footer: true,
+                            //     exportOptions: {
+                            //         format: {
+                            //             body: function ( data, row, kolom, node ) {
+                            //                 if (typeof data === 'undefined') {
+                            //                     return;
+                            //                 }
+                            //                 if (data == null) {
+                            //                     return data;
+                            //                 }
+                            //                 if ( kolom >= 2) {
+                            //                     var arr = data.split(',');
+                            //                     arr[0] = arr[0].toString().replace( /[\.]/g, "" );
+                            //                     if (arr[0] > ','  || arr[1] > ',') {
+                            //                         data = arr[0] + ',' + arr[1] + ',';
+                            //                     } else {
+                            //                         return '';
+                            //                     }
+                            //                     return data.toString().replace( /[^\d.,]/g, "," );
+                            //                 }
+                            //                 return data;
+                            //             }
+                            //         }
+                            //     },
+                            //     customize: function (file) {
+                            //         var sheet = file.xl.worksheets['sheet1.xml'];
+                            //         var style = file.xl['styles.xml'];
+                            //
+                            //         $('xf', style).find("alignment[horizontal='center']").attr("wrapText", "1");
+                            //
+                            //         var col = $('col', sheet);
+                            //         $(col[0]).attr("width", 8.5);
+                            //
+                            //         for(let i = 0; i < response.cost_center.length;i++) {
+                            //             const idx = i + 2
+                            //             $(col[idx]).attr("width", 25).attr('customWidth', '1');
+                            //         }
+                            //
+                            //         var mergeCells = $('mergeCells', sheet);
+                            //
+                            //         mergeCells[0].appendChild(
+                            //             _createNode( sheet, 'mergeCell', {
+                            //                 attr: { ref: 'A1:A2' }
+                            //             })
+                            //         );
+                            //
+                            //         mergeCells[0].appendChild(
+                            //             _createNode( sheet, 'mergeCell', {
+                            //                 attr: { ref: 'B1:B2' }
+                            //             })
+                            //         );
+                            //
+                            //         mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
+                            //
+                            //         function _createNode( doc, nodeName, opts ) {
+                            //             var tempNode = doc.createElement( nodeName );
+                            //
+                            //             if ( opts ) {
+                            //                 if ( opts.attr ) {
+                            //                     $(tempNode).attr( opts.attr );
+                            //                 }
+                            //
+                            //                 if ( opts.children ) {
+                            //                     $.each( opts.children, function ( key, value ) {
+                            //                         tempNode.appendChild( value );
+                            //                     } );
+                            //                 }
+                            //
+                            //                 if ( opts.text !== null && opts.text !== undefined ) {
+                            //                     tempNode.appendChild( doc.createTextNode( opts.text ) );
+                            //                 }
+                            //             }
+                            //
+                            //             return tempNode;
+                            //         }
+                            //     }
+                            // },
                         ],
                         ajax: {
                             type: "POST",
