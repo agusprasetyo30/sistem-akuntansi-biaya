@@ -267,7 +267,7 @@ class SalrController extends Controller
                 return $this->makeValidMsg($validator);
             }
 
-            $transaction = DB::transaction(function () use ($request) {
+//            $transaction = DB::transaction(function () use ($request) {
 
                 $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
 
@@ -287,7 +287,7 @@ class SalrController extends Controller
                     $data_fail = [];
                 }
                 return $data_fail;
-            });
+//            });
 
             if ($transaction->isNotEmpty()) {
                 return setResponse([
