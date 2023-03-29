@@ -524,8 +524,8 @@
             $('#submit_import').on('click', function () {
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
                 $("#back_import").attr("disabled", true);
-                var version = $('#data_main_version').val();
-                var date = $('#data_detal_version').val();
+                var version = $('#data_main_version_import').val();
+                var date = $('#data_detail_version_import').val();
 
                 if (version !== null && date !== null && $('#file').val() !== ''){
                     let file = new FormData($("#form_input_salr")[0]);
