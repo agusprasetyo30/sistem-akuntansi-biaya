@@ -267,7 +267,7 @@ class SalrController extends Controller
                 return $this->makeValidMsg($validator);
             }
 
-            $transaction = DB::transaction(function () use ($request) {
+//            $transaction = DB::transaction(function () use ($request) {
 
                 $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
 
@@ -289,19 +289,19 @@ class SalrController extends Controller
                     $data_fail = [];
                 }
                 return $data_fail;
-            });
+//            });
 
-            if ($transaction->isNotEmpty()) {
-                return setResponse([
-                    'code' => 500,
-                    'title' => 'Gagal meng-import data',
-                ]);
-            } else {
-                return setResponse([
-                    'code' => 200,
-                    'title' => 'Berhasil meng-import data'
-                ]);
-            }
+//            if ($transaction->isNotEmpty()) {
+//                return setResponse([
+//                    'code' => 500,
+//                    'title' => 'Gagal meng-import data',
+//                ]);
+//            } else {
+//                return setResponse([
+//                    'code' => 200,
+//                    'title' => 'Berhasil meng-import data'
+//                ]);
+//            }
         } catch (\Exception $exception) {
 //            $temp = explode('-', $request->tanggal_import);
 //            $timestamp = $temp[1] . '-' . $temp[0] . '-01';
