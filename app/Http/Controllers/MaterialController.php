@@ -35,7 +35,7 @@ class MaterialController extends Controller
                 "material_desc" => 'required',
                 "group_account_code" => 'required',
                 "kategori_material_id" => 'required',
-                "kategori_produk_id" => 'required',
+//                "kategori_produk_id" => 'required',
                 "material_uom" => 'required',
                 "is_dummy" => 'required',
                 "is_active" => 'required',
