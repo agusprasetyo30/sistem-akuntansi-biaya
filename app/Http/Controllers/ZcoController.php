@@ -8,6 +8,7 @@ use App\DataTables\Master\ZcoDataTable;
 use App\Exports\MultipleSheet\MS_ZcoExport;
 use App\Exports\Horizontal\ZCOExport;
 use App\Exports\Horizontal\ZCOGroupAccountExport;
+use App\Imports\Zco2Import;
 use App\Imports\ZcoImport;
 use App\Models\Asumsi_Umum;
 use App\Models\GLAccount;
@@ -285,95 +286,100 @@ class ZcoController extends Controller
                 return $this->makeValidMsg($validator);
             }
 
-            $transaction = DB::transaction(function () use ($request) {
-                $asumsi = Asumsi_Umum::where('id', $request->detail_version_import)->first();
-                $empty_excel = Excel::toArray(new ZcoImport($asumsi), $request->file('file'));
-                if ($empty_excel[0]) {
-                    $file = $request->file('file')->store('import');
-                    Zco::where('periode', 'ilike', '%' . $asumsi->month_year . '%')->delete();
-                    $import = new ZcoImport($asumsi);
-                    $import->import($file);
+            $asumsi = Asumsi_Umum::where('id', $request->detail_version_import)->first();
+            $master_plant = Plant::get()->pluck('plant_code')->all();
+            $master_product = Material::get()->pluck('material_code')->all();
+            $master_cost_element = GLAccount::get()->pluck('gl_account')->all();
 
-                    $data_fail = $import->failures();
-                } else {
-                    $data_fail = [];
-                }
-                return $data_fail;
+            $excel = Excel::toArray(new Zco2Import(), $request->file('file'));
+            $header = $excel[0][0];
+            unset($excel[0][0]);
+
+            $excel_fix =  collect($excel[0])->map(function ($query) use ($asumsi, $header) {
+                $query = array_combine($header, $query);
+                $data['plant_code'] = $query['plant_code'];
+                $data['periode'] = $asumsi->month_year;
+                $data['version_id'] = $asumsi->version_id;
+                $data['product_code'] = strval($query['product_code']);
+                $data['product_qty'] = $query['product_qty'];
+                $data['cost_element'] = strval($query['cost_element']);
+                $data['material_code'] = $query['material_code'];
+                $data['total_qty'] = $query['total_qty'];
+                $data['currency'] = $query['currency'];
+                $data['total_amount'] = $query['total_amount'];
+                $data['unit_price_product'] = $query['unit_price_product'];
+                $data['company_code'] = auth()->user()->company_code;
+                $data['created_by'] = auth()->user()->id;
+                $data['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                $data['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
+
+                return $data;
             });
 
-            if ($transaction->isNotEmpty()) {
+            if (count($excel_fix) == 0) {
                 return setResponse([
-                    'code' => 500,
+                    'code' => 430,
                     'title' => 'Gagal meng-import data',
+                    'message' => 'Data Excel Anda Kosong :>'
                 ]);
-            } else {
+            }
+
+            $plant_excel = array_values(array_unique($excel_fix->pluck('plant_code')->toArray()));
+            $product_excel = array_values(array_unique($excel_fix->pluck('product_code')->toArray()));
+            $cost_element_excel = array_values(array_unique($excel_fix->pluck('cost_element')->toArray()));
+
+            $check_plant = array_values(array_diff($plant_excel, $master_plant));
+            $check_product = array_values(array_diff($product_excel, $master_product));
+            $check_cost_element = array_values(array_diff($cost_element_excel, $master_cost_element));
+
+            if ($check_plant == null && $check_product == null && $check_cost_element == null) {
+                DB::transaction(function () use ($excel_fix, $asumsi) {
+                    Zco::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
+                        ->where('version_id', $asumsi->version_id)
+                        ->delete();
+
+                    $result = array_values($excel_fix->toArray());
+
+                    $data = array_chunk($result, 3000);
+
+                    foreach ($data as $items) {
+                        Zco::insert($items);
+                    }
+                });
+
                 return setResponse([
                     'code' => 200,
                     'title' => 'Berhasil meng-import data'
                 ]);
-            }
-        } catch (\Exception $exception) {
-            $asumsi = Asumsi_Umum::where('id', $request->detail_version_import)->first();
-            $empty_excel = Excel::toArray(new ZcoImport($asumsi), $request->file('file'));
-
-            $plant = [];
-            $plant_ = [];
-            $product = [];
-            $product_ = [];
-            $cost_element = [];
-            $cost_element_ = [];
-            $material = [];
-            $material_ = [];
-
-            foreach ($empty_excel[0] as $key => $value) {
-                array_push($plant, 'plant ' . $value['plant_code'] . ' tidak ada pada master');
-                $d_plant = Plant::whereIn('plant_code', [$value['plant_code']])->first();
-                if ($d_plant) {
-                    array_push($plant_, 'plant ' . $d_plant->plant_code . ' tidak ada pada master');
-                }
-
-                array_push($product, 'produk ' . $value['product_code'] . ' tidak ada pada master');
-                $d_product = Material::whereIn('material_code', [$value['product_code']])->first();
-                if ($d_product) {
-                    array_push($product_, 'produk ' . $d_product->material_code . ' tidak ada pada master');
-                }
-
-                array_push($cost_element, 'cost element ' . $value['cost_element'] . ' tidak ada pada master');
-                $d_cost_element = GLAccount::whereIn('gl_account', [$value['cost_element']])->first();
-                if ($d_cost_element) {
-                    array_push($cost_element_, 'cost element ' . $d_cost_element->gl_account . ' tidak ada pada master');
-                }
-
-                array_push($material, 'material ' . $value['material_code'] . ' tidak ada pada master');
-                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
-                if ($d_material) {
-                    array_push($material_, 'material ' . $d_material->material_code . ' tidak ada pada master');
-                }
-            }
-
-            $result_plant = array_diff($plant, $plant_);
-            $result_product = array_diff($product, $product_);
-            $result_cost_element = array_diff($cost_element, $cost_element_);
-            $result_material = array_diff($material, $material_);
-            $result = array_merge($result_plant, $result_product, $result_cost_element, $result_material);
-            $res = array_unique($result);
-
-            if ($res) {
+            } else {
+                $validation_data = ['Plant ', 'Produk ', 'Cost Element '];
+                $error = [];
                 $msg = '';
 
-                foreach ($res as $message)
-                    $msg .= '<p>' . $message . '</p>';
+                array_push($error, $check_plant);
+                array_push($error, $check_product);
+                array_push($error, $check_cost_element);
+
+                foreach ($error as $key => $items) {
+                    foreach ($items as $item) {
+                        if ($item != null or $item != '') {
+                            $msg .= '<p>' . $validation_data[$key] . $item . ' Tidak Ada Pada Master' . '</p>';
+                        } else {
+                            $msg .= '<p>' . $validation_data[$key] . ' Tidak Boleh Kosong' . '</p>';
+                        }
+                    }
+                }
 
                 return setResponse([
                     'code' => 430,
                     'title' => 'Gagal meng-import data',
                     'message' => $msg
                 ]);
-            } else {
-                return setResponse([
-                    'code' => 400,
-                ]);
             }
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 
@@ -384,9 +390,9 @@ class ZcoController extends Controller
 
     public function check(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             "periode" => 'required',
+            "version" => 'required',
         ], validatorMsg());
 
         if ($validator->fails())
