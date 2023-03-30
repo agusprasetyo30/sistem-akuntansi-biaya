@@ -26,7 +26,8 @@ class H_PriceRenDaanDataTable extends DataTable
             ->leftjoin('regions', 'regions.region_name', '=', 'price_rendaan.region_name')
             ->whereNull('price_rendaan.deleted_at')
             ->where('price_rendaan.version_id', $this->version)
-            ->groupBy('price_rendaan.material_code', 'price_rendaan.region_name', 'regions.region_desc', 'material.material_name');
+            ->groupBy('price_rendaan.material_code', 'price_rendaan.region_name', 'regions.region_desc', 'material.material_name')
+            ->orderBy('price_rendaan.material_code', 'asc');
 
         if ($this->company != 'all' && auth()->user()->mapping_akses('price_rendaan')->company_code == 'all') {
             $query = $query->where('price_rendaan.company_code', $this->company);

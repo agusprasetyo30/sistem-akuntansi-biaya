@@ -19,7 +19,8 @@ class H_QtyRenProdDataTable extends DataTable
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
             ->whereNull('qty_renprod.deleted_at')
             ->where('qty_renprod.version_id', $this->version)
-            ->groupBy('qty_renprod.cost_center', 'cost_center.cost_center_desc');
+            ->groupBy('qty_renprod.cost_center', 'cost_center.cost_center_desc')
+            ->orderBy('qty_renprod.cost_center', 'asc');
 
         if ($this->company != 'all' && auth()->user()->mapping_akses('qty_renprod')->company_code == 'all') {
             $query = $query->where('qty_renprod.company_code', $this->company);

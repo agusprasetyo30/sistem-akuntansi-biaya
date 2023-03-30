@@ -21,7 +21,8 @@ class H_TotalDaanDataTable extends DataTable
             ->leftjoin('regions', 'regions.region_name', '=', 'qty_rendaan.region_name')
             ->whereNull('qty_rendaan.deleted_at')
             ->where('qty_rendaan.version_id', $this->version)
-            ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name');
+            ->groupBy('qty_rendaan.material_code', 'qty_rendaan.region_name', 'regions.region_desc', 'material.material_name')
+            ->orderBy('qty_rendaan.material_code', 'asc');
 
         if ($this->company != 'all' && auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all') {
             $query = $query->where('qty_rendaan.company_code', $this->company);
