@@ -30,6 +30,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+
                     <div class="panel panel-primary">
                         <div class=" tab-menu-heading p-0 bg-light">
                             <div class="tabs-menu1 ">
@@ -554,6 +555,7 @@
                                 }).then((result) =>{
                                     if (result.value){
                                         $('#local_loader').show();
+                                        $('#count_load').css('display', 'block');
                                         importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -573,6 +575,7 @@
                                 }).then((result) =>{
                                     if (result.value){
                                         $('#local_loader').show();
+                                        $('#count_load').css('display', 'block');
                                         importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -617,6 +620,7 @@
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
+                        $('#count_load').css('display', 'none');
                         $('#local_loader').hide();
                         Swal.fire({
                             title: response.title,
@@ -639,6 +643,7 @@
                     error: function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
+                        $('#count_load').css('display', 'none');
                         $('#local_loader').hide();
                         handleError(response)
 
