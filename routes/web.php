@@ -269,6 +269,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('insert', [KursController::class, 'create'])->name('insert_kurs');
             Route::post('update', [KursController::class, 'update'])->name('update_kurs');
             Route::post('delete', [KursController::class, 'delete'])->name('delete_kurs');
+            Route::get('export', [KursController::class, 'export'])->name('export_kurs');
         });
 
         Route::group(['prefix' => 'asumsi-umum', 'middleware' => ['role:asumsi_umum']], function () {
@@ -326,6 +327,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [QtyRenProdController::class, 'delete'])->name('delete_qty_renprod');
             Route::post('import', [QtyRenProdController::class, 'import'])->name('import_qty_renprod');
             Route::get('export', [QtyRenProdController::class, 'export'])->name('export_qty_renprod');
+            Route::get('export-h', [QtyRenProdController::class, 'export_horizontal'])->name('export_h_qty_renprod');
             Route::post('check', [QtyRenProdController::class, 'check'])->name('check_qty_renprod');
         });
 
@@ -335,6 +337,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [QtyRenDaanController::class, 'update'])->name('update_qty_rendaan');
             Route::post('delete', [QtyRenDaanController::class, 'delete'])->name('delete_qty_rendaan');
             Route::post('export', [QtyRenDaanController::class, 'export'])->name('export_qty_rendaan');
+            Route::get('export-h', [QtyRenDaanController::class, 'export_horizontal'])->name('export_h_qty_rendaan');
             Route::post('import', [QtyRenDaanController::class, 'import'])->name('import_qty_rendaan');
             Route::post('check', [QtyRenDaanController::class, 'check'])->name('check_qty_rendaan');
         });
@@ -345,12 +348,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [PriceRenDaanController::class, 'update'])->name('update_price_rendaan');
             Route::post('delete', [PriceRenDaanController::class, 'delete'])->name('delete_price_rendaan');
             Route::post('export', [PriceRenDaanController::class, 'export'])->name('export_price_rendaan');
+            Route::get('export-h', [PriceRenDaanController::class, 'export_horizontal'])->name('export_h_price_rendaan');
             Route::post('import', [PriceRenDaanController::class, 'import'])->name('import_price_rendaan');
             Route::post('check', [PriceRenDaanController::class, 'check'])->name('check_price_rendaan');
         });
 
         Route::group(['prefix' => 'total-daan', 'middleware' => ['role:qty_rendaan&price_rendaan']], function () {
             Route::get('/', [TotalDaanController::class, 'index'])->name('total_daan');
+            Route::get('export-h', [TotalDaanController::class, 'export_horizontal'])->name('export_h_total_daan');
         });
 
         Route::group(['prefix' => 'zco', 'middleware' => ['role:zco']], function () {
@@ -393,6 +398,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [PJPemakaianController::class, 'update'])->name('update_pemakaian');
             Route::post('delete', [PJPemakaianController::class, 'delete'])->name('delete_pemakaian');
             Route::get('export', [PJPemakaianController::class, 'export'])->name('export_pemakaian');
+            Route::get('export-h', [PJPemakaianController::class, 'export_horizontal'])->name('export_h_pemakaian');
             Route::post('import', [PJPemakaianController::class, 'import'])->name('import_pemakaian');
             Route::post('check', [PJPemakaianController::class, 'check'])->name('check_pemakaian');
         });
@@ -403,6 +409,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('update', [PJPenjualanController::class, 'update'])->name('update_penjualan');
             Route::post('delete', [PJPenjualanController::class, 'delete'])->name('delete_penjualan');
             Route::get('export', [PJPenjualanController::class, 'export'])->name('export_penjualan');
+            Route::get('export-h', [PJPenjualanController::class, 'export_horizontal'])->name('export_h_penjualan');
             Route::post('import', [PJPenjualanController::class, 'import'])->name('import_penjualan');
             Route::post('check', [PJPenjualanController::class, 'check'])->name('check_penjualan');
         });

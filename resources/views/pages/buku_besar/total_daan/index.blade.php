@@ -47,7 +47,7 @@
                                             </select>
                                         </div>
                                     @endif
-
+                
                                     <div class="form-group">
                                         <label class="form-label">VERSI</label>
                                         <select id="filter_version_ver" class="form-control custom-select select2">
@@ -57,7 +57,7 @@
                                 </div>
                                 <div class="">
                                     <div class="table-responsive" id="table-wrapper">
-
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -376,12 +376,12 @@
                         ]
 
                     },
-                    // {
-                    //     extend: 'excel',
-                    //     className: 'mb-5',
-                    //     title: '',
-                    //     filename: 'Total Pengadaan - Vertikal'
-                    // }
+                    { 
+                        extend: 'excel', 
+                        className: 'mb-5',
+                        title: '',
+                        filename: 'Total Pengadaan - Vertikal'  
+                    }
                 ],
                 ajax: {
                     url : '{{route("total_daan")}}',
@@ -405,6 +405,7 @@
             })
         }
 
+        var mataUang = 'IDR'
         function get_data_horiz(){
             var table = '<table id="h_dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
             var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
@@ -451,23 +452,36 @@
                                         text:'Rupiah',
                                         action: function () {
                                             $('#h_dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Rupiah'])}}').load();
+                                            mataUang = 'IDR'
                                         }
                                     },
                                     {
                                         text:'Dollar',
                                         action: function () {
                                             $('#h_dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Dollar'])}}').load();
+                                            mataUang = 'USD'
                                         }
                                     }
                                 ]
 
                             },
-                            // {
-                            //     extend: 'excel',
+                            {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
+
+                                    window.location = '{{ route("export_h_total_daan") }}' + "?version=" + version_search + "&value=" + $('#filter_val').val() + "&mata_uang=" + mataUang
+                                },
+                                className: 'mb-5'
+                            }
+                            // { 
+                            //     extend: 'excel', 
                             //     className: 'mb-5',
                             //     title: '',
-                            //     filename: 'Total Pengadaan - Horizontal'
+                            //     filename: 'Total Pengadaan - Horizontal' 
                             // }
+
                         ],
                         ajax: {
                             url : '{{route("total_daan")}}',

@@ -53,7 +53,7 @@
                                                 </select>
                                             </div>
                                         @endif
-
+                    
                                         <div class="form-group">
                                             <label class="form-label">VERSI</label>
                                             <select id="filter_version_ver" class="form-control custom-select select2">
@@ -63,7 +63,7 @@
                                     </div>
                                     <div class="">
                                         <div class="table-responsive" id="table-wrapper">
-
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -76,7 +76,7 @@
                                                 </select>
                                             </div>
                                         @endif
-
+                    
                                         <div class="form-group">
                                             <label class="form-label">VERSI</label>
                                             <select id="filter_version_hor" class="form-control custom-select select2">
@@ -140,7 +140,7 @@
                                                 </select>
                                             </div>
                                         @endif
-
+                    
                                         <div class="form-group">
                                             <label class="form-label">VERSI</label>
                                             <select id="filter_version_group_account" class="form-control custom-select select2">
@@ -208,7 +208,7 @@
 @endsection()
 
 @section('scripts')
-
+    
     <!-- Custom Script -->
     <script src="{{asset('assets/plugins/datatables/Buttons/js/dataTables.buttons.js?v=1.0.1')}}"></script>
     <script src="{{asset('assets/plugins/datatables/Buttons/js/buttons.html5.js?v=1.0.2')}}"></script>
@@ -1099,12 +1099,12 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    // {
-                    //     extend: 'excel',
-                    //     className: 'mb-5',
+                    // { 
+                    //     extend: 'excel', 
+                    //     className: 'mb-5', 
                     //     exportOptions:{
                     //     columns: 'th:not(:last-child)'
-                    //     },
+                    //     }, 
                     //     title: '',
                     //     filename: 'ZCO - Vertikal',
                     //     customize: function (file) {
@@ -1115,62 +1115,62 @@
                     //         // console.log('row', row);
                     //         $(row[1]).remove()
                     //
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'A1:A2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'B1:B2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'C1:C2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'D1:D2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'E1:E2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'F1:F2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'G1:G2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'H1:H2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'I1:I2' }
-                    //             })
+                    //             }) 
                     //         );
-                    //         mergeCells[0].appendChild(
+                    //         mergeCells[0].appendChild( 
                     //             _createNode( sheet, 'mergeCell', {
                     //                 attr: { ref: 'J1:J2' }
-                    //             })
+                    //             }) 
                     //         );
                     //
                     //         mergeCells.attr( 'count', mergeCells.attr( 'count' )+1 );
                     //
                     //         function _createNode( doc, nodeName, opts ) {
                     //             var tempNode = doc.createElement( nodeName );
-                    //
+                    //      
                     //             if ( opts ) {
                     //                 if ( opts.attr ) {
                     //                     $(tempNode).attr( opts.attr );
@@ -1258,13 +1258,74 @@
                 },
                 success:function (response) {
                     for (let i = 0; i < response.material.length;i++){
+                        
+                        column.push(
+                            { 
+                                data: i.toString()+'harga_satuan', 
+                                orderable:false,
+                                render: function ( data, type, row ) {
+                                    if (data != 0) {
+                                        rs = Math.round(data);
+                                        result = formatRupiah(rs.toString(), 'Rp ')
+                                        return result
+                                    } else {
+                                        return "-"
+                                    }
+                                }
+                            }
+                        );
+                        column.push(
+                            { 
+                                data: i.toString()+'cr', 
+                                orderable:false,
+                                // render: $.fn.dataTable.render.number( ',', '.', 2, '' ),
+                                render: function ( data, type, row ) {
+                                    if (data != 0) {
+                                        result = data.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        return result
+                                    } else {
+                                        return "-"
+                                    }
+                                }
+                            }
+                        );
+                        column.push(
+                            { 
+                                data: i.toString()+'biaya_perton', 
+                                orderable:false,
+                                render: function ( data, type, row ) {
+                                    if (data != 0) {
+                                        rs = Math.round(data);
+                                        result = formatRupiah(rs.toString(), 'Rp ')
+                                        return result
+                                    } else {
+                                        return "-"
+                                    }
+                                }
+                            }
+                        );
+                        column.push(
+                            { 
+                                data: i.toString()+'total_biaya', 
+                                orderable:false,
+                                render: function ( data, type, row ) {
+                                    if (data != 0) {
+                                        rs = Math.round(data);
+                                        result = formatRupiah(rs.toString(), 'Rp ')
+                                        return result
+                                    } else {
+                                        return "-"
+                                    }
+                                }
+                            }
+                        );
+
                         kolom_top += '<th colspan="4" class="text-center"><strong>'+ response.material[i].product_code+'  '+ response.material[i].material_name+'<br>'+ response.material[i].plant_code +' '+ response.material[i].plant_desc +'<strong></th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
                     for (let j = 0; j < response.material.length * 4 ; j++) {
-                        column.push({ data: j.toString(), orderable:false})
-                        kolom_footer += '<th class="text-center"></th>'
+                        kolom_footer += '<th></th>'
                     }
 
                     $("#dinamic_tr_top").append(kolom_top);
@@ -1359,8 +1420,19 @@
                                             return intVal(a) + intVal(b);
                                         }, 0);
 
+                                    if (total == 0) {
+                                        total_perhitungan = '-'
+                                    } else {
+                                        if (index == 3 || index == 7 || index == 11 || index == 15 || index == 19 || index == 23 || index == 27 || index == 31 || index == 35 || index == 39 || index == 43 || index == 47 || index == 51 || index == 55 || index == 59) {
+                                            total_perhitungan = total.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                                        } else {
+                                            res = Math.round(total);
+                                            total_perhitungan = formatRupiah(res.toString(), 'Rp ')
+                                        }
+                                    }
+
                                     // Update footer
-                                    $(api.column(index).footer()).html(total);
+                                    $(api.column(index).footer()).html(total_perhitungan);
                                 }
                             })
                         },
@@ -1381,10 +1453,15 @@
                     <tr id="dinamic_group_account_tr">
                     </tr>
                 </thead>
+                <tfoot>
+                    <tr id="dinamic_group_account_footer">
+                    </tr>
+                </tfoot>
             </table>`
             // var kolom = '<th class="text-center">BIAYA </th>'
             var kolom_top = '<th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">BIAYA</th><th style="vertical-align : middle;text-align:center;" rowspan="2" class="text-center">GROUP ACCOUNT</th>'
             var kolom = ''
+            var kolom_footer = '<th> Total </th><th> Perhitungan </th>'
             var column = [
                 { data: 'group_account_code', orderable:false},
                 { data: 'group_account_desc', orderable:false},
@@ -1415,18 +1492,34 @@
                     //         confirmButtonText: 'Konfirmasi',
                     //     })
                     // }
-
+                    
                     for (let i = 0; i < response.group_account.length;i++){
                         kolom_top += '<th colspan="4" class="text-center">'+ response.group_account[i].product_code+'  '+ response.group_account[i].material_name+'<br>'+ response.group_account[i].plant_code + ' ' + response.group_account[i].plant_desc +'</th>';
                         kolom += '<th class="text-center">Harga Satuan</th><th class="text-center">CR</th><th class="text-center">Biaya Per Ton</th></th><th class="text-center">Total Biaya</th>';
                     }
 
                     for (let j = 0; j < response.group_account.length * 4 ; j++) {
-                        column.push({ data: j.toString(), orderable:false})
+                        column.push(
+                            { 
+                                data: j.toString(), 
+                                orderable:false, 
+                                render: function ( data, type, row ) {
+                                    if (data != 0) {
+                                        rs = Math.round(data);
+                                        result = formatRupiah(rs.toString(), 'Rp ')
+                                        return result
+                                    } else {
+                                        return "-"
+                                    }
+                                }
+                            }
+                        )
+                        kolom_footer += '<th></th>'
                     }
 
                     $("#dinamic_group_account_tr_top").append(kolom_top);
                     $("#dinamic_group_account_tr").append(kolom);
+                    $("#dinamic_group_account_footer").append(kolom_footer);
                     $('#h_dt_zco_group_account').DataTable().clear().destroy();
                     $("#h_dt_zco_group_account").DataTable({
                         scrollX: true,
@@ -1481,7 +1574,40 @@
                         initComplete: function( settings ) {
                             let api = this.api();
                             api.columns.adjust().draw();
-                        }
+                        },
+                        footerCallback: function (row, data, start, end, display) {
+                            this.api().eq(0).columns().every(function (index) {
+                                if (index > 1){
+                                    var api = this;
+                                    var intVal = function (i) {
+                                        // return typeof i === 'string' ? parseFloat(i.replace(/[\Rp.]/g, '')) : typeof i === 'number' ? i : 0;
+                                        if (i === '-') {
+                                            return 0
+                                        } else {
+                                            return typeof i === 'string' ? parseFloat(i.replace(/[\Rp.]/g, '')) : typeof i === 'number' ? i : 0;
+                                        }
+                                    };
+
+                                    // Total over all pages
+                                    total = api
+                                        .column(index)
+                                        .data()
+                                        .reduce(function (a, b) {
+                                            return intVal(a) + intVal(b);
+                                        }, 0);
+                                    
+                                    if (total == 0) {
+                                        total_perhitungan = '-'
+                                    } else {
+                                        res = Math.round(total);
+                                        total_perhitungan = formatRupiah(res.toString(), 'Rp ')
+                                    }
+
+                                    // Update footer
+                                    $(api.column(index).footer()).html(total_perhitungan);
+                                }
+                            })
+                        },
                     })
                 },
                 error: function (response) {
@@ -1491,12 +1617,12 @@
         }
 
         // Function Generate Abjad
-        function generateAbjad(idx) {
+        function generateAbjad(idx) {            
             const multiple = 4
             const start = (multiple * idx) + 2
             const end = start + 3
             let rangeColumn = '';
-
+            
             let firstAlp1st = 0;
             let firstAlp2nd = start;
             let secondAlp1st = 0;
@@ -1601,7 +1727,7 @@
                     periode:$('#detail_version_import').val()
                 },
                 success: function (response) {
-                    if (response.code == 201)
+                    if (response.code == 201) 
                     {
                         Swal.fire({
                             title: response.title,
@@ -1754,7 +1880,7 @@
                             $('#modal_edit'+id).modal('hide')
                             $('body').removeClass('modal-open');
                             $('.modal-backdrop').remove();
-
+                            
                             update_dt_horizontal()
                             update_dt_group_account_horizontal()
                             // table()
@@ -1817,7 +1943,7 @@
                 }
             })
         }
-
+        
         function reset_form(){
             $("#filter_material").val('all').trigger('change')
             $('#filter_plant').val('all').trigger('change')
