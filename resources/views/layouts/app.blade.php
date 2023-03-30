@@ -30,8 +30,21 @@
         </div>
         <!--- End Local-loader-->
 
+
+
+
 		<!-- PAGE -->
 		<div class="page">
+{{--            <div class="col-lg-6 justify-center" id="count_load" style="display: block;z-index: 99999999999;">--}}
+{{--                <div class="expanel expanel-secondary">--}}
+{{--                    <div class="expanel-heading text-center">--}}
+{{--                        <h3 class="expanel-title">Harap Menunggu Sampai Proses Selesai :)</h3>--}}
+{{--                    </div>--}}
+{{--                    <div class="expanel-body text-center">--}}
+{{--                        Sedang Mengupload Sebanyak <strong>12313123</strong> Data .....--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 			<div class="page-main">
 
             @include('layouts.sidebar')

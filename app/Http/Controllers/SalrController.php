@@ -304,8 +304,8 @@ class SalrController extends Controller
                 $data['purchase_order'] = $query['purchase_order'];
                 $data['company_code'] = auth()->user()->company_code;
                 $data['created_by'] = auth()->user()->id;
-                $data['created_at'] = Carbon::now()->format('Y-m-d');
-                $data['updated_at'] = Carbon::now()->format('Y-m-d');
+                $data['created_at'] = Carbon::now()->format('Y-m-d H:i:s');
+                $data['updated_at'] = Carbon::now()->format('Y-m-d H:i:s');
                 return $data;
             });
 
@@ -340,12 +340,11 @@ class SalrController extends Controller
                     foreach ($data as $items){
                         Salr::insert($items);
                     }
-
-                    return setResponse([
-                        'code' => 200,
-                        'title' => 'Berhasil meng-import data'
-                    ]);
                 });
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Berhasil meng-import data'
+                ]);
             }else{
 //                dd('bawah');
                 $validation_data = ['Gl Account FC ', 'Cost Center '];
