@@ -6,12 +6,14 @@ use App\DataTables\Master\H_SalrDataTable;
 use App\DataTables\Master\SalrDataTable;
 use App\Exports\MultipleSheet\MS_SalrExport;
 use App\Imports\SalrImport;
+use App\Imports\Salrs2Import;
 use App\Models\Asumsi_Umum;
 use App\Models\CostCenter;
 use App\Models\GLAccountFC;
 use App\Models\Material;
 use App\Models\Salr;
 use App\Models\Version_Asumsi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +26,17 @@ class SalrController extends Controller
 {
     public function index(Request $request, SalrDataTable $salrDataTable, H_SalrDataTable $h_SalrDataTable)
     {
+//        $data = [['product_id' => 1, 'name' => 'Desk'], ['product_id' => 1, 'name' => 'Desk']];
+//        $collection = collect($data);
+//
+//        $collection->put('price', 100);
+//
+//        $collection->all();
+//
+//        dd($collection);
+
+
+
         if ($request->data == 'index') {
             return $salrDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.salr.index');
         } elseif ($request->data == 'horizontal') {
@@ -267,98 +280,101 @@ class SalrController extends Controller
                 return $this->makeValidMsg($validator);
             }
 
-//            $transaction = DB::transaction(function () use ($request) {
+            $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
+            $master_gl_account_fc = GLAccountFC::get()->pluck('gl_account_fc')->all();
+            $master_cost_center = CostCenter::get()->pluck('cost_center')->all();
 
-                $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
+            $excel = Excel::toArray(new Salrs2Import(), $request->file('file'));
+            $header = $excel[0][0];
+            unset($excel[0][0]);
 
-                $empty_excel = Excel::toArray(new SalrImport($asumsi), $request->file('file'));
+            $excel_fix = collect($excel[0])->map(function ($query) use ($asumsi, $header){
+                $query = array_combine($header, $query);
+                $data['gl_account_fc'] = strval($query['gl_account_fc']);
+                $data['cost_center'] = $query['cost_center'];
+                $data['periode'] = $asumsi->month_year;
+                $data['version_id'] = $asumsi->version_id;
+                $data['name'] = $query['name'];
+                $data['value'] = $query['value']  != null ? (double) str_replace('.', '', str_replace('Rp ', '', $query['value'])) : 0;
+                $data['partner_cost_center'] = $query['partner_cost_center'];
+                $data['username'] = $query['username'];
+                $data['material_code'] = $query['material_code'];
+                $data['document_number'] = $query['document_number'];
+                $data['document_number_text'] = $query['document_number_text'];
+                $data['purchase_order'] = $query['purchase_order'];
+                $data['company_code'] = auth()->user()->company_code;
+                $data['created_by'] = auth()->user()->id;
+                $data['created_at'] = Carbon::now()->format('Y-m-d');
+                $data['updated_at'] = Carbon::now()->format('Y-m-d');
+                return $data;
+            });
 
-//                dd(collect($empty_excel[0])->pluck('gl_account_fc'));
+//            dd($excel_fix);
 
-                if ($empty_excel[0]) {
-                    $file = $request->file('file')->store('import');
+            if (count($excel_fix) == 0){
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal meng-import data',
+                    'message' => 'Data Excel Anda Kosong :>'
+                ]);
+            }
+
+
+            $gl_account_fc_excel = array_values(array_unique($excel_fix->pluck('gl_account_fc')->toArray()));
+            $cost_center_excel = array_values(array_unique($excel_fix->pluck('cost_center')->toArray()));
+
+            $check_gl_account_fc = array_values(array_diff($gl_account_fc_excel, $master_gl_account_fc));
+            $check_cost_center = array_values(array_diff($cost_center_excel, $master_cost_center));
+
+            if ($check_gl_account_fc == null and $check_cost_center == null){
+//                dd('atas');
+                DB::transaction(function () use ($excel_fix, $asumsi){
                     Salr::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
                         ->where('version_id', $asumsi->version_id)
                         ->delete();
 
-                    $import = new SalrImport($asumsi);
-                    $import->import($file);
+                    $result = array_values($excel_fix->toArray());
 
-                    $data_fail = $import->failures();
-                } else {
-                    $data_fail = [];
-                }
-                return $data_fail;
-//            });
+                    $data = array_chunk($result, 3000);
 
-//            if ($transaction->isNotEmpty()) {
-//                return setResponse([
-//                    'code' => 500,
-//                    'title' => 'Gagal meng-import data',
-//                ]);
-//            } else {
-//                return setResponse([
-//                    'code' => 200,
-//                    'title' => 'Berhasil meng-import data'
-//                ]);
-//            }
-        } catch (\Exception $exception) {
-//            $temp = explode('-', $request->tanggal_import);
-//            $timestamp = $temp[1] . '-' . $temp[0] . '-01';
+                    foreach ($data as $items){
+                        Salr::insert($items);
+                    }
 
-            $asumsi = Asumsi_Umum::where('id', $request->periode)->first();
-
-            $empty_excel = Excel::toArray(new SalrImport($asumsi->month_year), $request->file('file'));
-
-            $gl_account = [];
-            $gl_account_ = [];
-            $cost_center = [];
-            $cost_center_ = [];
-            $material = [];
-            $material_ = [];
-
-            foreach ($empty_excel[0] as $key => $value) {
-                array_push($gl_account, 'gl account ' . $value['gl_account_fc'] . ' tidak ada pada master');
-                $d_gl_account = GLAccountFC::whereIn('gl_account_fc', [$value['gl_account_fc']])->first();
-                if ($d_gl_account) {
-                    array_push($gl_account_, 'gl account ' . $d_gl_account->gl_account_fc . ' tidak ada pada master');
-                }
-
-                array_push($cost_center, 'cost center ' . $value['cost_center'] . ' tidak ada pada master');
-                $d_cost_center = CostCenter::whereIn('cost_center', [$value['cost_center']])->first();
-                if ($d_cost_center) {
-                    array_push($cost_center_, 'cost center ' . $d_cost_center->cost_center . ' tidak ada pada master');
-                }
-
-                array_push($material, 'material ' . $value['material_code'] . ' tidak ada pada master');
-                $d_material = Material::whereIn('material_code', [$value['material_code']])->first();
-                if ($d_material) {
-                    array_push($material_, 'material ' . $d_material->material_code . ' tidak ada pada master');
-                }
-            }
-
-            $result_gl_account = array_diff($gl_account, $gl_account_);
-            $result_cost_center = array_diff($cost_center, $cost_center_);
-            $result_material = array_diff($material, $material_);
-            $result = array_merge($result_gl_account, $result_cost_center, $result_material);
-            $res = array_unique($result);
-
-            if ($res) {
+                    return setResponse([
+                        'code' => 200,
+                        'title' => 'Berhasil meng-import data'
+                    ]);
+                });
+            }else{
+//                dd('bawah');
+                $validation_data = ['Gl Account FC ', 'Cost Center '];
+                $error = [];
                 $msg = '';
+                array_push($error, $check_gl_account_fc);
+                array_push($error, $check_cost_center);
 
-                foreach ($res as $message)
-                    $msg .= '<p>' . $message . '</p>';
+                foreach ($error as $key => $items){
+                    foreach ($items as $item){
+                        if ($item != null or $item != ''){
+                            $msg .= '<p>' . $validation_data[$key] . $item .' Tidak Ada Pada Master'.'</p>';
+                        }else{
+                            $msg .= '<p>' . $validation_data[$key] . ' Tidak Boleh Kosong'.'</p>';
+                        }
+                    }
+                }
 
                 return setResponse([
                     'code' => 430,
                     'title' => 'Gagal meng-import data',
                     'message' => $msg
                 ]);
-            } else {
-                return setResponse([
-                    'code' => 400,
-                ]);
             }
+
+        } catch (\Exception $exception) {
+            return setResponse([
+                'code' => 400,
+            ]);
         }
     }
 

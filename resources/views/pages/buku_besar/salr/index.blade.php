@@ -639,7 +639,9 @@
                     error: function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
+                        $('#local_loader').hide();
                         handleError(response)
+
                     }
                 })
             }

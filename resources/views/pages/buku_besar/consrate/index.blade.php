@@ -44,8 +44,21 @@
                                 </select>
                             </div>
                         @endif
+                            <div class="form-group">
+                                <label class="form-label">VERSI</label>
+                                <select id="filter_version1" class="form-control custom-select select2">
+                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
+                                </select>
+                            </div>
+                            <div class="mb-5 row">
+                                <div class="col-12">
+                                    <button style="display: none;" class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
+                                    <button style="display: none;" class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
+                                    <button style="display: none;" class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
+                                </div>
+                            </div>
 
-                        <div class="mb-5 row">
+{{--                        <div class="mb-5 row">--}}
 {{--                            <div class="form-group">--}}
 {{--                                <label class="form-label">VERSI</label>--}}
 {{--                                <select id="filter_version" class="form-control custom-select select2">--}}
@@ -53,17 +66,7 @@
 {{--                                </select>--}}
 {{--                            </div>--}}
 
-                            <div class="form-group">
-                                <label class="form-label">VERSI</label>
-                                <select id="filter_version1" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <button style="display: none;" class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
-                                <button style="display: none;" class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
-                                <button style="display: none;" class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
-                            </div>
+
 
 {{--                            @if (mapping_akses('cons_rate','submit') || mapping_akses('cons_rate','approve'))--}}
 {{--                                <div class="col-12">--}}
@@ -81,7 +84,7 @@
 {{--                                    @endif--}}
 {{--                                </div>--}}
 {{--                            @endif--}}
-                        </div>
+{{--                        </div>--}}
                     </div>
 
                     <div class="">
@@ -189,6 +192,11 @@
                     }
                 }
             }).on('change', function () {
+                $("#table_main").empty();
+                $('#btn_submit_data').css("display", "none")
+                $('#btn_approve_data').css("display", "none")
+                $('#btn_reject_data').css("display", "none")
+
                 var company = $('#filter_company1').val();
                 $('#filter_version1').append('<option selected disabled value="">Pilih Versi</option>').select2({
                     placeholder: 'Pilih Versi',
@@ -221,60 +229,30 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '{{route('check_status')}}',
+                    url: '{{route('general_mapping_akses')}}',
                     data: {
                         _token: "{{ csrf_token() }}",
                         version:$('#filter_version1').val(),
                         company:$('#filter_company1').val(),
+                        db:'cons_rate'
                     },
                     success:function (response_status) {
-                        $.ajax({
-                            type: "POST",
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            url: '{{route('general_mapping_akses')}}',
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                                db:'cons_rate'
-                            },
-                            success:function (response_status) {
-
-                                if (response_status.code === 100){
-                                    $('#btn_submit_data').css("display", "block")
-                                    $('#btn_approve_data').css("display", "none")
-                                    $('#btn_reject_data').css("display", "none")
-
-
-                                }else if (response_status.code === 101){
-                                    $('#btn_submit_data').css("display", "none")
-                                    $('#btn_approve_data').css("display", "block")
-                                    $('#btn_reject_data').css("display", "block")
-
-                                }else {
-
-                                }
-                            },
-                            error: function (response) {
-                                handleError(response)
-                                $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
-                                $("#back_import").attr("disabled", false);
-                            }
-                        })
+                        console.log(response_status)
                         if (response_status.code === 100){
-                            $('#btn_submit_data').css("display", "block")
-                            $('#btn_approve_data').css("display", "none")
-                            $('#btn_reject_data').css("display", "none")
-
-
+                            if(response_status.akses['submit'] === true){
+                                $('#btn_submit_data').css("display", "block")
+                                $('#btn_approve_data').css("display", "none")
+                                $('#btn_reject_data').css("display", "none")
+                            }
                         }else if (response_status.code === 101){
-                            $('#btn_submit_data').css("display", "none")
-                            $('#btn_approve_data').css("display", "block")
-                            $('#btn_reject_data').css("display", "block")
-
-                        }else {
-
+                            if (response_status.akses['approve'] === true){
+                                $('#btn_submit_data').css("display", "none")
+                                $('#btn_approve_data').css("display", "block")
+                                $('#btn_reject_data').css("display", "block")
+                            }
                         }
+
+                        get_data()
                     },
                     error: function (response) {
                         handleError(response)
@@ -768,8 +746,8 @@
                     url : '{{route("consrate")}}',
                     data: {
                         data:'index',
-                        filter_company:$('#filter_company').val(),
-                        filter_version:$('#filter_version').val()
+                        filter_company:$('#filter_company1').val(),
+                        filter_version:$('#filter_version1').val()
                     }
                 },
                 columns: [
@@ -1147,7 +1125,7 @@
                 url: '{{route('submit_consrate')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    filter_version:$('#filter_version').val()
+                    filter_version:$('#filter_version1').val()
                 },
                 success: function (response) {
                     Swal.fire({
@@ -1159,7 +1137,7 @@
                         confirmButtonText: 'Konfirmasi',
                     }).then((result) => {
                         if (result.value) {
-                            location.reload();
+                            // location.reload();
                         }
                     })
                 },
@@ -1179,7 +1157,7 @@
                 url: '{{route('approve_consrate')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    filter_version:$('#filter_version').val()
+                    filter_version:$('#filter_version1').val()
                 },
                 success: function (response) {
                     Swal.fire({
@@ -1211,7 +1189,7 @@
                 url: '{{route('reject_consrate')}}',
                 data: {
                     _token: "{{ csrf_token() }}",
-                    filter_version:$('#filter_version').val()
+                    filter_version:$('#filter_version1').val()
                 },
                 success: function (response) {
                     Swal.fire({
