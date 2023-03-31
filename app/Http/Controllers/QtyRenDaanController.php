@@ -180,10 +180,10 @@ class QtyRenDaanController extends Controller
             if (property_exists($acc, $curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom)) {
                 if (!property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}, $curr->region_desc)) {
                     $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc} = (object)[];
-                } 
-                    
+                }
+
                 $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc}->{$curr->month_year} = $curr->qty_rendaan_value;
-                
+
             } else {
                 $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom} = (object)[];
                 $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc} = (object)[];
@@ -263,7 +263,7 @@ class QtyRenDaanController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            dd($exception);
+//            dd($exception);
             $empty_excel = Excel::toArray(new KuantitiRenDaanImport($request->version), $request->file('file'));
 
             $material = [];

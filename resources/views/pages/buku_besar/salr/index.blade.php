@@ -555,7 +555,8 @@
                                 }).then((result) =>{
                                     if (result.value){
                                         $('#local_loader').show();
-                                        $('#salrs_local_loader').css('display', 'block');
+                                        // $('#salrs_local_loader').css('display', 'block');
+                                        // $('#count_load').val('123456789');
                                         importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -575,7 +576,8 @@
                                 }).then((result) =>{
                                     if (result.value){
                                         $('#local_loader').show();
-                                        $('#count_load').css('display', 'block');
+                                        // $('#salrs_local_loader').css('display', 'block');
+                                        // $('#count_load').val('123456789');
                                         importStore(file)
                                     }else {
                                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
@@ -620,7 +622,8 @@
                     success:function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
-                        $('#salrs_local_loader').css('display', 'block');
+                        // $('#salrs_local_loader').css('display', 'none');
+                        // $('#count_load').val('123456789');
                         // $('#count_load').css('display', 'none');
                         $('#local_loader').hide();
                         Swal.fire({
@@ -644,8 +647,8 @@
                     error: function (response) {
                         $("#submit_import").attr('class', 'btn btn-primary').attr("disabled", false);
                         $("#back_import").attr("disabled", false);
-                        $('#salrs_local_loader').css('display', 'block');
-                        // $('#count_load').css('display', 'none');
+                        // $('#salrs_local_loader').css('display', 'none');
+                        // $('#count_load').val('123456789');
                         $('#local_loader').hide();
                         handleError(response)
 

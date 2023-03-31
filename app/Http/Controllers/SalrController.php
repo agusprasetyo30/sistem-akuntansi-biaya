@@ -268,7 +268,6 @@ class SalrController extends Controller
 
     public function import(Request $request)
     {
-//        dd($request);
         try {
             $validator = Validator::make($request->all(), [
                 "file" => 'required',
@@ -379,6 +378,7 @@ class SalrController extends Controller
 
     public function check(Request $request)
     {
+//        dd($request);
         try {
             $asumsi = Asumsi_Umum::where('id', $request->periode)->first();
 //            $timestamp = explode('-', $request->periode);
