@@ -47,6 +47,11 @@ class KuantitiRenDaanImport implements ToModel, WithHeadingRow, SkipsOnError, Wi
                     ->where('version_id', $this->version)
                     ->first();
 
+//                dd($versi->id);
+                if ($versi == null){
+                    dd($row);
+                }
+
                 $input['qty_rendaan_value'] = $arr[$i] != null ? (double) str_replace(',', '.', $arr[$i])  :0;
                 $input['asumsi_umum_id'] = $versi->id;
                 $input['version_id'] = $this->version;

@@ -94,7 +94,7 @@ class MaterialController extends Controller
             $required['material_desc'] = 'required';
             $required['group_account_code'] = 'required';
             $required['kategori_material_id'] = 'required';
-            $required['kategori_produk_id'] = 'required';
+//            $required['kategori_produk_id'] = 'required';
             $required['material_uom'] = 'required';
             $required['is_dummy'] = 'required';
             $required['is_active'] = 'required';

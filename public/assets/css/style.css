@@ -892,6 +892,17 @@ pre code {
     top: 43%
 }
 
+#salrs_local_loader{
+    bottom: 0;
+    left: 0;
+    margin: 0 auto;
+    right: 0;
+    text-align: center;
+    position: absolute;
+    top: 43%;
+    z-index: 99999999999;
+}
+
 .loader {
     -webkit-animation: spin 2s linear infinite;
     animation: spin 2s linear infinite;
