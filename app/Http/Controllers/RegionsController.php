@@ -29,8 +29,8 @@ class RegionsController extends Controller
             $validator = Validator::make($request->all(), [
                 "nama" => 'required|unique:regions,region_name',
                 "deskripsi" => 'required',
-                "latitude" => 'required',
-                "longtitude" => 'required',
+                "latitude" => '',
+                "longtitude" => '',
                 "is_active" => 'required',
             ], validatorMsg());
 
@@ -71,15 +71,15 @@ class RegionsController extends Controller
                 'title' => 'Data Tidak Ditemukan!'
             ]);
 
-        if ($data->region_name != $request->nama){
+        if ($data->region_name != $request->nama) {
             $required['nama'] = 'required|unique:regions,region_name';
-        }else{
+        } else {
             $required['nama'] = 'required';
         }
 
         $required['deskripsi'] = 'required';
-        $required['latitude'] = 'required';
-        $required['longtitude'] = 'required';
+        $required['latitude'] = '';
+        $required['longtitude'] = '';
         $required['is_active'] = 'required';
         try {
             $validator = Validator::make($request->all(), $required, validatorMsg());
@@ -145,7 +145,7 @@ class RegionsController extends Controller
                     $hasil = $rows->values()[$rows->attribute()] . ' ' . $er;
                     array_push($err, $hasil);
                 }
-                if ($data_fail->isNotEmpty()){
+                if ($data_fail->isNotEmpty()) {
                     return setResponse([
                         'code' => 500,
                         'title' => 'Gagal meng-import data',
