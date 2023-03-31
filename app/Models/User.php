@@ -71,7 +71,7 @@ class User extends Authenticatable
         return $result[0] ?? false;
     }
 
-    public function getData($user_id)
+    public static function getData($user_id)
     {
         $usr = DB::table("users")
             ->select('management_role.db')

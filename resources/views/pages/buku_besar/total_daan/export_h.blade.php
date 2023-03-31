@@ -16,13 +16,17 @@
             @if($loop->index < 2)
             <td>{{$dt}}</td>
             @else
-                @if( $dt == -1 )
-                    <td style="background-color: salmon">-</td>
+                @if($dt == -2)
+                <td>-</td>
                 @else
-                    @if($mata_uang == 'IDR')
-                    <td style="background-color: darkseagreen" data-format='Rp* #,##0_-;Rp* -#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
+                    @if( $dt == -1 )
+                        <td style="background-color: salmon">-</td>
                     @else
-                    <td style="background-color: darkseagreen" data-format='$* #,##0.00_-'>{{ $dt }}</td>
+                        @if($mata_uang == 'IDR')
+                        <td style="background-color: darkseagreen" data-format='Rp* #,##0_-;Rp* -#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
+                        @else
+                        <td style="background-color: darkseagreen" data-format='$* #,##0.00_-'>{{ $dt }}</td>
+                        @endif
                     @endif
                 @endif
             @endif

@@ -17,7 +17,11 @@
             @if($loop->index == 0)
             <td>{{$dt}}</td>
             @else
-            <td data-format='#,##0_-;-#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
+                @if($dt == -1)
+                <td>-</td>
+                @else
+                <td data-format='#,##0_-;-#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
+                @endif
             @endif
             @endforeach
             </tr>

@@ -16,10 +16,14 @@
             @if($loop->index < 2)
             <td>{{$dt}}</td>
             @else
-                @if($mata_uang == 'IDR')
-                <td data-format='Rp* #,##0_-;Rp* -#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
+                @if($dt == -1)
+                <td>-</td>
                 @else
-                <td data-format='$* #,##0.00_-'>{{ $dt }}</td>
+                    @if($mata_uang == 'IDR')
+                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
+                    @else
+                    <td data-format='$* #,##0.00_-'>{{ $dt }}</td>
+                    @endif
                 @endif
             @endif
             @endforeach
