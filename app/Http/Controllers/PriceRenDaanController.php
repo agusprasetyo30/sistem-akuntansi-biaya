@@ -175,6 +175,14 @@ class PriceRenDaanController extends Controller
         $cc = auth()->user()->company_code;
         $mata_uang = $request->mata_uang;
 
+        $month_year = array_map(function($val) {
+            return $val->month_year;
+        }, DB::table(('asumsi_umum'))->select('month_year')
+            ->where("asumsi_umum.version_id", $request->version)
+            ->orderBy('month_year')
+            ->get()
+            ->toArray());
+
         $query = DB::table('price_rendaan')
             ->select('price_rendaan.material_code', 'material.material_name', 'regions.region_desc', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', DB::raw('SUM(price_rendaan.price_rendaan_value) as price_rendaan_value'))
             ->leftjoin('material', 'material.material_code', '=', 'price_rendaan.material_code')
@@ -200,13 +208,16 @@ class PriceRenDaanController extends Controller
 
         $data = array_reduce($query, function ($acc, $curr) {
             if (property_exists($acc, $curr->material_code . ' - ' . $curr->material_name)) {
-                if (property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name}, $curr->region_desc)) {
-                    array_push($acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc}, $curr->price_rendaan_value);
-                } else {
-                    $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc} = [$curr->price_rendaan_value];
-                }
+                if (!property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name}, $curr->region_desc)) {
+                    $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc} = (object)[];
+                } 
+                    
+                $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc}->{$curr->month_year} = $curr->price_rendaan_value;
+                
             } else {
-                $acc->{$curr->material_code . ' - ' . $curr->material_name} = (object)[$curr->region_desc => [$curr->price_rendaan_value]];
+                $acc->{$curr->material_code . ' - ' . $curr->material_name} = (object)[];
+                $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc} = (object)[];
+                $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc}->{$curr->month_year} = $curr->price_rendaan_value;
             }
 
             return $acc;
@@ -214,19 +225,21 @@ class PriceRenDaanController extends Controller
 
 
 
-        $header = ['MATERIAL', 'REGION', ...array_unique(array_map(function ($v) {
-            return $v->month_year;
-        }, $query))];
+        $header = ['MATERIAL', 'REGION', ...$month_year];
 
 
-        $body = array_reduce(array_map(function ($v) use ($data) {
+        $body = array_reduce(array_map(function ($v) use ($data, $month_year) {
             $_arrays = [];
 
             foreach ($data->{$v} as $w => $x) {
                 $_arr = [$v, $w];
 
-                foreach ($x as $y) {
-                    array_push($_arr, $y);
+                foreach($month_year as $e) {
+                    $val = -1;
+                    if (property_exists($x, $e)) {
+                        $val = $x->{$e};
+                    }
+                    array_push($_arr, $val);
                 }
 
                 array_push($_arrays, $_arr);

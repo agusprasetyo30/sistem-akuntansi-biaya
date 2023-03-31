@@ -228,6 +228,14 @@ class QtyRenProdController extends Controller
     {
         $cc = auth()->user()->company_code;
 
+        $month_year = array_map(function($val) {
+            return $val->month_year;
+        }, DB::table(('asumsi_umum'))->select('month_year')
+            ->where("asumsi_umum.version_id", $request->version)
+            ->orderBy('month_year')
+            ->get()
+            ->toArray());
+
         $query = DB::table('qty_renprod')->select(DB::Raw("CONCAT(cost_center.cost_center, ' ', cost_center.cost_center_desc) AS cc"), 'qty_renprod.qty_renprod_value', 'asumsi_umum.month_year')
             ->leftjoin('cost_center', 'cost_center.cost_center', '=', 'qty_renprod.cost_center')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_renprod.version_id')
@@ -242,26 +250,25 @@ class QtyRenProdController extends Controller
 
 
         $data = array_reduce($query, function ($carry, $item) {
-            if (property_exists($carry, $item->cc)) {
-                array_push($carry->{$item->cc}, (object)[
-                    $item->month_year => $item->qty_renprod_value
-                ]);
-            } else {
-                $carry->{$item->cc} = [(object)[$item->month_year => $item->qty_renprod_value]];
+            if (!property_exists($carry, $item->cc)) {
+                $carry->{$item->cc} = (object)[];
             }
+            $carry->{$item->cc}->{$item->month_year} = $item->qty_renprod_value;
 
             return $carry;
         }, (object)[]);
 
-        $header = ['COST CENTER', ...array_unique(array_map(function ($v) {
-            return $v->month_year;
-        }, $query))];
+        $header = ['COST CENTER', ...$month_year];
 
 
-        $body = array_map(function ($v) use ($data) {
+        $body = array_map(function ($v) use ($data, $month_year) {
             $_arr = [$v];
-            foreach ($data->{$v} as $e) {
-                $val = array_values(get_object_vars($e))[0];
+
+            foreach($month_year as $e) {
+                $val = -1;
+                if (property_exists($data->{$v}, $e)) {
+                    $val = $data->{$v}->{$e};
+                }
                 array_push($_arr, $val);
             }
             return $_arr;
