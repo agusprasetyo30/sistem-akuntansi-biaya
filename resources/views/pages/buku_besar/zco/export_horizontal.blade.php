@@ -40,10 +40,10 @@
                 <td>{{ $material->material_name }}</td>
     
                 @foreach ($product_lists as $product)
-                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;Rp* "0"_-;_-@_-'>{{ $fixed_value_data['harga_satuan'][$key_temp][$key] }}</td>
-                    <td data-format='#,##0.00_-;-#,##0.00_-;"0"_-;_-@_-'>{{ $fixed_value_data['cr'][$key_temp][$key] }}</td>
-                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;"0"_-;_-@_-'>{{ $fixed_value_data['biaya_per_ton'][$key_temp][$key] }}</td>
-                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;Rp* "0"_-;_-@_-'>{{ $fixed_value_data['total_biaya'][$key_temp][$key] }}</td>
+                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;"-"_-;_-@_-'>{{ $fixed_value_data['harga_satuan'][$key_temp][$key] }}</td>
+                    <td data-format='#,##0.00_-;-#,##0.00_-;"-"_-;_-@_-'>{{ $fixed_value_data['cr'][$key_temp][$key] }}</td>
+                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;"-"_-;_-@_-'>{{ $fixed_value_data['biaya_per_ton'][$key_temp][$key] }}</td>
+                    <td data-format='Rp* #,##0_-;Rp* -#,##0_-;"-"_-;_-@_-'>{{ $fixed_value_data['total_biaya'][$key_temp][$key] }}</td>
 
                     @php
                         $key_temp++;

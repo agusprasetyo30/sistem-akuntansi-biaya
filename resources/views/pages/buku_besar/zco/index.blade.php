@@ -1437,27 +1437,28 @@
                         fixedColumns: {
                             left: 2
                         },
-                        buttons: [{
-                                extend: 'pageLength'
-                            },
-                            {{-- { --}}
-                            {{--    text: 'Excel', --}}
-                            {{--    classname: 'mb-5', --}}
-                            {{--    action: function ( e, dt, node, config ) { --}}
-                            {{--        var material = $('#filter_material').val(); --}}
-                            {{--        var plant = $('#filter_plant').val(); --}}
-                            {{--        var format_data = $('#filter_format').val(); --}}
-                            {{--        var start_month = $('#bulan_filter1').val(); --}}
-                            {{--        var end_month = $('#bulan_filter2').val(); --}}
-                            {{--        var moth = $('#bulan_satuan_filter1').val(); --}}
+                        buttons: [
+                            { extend: 'pageLength'},
+                            {
+                                text: 'Excel',
+                                classname: 'mb-5',
+                                action: function ( e, dt, node, config ) {
+                                    var material = $('#filter_material').val();
+                                    var plant = $('#filter_plant').val();
+                                    var format_data = $('#filter_format').val();
+                                    var start_month = $('#bulan_filter1').val();
+                                    var end_month = $('#bulan_filter2').val();
+                                    var moth = $('#bulan_satuan_filter1').val();
+                                    var version = $('#filter_version_hor').val();
 
-                            {{--        let route_default = '{{ route("export_zco_horizontal") }}' --}}
-                            {{--        let route_complete = route_default + --}}
-                            {{--            "?material=" + material + "&plant=" + plant + "&format_data=" + format_data +"&start_month=" + start_month + "&end_month=" + end_month + "&moth=" + moth --}}
+                                    let route_default = '{{ route("export_zco_horizontal") }}'
+                                    let route_complete = route_default +
+                                        "?material=" + material + "&plant=" + plant + "&format_data=" + format_data +
+                                        "&start_month=" + start_month + "&end_month=" + end_month + "&moth=" + moth + "&version=" + version
 
-                            {{--        window.location = route_complete --}}
-                            {{--    } --}}
-                            {{-- } --}}
+                                    window.location = route_complete
+                                }
+                            }
                         ],
 
                         ajax: {
@@ -1643,27 +1644,29 @@
                         fixedColumns: {
                             left: 2
                         },
-                        buttons: [{
-                                extend: 'pageLength'
-                            },
-                            {{-- { --}}
-                            {{--    text: 'Excel', --}}
-                            {{--    classname: 'mb-5', --}}
-                            {{--    action: function ( e, dt, node, config ) { --}}
-                            {{--        let material_group_account = $('#filter_material_group_account').val(); --}}
-                            {{--        let plant_group_account = $('#filter_plant_group_account').val(); --}}
-                            {{--        let format_data_group_account = $('#filter_format_group_account').val(); --}}
-                            {{--        let start_month_group_account = $('#bulan_filter1_group_account').val(); --}}
-                            {{--        let end_month_group_account = $('#bulan_filter2_group_account').val(); --}}
-                            {{--        let moth_group_account = $('#btn_tampilkan_group_account').val(); --}}
+                        buttons: [
+                            { extend: 'pageLength'},
+                            {
+                                text: 'Excel',
+                                classname: 'mb-5',
+                                action: function ( e, dt, node, config ) {
+                                    let material_group_account = $('#filter_material_group_account').val();
+                                    let plant_group_account = $('#filter_plant_group_account').val();
+                                    let format_data_group_account = $('#filter_format_group_account').val();
+                                    let start_month_group_account = $('#bulan_filter1_group_account').val();
+                                    let end_month_group_account = $('#bulan_filter2_group_account').val();
+                                    let moth_group_account = $('#btn_tampilkan_group_account').val();
+                                    let version = $('#filter_version_group_account').val();
 
-                            {{--        let route_default_group_account = '{{ route("export_zco_account") }}' --}}
-                            {{--        let route_complete_group_account = route_default_group_account + --}}
-                            {{--            "?material=" + material_group_account + "&plant=" + plant_group_account + "&format_data=" + format_data_group_account +"&start_month=" + start_month_group_account + "&end_month=" + end_month_group_account + "&moth=" + moth_group_account --}}
-
-                            {{--        window.location = route_complete_group_account --}}
-                            {{--    } --}}
-                            {{-- } --}}
+                                    let route_default_group_account = '{{ route("export_zco_account") }}'
+                                    
+                                    let route_complete_group_account = route_default_group_account +
+                                        "?material=" + material_group_account + "&plant=" + plant_group_account + "&format_data=" + format_data_group_account +
+                                        "&start_month=" + start_month_group_account + "&end_month=" + end_month_group_account + "&moth=" + moth_group_account + "&version=" + version
+                                    
+                                    window.location = route_complete_group_account
+                                }
+                            }
                         ],
                         ajax: {
                             url: '{{ route('zco') }}',
