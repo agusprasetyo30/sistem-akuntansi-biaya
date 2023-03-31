@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Horizontal\H_Salr;
+use App\Exports\Horizontal\SalrExport;
+use App\Models\GroupAccountFC;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -405,5 +407,113 @@ class SalrController extends Controller
                 'code' => 400,
             ]);
         }
+    }
+
+    public function exportHorizontal(Request $request)
+    {
+        $group_accounts = GroupAccountFC::select('group_account_fc', 'group_account_fc_desc')->get();
+
+        $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
+            ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
+            ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
+
+         // Periode
+        if ($request->format == '0'){
+            $cost_center->where('salrs.version_id', $request->version);
+        }elseif ($request->format == '1'){
+            $timemonth = Asumsi_Umum::where('id', $request->month)->first();
+
+            $cost_center->where('salrs.periode', $timemonth->month_year)
+                ->where('version_id', $request->version);
+
+        }elseif ($request->format == '2'){
+            $start_temp = explode('-', $request->start_month);
+            $end_temp = explode('-', $request->end_month);
+            $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
+            $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
+
+            $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+                ->where('version_id', $request->version);
+        }
+        
+        // Error karena data input month itu gaada
+        $data_inflasi = Asumsi_Umum::where('id', $request->month)
+            ->first();
+            
+        if ($request->cost_center != 'all'){
+            $cost_center->where('salrs.cost_center', $request->cost_center);
+        }
+
+        $cost_center = $cost_center->get();
+
+        $temporary_value['value'] = [];
+        
+        // Melakukan filtering terhadap list data group accounts
+        foreach ($group_accounts as $group_account) {
+            //melakukan filtering sesuai dengan cost center
+            foreach ($cost_center as $key_sub => $item) {
+                $value_salr = Salr::select(DB::raw('SUM(value) as value'))
+                    ->leftjoin('gl_account_fc', 'gl_account_fc.gl_account_fc', '=', 'salrs.gl_account_fc')
+                    ->leftjoin('group_account_fc', 'group_account_fc.group_account_fc', '=', 'gl_account_fc.group_account_fc')
+                    ->where([
+                        'salrs.cost_center' => $item->cost_center,
+                        'group_account_fc.group_account_fc' => $group_account->group_account_fc
+                    ]);
+
+                // Periode
+                if ($request->format == '0'){
+                    $value_salr->where('salrs.version_id', $request->version);
+                }elseif ($request->format == '1'){
+                    $timemonth = Asumsi_Umum::where('id', $request->month)->first();
+
+                    $value_salr->where('salrs.periode', $timemonth->month_year)
+                        ->where('version_id', $request->version);
+                }elseif ($request->format == '2'){
+                    $start_temp = explode('-', $request->start_month);
+                    $end_temp = explode('-', $request->end_month);
+                    $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
+                    $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
+
+                    $value_salr->whereBetween('salrs.periode', [$start_date, $end_date])->where('version_id', $request->version);
+                }
+
+                $value_salr = $value_salr->first();
+
+                // Inflasi
+                if ($request->filter_inflasi == '1'){
+                    $result = $value_salr->value * $data_inflasi->inflasi / 100;
+                } else {
+                    $result = $value_salr->value;
+                }
+
+                array_push($temporary_value['value'], ["key" => $key_sub, "value" => ($value_salr->value != null ? $result : 0)]);
+            }
+        }
+
+        // Menghitung jumlah total asumsi umum sebagai acuan index
+        $cost_center_index_count = $cost_center->count() - 1;
+
+        // Memisahkan data array yang disesuaikan dengan array key & transaksi
+        $fixed_value['value'] = getSeparateValue($temporary_value['value'], $cost_center_index_count);
+
+        // Menghitung total dari kolom
+        for ($i = 0; $i < $cost_center->count(); $i++) {
+            $total['value'][$i] = array_sum($fixed_value['value'][$i]);
+        }
+
+        // dd($cost_center->count(), $total);
+
+        $data = [
+            'group_accounts'   => $group_accounts,
+            'cost_centers'     => $cost_center,
+            'fixed_value_data' => $fixed_value,
+            'total'            => $total
+        ];
+
+        // dd($query);
+        // return view('pages.buku_besar.salr.export-horizontal', $data);
+
+        return Excel::download(new SalrExport($data), 'SALR Horizontal.xlsx');
+
     }
 }
