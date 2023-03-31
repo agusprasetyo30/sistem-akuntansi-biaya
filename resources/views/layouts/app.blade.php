@@ -30,12 +30,8 @@
         </div>
         <!--- End Local-loader-->
 
-
-
-
-		<!-- PAGE -->
-		<div class="page">
-{{--            <div class="col-lg-6 justify-center" id="count_load" style="display: block;z-index: 99999999999;">--}}
+{{--        <div id="salrs_local_loader" style="display: block;margin: auto;">--}}
+{{--            <div class="col-lg-6 text-center" style="float:none;margin:auto;" id="count_load">--}}
 {{--                <div class="expanel expanel-secondary">--}}
 {{--                    <div class="expanel-heading text-center">--}}
 {{--                        <h3 class="expanel-title">Harap Menunggu Sampai Proses Selesai :)</h3>--}}
@@ -45,6 +41,14 @@
 {{--                    </div>--}}
 {{--                </div>--}}
 {{--            </div>--}}
+{{--        </div>--}}
+
+
+
+
+		<!-- PAGE -->
+		<div class="page">
+
 			<div class="page-main">
 
             @include('layouts.sidebar')
