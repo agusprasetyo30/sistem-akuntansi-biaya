@@ -218,6 +218,13 @@ class PJPemakaianController extends Controller
     {
         $cc = auth()->user()->company_code;
 
+        $month_year = array_map(function($val) {
+            return $val->month_year;
+        }, DB::table(('asumsi_umum'))->select('month_year')
+            ->where("asumsi_umum.version_id", $request->version)
+            ->orderBy('month_year')
+            ->get()
+            ->toArray());
 
         $query = DB::table('pj_pemakaian')
             ->select(DB::Raw("CONCAT(pj_pemakaian.material_code, ' ', material.material_name) mat"), 'material.material_uom', 'asumsi_umum.month_year', 'pj_pemakaian.pj_pemakaian_value')
@@ -234,30 +241,31 @@ class PJPemakaianController extends Controller
 
 
         $data = array_reduce($query, function ($carry, $item) {
-            if (property_exists($carry, $item->mat . '~' . $item->material_uom)) {
-                array_push($carry->{$item->mat . '~' . $item->material_uom}, (object)[
-                    $item->month_year => $item->pj_pemakaian_value
-                ]);
-            } else {
-                $carry->{$item->mat . '~' . $item->material_uom} = [(object)[$item->month_year => $item->pj_pemakaian_value]];
+            if (!property_exists($carry, $item->mat . '~' . $item->material_uom)) {
+                $carry->{$item->mat . '~' . $item->material_uom} = (object)[];
             }
+            
+            $carry->{$item->mat . '~' . $item->material_uom}->{$item->month_year} = $item->pj_pemakaian_value;
 
             return $carry;
         }, (object)[]);
 
 
-        $header = ['MATERIAL', 'UOM', ...array_unique(array_map(function ($v) {
-            return $v->month_year;
-        }, $query))];
+        $header = ['MATERIAL', 'UOM', ...$month_year];
 
 
-        $body = array_map(function ($v) use ($data) {
+        $body = array_map(function ($v) use ($data, $month_year) {
             list($mat, $uom) = explode("~", $v);
             $_arr = [$mat, $uom];
-            foreach ($data->{$v} as $e) {
-                $val = array_values(get_object_vars($e))[0];
+
+            foreach($month_year as $e) {
+                $val = -1;
+                if (property_exists($data->{$v}, $e)) {
+                    $val = $data->{$v}->{$e};
+                }
                 array_push($_arr, $val);
             }
+
             return $_arr;
         }, array_keys(get_object_vars($data)));
 

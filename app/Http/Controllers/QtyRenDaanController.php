@@ -152,6 +152,14 @@ class QtyRenDaanController extends Controller
     {
         // $cc = auth()->user()->company_code;
 
+        $month_year = array_map(function($val) {
+            return $val->month_year;
+        }, DB::table(('asumsi_umum'))->select('month_year')
+            ->where("asumsi_umum.version_id", $request->version)
+            ->orderBy('month_year')
+            ->get()
+            ->toArray());
+
         $query = DB::table('qty_rendaan')->select('qty_rendaan.material_code', 'material.material_name', 'material.material_uom', 'regions.region_desc', 'asumsi_umum.month_year', DB::raw('SUM(qty_rendaan.qty_rendaan_value) as qty_rendaan_value'))
             ->leftjoin('material', 'qty_rendaan.material_code', '=', 'material.material_code')
             ->leftjoin('asumsi_umum', 'qty_rendaan.asumsi_umum_id', '=', 'asumsi_umum.id')
@@ -170,34 +178,38 @@ class QtyRenDaanController extends Controller
 
         $data = array_reduce($query, function ($acc, $curr) {
             if (property_exists($acc, $curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom)) {
-                if (property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}, $curr->region_desc)) {
-                    array_push($acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc}, $curr->qty_rendaan_value);
-                } else {
-                    $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc} = [$curr->qty_rendaan_value];
+                if (!property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}, $curr->region_desc)) {
+                    $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc} = (object)[];
                 }
+
+                $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc}->{$curr->month_year} = $curr->qty_rendaan_value;
+
             } else {
-                $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom} = (object)[$curr->region_desc => [$curr->qty_rendaan_value]];
+                $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom} = (object)[];
+                $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc} = (object)[];
+                $acc->{$curr->material_code . ' - ' . $curr->material_name . '~' . $curr->material_uom}->{$curr->region_desc}->{$curr->month_year} = $curr->qty_rendaan_value;
             }
 
             return $acc;
         }, (object)[]);
 
 
-
-//        $header = ['MATERIAL', 'REGION', 'UOM', ...array_unique(array_map(function ($v) {
-//            return $v->month_year;
-//        }, $query))];
+        $header = ['MATERIAL', 'REGION', 'UOM', ...$month_year];
 
 
-        $body = array_reduce(array_map(function ($v) use ($data) {
+        $body = array_reduce(array_map(function ($v) use ($data, $month_year) {
             list($mat, $uom) = explode("~", $v);
             $_arrays = [];
 
             foreach ($data->{$v} as $w => $x) {
                 $_arr = [$mat, $w, $uom];
 
-                foreach ($x as $y) {
-                    array_push($_arr, $y);
+                foreach($month_year as $e) {
+                    $val = -1;
+                    if (property_exists($x, $e)) {
+                        $val = $x->{$e};
+                    }
+                    array_push($_arr, $val);
                 }
 
                 array_push($_arrays, $_arr);
@@ -207,10 +219,13 @@ class QtyRenDaanController extends Controller
             return array_merge($acc, $curr);
         }, []);
 
-//        $data = [
-//            'header' => $header,
-//            'body'   => $body
-//        ];
+        // return response()->json($body);
+
+
+        $data = [
+            'header' => $header,
+            'body'   => $body
+        ];
 
         return Excel::download(new QtyRenDaanExport($data), "Qty Ren Daan - Horizontal.xlsx");
     }

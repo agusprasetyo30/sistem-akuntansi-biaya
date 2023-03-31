@@ -43,8 +43,16 @@ class TotalDaanController extends Controller
         $mata_uang = $request->mata_uang;
         $value_filter = $request->value;
 
+        $month_year = array_map(function($val) {
+            return $val->month_year;
+        }, DB::table(('asumsi_umum'))->select('month_year')
+            ->where("asumsi_umum.version_id", $request->version)
+            ->orderBy('month_year')
+            ->get()
+            ->toArray());
+
         $query = DB::table('qty_rendaan')
-            ->select(DB::Raw("CONCAT(qty_rendaan.material_code, ' - ', material.material_name) mat"), 'regions.region_desc', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', DB::Raw("COALESCE(qty_rendaan.qty_rendaan_value * (price_rendaan.price_rendaan_value * (1 + (asumsi_umum.adjustment / 100))), -1) qty"))
+            ->select(DB::Raw("CONCAT(qty_rendaan.material_code, ' - ', material.material_name) mat"), 'regions.region_desc', 'asumsi_umum.month_year', 'asumsi_umum.usd_rate', DB::Raw("COALESCE(qty_rendaan.qty_rendaan_value * (price_rendaan.price_rendaan_value * (1 + (asumsi_umum.adjustment / 100))),-1) qty"))
             ->leftjoin('material', 'material.material_code', '=', 'qty_rendaan.material_code')
             ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'qty_rendaan.asumsi_umum_id')
             ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'qty_rendaan.version_id')
@@ -87,15 +95,32 @@ class TotalDaanController extends Controller
 
         // return response()->json($query);
 
+        // $data = array_reduce($query, function ($acc, $curr) {
+        //     if (property_exists($acc, $curr->mat)) {
+        //         if (property_exists($acc->{$curr->mat}, $curr->region_desc)) {
+        //             array_push($acc->{$curr->mat}->{$curr->region_desc}, $curr->qty);
+        //         } else {
+        //             $acc->{$curr->mat}->{$curr->region_desc} = [$curr->qty];
+        //         }
+        //     } else {
+        //         $acc->{$curr->mat} = (object)[$curr->region_desc => [$curr->qty]];
+        //     }
+
+        //     return $acc;
+        // }, (object)[]);
+
         $data = array_reduce($query, function ($acc, $curr) {
             if (property_exists($acc, $curr->mat)) {
-                if (property_exists($acc->{$curr->mat}, $curr->region_desc)) {
-                    array_push($acc->{$curr->mat}->{$curr->region_desc}, $curr->qty);
-                } else {
-                    $acc->{$curr->mat}->{$curr->region_desc} = [$curr->qty];
-                }
+                if (!property_exists($acc->{$curr->mat}, $curr->region_desc)) {
+                    $acc->{$curr->mat}->{$curr->region_desc} = (object)[];
+                } 
+                    
+                $acc->{$curr->mat}->{$curr->region_desc}->{$curr->month_year} = $curr->qty;
+                
             } else {
-                $acc->{$curr->mat} = (object)[$curr->region_desc => [$curr->qty]];
+                $acc->{$curr->mat} = (object)[];
+                $acc->{$curr->mat}->{$curr->region_desc} = (object)[];
+                $acc->{$curr->mat}->{$curr->region_desc}->{$curr->month_year} = $curr->qty;
             }
 
             return $acc;
@@ -110,16 +135,19 @@ class TotalDaanController extends Controller
         }, $query))];
 
 
-        $body = array_reduce(array_map(function ($v) use ($data) {
+        $body = array_reduce(array_map(function ($v) use ($data, $month_year) {
             $_arrays = [];
 
             foreach ($data->{$v} as $w => $x) {
                 $_arr = [$v, $w];
 
-                foreach ($x as $y) {
-                    array_push($_arr, $y);
+                foreach($month_year as $e) {
+                    $val = -2;
+                    if (property_exists($x, $e)) {
+                        $val = $x->{$e};
+                    }
+                    array_push($_arr, $val);
                 }
-
                 array_push($_arrays, $_arr);
             }
             return $_arrays;

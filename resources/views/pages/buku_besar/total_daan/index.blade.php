@@ -1,95 +1,93 @@
 @extends('layouts.app')
 
 @section('styles')
+
 @endsection
 
 @section('content')
-    <!--Page header-->
-    <div class="page-header">
-        <div class="page-leftheader">
-            <h4 class="page-title mb-0 text-primary">Total Pengadaan</h4>
-        </div>
-        <div class="page-rightheader">
-            <div class="btn-list">
-                {{-- <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
+
+<!--Page header-->
+<div class="page-header">
+    <div class="page-leftheader">
+        <h4 class="page-title mb-0 text-primary">Total Pengadaan</h4>
+    </div>
+    <div class="page-rightheader">
+        <div class="btn-list">
+            {{-- <button class="btn btn-outline-primary"><i class="fe fe-download me-2"></i>Import</button>
             <button type="button" data-bs-toggle="modal" data-bs-target="#modal_add"  class="btn btn-primary btn-pill" id="btn-tambah"><i class="fa fa-plus me-2 fs-14"></i> Add</button> --}}
-            </div>
         </div>
     </div>
-    <!--End Page header-->
+</div>
+<!--End Page header-->
 
-    <!-- Row -->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="panel panel-primary">
-                        <div class=" tab-menu-heading p-0 bg-light">
-                            <div class="tabs-menu1 ">
-                                <!-- Tabs -->
-                                <ul class="nav panel-tabs">
-                                    <li class="" id="tabs_vertical"> <a href="#vertical" class="active"
-                                            data-bs-toggle="tab">Vertikal</a> </li>
-                                    <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a>
-                                    </li>
-                                </ul>
-                            </div>
+<!-- Row -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="panel panel-primary">
+                    <div class=" tab-menu-heading p-0 bg-light">
+                        <div class="tabs-menu1 ">
+                            <!-- Tabs -->
+                            <ul class="nav panel-tabs">
+                                <li class="" id="tabs_vertical"> <a href="#vertical" class="active" data-bs-toggle="tab">Vertikal</a> </li>
+                                <li id="tabs_horizontal"> <a href="#horizontal" data-bs-toggle="tab">Horizontal</a> </li>
+                            </ul>
                         </div>
-                        <div class="panel-body tabs-menu-body">
-                            <div class="tab-content">
-                                <div class="tab-pane active " id="vertical">
-                                    <div class="mb-5 row">
-                                        @if (auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all')
-                                            <div class="form-group">
-                                                <label class="form-label">PERUSAHAAN</label>
-                                                <select id="filter_company_ver" class="form-control custom-select select2">
-                                                    <option value="all" selected>Semua Perusahaan</option>
-                                                </select>
-                                            </div>
-                                        @endif
-
+                    </div>
+                    <div class="panel-body tabs-menu-body">
+                        <div class="tab-content">
+                            <div class="tab-pane active " id="vertical">
+                                <div class="mb-5 row">
+                                    @if (auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all')
                                         <div class="form-group">
-                                            <label class="form-label">VERSI</label>
-                                            <select id="filter_version_ver" class="form-control custom-select select2">
-                                                <option value="all" selected>Semua</option>
+                                            <label class="form-label">PERUSAHAAN</label>
+                                            <select id="filter_company_ver" class="form-control custom-select select2">
+                                                <option value="all" selected>Semua Perusahaan</option>
                                             </select>
                                         </div>
-                                    </div>
-                                    <div class="">
-                                        <div class="table-responsive" id="table-wrapper">
-
-                                        </div>
+                                    @endif
+                
+                                    <div class="form-group">
+                                        <label class="form-label">VERSI</label>
+                                        <select id="filter_version_ver" class="form-control custom-select select2">
+                                            <option value="all" selected>Semua</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="tab-pane " id="horizontal">
-                                    <div class="mb-5 row">
-                                        @if (auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all')
-                                            <div class="form-group">
-                                                <label class="form-label">PERUSAHAAN</label>
-                                                <select id="filter_company" class="form-control custom-select select2">
-                                                </select>
-                                            </div>
-                                        @endif
-
-                                        <div class="form-group">
-                                            <label class="form-label">VERSI</label>
-                                            <select id="filter_version" class="form-control custom-select select2">
-                                            </select>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="form-label">VALUE</label>
-                                            <select id="filter_val" class="form-control custom-select select2">
-                                                @foreach (value_dt() as $key => $value)
-                                                    options += '<option value="{{ $key }}">{{ ucwords($value) }}
-                                                    </option>';
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                <div class="">
+                                    <div class="table-responsive" id="table-wrapper">
+                                        
                                     </div>
-                                    <div class="mt-auto">
-                                        <div class="table-responsive" id="dinamic_table">
+                                </div>
+                            </div>
+                            <div class="tab-pane " id="horizontal">
+                                <div class="mb-5 row">
+                                    @if (auth()->user()->mapping_akses('qty_rendaan')->company_code == 'all')
+                                        <div class="form-group">
+                                            <label class="form-label">PERUSAHAAN</label>
+                                            <select id="filter_company" class="form-control custom-select select2">
+                                            </select>
                                         </div>
+                                    @endif
+
+                                    <div class="form-group">
+                                        <label class="form-label">VERSI</label>
+                                        <select id="filter_version" class="form-control custom-select select2">
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="form-label">VALUE</label>
+                                        <select id="filter_val" class="form-control custom-select select2">
+                                            @foreach (value_dt() as $key => $value)
+                                                options += '<option value="{{ $key }}">{{ ucwords($value) }}</option>';
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mt-auto">
+                                    <div class="table-responsive" id="dinamic_table">
                                     </div>
                                 </div>
                             </div>
@@ -99,17 +97,19 @@
             </div>
         </div>
     </div>
+</div>
 
 
-    <!-- /Row -->
+<!-- /Row -->
+
 @endsection()
 
 @section('scripts')
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             table()
 
-            $('#tabs_vertical').on('click', function() {
+            $('#tabs_vertical').on('click', function () {
                 table()
             })
 
@@ -118,10 +118,10 @@
                 width: '100%',
                 allowClear: false,
                 ajax: {
-                    url: "{{ route('main_company_filter_select') }}",
+                    url: "{{route('main_company_filter_select') }}",
                     dataType: 'json',
                     delay: 250,
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             search: params.term
                         };
@@ -132,7 +132,7 @@
                         };
                     }
                 }
-            }).on('change', function() {
+            }).on('change', function () {
                 $("#table_main").empty();
                 get_data()
             })
@@ -145,7 +145,7 @@
                     url: "{{ route('version_dt') }}",
                     dataType: 'json',
                     delay: 250,
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             search: params.term
                         };
@@ -156,7 +156,7 @@
                         };
                     }
                 }
-            }).on('change', function() {
+            }).on('change', function () {
                 $("#table_main").empty();
                 get_data()
             })
@@ -169,7 +169,7 @@
                     url: "{{ route('version_select') }}",
                     dataType: 'json',
                     delay: 250,
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             search: params.term
                         };
@@ -180,7 +180,7 @@
                         };
                     }
                 }
-            }).on('change', function() {
+            }).on('change', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
@@ -193,7 +193,7 @@
                     url: "{{ route('company_filter_select') }}",
                     dataType: 'json',
                     delay: 250,
-                    data: function(params) {
+                    data: function (params) {
                         return {
                             search: params.term
                         };
@@ -204,7 +204,7 @@
                         };
                     }
                 }
-            }).on('change', function() {
+            }).on('change', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
@@ -213,13 +213,13 @@
                 placeholder: 'Pilih Value',
                 width: '100%',
                 allowClear: false,
-            }).on('change', function() {
+            }).on('change', function () {
                 $("#dinamic_table").empty();
                 get_data_horiz()
             })
         })
 
-        function table() {
+        function table (){
             document.getElementById('table-wrapper').innerHTML = `
             <table id="dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;">
                 <thead>
@@ -239,7 +239,7 @@
             get_data()
         }
 
-        function get_data() {
+        function get_data(){
             $('#dt_total_daan thead tr')
                 .clone(true)
                 .addClass('filters')
@@ -250,63 +250,59 @@
                 scrollX: true,
                 dom: 'Bfrtip',
                 orderCellsTop: true,
-                autoWidth: true,
+                autoWidth:true,
                 scrollCollapse: true,
                 // sortable: false,
                 // searching: false,
                 processing: true,
                 serverSide: true,
-                order: [
-                    [0, 'desc']
-                ],
+                order:[[0, 'desc']],
                 fixedHeader: {
                     header: true,
                     headerOffset: $('#main_header').height()
                 },
-                initComplete: function() {
-                    $('.dataTables_scrollHead').css('overflow', 'auto');
-                    $('.dataTables_scrollHead').on('scroll', function() {
+                initComplete: function () {
+                        $('.dataTables_scrollHead').css('overflow', 'auto');
+                        $('.dataTables_scrollHead').on('scroll', function () {
                         $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                     });
 
-                    $(document).on('scroll', function() {
-                        $('.dtfh-floatingparenthead').on('scroll', function() {
+                    $(document).on('scroll', function () {
+                        $('.dtfh-floatingparenthead').on('scroll', function () {
                             $('.dataTables_scrollBody').scrollLeft($(this).scrollLeft());
                         });
                     })
 
-                    this.api().eq(0).columns().every(function(index) {
+                    this.api().eq(0).columns().every(function (index) {
                         var column = this;
                         var cell = $('.filters th').eq($(column.column(index).header()).index());
                         var data_type = this.header().getAttribute('data-type');
                         var iName = this.header().getAttribute('data-name');
                         var isSearchable = column.settings()[0].aoColumns[index].bSearchable;
-                        if (isSearchable) {
-                            if (data_type == 'text') {
+                        if (isSearchable){
+                            if (data_type == 'text'){
                                 var input = document.createElement("input");
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
                                 $(input).
                                 appendTo(cell.empty()).
-                                on('change clear', function() {
+                                on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
                                 });
-                            } else if (data_type == 'select') {
+                            } else if (data_type == 'select'){
                                 var input = document.createElement("select");
                                 var options = "";
-                                if (iName == 'material') {
-                                    input.className =
-                                        "material_search form-control custom-select select2";
+                                if (iName == 'material'){
+                                    input.className = "material_search form-control custom-select select2";
 
-                                } else if (iName == 'version') {
-                                    input.className =
-                                        "version_search form-control custom-select select2";
+                                } else if(iName == 'version'){
+                                    input.className = "version_search form-control custom-select select2";
 
                                 }
 
                                 input.innerHTML = options
                                 $(input).appendTo(cell.empty())
-                                    .on('change clear', function() {
+                                    .on('change clear', function () {
                                         column.search($(this).val(), false, false, true).draw();
                                     });
                             }
@@ -321,7 +317,7 @@
                                 url: "{{ route('material_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
-                                data: function(params) {
+                                data: function (params) {
                                     return {
                                         search: params.term
                                     };
@@ -341,7 +337,7 @@
                                 url: "{{ route('version_dt') }}",
                                 dataType: 'json',
                                 delay: 250,
-                                data: function(params) {
+                                data: function (params) {
                                     return {
                                         search: params.term
                                     };
@@ -358,116 +354,79 @@
                     let api = this.api();
                     api.columns.adjust().draw();
                 },
-                buttons: [{
-                        extend: 'pageLength',
-                        className: 'mb-5'
-                    },
+                buttons: [
+                    { extend: 'pageLength', className: 'mb-5' },
                     {
                         extend: 'collection',
                         className: 'mb-5',
-                        text: 'Mata Uang',
-                        buttons: [{
-                                text: 'Rupiah',
-                                action: function() {
-                                    $('#dt_total_daan').DataTable().ajax.url(
-                                        '{{ route('total_daan', ['currency' => 'Rupiah']) }}')
-                                    .load();
+                        text:'Mata Uang',
+                        buttons:[
+                            {
+                                text:'Rupiah',
+                                action: function () {
+                                    $('#dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Rupiah'])}}').load();
                                 }
                             },
                             {
-                                text: 'Dollar',
-                                action: function() {
-                                    $('#dt_total_daan').DataTable().ajax.url(
-                                        '{{ route('total_daan', ['currency' => 'Dollar']) }}')
-                                    .load();
+                                text:'Dollar',
+                                action: function () {
+                                    $('#dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Dollar'])}}').load();
                                 }
                             }
                         ]
 
                     },
-                    {
-                        extend: 'excel',
+                    { 
+                        extend: 'excel', 
                         className: 'mb-5',
                         title: '',
-                        filename: 'Total Pengadaan - Vertikal'
+                        filename: 'Total Pengadaan - Vertikal'  
                     }
                 ],
                 ajax: {
-                    url: '{{ route('total_daan') }}',
+                    url : '{{route("total_daan")}}',
                     data: {
-                        data: 'index',
-                        filter_company: $('#filter_company_ver').val(),
-                        filter_version: $('#filter_version_ver').val()
+                        data:'index',
+                        filter_company:$('#filter_company_ver').val(),
+                        filter_version:$('#filter_version_ver').val()
                     }
                 },
-                columns: [{
-                        data: 'version',
-                        name: 'filter_version',
-                        orderable: true
-                    },
-                    {
-                        data: 'periode',
-                        name: 'filter_periode',
-                        orderable: true
-                    },
-                    {
-                        data: 'material',
-                        name: 'filter_material',
-                        orderable: true
-                    },
-                    {
-                        data: 'region_desc',
-                        name: 'filter_region',
-                        orderable: true
-                    },
-                    {
-                        data: 'value',
-                        name: 'value',
-                        searchable: false,
-                        orderable: false
-                    },
+                columns: [
+                    { data: 'version', name: 'filter_version', orderable:true},
+                    { data: 'periode', name: 'filter_periode', orderable:true},
+                    { data: 'material', name: 'filter_material', orderable:true},
+                    { data: 'region_desc', name: 'filter_region', orderable:true},
+                    { data: 'value', name: 'value', searchable:false, orderable:false},
                 ],
-                columnDefs: [{
-                    className: 'text-center',
-                    targets: [0]
-                }],
+                columnDefs:[
+                    {className: 'text-center', targets: [0]}
+                ],
 
             })
         }
 
         var mataUang = 'IDR'
-
-        function get_data_horiz() {
-            var table =
-                '<table id="h_dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
+        function get_data_horiz(){
+            var table = '<table id="h_dt_total_daan" class="table table-bordered text-nowrap key-buttons" style="width: 100%;"><thead><tr id="dinamic_tr"></tr></thead></table>'
             var kolom = '<th class="text-center">MATERIAL</th><th class="text-center">REGION</th>'
-            var column = [{
-                    data: 'material',
-                    orderable: false
-                },
-                {
-                    data: 'region_desc',
-                    orderable: false
-                }
+            var column = [
+                { data: 'material', orderable:false},
+                { data: 'region_desc', orderable:false}
             ]
             $("#dinamic_table").append(table);
             $.ajax({
                 type: "GET",
-                url: '{{ route('total_daan') }}',
+                url : '{{route("total_daan")}}',
                 data: {
-                    data: 'version',
-                    version: $('#filter_version').val(),
-                    company: $('#filter_company').val(),
-                    val: $('#filter_val').val()
+                    data:'version',
+                    version:$('#filter_version').val(),
+                    company:$('#filter_company').val(),
+                    val:$('#filter_val').val()
                 },
-                success: function(response) {
-                    for (let i = 0; i < response.asumsi.length; i++) {
-                        column.push({
-                            data: i.toString(),
-                            orderable: false
-                        })
-                        kolom += '<th class="text-center">' + helpDateFormat(response.asumsi[i].month_year,
-                            'bi') + '</th>';
+                success:function (response) {
+                    for (let i = 0; i < response.asumsi.length;i++){
+                        column.push({ data: i.toString(), orderable:false})
+                        kolom += '<th class="text-center">'+helpDateFormat(response.asumsi[i].month_year, 'bi')+'</th>';
                     }
                     $("#dinamic_tr").append(kolom);
                     $('#h_dt_total_daan').DataTable().clear().destroy();
@@ -482,45 +441,40 @@
                             header: true,
                             headerOffset: $('#main_header').height()
                         },
-                        buttons: [{
-                                extend: 'pageLength',
-                                className: 'mb-5'
-                            },
+                        buttons: [
+                            { extend: 'pageLength', className: 'mb-5' },
                             {
                                 extend: 'collection',
                                 className: 'mb-5',
-                                text: 'Mata Uang',
-                                buttons: [{
-                                        text: 'Rupiah',
-                                        action: function() {
-                                            $('#h_dt_total_daan').DataTable().ajax.url(
-                                                '{{ route('total_daan', ['currency' => 'Rupiah']) }}'
-                                                ).load();
+                                text:'Mata Uang',
+                                buttons:[
+                                    {
+                                        text:'Rupiah',
+                                        action: function () {
+                                            $('#h_dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Rupiah'])}}').load();
                                             mataUang = 'IDR'
                                         }
                                     },
                                     {
-                                        text: 'Dollar',
-                                        action: function() {
-                                            $('#h_dt_total_daan').DataTable().ajax.url(
-                                                '{{ route('total_daan', ['currency' => 'Dollar']) }}'
-                                                ).load();
+                                        text:'Dollar',
+                                        action: function () {
+                                            $('#h_dt_total_daan').DataTable().ajax.url('{{route('total_daan', ['currency' => 'Dollar'])}}').load();
                                             mataUang = 'USD'
                                         }
                                     }
                                 ]
 
                             },
-                            // {
-                            //     text: 'Excel',
-                            //     action: function(e, dt, node, config) {
+                            {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
 
-                            //         let version_search = $('#filter_version').val()
-
-                            //         window.location = '{{ route('export_h_total_daan') }}' + "?version=" + version_search + "&value=" + $('#filter_val').val() + "&mata_uang=" + mataUang
-                            //     },
-                            //     className: 'mb-5'
-                            // }
+                                    window.location = '{{ route("export_h_total_daan") }}' + "?version=" + version_search + "&value=" + $('#filter_val').val() + "&mata_uang=" + mataUang
+                                },
+                                className: 'mb-5'
+                            }
                             // { 
                             //     extend: 'excel', 
                             //     className: 'mb-5',
@@ -530,16 +484,16 @@
 
                         ],
                         ajax: {
-                            url: '{{ route('total_daan') }}',
+                            url : '{{route("total_daan")}}',
                             data: {
-                                data: 'horizontal',
-                                version: $('#filter_version').val(),
-                                company: $('#filter_company').val(),
-                                val: $('#filter_val').val()
+                                data:'horizontal',
+                                version:$('#filter_version').val(),
+                                company:$('#filter_company').val(),
+                                val:$('#filter_val').val()
                             }
                         },
                         columns: column,
-                        createdRow: function(row, data, index) {
+                        createdRow: function ( row, data, index ) {
                             // console.log(data);
                             // console.log(response.asumsi.length);
                             // if ( data['1'] != null ) {
@@ -548,21 +502,21 @@
                             //     $('td', row).eq(3).addClass('danger');
                             // }
 
-                            for (let i = 0; i < response.asumsi.length; i++) {
+                            for (let i = 0; i < response.asumsi.length;i++){
                                 // console.log(data[i])
                                 if (data[i] === '-') {
                                     // console.log('yah kosong')
-                                    $('td', row).eq(2 + i).css('background-color', 'Salmon');
+                                    $('td', row).eq(2+i).css('background-color', 'Salmon');
                                 } else if (data[i] === "") {
                                     // console.log('ada isinya loh')
-                                    $('td', row).eq(2 + i).css('background-color', 'white');
+                                    $('td', row).eq(2+i).css('background-color', 'white');
                                     // $('td', row).css('background-color', 'Green');
                                 } else {
-                                    $('td', row).eq(2 + i).css('background-color', 'DarkSeaGreen');
+                                    $('td', row).eq(2+i).css('background-color', 'DarkSeaGreen');
                                 }
                             }
                         },
-                        initComplete: function(settings) {
+                        initComplete: function( settings ) {
                             let api = this.api();
                             api.columns.adjust().draw();
                         }
