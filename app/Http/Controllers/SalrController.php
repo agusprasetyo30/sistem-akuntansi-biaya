@@ -159,14 +159,14 @@ class SalrController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $asumsi = Asumsi_Umum::where('id', $request->date)->first();
+            $year = Carbon::now()->format('Y');
 
             $input['gl_account_fc'] = $request->gl_account;
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['periode'] = $asumsi->month_year;
-            $input['version_id'] = $asumsi->version_id;
+            $input['periode'] = $year.'-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
+            $input['version_id'] = $request->version;
             $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
             $input['partner_cost_center'] = $request->partner_cost_center;
@@ -206,19 +206,14 @@ class SalrController extends Controller
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            try {
-                $asumsi = Asumsi_Umum::where('id', $request->date)->first();
-            }catch (\Exception $exception){
-                $asumsi = Asumsi_Umum::where('month_year', 'ilike', '%'.$request->date.'%')
-                    ->where('version_id', $request->version)->first();
-            }
+            $year = Carbon::now()->format('Y');
 
             $input['gl_account_fc'] = $request->gl_account;
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['periode'] = $asumsi->month_year;
-            $input['version_id'] = $asumsi->version_id;
+            $input['periode'] = $year.'-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
+            $input['version_id'] = $request->version;
             $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
             $input['partner_cost_center'] = $request->partner_cost_center;
@@ -271,15 +266,13 @@ class SalrController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 "file" => 'required',
-                "detail_version" => 'required',
-                'main_version' => 'required'
             ], validatorMsg());
 
             if ($validator->fails()) {
                 return $this->makeValidMsg($validator);
             }
+            $year = Carbon::now()->format('Y');
 
-            $asumsi = Asumsi_Umum::where('id', $request->detail_version)->first();
             $master_gl_account_fc = GLAccountFC::get()->pluck('gl_account_fc')->all();
             $master_cost_center = CostCenter::get()->pluck('cost_center')->all();
 
@@ -287,12 +280,12 @@ class SalrController extends Controller
             $header = $excel[0][0];
             unset($excel[0][0]);
 
-            $excel_fix = collect($excel[0])->map(function ($query) use ($asumsi, $header){
+            $excel_fix = collect($excel[0])->map(function ($query) use ($header, $year, $request){
                 $query = array_combine($header, $query);
                 $data['gl_account_fc'] = strval($query['gl_account_fc']);
                 $data['cost_center'] = $query['cost_center'];
-                $data['periode'] = $asumsi->month_year;
-                $data['version_id'] = $asumsi->version_id;
+                $data['periode'] = $year.'-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
+                $data['version_id'] = $request->main_version;
                 $data['name'] = $query['name'];
                 $data['value'] = $query['value']  != null ? (double) str_replace('.', '', str_replace('Rp ', '', $query['value'])) : 0;
                 $data['partner_cost_center'] = $query['partner_cost_center'];
@@ -327,9 +320,9 @@ class SalrController extends Controller
 
             if ($check_gl_account_fc == null and $check_cost_center == null){
 //                dd('atas');
-                DB::transaction(function () use ($excel_fix, $asumsi){
-                    Salr::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
-                        ->where('version_id', $asumsi->version_id)
+                DB::transaction(function () use ($excel_fix, $request){
+                    Salr::where('periode', 'ilike', '%-' . check_month_by_name($request->bulan_periode) . '-%')
+                        ->where('version_id', $request->main_version)
                         ->delete();
 
                     $result = array_values($excel_fix->toArray());
@@ -370,6 +363,7 @@ class SalrController extends Controller
             }
 
         } catch (\Exception $exception) {
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -378,11 +372,9 @@ class SalrController extends Controller
 
     public function check(Request $request)
     {
-//        dd($request);
         try {
-            $asumsi = Asumsi_Umum::where('id', $request->periode)->first();
-//            $timestamp = explode('-', $request->periode);
-            $check = Salr::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
+            $check = Salr::where('periode', 'ilike', '%-' . check_month_by_name($request->periode) . '-%')
+                ->where('version_id', $request->version)
                 ->first();
             if ($check == null) {
                 return response()->json(['code' => 200, 'msg' => 'Data Tidak Ada']);
