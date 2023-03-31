@@ -20,7 +20,8 @@ class H_PJPemakaianDataTable extends DataTable
             ->whereNull('pj_pemakaian.deleted_at')
             ->where('pj_pemakaian.version_id', $this->version)
             ->orderBy('material_code')
-            ->groupBy('pj_pemakaian.material_code', 'material.material_name', 'material.material_uom');
+            ->groupBy('pj_pemakaian.material_code', 'material.material_name', 'material.material_uom')
+            ->orderBy('pj_pemakaian.material_code', 'asc');
 
         if ($this->company != 'all' && auth()->user()->mapping_akses('pj_pemakaian')->company_code == 'all') {
             $query = $query->where('pj_pemakaian.company_code', $this->company);

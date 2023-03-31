@@ -19,7 +19,8 @@ class H_PJPenjualanDataTable extends DataTable
             ->leftjoin('material', 'material.material_code', '=', 'pj_penjualan.material_code')
             ->whereNull('pj_penjualan.deleted_at')
             ->where('pj_penjualan.version_id', $this->version)
-            ->groupBy('pj_penjualan.material_code', 'material.material_name', 'material.material_uom');
+            ->groupBy('pj_penjualan.material_code', 'material.material_name', 'material.material_uom')
+            ->orderBy('pj_penjualan.material_code', 'asc');
 
         if ($this->company != 'all' && auth()->user()->mapping_akses('pj_penjualan')->company_code == 'all') {
             $query = $query->where('pj_penjualan.company_code', $this->company);
