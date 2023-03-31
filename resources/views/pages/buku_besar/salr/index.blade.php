@@ -1209,7 +1209,7 @@
                                 text: 'Excel',
                                 classname: 'mb-5',
                                 action: function ( e, dt, node, config ) {
-                                    var format = $('#filter_format').val();
+                                    var format1 = $('#filter_format').val();
                                     var cost_center = $('#cost_center_format').val();
                                     var version = $('#data_main_version_horizontal').val();
 
@@ -1219,10 +1219,10 @@
                                     var end_month = $('#bulan_filter2').val();
                                     var month = $('#data_main_version_horizontal').val();
                                     var inflasi = $('#filter_inflasi').val();
-                                    
+
                                     let route_default = '{{ route("export_horizontal_salr") }}'
                                     let route_complete = route_default + "?cost_center="+ cost_center +"&start_month_versi="+ start_month_versi +
-                                        "&end_month_versi="+ end_month_versi +"&start_month="+ start_month +"&end_month="+ end_month +"&format="+ format +"&inflasi="+ inflasi +"&month="+ month + "&version=" + version
+                                        "&end_month_versi="+ end_month_versi +"&start_month="+ start_month +"&end_month="+ end_month +"&format="+ format1 +"&inflasi="+ inflasi +"&month="+ month + "&version=" + version
 
                                     window.location = route_complete
                                 }

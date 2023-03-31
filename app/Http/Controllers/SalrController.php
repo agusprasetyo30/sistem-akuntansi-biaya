@@ -410,15 +410,15 @@ class SalrController extends Controller
             ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc');
 
          // Periode
-        if ($request->format == '0'){
+        if ($request->format1 == '0'){
             $cost_center->where('salrs.version_id', $request->version);
-        }elseif ($request->format == '1'){
+        }elseif ($request->format1 == '1'){
             $timemonth = Asumsi_Umum::where('id', $request->month)->first();
 
             $cost_center->where('salrs.periode', $timemonth->month_year)
                 ->where('version_id', $request->version);
 
-        }elseif ($request->format == '2'){
+        }elseif ($request->format1 == '2'){
             $start_temp = explode('-', $request->start_month);
             $end_temp = explode('-', $request->end_month);
             $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
@@ -427,11 +427,11 @@ class SalrController extends Controller
             $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
                 ->where('version_id', $request->version);
         }
-        
+
         // Error karena data input month itu gaada
         $data_inflasi = Asumsi_Umum::where('id', $request->month)
             ->first();
-            
+
         if ($request->cost_center != 'all'){
             $cost_center->where('salrs.cost_center', $request->cost_center);
         }
@@ -439,7 +439,7 @@ class SalrController extends Controller
         $cost_center = $cost_center->get();
 
         $temporary_value['value'] = [];
-        
+
         // Melakukan filtering terhadap list data group accounts
         foreach ($group_accounts as $group_account) {
             //melakukan filtering sesuai dengan cost center
@@ -453,14 +453,14 @@ class SalrController extends Controller
                     ]);
 
                 // Periode
-                if ($request->format == '0'){
+                if ($request->format1 == '0'){
                     $value_salr->where('salrs.version_id', $request->version);
-                }elseif ($request->format == '1'){
+                }elseif ($request->format1 == '1'){
                     $timemonth = Asumsi_Umum::where('id', $request->month)->first();
 
                     $value_salr->where('salrs.periode', $timemonth->month_year)
                         ->where('version_id', $request->version);
-                }elseif ($request->format == '2'){
+                }elseif ($request->format1 == '2'){
                     $start_temp = explode('-', $request->start_month);
                     $end_temp = explode('-', $request->end_month);
                     $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
