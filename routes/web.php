@@ -380,6 +380,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('import', [SalrController::class, 'import'])->name('import_salr');
             Route::post('check', [SalrController::class, 'check'])->name('check_salr');
             Route::post('check_version_salrs', [SalrController::class, 'check_version_salrs'])->name('check_version_salrs');
+            Route::get('/export-horizontal', [SalrController::class, 'exportHorizontal'])->name('export_horizontal_salr');
         });
 
         Route::group(['prefix' => 'laba-rugi', 'middleware' => ['role:laba_rugi']], function () {
