@@ -184,9 +184,9 @@ class QtyRenDaanController extends Controller
 
 
 
-        $header = ['MATERIAL', 'REGION', 'UOM', ...array_unique(array_map(function ($v) {
-            return $v->month_year;
-        }, $query))];
+//        $header = ['MATERIAL', 'REGION', 'UOM', ...array_unique(array_map(function ($v) {
+//            return $v->month_year;
+//        }, $query))];
 
 
         $body = array_reduce(array_map(function ($v) use ($data) {
@@ -207,10 +207,10 @@ class QtyRenDaanController extends Controller
             return array_merge($acc, $curr);
         }, []);
 
-        $data = [
-            'header' => $header,
-            'body'   => $body
-        ];
+//        $data = [
+//            'header' => $header,
+//            'body'   => $body
+//        ];
 
         return Excel::download(new QtyRenDaanExport($data), "Qty Ren Daan - Horizontal.xlsx");
     }

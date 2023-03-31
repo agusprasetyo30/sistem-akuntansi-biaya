@@ -30,14 +30,15 @@
         </div>
         <!--- End Local-loader-->
 
-{{--        <div id="salrs_local_loader" style="display: block;margin: auto;">--}}
-{{--            <div class="col-lg-6 text-center" style="float:none;margin:auto;" id="count_load">--}}
+{{--        <div id="salrs_local_loader" style="display: none;margin-left: auto;margin-right: auto;margin-top: 7%;">--}}
+{{--            <p>Proses Mengupload <p id="count_load">10000</p> Baris Data</p>--}}
+{{--            <div class="col-lg-6 text-center" style="float:none;margin:auto;" >--}}
 {{--                <div class="expanel expanel-secondary">--}}
 {{--                    <div class="expanel-heading text-center">--}}
 {{--                        <h3 class="expanel-title">Harap Menunggu Sampai Proses Selesai :)</h3>--}}
 {{--                    </div>--}}
-{{--                    <div class="expanel-body text-center">--}}
-{{--                        Sedang Mengupload Sebanyak <strong>12313123</strong> Data .....--}}
+{{--                    <div class="expanel-body text-center" >--}}
+{{--                        Sedang Mengupload Sebanyak <strong id="count_load"></strong> Data .....--}}
 {{--                    </div>--}}
 {{--                </div>--}}
 {{--            </div>--}}
