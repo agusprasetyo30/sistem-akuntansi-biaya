@@ -37,32 +37,16 @@ class H_SalrDataTable extends DataTable
         if ($this->format == '0'){
             $cost_center->where('salrs.version_id', $this->version);
         }elseif ($this->format == '1'){
-            $timemonth = Asumsi_Umum::where('id', $this->month)->first();
-
-            $cost_center->where('salrs.periode', $timemonth->month_year)
+            $cost_center->where('salrs.periode', 'ilike', '%-'.check_month_by_name($this->month).'-%')
                 ->where('version_id', $this->version);
 
         }elseif ($this->format == '2'){
-            $start_temp = explode('-', $this->start_month);
-            $end_temp = explode('-', $this->end_month);
-            $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
-            $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
-
-            $cost_center->whereBetween('salrs.periode', [$start_date, $end_date])
+            $cost_center->whereBetween('salrs.periode', ['%-'.check_month_by_name($this->start_month).'-%', '%-'.check_month_by_name($this->end_month).'-%',])
                 ->where('version_id', $this->version);
         }
 
-//        // Inflasi
-//        if ($this->inflasi == '1'){
-//            $data_inflasi = Asumsi_Umum::where('id', $this->inflasi_asumsi)
-//                ->first();
-//        }else{
-//            $data_inflasi = Asumsi_Umum::where('id', $this->inflasi_asumsi)
-//                ->first();
-//        }
-
-
-        $data_inflasi = Asumsi_Umum::where('id', $this->month)
+        $data_inflasi = Asumsi_Umum::where('month_year', 'ilike', '%-'.check_month_by_name($this->month).'-%')
+            ->where('version_id', $this->version)
             ->first();
 
         if ($this->cost_center != 'all'){
@@ -85,17 +69,11 @@ class H_SalrDataTable extends DataTable
                 if ($this->format == '0'){
                     $value_salr->where('salrs.version_id', $this->version);
                 }elseif ($this->format == '1'){
-                    $timemonth = Asumsi_Umum::where('id', $this->month)->first();
-
-                    $value_salr->where('salrs.periode', $timemonth->month_year)
+                    $value_salr->where('salrs.periode', 'ilike', '%-'.check_month_by_name($this->month).'-%')
                         ->where('version_id', $this->version);
                 }elseif ($this->format == '2'){
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
-                    $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
-
-                    $value_salr->whereBetween('salrs.periode', [$start_date, $end_date])->where('version_id', $this->version);
+                    $value_salr->whereBetween('salrs.periode', ['%-'.check_month_by_name($this->start_month).'-%', '%-'.check_month_by_name($this->end_month).'-%',])
+                        ->where('version_id', $this->version);
                 }
 
                 $value_salr = $value_salr->first();
@@ -122,17 +100,12 @@ class H_SalrDataTable extends DataTable
                 if ($this->format == '0'){
                     $total->where('salrs.version_id', $this->version);
                 }elseif ($this->format == '1'){
-                    $timemonth = Asumsi_Umum::where('id', $this->month)->first();
-
-                    $total->where('salrs.periode', $timemonth->month_year)
+                    $total->where('salrs.periode', 'ilike', '%-'.check_month_by_name($this->month).'-%')
                         ->where('version_id', $this->version);
                 }elseif ($this->format == '2'){
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1].'-'.$start_temp[0].'-01 00:00:00';
-                    $end_date = $end_temp[1].'-'.$end_temp[0].'-01 00:00:00';
 
-                    $total->whereBetween('salrs.periode', [$start_date, $end_date])->where('version_id', $this->version);
+                    $total->whereBetween('salrs.periode', ['%-'.check_month_by_name($this->start_month).'-%', '%-'.check_month_by_name($this->end_month).'-%',])
+                        ->where('version_id', $this->version);
                 }
 
                 $total = $total->first();

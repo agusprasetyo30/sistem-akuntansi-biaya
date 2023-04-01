@@ -417,6 +417,22 @@ if (!function_exists('check_month')) {
     }
 }
 
+if (!function_exists('check_month_by_name')) {
+    function check_month_by_name($periode)
+    {
+        $monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        $data = array_search($periode, $monthNames) + 1;
+
+        if ($data > 9){
+            $result = strval($data);
+        }else{
+            $result = '0'.$data;
+        }
+
+        return $result;
+    }
+}
+
 if (!function_exists('format_month')) {
     function format_month($date, $method = 'def')
     {
@@ -439,6 +455,10 @@ if (!function_exists('format_month')) {
                 break;
             case 'ye':
                 $data = Carbon::parse($date)->format('Y-m');
+                return $data;
+                break;
+            case 'eng':
+                $data = Carbon::parse($date)->format('F');
                 return $data;
                 break;
             default:

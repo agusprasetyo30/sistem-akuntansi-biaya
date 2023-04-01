@@ -97,14 +97,14 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group" id="month_pick_range_versi" style="display:none;">
-                                            <label class="form-label">BULAN <span class="text-red">*</span></label>
-                                            <div class="input-group input-daterange">
-                                                <input readonly type="text" id="bulan_filter1_versi" class="form-control" placeholder="Month" autocomplete="off">
-                                                <div class="input-group-addon">to</div>
-                                                <input readonly type="text" id="bulan_filter2_versi" class="form-control" placeholder="Month" autocomplete="off">
-                                            </div>
-                                        </div>
+{{--                                        <div class="form-group" id="month_pick_range_versi" style="display:none;">--}}
+{{--                                            <label class="form-label">BULAN <span class="text-red">*</span></label>--}}
+{{--                                            <div class="input-group input-daterange">--}}
+{{--                                                <input readonly type="text" id="bulan_filter1_versi" class="form-control" placeholder="Month" autocomplete="off">--}}
+{{--                                                <div class="input-group-addon">to</div>--}}
+{{--                                                <input readonly type="text" id="bulan_filter2_versi" class="form-control" placeholder="Month" autocomplete="off">--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
 
                                         <div class="form-group" id="month_pick_range" style="display:none;">
                                             <label class="form-label">BULAN <span class="text-red">*</span></label>
@@ -114,12 +114,17 @@
                                                 <input type="text" id="bulan_filter2" class="form-control" placeholder="Month" autocomplete="off">
                                             </div>
                                         </div>
+{{--                                        <div class="form-group" id="month_pick" style="display:none;">--}}
+{{--                                            <label class="form-label">Bulan <span class="text-red">*</span></label>--}}
+{{--                                            <select name="data_detail_version_horizontal" id="data_detail_version_horizontal" class="form-control custom-select select2">--}}
+{{--                                                <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>--}}
+{{--                                            </select>--}}
+{{--                                        </div>--}}
                                         <div class="form-group" id="month_pick" style="display:none;">
-                                            <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                            <select name="data_detail_version_horizontal" id="data_detail_version_horizontal" class="form-control custom-select select2">
-                                                <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
-                                            </select>
+                                            <label for="tanggal_awal">Bulan <span class="text-red">*</span></label>
+                                            <input type="text" class="form-control" name="data_detail_version_horizontal" id="data_detail_version_horizontal" placeholder="Bulan" autocomplete="off" required>
                                         </div>
+
                                         <div class="form-group" id="inflasi_pick" style="display:none;">
                                             <label class="form-label">INFLASI <span class="text-red">*</span></label>
                                             <select id="filter_inflasi" class="form-control custom-select select2">
@@ -181,6 +186,21 @@
         $(document).ready(function () {
 
             get_data()
+
+            $('#bulan_periode').bootstrapdatepicker({
+                format: "MM",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#bulan_periode').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            }).on('change', function () {
+                $("#template").css("display", "block");
+            });
 
             $('#filter_company_ver').select2({
                 placeholder: 'Pilih Perusahaan',
@@ -250,32 +270,35 @@
                         };
                     }
                 }
-            }).on('change', function () {
-                var data_version = $('#data_main_version_add').val();
-                $('#data_detail_version_add').append('<option selected disabled value="">Pilih Bulan</option>').select2({
-                    dropdownParent: $('#modal_add'),
-                    placeholder: 'Pilih Bulan',
-                    width: '100%',
-                    allowClear: false,
-                    ajax: {
-                        url: "{{ route('version_detail_select') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                version:data_version
-
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        }
-                    }
-                })
             })
+
+            $('#data_detail_version_add').bootstrapdatepicker({
+                format: "MM",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#data_detail_version_add').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            }).on('change', function () {
+                $("#template").css("display", "block");
+            });
+
+            $('#data_detail_version_horizontal').bootstrapdatepicker({
+                format: "MM",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose:true,
+                showOnFocus: false,
+            }).on('click', function () {
+                $('#data_detail_version_horizontal').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            });
 
             $('#data_main_version_import').select2({
                 dropdownParent: $('#modal_import'),
@@ -297,35 +320,7 @@
                         };
                     }
                 }
-            }).on('change', function () {
-                var data_version = $('#data_main_version_import').val();
-                $('#data_detail_version_import').append('<option selected disabled value="">Pilih Bulan</option>').select2({
-                    dropdownParent: $('#modal_import'),
-                    placeholder: 'Pilih Bulan',
-                    width: '100%',
-                    allowClear: false,
-                    ajax: {
-                        url: "{{ route('version_detail_select') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function (params) {
-                            return {
-                                search: params.term,
-                                version:data_version
-
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        }
-                    }
-                }).on('change', function () {
-                    $("#template").css("display", "block");
-                });
             })
-
 
             $('#data_main_version_horizontal').select2({
                 placeholder: 'Pilih Versi',
@@ -348,13 +343,6 @@
                 }
             }).on('change', function () {
                 $("#format_pick").css("display", "block");
-                var periode = $('#filter_format').val()
-
-                if (periode === '0'){
-                    set_versi_date()
-                }else if (periode === '1'){
-                    set_month_date()
-                }
             })
 
             $('#bulan_satuan_filter1').bootstrapdatepicker({
@@ -526,9 +514,9 @@
                 $("#submit_import").attr('class', 'btn btn-primary btn-loaders btn-icon').attr("disabled", true);
                 $("#back_import").attr("disabled", true);
                 var version = $('#data_main_version_import').val();
-                var date = $('#data_detail_version_import').val();
+                var date = $('#bulan_periode').val();
 
-                if (version !== null && date !== null && $('#file').val() !== ''){
+                if (version !== null && date !== '' && $('#file').val() !== ''){
                     let file = new FormData($("#form_input_salr")[0]);
                     $.ajax({
                         type: "POST",
@@ -679,16 +667,16 @@
                     $("#month_pick").css("display", "none");
                     $("#inflasi_pick").css("display", "none");
 
-                    $("#month_pick_range_versi").css("display", "block");
+                    // $("#month_pick_range_versi").css("display", "block");
 
-                    set_versi_date()
+                    // set_versi_date()
                 }else if ($('#filter_format').val() === '1'){
                     $("#month_pick_range").css("display", "none");
                     $("#month_pick_range_versi").css("display", "none");
 
                     $("#month_pick").css("display", "block");
                     $("#inflasi_pick").css("display", "block");
-                    set_month_date()
+                    // set_month_date()
 
                 }else if($('#filter_format').val() === '2'){
                     $("#month_pick").css("display", "none");
@@ -765,7 +753,7 @@
                         // var akhir_periode = moment(response.data['akhir_periode'])
                         // console.log(response.data['akhir_periode'], awal_periode, akhir_periode)
                         $('#bulan_filter1').bootstrapdatepicker({
-                            format: "mm-yyyy",
+                            format: "MM",
                             viewMode: "months",
                             minViewMode: "months",
                             autoclose:true,
@@ -774,7 +762,7 @@
                         });
 
                         $('#bulan_filter2').bootstrapdatepicker({
-                            format: "mm-yyyy",
+                            format: "MM",
                             viewMode: "months",
                             minViewMode: "months",
                             autoclose:true,
@@ -815,8 +803,6 @@
             $('#btn_tampilkan').on('click', function () {
                 let cek = true;
                 if ($('#filter_format').val() !== null && $('#cost_center_format').val() !== null && $('#data_main_version_horizontal').val() !== null){
-
-
                     if ($('#filter_format').val() === '1'){
 
                         if ($('#filter_inflasi').val() === '1'){
@@ -911,11 +897,26 @@
 
                                 if(iName == 'price_rendaan_value'){
                                     input.id = 'price_rendaan_value_search'
+                                }else if (iName == 'periode'){
+                                    input.id = "periode_search";
                                 }
                                 $(input).
                                 appendTo(cell.empty()).
                                 on('change clear', function () {
                                     column.search($(this).val(), false, false, true).draw();
+                                });
+
+                                $('#periode_search').bootstrapdatepicker({
+                                    format: "MM",
+                                    viewMode: "months",
+                                    minViewMode: "months",
+                                    autoclose:true,
+                                    showOnFocus: false,
+                                }).on('click', function () {
+                                    $('#periode_search').bootstrapdatepicker("show");
+                                    $('.datepicker-switch').css('display', 'none');
+                                    $('.prev').css('display', 'none');
+                                    $('.next').css('display', 'none');
                                 });
 
                                 $('#price_rendaan_value_search').on('keyup', function(){
@@ -1188,7 +1189,7 @@
                                 text: 'Excel',
                                 classname: 'mb-5',
                                 action: function ( e, dt, node, config ) {
-                                    var format = $('#filter_format').val();
+                                    var format1 = $('#filter_format').val();
                                     var cost_center = $('#cost_center_format').val();
                                     var version = $('#data_main_version_horizontal').val();
 
@@ -1198,10 +1199,10 @@
                                     var end_month = $('#bulan_filter2').val();
                                     var month = $('#data_main_version_horizontal').val();
                                     var inflasi = $('#filter_inflasi').val();
-                                    
+
                                     let route_default = '{{ route("export_horizontal_salr") }}'
                                     let route_complete = route_default + "?cost_center="+ cost_center +"&start_month_versi="+ start_month_versi +
-                                        "&end_month_versi="+ end_month_versi +"&start_month="+ start_month +"&end_month="+ end_month +"&format="+ format +"&inflasi="+ inflasi +"&month="+ month + "&version=" + version
+                                        "&end_month_versi="+ end_month_versi +"&start_month="+ start_month +"&end_month="+ end_month +"&format="+ format1 +"&inflasi="+ inflasi +"&month="+ month + "&version=" + version
 
                                     window.location = route_complete
                                 }

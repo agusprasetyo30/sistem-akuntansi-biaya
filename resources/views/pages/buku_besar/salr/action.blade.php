@@ -40,11 +40,11 @@
                             </div>
                             <div class="form-group">
                                 <label for="tanggal_awal">Bulan <span class="text-red">*</span></label>
-                                <input disabled value="{{helpDate($model->periode, 'se')}}" type="text" class="form-control" id="detail_tanggal" placeholder="Bulan-Tahun" autocomplete="off">
+                                <input disabled value="{{format_month($model->periode, 'eng')}}" type="text" class="form-control" id="detail_tanggal" placeholder="Bulan-Tahun" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value <span class="text-red">*</span></label>
-                                <input disabled value="{{$model->value}}" class="form-control" type="text" placeholder="0" required name="value" id="detail_value" autocomplete="off">
+                                <input disabled value="{{rupiah($model->value)}}" class="form-control" type="text" placeholder="0" required name="value" id="detail_value" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Nama </label>
@@ -124,13 +124,11 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                <select name="data_detail_version_update" id="data_detail_version_update{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->periode}}" selected>{{format_month($model->periode, 'se')}}</option>
-                                </select>
+                                <input type="text" class="form-control" value="{{format_month($model->periode, 'eng')}}" name="data_detail_version_update" id="data_detail_version_update{{$model->id}}" placeholder="Bulan" autocomplete="off" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value <span class="text-red">*</span></label>
-                                <input value="{{$model->value}}" class="form-control" type="text" placeholder="0" required name="value" id="edit_value{{$model->id}}" autocomplete="off">
+                                <input value="{{rupiah($model->value)}}" class="form-control" type="text" placeholder="0" required name="value" id="edit_value{{$model->id}}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Nama </label>
@@ -200,32 +198,21 @@
                 };
             }
         }
-    }).on('change', function () {
-        var data_version = $('#data_main_version_update'+{{$model->id}}).val();
-        $('#data_detail_version_update'+{{$model->id}}).append('<option selected disabled value="">Pilih Bulan</option>').select2({
-            dropdownParent: $('#modal_edit'+{{$model->id}}),
-            placeholder: 'Pilih Bulan',
-            width: '100%',
-            allowClear: false,
-            ajax: {
-                url: "{{ route('version_detail_select') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term,
-                        version:data_version
-
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                }
-            }
-        })
     })
+
+    $('#data_detail_version_update'+{{$model->id}}).bootstrapdatepicker({
+        format: "MM",
+        viewMode: "months",
+        minViewMode: "months",
+        autoclose:true,
+        showOnFocus: false,
+    }).on('click', function () {
+        $('#data_detail_version_update'+{{$model->id}}).bootstrapdatepicker("show");
+        $('.datepicker-switch').css('display', 'none');
+        $('.prev').css('display', 'none');
+        $('.next').css('display', 'none');
+    });
+
 
     $('#edit_value'+{{$model->id}}).on('keyup', function(){
         let rupiah = formatRupiah($(this).val(), "Rp ")

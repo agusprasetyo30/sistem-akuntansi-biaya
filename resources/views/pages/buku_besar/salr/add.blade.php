@@ -34,10 +34,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                <select name="detail_version" id="data_detail_version_add" class="form-control custom-select select2">
-                                    <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
-                                </select>
+                                <label for="tanggal_awal">Bulan <span class="text-red">*</span></label>
+                                <input type="text" class="form-control" name="data_detail_version_add" id="data_detail_version_add" placeholder="Bulan" autocomplete="off" required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Value <span class="text-red">*</span></label>

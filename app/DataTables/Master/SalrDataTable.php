@@ -47,7 +47,7 @@ class SalrDataTable extends DataTable
                 return $query->cost_center.' - '. $query->cost_center_desc;
             })
             ->addColumn('periode', function ($query){
-                return format_month($query->periode, 'bi');
+                return format_month($query->periode, 'eng');
             })
             ->addColumn('value', function ($query){
                 return rupiah($query->value);
@@ -68,13 +68,8 @@ class SalrDataTable extends DataTable
                 }
             })
             ->filterColumn('filter_periode', function ($query, $keyword){
-                $temp = explode('/', $keyword);
-                if (count($temp) == 1){
-                    $query->Where('salrs.periode', 'ilike', '%'.$keyword.'%');
-                }elseif (count($temp) == 2){
-                    $keyword = $temp[1].'-'.$temp[0];
-                    $query->Where('salrs.periode', 'ilike', '%'.$keyword.'%');
-                }
+                $temp = check_month_by_name($keyword);
+                $query->Where('salrs.periode', 'ilike', '%-'.$temp.'-%');
             })
             ->orderColumn('filter_group_account', function ($query, $order) {
                 $query->orderBy('group_account_fc.group_account_fc', $order);
