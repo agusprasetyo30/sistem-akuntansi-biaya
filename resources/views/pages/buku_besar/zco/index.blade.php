@@ -123,13 +123,20 @@
                                                     placeholder="Month" autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="form-group" id="month_pick">
+                                        {{-- <div class="form-group" id="month_pick">
                                             <label class="form-label">Bulan</label>
                                             <select name="bulan_satuan_filter1" id="bulan_satuan_filter1"
                                                 class="form-control custom-select select2">
                                                 <option value="" selected>Pilih Version Terlebih Dahulu</option>
                                             </select>
+                                        </div> --}}
+                                        <div class="form-group" id="month_pick" style="display:none;">
+                                            <label class="form-label">BULAN </label>
+                                            <input type="text" class="form-control form-control-sm"
+                                                name="bulan_satuan_filter1" id="bulan_satuan_filter1" placeholder="Month"
+                                                autocomplete="off" required>
                                         </div>
+
                                     </div>
                                     <div class="btn-list mb-5">
                                         <button type="button" class="btn btn-primary btn-pill" id="btn_tampilkan"><i
@@ -196,13 +203,20 @@
                                                     class="form-control" placeholder="Month" autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="form-group" id="month_pick_group_account">
+                                        {{-- <div class="form-group" id="month_pick_group_account">
                                             <label class="form-label">Bulan</label>
                                             <select name="bulan_satuan_filter1_group_account"
                                                 id="bulan_satuan_filter1_group_account"
                                                 class="form-control custom-select select2">
                                                 <option value="" selected>Pilih Version Terlebih Dahulu</option>
                                             </select>
+                                        </div> --}}
+                                        <div class="form-group" id="month_pick_group_account" style="display:none;">
+                                            <label class="form-label">BULAN </label>
+                                            <input type="text" class="form-control form-control-sm"
+                                                name="bulan_satuan_filter1_group_account"
+                                                id="bulan_satuan_filter1_group_account" placeholder="Month"
+                                                autocomplete="off" required>
                                         </div>
                                     </div>
                                     <div class="btn-list mb-5">
@@ -473,34 +487,6 @@
                         };
                     }
                 }
-            }).on('change', function() {
-                var d_version = $('#version_import').val();
-                $('#detail_version_import').append(
-                    '<option selected disabled value="">Pilih Bulan</option>').select2({
-                    dropdownParent: $('#modal_import'),
-                    placeholder: 'Pilih Bulan',
-                    width: '100%',
-                    allowClear: false,
-                    ajax: {
-                        url: "{{ route('version_detail_select') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term,
-                                version: d_version
-
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        }
-                    }
-                }).on('change', function() {
-                    $("#submit-export").css("display", "block");
-                });
             })
 
             $('#filter_version_hor').select2({
@@ -522,31 +508,6 @@
                         };
                     }
                 }
-            }).on('change', function() {
-                var _ver = $('#filter_version_hor').val();
-                $('#bulan_satuan_filter1').append('<option selected disabled value="">Pilih Bulan</option>')
-                    .select2({
-                        placeholder: 'Pilih Bulan',
-                        width: '100%',
-                        allowClear: false,
-                        ajax: {
-                            url: "{{ route('version_detail_select') }}",
-                            dataType: 'json',
-                            delay: 250,
-                            data: function(params) {
-                                return {
-                                    search: params.term,
-                                    version: _ver
-
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            }
-                        }
-                    })
             })
 
             $('#filter_version_group_account').select2({
@@ -568,31 +529,6 @@
                         };
                     }
                 }
-            }).on('change', function() {
-                var _ver = $('#filter_version_group_account').val();
-                $('#bulan_satuan_filter1_group_account').append(
-                    '<option selected disabled value="">Pilih Bulan</option>').select2({
-                    placeholder: 'Pilih Bulan',
-                    width: '100%',
-                    allowClear: false,
-                    ajax: {
-                        url: "{{ route('version_detail_select') }}",
-                        dataType: 'json',
-                        delay: 250,
-                        data: function(params) {
-                            return {
-                                search: params.term,
-                                version: _ver
-
-                            };
-                        },
-                        processResults: function(response) {
-                            return {
-                                results: response
-                            };
-                        }
-                    }
-                })
             })
 
             $('#periode_import').on("click", function() {
@@ -830,32 +766,6 @@
                         };
                     }
                 }
-            }).on('change', function() {
-                var data_version = $('#data_main_version').val();
-                $('#data_detal_version').append('<option selected disabled value="">Pilih Bulan</option>')
-                    .select2({
-                        dropdownParent: $('#modal_add'),
-                        placeholder: 'Pilih Bulan',
-                        width: '100%',
-                        allowClear: false,
-                        ajax: {
-                            url: "{{ route('version_detail_select') }}",
-                            dataType: 'json',
-                            delay: 250,
-                            data: function(params) {
-                                return {
-                                    search: params.term,
-                                    version: data_version
-
-                                };
-                            },
-                            processResults: function(response) {
-                                return {
-                                    results: response
-                                };
-                            }
-                        }
-                    });
             })
 
             $('#filter_company_hor').select2({
@@ -900,26 +810,60 @@
                 }
             })
 
-            // $('#filter_version_hor').select2({
-            //     placeholder: 'Pilih Versi',
-            //     width: '100%',
-            //     allowClear: false,
-            //     ajax: {
-            //         url: "{{ route('version_select') }}",
-            //         dataType: 'json',
-            //         delay: 250,
-            //         data: function (params) {
-            //             return {
-            //                 search: params.term
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         }
-            //     }
-            // })
+            $('#detail_version_import').bootstrapdatepicker({
+                format: "mm",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose: true,
+                showOnFocus: false,
+            }).on('click', function() {
+                $('#detail_version_import').bootstrapdatepicker("show");
+                $("#submit-export").css("display", "block");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            }).on('change', function() {
+                $("#template").css("display", "block");
+            });
+
+            $('#data_detal_version').bootstrapdatepicker({
+                format: "mm",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose: true,
+                showOnFocus: false,
+            }).on('click', function() {
+                $('#data_detal_version').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            });
+
+            $('#bulan_satuan_filter1').bootstrapdatepicker({
+                format: "mm",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose: true,
+                showOnFocus: false,
+            }).on('click', function() {
+                $('#bulan_satuan_filter1').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            });
+
+            $('#bulan_satuan_filter1_group_account').bootstrapdatepicker({
+                format: "mm",
+                viewMode: "months",
+                minViewMode: "months",
+                autoclose: true,
+                showOnFocus: false,
+            }).on('click', function() {
+                $('#bulan_satuan_filter1_group_account').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
+            });
         })
 
         function table() {
@@ -1437,12 +1381,13 @@
                         fixedColumns: {
                             left: 2
                         },
-                        buttons: [
-                            { extend: 'pageLength'},
+                        buttons: [{
+                                extend: 'pageLength'
+                            },
                             {
                                 text: 'Excel',
                                 classname: 'mb-5',
-                                action: function ( e, dt, node, config ) {
+                                action: function(e, dt, node, config) {
                                     var material = $('#filter_material').val();
                                     var plant = $('#filter_plant').val();
                                     var format_data = $('#filter_format').val();
@@ -1451,10 +1396,12 @@
                                     var moth = $('#bulan_satuan_filter1').val();
                                     var version = $('#filter_version_hor').val();
 
-                                    let route_default = '{{ route("export_zco_horizontal") }}'
+                                    let route_default = '{{ route('export_zco_horizontal') }}'
                                     let route_complete = route_default +
-                                        "?material=" + material + "&plant=" + plant + "&format_data=" + format_data +
-                                        "&start_month=" + start_month + "&end_month=" + end_month + "&moth=" + moth + "&version=" + version
+                                        "?material=" + material + "&plant=" + plant +
+                                        "&format_data=" + format_data +
+                                        "&start_month=" + start_month + "&end_month=" +
+                                        end_month + "&moth=" + moth + "&version=" + version
 
                                     window.location = route_complete
                                 }
@@ -1644,26 +1591,39 @@
                         fixedColumns: {
                             left: 2
                         },
-                        buttons: [
-                            { extend: 'pageLength'},
+                        buttons: [{
+                                extend: 'pageLength'
+                            },
                             {
                                 text: 'Excel',
                                 classname: 'mb-5',
-                                action: function ( e, dt, node, config ) {
-                                    let material_group_account = $('#filter_material_group_account').val();
-                                    let plant_group_account = $('#filter_plant_group_account').val();
-                                    let format_data_group_account = $('#filter_format_group_account').val();
-                                    let start_month_group_account = $('#bulan_filter1_group_account').val();
-                                    let end_month_group_account = $('#bulan_filter2_group_account').val();
-                                    let moth_group_account = $('#btn_tampilkan_group_account').val();
+                                action: function(e, dt, node, config) {
+                                    let material_group_account = $(
+                                        '#filter_material_group_account').val();
+                                    let plant_group_account = $('#filter_plant_group_account')
+                                        .val();
+                                    let format_data_group_account = $(
+                                        '#filter_format_group_account').val();
+                                    let start_month_group_account = $(
+                                        '#bulan_filter1_group_account').val();
+                                    let end_month_group_account = $(
+                                        '#bulan_filter2_group_account').val();
+                                    let moth_group_account = $('#btn_tampilkan_group_account')
+                                        .val();
                                     let version = $('#filter_version_group_account').val();
 
-                                    let route_default_group_account = '{{ route("export_zco_account") }}'
-                                    
-                                    let route_complete_group_account = route_default_group_account +
-                                        "?material=" + material_group_account + "&plant=" + plant_group_account + "&format_data=" + format_data_group_account +
-                                        "&start_month=" + start_month_group_account + "&end_month=" + end_month_group_account + "&moth=" + moth_group_account + "&version=" + version
-                                    
+                                    let route_default_group_account =
+                                        '{{ route('export_zco_account') }}'
+
+                                    let route_complete_group_account =
+                                        route_default_group_account +
+                                        "?material=" + material_group_account + "&plant=" +
+                                        plant_group_account + "&format_data=" +
+                                        format_data_group_account +
+                                        "&start_month=" + start_month_group_account +
+                                        "&end_month=" + end_month_group_account + "&moth=" +
+                                        moth_group_account + "&version=" + version
+
                                     window.location = route_complete_group_account
                                 }
                             }
