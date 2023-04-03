@@ -51,6 +51,7 @@ class ZcoController extends Controller
                 $validator = Validator::make($request->all(), [
                     "version" => 'required',
                     "company" => 'required',
+                    "material" => 'required',
                 ], validatorMsg());
 
                 if ($validator->fails())
@@ -58,6 +59,7 @@ class ZcoController extends Controller
             } else {
                 $validator = Validator::make($request->all(), [
                     "version" => 'required',
+                    "material" => 'required',
                 ], validatorMsg());
 
                 if ($validator->fails())
@@ -120,6 +122,7 @@ class ZcoController extends Controller
                 $validator = Validator::make($request->all(), [
                     "version" => 'required',
                     "company" => 'required',
+                    "material" => 'required',
                 ], validatorMsg());
 
                 if ($validator->fails())
@@ -127,6 +130,7 @@ class ZcoController extends Controller
             } else {
                 $validator = Validator::make($request->all(), [
                     "version" => 'required',
+                    "material" => 'required',
                 ], validatorMsg());
 
                 if ($validator->fails())
@@ -287,7 +291,6 @@ class ZcoController extends Controller
                 return $this->makeValidMsg($validator);
             }
 
-            $asumsi = Asumsi_Umum::where('id', $request->detail_version_import)->first();
             $master_plant = Plant::get()->pluck('plant_code')->all();
             $master_product = Material::get()->pluck('material_code')->all();
             $master_cost_element = GLAccount::get()->pluck('gl_account')->all();
@@ -298,8 +301,8 @@ class ZcoController extends Controller
             $excel_fix =  collect($excel[0])->map(function ($query) use ($header, $request) {
                 $query = array_combine($header, $query);
                 $data['plant_code'] = $query['plant_code'];
-                $data['periode'] = '2000-' . check_month_by_name($request->periode) . '-01 00:00:00';
-                $data['version_id'] = $request->version;
+                $data['periode'] = '2000-' . check_month_by_name($request->detail_version_import) . '-01 00:00:00';
+                $data['version_id'] = $request->version_import;
                 $data['product_code'] = strval($query['product_code']);
                 $data['product_qty'] = $query['product_qty'];
                 $data['cost_element'] = strval($query['cost_element']);
@@ -334,8 +337,8 @@ class ZcoController extends Controller
 
             if ($check_plant == null && $check_product == null && $check_cost_element == null) {
                 DB::transaction(function () use ($excel_fix, $request) {
-                    Zco::where('periode', 'ilike', '%-' . check_month_by_name($request->periode) . '-%')
-                        ->where('version_id', $request->version)
+                    Zco::where('periode', 'ilike', '%-' . check_month_by_name($request->detail_version_import) . '-%')
+                        ->where('version_id', $request->version_import)
                         ->delete();
 
                     $result = array_values($excel_fix->toArray());
