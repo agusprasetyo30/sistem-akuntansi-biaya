@@ -91,22 +91,19 @@
                                         <div class="form-group">
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material" class="form-control custom-select select2">
-                                                {{-- <option value="" disabled selected>Pilih Produk</option> --}}
-                                                <option value="all" selected>Semua</option>
+                                                <option value="" disabled selected>Pilih Produk</option>
+                                                {{-- <option value="all" selected>Semua</option> --}}
                                             </select>
                                         </div>
                                         <div class="form-group" id="format_plant">
                                             <label class="form-label">PLANT</label>
                                             <select id="filter_plant" class="form-control custom-select select2">
-                                                {{-- <option value="all" selected>Semua</option> --}}
-                                                {{-- <option value="all" selected>Pilih Produk Terlebih Dahulu</option> --}}
+                                                <option value="all" selected>Semua</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">PERIODE </label>
                                             <select id="filter_format" class="form-control custom-select select2">
-                                                {{-- <option value="" disabled selected>Pilih Periode</option> --}}
-                                                {{-- <option selected disabled value="">Pilih Format</option> --}}
                                                 @foreach (format_zco() as $key => $value)
                                                     options += '<option value="{{ $key }}">{{ ucwords($value) }}
                                                     </option>';
@@ -170,23 +167,21 @@
                                             <label class="form-label">PRODUK</label>
                                             <select id="filter_material_group_account"
                                                 class="form-control custom-select select2">
-                                                {{-- <option value="" disabled selected>Pilih Produk</option> --}}
-                                                <option value="all" selected>Semua</option>
+                                                <option value="" disabled selected>Pilih Produk</option>
+                                                {{-- <option value="all" selected>Semua</option> --}}
                                             </select>
                                         </div>
                                         <div class="form-group" id="format_plant_group_account">
                                             <label class="form-label">PLANT</label>
                                             <select id="filter_plant_group_account"
                                                 class="form-control custom-select select2">
-                                                {{-- <option value="all" selected>Pilih Produk Terlebih Dahulu</option> --}}
+                                                <option value="all" selected>Semua</option>
                                             </select>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label">PERIODE </label>
                                             <select id="filter_format_group_account"
                                                 class="form-control custom-select select2">
-                                                {{-- <option value="" disabled selected>Pilih Periode</option> --}}
-                                                {{-- <option selected disabled value="">Pilih Format</option> --}}
                                                 @foreach (format_zco() as $key => $value)
                                                     options += '<option value="{{ $key }}">{{ ucwords($value) }}
                                                     </option>';
@@ -711,38 +706,58 @@
             })
 
             $('#bulan_filter1').bootstrapdatepicker({
-                format: "mm-yyyy",
+                format: "MM",
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose: true
+            }).on('click', function() {
+                $('#bulan_filter1').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
             }).on('change', function() {
                 var periode = moment($('#bulan_filter1').val(), "MM-YYYY").add(1, 'months').format(
                     'MM-YYYY');
                 $('#bulan_filter2').attr('disabled', false)
                     .bootstrapdatepicker({
-                        format: "mm-yyyy",
+                        format: "MM",
                         viewMode: "months",
                         minViewMode: "months",
                         autoclose: true,
                         startDate: periode
+                    }).on('click', function() {
+                        $('#bulan_filter2').bootstrapdatepicker("show");
+                        $('.datepicker-switch').css('display', 'none');
+                        $('.prev').css('display', 'none');
+                        $('.next').css('display', 'none');
                     });
             });
 
             $('#bulan_filter1_group_account').bootstrapdatepicker({
-                format: "mm-yyyy",
+                format: "MM",
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose: true
+            }).on('click', function() {
+                $('#bulan_filter1_group_account').bootstrapdatepicker("show");
+                $('.datepicker-switch').css('display', 'none');
+                $('.prev').css('display', 'none');
+                $('.next').css('display', 'none');
             }).on('change', function() {
                 var periode_group_account = moment($('#bulan_filter1_group_account').val(), "MM-YYYY").add(
                     1, 'months').format('MM-YYYY');
                 $('#bulan_filter2_group_account').attr('disabled', false)
                     .bootstrapdatepicker({
-                        format: "mm-yyyy",
+                        format: "MM",
                         viewMode: "months",
                         minViewMode: "months",
                         autoclose: true,
                         startDate: periode_group_account
+                    }).on('click', function() {
+                        $('#bulan_filter2_group_account').bootstrapdatepicker("show");
+                        $('.datepicker-switch').css('display', 'none');
+                        $('.prev').css('display', 'none');
+                        $('.next').css('display', 'none');
                     });
             });
 
@@ -1665,6 +1680,7 @@
                             }
                         ],
                         ajax: {
+                            type: "POST",
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },

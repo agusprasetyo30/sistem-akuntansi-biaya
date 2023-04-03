@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\labaRugiDataTable;
 use App\Exports\MultipleSheet\MS_LabaRugiExport;
+use App\Exports\Vertical\KursExport;
+use App\Exports\Vertical\LabaRugiExport;
 use App\Imports\LabaRugiImport;
 use App\Imports\LabaRugiNewImport;
 use App\Models\KategoriProduk;
@@ -207,6 +209,34 @@ class LabaRugiController extends Controller
                 ]);
             }
         }
+    }
+
+    public function export_horizontal(Request $request)
+    {
+        $labarugi = DB::table('laba_rugi')
+            ->select('laba_rugi.*', 'version_asumsi.version', DB::Raw("CONCAT(kategori_produk.kategori_produk_name, ' ', kategori_produk.kategori_produk_desc) prod"))
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'laba_rugi.version_id')
+            ->leftjoin('kategori_produk', 'kategori_produk.id', '=', 'laba_rugi.kategori_produk_id')
+            ->whereNull('laba_rugi.deleted_at')
+            ->orderBy('prod');
+        
+        if($request->version != 'all') {
+            $labarugi->where('a.version_id', $request->version);
+        }
+
+        try {
+            $labarugi = $labarugi
+                    ->get()
+                    ->toArray();
+        } catch (\Throwable $th) {
+            $labarugi = [];
+        }
+        // return response()->json($labarugi);
+
+        $data = [
+            'labarugi' => $labarugi
+        ];
+        return Excel::download(new LabaRugiExport($data), "Laba Rugi.xlsx");
     }
 
     public function check(Request $request){

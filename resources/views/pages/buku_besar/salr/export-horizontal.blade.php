@@ -1,16 +1,16 @@
 <table border=1 style="border-collapse: collapse">
 	<thead>
 		<tr>
-			<td rowspan="2"><b>Group Account</b></td>
-			<td rowspan="2"><b>Group Account Desc</b></td>
+			<td rowspan="2" style="text-align: center"><b>Group Account</b></td>
+			<td rowspan="2" style="text-align: center"><b>Group Account Desc</b></td>
 
 			@foreach ($cost_centers as $cost_center)
-				<td><b>{{ $cost_center->cost_center }}</b></td>
+				<td style="text-align: center"><b>{{ $cost_center->cost_center }}</b></td>
 			@endforeach
 		</tr>
 		<tr>
 			@foreach ($cost_centers as $cost_center)
-				<td><b>{{ $cost_center->cost_center_desc }}</b></td>
+				<td style="text-align: center"><b>{{ $cost_center->cost_center_desc }}</b></td>
 			@endforeach
 		</tr>
 	</thead>
@@ -27,7 +27,8 @@
 		@endforeach
 		
 		<tr>
-			<td colspan="2" style="text-align: right">Total</td>
+			<td colspan="1" style="text-align: center"><b>Total</b></td>
+			<td colspan="1" style="text-align: center"><b>Perhitungan</b></td>
 			@php $key_temp = 0 @endphp
 			
 			@foreach ($cost_centers as $cost_center)

@@ -600,7 +600,7 @@ class SelectController extends Controller
             $versi = Version_Asumsi::select('version_asumsi.id', 'version_asumsi.version', 'version_asumsi.company_code', 'company.company_name')
                 ->leftjoin('company', 'company.company_code', '=', 'version_asumsi.company_code')
                 ->where('version_asumsi.company_code', $company)
-                ->where('version_asumsi.company_code', 'ilike', '%' .$search. '%')
+                ->where('version_asumsi.company_code', 'ilike', '%' . $search . '%')
                 ->limit(10)
                 ->get();
         }
@@ -645,14 +645,13 @@ class SelectController extends Controller
     public function cost_center_salr(Request $request)
     {
         $search = $request->search;
-//        dd($search == '');
+        //        dd($search == '');
         if ($search == '') {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
                 ->whereNull('salrs.deleted_at')
                 ->groupBy('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->limit(10)->get();
-
         } else {
             $cost_center = Salr::select('salrs.cost_center', 'cost_center.cost_center_desc')
                 ->leftjoin('cost_center', 'salrs.cost_center', '=', 'cost_center.cost_center')
@@ -1182,10 +1181,10 @@ class SelectController extends Controller
         }
 
         $response = array();
-        $response[] = array(
-            "id" => 'all',
-            "text" => 'Semua'
-        );
+        // $response[] = array(
+        //     "id" => 'all',
+        //     "text" => 'Semua'
+        // );
         foreach ($zco_product as $items) {
             $response[] = array(
                 "id" => $items->product_code,

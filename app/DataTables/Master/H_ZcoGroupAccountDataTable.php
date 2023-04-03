@@ -96,16 +96,14 @@ class H_ZcoGroupAccountDataTable extends DataTable
                     ])->groupBy('product_qty', 'periode');
 
                 if ($this->format == '0') {
-                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
-                    $kuantum_produksi->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                    $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
                 } else if ($this->format == '1') {
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $start_month = '2000-' . check_month_by_name($this->start_month) . '-01 00:00:00';
+                    $end_month = '2000-' . check_month_by_name($this->end_month) . '-01 00:00:00';
 
-                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-                    $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                    $total_biaya->whereBetween('periode', [$start_month, $end_month]);
+                    $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
                 }
 
                 $total_biaya = $total_biaya->first();
@@ -123,6 +121,8 @@ class H_ZcoGroupAccountDataTable extends DataTable
                 }
 
                 return $biaya_perton ? $biaya_perton : 0;
+
+                // return 0;
             })->addColumn($key, function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount', 'gl_account.group_account_code'))
                     ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
@@ -133,19 +133,19 @@ class H_ZcoGroupAccountDataTable extends DataTable
                     ]);
 
                 if ($this->format == '0') {
-                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
                 } else if ($this->format == '1') {
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $start_month = '2000-' . check_month_by_name($this->start_month) . '-01 00:00:00';
+                    $end_month = '2000-' . check_month_by_name($this->end_month) . '-01 00:00:00';
 
-                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+                    $total_biaya->whereBetween('periode', [$start_month, $end_month]);
                 }
 
                 $total_biaya = $total_biaya->first();
 
                 return $total_biaya->total_amount ? $total_biaya->total_amount : 0;
+
+                // return 0;
             });
         }
 

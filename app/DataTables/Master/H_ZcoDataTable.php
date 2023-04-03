@@ -27,7 +27,6 @@ class H_ZcoDataTable extends DataTable
             ->leftjoin('material', 'zco.material_code', '=', 'material.material_code')
             ->groupBy('zco.material_code', 'material.group_account_code', 'material.material_name')
             ->orderBy('zco.material_code', 'asc');
-        // ->whereNotNull('zco.material_code');
 
         if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
             $query = $query->where('material.company_code', auth()->user()->mapping_akses('zco')->company_code);
@@ -72,6 +71,7 @@ class H_ZcoDataTable extends DataTable
         // }
 
         $product = $product->get();
+
         $zcoValues = DB::table('zco')
             ->select('zco.*', 'gl_account.group_account_code')
             ->leftjoin('gl_account', 'zco.cost_element', '=', 'gl_account.gl_account')
