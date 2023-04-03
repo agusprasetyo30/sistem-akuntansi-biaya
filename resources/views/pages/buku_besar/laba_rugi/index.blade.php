@@ -564,15 +564,25 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
+                    // {
+                    //     extend: 'excel',
+                    //     className: 'mb-5',
+                    //     exportOptions:{
+                    //     columns:[0,1,2,3,4]
+                    // },
+                    //     title: '',
+                    //     filename: 'Laba Rugi'
+                    // }
                     {
-                        extend: 'excel',
-                        className: 'mb-5',
-                        exportOptions:{
-                        columns:[0,1,2,3,4]
-                    },
-                        title: '',
-                        filename: 'Laba Rugi'
-                    }
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search = $('#filter_version').val()
+
+                                    window.location = '{{ route("export_h_labarugi") }}' + "?version=" + version_search
+                                },
+                                className: 'mb-5'
+                            }
                 ],
                 ajax: {
                     url : '{{route("laba_rugi")}}',

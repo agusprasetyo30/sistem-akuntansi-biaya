@@ -1,27 +1,27 @@
 <table border=1 style="border-collapse: collapse">
     <thead>
         <tr>
-            <td align="center" valign="top" rowspan="5"><b>Jenis Biaya</b></td>
+            <td align="center" valign="middle" rowspan="6">Jenis Biaya</td>
 		</tr>
 		<tr>
 			@foreach ($asumsi as $data_asumsi)
-				<td align="center" valign="top" colspan="4">{{ date('F Y', strtotime($data_asumsi->month_year)) }}</td>
+				<td align="center" valign="default" colspan="4">{{ date('F Y', strtotime($data_asumsi->month_year)) }}</td>
 			@endforeach
 		</tr>
 		<tr>
 			@for ($i = 0; $i < $asumsi->count(); $i++)			
-				<td align="center" valign="top" colspan="4">{{ $product->first()->material_code . ' ' . $product->first()->material_name }}</td>
+				<td align="center" valign="default" colspan="4">{{ $product->first()->material_code . ' ' . $product->first()->material_name }}</td>
 			@endfor
 		</tr>
 		<tr>
 			@for ($i = 0; $i < $asumsi->count(); $i++)			
-				<td align="center" valign="top" colspan="4">{{ $plant->first()->plant_code . ' ' . $plant->first()->plant_desc }}</td>
+				<td align="center" valign="default" colspan="4">{{ $plant->first()->plant_code . ' ' . $plant->first()->plant_desc }}</td>
 			@endfor
 
 		</tr>
 		<tr>
 			@foreach ($kp as $simulasi_proyeksi)
-				<td align="center" valign="top" colspan="4">Kuantum Produksi {{ number_format($simulasi_proyeksi->kuantum_produksi, 0, ",", ".") }}</td>
+				<td align="center" valign="default" colspan="4">Kuantum Produksi {{ number_format($simulasi_proyeksi->kuantum_produksi, 0, ",", ".") }}</td>
 			@endforeach
 		</tr>
 		<tr>
