@@ -99,7 +99,7 @@
                                             <label class="form-label">PLANT</label>
                                             <select id="filter_plant" class="form-control custom-select select2">
                                                 {{-- <option value="all" selected>Semua</option> --}}
-                                                <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                                {{-- <option value="all" selected>Pilih Produk Terlebih Dahulu</option> --}}
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -178,7 +178,7 @@
                                             <label class="form-label">PLANT</label>
                                             <select id="filter_plant_group_account"
                                                 class="form-control custom-select select2">
-                                                <option value="all" selected>Pilih Produk Terlebih Dahulu</option>
+                                                {{-- <option value="all" selected>Pilih Produk Terlebih Dahulu</option> --}}
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -811,7 +811,7 @@
             })
 
             $('#detail_version_import').bootstrapdatepicker({
-                format: "mm",
+                format: "MM",
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose: true,
@@ -827,7 +827,7 @@
             });
 
             $('#data_detal_version').bootstrapdatepicker({
-                format: "mm",
+                format: "MM",
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose: true,
@@ -840,7 +840,7 @@
             });
 
             $('#bulan_satuan_filter1').bootstrapdatepicker({
-                format: "mm",
+                format: "MM",
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose: true,
@@ -853,7 +853,7 @@
             });
 
             $('#bulan_satuan_filter1_group_account').bootstrapdatepicker({
-                format: "mm",
+                format: "MM",
                 viewMode: "months",
                 minViewMode: "months",
                 autoclose: true,
@@ -940,10 +940,26 @@
                                 var input = document.createElement("input");
                                 input.className = "form-control form-control-sm";
                                 input.styleName = "width: 100%;";
+                                if (iName == 'periode') {
+                                    input.id = "periode_search";
+                                }
                                 $(input).
                                 appendTo(cell.empty()).
                                 on('change clear', function() {
                                     column.search($(this).val(), false, false, true).draw();
+                                });
+
+                                $('#periode_search').bootstrapdatepicker({
+                                    format: "MM",
+                                    viewMode: "months",
+                                    minViewMode: "months",
+                                    autoclose: true,
+                                    showOnFocus: false,
+                                }).on('click', function() {
+                                    $('#periode_search').bootstrapdatepicker("show");
+                                    $('.datepicker-switch').css('display', 'none');
+                                    $('.prev').css('display', 'none');
+                                    $('.next').css('display', 'none');
                                 });
                             } else if (data_type == 'select') {
                                 var input = document.createElement("select");
@@ -1192,7 +1208,7 @@
                     },
                     {
                         data: 'periode',
-                        name: 'periode',
+                        name: 'filter_periode',
                         orderable: true
                     },
                     {
@@ -1283,9 +1299,13 @@
             ]
             $("#dinamic_table").append(table);
             $.ajax({
-                type: "GET",
-                url: '{{ route('zco') }}',
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{ route('get_data_zco') }}',
                 data: {
+                    _token: "{{ csrf_token() }}",
                     data: 'material',
                     material: $('#filter_material').val(),
                     plant: $('#filter_plant').val(),
@@ -1297,6 +1317,7 @@
                     company: $('#filter_company_hor').val(),
                 },
                 success: function(response) {
+                    console.log(response)
                     for (let i = 0; i < response.material.length; i++) {
 
                         column.push({
@@ -1373,6 +1394,7 @@
                         orderCellsTop: true,
                         processing: true,
                         serverSide: true,
+                        scrollCollapse: true,
                         pageLength: -1,
                         fixedHeader: {
                             header: true,
@@ -1409,8 +1431,13 @@
                         ],
 
                         ajax: {
-                            url: '{{ route('zco') }}',
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '{{ route('get_data_zco') }}',
                             data: {
+                                _token: "{{ csrf_token() }}",
                                 data: 'horizontal',
                                 material: $('#filter_material').val(),
                                 plant: $('#filter_plant').val(),
@@ -1427,18 +1454,18 @@
                             let api = this.api();
                             api.columns.adjust().draw();
                         },
-                        // footerCallback: function () {
-                        //     var response = this.api().ajax.json();
-                        //     this.api().eq(0).columns().every(function (index) {
-                        //         var api = this
-                        //         if (index > 1){
-                        //             var count = parseInt(index) - 2
-                        //             console.log(index, count)
-                        //             var variable = 'total'+ count;
-                        //             $( api.column(index).footer() ).html(response[variable]);
-                        //         }
-                        //     })
-                        // },
+                        footerCallback: function() {
+                            var response = this.api().ajax.json();
+                            this.api().eq(0).columns().every(function(index) {
+                                var api = this
+                                if (index > 1) {
+                                    var count = parseInt(index) - 2
+                                    console.log(index, count)
+                                    var variable = 'total' + count;
+                                    $(api.column(index).footer()).html(response[variable]);
+                                }
+                            })
+                        },
                         footerCallback: function(row, data, start, end, display) {
                             this.api().eq(0).columns().every(function(index) {
                                 if (index > 1) {
@@ -1470,7 +1497,12 @@
                                             index == 27 || index == 31 || index == 35 ||
                                             index == 39 || index == 43 || index == 47 ||
                                             index == 51 || index == 55 || index == 59 ||
-                                            index == 63 || index == 67 || index == 71) {
+                                            index == 63 || index == 67 || index == 71 ||
+                                            index == 75 || index == 79 || index == 83 ||
+                                            index == 87 || index == 91 || index == 95 ||
+                                            index == 99 || index == 103 || index == 107 ||
+                                            index == 111 || index == 115 || index == 119 ||
+                                            index == 123 || index == 127 || index == 131) {
                                             total_perhitungan = total.toFixed(2).replace(
                                                 /\d(?=(\d{3})+\.)/g, '$&,');
                                         } else {
@@ -1523,9 +1555,13 @@
             ]
             $("#dinamic_group_account_table").append(table);
             $.ajax({
-                type: "GET",
-                url: '{{ route('zco') }}',
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                url: '{{ route('get_data_zco_ga') }}',
                 data: {
+                    _token: "{{ csrf_token() }}",
                     data: 'group_account',
                     material: $('#filter_material_group_account').val(),
                     plant: $('#filter_plant_group_account').val(),
@@ -1629,8 +1665,12 @@
                             }
                         ],
                         ajax: {
-                            url: '{{ route('zco') }}',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '{{ route('get_data_zco_ga') }}',
                             data: {
+                                _token: "{{ csrf_token() }}",
                                 data: 'horizontal_group_account',
                                 material: $('#filter_material_group_account').val(),
                                 plant: $('#filter_plant_group_account').val(),
@@ -1719,19 +1759,19 @@
             return rangeColumn
         }
 
-        function update_dt_horizontal() {
-            if ($('#filter_material').val() != null) {
-                $("#dinamic_table").empty();
-                get_data_horiz()
-            }
-        }
+        // function update_dt_horizontal() {
+        //     if ($('#filter_material').val() != null) {
+        //         $("#dinamic_table").empty();
+        //         get_data_horiz()
+        //     }
+        // }
 
-        function update_dt_group_account_horizontal() {
-            if ($('#filter_material_group_account').val() != null) {
-                $("#dinamic_group_account_table").empty();
-                get_data_group_account_horiz()
-            }
-        }
+        // function update_dt_group_account_horizontal() {
+        //     if ($('#filter_material_group_account').val() != null) {
+        //         $("#dinamic_group_account_table").empty();
+        //         get_data_group_account_horiz()
+        //     }
+        // }
 
         $('#submit').on('click', function() {
             $.ajax({
@@ -1743,7 +1783,7 @@
                 data: {
                     _token: "{{ csrf_token() }}",
                     plant_code: $('#data_main_plant').val(),
-                    periode: $('#periode').val(),
+                    periode: $('#data_detal_version').val(),
                     product_code: $('#data_main_produk').val(),
                     product_qty: $('#product_qty').val(),
                     cost_element: $('#data_main_cost_element').val(),
@@ -1753,7 +1793,6 @@
                     total_amount: $('#total_amount').val(),
                     unit_price_product: $('#unit_price_product').val(),
                     version: $('#data_main_version').val(),
-                    id_asumsi: $('#data_detal_version').val(),
                 },
                 success: function(response) {
                     Swal.fire({
@@ -1932,7 +1971,7 @@
                     _token: "{{ csrf_token() }}",
                     id: id,
                     plant_code: $('#edit_data_main_plant' + id).val(),
-                    periode: $('#edit_periode' + id).val(),
+                    periode: $('#edit_data_detal_version' + id).val(),
                     product_code: $('#edit_data_main_produk' + id).val(),
                     product_qty: $('#edit_product_qty' + id).val(),
                     cost_element: $('#edit_data_main_cost_element' + id).val(),
@@ -1942,7 +1981,6 @@
                     total_amount: $('#edit_total_amount' + id).val(),
                     unit_price_product: $('#edit_unit_price_product' + id).val(),
                     version: $('#edit_data_main_version' + id).val(),
-                    id_asumsi: $('#edit_data_detal_version' + id).val(),
 
                 },
                 success: function(response) {
@@ -1960,8 +1998,8 @@
                                 $('body').removeClass('modal-open');
                                 $('.modal-backdrop').remove();
 
-                                update_dt_horizontal()
-                                update_dt_group_account_horizontal()
+                                // update_dt_horizontal()
+                                // update_dt_group_account_horizontal()
                                 // table()
                                 $('#dt_zco').DataTable().ajax.reload();
                             }
@@ -2008,8 +2046,8 @@
                                 })
                                 .then((result) => {
                                     if (result.value) {
-                                        update_dt_horizontal()
-                                        update_dt_group_account_horizontal()
+                                        // update_dt_horizontal()
+                                        // update_dt_group_account_horizontal()
                                         // table()
                                         $('#dt_zco').DataTable().ajax.reload();
                                     }
