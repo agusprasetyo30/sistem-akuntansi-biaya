@@ -1,5 +1,6 @@
 <!-- Modal Add-->
-<div class="modal fade" id="modal_add" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="largemodal" aria-hidden="true" style="text-align: start;">
+<div class="modal fade" id="modal_add" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
+    aria-labelledby="largemodal" aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,68 +15,74 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
-                                <select name="main_version" id="data_main_version" class="form-control custom-select select2">
+                                <select name="main_version" id="data_main_version"
+                                    class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Versi</option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <label class="form-label">Bulan <span class="text-red">*</span></label>
                                 <select name="detail_version" id="data_detal_version" class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
                                 </select>
+                            </div> --}}
+                            <div class="form-group">
+                                <label>Periode </label>
+                                <input type="text" class="form-control" id="data_detal_version" placeholder="Periode"
+                                    autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Plant</label>
-                                <select name="main_plant" id="data_main_plant" class="form-control custom-select select2">
+                                <select name="main_plant" id="data_main_plant"
+                                    class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Plant</option>
                                 </select>
                             </div>
-                            {{-- <div class="form-group">
-                                <label>Periode </label>
-                                <input type="text" class="form-control" id="periode" placeholder="Periode" autocomplete="off">
-                            </div> --}}
                             <div class="form-group">
                                 <label class="form-label">Produk</label>
-                                <select name="main_produk" id="data_main_produk" class="form-control custom-select select2">
+                                <select name="main_produk" id="data_main_produk"
+                                    class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Produk</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Produk Qty </label>
-                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="product_qty"
-                                    id="product_qty" autocomplete="off">
+                                <input type="number" class="form-control form-control-sm" placeholder="Value"
+                                    name="product_qty" id="product_qty" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Cost Element</label>
-                                <select name="main_cost_element" id="data_main_cost_element" class="form-control custom-select select2">
+                                <select name="main_cost_element" id="data_main_cost_element"
+                                    class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Cost Element</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Material</label>
-                                <select name="main_material" id="data_main_material" class="form-control custom-select select2">
+                                <select name="main_material" id="data_main_material"
+                                    class="form-control custom-select select2">
                                     <option value="" disabled selected>Pilih Material</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Total Qty </label>
-                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="total_qty"
-                                    id="total_qty" autocomplete="off">
+                                <input type="number" class="form-control form-control-sm" placeholder="Value"
+                                    name="total_qty" id="total_qty" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Currency </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value" name="currency"
-                                    id="currency" autocomplete="off">
+                                <input type="text" class="form-control form-control-sm" placeholder="Value"
+                                    name="currency" id="currency" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Total Amount </label>
-                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="total_amount"
-                                    id="total_amount" autocomplete="off">
+                                <input type="number" class="form-control form-control-sm" placeholder="Value"
+                                    name="total_amount" id="total_amount" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Unit Price Produk </label>
-                                <input type="number" class="form-control form-control-sm" placeholder="Value" name="unit_price_product"
-                                    id="unit_price_product" autocomplete="off">
+                                <input type="number" class="form-control form-control-sm" placeholder="Value"
+                                    name="unit_price_product" id="unit_price_product" autocomplete="off">
                             </div>
                         </div>
                     </div>

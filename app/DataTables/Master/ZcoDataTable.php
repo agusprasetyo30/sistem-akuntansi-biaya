@@ -54,7 +54,7 @@ class ZcoDataTable extends DataTable
                 return $query->plant_code . ' ' . $query->plant_desc;
             })
             ->addColumn('periode', function ($query) {
-                return format_month($query->periode, 'bi');
+                return format_month($query->periode, 'eng');
             })
             ->addColumn('cost_element', function ($query) {
                 return $query->cost_element . ' ' . $query->gl_account_desc;
@@ -86,6 +86,9 @@ class ZcoDataTable extends DataTable
             ->orderColumn('filter_version', function ($query, $order) {
                 $query->orderBy('version_asumsi.version', $order);
             })
+            ->orderColumn('filter_periode', function ($query, $order) {
+                $query->orderBy('zco.periode', $order);
+            })
             ->filterColumn('filter_plant', function ($query, $keyword) {
                 if ($keyword != 'all') {
                     $query->where('zco.plant_code', 'ilike', '%' . $keyword . '%');
@@ -113,6 +116,10 @@ class ZcoDataTable extends DataTable
                 if ($keyword != 'all') {
                     $query->where('version_asumsi.id', 'ilike', '%' . $keyword . '%');
                 }
+            })
+            ->filterColumn('filter_periode', function ($query, $keyword) {
+                $temp = check_month_by_name($keyword);
+                $query->Where('zco.periode', 'ilike', '%-' . $temp . '-%');
             })
             ->addColumn('action', 'pages.buku_besar.zco.action')
             ->escapeColumns([]);
