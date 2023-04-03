@@ -163,16 +163,19 @@ class BalansController extends Controller
     {
         try {
 
-            $antrian = antrian_material_balans($request->version);
+            $antrian = array_unique(antrian_material_balans($request->version));
 
 //            dd($antrian);
-//            $result_antrian = [];
-//            foreach ($antrian as $items){
-//                foreach ($items as $item){
-//                    array_push($result_antrian, $item);
-//                }
-//            }
-            DB::transaction(function () use ($request, $antrian){
+            $result_antrian = "";
+            foreach ($antrian as $key_antrian =>$items_antrian){
+                if ($key_antrian == 0){
+                    $result_antrian .="'".$items_antrian."'";
+                }else{
+                    $result_antrian .=",'".$items_antrian."'";
+                }
+            }
+
+            DB::transaction(function () use ($request, $antrian, $result_antrian){
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
 
@@ -186,71 +189,23 @@ class BalansController extends Controller
                         'id' => $request->version,
                         'company_code' => auth()->user()->company_code
                     ])->first();
-
-//                $antrian = array_values(array_unique($result_antrian));
-
-
-//                $main_query_ori = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-//                    ->whereIn('map_kategori_balans.material_code', $antrian)
-//                    ->where('map_kategori_balans.version_id', $request->version)
-//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-//                    ->get();
-
-
                 try {
 
-//                    DB::enableQueryLog();
                     $query = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans', 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
                         ->select('kategori_balans.order_view', 'map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                         ->leftJoin('kategori_balans', 'kategori_balans.id', '=', 'map_kategori_balans.kategori_balans_id')
                         ->whereIn('map_kategori_balans.material_code', $antrian)
                         ->where('map_kategori_balans.version_id', $request->version)
-                        ->orderBy(DB::raw("array_position(ARRAY[".implode(',', $antrian)."]::varchar[],map_kategori_balans.material_code)"))
+                        ->orderBy(DB::raw("array_position(ARRAY[".$result_antrian."]::varchar[],map_kategori_balans.material_code)"))
                         ->orderBy('kategori_balans.order_view', 'ASC')
 //                        ->groupBy('kategori_balans.order_view', 'map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
                         ->get();
-//                        ->sortBy
-//                        (
-//                            ['material_code', function($query) use ($antrian){
-//                                return array_search($query['material_code'], $antrian);
-//                            }]
-//                        )
-//                        ->take(5);
-//                    dd($query,DB::getQueryLog());
+
                 }catch (\Exception $exception){
-//                    dd($exception);
+//                    dd(implode(',', $antrian));
+                    dd($exception);
                 }
-
-
-
-//                $main_query = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-//                    ->whereIn('map_kategori_balans.material_code', $antrian)
-//                    ->where('map_kategori_balans.version_id', $request->version)
-//                    ->whereIn('map_kategori_balans.kategori_balans_id', [1,2])
-//                    ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC')
-//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-//                    ->get();
-//
-//                $main_query_spesial = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-//                    ->whereIn('map_kategori_balans.material_code', $antrian)
-//                    ->where('map_kategori_balans.version_id', $request->version)
-//                    ->whereNotIn('map_kategori_balans.kategori_balans_id', [1,2,4,5,3,6])
-//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-//                    ->get();
-//
-//                $main_query_result = MapKategoriBalans::with(['material:material_code,material_name' ,'glos_cc', 'kategori_balans:id,order_view,type_kategori_balans,kategori_balans_desc' , 'saldo_awal:material_code,total_stock,total_value', 'pemakaian:material_code,pj_pemakaian_value,asumsi_umum_id', 'penjualan:material_code,pj_penjualan_value,asumsi_umum_id', 'price_rencana_pengadaan:material_code,price_rendaan_value,asumsi_umum_id', 'qty_rencana_pengadaan:material_code,qty_rendaan_value,asumsi_umum_id', 'const_rate', 'simulasi_proyeksi'])
-//                    ->select('map_kategori_balans.kategori_balans_id','map_kategori_balans.material_code', 'map_kategori_balans.plant_code', 'map_kategori_balans.company_code')
-//                    ->whereIn('map_kategori_balans.material_code', $antrian)
-//                    ->where('map_kategori_balans.version_id', $request->version)
-//                    ->whereIn('map_kategori_balans.kategori_balans_id', [3, 6, 4,5])
-//                    ->orderBy('map_kategori_balans.kategori_balans_id', 'ASC')
-//                    ->orderBy('map_kategori_balans.material_code', 'ASC')
-//                    ->get();
-//
-//                $temp_query = $main_query;
+//                dd($query);
 
                 try {
                     $collection_input_temp = collect();

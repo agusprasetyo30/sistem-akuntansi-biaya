@@ -9,6 +9,7 @@ use App\Models\GroupAccount;
 use App\Models\GroupAccountFC;
 use App\Models\KategoriMaterial;
 use App\Models\KategoriProduk;
+use App\Models\MapKategoriBalans;
 use App\Models\Material;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -123,7 +124,16 @@ class MaterialController extends Controller
             $input['updated_by'] = auth()->user()->id;
             $input['updated_at'] = Carbon::now();
 
-            DB::table('material')->where('material_code', $request->id)->update($input);
+            DB::transaction(function () use ($input, $material_code, $request) {
+                $check_mapping_material_balans = MapKategoriBalans::where('material_code', $request->id)->first();
+
+                DB::table('material')->where('material_code', $request->id)->update($input);
+                if ($request->kategori_material_id == '1') {
+                    if ($check_mapping_material_balans == null){
+                        mapping_plant_insert($material_code);
+                    }
+                }
+            });
 
             return setResponse([
                 'code' => 200,
