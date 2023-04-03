@@ -18,7 +18,7 @@
             <td>{{$dt}}</td>
             @else
                 @if($dt == -1)
-                <td>-</td>
+                <td  align="center" valign="middle">-</td>
                 @else
                 <td data-format='#,##0_-;-#,##0_-;"0"_-;_-@_-'>{{ $dt }}</td>
                 @endif

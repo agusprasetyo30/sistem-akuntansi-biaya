@@ -1,26 +1,26 @@
 <table border=1 style="border-collapse: collapse">
     <thead>
         <tr >
-            <td align="center" valign="top" rowspan="3"><b>Material</b></td>
-            <td align="center" valign="top" rowspan="3"><b>Plant Code</b></td>
-            <td align="center" valign="top" rowspan="3"><b>Keterangan</b></td>
+            <td align="center" valign="middle" rowspan="3"><b>Material</b></td>
+            <td align="center" valign="middle" rowspan="3"><b>Plant Code</b></td>
+            <td align="center" valign="middle" rowspan="3"><b>Keterangan</b></td>
             
             @foreach ($asumsi_umum as $data)
-                <td align="center" valign="top" colspan="3" data-format="dd/mm/yyyy"><b>{{ date('d/m/Y', strtotime($data->month_year)) }} </b></td>
+                <td align="center" valign="middle" colspan="3" data-format="dd/mm/yyyy"><b>{{ date('d/m/Y', strtotime($data->month_year)) }} </b></td>
             @endforeach
         </tr>
         <tr>
             @foreach ($asumsi_umum as $data)
-                <td>Q</td>
-                <td>P</td>
-                <td>Nilai = Q X P</td>
+                <td align="center" valign="middle">Q</td>
+                <td align="center" valign="middle">P</td>
+                <td align="center" valign="middle">Nilai = Q X P</td>
             @endforeach
         </tr>
         <tr>
             @foreach ($asumsi_umum as $data)
-                <td>Ton</td>
-                <td>Rp/Ton</td>
-                <td>Nilai (Rp)</td>
+                <td align="center" valign="middle">Ton</td>
+                <td align="center" valign="middle">Rp/Ton</td>
+                <td align="center" valign="middle">Nilai (Rp)</td>
             @endforeach
         </tr>
 
