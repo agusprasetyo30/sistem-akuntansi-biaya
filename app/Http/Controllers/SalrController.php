@@ -110,7 +110,11 @@ class SalrController extends Controller
                     ->where('version_id', $request->version);
 
             } elseif ($request->format_data == '2') {
-                $cost_center->whereBetween('salrs.periode', ['%-'.check_month_by_name($request->start_month).'-%', '%-'.check_month_by_name($request->end_month).'-%',])
+                $start_month = '2000-'.check_month_by_name($request->start_month).'-01 00:00:00';
+                $end_month = '2000-'.check_month_by_name($request->end_month).'-01 00:00:00';
+
+
+                $cost_center->whereBetween('salrs.periode', [$start_month, $end_month])
                     ->where('version_id', $request->version);
 
             }
@@ -147,7 +151,7 @@ class SalrController extends Controller
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['periode'] = $year.'-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
+            $input['periode'] = '2000-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
             $input['version_id'] = $request->version;
             $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
@@ -194,7 +198,7 @@ class SalrController extends Controller
             $input['cost_center'] = $request->cost_center;
             $input['company_code'] = auth()->user()->company_code;
             $input['material_code'] = $request->material_id;
-            $input['periode'] = $year.'-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
+            $input['periode'] = '2000-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
             $input['version_id'] = $request->version;
             $input['value'] = (float) str_replace('.', '', str_replace('Rp ', '', $request->value));
             $input['name'] = $request->nama;
@@ -266,7 +270,7 @@ class SalrController extends Controller
                 $query = array_combine($header, $query);
                 $data['gl_account_fc'] = strval($query['gl_account_fc']);
                 $data['cost_center'] = $query['cost_center'];
-                $data['periode'] = $year.'-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
+                $data['periode'] = '2000-'.check_month_by_name($request->bulan_periode).'-01 00:00:00';
                 $data['version_id'] = $request->main_version;
                 $data['name'] = $query['name'];
                 $data['value'] = $query['value']  != null ? (double) str_replace('.', '', str_replace('Rp ', '', $query['value'])) : 0;
