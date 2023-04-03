@@ -1,17 +1,20 @@
-@if (mapping_akses('zco','read'))
-    <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal" data-bs-target="{{__('#modal_detail'.$model->id)}}"><i class="fe fe-info"></i></button>
+@if (mapping_akses('zco', 'read'))
+    <button type="button" class="btn bg-info-transparent" title="detail" data-bs-toggle="modal"
+        data-bs-target="{{ __('#modal_detail' . $model->id) }}"><i class="fe fe-info"></i></button>
 @endif
 
-@if (mapping_akses('zco','update'))
-    <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal" data-bs-target="{{__('#modal_edit'.$model->id)}}"><i class="fe fe-edit"></i></a>
+@if (mapping_akses('zco', 'update'))
+    <a class="btn bg-warning-transparent" title="edit" data-bs-toggle="modal"
+        data-bs-target="{{ __('#modal_edit' . $model->id) }}"><i class="fe fe-edit"></i></a>
 @endif
 
-@if (mapping_akses('zco','delete'))
-    <a class="btn bg-danger-transparent" onclick="delete_zco({{$model->id}})" title="hapus" data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
+@if (mapping_akses('zco', 'delete'))
+    <a class="btn bg-danger-transparent" onclick="delete_zco({{ $model->id }})" title="hapus"
+        data-toggle="tooltip"><i class="fe fe fe-trash"></i></a>
 @endif
 <!-- Modal Detail-->
-<div class="modal fade" id="{{__('modal_detail'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
-    aria-hidden="true">
+<div class="modal fade" id="{{ __('modal_detail' . $model->id) }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    role="dialog" aria-labelledby="modal_detail" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -26,17 +29,23 @@
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
                                 <label>Versi Asumsi </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="version" value="{{$model->version}}" name="detail_version" id="detail_version" autocomplete="off">
+                                <input disabled type="text" class="form-control form-control-sm"
+                                    placeholder="version" value="{{ $model->version }}" name="detail_version"
+                                    id="detail_version" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Periode </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="bulan" value="{{format_month($model->periode,'bi')}}" name="detail_bulan" id="detail_bulan" autocomplete="off">
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="bulan"
+                                    value="{{ format_month($model->periode, 'eng') }}" name="detail_bulan"
+                                    id="detail_bulan" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Plant </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Versi" value="{{$model->plant_code}}" name="detail_plant_code
-                                    id="detail_version" autocomplete="off">
+                                    placeholder="Nama Versi" value="{{ $model->plant_code }}"
+                                    name="detail_plant_code
+                                    id="detail_version"
+                                    autocomplete="off">
                             </div>
                             {{-- <div class="form-group">
                                 <label>Periode </label>
@@ -45,48 +54,54 @@
                             <div class="form-group">
                                 <label>Produk </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->product_code}} {{$model->product_name}}" name="detail_product_code"
-                                    id="detail_product_code" autocomplete="off">
+                                    placeholder="Nama Kategori"
+                                    value="{{ $model->product_code }} {{ $model->product_name }}"
+                                    name="detail_product_code" id="detail_product_code" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Produk Qty </label>
-                                <input disabled type="text" class="form-control form-control-sm" placeholder="bulan" value="{{$model->product_qty}}" name="detail_product_qty" id="detail_bulan" autocomplete="off">
+                                <input disabled type="text" class="form-control form-control-sm" placeholder="bulan"
+                                    value="{{ $model->product_qty }}" name="detail_product_qty" id="detail_bulan"
+                                    autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Cost Element </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->cost_element}} {{$model->gl_account_desc}}" name="detail_cost_element"
-                                    id="detail_cost_element" autocomplete="off">
+                                    placeholder="Nama Kategori"
+                                    value="{{ $model->cost_element }} {{ $model->gl_account_desc }}"
+                                    name="detail_cost_element" id="detail_cost_element" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Material </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nama Kategori" value="{{$model->material_code}} {{$model->material_name}}" name="detail_material_code"
-                                    id="detail_material_code" autocomplete="off">
+                                    placeholder="Nama Kategori"
+                                    value="{{ $model->material_code }} {{ $model->material_name }}"
+                                    name="detail_material_code" id="detail_material_code" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Total Qty </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->total_qty}}" name="detail_total_qty"
+                                    placeholder="Nilai Satuan" value="{{ $model->total_qty }}" name="detail_total_qty"
                                     id="detail_total_qty" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Currency </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->currency}}" name="detail_currency"
+                                    placeholder="Nilai Satuan" value="{{ $model->currency }}" name="detail_currency"
                                     id="detail_currency" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Total Amount </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->total_amount}}" name="detail_total_amount"
-                                    id="detail_total_amount" autocomplete="off">
+                                    placeholder="Nilai Satuan" value="{{ $model->total_amount }}"
+                                    name="detail_total_amount" id="detail_total_amount" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Unit Price Produk </label>
                                 <input disabled type="text" class="form-control form-control-sm"
-                                    placeholder="Nilai Satuan" value="{{$model->unit_price_product}}" name="detail_unit_price_product"
-                                    id="detail_unit_price_product" autocomplete="off">
+                                    placeholder="Nilai Satuan" value="{{ $model->unit_price_product }}"
+                                    name="detail_unit_price_product" id="detail_unit_price_product"
+                                    autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -101,8 +116,8 @@
 <!--/div-->
 
 <!-- Modal Edit-->
-<div class="modal fade" id="{{__('modal_edit'.$model->id)}}" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modal_detail"
-    aria-hidden="true" style="text-align: start;">
+<div class="modal fade" id="{{ __('modal_edit' . $model->id) }}" data-bs-backdrop="static" data-bs-keyboard="false"
+    role="dialog" aria-labelledby="modal_detail" aria-hidden="true" style="text-align: start;">
     <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -117,82 +132,95 @@
                         <div class="col-md-12" style="text-align: start;">
                             <div class="form-group">
                                 <label class="form-label">Versi Asumsi <span class="text-red">*</span></label>
-                                <select name="edit_data_main_version{{$model->id}}" id="edit_data_main_version{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->version_id}}" selected>{{$model->version}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Bulan <span class="text-red">*</span></label>
-                                <select name="edit_data_detal_version{{$model->id}}" id="edit_data_detal_version{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->periode}}" selected>{{format_month($model->periode, 'se')}}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Plant</label>
-                                <select name="main_plant" id="edit_data_main_plant{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->plant_code}}" selected>{{$model->plant_code}}</option>
+                                <select name="edit_data_main_version{{ $model->id }}"
+                                    id="edit_data_main_version{{ $model->id }}"
+                                    class="form-control custom-select select2">
+                                    <option value="{{ $model->version_id }}" selected>{{ $model->version }}</option>
                                 </select>
                             </div>
                             {{-- <div class="form-group">
-                                <label>Periode </label>
-                                <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{format_month($model->periode, 'se')}}" name="edit_periode"
-                                    id="edit_periode{{$model->id}}" autocomplete="off">
+                                <label class="form-label">Bulan <span class="text-red">*</span></label>
+                                <select name="edit_data_detal_version{{ $model->id }}"
+                                    id="edit_data_detal_version{{ $model->id }}"
+                                    class="form-control custom-select select2">
+                                    <option value="{{ $model->periode }}" selected>
+                                        {{ format_month($model->periode, 'se') }}</option>
+                                </select>
                             </div> --}}
                             <div class="form-group">
+                                <label>Periode </label>
+                                <input type="text" class="form-control form-control-sm" placeholder="Value"
+                                    value="{{ format_month($model->periode, 'eng') }}" name="edit_periode"
+                                    id="edit_data_detal_version{{ $model->id }}" autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Plant</label>
+                                <select name="main_plant" id="edit_data_main_plant{{ $model->id }}"
+                                    class="form-control custom-select select2">
+                                    <option value="{{ $model->plant_code }}" selected>{{ $model->plant_code }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label class="form-label">Produk</label>
-                                <select name="main_produk" id="edit_data_main_produk{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->product_code}}" selected>{{$model->product_code}} - {{$model->product_name}}</option>
+                                <select name="main_produk" id="edit_data_main_produk{{ $model->id }}"
+                                    class="form-control custom-select select2">
+                                    <option value="{{ $model->product_code }}" selected>{{ $model->product_code }} -
+                                        {{ $model->product_name }}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Produk Qty </label>
                                 <input type="number" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->product_qty}}" name="edit_product_qty"
-                                    id="edit_product_qty{{$model->id}}" autocomplete="off">
+                                    value="{{ $model->product_qty }}" name="edit_product_qty"
+                                    id="edit_product_qty{{ $model->id }}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Cost Element</label>
-                                <select name="main_produk" id="edit_data_main_cost_element{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->cost_element}}" selected>{{$model->cost_element}} {{$model->gl_account_desc}}</option>
+                                <select name="main_produk" id="edit_data_main_cost_element{{ $model->id }}"
+                                    class="form-control custom-select select2">
+                                    <option value="{{ $model->cost_element }}" selected>{{ $model->cost_element }}
+                                        {{ $model->gl_account_desc }}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Material</label>
-                                <select name="main_material" id="edit_data_main_material{{$model->id}}" class="form-control custom-select select2">
-                                    <option value="{{$model->material_code}}" selected>{{$model->material_code}} - {{$model->material_name}}</option>
+                                <select name="main_material" id="edit_data_main_material{{ $model->id }}"
+                                    class="form-control custom-select select2">
+                                    <option value="{{ $model->material_code }}" selected>{{ $model->material_code }}
+                                        - {{ $model->material_name }}</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label>Total Qty </label>
                                 <input type="number" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->total_qty}}" name="edit_total_qty"
-                                    id="edit_total_qty{{$model->id}}" autocomplete="off">
+                                    value="{{ $model->total_qty }}" name="edit_total_qty"
+                                    id="edit_total_qty{{ $model->id }}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Currency </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->currency}}" name="edit_currency"
-                                    id="edit_currency{{$model->id}}" autocomplete="off">
+                                    value="{{ $model->currency }}" name="edit_currency"
+                                    id="edit_currency{{ $model->id }}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Total Amount </label>
                                 <input type="number" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->total_amount}}" name="edit_total_amount"
-                                    id="edit_total_amount{{$model->id}}" autocomplete="off">
+                                    value="{{ $model->total_amount }}" name="edit_total_amount"
+                                    id="edit_total_amount{{ $model->id }}" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <label>Unit Price Produk </label>
                                 <input type="number" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{$model->unit_price_product}}" name="edit_unit_price_product"
-                                    id="edit_unit_price_product{{$model->id}}" autocomplete="off">
+                                    value="{{ $model->unit_price_product }}" name="edit_unit_price_product"
+                                    id="edit_unit_price_product{{ $model->id }}" autocomplete="off">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" id="submit_edit" onclick="update_zco({{$model->id}})"
+                <button type="button" id="submit_edit" onclick="update_zco({{ $model->id }})"
                     class="btn btn-primary">Simpan</button>
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Kembali</button>
             </div>
@@ -202,13 +230,13 @@
 <!--/div-->
 
 <script>
-    // $('#edit_qty_renprod_value'+{{$model->id}}).on('keyup', function(){
+    // $('#edit_qty_renprod_value'+{{ $model->id }}).on('keyup', function(){
     //     let rupiah = formatRupiah($(this).val(), "Rp ")
     //     $(this).val(rupiah)
     // });
 
-    $('#edit_data_main_plant'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
+    $('#edit_data_main_plant' + {{ $model->id }}).select2({
+        dropdownParent: $('#modal_edit' + {{ $model->id }}),
         placeholder: 'Pilih Plant',
         width: '100%',
         allowClear: false,
@@ -216,7 +244,7 @@
             url: "{{ route('plant_select') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     search: params.term
                 };
@@ -228,9 +256,9 @@
             }
         }
     })
-    
-    $('#edit_data_main_produk'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
+
+    $('#edit_data_main_produk' + {{ $model->id }}).select2({
+        dropdownParent: $('#modal_edit' + {{ $model->id }}),
         placeholder: 'Pilih Produk',
         width: '100%',
         allowClear: false,
@@ -238,7 +266,7 @@
             url: "{{ route('material_select') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     search: params.term
                 };
@@ -251,8 +279,8 @@
         }
     })
 
-    $('#edit_data_main_cost_element'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
+    $('#edit_data_main_cost_element' + {{ $model->id }}).select2({
+        dropdownParent: $('#modal_edit' + {{ $model->id }}),
         placeholder: 'Pilih Cost Element',
         width: '100%',
         allowClear: false,
@@ -260,7 +288,7 @@
             url: "{{ route('cost_element_select') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     search: params.term
                 };
@@ -273,8 +301,8 @@
         }
     })
 
-    $('#edit_data_main_material'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
+    $('#edit_data_main_material' + {{ $model->id }}).select2({
+        dropdownParent: $('#modal_edit' + {{ $model->id }}),
         placeholder: 'Pilih Material',
         width: '100%',
         allowClear: false,
@@ -282,7 +310,7 @@
             url: "{{ route('material_select') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     search: params.term
                 };
@@ -295,8 +323,8 @@
         }
     })
 
-    $('#edit_data_main_version'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
+    $('#edit_data_main_version' + {{ $model->id }}).select2({
+        dropdownParent: $('#modal_edit' + {{ $model->id }}),
         placeholder: 'Pilih Versi',
         width: '100%',
         allowClear: false,
@@ -304,7 +332,7 @@
             url: "{{ route('version_select') }}",
             dataType: 'json',
             delay: 250,
-            data: function (params) {
+            data: function(params) {
                 return {
                     search: params.term
                 };
@@ -315,55 +343,19 @@
                 };
             }
         }
-    }).on('change', function () {
-        var data_version = $('#edit_data_main_version'+{{$model->id}}).val();
-        $('#edit_data_detal_version'+{{$model->id}}).append('<option selected disabled value="">Pilih Bulan</option>').select2({
-            dropdownParent: $('#modal_edit'+{{$model->id}}),
-            placeholder: 'Pilih Bulan',
-            width: '100%',
-            allowClear: false,
-            ajax: {
-                url: "{{ route('version_detail_select') }}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        search: params.term,
-                        version:data_version
-
-                    };
-                },
-                processResults: function(response) {
-                    return {
-                        results: response
-                    };
-                }
-            }
-        });
     })
 
-    $('#edit_data_detal_version'+{{$model->id}}).select2({
-        dropdownParent: $('#modal_edit'+{{$model->id}}),
-        placeholder: 'Pilih Bulan',
-        width: '100%',
-        allowClear: false,
-        ajax: {
-            url: "{{ route('version_detail_select') }}",
-            dataType: 'json',
-            delay: 250,
-            data: function (params) {
-                return {
-                    search: params.term,
-                    version: $('#edit_data_main_version'+{{$model->id}}).val()
-
-                };
-            },
-            processResults: function(response) {
-                return {
-                    results: response
-                };
-            }
-        }
+    $('#edit_data_detal_version' + {{ $model->id }}).bootstrapdatepicker({
+        dropdownParent: $('#modal_edit' + {{ $model->id }}),
+        format: "MM",
+        viewMode: "months",
+        minViewMode: "months",
+        autoclose: true,
+        showOnFocus: false,
+    }).on('click', function() {
+        $('#edit_data_detal_version' + {{ $model->id }}).bootstrapdatepicker("show");
+        $('.datepicker-switch').css('display', 'none');
+        $('.prev').css('display', 'none');
+        $('.next').css('display', 'none');
     });
-    
 </script>

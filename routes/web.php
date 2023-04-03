@@ -360,6 +360,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::group(['prefix' => 'zco', 'middleware' => ['role:zco']], function () {
             Route::get('/', [ZcoController::class, 'index'])->name('zco');
+            Route::post('get_data', [ZcoController::class, 'get_data'])->name('get_data_zco');
+            Route::post('get_data_ga', [ZcoController::class, 'get_data_ga'])->name('get_data_zco_ga');
             Route::post('insert', [ZcoController::class, 'create'])->name('insert_zco');
             Route::post('update', [ZcoController::class, 'update'])->name('update_zco');
             Route::post('delete', [ZcoController::class, 'delete'])->name('delete_zco');

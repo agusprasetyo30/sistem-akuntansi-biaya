@@ -24,31 +24,25 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ZcoController extends Controller
 {
-    public function index(Request $request, ZcoDataTable $zcoDataTable, H_ZcoDataTable $h_zcoDataTable, H_ZcoGroupAccountDataTable $h_zcogroupaccountDataTable)
+    public function index(Request $request, ZcoDataTable $zcoDataTable)
     {
         if ($request->data == 'index') {
             return $zcoDataTable->with(['filter_company' => $request->filter_company, 'filter_version' => $request->filter_version])->render('pages.buku_besar.zco.index');
-        } else if ($request->data == 'horizontal') {
-            $asumsi = Asumsi_Umum::where('id',  $request->moth)->first();
+        }
+
+        return view('pages.buku_besar.zco.index');
+    }
+
+    public function get_data(Request $request, H_ZcoDataTable $h_zcoDataTable)
+    {
+        if ($request->data == 'horizontal') {
             return $h_zcoDataTable->with([
                 'material' => $request->material,
                 'plant' => $request->plant,
                 'format' => $request->format_data,
                 'start_month' => $request->start_month,
                 'end_month' => $request->end_month,
-                'moth' => $asumsi->month_year ?? null,
-                'version' => $request->version,
-                'company' => $request->company,
-            ])->render('pages.buku_besar.zco.index');
-        } else if ($request->data == 'horizontal_group_account') {
-            $asumsi = Asumsi_Umum::where('id',  $request->moth)->first();
-            return $h_zcogroupaccountDataTable->with([
-                'material' => $request->material,
-                'plant' => $request->plant,
-                'format' => $request->format_data,
-                'start_month' => $request->start_month,
-                'end_month' => $request->end_month,
-                'moth' => $asumsi->month_year ?? null,
+                'moth' => $request->moth,
                 'version' => $request->version,
                 'company' => $request->company,
             ])->render('pages.buku_besar.zco.index');
@@ -91,21 +85,36 @@ class ZcoController extends Controller
                 $material->where('zco.company_code', $request->company);
             }
 
-            $asumsi = Asumsi_Umum::where('id',  $request->moth)->first();
             if ($request->format_data == '0') {
-                $material->where('periode', 'ilike', '%' . $asumsi->month_year . '%');
+                $material->where('zco.periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
             } else if ($request->format_data == '1') {
-                $start_temp = explode('-', $request->start_month);
-                $end_temp = explode('-', $request->end_month);
-                $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                $start_month = '2000-' . check_month_by_name($request->start_month) . '-01 00:00:00';
+                $end_month = '2000-' . check_month_by_name($request->end_month) . '-01 00:00:00';
 
-                $material->whereBetween('periode', [$start_date, $end_date]);
+                $material->whereBetween('zco.periode', [$start_month, $end_month]);
             }
             // dd($request->material, $request->plant);
             $material = $material->get();
             // dd($material);
             return response()->json(['code' => 200, 'material' => $material]);
+        }
+
+        return view('pages.buku_besar.zco.index');
+    }
+
+    public function get_data_ga(Request $request, H_ZcoGroupAccountDataTable $h_zcogroupaccountDataTable)
+    {
+        if ($request->data == 'horizontal_group_account') {
+            return $h_zcogroupaccountDataTable->with([
+                'material' => $request->material,
+                'plant' => $request->plant,
+                'format' => $request->format_data,
+                'start_month' => $request->start_month,
+                'end_month' => $request->end_month,
+                'moth' => $request->moth,
+                'version' => $request->version,
+                'company' => $request->company,
+            ])->render('pages.buku_besar.zco.index');
         } else if ($request->data == 'group_account') {
             if (auth()->user()->mapping_akses('zco')->company_code == 'all') {
                 $validator = Validator::make($request->all(), [
@@ -145,16 +154,13 @@ class ZcoController extends Controller
                 $group_account->where('zco.company_code', $request->company);
             }
 
-            $asumsi = Asumsi_Umum::where('id',  $request->moth)->first();
             if ($request->format_data == '0') {
-                $group_account->where('periode', 'ilike', '%' . $asumsi->month_year . '%');
+                $group_account->where('zco.periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
             } else if ($request->format_data == '1') {
-                $start_temp = explode('-', $request->start_month);
-                $end_temp = explode('-', $request->end_month);
-                $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                $start_month = '2000-' . check_month_by_name($request->start_month) . '-01 00:00:00';
+                $end_month = '2000-' . check_month_by_name($request->end_month) . '-01 00:00:00';
 
-                $group_account->whereBetween('periode', [$start_date, $end_date]);
+                $group_account->whereBetween('zco.periode', [$start_month, $end_month]);
             }
             // dd($request->material, $request->plant);
             $group_account = $group_account->get();
@@ -174,17 +180,15 @@ class ZcoController extends Controller
                 "material_code" => 'required',
                 "cost_element" => 'required',
                 "version" => 'required',
-                "id_asumsi" => 'required',
+                "periode" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $data_asumsi = Asumsi_Umum::where('id', $request->id_asumsi)->first();
-
             $input['company_code'] = auth()->user()->company_code;
             $input['version_id'] = (int) $request->version;
-            $input['periode'] = $data_asumsi->month_year;
+            $input['periode'] = '2000-' . check_month_by_name($request->periode) . '-01 00:00:00';
             $input['plant_code'] = $request->plant_code;
             $input['product_code'] = $request->product_code;
             $input['product_qty'] = $request->product_qty;
@@ -221,18 +225,15 @@ class ZcoController extends Controller
                 "material_code" => 'required',
                 "cost_element" => 'required',
                 "version" => 'required',
-                "id_asumsi" => 'required',
+                "periode" => 'required',
             ], validatorMsg());
 
             if ($validator->fails())
                 return $this->makeValidMsg($validator);
 
-            $data_asumsi = Asumsi_Umum::where('id', $request->id_asumsi)->first();
-
             $input['company_code'] = auth()->user()->company_code;
-            $input['plant_code'] = $request->plant_code;
             $input['version_id'] = (int) $request->version;
-            $input['periode'] = $data_asumsi->month_year;
+            $input['periode'] = '2000-' . check_month_by_name($request->periode) . '-01 00:00:00';
             $input['product_code'] = $request->product_code;
             $input['product_qty'] = $request->product_qty;
             $input['cost_element'] = $request->cost_element;
@@ -290,16 +291,15 @@ class ZcoController extends Controller
             $master_plant = Plant::get()->pluck('plant_code')->all();
             $master_product = Material::get()->pluck('material_code')->all();
             $master_cost_element = GLAccount::get()->pluck('gl_account')->all();
-
             $excel = Excel::toArray(new Zco2Import(), $request->file('file'));
             $header = $excel[0][0];
             unset($excel[0][0]);
 
-            $excel_fix =  collect($excel[0])->map(function ($query) use ($asumsi, $header) {
+            $excel_fix =  collect($excel[0])->map(function ($query) use ($header, $request) {
                 $query = array_combine($header, $query);
                 $data['plant_code'] = $query['plant_code'];
-                $data['periode'] = $asumsi->month_year;
-                $data['version_id'] = $asumsi->version_id;
+                $data['periode'] = '2000-' . check_month_by_name($request->periode) . '-01 00:00:00';
+                $data['version_id'] = $request->version;
                 $data['product_code'] = strval($query['product_code']);
                 $data['product_qty'] = $query['product_qty'];
                 $data['cost_element'] = strval($query['cost_element']);
@@ -333,9 +333,9 @@ class ZcoController extends Controller
             $check_cost_element = array_values(array_diff($cost_element_excel, $master_cost_element));
 
             if ($check_plant == null && $check_product == null && $check_cost_element == null) {
-                DB::transaction(function () use ($excel_fix, $asumsi) {
-                    Zco::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
-                        ->where('version_id', $asumsi->version_id)
+                DB::transaction(function () use ($excel_fix, $request) {
+                    Zco::where('periode', 'ilike', '%-' . check_month_by_name($request->periode) . '-%')
+                        ->where('version_id', $request->version)
                         ->delete();
 
                     $result = array_values($excel_fix->toArray());
@@ -399,9 +399,8 @@ class ZcoController extends Controller
             return $this->makeValidMsg($validator);
 
         try {
-            $asumsi = Asumsi_Umum::where('id', $request->periode)->first();
-
-            $check = Zco::where('periode', 'ilike', '%' . $asumsi->month_year . '%')
+            $check = Zco::where('periode', 'ilike', '%-' . check_month_by_name($request->periode) . '-%')
+                ->where('version_id', $request->version)
                 ->first();
 
             if ($check == null) {
@@ -422,7 +421,7 @@ class ZcoController extends Controller
         }
     }
 
-     /**
+    /**
      * Undocumented function
      *
      * @param Request $request
@@ -625,7 +624,7 @@ class ZcoController extends Controller
                     'product_code' => $query_col_data->product_code,
                     'plant_code' => $query_col_data->plant_code,
                     'material_code' => $query_row_data->material_code,
-                ]); 
+                ]);
 
             $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
                 ->where([
