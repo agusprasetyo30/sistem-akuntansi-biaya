@@ -22,7 +22,13 @@ class H_ZcoDataTable extends DataTable
      */
     public function dataTable($query)
     {
-        $query = Material::select('material_code', 'material_name', 'group_account_code')->orderBy('material_code', 'asc');
+        // $query = Material::select('material_code', 'material_name', 'group_account_code')->orderBy('material_code', 'asc');
+        $query = Zco::select('zco.material_code', 'material.group_account_code', 'material.material_name')
+            ->leftjoin('material', 'zco.material_code', '=', 'material.material_code')
+            ->groupBy('zco.material_code', 'material.group_account_code', 'material.material_name')
+            ->orderBy('zco.material_code', 'asc');
+        // ->whereNotNull('zco.material_code');
+
         if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
             $query = $query->where('material.company_code', auth()->user()->mapping_akses('zco')->company_code);
         }
@@ -99,18 +105,16 @@ class H_ZcoDataTable extends DataTable
                     ])->groupBy('product_qty', 'periode');
 
                 if ($this->format == '0') {
-                    $total_qty->where('periode', 'ilike', '%' . $this->moth . '%');
-                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
-                    $kuantum_produksi->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $total_qty->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                    $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                    $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
                 } else if ($this->format == '1') {
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $start_month = '2000-' . check_month_by_name($this->start_month) . '-01 00:00:00';
+                    $end_month = '2000-' . check_month_by_name($this->end_month) . '-01 00:00:00';
 
-                    $total_qty->whereBetween('periode', [$start_date, $end_date]);
-                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-                    $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                    $total_qty->whereBetween('periode', [$start_month, $end_month]);
+                    $total_biaya->whereBetween('periode', [$start_month, $end_month]);
+                    $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
                 }
 
                 $total_qty = $total_qty->first();
@@ -139,6 +143,8 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 return $harga_satuan ? $harga_satuan  : 0;
+
+                // return 0;
             })->addColumn($key . 'cr', function ($query) use ($zcoValues, $item) {
                 $total_qty = Zco::select(DB::raw('SUM(total_qty) as total_qty'))
                     ->where([
@@ -154,16 +160,14 @@ class H_ZcoDataTable extends DataTable
                     ])->groupBy('product_qty', 'periode');
 
                 if ($this->format == '0') {
-                    $total_qty->where('periode', 'ilike', '%' . $this->moth . '%');
-                    $kuantum_produksi->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $total_qty->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                    $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
                 } else if ($this->format == '1') {
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $start_month = '2000-' . check_month_by_name($this->start_month) . '-01 00:00:00';
+                    $end_month = '2000-' . check_month_by_name($this->end_month) . '-01 00:00:00';
 
-                    $total_qty->whereBetween('periode', [$start_date, $end_date]);
-                    $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                    $total_qty->whereBetween('periode', [$start_month, $end_month]);
+                    $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
                 }
 
                 $total_qty = $total_qty->first();
@@ -181,6 +185,8 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 return $cr ? $cr : 0;
+
+                // return 0;
             })->addColumn($key . 'biaya_perton', function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
                     ->where([
@@ -196,16 +202,14 @@ class H_ZcoDataTable extends DataTable
                     ])->groupBy('product_qty', 'periode');
 
                 if ($this->format == '0') {
-                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
-                    $kuantum_produksi->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                    $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
                 } else if ($this->format == '1') {
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $start_month = '2000-' . check_month_by_name($this->start_month) . '-01 00:00:00';
+                    $end_month = '2000-' . check_month_by_name($this->end_month) . '-01 00:00:00';
 
-                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-                    $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                    $total_biaya->whereBetween('periode', [$start_month, $end_month]);
+                    $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
                 }
 
                 $total_biaya = $total_biaya->first();
@@ -224,6 +228,8 @@ class H_ZcoDataTable extends DataTable
                 }
 
                 return $biaya_perton ? $biaya_perton : 0;
+
+                // return 0;
             })->addColumn($key . 'total_biaya', function ($query) use ($zcoValues, $item) {
                 $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
                     ->where([
@@ -233,19 +239,19 @@ class H_ZcoDataTable extends DataTable
                     ]);
 
                 if ($this->format == '0') {
-                    $total_biaya->where('periode', 'ilike', '%' . $this->moth . '%');
+                    $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
                 } else if ($this->format == '1') {
-                    $start_temp = explode('-', $this->start_month);
-                    $end_temp = explode('-', $this->end_month);
-                    $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                    $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                    $start_month = '2000-' . check_month_by_name($this->start_month) . '-01 00:00:00';
+                    $end_month = '2000-' . check_month_by_name($this->end_month) . '-01 00:00:00';
 
-                    $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+                    $total_biaya->whereBetween('periode', [$start_month, $end_month]);
                 }
 
                 $total_biaya = $total_biaya->first();
 
                 return $total_biaya->total_amount ? (float) $total_biaya->total_amount : 0;
+
+                // return 0;
             });
         }
 

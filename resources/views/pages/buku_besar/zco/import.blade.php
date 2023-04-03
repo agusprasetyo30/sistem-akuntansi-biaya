@@ -41,8 +41,7 @@
                                 <div class="form-group">
                                     <label class="form-label">Periode </label>
                                     <input type="text" class="form-control" name="detail_version_import"
-                                        id="detail_version_import" placeholder="Bulan-Tahun" autocomplete="off"
-                                        required>
+                                        id="detail_version_import" placeholder="Bulan" autocomplete="off" required>
                                     <button style="display: none;" type="button" class="btn btn-primary mt-2"
                                         id="submit-export"><i class="fe fe-download me-2"></i>Download Template</button>
                                 </div>

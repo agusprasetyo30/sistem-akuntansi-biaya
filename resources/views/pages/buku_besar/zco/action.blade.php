@@ -36,7 +36,7 @@
                             <div class="form-group">
                                 <label>Periode </label>
                                 <input disabled type="text" class="form-control form-control-sm" placeholder="bulan"
-                                    value="{{ format_month($model->periode, 'bi') }}" name="detail_bulan"
+                                    value="{{ format_month($model->periode, 'eng') }}" name="detail_bulan"
                                     id="detail_bulan" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -150,7 +150,7 @@
                             <div class="form-group">
                                 <label>Periode </label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Value"
-                                    value="{{ format_month($model->periode, 'se') }}" name="edit_periode"
+                                    value="{{ format_month($model->periode, 'eng') }}" name="edit_periode"
                                     id="edit_data_detal_version{{ $model->id }}" autocomplete="off">
                             </div>
                             <div class="form-group">
@@ -347,7 +347,7 @@
 
     $('#edit_data_detal_version' + {{ $model->id }}).bootstrapdatepicker({
         dropdownParent: $('#modal_edit' + {{ $model->id }}),
-        format: "mm",
+        format: "MM",
         viewMode: "months",
         minViewMode: "months",
         autoclose: true,
