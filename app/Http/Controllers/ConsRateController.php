@@ -223,7 +223,7 @@ class ConsRateController extends Controller
                 'title' => 'Berhasil meng-import data'
             ]);
         } catch (\Exception $exception) {
-            dd($exception);
+//            dd($exception);
             $empty_excel = Excel::toArray(new ConsRateImport($request->version), $request->file('file'));
 
             $plant_code = [];
