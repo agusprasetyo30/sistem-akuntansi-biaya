@@ -41,7 +41,9 @@ class H_SalrDataTable extends DataTable
                 ->where('version_id', $this->version);
 
         }elseif ($this->format == '2'){
-            $cost_center->whereBetween('salrs.periode', ['%-'.check_month_by_name($this->start_month).'-%', '%-'.check_month_by_name($this->end_month).'-%',])
+            $start_month = '2000-'.check_month_by_name($this->start_month).'-01 00:00:00';
+            $end_month = '2000-'.check_month_by_name($this->end_month).'-01 00:00:00';
+            $cost_center->whereBetween('salrs.periode', [$start_month, $end_month])
                 ->where('version_id', $this->version);
         }
 
@@ -72,7 +74,10 @@ class H_SalrDataTable extends DataTable
                     $value_salr->where('salrs.periode', 'ilike', '%-'.check_month_by_name($this->month).'-%')
                         ->where('version_id', $this->version);
                 }elseif ($this->format == '2'){
-                    $value_salr->whereBetween('salrs.periode', ['%-'.check_month_by_name($this->start_month).'-%', '%-'.check_month_by_name($this->end_month).'-%',])
+                    $start_month = '2000-'.check_month_by_name($this->start_month).'-01 00:00:00';
+                    $end_month = '2000-'.check_month_by_name($this->end_month).'-01 00:00:00';
+
+                    $value_salr->whereBetween('salrs.periode', [$start_month, $end_month])
                         ->where('version_id', $this->version);
                 }
 
@@ -104,7 +109,10 @@ class H_SalrDataTable extends DataTable
                         ->where('version_id', $this->version);
                 }elseif ($this->format == '2'){
 
-                    $total->whereBetween('salrs.periode', ['%-'.check_month_by_name($this->start_month).'-%', '%-'.check_month_by_name($this->end_month).'-%',])
+                    $start_month = '2000-'.check_month_by_name($this->start_month).'-01 00:00:00';
+                    $end_month = '2000-'.check_month_by_name($this->end_month).'-01 00:00:00';
+
+                    $total->whereBetween('salrs.periode', [$start_month, $end_month])
                         ->where('version_id', $this->version);
                 }
 
