@@ -405,6 +405,7 @@ class ConsRateController extends Controller
 
             $input['approved_by'] = auth()->user()->id;
             $input['approved_at'] = Carbon::now();
+            $input['status_pengajuan'] = 'APPROVED';
 
             DB::transaction(function () use ($request, $input) {
                 ConsRate::where('version_id', $request->filter_version)->update($input);
@@ -445,6 +446,7 @@ class ConsRateController extends Controller
             $input['rejected_at'] = Carbon::now();
             $input['submited_by'] = null;
             $input['submited_at'] = null;
+            $input['status_pengajuan'] = 'REJECTED';
 
             DB::transaction(function () use ($request, $input) {
                 ConsRate::where('version_id', $request->filter_version)->update($input);
