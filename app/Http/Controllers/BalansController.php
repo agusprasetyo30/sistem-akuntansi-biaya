@@ -163,6 +163,31 @@ class BalansController extends Controller
     {
         try {
 
+            $msg = '';
+
+            $cons_rate = ConsRate::with(
+                ['glos_cc1']
+            )
+                ->select('product_code', 'plant_code', 'version_id')
+                ->where('version_id', $request->version)
+                ->groupBy('product_code', 'plant_code', 'version_id')
+                ->get();
+
+            foreach ($cons_rate as $items_cost_center){
+                if ($items_cost_center->glos_cc1 == null){
+                    $msg .= '<p>Mapping Cost Center Dengan Product ' . $items_cost_center->product_code . ' Pada Plant '.$items_cost_center->plant_code.' Tidak Ada Pada Gloss CC</p>';
+                }
+            }
+
+
+            if ($msg != ''){
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Data Gagal Diproyeksikan',
+                    'message' => $msg,
+                ]);
+            }
+
             $antrian = array_unique(antrian_material_balans($request->version));
 
 //            dd($antrian);
@@ -483,4 +508,5 @@ class BalansController extends Controller
             ]);
         }
     }
+
 }
