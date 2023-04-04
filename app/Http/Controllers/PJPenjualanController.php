@@ -6,6 +6,7 @@ use App\DataTables\Master\H_PJPenjualanDataTable;
 use App\DataTables\Master\PJPenjualanDataTable;
 use App\Exports\MultipleSheet\MS_PJPenjualanExport;
 use App\Exports\Horizontal\PJPenjualanExport;
+use App\Exports\Vertical\Vertikal_PJPenjualanExport;
 use App\Imports\PJPenjualanImport;
 use App\Models\Material;
 use App\Models\PJ_Penjualan;
@@ -275,6 +276,39 @@ class PJPenjualanController extends Controller
         ];
 
         return Excel::download(new PJPenjualanExport($data), "PJ Penjualan - Horizontal.xlsx");
+    }
+
+    public function export_vertikal(Request $request)
+    {
+        $penjualan = DB::table('pj_penjualan')
+            ->select('pj_penjualan.*', 'asumsi_umum.month_year', 'version_asumsi.version', DB::Raw("CONCAT(material.material_code, ' ', material.material_name) materialjoin"))
+            ->leftjoin('material', 'material.material_code', '=', 'pj_penjualan.material_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'pj_penjualan.version_id')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_penjualan.asumsi_umum_id')
+            ->whereNull('pj_penjualan.deleted_at')
+            ->orderBy('materialjoin', 'asc');
+            // ->orderBy('time DESC');
+            
+        if($request->version2 != 'all') {
+            $penjualan->where('a.version_id', $request->version2);
+        }
+
+        try {
+            $penjualan = $penjualan
+                    ->get()
+                    ->toArray();
+        } catch (\Throwable $th) {
+            $penjualan = [];
+        }
+        // dd($penjualan);
+        // return response()->json($labarugi);
+
+        $data = [
+            'penjualan' => $penjualan
+        ];
+        // dd($penjualan);
+
+        return Excel::download(new Vertikal_PJPenjualanExport($data), "penjualan Vertikal.xlsx");
     }
 
     public function check(Request $request)

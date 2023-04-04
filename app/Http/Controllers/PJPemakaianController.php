@@ -6,6 +6,7 @@ use App\DataTables\Master\H_PJPemakaianDataTable;
 use App\DataTables\Master\PJPemakaianDataTable;
 use App\Exports\MultipleSheet\MS_PJPemakaianExport;
 use App\Exports\Horizontal\PJPemakaianExport;
+use App\Exports\Vertical\Vertikal_PJPemakaianExport;
 use App\Imports\PJPemakaianImport;
 use App\Models\Material;
 use App\Models\PJ_Pemakaian;
@@ -277,6 +278,38 @@ class PJPemakaianController extends Controller
         ];
 
         return Excel::download(new PJPemakaianExport($data), "PJ Pemakaian - Horizontal.xlsx");
+    }
+
+    public function export_vertikal(Request $request)
+    {
+        $pemakaian = DB::table('pj_pemakaian')
+            ->select('pj_pemakaian.*', 'asumsi_umum.month_year', 'version_asumsi.version', DB::Raw("CONCAT(material.material_code, ' ', material.material_name) materialjoin"))
+            ->leftjoin('material', 'material.material_code', '=', 'pj_pemakaian.material_code')
+            ->leftjoin('version_asumsi', 'version_asumsi.id', '=', 'pj_pemakaian.version_id')
+            ->leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'pj_pemakaian.asumsi_umum_id')
+            ->whereNull('pj_pemakaian.deleted_at')
+            ->orderBy('materialjoin');
+            
+        if($request->version2 != 'all') {
+            $pemakaian->where('a.version_id', $request->version2);
+        }
+
+        try {
+            $pemakaian = $pemakaian
+                    ->get()
+                    ->toArray();
+        } catch (\Throwable $th) {
+            $pemakaian = [];
+        }
+        // dd($pemakaian);
+        // return response()->json($labarugi);
+
+        $data = [
+            'pemakaian' => $pemakaian
+        ];
+        // dd($pemakaian);
+
+        return Excel::download(new Vertikal_PJPemakaianExport($data), "Pemakaian Vertikal.xlsx");
     }
 
     public function check(Request $request)

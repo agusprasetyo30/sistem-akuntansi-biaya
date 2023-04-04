@@ -444,22 +444,32 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5', 
-                        filename: 'Pemakaian - Vertikal',
-                        title: '', 
-                        exportOptions: {
-                            columns: [0,1,2,3],
-                        },
-                        // customize: function (file) {
-                        //     var sheet = file.xl.worksheets['sheet1.xml'];
-                        //     var style = file.xl['styles.xml'];
-                        //     var row = $('row', sheet);
-                        //     console.log('row', row);
-                        //     $(row[1]).remove()
-                        // }
-                    },
+                    // { 
+                    //     extend: 'excel', 
+                    //     className: 'mb-5', 
+                    //     filename: 'Pemakaian - Vertikal',
+                    //     title: '', 
+                    //     exportOptions: {
+                    //         columns: [0,1,2,3],
+                    //     },
+                    //     // customize: function (file) {
+                    //     //     var sheet = file.xl.worksheets['sheet1.xml'];
+                    //     //     var style = file.xl['styles.xml'];
+                    //     //     var row = $('row', sheet);
+                    //     //     console.log('row', row);
+                    //     //     $(row[1]).remove()
+                    //     // }
+                    // },
+                    {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search2 = $('#filter_version_ver').val()
+
+                                    window.location = '{{ route("export_v_pemakaian") }}' + "?version2=" + version_search2
+                                },
+                                className: 'mb-5'
+                            }
                 ],
                 ajax: {
                     url : '{{route("pemakaian")}}',
@@ -530,35 +540,7 @@
                                 },
                                 className: 'mb-5'
                             }
-                            // { 
-                            //     extend: 'excel', 
-                            //     className: 'mb-5',
-                            //     filename: 'Pemakaian - Horizontal',
-                            //     title: '',
-                            //     exportOptions: {
-                            //         format: {
-                            //             body: function ( data, row, kolom, node ) {
-                            //                 if (typeof data === 'undefined') {
-                            //                     return;
-                            //                 }
-                            //                 if (data == null) {
-                            //                     return data;
-                            //                 }
-                            //                 if ( kolom >= 2) {                      
-                            //                     var arr = data.split(',');
-                            //                     arr[0] = arr[0].toString().replace( /[\.]/g, "" );
-                            //                     if (arr[0] > ','  || arr[1] > ',') {
-                            //                         data = arr[0] + '' + arr[1];
-                            //                     } else {
-                            //                         return '';
-                            //                     }
-                            //                     return data.toString().replace( /[^\d.-]/g, "," );    
-                            //                 }
-                            //                 return data;
-                            //             }
-                            //         }
-                            //     }
-                            // }
+  
                         ],
                         ajax: {
                             url : '{{route("pemakaian")}}',

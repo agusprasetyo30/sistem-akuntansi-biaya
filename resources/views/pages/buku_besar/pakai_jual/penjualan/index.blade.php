@@ -444,15 +444,25 @@
                 },
                 buttons: [
                     { extend: 'pageLength', className: 'mb-5' },
-                    { 
-                        extend: 'excel', 
-                        className: 'mb-5', 
-                        exportOptions:{
-                        columns:[0,1,2,3]
-                    }, 
-                        title: '',
-                        filename: 'Penjualan - Vertikal'
-                    }
+                    // { 
+                    //     extend: 'excel', 
+                    //     className: 'mb-5', 
+                    //     exportOptions:{
+                    //     columns:[0,1,2,3]
+                    // }, 
+                    //     title: '',
+                    //     filename: 'Penjualan - Vertikal'
+                    // }
+                    {
+                                text: 'Excel',
+                                action: function(e, dt, node, config) {
+                                    
+                                    let version_search2 = $('#filter_version_ver').val()
+
+                                    window.location = '{{ route("export_v_penjualan") }}' + "?version2=" + version_search2
+                                },
+                                className: 'mb-5'
+                            }
                 ],
                 ajax: {
                     url : '{{route("penjualan")}}',
