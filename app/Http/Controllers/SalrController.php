@@ -173,6 +173,7 @@ class SalrController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -221,6 +222,7 @@ class SalrController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -349,9 +351,9 @@ class SalrController extends Controller
             }
 
         } catch (\Exception $exception) {
-            dd($exception);
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }

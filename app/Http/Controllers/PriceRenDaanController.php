@@ -105,6 +105,7 @@ class PriceRenDaanController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -143,6 +144,7 @@ class PriceRenDaanController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -210,10 +212,10 @@ class PriceRenDaanController extends Controller
             if (property_exists($acc, $curr->material_code . ' - ' . $curr->material_name)) {
                 if (!property_exists($acc->{$curr->material_code . ' - ' . $curr->material_name}, $curr->region_desc)) {
                     $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc} = (object)[];
-                } 
-                    
+                }
+
                 $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc}->{$curr->month_year} = $curr->price_rendaan_value;
-                
+
             } else {
                 $acc->{$curr->material_code . ' - ' . $curr->material_name} = (object)[];
                 $acc->{$curr->material_code . ' - ' . $curr->material_name}->{$curr->region_desc} = (object)[];
@@ -344,6 +346,7 @@ class PriceRenDaanController extends Controller
             } else {
                 return setResponse([
                     'code' => 400,
+                    'title' => $exception->getMessage()
                 ]);
             }
         }

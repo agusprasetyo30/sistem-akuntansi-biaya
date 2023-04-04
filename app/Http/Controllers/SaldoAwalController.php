@@ -86,6 +86,7 @@ class SaldoAwalController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -136,6 +137,7 @@ class SaldoAwalController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -153,6 +155,7 @@ class SaldoAwalController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+
             ]);
         }
     }
@@ -245,6 +248,7 @@ class SaldoAwalController extends Controller
             } else {
                 return setResponse([
                     'code' => 400,
+                    'title' => $exception->getMessage()
                 ]);
             }
         }
@@ -289,6 +293,7 @@ class SaldoAwalController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -332,6 +337,7 @@ class SaldoAwalController extends Controller
         } catch (\Throwable $th) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
