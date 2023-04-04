@@ -54,6 +54,7 @@ class GLAccountFixedCostController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -99,6 +100,7 @@ class GLAccountFixedCostController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -160,6 +162,7 @@ class GLAccountFixedCostController extends Controller
             //            dd($exception);
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
             //            $empty_excel = Excel::toArray(new GLAccountFCImport(), $request->file('file'));
             //

@@ -95,6 +95,7 @@ class ConsRateController extends Controller
             //            dd($exception);
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -166,6 +167,7 @@ class ConsRateController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -274,6 +276,7 @@ class ConsRateController extends Controller
             } else {
                 return setResponse([
                     'code' => 400,
+                    'title' => $exception->getMessage()
                 ]);
             }
         }
@@ -379,6 +382,7 @@ class ConsRateController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -418,6 +422,7 @@ class ConsRateController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -459,6 +464,7 @@ class ConsRateController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }

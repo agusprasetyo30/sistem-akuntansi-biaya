@@ -69,6 +69,7 @@ class LabaRugiController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -106,6 +107,7 @@ class LabaRugiController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -206,6 +208,7 @@ class LabaRugiController extends Controller
             } else {
                 return setResponse([
                     'code' => 400,
+                    'title' => $exception->getMessage()
                 ]);
             }
         }
@@ -219,7 +222,7 @@ class LabaRugiController extends Controller
             ->leftjoin('kategori_produk', 'kategori_produk.id', '=', 'laba_rugi.kategori_produk_id')
             ->whereNull('laba_rugi.deleted_at')
             ->orderBy('prod');
-        
+
         if($request->version != 'all') {
             $labarugi->where('a.version_id', $request->version);
         }

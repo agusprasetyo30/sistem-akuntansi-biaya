@@ -79,6 +79,7 @@ class PJPenjualanController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -116,6 +117,7 @@ class PJPenjualanController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -198,6 +200,7 @@ class PJPenjualanController extends Controller
             } else {
                 return setResponse([
                     'code' => 400,
+                    'title' => $exception->getMessage()
                 ]);
             }
         }
@@ -244,7 +247,7 @@ class PJPenjualanController extends Controller
             if (!property_exists($carry, $item->mat . '~' . $item->material_uom)) {
                 $carry->{$item->mat . '~' . $item->material_uom} = (object)[];
             }
-            
+
             $carry->{$item->mat . '~' . $item->material_uom}->{$item->month_year} = $item->pj_penjualan_value;
 
             return $carry;
@@ -288,7 +291,7 @@ class PJPenjualanController extends Controller
             ->whereNull('pj_penjualan.deleted_at')
             ->orderBy('materialjoin', 'asc');
             // ->orderBy('time DESC');
-            
+
         if($request->version2 != 'all') {
             $penjualan->where('a.version_id', $request->version2);
         }
@@ -339,6 +342,7 @@ class PJPenjualanController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }

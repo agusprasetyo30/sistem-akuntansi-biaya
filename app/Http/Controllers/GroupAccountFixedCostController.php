@@ -52,6 +52,7 @@ class GroupAccountFixedCostController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -96,6 +97,7 @@ class GroupAccountFixedCostController extends Controller
         } catch (\Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
@@ -164,6 +166,7 @@ class GroupAccountFixedCostController extends Controller
         } catch (Exception $exception) {
             return setResponse([
                 'code' => 400,
+                'title' => $exception->getMessage()
             ]);
         }
     }
