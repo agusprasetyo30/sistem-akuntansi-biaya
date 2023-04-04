@@ -403,6 +403,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [PJPemakaianController::class, 'delete'])->name('delete_pemakaian');
             Route::get('export', [PJPemakaianController::class, 'export'])->name('export_pemakaian');
             Route::get('export-h', [PJPemakaianController::class, 'export_horizontal'])->name('export_h_pemakaian');
+            Route::get('export-v', [PJPemakaianController::class, 'export_vertikal'])->name('export_v_pemakaian');
             Route::post('import', [PJPemakaianController::class, 'import'])->name('import_pemakaian');
             Route::post('check', [PJPemakaianController::class, 'check'])->name('check_pemakaian');
         });
@@ -414,6 +415,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('delete', [PJPenjualanController::class, 'delete'])->name('delete_penjualan');
             Route::get('export', [PJPenjualanController::class, 'export'])->name('export_penjualan');
             Route::get('export-h', [PJPenjualanController::class, 'export_horizontal'])->name('export_h_penjualan');
+            Route::get('export-v', [PJPenjualanController::class, 'export_vertikal'])->name('export_v_penjualan');
             Route::post('import', [PJPenjualanController::class, 'import'])->name('import_penjualan');
             Route::post('check', [PJPenjualanController::class, 'check'])->name('check_penjualan');
         });
