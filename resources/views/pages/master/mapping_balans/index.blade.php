@@ -137,7 +137,7 @@
                     }
                 }
             }).on('change', function () {
-                if ($('#data_main_kategori_balans').val() > 5){
+                if ($('#data_main_kategori_balans').val() > 6){
                     $('#plant_field').css('display', 'block');
                     $('#data_main_plant').removeAttr('multiple', 'multiple').val([]).change().select2({
                         dropdownParent: $('#modal_add'),
