@@ -431,6 +431,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['prefix' => 'simulasi-proyeksi'], function () {
         Route::get('/', [SimulasiProyeksiController::class, 'index'])->name('simulasi_proyeksi');
         Route::post('header', [SimulasiProyeksiController::class, 'index_header'])->name('header_simulasi_proyeksi');
+        Route::get('summary', [SimulasiProyeksiController::class, 'summary'])->name('simulasi_proyeksi_summary');
+        Route::get('header_summary', [SimulasiProyeksiController::class, 'header_summary'])->name('header_simulasi_proyeksi_summary');
         Route::post('store', [SimulasiProyeksiController::class, 'store'])->name('store_simulasi_proyeksi');
         Route::get('export', [SimulasiProyeksiController::class, 'export'])->name('export.simulasi_proyeksi');
     });
