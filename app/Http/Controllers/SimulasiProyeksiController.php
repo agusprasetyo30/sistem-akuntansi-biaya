@@ -440,10 +440,15 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
-            dd($exception);
-            return setResponse([
+//            return setResponse([
+//                'code' => 400,
+//                'msg' => $exception->getMessage(),
+//            ]);
+
+            return [
                 'code' => 400,
-            ]);
+                'msg' => $exception->getMessage()
+            ];
         }
     }
 
@@ -818,10 +823,14 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
-            dd($exception);
-            return setResponse([
+//            return setResponse([
+//                'code' => 400,
+//            ]);
+
+            return [
                 'code' => 400,
-            ]);
+                'msg' => $exception->getMessage()
+            ];
         }
     }
 
