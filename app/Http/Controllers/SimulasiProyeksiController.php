@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DataTables\Master\SimulasiProyeksiDataTable;
 use App\DataTables\Master\SimulasiProyeksiStoreDataTable;
+use App\DataTables\Master\SummarySimulasiProyeksiDataTable;
 use App\Exports\Horizontal\SimulasiProyeksiExport;
 use App\Models\Asumsi_Umum;
 use App\Models\Balans;
@@ -49,7 +50,7 @@ class SimulasiProyeksiController extends Controller
                 ->groupBy('product_code', 'plant_code', 'version_id')
                 ->get();
 
-//            dd($cons_rate);
+            //            dd($cons_rate);
 
             $asumsi = Version_Asumsi::with('asumsi_umum:id,version_id,month_year,saldo_awal,usd_rate,adjustment,inflasi')
                 ->select('id', 'version')
@@ -137,12 +138,12 @@ class SimulasiProyeksiController extends Controller
                     ->orderBy('no', 'asc')
                     ->orderBy('kategori', 'asc')
                     ->get();
-//                 dd($query->toArray());
+                //                 dd($query->toArray());
 
                 // $asumsi = Asumsi_Umum::where('version_id', $data_version)
                 //     ->get();
 
-//                dd($query)
+                //                dd($query)
                 foreach ($asumsi->asumsi_umum as $key2 => $asum) {
                     $hs = 0;
                     $consrate = 0;
@@ -171,7 +172,7 @@ class SimulasiProyeksiController extends Controller
                                 if ($kp_v == 1) {
                                     $consrate = 0;
                                 } else {
-//                                    dd($data_version, $data_plant, $asum->month_year);
+                                    //                                    dd($data_version, $data_plant, $asum->month_year);
                                     $consrate = $val->consRate($data_version, $data_plant, $asum->month_year) ?? 0;
                                 }
                                 $kp_val = $kp_v;
@@ -260,16 +261,16 @@ class SimulasiProyeksiController extends Controller
                             if ($temp_total != 0 && $temp_perton != 0) {
                                 if ($inflasi == 0) {
                                     $total_biaya = $temp_total + $tar;
-                                    if ($kuan_prod != 0){
+                                    if ($kuan_prod != 0) {
                                         $biaya_perton = $total_biaya / $kuan_prod;
-                                    }else{
+                                    } else {
                                         $biaya_perton = 0;
                                     }
                                 } else {
                                     $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
-                                    if ($kuan_prod != 0){
+                                    if ($kuan_prod != 0) {
                                         $biaya_perton = $total_biaya / $kuan_prod;
-                                    }else{
+                                    } else {
                                         $biaya_perton = 0;
                                     }
                                 }
@@ -430,12 +431,10 @@ class SimulasiProyeksiController extends Controller
 
                         $collection_input_temp->push($this->submit_data($data_version, $data_plant, $data_product, $data_cost_center, $hs, $consrate, $biaya_perton, $total_biaya, $periode, $val->no, $val->kategori, $val->name, $val->code, $kuan_prod));
                     }
-
-
                 }
             }
-//            dd($collection_input_temp->where('product_code', '2000001')->where('plant_code', 'B019'));
-//            dd($collection_input_temp[0]['product_code']);
+            //            dd($collection_input_temp->where('product_code', '2000001')->where('plant_code', 'B019'));
+            //            dd($collection_input_temp[0]['product_code']);
             $chunk = array_chunk($collection_input_temp->toArray(), 500);
             foreach ($chunk as $insert) {
                 SimulasiProyeksi::insert($insert);
@@ -559,22 +558,22 @@ class SimulasiProyeksiController extends Controller
 
 
 
-                        if ($val->code != $data_product){
+                        if ($val->code != $data_product) {
                             $balans = $collections
                                 ->where('kategori_balans_id', 3)
                                 ->where('material_code', $val->code)
                                 ->where('asumsi_umum_id', $periode)->first();
 
                             try {
-                                if ($balans != null){
+                                if ($balans != null) {
                                     $res = $balans['p'];
-                                }else{
+                                } else {
                                     $res = 0;
                                 }
-                            }catch (\Exception $exception){
+                            } catch (\Exception $exception) {
                                 $res = 0;
                             }
-                        }else{
+                        } else {
                             $res = 0;
                         }
 
@@ -591,7 +590,7 @@ class SimulasiProyeksiController extends Controller
                         }
                     } else if ($val->kategori == 2) {
                         //Harga Satuan
-//                        dd($data_plant);
+                        //                        dd($data_plant);
                         $res = $val->hsZco($data_plant);
                         $hs = $res;
 
@@ -654,17 +653,16 @@ class SimulasiProyeksiController extends Controller
                     if ($temp_total != 0 && $temp_perton != 0) {
                         if ($inflasi == 0) {
                             $total_biaya = $temp_total + $tar;
-                            if ($kuan_prod != 0){
+                            if ($kuan_prod != 0) {
                                 $biaya_perton = $total_biaya / $kuan_prod;
-                            }else{
+                            } else {
                                 $biaya_perton = 0;
                             }
-
                         } else {
                             $total_biaya = ($temp_total * ($inflasi / 100)) + $tar;
-                            if ($kuan_prod != 0){
+                            if ($kuan_prod != 0) {
                                 $biaya_perton = $total_biaya / $kuan_prod;
-                            }else{
+                            } else {
                                 $biaya_perton = 0;
                             }
                         }
@@ -809,23 +807,22 @@ class SimulasiProyeksiController extends Controller
                     }
                 }
                 $collection_input_temp->push($this->submit_data($data_version, $data_plant, $data_product, $data_cost_center, $hs, $consrate, $biaya_perton, $total_biaya, $periode, $val->no, $val->kategori, $val->name, $val->code, $kuan_prod));
-//                dd($collection_input_temp);
+                //                dd($collection_input_temp);
             }
             // }
 
-//             dd($collection_input_temp);
+            //             dd($collection_input_temp);
             $chunk = array_chunk($collection_input_temp->toArray(), 500);
             foreach ($chunk as $insert) {
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
-//            dd($exception);
+            //            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
         }
     }
-
 
     public function submit_data($data_version, $data_plant, $data_product, $data_cost_center, $hs, $consrate, $biaya_perton, $total_biaya, $periode, $no, $kategori, $name, $code, $kuan_prod)
     {
@@ -859,7 +856,7 @@ class SimulasiProyeksiController extends Controller
                     ->where('glos_cc.plant_code', $request->plant)
                     ->first();
 
-//                dd($glos_cc->cost_center,$request->version,$request->plant, $request->produk);
+                // dd($glos_cc->cost_center,$request->version,$request->plant, $request->produk);
 
                 return $simulasiproyeksiDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $glos_cc->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
             }
@@ -916,21 +913,82 @@ class SimulasiProyeksiController extends Controller
                 ]);
             }
 
-            // $simpro = DB::table('simulasi_proyeksi')
-            //     ->where('simulasi_proyeksi.product_code', $request->produk)
-            //     ->where('simulasi_proyeksi.plant_code', $request->plant)
-            //     ->where('simulasi_proyeksi.cost_center', $glos_cc->cost_center)
-            //     ->first();
+            $simpro = DB::table('simulasi_proyeksi')
+                ->where('simulasi_proyeksi.product_code', $request->produk)
+                ->where('simulasi_proyeksi.plant_code', $request->plant)
+                ->where('simulasi_proyeksi.cost_center', $glos_cc->cost_center)
+                ->first();
 
-            // if (!$simpro) {
-            //     return setResponse([
-            //         'code' => 430,
-            //         'title' => 'Gagal menampilkan data',
-            //         'message' => 'Data simulasi proyeksi tidak ditemukan!',
-            //     ]);
-            // }
+            if (!$simpro) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal menampilkan data',
+                    'message' => 'Data simulasi proyeksi tidak ditemukan!',
+                ]);
+            }
 
             return response()->json(['code' => 200, 'asumsi' => $asumsi, 'produk' => $produk, 'plant' => $plant, 'kuantum_produksi' => $kp]);
+        } catch (\Throwable $th) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function summary(Request $request, SummarySimulasiProyeksiDataTable $summarysimproDatatable)
+    {
+        try {
+            if ($request->data == 'index') {
+                $glos_cc = DB::table('glos_cc')
+                    ->where('glos_cc.material_code', $request->produk)
+                    ->where('glos_cc.plant_code', $request->plant)
+                    ->first();
+
+                // dd($glos_cc->cost_center, $request->version, $request->plant, $request->produk);
+
+                return $summarysimproDatatable->with(['version' => $request->version, 'plant' => $request->plant, 'produk' => $request->produk, 'cost_center' => $glos_cc->cost_center, 'save' => false])->render('pages.simulasi_proyeksi.index');
+            }
+            return view('pages.simulasi_proyeksi.index');
+        } catch (\Throwable $th) {
+            return setResponse([
+                'code' => 400,
+            ]);
+        }
+    }
+
+    public function summary_header(Request $request)
+    {
+        try {
+            $asumsi = Asumsi_Umum::where('version_id', $request->version)->get();
+
+            $glos_cc = DB::table('glos_cc')
+                ->where('glos_cc.material_code', $request->produk)
+                ->where('glos_cc.plant_code', $request->plant)
+                ->first();
+
+            if (!$glos_cc) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal menampilkan data',
+                    'message' => 'Data cost center dari produk ' . $request->produk . ' dan plant ' . $request->plant . ' tidak ditemukan!',
+                ]);
+            }
+
+            $simpro = DB::table('simulasi_proyeksi')
+                ->where('simulasi_proyeksi.product_code', $request->produk)
+                ->where('simulasi_proyeksi.plant_code', $request->plant)
+                ->where('simulasi_proyeksi.cost_center', $glos_cc->cost_center)
+                ->first();
+
+            if (!$simpro) {
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Gagal menampilkan data',
+                    'message' => 'Data simulasi proyeksi tidak ditemukan!',
+                ]);
+            }
+
+            return response()->json(['code' => 200, 'asumsi' => $asumsi]);
         } catch (\Throwable $th) {
             return setResponse([
                 'code' => 400,
@@ -975,13 +1033,13 @@ class SimulasiProyeksiController extends Controller
         $asumsi = Asumsi_Umum::where('version_id',  $request->version)->get();
 
         $kp = SimulasiProyeksi::select('asumsi_umum_id', 'kuantum_produksi')
-                ->where('product_code', $request->produk)
-                ->where('plant_code', $request->plant)
-                ->where('kategori', 1)
-                ->groupBy('asumsi_umum_id', 'kuantum_produksi')
-                ->orderBy('asumsi_umum_id', 'asc')
-                ->get();
-        
+            ->where('product_code', $request->produk)
+            ->where('plant_code', $request->plant)
+            ->where('kategori', 1)
+            ->groupBy('asumsi_umum_id', 'kuantum_produksi')
+            ->orderBy('asumsi_umum_id', 'asc')
+            ->get();
+
         $glos_cc = DB::table('glos_cc')
             ->where('glos_cc.material_code', $request->produk)
             ->where('glos_cc.plant_code', $request->plant)
@@ -1013,14 +1071,14 @@ class SimulasiProyeksiController extends Controller
 
         // Dibuat variabel index temporary dikarenakan case nya ada index yang tidak diawali dengan 0
         $key_temp = 0;
-        
+
         foreach ($query_simulasi_proyeksi as $key => $data_query) {
             foreach ($asumsi as $key1 => $data_asumsi) {
                 array_push($temporary_value['harga_satuan'], ['key' => $key_temp, 'value' => $this->hargaSatuanCount($data_query, $simproValues, $data_asumsi)]);
                 array_push($temporary_value['cr'], ['key' => $key_temp, 'value' => $this->crCount($data_query, $simproValues, $data_asumsi)]);
                 array_push($temporary_value['biaya_per_ton'], ['key' => $key_temp, 'value' => $this->biayaPerTonCount($data_query, $simproValues, $data_asumsi)]);
                 array_push($temporary_value['total_biaya'], ['key' => $key_temp, 'value' => $this->totalBiayaCount($data_query, $simproValues, $data_asumsi)]);
-                
+
                 $key_temp++;
             }
 
