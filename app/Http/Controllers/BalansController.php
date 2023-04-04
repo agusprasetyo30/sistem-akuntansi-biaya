@@ -463,7 +463,7 @@ class BalansController extends Controller
         }catch (\Exception   $exception){
             return setResponse([
                 'code' => 400,
-                'title' => 'Data Gagal Diproyeksikan',
+                'title' => $exception->getMessage(),
                 'message' => $exception->getMessage(),
             ]);
         }
