@@ -39,7 +39,7 @@
 {{--                                </select>--}}
 {{--                            </div>--}}
                             <div class="form-group">
-                                <label class="form-label">PERUSAHAAN ext</label>
+                                <label class="form-label">PERUSAHAAN</label>
                                 <select id="filter_company1" class="form-control custom-select select2">
                                 </select>
                             </div>
@@ -50,13 +50,24 @@
                                     <option value="" disabled selected>Pilih Version Terlebih Dahulu</option>
                                 </select>
                             </div>
-                            <div class="mb-5 row">
+                            <div class="form-group">
+                                <label class="form-label">Log Aktifitas</label>
+                                <input type="text" id="log_aktifitas" class="form-control form-control-sm">
+                            </div>
+
+                            <div class="mb-5 row" style="display: none;" id="pick_submit" >
                                 <div class="col-12">
-                                    <button style="display: none;" class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
-                                    <button style="display: none;" class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
-                                    <button style="display: none;" class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
+                                    <button class="btn btn-info" type="button" id="btn_submit_data" name="btn_submit_data">Submit</button>
                                 </div>
                             </div>
+
+                            <div class="mb-5 row" style="display: none;" id="pick_approve">
+                                <div class="col-12">
+                                    <button class="btn btn-warning" type="button" id="btn_approve_data" name="btn_approve_data">Approve</button>
+                                    <button class="btn btn-danger" type="button" id="btn_reject_data" name="btn_reject_data">Reject</button>
+                                </div>
+                            </div>
+
 
 {{--                        <div class="mb-5 row">--}}
 {{--                            <div class="form-group">--}}
@@ -193,9 +204,8 @@
                 }
             }).on('change', function () {
                 $("#table_main").empty();
-                $('#btn_submit_data').css("display", "none")
-                $('#btn_approve_data').css("display", "none")
-                $('#btn_reject_data').css("display", "none")
+                $('#pick_submit').css("display", "none")
+                $('#pick_approve').css("display", "none")
 
                 var company = $('#filter_company1').val();
                 $('#filter_version1').append('<option selected disabled value="">Pilih Versi</option>').select2({
@@ -240,16 +250,23 @@
                         console.log(response_status)
                         if (response_status.code === 100){
                             if(response_status.akses['submit'] === true){
-                                $('#btn_submit_data').css("display", "block")
-                                $('#btn_approve_data').css("display", "none")
-                                $('#btn_reject_data').css("display", "none")
+                                $('#pick_submit').css("display", "block")
+                                $('#pick_approve').css("display", "none")
+
+                                $('#log_aktifitas').val('Draft')
                             }
                         }else if (response_status.code === 101){
                             if (response_status.akses['approve'] === true){
-                                $('#btn_submit_data').css("display", "none")
-                                $('#btn_approve_data').css("display", "block")
-                                $('#btn_reject_data').css("display", "block")
+                                $('#pick_submit').css("display", "none")
+                                $('#pick_approve').css("display", "block")
+
+                                $('#log_aktifitas').val('Submit')
                             }
+                        }else if (response_status.code === 102){
+                            $('#pick_submit').css("display", "none")
+                            $('#pick_approve').css("display", "none")
+
+                            $('#log_aktifitas').val('Approve')
                         }
 
                         get_data()
@@ -556,6 +573,138 @@
                 dropdownParent: $('#modal_add'),
                 placeholder: 'Pilih Status',
                 width: '100%'
+            })
+
+            $('#btn_submit_data').on('click', function () {
+                Swal.fire({
+                    title: 'PERINGATAN',
+                    text: "Data Ini Akan Disubmit, Apakah Anda Yakin ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#019267',
+                    cancelButtonColor: '#EF4B4B',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Kembali'
+                }).then((result)=>{
+                    if (result.value){
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '{{route('submit_consrate')}}',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                filter_version:$('#filter_version1').val()
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: response.title,
+                                    text: response.msg,
+                                    icon: response.type,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: "#019267",
+                                    confirmButtonText: 'Konfirmasi',
+                                }).then((result) => {
+                                    if (result.value) {
+                                        manajemen_akses_load()
+                                    }
+                                })
+                            },
+                            error: function (response) {
+                                handleError(response)
+                            }
+                        })
+                    }
+                })
+            })
+
+            $('#btn_approve_data').on('click', function () {
+                Swal.fire({
+                    title: 'PERINGATAN',
+                    text: "Data Ini Akan Diapprove, Apakah Anda Yakin ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#019267',
+                    cancelButtonColor: '#EF4B4B',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Kembali'
+                }).then((result)=>{
+                    if (result.value){
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '{{route('approve_consrate')}}',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                filter_version:$('#filter_version1').val()
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: response.title,
+                                    text: response.msg,
+                                    icon: response.type,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: "#019267",
+                                    confirmButtonText: 'Konfirmasi',
+                                }).then((result) => {
+                                    if (result.value) {
+                                        manajemen_akses_load()
+                                    }
+                                })
+                            },
+                            error: function (response) {
+                                handleError(response)
+                            }
+                        })
+                    }
+                })
+            })
+
+            $('#btn_reject_data').on('click', function () {
+                Swal.fire({
+                    title: 'PERINGATAN',
+                    text: "Data Ini Akan Direject, Apakah Anda Yakin ?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#019267',
+                    cancelButtonColor: '#EF4B4B',
+                    confirmButtonText: 'Konfirmasi',
+                    cancelButtonText: 'Kembali'
+                }).then((result)=>{
+                    if (result.value){
+                        $.ajax({
+                            type: "POST",
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '{{route('reject_consrate')}}',
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                filter_version:$('#filter_version1').val()
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: response.title,
+                                    text: response.msg,
+                                    icon: response.type,
+                                    allowOutsideClick: false,
+                                    confirmButtonColor: "#019267",
+                                    confirmButtonText: 'Konfirmasi',
+                                }).then((result) => {
+                                    if (result.value) {
+                                        manajemen_akses_load()
+                                    }
+                                })
+                            },
+                            error: function (response) {
+                                handleError(response)
+                            }
+                        })
+                    }
+                })
             })
         })
 
@@ -1116,100 +1265,6 @@
             })
         }
 
-        $('#btn_submit_data').on('click', function () {
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('submit_consrate')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    filter_version:$('#filter_version1').val()
-                },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: "#019267",
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result) => {
-                        if (result.value) {
-                            // location.reload();
-                        }
-                    })
-                },
-                error: function (response) {
-                    handleError(response)
-                }
-            })
 
-        })
-
-        $('#btn_approve_data').on('click', function () {
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('approve_consrate')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    filter_version:$('#filter_version1').val()
-                },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: "#019267",
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result) => {
-                        if (result.value) {
-                            location.reload();
-                        }
-                    })
-                },
-                error: function (response) {
-                    handleError(response)
-                }
-            })
-
-        })
-
-        $('#btn_reject_data').on('click', function () {
-            $.ajax({
-                type: "POST",
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                url: '{{route('reject_consrate')}}',
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    filter_version:$('#filter_version1').val()
-                },
-                success: function (response) {
-                    Swal.fire({
-                        title: response.title,
-                        text: response.msg,
-                        icon: response.type,
-                        allowOutsideClick: false,
-                        confirmButtonColor: "#019267",
-                        confirmButtonText: 'Konfirmasi',
-                    }).then((result) => {
-                        if (result.value) {
-                            location.reload();
-                        }
-                    })
-                },
-                error: function (response) {
-                    handleError(response)
-                }
-            })
-
-        })
     </script>
 @endsection

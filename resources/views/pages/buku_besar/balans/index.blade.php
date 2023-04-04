@@ -400,9 +400,16 @@
                         icon: 'success',
                         confirmButtonColor: '#019267',
                         confirmButtonText: 'Konfirmasi',
-
                     })
 
+                }, error:function () {
+                    $('#local_loader').hide();
+                    Swal.fire({
+                        title: 'Data Gagal diproyeksikan',
+                        icon: 'error',
+                        confirmButtonColor: '#019267',
+                        confirmButtonText: 'Konfirmasi',
+                    })
                 }
             })
         }
