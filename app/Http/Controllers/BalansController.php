@@ -406,7 +406,12 @@ class BalansController extends Controller
                 }
 
                 SimulasiProyeksi::where('version_id', $request->version)->delete();
-                $simulasi_create->hitung_simpro($request->version);
+                try {
+
+                    $simulasi_create->hitung_simpro($request->version);
+                }catch (\Exception $exception){
+                    dd($exception);
+                }
             });
             return response()->json(['code' => 200]);
         }catch (\Exception   $exception){

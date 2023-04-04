@@ -142,7 +142,6 @@ class SimulasiProyeksiController extends Controller
                 // $asumsi = Asumsi_Umum::where('version_id', $data_version)
                 //     ->get();
 
-//                dd($query)
                 foreach ($asumsi->asumsi_umum as $key2 => $asum) {
                     $hs = 0;
                     $consrate = 0;
@@ -441,6 +440,7 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -819,7 +819,7 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
-//            dd($exception);
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -981,7 +981,7 @@ class SimulasiProyeksiController extends Controller
                 ->groupBy('asumsi_umum_id', 'kuantum_produksi')
                 ->orderBy('asumsi_umum_id', 'asc')
                 ->get();
-        
+
         $glos_cc = DB::table('glos_cc')
             ->where('glos_cc.material_code', $request->produk)
             ->where('glos_cc.plant_code', $request->plant)
@@ -1013,14 +1013,14 @@ class SimulasiProyeksiController extends Controller
 
         // Dibuat variabel index temporary dikarenakan case nya ada index yang tidak diawali dengan 0
         $key_temp = 0;
-        
+
         foreach ($query_simulasi_proyeksi as $key => $data_query) {
             foreach ($asumsi as $key1 => $data_asumsi) {
                 array_push($temporary_value['harga_satuan'], ['key' => $key_temp, 'value' => $this->hargaSatuanCount($data_query, $simproValues, $data_asumsi)]);
                 array_push($temporary_value['cr'], ['key' => $key_temp, 'value' => $this->crCount($data_query, $simproValues, $data_asumsi)]);
                 array_push($temporary_value['biaya_per_ton'], ['key' => $key_temp, 'value' => $this->biayaPerTonCount($data_query, $simproValues, $data_asumsi)]);
                 array_push($temporary_value['total_biaya'], ['key' => $key_temp, 'value' => $this->totalBiayaCount($data_query, $simproValues, $data_asumsi)]);
-                
+
                 $key_temp++;
             }
 
