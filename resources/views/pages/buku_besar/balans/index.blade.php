@@ -396,20 +396,17 @@
                 },success:function (response) {
                     $('#local_loader').hide();
                     Swal.fire({
-                        title: 'Data berhasil diproyeksikan',
-                        icon: 'success',
+                        title: response.title,
+                        text: response.message,
+                        icon: response.type,
+                        allowOutsideClick: false,
                         confirmButtonColor: '#019267',
                         confirmButtonText: 'Konfirmasi',
                     })
 
-                }, error:function () {
+                }, error:function (response) {
                     $('#local_loader').hide();
-                    Swal.fire({
-                        title: 'Data Gagal diproyeksikan',
-                        icon: 'error',
-                        confirmButtonColor: '#019267',
-                        confirmButtonText: 'Konfirmasi',
-                    })
+                    handleError(response)
                 }
             })
         }

@@ -175,7 +175,7 @@ class BalansController extends Controller
                 }
             }
 
-            DB::transaction(function () use ($request, $antrian, $result_antrian){
+            $db_trans = DB::transaction(function () use ($request, $antrian, $result_antrian){
                 Balans::leftjoin('asumsi_umum', 'asumsi_umum.id', '=', 'balans.asumsi_umum_id')
                     ->where('asumsi_umum.version_id', $request->version)->delete();
 
@@ -396,8 +396,16 @@ class BalansController extends Controller
                             $collection_input_temp->push($this->submit_temp($data->id, $data_map->kategori_balans_id, $data_map->plant_code, $data_map->material_code, $q, $p, $nilai, $type, $material_name, $version_id, $order_view, $kategori_balans_desc, $month_year));
                         }
                     }
+
+                    $code_balans = [
+                        'code' => 200,
+                        'msg' => null
+                    ];
                 }catch (\Exception $exception){
-                    dd($exception);
+                    $code_balans = [
+                        'code' => 200,
+                        'msg' => $exception->getMessage()
+                    ];
                 }
 
                 $chunk = array_chunk($collection_input_temp->toArray(), 5000);
@@ -406,15 +414,33 @@ class BalansController extends Controller
                 }
 
                 SimulasiProyeksi::where('version_id', $request->version)->delete();
-                try {
-                    $simulasi_create->hitung_simpro($request->version);
-                }catch (\Exception $exception){
-                    dd($exception);
-                }
+                $code_simulasi = $simulasi_create->hitung_simpro($request->version);
+
+                $code_result = [$code_balans, $code_simulasi];
+
+                return $code_result;
             });
-            return response()->json(['code' => 200]);
+
+            $cek_hasil = collect($db_trans)->where('code', '=', '400')->first();
+
+            if ($cek_hasil == null){
+                return setResponse([
+                    'code' => 200,
+                    'title' => 'Data berhasil Diproyeksikan'
+                ]);
+            }else{
+                return setResponse([
+                    'code' => 430,
+                    'title' => 'Data Gagal Diproyeksikan',
+                    'message' => $cek_hasil['msg'],
+                ]);
+            }
         }catch (\Exception   $exception){
-            return response()->json(['code' => 500]);
+            return setResponse([
+                'code' => 400,
+                'title' => 'Data Gagal Diproyeksikan',
+                'message' => $exception->getMessage(),
+            ]);
         }
     }
 
