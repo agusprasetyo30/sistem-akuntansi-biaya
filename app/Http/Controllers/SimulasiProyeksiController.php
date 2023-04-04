@@ -143,7 +143,7 @@ class SimulasiProyeksiController extends Controller
                 // $asumsi = Asumsi_Umum::where('version_id', $data_version)
                 //     ->get();
 
-                //                dd($query)
+//                dd($query)
                 foreach ($asumsi->asumsi_umum as $key2 => $asum) {
                     $hs = 0;
                     $consrate = 0;
@@ -440,6 +440,7 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
@@ -817,7 +818,7 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
-            //            dd($exception);
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
