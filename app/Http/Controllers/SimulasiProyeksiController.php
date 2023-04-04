@@ -440,6 +440,7 @@ class SimulasiProyeksiController extends Controller
                 SimulasiProyeksi::insert($insert);
             }
         } catch (\Exception $exception) {
+            dd($exception);
             return setResponse([
                 'code' => 400,
             ]);
