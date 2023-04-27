@@ -1117,7 +1117,7 @@ class SimulasiProyeksiController extends Controller
             'fixed_value_data' => $fixed_value,
         ];
 
-        // return view('pages.kontrol_proyeksi.export', $data);
+        // return view('pages.simulasi_proyeksi.export', $data);
         return Excel::download(new SimulasiProyeksiExport($data), "Simulasi Proyeksi Horizontal.xlsx");
     }
 

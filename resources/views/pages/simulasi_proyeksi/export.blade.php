@@ -1,13 +1,14 @@
 <table border=1 style="border-collapse: collapse">
     <thead>
         <tr>
-            <td align="center" valign="middle" rowspan="6">Jenis Biaya</td>
-		</tr>
-		<tr>
+            <td align="center" valign="middle" rowspan="5">Jenis Biaya</td>
+			
 			@foreach ($asumsi as $data_asumsi)
 				<td align="center" valign="default" colspan="4">{{ date('F Y', strtotime($data_asumsi->month_year)) }}</td>
 			@endforeach
 		</tr>
+		{{-- <tr>
+		</tr> --}}
 		<tr>
 			@for ($i = 0; $i < $asumsi->count(); $i++)			
 				<td align="center" valign="default" colspan="4">{{ $product->first()->material_code . ' ' . $product->first()->material_name }}</td>

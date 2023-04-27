@@ -436,19 +436,23 @@ class ZcoController extends Controller
     public function exportHorizontal(Request $request)
     {
         // Material list by user company code
-        $material_list = Material::orderBy('material_code', 'asc');
+        $material_list = Zco::select('zco.material_code', 'material.group_account_code', 'material.material_name')
+            ->leftjoin('material', 'zco.material_code', '=', 'material.material_code')
+            ->groupBy('zco.material_code', 'material.group_account_code', 'material.material_name')
+            ->orderBy('zco.material_code', 'asc');
 
         if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
             $material_list = $material_list->where('material.company_code', auth()->user()->mapping_akses('zco')->company_code);
         }
 
+
         // Product list for header dinamis
-        $product_list = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'material.material_code')
+        $product_list = Zco::select('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name')
             ->leftjoin('material', 'zco.product_code', '=', 'material.material_code')
             ->leftjoin('plant', 'zco.plant_code', '=', 'plant.plant_code')
-            ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name', 'material.material_code')
-            ->orderBy('material.material_code', 'asc');
+            ->groupBy('zco.product_code', 'zco.plant_code', 'plant.plant_desc', 'material.material_name');
 
+        
         if (auth()->user()->mapping_akses('zco')->company_code != 'all') {
             $product_list = $product_list->where('zco.company_code', auth()->user()->mapping_akses('zco')->company_code);
         }
@@ -458,11 +462,11 @@ class ZcoController extends Controller
         }
 
         if ($request->material != 'all') {
-            $product_list = $product_list->where('product_code',  $request->material);
+            $product_list = $product_list->where('zco.product_code',  $request->material);
         }
 
         if ($request->plant != 'all') {
-            $product_list = $product_list->where('plant_code', $request->plant);
+            $product_list = $product_list->where('zco.plant_code', $request->plant);
         }
 
         $temporary_value['harga_satuan'] = [];
@@ -473,12 +477,13 @@ class ZcoController extends Controller
         $material_list = $material_list->get();
         $product_list = $product_list->get();
 
+
         // Dibuat variabel index temporary dikarenakan case nya ada index yang tidak diawali dengan 0
         $key_temp = 0;
 
         // Proses memasukan data berdasarkan rule/aturan
-        foreach ($material_list->get() as $query) {
-            foreach ($product_list->get() as $item) {
+        foreach ($material_list as $query) {
+            foreach ($product_list as $item) {
                 array_push($temporary_value['harga_satuan'], ['key' => $key_temp, 'value' => $this->getHargaSatuanCount($request, $item, $query, 'horizontal')]);
                 array_push($temporary_value['cr'], ['key' => $key_temp, 'value' => $this->getCRCount($request, $item, $query, 'horizontal')]);
                 array_push($temporary_value['biaya_per_ton'], ['key' => $key_temp, 'value' => $this->getBiayaPerTon($request, $item, $query, 'horizontal')]);
@@ -491,7 +496,7 @@ class ZcoController extends Controller
         }
 
         // Menghitung jumlah total asumsi umum sebagai acuan index
-        $product_index_count = $product_list->get()->count() - 1;
+        $product_index_count = $product_list->count() - 1;
 
         // Memisahkan data array yang disesuaikan dengan array key & transaksi (p, q, <nila></nila>i)
         $fixed_value['harga_satuan'] = getSeparateValue($temporary_value['harga_satuan'], $product_index_count);
@@ -500,7 +505,7 @@ class ZcoController extends Controller
         $fixed_value['total_biaya'] = getSeparateValue($temporary_value['total_biaya'], $product_index_count);
 
         // Menghitung total dari kolom
-        for ($i = 0; $i < $product_list->get()->count(); $i++) {
+        for ($i = 0; $i < $product_list->count(); $i++) {
             $total['harga_satuan'][$i] = array_sum($fixed_value['harga_satuan'][$i]);
             $total['cr'][$i] = array_sum($fixed_value['cr'][$i]);
             $total['biaya_per_ton'][$i] = array_sum($fixed_value['biaya_per_ton'][$i]);
@@ -508,14 +513,13 @@ class ZcoController extends Controller
         }
 
         $data = [
-            'material_lists'   => $material_list->get(),
-            'product_lists'    => $product_list->get(),
+            'material_lists'   => $material_list,
+            'product_lists'    => $product_list,
             'fixed_value_data' => $fixed_value,
             'total'            => $total
         ];
 
         return Excel::download(new ZCOExport($data), "ZCO Horizontal.xlsx");
-
         // return view('pages.buku_besar.zco.export_horizontal', $data);
     }
 
@@ -539,11 +543,11 @@ class ZcoController extends Controller
         }
 
         if ($request->material != 'all') {
-            $product_list = $product_list->where('product_code',  $request->material);
+            $product_list = $product_list->where('zco.product_code',  $request->material);
         }
 
         if ($request->plant != 'all') {
-            $product_list = $product_list->where('plant_code', $request->plant);
+            $product_list = $product_list->where('zco.plant_code', $request->plant);
         }
 
         // if ($request->format_data == '0') {
@@ -626,11 +630,11 @@ class ZcoController extends Controller
         if ($type == 'horizontal') {
 
             $total_qty = Zco::select(DB::raw('SUM(total_qty) as total_qty'))
-                ->where([
-                    'product_code' => $query_col_data->product_code,
-                    'plant_code' => $query_col_data->plant_code,
-                    'material_code' => $query_row_data->material_code,
-                ]);
+            ->where([
+                'product_code' => $query_col_data->product_code,
+                'plant_code' => $query_col_data->plant_code,
+                'material_code' => $query_row_data->material_code,
+            ]);
 
             $total_biaya = Zco::select(DB::raw('SUM(total_amount) as total_amount'))
                 ->where([
@@ -645,19 +649,17 @@ class ZcoController extends Controller
                     'plant_code' => $query_col_data->plant_code,
                 ])->groupBy('product_qty', 'periode');
 
-            if ($request->format_data == '0') {
-                $total_qty->where('periode', 'ilike', '%' . $request->moth . '%');
-                $total_biaya->where('periode', 'ilike', '%' . $request->moth . '%');
-                $kuantum_produksi->where('periode', 'ilike', '%' . $request->moth . '%');
-            } else if ($request->format_data == '1') {
-                $start_temp = explode('-', $request->start_month);
-                $end_temp = explode('-', $request->end_month);
-                $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+            if ($request->format == '0') {
+                $total_qty->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+                $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($this->moth) . '-%');
+            } else if ($request->format == '1') {
+                $start_month = '2000-' . check_month_by_name($request->start_month) . '-01 00:00:00';
+                $end_month = '2000-' . check_month_by_name($request->end_month) . '-01 00:00:00';
 
-                $total_qty->whereBetween('periode', [$start_date, $end_date]);
-                $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-                $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                $total_qty->whereBetween('periode', [$start_month, $end_month]);
+                $total_biaya->whereBetween('periode', [$start_month, $end_month]);
+                $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
             }
 
             $total_qty = $total_qty->first();
@@ -684,6 +686,7 @@ class ZcoController extends Controller
             if ($biaya_perton != 0 && $cr != 0) {
                 $harga_satuan = $biaya_perton / $cr;
             }
+
         } else if ($type == 'group_account') {
             // TODO
 
@@ -711,7 +714,6 @@ class ZcoController extends Controller
                     'material_code' => $query_row_data->material_code,
                 ]);
 
-
             $kuantum_produksi = Zco::select(DB::raw('product_qty', 'periode'))
                 ->where([
                     'product_code' => $query_col_data->product_code,
@@ -719,16 +721,14 @@ class ZcoController extends Controller
                 ])->groupBy('product_qty', 'periode');
 
             if ($request->format_data == '0') {
-                $total_qty->where('periode', 'ilike', '%' . $request->moth . '%');
-                $kuantum_produksi->where('periode', 'ilike', '%' . $request->moth . '%');
+                $total_qty->where('periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
+                $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
             } else if ($request->format_data == '1') {
-                $start_temp = explode('-', $request->start_month);
-                $end_temp = explode('-', $request->end_month);
-                $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-                $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+                $start_month = '2000-' . check_month_by_name($request->start_month) . '-01 00:00:00';
+                $end_month = '2000-' . check_month_by_name($request->end_month) . '-01 00:00:00';
 
-                $total_qty->whereBetween('periode', [$start_date, $end_date]);
-                $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+                $total_qty->whereBetween('periode', [$start_month, $end_month]);
+                $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
             }
 
             $total_qty = $total_qty->first();
@@ -744,6 +744,7 @@ class ZcoController extends Controller
             if ($total_qty->total_qty != 0 && $tot_kuanprod > 0) {
                 $cr = $total_qty->total_qty / $tot_kuanprod;
             }
+
         } else if ($type == 'group_account') {
             // TODO
             $cr = 0;
@@ -786,16 +787,14 @@ class ZcoController extends Controller
             ])->groupBy('product_qty', 'periode');
 
         if ($request->format_data == '0') {
-            $total_biaya->where('periode', 'ilike', '%' . $request->moth . '%');
-            $kuantum_produksi->where('periode', 'ilike', '%' . $request->moth . '%');
+            $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
+            $kuantum_produksi->where('periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
         } else if ($request->format_data == '1') {
-            $start_temp = explode('-', $request->start_month);
-            $end_temp = explode('-', $request->end_month);
-            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+            $start_month = '2000-' . check_month_by_name($request->start_month) . '-01 00:00:00';
+            $end_month = '2000-' . check_month_by_name($request->end_month) . '-01 00:00:00';
 
-            $total_biaya->whereBetween('periode', [$start_date, $end_date]);
-            $kuantum_produksi->whereBetween('periode', [$start_date, $end_date]);
+            $total_biaya->whereBetween('periode', [$start_month, $end_month]);
+            $kuantum_produksi->whereBetween('periode', [$start_month, $end_month]);
         }
 
         $total_biaya = $total_biaya->first();
@@ -844,14 +843,12 @@ class ZcoController extends Controller
         }
 
         if ($request->format_data == '0') {
-            $total_biaya->where('periode', 'ilike', '%' . $request->moth . '%');
+            $total_biaya->where('periode', 'ilike', '%-' . check_month_by_name($request->moth) . '-%');
         } else if ($request->format_data == '1') {
-            $start_temp = explode('-', $request->start_month);
-            $end_temp = explode('-', $request->end_month);
-            $start_date = $start_temp[1] . '-' . $start_temp[0] . '-01 00:00:00';
-            $end_date = $end_temp[1] . '-' . $end_temp[0] . '-01 00:00:00';
+            $start_month = '2000-' . check_month_by_name($request->start_month) . '-01 00:00:00';
+            $end_month = '2000-' . check_month_by_name($request->end_month) . '-01 00:00:00';
 
-            $total_biaya->whereBetween('periode', [$start_date, $end_date]);
+            $total_biaya->whereBetween('periode', [$start_month, $end_month]);
         }
 
         $total_biaya = $total_biaya->first();

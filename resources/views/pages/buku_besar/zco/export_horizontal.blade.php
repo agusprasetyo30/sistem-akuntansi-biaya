@@ -62,10 +62,10 @@
             </td>
             
             @foreach ($product_lists as $product)
-                <td data-format='Rp* #,##0.00_-;Rp* -#,##0.00_-;Rp* "0"_-;_-@_-'>{{ $total['harga_satuan'][$key_temp] }}</td>
+                <td data-format='Rp* #,##0_-;Rp* -#,##0.00_-;Rp* "0"_-;_-@_-'>{{ $total['harga_satuan'][$key_temp] }}</td>
                 <td data-format='#,##0.00_-;-#,##0.00_-;"0"_-;_-@_-'>{{ $total['cr'][$key_temp] }}</td>
-                <td data-format='Rp* #,##0.00_-;Rp* -#,##0.00_-;"0"_-;_-@_-'>{{ $total['biaya_per_ton'][$key_temp] }}</td>
-                <td data-format='Rp* #,##0.00_-;Rp* -#,##0.00_-;Rp* "0"_-;_-@_-'>{{ $total['total_biaya'][$key_temp] }}</td>
+                <td data-format='Rp* #,##0_-;Rp* -#,##0.00_-;"0"_-;_-@_-'>{{ $total['biaya_per_ton'][$key_temp] }}</td>
+                <td data-format='Rp* #,##0_-;Rp* -#,##0.00_-;Rp* "0"_-;_-@_-'>{{ $total['total_biaya'][$key_temp] }}</td>
 
                 @php
                     $key_temp++;
